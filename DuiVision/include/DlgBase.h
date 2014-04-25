@@ -1,0 +1,283 @@
+
+
+#ifndef __DLG_MY_BASE_X_H__
+#define __DLG_MY_BASE_X_H__
+#include <vector>
+#include "DuiVision.h"
+
+using namespace  std;
+
+class  CDlgBase : public CDialog, public CTimer, public CDuiObject
+{
+public:
+	static LPCSTR GetClassName() { return "dlg";}
+	virtual BOOL IsClass(LPCSTR lpszName)
+	{
+		if(strcmp(GetClassName(), lpszName)  == 0) return TRUE;
+		return __super::IsClass(lpszName);
+	}
+
+	DECLARE_DYNAMIC(CDlgBase)
+
+	// 对话框控件预设置结构
+	struct CONTROL_VALUE
+	{
+		CString strName;	// 控件对象名
+		CString strType;	// 控件类型
+		CString strValue;	// 设置的值
+	};
+
+public:
+	UINT			m_nIDTemplate;				// 对话框资源ID
+	BOOL			m_bInit;					// 是否初始化完成
+	CString			m_strXmlFile;				// 窗口的XML文件名
+	CString			m_strXmlContent;			// 窗口的XML内容
+
+protected:
+	CDuiObject*		m_pParentDuiObject;			// 父控件对象
+
+	DWORD			m_nMainThreadId;			// 主线程ID
+
+	UINT			m_uTimerAnimation;			// 动画定时器
+	UINT			m_uTimerAutoClose;			// 用于窗口自动关闭的定时器ID
+
+	BOOL			m_bChangeSize;				// 改变窗口大小
+	CSize			m_MinSize;					// 窗口限定最小大小
+	CRgn			m_Rgn;						// 不规则窗口区域
+	COLORREF		m_clrBK;					// 自定义前景颜色
+
+	CString			m_strTitle;					// 窗口标题
+	CFont			m_TitleFont;				// 绘制标题栏的字体
+	HICON			m_hIcon;					// 窗口图标句柄
+	BOOL			m_bAppWin;					// 是否主窗口
+
+	CDlgPopup		*m_pWndPopup;				// 保存的弹出框指针
+
+	CBitmap			m_BKImage;					// 框架背景图片
+	CSize			m_sizeBKImage;
+	CString			m_strFramePicture;			// 背景图片
+	CDC				m_MemBKDC;					// 背景dc
+	CBitmap			*m_pOldMemBK;
+	CBitmap			m_MemBK;
+	BOOL			m_bDrawImage;				// 图片或纯色背景
+	int				m_nFrameSize;				// 边框大小
+	int				m_nFrameWLT;				// 边框左上角宽度(九宫格模式)
+	int				m_nFrameHLT;				// 边框左上角高度(九宫格模式)
+	int				m_nFrameWRB;				// 边框右下角宽度(九宫格模式)
+	int				m_nFrameHRB;				// 边框右下角高度(九宫格模式)
+
+	CString			m_strBkImg;					// 背景图片
+	COLORREF		m_crlBack;					// 背景颜色
+
+	int				m_nFrameTopBottomSpace;
+	int				m_nFrameLeftRightSpace;
+
+	int				m_nOverRegioX;				//过度的大小
+	int				m_nOverRegioY;				//过度的大小
+	BOOL			m_bNCActive;
+
+	BOOL			m_bTracking;
+	BOOL			m_bIsLButtonDown;	
+	BOOL			m_bIsLButtonDblClk;
+	BOOL			m_bIsSetCapture;
+
+	BOOL			m_bAutoClose;				// 窗口自动关闭标志
+	BOOL			m_bAutoHide;				// 窗口自动隐藏标志
+	UINT			m_uAutoCloseDelayTime;		// 窗口自动关闭的延迟时间
+
+	CToolTipCtrl	m_wndToolTip;				// Tooltip
+	int				m_nTooltipCtrlID;			// 当前Tooltip显示的控件ID
+
+	CDuiHandler*	m_pTrayHandler;				// 托盘图标和菜单的事件处理对象
+	CString			m_strTrayMenuXml;			// 托盘菜单的XML定义文件
+
+	vector<CControlBase *>	m_vecControl;		// 用户添加的窗口控件
+	vector<CControlBase *>	m_vecArea;			// 用户添加的区域(不影响鼠标事件)
+	CControlBase	*m_pControl;				// 当前活动控件对象
+	CControlBase	*m_pFocusControl;			// 当前焦点的控件对象
+
+	vector<CONTROL_VALUE>	m_vecControlValue;	// 控件预设置信息
+
+private:
+	vector<CControlBase *>	m_vecBaseControl;	// 窗口自身用到的一些默认控件
+	vector<CControlBase *>	m_vecBaseArea;		// 窗口默认区域
+
+public:
+	CDlgBase(UINT nIDTemplate, CWnd* pParent = NULL);
+	virtual ~CDlgBase();
+
+	UINT GetIDTemplate() { return m_nIDTemplate; }
+
+	void SetMinSize(int iWidth, int iHeight);	// 设置最小窗口大小
+	CSize GetMinSize();
+
+	void SetParent(CDuiObject* pParent) { m_pParentDuiObject = pParent; }
+	virtual CDuiObject* GetParent() { return m_pParentDuiObject; }
+
+	void TestMainThread();	// 测试是否在主线程
+
+	void SetXmlFile(CString strXmlFile) {m_strXmlFile = strXmlFile;}
+	void SetXmlContent(CString strXmlContent) {m_strXmlContent = strXmlContent;}
+
+	void SetTrayHandler(CDuiHandler* pDuiHandler) { m_pTrayHandler = pDuiHandler; }
+	void SetTratMenuXml(CString strMenuXml) { m_strTrayMenuXml = strMenuXml; }
+
+	CControlBase *GetControl(UINT uControlID);
+	CControlBase *GetControl(CString strControlName);
+	CControlBase *GetBaseControl(UINT uControlID);
+	CControlBase *GetBaseControl(CString strControlName);
+
+	vector<CControlBase*>* GetControls() { return &m_vecControl; }
+
+	void SetFocusControl(CControlBase* pFocusControl);
+	CControlBase* GetFocusControl();
+	CControlBase* GetPrevFocusableControl();
+	CControlBase* GetNextFocusableControl();
+
+	// 确认和放弃
+	void DoOK() { PostMessage(WM_USER_CLOSEWND, IDOK, 0); }
+	void DoCancel() { PostMessage(WM_USER_CLOSEWND, IDCANCEL, 0); }
+	void DoClose() { PostMessage(WM_USER_CLOSEWND, IDCANCEL, 0); }
+	void DoYes() { PostMessage(WM_USER_CLOSEWND, IDYES, 0); }
+	void DoNo() { PostMessage(WM_USER_CLOSEWND, IDNO, 0); }
+
+	// 移动控件
+	virtual CControlBase * SetControlRect(UINT uControlID, CRect rc);
+	// 移动控件
+	virtual CControlBase * SetControlRect(CControlBase *pControlBase, CRect rc);
+	// 显示控件
+	virtual CControlBase * SetControlVisible(UINT uControlID, BOOL bVisible);
+	// 显示控件
+	virtual CControlBase * SetControlVisible(CControlBase *pControlBase, BOOL bVisible);
+	// 禁用控件
+	virtual CControlBase * SetControlDisable(UINT uControlID, BOOL bDisable);
+	// 禁用控件
+	virtual CControlBase * SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
+
+	// 设置resize属性
+	HRESULT OnAttributeResize(const CStringA& strValue, BOOL bLoading);
+
+	// 打开弹出对话框
+	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID);
+	// 关闭弹出对话框
+	void CloseDlgPopup();
+
+	// 根据控件名创建控件实例
+	CControlBase* _CreateControlByName(LPCSTR lpszName);
+
+	// 设置不规则窗体区域
+	void SetupRegion(int border_offset[], int nSize);
+	void DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpdate);
+	
+	// 初始化窗口背景皮肤
+	void InitWindowBkSkin();
+	// 加载图片
+	void LoadImage(UINT nIDResource, CString strType = TEXT("PNG"));
+	void LoadImage(CString strFileName);
+	// 初始化窗口控件的默认值
+	void InitUIState();
+	// 设置不规则窗体区域
+	void SetupRegion(int nSize);
+	// 画背景图片
+	void DrawBackground(CBitmap &bitBackground);
+	// 画背景图片
+	void DrawBackground(COLORREF clr);
+	// 前景图片
+	virtual void DrawControl(CDC &dc, const CRect &rcClient);	
+	// 重置控件
+	virtual void ResetControl();
+	// 更新选中
+	void UpdateHover();
+
+	void InitBaseUI(CRect rcClient, TiXmlElement* pNode);
+	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);
+	virtual void OnSize(CRect rcClient);
+
+	void SetControlValue(CString strName, CString strType, CString strValue);
+	void InitDialogValue();
+	void InitControlValue();
+
+	void SetAutoCloseTimer(UINT uDelayTime, BOOL bHideWnd = FALSE);
+
+	// 定时器消息
+	virtual void OnTimer(UINT uTimerID);
+	virtual void OnTimer(UINT uTimerID, CString strTimerName);
+
+	// 消息响应
+	virtual LRESULT OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL);
+	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+protected:
+	virtual void OnClose();
+	virtual void OnMinimize();
+	virtual BOOL OnMaximize();
+	virtual void OnSkin();
+
+	virtual BOOL OnInitDialog();
+	virtual void PostNcDestroy();
+	afx_msg void OnDropFiles(HDROP hDropInfo);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg BOOL OnEraseBkgnd (CDC* pDC);
+	afx_msg LRESULT OnNcHitTest(CPoint point);
+	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg void OnPaint();
+	afx_msg void OnNcPaint();
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS* lpncsp);
+	afx_msg BOOL OnNcActivate(BOOL bActive);
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+	afx_msg void OnWindowPosChanged(WINDOWPOS* lpwndpos);
+
+	afx_msg LRESULT OnUserCloseWindow(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnMessageSkin(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnMessageUITask(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT	OnSystemTrayIcon(WPARAM wParam, LPARAM lParam);
+
+	// 跨进程通知消息
+	LRESULT OnCheckItsMe(WPARAM wParam, LPARAM lParam);
+
+	LRESULT OnMessageButtomMin(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtomMax(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtomClose(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtomSkin(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	
+	//}}AFX_MSG
+
+	DECLARE_MESSAGE_MAP()
+
+protected:
+	virtual void PreSubclassWindow();
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnMouseHover(WPARAM wParam, LPARAM lParam);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnDestroy();
+
+	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_INT_ATTRIBUTE("appwin", m_bAppWin, FALSE)
+		DUI_TSTRING_ATTRIBUTE("title", m_strTitle, FALSE)
+		DUI_INT_ATTRIBUTE("width", m_MinSize.cx, FALSE)
+		DUI_INT_ATTRIBUTE("height", m_MinSize.cy, FALSE)
+		DUI_CUSTOM_ATTRIBUTE("resize", OnAttributeResize)
+		DUI_TSTRING_ATTRIBUTE("frame", m_strFramePicture, FALSE)
+		DUI_INT_ATTRIBUTE("framesize", m_nFrameSize, FALSE)
+		DUI_INT_ATTRIBUTE("width-lt", m_nFrameWLT, FALSE)
+		DUI_INT_ATTRIBUTE("height-lt", m_nFrameHLT, FALSE)
+		DUI_INT_ATTRIBUTE("width-rb", m_nFrameWRB, FALSE)
+		DUI_INT_ATTRIBUTE("height-rb", m_nFrameHRB, FALSE)
+		DUI_TSTRING_ATTRIBUTE("bkimg", m_strBkImg, FALSE)
+		DUI_RGBCOLOR_ATTRIBUTE("crbk", m_crlBack, FALSE)
+	DUI_DECLARE_ATTRIBUTES_END()
+};
+
+#endif __DLG_MY_BASE_X_H__
+
