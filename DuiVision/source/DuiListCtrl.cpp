@@ -943,12 +943,12 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				// 画行左边图片
 				int nImgY = 3;
-				if((rowInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
-				{
-					nImgY = (m_nRowHeight - rowInfo.sizeImage.cy) / 2 + 1;
-				}
 				if(rowInfo.pImage != NULL)
 				{
+					if((rowInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					{
+						nImgY = (m_nRowHeight - rowInfo.sizeImage.cy) / 2 + 1;
+					}
 					// 使用行数据指定的图片
 					graphics.DrawImage(rowInfo.pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy),
 						0, 0, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy, UnitPixel);
@@ -956,21 +956,25 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}else
 				if((rowInfo.nImageIndex != -1) && (m_pImage != NULL))
 				{
+					if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					{
+						nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+					}
 					// 使用索引图片
-					graphics.DrawImage(m_pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy),
-						rowInfo.nImageIndex*rowInfo.sizeImage.cx, 0, rowInfo.sizeImage.cx, m_sizeImage.cy, UnitPixel);
-					nXPos += (rowInfo.sizeImage.cx + 3);
+					graphics.DrawImage(m_pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+						rowInfo.nImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
+					nXPos += (m_sizeImage.cx + 3);
 				}
 
 				// 画行右边图片
 				int nRightImageWidth = 0;
 				nImgY = 3;
-				if((rowInfo.sizeRightImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
-				{
-					nImgY = (m_nRowHeight - rowInfo.sizeRightImage.cy) / 2 + 1;
-				}
 				if(rowInfo.pRightImage != NULL)
 				{
+					if((rowInfo.sizeRightImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					{
+						nImgY = (m_nRowHeight - rowInfo.sizeRightImage.cy) / 2 + 1;
+					}
 					// 使用行数据指定的图片
 					graphics.DrawImage(rowInfo.pRightImage, Rect(nWidth-rowInfo.sizeRightImage.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy),
 						0, 0, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy, UnitPixel);
@@ -978,10 +982,14 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}else
 				if((rowInfo.nRightImageIndex != -1) && (m_pImage != NULL))
 				{
+					if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					{
+						nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+					}
 					// 使用索引图片
-					graphics.DrawImage(m_pImage, Rect(nWidth-rowInfo.sizeRightImage.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy),
-						rowInfo.nRightImageIndex*rowInfo.sizeRightImage.cx, 0, rowInfo.sizeRightImage.cx, m_sizeImage.cy, UnitPixel);
-					nRightImageWidth = rowInfo.sizeRightImage.cx + 1;
+					graphics.DrawImage(m_pImage, Rect(nWidth-m_sizeImage.cx-1, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+						rowInfo.nRightImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
+					nRightImageWidth = m_sizeImage.cx + 1;
 				}
 
 				// 画内容
