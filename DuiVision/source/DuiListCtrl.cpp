@@ -625,7 +625,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 	if(m_rc.PtInRect(point))
 	{
-		if(m_nHoverRow != -1)
+		if((m_nHoverRow != -1) && (m_nHoverRow < m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 			nOldHoverLink = rowInfo.nHoverLink;
@@ -640,10 +640,10 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 				return false;
 			}
 			m_nHoverRow = -1;		
-		}		
+		}
 
 		BOOL bMousenDown = false;
-		if(m_nDownRow != -1)
+		if((m_nDownRow != -1) && (m_nDownRow < m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
 			nOldHoverLink = rowInfo.nHoverLink;
@@ -918,7 +918,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		if(m_vecRowInfo.size() > 0)
 		{
-			for(size_t i = m_nFirstViewRow; i <= m_nLastViewRow; i++)
+			for(size_t i = m_nFirstViewRow; i <= m_nLastViewRow && i <= m_vecRowInfo.size(); i++)
 			{
 				ListRowInfo &rowInfo = m_vecRowInfo.at(i);
 				SolidBrush solidBrushRow(rowInfo.clrText);	// 行定义的颜色
