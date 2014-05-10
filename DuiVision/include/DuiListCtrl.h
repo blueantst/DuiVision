@@ -78,7 +78,6 @@ protected:
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 
 	HRESULT OnAttributeFontTitle(const CStringA& strValue, BOOL bLoading);
-	//HRESULT OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageCheckBox(const CStringA& strValue, BOOL bLoading);
 
@@ -86,7 +85,6 @@ protected:
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 public:
-	//CControlBaseFont*	m_pControScrollV;	// 垂直滚动条
 	CControlBase*		m_pControBkArea;	// 背景Area
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
@@ -113,7 +111,6 @@ public:
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		//DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScroll)
 		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)
 		DUI_CUSTOM_ATTRIBUTE("font-title", OnAttributeFontTitle)
@@ -122,7 +119,6 @@ public:
 		DUI_COLOR_ATTRIBUTE("crpush", m_clrTextDown, FALSE)
 		DUI_COLOR_ATTRIBUTE("crtitle", m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
-		DUI_INT_ATTRIBUTE("img-width", m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
