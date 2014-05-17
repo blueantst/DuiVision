@@ -42,6 +42,7 @@ CDuiListCtrl::CDuiListCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nHoverRow = 0;
 	m_nDownRow = 0;
 	m_bSingleLine = TRUE;
+	m_bTextWrap = FALSE;
 
 	m_nFirstViewRow = 0;
 	m_nLastViewRow = 0;
@@ -898,6 +899,10 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		}
 		strFormat.SetTrimming(StringTrimmingEllipsisWord);	// 以单词为单位去尾,略去部分使用省略号
 		//strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
+		if(!m_bTextWrap)
+		{
+			strFormat.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行
+		}
 
 		// 时间字段采用右对齐
 		StringFormat strFormatRight;
@@ -915,6 +920,10 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormatRight.SetLineAlignment(StringAlignmentFar);	// 下对齐
 		}
 		//strFormatRight.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
+		if(!m_bTextWrap)
+		{
+			strFormatRight.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行
+		}
 		
 		if(m_vecRowInfo.size() > 0)
 		{

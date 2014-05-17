@@ -5,6 +5,7 @@
 
 using namespace  std;
 
+// 列表行信息
 struct ListRowInfo
 {
 	CRect	rcRow;			// 行位置信息
@@ -97,6 +98,7 @@ public:
 	int					m_nRowHeight;		// 行高度
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
+	BOOL				m_bTextWrap;		// 文字是否换行
 
 	Image*				m_pImageSeperator;	// 行分隔线图片
 	CSize				m_sizeSeperator;	// 行分隔线大小
@@ -120,6 +122,7 @@ public:
 		DUI_COLOR_ATTRIBUTE("crtitle", m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
+		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
