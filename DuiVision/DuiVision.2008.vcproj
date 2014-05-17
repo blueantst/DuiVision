@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiGridCtrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiHandler.cpp"
 				>
 			</File>
@@ -340,6 +344,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiDef.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiGridCtrl.h"
 				>
 			</File>
 			<File

@@ -1,0 +1,126 @@
+// Panel控件，此控件是一个控件容器
+#pragma once
+
+#include "Panel.h"
+
+using namespace  std;
+
+// 单元格信息
+struct GridItemInfo
+{
+	CRect	rcItem;			// 位置信息
+	CString strText;		// 文字
+	int		nImageIndex;	// 图片索引
+	Image * pImage;			// 图片对象
+	CSize	sizeImage;		// 图片大小
+	Color	clrText;		// 文字颜色
+};
+
+// 行信息
+struct GridRowInfo
+{
+	CRect	rcRow;			// 行位置信息
+	CString	strId;			// ID
+	int		nCheck;			// 检查框状态(-1表示不显示)
+	CRect	rcCheck;		// 检查框位置信息
+	int		nImageIndex;	// 图片索引
+	Image * pImage;			// 图片对象
+	CSize	sizeImage;		// 图片大小
+	int		nRightImageIndex;// 右边图片索引
+	Image * pRightImage;	// 右边图片对象
+	CSize	sizeRightImage;	// 右边图片大小
+	BOOL	bRowColor;		// 使用行定义的颜色
+	Color	clrText;		// 行文字颜色
+	int		nHoverItem;		// 当前热点列
+	vector<GridItemInfo> vecItemInfo;
+};
+
+class CDuiGridCtrl : public CDuiPanel
+{
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiGridCtrl, "gridctrl")
+
+public:
+	CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject) ;
+	virtual ~CDuiGridCtrl(void);
+
+	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+
+	BOOL InsertRow(int nItem, CString strId,
+		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
+		int nRightImageIndex = -1, CString strRightImage = _T(""),
+		int nCheck = -1);
+	BOOL InsertRow(int nItem, GridRowInfo &rowInfo);
+	BOOL DeleteRow(int nItem);
+	int  GetRowCount() { return m_vecRowInfo.size(); }
+	GridRowInfo* GetRowInfo(int nRow);
+	void SetRowColor(int nRow, Color clrText);
+	void ClearItems();
+
+	BOOL SetSeperator(UINT nResourceID = 0, CString strType= TEXT("PNG"));
+	BOOL SetSeperator(CString strImage = TEXT(""));
+	BOOL SetCheckBoxImage(UINT nResourceID = 0, CString strType= TEXT("PNG"));
+	BOOL SetCheckBoxImage(CString strImage = TEXT(""));
+
+	BOOL PtInRow(CPoint point, GridRowInfo& rowInfo);
+	BOOL PtInRowCheck(CPoint point, GridRowInfo& rowInfo);
+	int  PtInRowItem(CPoint point, GridRowInfo& rowInfo);
+
+protected:
+	vector<GridRowInfo> m_vecRowInfo;
+
+	virtual void SetControlRect(CRect rc);
+	virtual void DrawControl(CDC &dc, CRect rcUpdate);
+
+	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
+	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
+	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
+	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
+
+	HRESULT OnAttributeFontTitle(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageCheckBox(const CStringA& strValue, BOOL bLoading);
+
+	// 消息响应
+	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
+
+public:
+	CControlBase*		m_pControBkArea;	// 背景Area
+	CString				m_strFontTitle;		// 标题字体
+	int					m_nFontTitleWidth;	// 标题字体宽度
+	FontStyle			m_fontTitleStyle;	// 标题字体Style
+	Color				m_clrText;			// 文字颜色
+	Color				m_clrTextHover;		// 文字颜色
+	Color				m_clrTextDown;		// 文字颜色
+	Color				m_clrTitle;			// 标题颜色
+	Color				m_clrSeperator;		// 分割线颜色
+	int					m_nRowHeight;		// 行高度
+	int					m_nBkTransparent;	// 背景透明度
+	BOOL				m_bSingleLine;		// 显示单行文字
+	BOOL				m_bTextWrap;		// 文字是否换行
+
+	Image*				m_pImageSeperator;	// 行分隔线图片
+	CSize				m_sizeSeperator;	// 行分隔线大小
+	Image*				m_pImageCheckBox;	// 检查框图片
+	CSize				m_sizeCheckBox;		// 检查框图片大小
+
+	int					m_nHoverRow;		// 当前鼠标移动的行索引
+	int					m_nDownRow;			// 当前点击的行索引
+
+	int					m_nFirstViewRow;	// 当前显示区的第一行的序号
+	int					m_nLastViewRow;		// 当前显示区的最后一行的序号
+	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
+
+	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
+		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)
+		DUI_CUSTOM_ATTRIBUTE("font-title", OnAttributeFontTitle)
+		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
+		DUI_COLOR_ATTRIBUTE("crhover", m_clrTextHover, FALSE)
+		DUI_COLOR_ATTRIBUTE("crpush", m_clrTextDown, FALSE)
+		DUI_COLOR_ATTRIBUTE("crtitle", m_clrTitle, FALSE)
+		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
+		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
+		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
+		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
+    DUI_DECLARE_ATTRIBUTES_END()
+};
