@@ -205,19 +205,19 @@ Size GetTextBounds(const Font& font,const StringFormat& strFormat,const CString&
 	REAL rHeight = font.GetHeight(0.0f);
 
 	return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
-		(int)(rHeight > (int)rHeight ? rHeight + 2 : rHeight + 1));
+		(int)(rHeight > (int)rHeight ? rHeight + 4 : rHeight + 1));
 
 	//return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
 	//	(int)(rcBound.Height > (int)rcBound.Height ? rcBound.Height + 2 : rcBound.Height + 1));
 }
 
-// 获取文字需要的显示区域
+// 获取文字需要的显示区域(指定宽度)
 Size GetTextBounds(const Font& font,const StringFormat& strFormat,int nWidth,const CString& strText)
 {
 	GraphicsPath path;
 	FontFamily fontfamily;
 	font.GetFamily(&fontfamily);
-	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),RectF(0,0,nWidth,1000),&strFormat);
+	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),RectF(0,0,nWidth,0),&strFormat);
 	RectF rcBound;
 	path.GetBounds(&rcBound);
 
@@ -226,13 +226,13 @@ Size GetTextBounds(const Font& font,const StringFormat& strFormat,int nWidth,con
 	int nHeightBound = (int)(rcBound.Height > (int)rcBound.Height ? rcBound.Height + 2 : rcBound.Height + 1);
 
 	return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
-		(nHeightBound > nHeight) ? nHeightBound+2 : nHeight+1);
+		(nHeightBound > nHeight) ? nHeightBound+5 : nHeight+1);
 
 	//return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
 	//	(int)(rcBound.Height > (int)rcBound.Height ? rcBound.Height + 2 : rcBound.Height + 1));
 }
 
-// 获取文字需要的显示区域
+// 获取文字需要的显示区域(使用非换行的默认格式)
 Size GetTextBounds(const Font& font,const CString& strText)
 {
 	StringFormat strFormat;
@@ -248,10 +248,10 @@ Size GetTextBounds(const Font& font,const CString& strText)
 	REAL rHeight = font.GetHeight(0.0f);
 
 	return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
-		(int)(rHeight > (int)rHeight ? rHeight + 2 : rHeight + 1));
+		(int)(rHeight > (int)rHeight ? rHeight + 4 : rHeight + 1));
 
-	/*return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
-		(int)(rcBound.Height > (int)rcBound.Height ? rcBound.Height + 2 : rcBound.Height + 1));*/
+	//return Size((int)(rcBound.Width > (int)rcBound.Width ? rcBound.Width + 1 : rcBound.Width),
+	//	(int)(rcBound.Height > (int)rcBound.Height ? rcBound.Height + 2 : rcBound.Height + 1));
 }
 
 // 取得位置
