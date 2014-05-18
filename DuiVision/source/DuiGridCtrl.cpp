@@ -31,6 +31,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrTitle = Color(255, 32, 32, 32);
 	m_clrSeperator = Color(200, 160, 160, 160);
 	m_nRowHeight = 50;
+	m_nLeftPos = 0;
 
 	m_pImageSeperator = NULL;
 	m_sizeSeperator = CSize(0, 0);
@@ -74,6 +75,34 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+
+	// 加载下层的cloumn节点信息
+	TiXmlElement* pColumnElem = NULL;
+	for (pColumnElem = pXmlElem->FirstChildElement("column"); pColumnElem != NULL; pColumnElem=pColumnElem->NextSiblingElement())
+	{
+		CStringA strTitleA = pColumnElem->Attribute("title");
+		CStringA strClrTextA = pColumnElem->Attribute("crtext");
+		CStringA strWidthA = pColumnElem->Attribute("width");
+		DuiSystem::Instance()->ParseDuiString(strTitleA);
+		CString strTitle = CA2T(strTitleA, CP_UTF8);
+		Color clrText = Color(0,0,0,0);
+		if(!strClrTextA.IsEmpty())
+		{
+			if(strClrTextA.Find(",") == -1)
+			{
+				clrText = CDuiObject::HexStringToColor(strClrTextA);
+			}else
+			{
+				clrText = CDuiObject::StringToColor(strClrTextA);
+			}
+		}
+		int nWidth = -1;
+		if(!strWidthA.IsEmpty())
+		{
+			nWidth = atoi(strWidthA);
+		}
+		InsertColumn(-1, strTitle, nWidth, clrText);
+	}
 
 	// 加载下层的row节点信息
 	TiXmlElement* pRowElem = NULL;
@@ -150,9 +179,97 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 			}
 		}
 		InsertRow(-1, strId, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage, nCheck);
+
+		int nRowIndex = m_vecRowInfo.size()-1;
+		int nItemIndex = 0;
+		// 加载下层的item节点信息
+		TiXmlElement* pItemElem = NULL;
+		for (pItemElem = pRowElem->FirstChildElement("item"); pItemElem != NULL; pItemElem=pItemElem->NextSiblingElement())
+		{
+			CStringA strTitleA = pItemElem->Attribute("title");
+			CStringA strContentA = pItemElem->Attribute("content");
+			CStringA strClrTextA = pItemElem->Attribute("crtext");
+			CStringA strImageA = pItemElem->Attribute("image");
+			DuiSystem::Instance()->ParseDuiString(strTitleA);
+			DuiSystem::Instance()->ParseDuiString(strContentA);
+			CString strTitle = CA2T(strTitleA, CP_UTF8);
+			CString strContent = CA2T(strContentA, CP_UTF8);
+			Color clrText = Color(0,0,0,0);
+			if(!strClrTextA.IsEmpty())
+			{
+				if(strClrTextA.Find(",") == -1)
+				{
+					clrText = CDuiObject::HexStringToColor(strClrTextA);
+				}else
+				{
+					clrText = CDuiObject::StringToColor(strClrTextA);
+				}
+			}
+
+			// 图片,通过Skin读取
+			CStringA strSkin = "";
+			if(strImageA.Find("skin:") == 0)
+			{
+				strSkin = DuiSystem::Instance()->GetSkin(strImageA);
+			}else
+			{
+				strSkin = strImageA;
+			}
+
+			int nImageIndex = -1;
+			CString strImage = _T("");
+			if(strSkin.Find(".") != -1)
+			{
+				// 图片文件
+				strImage = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+			}else
+			if(!strSkin.IsEmpty())
+			{
+				// 图片索引
+				nImageIndex = atoi(strSkin);
+			}
+
+			SetSubItem(nRowIndex, nItemIndex, strTitle, strContent, nImageIndex, clrText, strImage);
+			nItemIndex++;
+		}
 	}
 
     return TRUE;
+}
+
+// 添加列
+BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color clrText)
+{
+	GridColumnInfo columnInfo;
+	columnInfo.strTitle = strTitle;
+	columnInfo.clrText = clrText;
+	columnInfo.nWidth = nWidth;
+	if(nColumn <= -1 || nColumn >= m_vecColumnInfo.size())
+	{
+		m_vecColumnInfo.push_back(columnInfo);
+	}
+	else
+	{
+		m_vecColumnInfo.insert(m_vecColumnInfo.begin() + nColumn, columnInfo);
+	}
+
+	int nXPos = 0;
+	int nYPos = 0;
+
+	for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+	{
+		GridColumnInfo &columnInfoTemp = m_vecColumnInfo.at(i);
+		int nWidth = columnInfoTemp.nWidth;
+		if(nWidth == -1)
+		{
+			nWidth = m_rc.Width() - nXPos;
+		}
+		columnInfoTemp.rcHeader.SetRect(nXPos, nYPos, nXPos + nWidth, nYPos + m_nRowHeight);
+		nXPos += columnInfoTemp.nWidth;
+	}
+
+	UpdateControl(true);
+	return true;
 }
 
 // 添加行
@@ -220,18 +337,12 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, CString strId, int nImageIndex, Color cl
 		}
 	}
 
-	//rowInfo.rcRow.SetRect(m_rc.left, m_rc.top, m_rc.left, m_rc.bottom);
-
 	return InsertRow(nItem, rowInfo);
 }
 
 // 添加行
 BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
 {
-	if(m_vecRowInfo.size() > 0)
-	{
-		CRect rc;
-	}
 	if(nItem <= -1 || nItem >= m_vecRowInfo.size())
 	{
 		m_vecRowInfo.push_back(rowInfo);
@@ -260,6 +371,66 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
 
 	UpdateControl(true);
 	return true;
+}
+
+// 设置表格项内容
+BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString strContent, int nImageIndex, Color clrText, CString strImage)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return FALSE;
+	}
+	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	{
+		return FALSE;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	for(int i = rowInfo.vecItemInfo.size(); i <= nItem; i++)
+	{
+		GridItemInfo itemInfo;
+		itemInfo.strText = _T("");
+		itemInfo.strContent = _T("");
+		itemInfo.nImageIndex = -1;
+		itemInfo.pImage = NULL;
+		itemInfo.sizeImage = CSize(0,0);
+		itemInfo.clrText = Color(0, 0, 0, 0);
+		rowInfo.vecItemInfo.push_back(itemInfo);
+	}
+
+	GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(nItem);
+	itemInfo.strText = strTitle;
+	itemInfo.strContent = strContent;
+	itemInfo.nImageIndex = nImageIndex;
+	itemInfo.sizeImage = CSize(0,0);
+	itemInfo.clrText = clrText;
+
+	GridColumnInfo &columnInfo = m_vecColumnInfo.at(nItem);
+	itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
+
+	// 图片
+	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
+	{
+		strImage = DuiSystem::GetSkinPath() + strImage;
+	}
+	if(!strImage.IsEmpty())
+	{
+		// 使用行数据指定的图片
+		itemInfo.pImage = Image::FromFile(strImage, TRUE);
+		if(itemInfo.pImage->GetLastStatus() == Ok)
+		{
+			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
+		}
+	}else
+	{
+		// 使用索引图片
+		itemInfo.pImage = NULL;
+		if((itemInfo.nImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
+		{
+			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+		}
+	}
 }
 
 // 删除行
@@ -555,21 +726,17 @@ BOOL CDuiGridCtrl::PtInRowCheck(CPoint point, GridRowInfo& rowInfo)
 // 判断指定的坐标位置是否在某一行的某个列中,返回列索引
 int CDuiGridCtrl::PtInRowItem(CPoint point, GridRowInfo& rowInfo)
 {
-	/*CRect rc = rowInfo.rcLink1;
-	// rcLink坐标是画图时候计算出的按照控件虚拟显示区域为参照的坐标,需要转换为鼠标坐标
-	rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
-	if(rc.PtInRect(point))
+	for(size_t i = 0; i < rowInfo.vecItemInfo.size(); i++)
 	{
-		return 0;
+		GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(i);
+		CRect rc = itemInfo.rcItem;
+		// rcItem坐标是画图时候计算出的按照控件虚拟显示区域为参照的坐标,需要转换为鼠标坐标
+		rc.OffsetRect(m_rc.left + m_nLeftPos, m_rc.top-m_nVirtualTop);
+		if(rc.PtInRect(point))
+		{
+			return i;
+		}
 	}
-
-	rc = rowInfo.rcLink2;
-	// rcLink坐标是画图时候计算出的按照控件虚拟显示区域为参照的坐标,需要转换为鼠标坐标
-	rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
-	if(rc.PtInRect(point))
-	{
-		return 1;
-	}*/
 
 	return -1;
 }
@@ -954,17 +1121,40 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}
 
 				// 画内容
-				RectF rect(nXPos, nVI*m_nRowHeight + 1, nWidth-20, m_bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2) );
-				if(m_nHoverRow == i)
+				int nPosItemX = (m_nLeftPos != 0) ? m_nLeftPos : nXPos;
+				for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
 				{
+					GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+					BOOL bSingleLine = itemInfo.strContent.IsEmpty();
 
-				}else
-				if(m_nDownRow == i)
-				{
+					// 画第一行
+					RectF rect(nPosItemX, nVI*m_nRowHeight + 1, itemInfo.rcItem.Width(), bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2));
+					SolidBrush solidBrushItem(m_clrText);
+					if(m_nHoverRow == i)
+					{
+						solidBrushItem.SetColor(m_clrTextHover);
+					}else
+					if(m_nDownRow == i)
+					{
+						solidBrushItem.SetColor(m_clrTextDown);
+					}else
+					if(itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
+					{
+						solidBrushItem.SetColor(itemInfo.clrText);
+					}
+					graphics.DrawString(itemInfo.strText.AllocSysString(), (INT)wcslen(itemInfo.strText.AllocSysString()),
+						&font, rect, &strFormat, &solidBrushItem);
 
-				}else
-				{
+					// 画第二行
+					if(!bSingleLine)
+					{
+						rect.Offset(0, m_nRowHeight / 2 + 2);
+						rect.Height = m_nRowHeight / 2 - 4;
+						graphics.DrawString(itemInfo.strContent.AllocSysString(), (INT)wcslen(itemInfo.strContent.AllocSysString()),
+							&font, rect, &strFormat, &solidBrushItem);
+					}
 
+					nPosItemX += itemInfo.rcItem.Width();
 				}
 
 				// 画分隔线(采用拉伸模式)
@@ -973,10 +1163,6 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 使用拉伸模式属性画图
 					graphics.DrawImage(m_pImageSeperator, RectF(0, (nVI+1)*m_nRowHeight, nWidth-2, m_sizeSeperator.cy),
 							0, 0, m_sizeSeperator.cx, m_sizeSeperator.cy, UnitPixel);
-
-					// 使用平铺方式填充矩形(暂不使用这种方式)
-					//TextureBrush tileBrush(m_pImageSeperator, WrapModeTile);
-					//graphics.FillRectangle(&tileBrush, RectF(0, (nVI+1)*m_nRowHeight, nWidth-2, m_sizeSeperator.cy));
 				}else
 				{
 					// 未指定图片,则画矩形

@@ -5,11 +5,21 @@
 
 using namespace  std;
 
+// 列信息
+struct GridColumnInfo
+{
+	CRect	rcHeader;		// 列头位置信息
+	CString strTitle;		// 标题
+	Color	clrText;		// 文字颜色
+	int		nWidth;			// 列宽度
+};
+
 // 单元格信息
 struct GridItemInfo
 {
 	CRect	rcItem;			// 位置信息
 	CString strText;		// 文字
+	CString strContent;		// 内容
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
@@ -45,11 +55,14 @@ public:
 
 	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
 
+	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
 	BOOL InsertRow(int nItem, CString strId,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		int nCheck = -1);
 	BOOL InsertRow(int nItem, GridRowInfo &rowInfo);
+	BOOL SetSubItem(int nRow, int nItem, CString strTitle, CString strContent = _T(""),
+		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL DeleteRow(int nItem);
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);
@@ -66,6 +79,7 @@ public:
 	int  PtInRowItem(CPoint point, GridRowInfo& rowInfo);
 
 protected:
+	vector<GridColumnInfo> m_vecColumnInfo;
 	vector<GridRowInfo> m_vecRowInfo;
 
 	virtual void SetControlRect(CRect rc);
@@ -93,6 +107,7 @@ public:
 	Color				m_clrTextDown;		// 文字颜色
 	Color				m_clrTitle;			// 标题颜色
 	Color				m_clrSeperator;		// 分割线颜色
+	int					m_nLeftPos;			// 左侧起始位置
 	int					m_nRowHeight;		// 行高度
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
@@ -120,6 +135,7 @@ public:
 		DUI_COLOR_ATTRIBUTE("crtitle", m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
+		DUI_INT_ATTRIBUTE("left-pos", m_nLeftPos, FALSE)
 		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
