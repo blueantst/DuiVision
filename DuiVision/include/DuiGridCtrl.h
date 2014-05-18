@@ -18,12 +18,14 @@ struct GridColumnInfo
 struct GridItemInfo
 {
 	CRect	rcItem;			// 位置信息
-	CString strText;		// 文字
+	CString strTitle;		// 文字
 	CString strContent;		// 内容
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
 	Color	clrText;		// 文字颜色
+	CString strLink;		// 链接的文字
+	CString strLinkAction;	// 链接的动作
 };
 
 // 行信息
@@ -63,9 +65,12 @@ public:
 	BOOL InsertRow(int nItem, GridRowInfo &rowInfo);
 	BOOL SetSubItem(int nRow, int nItem, CString strTitle, CString strContent = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
+	BOOL SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction = _T(""),
+		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL DeleteRow(int nItem);
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);
+	GridItemInfo* GetItemInfo(int nRow, int nItem);
 	void SetRowColor(int nRow, Color clrText);
 	void ClearItems();
 

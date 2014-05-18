@@ -190,10 +190,16 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 			CStringA strContentA = pItemElem->Attribute("content");
 			CStringA strClrTextA = pItemElem->Attribute("crtext");
 			CStringA strImageA = pItemElem->Attribute("image");
+			CStringA strLinkA = pItemElem->Attribute("link");
+			CStringA strLinkActionA = pItemElem->Attribute("linkaction");
 			DuiSystem::Instance()->ParseDuiString(strTitleA);
 			DuiSystem::Instance()->ParseDuiString(strContentA);
+			DuiSystem::Instance()->ParseDuiString(strLinkA);
+			DuiSystem::Instance()->ParseDuiString(strLinkActionA);
 			CString strTitle = CA2T(strTitleA, CP_UTF8);
 			CString strContent = CA2T(strContentA, CP_UTF8);
+			CString strLink = CA2T(strLinkA, CP_UTF8);
+			CString strLinkAction = CA2T(strLinkActionA, CP_UTF8);
 			Color clrText = Color(0,0,0,0);
 			if(!strClrTextA.IsEmpty())
 			{
@@ -229,7 +235,13 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 				nImageIndex = atoi(strSkin);
 			}
 
-			SetSubItem(nRowIndex, nItemIndex, strTitle, strContent, nImageIndex, clrText, strImage);
+			if(!strLink.IsEmpty())
+			{
+				SetSubItemLink(nRowIndex, nItemIndex, strLink, strLinkAction, nImageIndex, clrText, strImage);
+			}else
+			{
+				SetSubItem(nRowIndex, nItemIndex, strTitle, strContent, nImageIndex, clrText, strImage);
+			}
 			nItemIndex++;
 		}
 	}
@@ -373,7 +385,7 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
 	return true;
 }
 
-// 设置表格项内容
+// 设置表格项内容(文字表格项)
 BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString strContent, int nImageIndex, Color clrText, CString strImage)
 {
 	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
@@ -389,18 +401,82 @@ BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString str
 	for(int i = rowInfo.vecItemInfo.size(); i <= nItem; i++)
 	{
 		GridItemInfo itemInfo;
-		itemInfo.strText = _T("");
+		itemInfo.strTitle = _T("");
 		itemInfo.strContent = _T("");
 		itemInfo.nImageIndex = -1;
 		itemInfo.pImage = NULL;
 		itemInfo.sizeImage = CSize(0,0);
 		itemInfo.clrText = Color(0, 0, 0, 0);
+		itemInfo.strLink = _T("");
+		itemInfo.strLinkAction = _T("");
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
 	GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(nItem);
-	itemInfo.strText = strTitle;
+	itemInfo.strTitle = strTitle;
 	itemInfo.strContent = strContent;
+	itemInfo.nImageIndex = nImageIndex;
+	itemInfo.sizeImage = CSize(0,0);
+	itemInfo.clrText = clrText;
+
+	GridColumnInfo &columnInfo = m_vecColumnInfo.at(nItem);
+	itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
+
+	// 图片
+	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
+	{
+		strImage = DuiSystem::GetSkinPath() + strImage;
+	}
+	if(!strImage.IsEmpty())
+	{
+		// 使用行数据指定的图片
+		itemInfo.pImage = Image::FromFile(strImage, TRUE);
+		if(itemInfo.pImage->GetLastStatus() == Ok)
+		{
+			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
+		}
+	}else
+	{
+		// 使用索引图片
+		itemInfo.pImage = NULL;
+		if((itemInfo.nImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
+		{
+			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+		}
+	}
+}
+
+// 设置表格项内容(链接表格项)
+BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction, int nImageIndex, Color clrText, CString strImage)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return FALSE;
+	}
+	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	{
+		return FALSE;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	for(int i = rowInfo.vecItemInfo.size(); i <= nItem; i++)
+	{
+		GridItemInfo itemInfo;
+		itemInfo.strTitle = _T("");
+		itemInfo.strContent = _T("");
+		itemInfo.nImageIndex = -1;
+		itemInfo.pImage = NULL;
+		itemInfo.sizeImage = CSize(0,0);
+		itemInfo.clrText = Color(0, 0, 0, 0);
+		itemInfo.strLink = _T("");
+		itemInfo.strLinkAction = _T("");
+		rowInfo.vecItemInfo.push_back(itemInfo);
+	}
+
+	GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(nItem);
+	itemInfo.strLink = strLink;
+	itemInfo.strLinkAction = strLinkAction;
 	itemInfo.nImageIndex = nImageIndex;
 	itemInfo.sizeImage = CSize(0,0);
 	itemInfo.clrText = clrText;
@@ -467,6 +543,30 @@ GridRowInfo* CDuiGridCtrl::GetRowInfo(int nRow)
 
 	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
 	return &rowInfo;
+}
+
+// 获取某一个单元格信息
+GridItemInfo* CDuiGridCtrl::GetItemInfo(int nRow, int nItem)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return NULL;
+	}
+
+	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	{
+		return NULL;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	if(nItem >= rowInfo.vecItemInfo.size())
+	{
+		return NULL;
+	}
+
+	GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(nItem);
+
+	return &itemInfo;
 }
 
 // 设置某一个行的颜色
@@ -937,8 +1037,14 @@ LRESULT CDuiGridCtrl::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam
 	{
 		// 点击了行的某个链接
 		GridRowInfo* pRowInfo = GetRowInfo(wParam);
-		if(pRowInfo)
+		if(pRowInfo && (lParam >= 0) && (lParam < pRowInfo->vecItemInfo.size()))
 		{
+			GridItemInfo &itemInfo = pRowInfo->vecItemInfo.at(lParam);
+			// 转换为BUTTOM_UP消息,因为DuiSystem任务处理时候只处理BUTTOM_UP消息
+			if(!itemInfo.strLinkAction.IsEmpty())
+			{
+				DuiSystem::AddDuiActionTask(uID, BUTTOM_UP, wParam, lParam, GetName(), itemInfo.strLinkAction, GetParent());
+			}
 		}
 	}
 
@@ -1120,15 +1226,43 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					nRightImageWidth = m_sizeImage.cx + 1;
 				}
 
-				// 画内容
+				// 画单元格内容
 				int nPosItemX = (m_nLeftPos != 0) ? m_nLeftPos : nXPos;
 				for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
 				{
 					GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
-					BOOL bSingleLine = itemInfo.strContent.IsEmpty();
-
-					// 画第一行
+					BOOL bSingleLine = (itemInfo.strContent.IsEmpty() || !itemInfo.strLink.IsEmpty());
 					RectF rect(nPosItemX, nVI*m_nRowHeight + 1, itemInfo.rcItem.Width(), bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2));
+
+					// 画单元格图片
+					int nItemImageX = 0;
+					int nImgY = 3;
+					if(itemInfo.pImage != NULL)
+					{
+						if((itemInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+						{
+							nImgY = (m_nRowHeight - rowInfo.sizeImage.cy) / 2 + 1;
+						}
+						// 使用单元格指定的图片
+						graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+							0, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
+						nItemImageX += (itemInfo.sizeImage.cx + 3);
+					}else
+					if((itemInfo.nImageIndex != -1) && (m_pImage != NULL))
+					{
+						if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+						{
+							nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+						}
+						// 使用索引图片
+						graphics.DrawImage(m_pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+							itemInfo.nImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
+						nItemImageX += (m_sizeImage.cx + 3);
+					}
+					rect.Offset(nItemImageX, 0);
+					rect.Width -= nItemImageX;
+
+					// 画单元格标题或链接内容
 					SolidBrush solidBrushItem(m_clrText);
 					if(m_nHoverRow == i)
 					{
@@ -1142,10 +1276,22 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					{
 						solidBrushItem.SetColor(itemInfo.clrText);
 					}
-					graphics.DrawString(itemInfo.strText.AllocSysString(), (INT)wcslen(itemInfo.strText.AllocSysString()),
+					CString strItemTitle = itemInfo.strTitle;
+					if(!itemInfo.strLink.IsEmpty())
+					{
+						strItemTitle = itemInfo.strLink;
+						if((m_nHoverRow == i) && (rowInfo.nHoverItem == j))
+						{
+							solidBrushItem.SetColor(m_clrTextHover);
+						}else
+						{
+							solidBrushItem.SetColor((itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue()) ? itemInfo.clrText : m_clrText);
+						}
+					}
+					graphics.DrawString(strItemTitle.AllocSysString(), (INT)wcslen(strItemTitle.AllocSysString()),
 						&font, rect, &strFormat, &solidBrushItem);
 
-					// 画第二行
+					// 画单元格内容
 					if(!bSingleLine)
 					{
 						rect.Offset(0, m_nRowHeight / 2 + 2);
