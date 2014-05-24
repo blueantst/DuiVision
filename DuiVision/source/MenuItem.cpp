@@ -106,6 +106,7 @@ void CMenuItem::ShowPopupMenu()
 		CPoint point;
 		CRect rc = GetRect();
 		point.SetPoint(rc.left + rc.Width(), rc.top);
+		int nMenuWidth = rc.Width();
 
 		CDlgBase* pParentDlg = GetParentDialog();
 		// 如果菜单项定义了XML文件,则使用此菜单项定义的XML文件加载子菜单
@@ -138,11 +139,12 @@ void CMenuItem::ShowPopupMenu()
 				CRect rc;
 				m_pPopupMenu->GetWindowRect(&rc);
 				rc.OffsetRect(rc.Width()/2, 0);
-				// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
+				// 如果超出屏幕右侧范围,则菜单窗口往左移动一些,移动到当前菜单的左侧
 				int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
 				if(rc.right > nScreenWidth)
 				{
-					rc.OffsetRect(nScreenWidth - rc.right -10, 0);
+					//rc.OffsetRect(nScreenWidth - rc.right -10, 0);	// 移动到屏幕最右侧
+					rc.OffsetRect(-(nMenuWidth + rc.Width()), 0);	// 移动到当前菜单左侧
 				}
 				m_pPopupMenu->MoveWindow(rc);
 				m_pPopupMenu->ShowWindow(SW_SHOW);
