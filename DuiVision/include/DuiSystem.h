@@ -22,6 +22,38 @@
 #define LOG_LEVEL_ERROR 0x0004      //错误信息
 #define LOG_LEVEL_CRITICAL 0x0008	//致命信息
 
+// 操作系统类型定义
+enum OSType
+{
+	OS_UNKNOWN		= -1,
+    WINDOWS_WIN32	= 100,
+    WINDOWS_95,
+    WINDOWS_98,
+    WINDOWS_ME,
+    WINDOWS_NT,
+    WINDOWS_2K,
+    WINDOWS_XP,
+    WINDOWS_2003,
+    WINDOWS_VISTA,
+	WINDOWS_7,
+	WINDOWS_8,
+    WINDOWS_HIGH
+};
+
+// 操作系统补丁类型定义
+enum OSPack
+{
+	PACK_UNKNOWN	= -1,
+    SP1				= 1,
+    SP2, 
+    SP3,
+    SP4,
+    SP5,
+    SP6,
+    SP7,
+    SP8
+ };
+
 class CDlgPopup;
 class CTaskMgr;
 
@@ -72,6 +104,8 @@ public:
 	void SetString(CStringA strName, CString strValue);
 	// 解析字符串，替换其中的替换内容
 	void ParseDuiString(CStringA& strString);
+	// 获取操作系统名字
+	CString GetOSName();
 	// 获取字体信息
 	BOOL GetFont(CStringA strName, DuiFontInfo& fontInfo);
 	// 获取缺省字体信息(如果给了输入参数,则判断输入参数是否不合适,不合适就换成可以用的)

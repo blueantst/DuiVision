@@ -452,6 +452,8 @@ BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString str
 			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
 		}
 	}
+
+	return TRUE;
 }
 
 // 设置表格项内容(链接表格项)
@@ -515,6 +517,8 @@ BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString 
 			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
 		}
 	}
+
+	return TRUE;
 }
 
 // 删除行

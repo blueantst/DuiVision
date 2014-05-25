@@ -326,6 +326,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 					CStringA strNameA = pResElem->Attribute("name");
 					CStringA strFontA = pResElem->Attribute("font");
 					int nFontWidth = atoi(pResElem->Attribute("size"));
+					CStringA strOSA = pResElem->Attribute("os");
 					CStringA strBoldA = pResElem->Attribute("bold");
 					BOOL bBold = FALSE;
 					if(pResElem->Attribute("bold"))
@@ -371,7 +372,18 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 					fontInfo.strFont = DuiSystem::GetDefaultFont(strFont);
 					fontInfo.nFontWidth = nFontWidth;
 					fontInfo.fontStyle = fontStyle;
-					m_mapFontPool.SetAt(strNameA, fontInfo);
+					fontInfo.strOS = CA2T(strOSA, CP_UTF8);
+					if(!fontInfo.strOS.IsEmpty())
+					{
+						// 如果OS属性非空,则判断当前操作系统是否符合OS属性
+						if(GetOSName().CompareNoCase(fontInfo.strOS) == 0)
+						{
+							m_mapFontPool.SetAt(strNameA, fontInfo);
+						}
+					}else
+					{
+						m_mapFontPool.SetAt(strNameA, fontInfo);
+					}
 				}
 			}
 		}
@@ -451,6 +463,138 @@ void DuiSystem::ParseDuiString(CStringA& strString)
 		nPos1 = strTmp.Find("[", nPos1+1);
 	}
 	strString = strTmp;
+}
+
+// 获取操作系统名字
+CString DuiSystem::GetOSName()
+{
+	int nOSType       =  OS_UNKNOWN;
+	int nServicePack  =  PACK_UNKNOWN;
+	
+	// 获取操作系统版本信息
+	OSVERSIONINFOEX osvi;
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	
+	if( !( GetVersionEx((OSVERSIONINFO *) &osvi ) ) )
+	{
+		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+		if (! GetVersionEx( (OSVERSIONINFO *) &osvi) )
+		{
+			return L"";
+		}
+	}
+	
+	//操作系统补丁版本
+	nServicePack = osvi.wServicePackMajor;
+	switch (osvi.dwPlatformId)
+	{
+	case VER_PLATFORM_WIN32_NT:
+		
+		if ( osvi.dwMajorVersion <= 4 )
+		{
+			nOSType = WINDOWS_NT;
+		}
+		
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
+		{
+			nOSType = WINDOWS_2K;
+		}
+		
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 1 )
+		{
+			nOSType = WINDOWS_XP;
+		}
+		
+		if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+		{
+			nOSType = WINDOWS_2003;
+		}
+		
+		if ( osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 0 )
+		{
+			nOSType = WINDOWS_VISTA;
+		}
+
+		if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 1)
+		{
+			nOSType = WINDOWS_7;
+		}
+
+		if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 2)
+		{
+			nOSType = WINDOWS_8;
+		}
+
+		//操作系统版本比Win8更高
+		if (osvi.dwMajorVersion > 6)
+		{
+			nOSType = WINDOWS_HIGH;
+		}
+		break;
+		
+	case VER_PLATFORM_WIN32_WINDOWS:
+		
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
+		{
+			nOSType = WINDOWS_95;
+		} 
+		
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 10)
+		{
+			nOSType = WINDOWS_98; 
+		} 
+		
+		if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 90)
+		{
+			nOSType = WINDOWS_ME;
+		} 
+		break;
+		
+	case VER_PLATFORM_WIN32s:  
+		
+		nOSType = WINDOWS_WIN32;
+		break;
+	default:
+		nOSType = OS_UNKNOWN;
+		break;
+	}
+
+	CString strOSType = _T("");
+	switch( nOSType )
+	{
+	case WINDOWS_8:
+		strOSType = L"win8";
+		break;
+	case WINDOWS_7:
+		strOSType = L"win7";
+		break;
+	case WINDOWS_VISTA:
+		strOSType = L"vista";
+		break;
+	case WINDOWS_2003:
+		strOSType = L"win2003";
+		break;
+	case WINDOWS_XP:
+		strOSType = L"winxp";
+		break;
+	case WINDOWS_2K:
+		strOSType = L"win2000";
+		break;
+	case WINDOWS_NT:
+		strOSType = L"winnt";
+		break;
+	case WINDOWS_ME:
+		strOSType = L"winme";
+		break;
+	case WINDOWS_98:
+		strOSType = L"win98";
+		break;
+	case WINDOWS_95:
+		strOSType = L"win95";
+		break;
+	}
+	return strOSType;
 }
 
 // 获取字体信息

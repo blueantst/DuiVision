@@ -221,6 +221,7 @@ struct DuiFontInfo
 	CString strFont;	// 字体名
 	int nFontWidth;		// 字体大小
 	FontStyle fontStyle;// 字体风格
+	CString strOS;		// 操作系统
 };
 
 // 具有文字的控件基类
