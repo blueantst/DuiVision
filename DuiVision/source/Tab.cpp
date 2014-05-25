@@ -862,6 +862,22 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 	if(m_rc.PtInRect(point))
 	{
+		// 判断如果鼠标不在所有tab页范围内,则不做响应
+		BOOL bPtInTabs = false;
+		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+		{
+			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+			if(itemInfo.bVisible && itemInfo.rc.PtInRect(point))
+			{
+				bPtInTabs = true;
+				break;
+			}
+		}
+		if(!bPtInTabs)
+		{
+			return false;
+		}
+
 		if(m_nHoverItem != -1)
 		{
 			TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
@@ -911,7 +927,7 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 }
 
 BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
-{	
+{
 	if(m_nHoverItem != -1)
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
@@ -936,6 +952,14 @@ BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 					m_nDownItem = m_nHoverItem;					
 					m_nHoverItem = -1;
 
+					// 删除旧的Tooltip
+					CDlgBase* pDlg = GetParentDialog();
+					if(pDlg)
+					{
+						pDlg->ClearTooltip();
+					}
+
+					// 点击事件消息
 					SendMessage(BUTTOM_DOWN, m_nDownItem, 0);
 
 					// 只显示当前活动的tab页对应的Panel对象，其他页面的Panel对象都隐藏

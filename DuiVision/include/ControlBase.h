@@ -128,10 +128,10 @@ public:
 	BOOL OnTimer();
 
 	virtual BOOL OnMousePointChange(CPoint& point) { return FALSE; }
-	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point){ return FALSE;};
-	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point){ return FALSE;};
-	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point){ return FALSE;};
-	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point){ return FALSE;};
+	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point){ return FALSE; }
+	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point){ return FALSE; }
+	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point){ return FALSE; }
+	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	virtual	BOOL OnControlTimer() { return FALSE;};

@@ -30,6 +30,7 @@ struct ListRowInfo
 	CString strLinkAction2;	// 链接2的动作
 	CRect	rcLink2;		// 链接2位置信息
 	int		nHoverLink;		// 当前处于热点状态的链接索引
+	BOOL	bNeedTip;		// 是否需要显示tip(title实际宽度大于显示宽度)
 };
 
 class CDuiListCtrl : public CDuiPanel
@@ -66,6 +67,8 @@ public:
 	BOOL PtInRow(CPoint point, ListRowInfo& rowInfo);
 	BOOL PtInRowCheck(CPoint point, ListRowInfo& rowInfo);
 	int  PtInRowLink(CPoint point, ListRowInfo& rowInfo);
+
+	void SetRowTooltip(int nRow, CString strTooltip);
 
 protected:
 	vector<ListRowInfo> m_vecRowInfo;
@@ -112,6 +115,10 @@ public:
 	int					m_nLastViewRow;		// 当前显示区的最后一行的序号
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
 
+	BOOL				m_bRowTooltip;		// 是否显示行的Tooltip(title部分)
+	int					m_nTipRow;			// 当前tip行
+	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
+
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)
@@ -124,5 +131,6 @@ public:
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
+		DUI_INT_ATTRIBUTE("row-tip", m_bRowTooltip, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

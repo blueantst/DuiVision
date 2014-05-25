@@ -1999,6 +1999,27 @@ void CDlgBase::PreSubclassWindow()
 	CDialog::PreSubclassWindow();
 }
 
+// 设置当前的Tooltip
+void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect)
+{
+	m_wndToolTip.DelTool(this, 1);
+	m_wndToolTip.Activate(FALSE);
+	if(!strTooltip.IsEmpty())
+	{
+		//int nCount = m_wndToolTip.GetToolCount();
+		m_wndToolTip.SetMaxTipWidth(pControl->GetRect().Width());
+		m_wndToolTip.AddTool(this, strTooltip, rect, 1);//Tooltip默认都用1作为ID, pControl->GetID());
+		m_wndToolTip.Activate(TRUE);
+		m_nTooltipCtrlID = pControl->GetID();
+	}
+}
+
+// 清除当前的Tooltip
+void CDlgBase::ClearTooltip()
+{
+	m_wndToolTip.DelTool(this, 1);
+}
+
 void CDlgBase::OnMouseMove(UINT nFlags, CPoint point) 
 {	
 	if (!m_bTracking)
@@ -2020,17 +2041,14 @@ void CDlgBase::OnMouseMove(UINT nFlags, CPoint point)
 	
 	if (m_pControl)
 	{
-		if(m_nTooltipCtrlID != m_pControl->GetID())
+		if((m_nTooltipCtrlID != m_pControl->GetID()) && !m_pControl->GetTooltip().IsEmpty())
 		{
-			// 如果当前控件有Tooltip,则添加一个Tooltip
-			m_wndToolTip.DelTool(this);
+			// 如果当前控件有Tooltip,则添加一个Tooltip,Tooltip的ID默认都用1
+			m_wndToolTip.DelTool(this, 1);
 			m_wndToolTip.Activate(FALSE);
-			if(!m_pControl->GetTooltip().IsEmpty())
-			{
-				m_wndToolTip.AddTool(this, m_pControl->GetTooltip(), m_pControl->GetRect(), m_pControl->GetID());
-				m_wndToolTip.Activate(TRUE);
-				m_nTooltipCtrlID = m_pControl->GetID();
-			}
+			m_wndToolTip.AddTool(this, m_pControl->GetTooltip(), m_pControl->GetRect(), 1);
+			m_wndToolTip.Activate(TRUE);
+			m_nTooltipCtrlID = m_pControl->GetID();
 		}
 
 		if((m_pControl->PtInRect(point) || m_bIsLButtonDown) && m_bTracking)

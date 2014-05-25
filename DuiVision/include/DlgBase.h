@@ -189,6 +189,11 @@ public:
 	// 更新选中
 	void UpdateHover();
 
+	// 设置Tooltip
+	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect);
+	// 清除Tooltip
+	void ClearTooltip();
+
 	void InitBaseUI(CRect rcClient, TiXmlElement* pNode);
 	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);
 	virtual void OnSize(CRect rcClient);

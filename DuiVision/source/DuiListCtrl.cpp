@@ -44,6 +44,10 @@ CDuiListCtrl::CDuiListCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bSingleLine = TRUE;
 	m_bTextWrap = FALSE;
 
+	m_bRowTooltip = TRUE;
+	m_nTipRow = -1;
+	m_nTipVirtualTop = 0;
+
 	m_nFirstViewRow = 0;
 	m_nLastViewRow = 0;
 	m_nVirtualTop = 0;
@@ -201,6 +205,7 @@ BOOL CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CStrin
 	rowInfo.strLink2 = strLink2;
 	rowInfo.strLinkAction2 = strLinkAction2;
 	rowInfo.nHoverLink = -1;
+	rowInfo.bNeedTip = FALSE;
 	if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
 	{
 		rowInfo.bRowColor = TRUE;
@@ -613,6 +618,29 @@ int CDuiListCtrl::PtInRowLink(CPoint point, ListRowInfo& rowInfo)
 	return -1;
 }
 
+// 设置行的Tooltip
+void CDuiListCtrl::SetRowTooltip(int nRow, CString strTooltip)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg && ((m_nTipRow != nRow) || (m_nTipVirtualTop != m_nVirtualTop)))
+	{
+		ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+		if(rowInfo.bNeedTip)
+		{
+			CRect rc = rowInfo.rcRow;
+			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
+			pDlg->SetTooltip(this, strTooltip, rc);
+		}
+		m_nTipRow = nRow;
+		m_nTipVirtualTop = m_nVirtualTop;
+	}
+}
+
 BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -626,12 +654,18 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 	if(m_rc.PtInRect(point))
 	{
+		// 如果鼠标在热点行,判断鼠标是否在某个链接位置
 		if((m_nHoverRow != -1) && (m_nHoverRow < m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 			nOldHoverLink = rowInfo.nHoverLink;
 			if(PtInRow(point, rowInfo))
 			{
+				if(m_bRowTooltip)
+				{
+					SetRowTooltip(m_nHoverRow, rowInfo.strTitle);
+				}
+
 				rowInfo.nHoverLink = PtInRowLink(point, rowInfo);
 				if(nOldHoverLink != rowInfo.nHoverLink)
 				{
@@ -643,6 +677,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			m_nHoverRow = -1;		
 		}
 
+		// 如果鼠标在当前行,判断鼠标是否在某个链接位置
 		BOOL bMousenDown = false;
 		if((m_nDownRow != -1) && (m_nDownRow < m_vecRowInfo.size()))
 		{
@@ -650,6 +685,11 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			nOldHoverLink = rowInfo.nHoverLink;
 			if(PtInRow(point, rowInfo))
 			{
+				if(m_bRowTooltip)
+				{
+					SetRowTooltip(m_nDownRow, rowInfo.strTitle);
+				}
+
 				rowInfo.nHoverLink = PtInRowLink(point, rowInfo);
 				bMousenDown = true;
 				m_nHoverRow = -1;
@@ -660,6 +700,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			}		
 		}
 
+		// 计算热点行和热点链接
 		if(!bMousenDown)
 		{
 			for(size_t i = 0; i < m_vecRowInfo.size(); i++)
@@ -1046,6 +1087,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}
 				
 				rect.Width -= nLinkWidth;
+				rowInfo.bNeedTip = rect.Width < GetTextBounds(font, rowInfo.strTitle).Width;	// 计算是否需要显示tip
 				RectF rectTime(nWidth-nRightImageWidth-2-100, nVI*m_nRowHeight + 1, 100, m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2) );
 				if(m_nHoverRow == i)
 				{
