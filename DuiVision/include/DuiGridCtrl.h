@@ -26,6 +26,7 @@ struct GridItemInfo
 	Color	clrText;		// 文字颜色
 	CString strLink;		// 链接的文字
 	CString strLinkAction;	// 链接的动作
+	BOOL	bNeedTip;		// 是否需要显示tip(title实际宽度大于显示宽度)
 };
 
 // 行信息
@@ -83,6 +84,8 @@ public:
 	BOOL PtInRowCheck(CPoint point, GridRowInfo& rowInfo);
 	int  PtInRowItem(CPoint point, GridRowInfo& rowInfo);
 
+	void SetGridTooltip(int nRow, int nItem, CString strTooltip);
+
 protected:
 	vector<GridColumnInfo> m_vecColumnInfo;
 	vector<GridRowInfo> m_vecRowInfo;
@@ -114,6 +117,7 @@ public:
 	Color				m_clrSeperator;		// 分割线颜色
 	int					m_nLeftPos;			// 左侧起始位置
 	int					m_nRowHeight;		// 行高度
+	int					m_nHeaderHeight;	// 标题行高度
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
@@ -130,6 +134,11 @@ public:
 	int					m_nLastViewRow;		// 当前显示区的最后一行的序号
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
 
+	BOOL				m_bGridTooltip;		// 是否显示单元格的Tooltip
+	int					m_nTipRow;			// 当前tip行
+	int					m_nTipItem;			// 当前tip列
+	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
+
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)
@@ -140,8 +149,10 @@ public:
 		DUI_COLOR_ATTRIBUTE("crtitle", m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
+		DUI_INT_ATTRIBUTE("header-height", m_nHeaderHeight, FALSE)
 		DUI_INT_ATTRIBUTE("left-pos", m_nLeftPos, FALSE)
 		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
+		DUI_INT_ATTRIBUTE("grid-tip", m_bGridTooltip, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
