@@ -376,7 +376,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 					if(!fontInfo.strOS.IsEmpty())
 					{
 						// 如果OS属性非空,则判断当前操作系统是否符合OS属性
-						if(GetOSName().CompareNoCase(fontInfo.strOS) == 0)
+						if(CheckOSName(fontInfo.strOS))
 						{
 							m_mapFontPool.SetAt(strNameA, fontInfo);
 						}
@@ -595,6 +595,31 @@ CString DuiSystem::GetOSName()
 		break;
 	}
 	return strOSType;
+}
+
+// 检查当前操作系统是否在指定的OS字符串范围内
+BOOL DuiSystem::CheckOSName(CString strOS)
+{
+	CString strCurOSName = GetOSName();
+	int nPos = -1;
+	while((nPos = strOS.Find(L",")) != -1)
+	{
+		CString strTemp = strOS.Left(nPos);
+		strOS.Delete(0, nPos+1);
+		if(strCurOSName.CompareNoCase(strTemp) == 0)
+		{
+			return TRUE;
+		}
+	}
+	if(!strOS.IsEmpty())
+	{
+		if(strCurOSName.CompareNoCase(strOS) == 0)
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // 获取字体信息

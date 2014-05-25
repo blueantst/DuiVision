@@ -56,6 +56,7 @@ protected:
 	// 根据控件名创建控件实例
 	CControlBase* _CreateControlByName(LPCSTR lpszName);
 
+	virtual BOOL OnCheckMouseResponse(UINT nFlags, CPoint point);
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);

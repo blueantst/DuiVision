@@ -128,6 +128,7 @@ public:
 	BOOL OnTimer();
 
 	virtual BOOL OnMousePointChange(CPoint& point) { return FALSE; }
+	virtual BOOL OnCheckMouseResponse(UINT nFlags, CPoint point) { return TRUE; }	// 判断鼠标是否在控件可响应的区域
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point){ return FALSE; }

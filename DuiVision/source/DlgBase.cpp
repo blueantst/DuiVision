@@ -2223,9 +2223,10 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 				m_pControl->OnLButtonDown(nFlags, point);						
 			}
 		}
-	}	
+	}
 	
-	if (bIsSelect && !m_bIsSetCapture)
+	// 当前控件是否可以捕获鼠标
+	if (bIsSelect && !m_bIsSetCapture && ((m_pControl == NULL) || m_pControl->OnCheckMouseResponse(nFlags, point)))
 	{
 		SetCapture();
 		m_bIsSetCapture = TRUE;

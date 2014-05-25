@@ -106,6 +106,8 @@ public:
 	void ParseDuiString(CStringA& strString);
 	// 获取操作系统名字
 	CString GetOSName();
+	// 检查当前操作系统是否在指定的OS字符串范围内
+	BOOL CheckOSName(CString strOS);
 	// 获取字体信息
 	BOOL GetFont(CStringA strName, DuiFontInfo& fontInfo);
 	// 获取缺省字体信息(如果给了输入参数,则判断输入参数是否不合适,不合适就换成可以用的)

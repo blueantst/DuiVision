@@ -856,28 +856,37 @@ BOOL CDuiTabCtrl::GetItemVisible(CString strTabName)
 	return FALSE;
 }
 
+// 判断鼠标是否在控件可响应的区域
+BOOL CDuiTabCtrl::OnCheckMouseResponse(UINT nFlags, CPoint point)
+{
+	CRect rc = m_rc;
+	rc.bottom = rc.top + m_nTabCtrlHeight;
+	if(!rc.PtInRect(point))
+	{
+		return true;
+	}
+
+	// 判断如果鼠标不在所有tab页范围内,则不做响应
+	BOOL bPtInTabs = false;
+	for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+	{
+		TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+		if(itemInfo.bVisible && itemInfo.rc.PtInRect(point))
+		{
+			bPtInTabs = true;
+			break;
+		}
+	}
+	
+	return bPtInTabs;
+}
+
 BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	int nOldHoverItem = m_nHoverItem;
 
 	if(m_rc.PtInRect(point))
 	{
-		// 判断如果鼠标不在所有tab页范围内,则不做响应
-		BOOL bPtInTabs = false;
-		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
-		{
-			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
-			if(itemInfo.bVisible && itemInfo.rc.PtInRect(point))
-			{
-				bPtInTabs = true;
-				break;
-			}
-		}
-		if(!bPtInTabs)
-		{
-			return false;
-		}
-
 		if(m_nHoverItem != -1)
 		{
 			TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
