@@ -1046,7 +1046,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				RectF rect(nXPos, nVI*m_nRowHeight + 1, nWidth-20, m_bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2) );
 				if(!rowInfo.strTime.IsEmpty())
 				{
-					rect.Width -= 120;
+					Size size = GetTextBounds(font, rowInfo.strTime);
+					rect.Width -= (size.Width + 5);
 				}
 
 				// а╢╫сндвж
