@@ -403,7 +403,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	BOOL bRresponse = false;
 	if(m_pControl)
 	{
-		if(m_pControl->PtInRect(point) || m_bMouseDown)
+		if((m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point)) || m_bMouseDown)
 		{
 			if(m_pControl->OnMouseMove(nFlags, point))
 			{
@@ -527,7 +527,7 @@ BOOL CControlBase::OnScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	if(m_pControl)
 	{
 		// 判断当前活动控件
-		if(m_pControl->PtInRect(point))
+		if(m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
 		{
 			if(m_pControl->OnScroll(bVertical, nFlags, point))
 			{

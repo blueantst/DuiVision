@@ -648,7 +648,7 @@ void CDlgPopup::OnMouseMove(UINT nFlags, CPoint point)
 
 	if (m_pControl)
 	{
-		if((m_pControl->PtInRect(point) || m_bIsLButtonDown) && m_bTracking)
+		if(((m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point)) || m_bIsLButtonDown) && m_bTracking)
 		{			
 			m_pControl->OnMouseMove(nFlags, point);
 			return;
@@ -708,7 +708,7 @@ void CDlgPopup::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		if(m_pControl->GetVisible())
 		{
-			if (m_pControl->PtInRect(point))
+			if (m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
 			{
 				bIsSelect = TRUE;
 				m_bIsLButtonDown = TRUE;

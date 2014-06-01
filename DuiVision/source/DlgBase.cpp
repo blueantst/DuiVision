@@ -2051,9 +2051,9 @@ void CDlgBase::OnMouseMove(UINT nFlags, CPoint point)
 			m_nTooltipCtrlID = m_pControl->GetID();
 		}
 
-		if((m_pControl->PtInRect(point) || m_bIsLButtonDown) && m_bTracking)
+		if(((m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point)) || m_bIsLButtonDown) && m_bTracking)
 		{			
-			m_pControl->OnMouseMove(nFlags, point);			
+			m_pControl->OnMouseMove(nFlags, point);
 			return;
 		}
 	}
@@ -2214,7 +2214,7 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
 		{
-			if (m_pControl->PtInRect(point))
+			if (m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
 			{
 				bIsSelect = TRUE;
 				m_bIsLButtonDown = TRUE;
@@ -2260,7 +2260,7 @@ void CDlgBase::OnLButtonUp(UINT nFlags, CPoint point)
 			if (!rc.PtInRect(point))
 			{
 				m_pControl = NULL;
-			}	
+			}
 		}
 		else
 		{
