@@ -190,9 +190,13 @@ public:
 	void UpdateHover();
 
 	// 设置Tooltip
-	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect);
+	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth = FALSE);
 	// 清除Tooltip
 	void ClearTooltip();
+	// 设置当前tooltip控件ID
+	void SetTooltipCtrlID(int nTooltipCtrlID) { m_nTooltipCtrlID = nTooltipCtrlID; }
+	// 获取当前tooltip控件ID
+	int  GetTooltipCtrlID() { return m_nTooltipCtrlID; }
 
 	void InitBaseUI(CRect rcClient, TiXmlElement* pNode);
 	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);

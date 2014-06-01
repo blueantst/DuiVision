@@ -878,7 +878,7 @@ void CDuiGridCtrl::SetGridTooltip(int nRow, int nItem, CString strTooltip)
 		{
 			CRect rc = pGridInfo->rcItem;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop+m_nHeaderHeight);
-			pDlg->SetTooltip(this, strTooltip, rc);
+			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
 		}else
 		{
 			pDlg->ClearTooltip();

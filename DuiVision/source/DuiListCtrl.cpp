@@ -635,7 +635,7 @@ void CDuiListCtrl::SetRowTooltip(int nRow, CString strTooltip)
 		{
 			CRect rc = rowInfo.rcRow;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
-			pDlg->SetTooltip(this, strTooltip, rc);
+			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
 		}
 		m_nTipRow = nRow;
 		m_nTipVirtualTop = m_nVirtualTop;

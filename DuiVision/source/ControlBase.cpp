@@ -416,6 +416,17 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	CControlBase * pOldControl = m_pControl;
 	m_pControl =  NULL;
 
+	if(!m_strTooltip.IsEmpty() && PtInRect(point) && OnCheckMouseResponse(nFlags, point))
+	{
+		// 如果当前控件有Tooltip,则添加一个Tooltip
+		CDlgBase* pDlg = GetParentDialog();
+		if(pDlg && (pDlg->GetTooltipCtrlID() != GetID()))
+		{
+			pDlg->SetTooltip(this, m_strTooltip, m_rc);
+			pDlg->SetTooltipCtrlID(GetID());
+		}
+	}
+
 	bRresponse = OnControlMouseMove(nFlags, point);
 
 	if(!m_bMouseDown)
