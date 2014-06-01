@@ -87,6 +87,7 @@ public:
 	int  PtInRowItem(CPoint point, GridRowInfo& rowInfo);
 
 	void SetGridTooltip(int nRow, int nItem, CString strTooltip);
+	void ClearGridTooltip();
 
 protected:
 	vector<GridColumnInfo> m_vecColumnInfo;

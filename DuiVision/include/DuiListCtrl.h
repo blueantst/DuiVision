@@ -30,7 +30,8 @@ struct ListRowInfo
 	CString strLinkAction2;	// 链接2的动作
 	CRect	rcLink2;		// 链接2位置信息
 	int		nHoverLink;		// 当前处于热点状态的链接索引
-	BOOL	bNeedTip;		// 是否需要显示tip(title实际宽度大于显示宽度)
+	BOOL	bNeedTitleTip;	// 是否需要显示title tip(title实际宽度大于显示宽度)
+	BOOL	bNeedContentTip;// 是否需要显示content tip(content实际宽度大于显示宽度)
 };
 
 class CDuiListCtrl : public CDuiPanel
@@ -69,6 +70,7 @@ public:
 	int  PtInRowLink(CPoint point, ListRowInfo& rowInfo);
 
 	void SetRowTooltip(int nRow, CString strTooltip);
+	void ClearRowTooltip();
 
 protected:
 	vector<ListRowInfo> m_vecRowInfo;

@@ -205,7 +205,8 @@ BOOL CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CStrin
 	rowInfo.strLink2 = strLink2;
 	rowInfo.strLinkAction2 = strLinkAction2;
 	rowInfo.nHoverLink = -1;
-	rowInfo.bNeedTip = FALSE;
+	rowInfo.bNeedTitleTip = FALSE;
+	rowInfo.bNeedContentTip = FALSE;
 	if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
 	{
 		rowInfo.bRowColor = TRUE;
@@ -630,7 +631,7 @@ void CDuiListCtrl::SetRowTooltip(int nRow, CString strTooltip)
 	if(pDlg && ((m_nTipRow != nRow) || (m_nTipVirtualTop != m_nVirtualTop)))
 	{
 		ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
-		if(rowInfo.bNeedTip)
+		if(rowInfo.bNeedTitleTip || rowInfo.bNeedContentTip)
 		{
 			CRect rc = rowInfo.rcRow;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
@@ -638,6 +639,18 @@ void CDuiListCtrl::SetRowTooltip(int nRow, CString strTooltip)
 		}
 		m_nTipRow = nRow;
 		m_nTipVirtualTop = m_nVirtualTop;
+	}
+}
+
+// 清除Tooltip
+void CDuiListCtrl::ClearRowTooltip()
+{
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClearTooltip();
+		m_nTipRow = -1;
+		m_nTipVirtualTop = 0;
 	}
 }
 
@@ -663,7 +676,17 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			{
 				if(m_bRowTooltip)
 				{
-					SetRowTooltip(m_nHoverRow, rowInfo.strTitle);
+					if(rowInfo.bNeedTitleTip)
+					{
+						SetRowTooltip(m_nHoverRow, rowInfo.strTitle);
+					}else
+					if(rowInfo.bNeedContentTip)
+					{
+						SetRowTooltip(m_nHoverRow, rowInfo.strContent);
+					}else
+					{
+						ClearRowTooltip();
+					}
 				}
 
 				rowInfo.nHoverLink = PtInRowLink(point, rowInfo);
@@ -687,7 +710,17 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			{
 				if(m_bRowTooltip)
 				{
-					SetRowTooltip(m_nDownRow, rowInfo.strTitle);
+					if(rowInfo.bNeedTitleTip)
+					{
+						SetRowTooltip(m_nDownRow, rowInfo.strTitle);
+					}else
+					if(rowInfo.bNeedContentTip)
+					{
+						SetRowTooltip(m_nDownRow, rowInfo.strContent);
+					}else
+					{
+						ClearRowTooltip();
+					}
 				}
 
 				rowInfo.nHoverLink = PtInRowLink(point, rowInfo);
@@ -1088,7 +1121,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}
 				
 				rect.Width -= nLinkWidth;
-				rowInfo.bNeedTip = rect.Width < GetTextBounds(font, rowInfo.strTitle).Width;	// 计算是否需要显示tip
+				// 计算是否需要显示tip
+				rowInfo.bNeedTitleTip = rect.Width < GetTextBounds(font, rowInfo.strTitle).Width;
+				rowInfo.bNeedContentTip = rect.Width < GetTextBounds(font, rowInfo.strContent).Width;
 				RectF rectTime(nWidth-nRightImageWidth-2-100, nVI*m_nRowHeight + 1, 100, m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2) );
 				if(m_nHoverRow == i)
 				{

@@ -889,6 +889,19 @@ void CDuiGridCtrl::SetGridTooltip(int nRow, int nItem, CString strTooltip)
 	}
 }
 
+// Çå³ýTooltip
+void CDuiGridCtrl::ClearGridTooltip()
+{
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClearTooltip();
+		m_nTipRow = -1;
+		m_nTipItem = -1;
+		m_nTipVirtualTop = 0;
+	}
+}
+
 BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -925,6 +938,9 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 					if(pGridInfo && pGridInfo->bNeedContentTip)
 					{
 						SetGridTooltip(m_nHoverRow, rowInfo.nHoverItem, pGridInfo->strContent);
+					}else
+					{
+						ClearGridTooltip();
 					}
 				}
 
@@ -958,6 +974,9 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 					if(pGridInfo && pGridInfo->bNeedContentTip)
 					{
 						SetGridTooltip(m_nDownRow, rowInfo.nHoverItem, pGridInfo->strContent);
+					}else
+					{
+						ClearGridTooltip();
 					}
 				}
 			}		
