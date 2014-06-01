@@ -26,7 +26,9 @@ struct GridItemInfo
 	Color	clrText;		// 文字颜色
 	CString strLink;		// 链接的文字
 	CString strLinkAction;	// 链接的动作
-	BOOL	bNeedTip;		// 是否需要显示tip(title实际宽度大于显示宽度)
+	BOOL	bNeedTitleTip;	// 是否需要显示title tip(title实际宽度大于显示宽度)
+	BOOL	bNeedContentTip;// 是否需要显示content tip(content实际宽度大于显示宽度)
+	BOOL	bUseTitleFont;	// 是否使用标题字体显示标题
 };
 
 // 行信息
@@ -64,7 +66,7 @@ public:
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		int nCheck = -1);
 	BOOL InsertRow(int nItem, GridRowInfo &rowInfo);
-	BOOL SetSubItem(int nRow, int nItem, CString strTitle, CString strContent = _T(""),
+	BOOL SetSubItem(int nRow, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));

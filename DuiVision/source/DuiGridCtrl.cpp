@@ -198,6 +198,7 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 			CStringA strImageA = pItemElem->Attribute("image");
 			CStringA strLinkA = pItemElem->Attribute("link");
 			CStringA strLinkActionA = pItemElem->Attribute("linkaction");
+			CStringA strFontTitleA = pItemElem->Attribute("font-title");
 			DuiSystem::Instance()->ParseDuiString(strTitleA);
 			DuiSystem::Instance()->ParseDuiString(strContentA);
 			DuiSystem::Instance()->ParseDuiString(strLinkA);
@@ -241,12 +242,14 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 				nImageIndex = atoi(strSkin);
 			}
 
+			BOOL bUseTitleFont = (strFontTitleA == "1");
+
 			if(!strLink.IsEmpty())
 			{
 				SetSubItemLink(nRowIndex, nItemIndex, strLink, strLinkAction, nImageIndex, clrText, strImage);
 			}else
 			{
-				SetSubItem(nRowIndex, nItemIndex, strTitle, strContent, nImageIndex, clrText, strImage);
+				SetSubItem(nRowIndex, nItemIndex, strTitle, strContent, bUseTitleFont, nImageIndex, clrText, strImage);
 			}
 			nItemIndex++;
 		}
@@ -392,7 +395,7 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
 }
 
 // 设置表格项内容(文字表格项)
-BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString strContent, int nImageIndex, Color clrText, CString strImage)
+BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString strContent, BOOL bUseTitleFont, int nImageIndex, Color clrText, CString strImage)
 {
 	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
 	{
@@ -415,7 +418,9 @@ BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString str
 		itemInfo.clrText = Color(0, 0, 0, 0);
 		itemInfo.strLink = _T("");
 		itemInfo.strLinkAction = _T("");
-		itemInfo.bNeedTip = FALSE;
+		itemInfo.bNeedTitleTip = FALSE;
+		itemInfo.bNeedContentTip = FALSE;
+		itemInfo.bUseTitleFont = bUseTitleFont;
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
@@ -480,7 +485,9 @@ BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString 
 		itemInfo.clrText = Color(0, 0, 0, 0);
 		itemInfo.strLink = _T("");
 		itemInfo.strLinkAction = _T("");
-		itemInfo.bNeedTip = FALSE;
+		itemInfo.bNeedTitleTip = FALSE;
+		itemInfo.bNeedContentTip = FALSE;
+		itemInfo.bUseTitleFont = FALSE;
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
@@ -867,7 +874,7 @@ void CDuiGridCtrl::SetGridTooltip(int nRow, int nItem, CString strTooltip)
 	if(pDlg && ((m_nTipRow != nRow) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop)))
 	{
 		GridItemInfo* pGridInfo = GetItemInfo(nRow, nItem);
-		if(pGridInfo && pGridInfo->bNeedTip)
+		if(pGridInfo && (pGridInfo->bNeedTitleTip || pGridInfo->bNeedContentTip))
 		{
 			CRect rc = pGridInfo->rcItem;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop+m_nHeaderHeight);
@@ -911,9 +918,13 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 				if(m_bGridTooltip)	// 设置单元格Tooltip
 				{
 					GridItemInfo* pGridInfo = GetItemInfo(m_nHoverRow, rowInfo.nHoverItem);
-					if(pGridInfo)
+					if(pGridInfo && pGridInfo->bNeedTitleTip)
 					{
 						SetGridTooltip(m_nHoverRow, rowInfo.nHoverItem, pGridInfo->strTitle);
+					}else
+					if(pGridInfo && pGridInfo->bNeedContentTip)
+					{
+						SetGridTooltip(m_nHoverRow, rowInfo.nHoverItem, pGridInfo->strContent);
 					}
 				}
 
@@ -940,9 +951,13 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 				if(m_bGridTooltip)	// 设置单元格Tooltip
 				{
 					GridItemInfo* pGridInfo = GetItemInfo(m_nDownRow, rowInfo.nHoverItem);
-					if(pGridInfo)
+					if(pGridInfo && pGridInfo->bNeedTitleTip)
 					{
 						SetGridTooltip(m_nDownRow, rowInfo.nHoverItem, pGridInfo->strTitle);
+					}else
+					if(pGridInfo && pGridInfo->bNeedContentTip)
+					{
+						SetGridTooltip(m_nDownRow, rowInfo.nHoverItem, pGridInfo->strContent);
 					}
 				}
 			}		
@@ -1349,7 +1364,9 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						solidBrushItem.SetColor(itemInfo.clrText);
 					}
 					CString strItemTitle = itemInfo.strTitle;
-					itemInfo.bNeedTip = rect.Width < GetTextBounds(font, strItemTitle).Width;	// 计算是否需要显示tip
+					// 计算是否需要显示tip
+					itemInfo.bNeedTitleTip = rect.Width < GetTextBounds(font, strItemTitle).Width;
+					itemInfo.bNeedContentTip = rect.Width < GetTextBounds(font, itemInfo.strContent).Width;
 					if(!itemInfo.strLink.IsEmpty())
 					{
 						strItemTitle = itemInfo.strLink;
@@ -1361,8 +1378,9 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 							solidBrushItem.SetColor((itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue()) ? itemInfo.clrText : m_clrText);
 						}
 					}
+					// 根据bUseTitleFont决定用标题字体还是普通字体
 					graphics.DrawString(strItemTitle.AllocSysString(), (INT)wcslen(strItemTitle.AllocSysString()),
-						&font, rect, &strFormat, &solidBrushItem);
+						itemInfo.bUseTitleFont ? &fontTitle : &font, rect, &strFormat, itemInfo.bUseTitleFont ? &solidBrushT : &solidBrushItem);
 
 					// 画单元格内容
 					if(!bSingleLine)
