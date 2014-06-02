@@ -553,7 +553,7 @@ CMenuItem* CMenuEx::GetHoverMenuItem()
 // œ˚œ¢œÏ”¶
 LRESULT CMenuEx::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if(Msg != BUTTOM_UP)
+	if((Msg != BUTTOM_UP) && (Msg != BUTTOM_CHECK))
 	{
 		return 0;
 	}

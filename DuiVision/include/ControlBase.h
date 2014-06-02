@@ -20,8 +20,9 @@ enum enumButtonState
 };
 
 // 按钮消息定义
-#define				BUTTOM_DOWN			1
-#define				BUTTOM_UP			2
+#define				BUTTOM_DOWN			1	// 按钮按下
+#define				BUTTOM_UP			2	// 按钮放开
+#define				BUTTOM_CHECK		3	// 检查框消息
 
 // 菜单ID定义
 #define					WM_DUI_MENU		(WM_USER + 20)	

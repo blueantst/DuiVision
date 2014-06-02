@@ -299,7 +299,7 @@ BOOL CMenuItem::OnControlLButtonDown(UINT nFlags, CPoint point)
 				{
 					m_enButtonState = enBSHover;
 				}				
-				SendMessage(BUTTOM_DOWN, bDown, true);
+				SendMessage(BUTTOM_CHECK, bDown, true);
 			}
 			else
 			{
