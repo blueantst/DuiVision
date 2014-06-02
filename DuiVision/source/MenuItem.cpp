@@ -128,6 +128,13 @@ void CMenuItem::ShowPopupMenu()
 			pParentMenu->SetAutoClose(FALSE);
 			// 转换子菜单的坐标
 			::ClientToScreen(pParentMenu->GetSafeHwnd(), &point);
+
+			// 将父菜单的预设值菜单项列表添加到子菜单中
+			for (size_t i = 0; i < pParentMenu->m_vecMenuItemValue.size(); i++)
+			{
+				MenuItemValue& itemValue = pParentMenu->m_vecMenuItemValue.at(i);
+				m_pPopupMenu->m_vecMenuItemValue.push_back(itemValue);
+			}
 		}
 
 		if(!strXmlFile.IsEmpty())
