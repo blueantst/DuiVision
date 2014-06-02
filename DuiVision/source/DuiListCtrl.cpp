@@ -1124,7 +1124,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				// 计算是否需要显示tip
 				rowInfo.bNeedTitleTip = rect.Width < GetTextBounds(font, rowInfo.strTitle).Width;
 				rowInfo.bNeedContentTip = rect.Width < GetTextBounds(font, rowInfo.strContent).Width;
-				RectF rectTime(nWidth-nRightImageWidth-2-100, nVI*m_nRowHeight + 1, 100, m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2) );
+				Size sizeTime = GetTextBounds(font, strFormatRight, rowInfo.strTime);
+				int nTimeWidth = sizeTime.Width + 10;
+				RectF rectTime(nWidth-nRightImageWidth-2-nTimeWidth-nLinkWidth, nVI*m_nRowHeight + 1, nTimeWidth, m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2) );
 				if(m_nHoverRow == i)
 				{
 					// 画标题行
