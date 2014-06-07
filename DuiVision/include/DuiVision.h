@@ -53,6 +53,7 @@ using namespace Gdiplus;
 #include "PopupList.h"
 #include "DuiListCtrl.h"
 #include "DuiGridCtrl.h"
+#include "DuiTreeCtrl.h"
 
 //////////////////////////////////////////////////////////
 //Other

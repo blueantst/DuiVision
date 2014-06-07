@@ -153,6 +153,12 @@
     <ClInclude Include="include\RadioButton.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\DuiGridCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiTreeCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -273,6 +279,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\RadioButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiGridCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiTreeCtrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

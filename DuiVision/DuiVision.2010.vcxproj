@@ -119,11 +119,13 @@
     <ClInclude Include="include\DlgPopup.h" />
     <ClInclude Include="include\DlgSkin.h" />
     <ClInclude Include="include\DuiDef.h" />
+    <ClInclude Include="include\DuiGridCtrl.h" />
     <ClInclude Include="include\DuiHandler.h" />
     <ClInclude Include="include\duiid.h" />
     <ClInclude Include="include\DuiListCtrl.h" />
     <ClInclude Include="include\DuiObject.h" />
     <ClInclude Include="include\DuiSystem.h" />
+    <ClInclude Include="include\DuiTreeCtrl.h" />
     <ClInclude Include="include\DuiVision.h" />
     <ClInclude Include="include\EditEx.h" />
     <ClInclude Include="include\Frame.h" />
@@ -162,10 +164,12 @@
     <ClCompile Include="source\DlgBase.cpp" />
     <ClCompile Include="source\DlgPopup.cpp" />
     <ClCompile Include="source\DlgSkin.cpp" />
+    <ClCompile Include="source\DuiGridCtrl.cpp" />
     <ClCompile Include="source\DuiHandler.cpp" />
     <ClCompile Include="source\DuiListCtrl.cpp" />
     <ClCompile Include="source\DuiObject.cpp" />
     <ClCompile Include="source\DuiSystem.cpp" />
+    <ClCompile Include="source\DuiTreeCtrl.cpp" />
     <ClCompile Include="source\EditEx.cpp" />
     <ClCompile Include="source\Frame.cpp" />
     <ClCompile Include="source\GlobalFunction.cpp" />

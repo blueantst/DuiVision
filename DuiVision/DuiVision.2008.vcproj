@@ -201,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiTreeCtrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\EditEx.cpp"
 				>
 			</File>
@@ -372,6 +376,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiTreeCtrl.h"
 				>
 			</File>
 			<File
