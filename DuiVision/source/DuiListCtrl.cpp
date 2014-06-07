@@ -1001,7 +1001,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		if(m_vecRowInfo.size() > 0)
 		{
-			for(size_t i = m_nFirstViewRow; i <= m_nLastViewRow && i <= m_vecRowInfo.size(); i++)
+			for(size_t i = m_nFirstViewRow; i <= m_nLastViewRow && i < m_vecRowInfo.size(); i++)
 			{
 				ListRowInfo &rowInfo = m_vecRowInfo.at(i);
 				SolidBrush solidBrushRow(rowInfo.clrText);	// 行定义的颜色

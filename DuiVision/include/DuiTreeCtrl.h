@@ -69,24 +69,25 @@ public:
 	BOOL LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem);
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
-	BOOL InsertNode(HTREEITEM hParentNode, CString strId,
+	HTREEITEM InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		int nCheck = -1);
 	HTREEITEM InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo);
-	BOOL SetSubItem(int nRow, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
+	BOOL SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
-	BOOL SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction = _T(""),
+	BOOL SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
-	BOOL SetSubItemCollapse(int nRow, int nItem);
-	BOOL DeleteNode(int nItem);
+	BOOL SetSubItemCollapse(HTREEITEM hNode, int nItem);
+	BOOL DeleteNode(HTREEITEM hNode);
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
 	int  GetNodeRow(HTREEITEM hNode);
 	int	 GetNodeLastChildRow(HTREEITEM hNode);
-	TreeNodeInfo* GetNodeInfo(int nRow);
-	TreeItemInfo* GetItemInfo(int nRow, int nItem);
-	void SetItemInfo(int nRow, int nItem, TreeItemInfo* pItemInfo);
-	void SetNodeColor(int nRow, Color clrText);
+	HTREEITEM GetNodeWithId(CString strId);
+	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);
+	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
+	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
+	void SetNodeColor(HTREEITEM hNode, Color clrText);
 	void ClearNodes();
 	void HideChildNodes(HTREEITEM hItem);
 	void RefreshNodeRows();
@@ -153,8 +154,8 @@ public:
 	int					m_nDownRow;			// 当前点击的行索引
 
 	int					m_nFirstViewRow;	// 当前显示区的第一行的序号
-	int					m_nLastViewRow;		// 当前显示区的最后一行的序号
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
+	int					m_nVisibleRowCount;	// 当前可显示的行数(非折叠行)
 
 	BOOL				m_bGridTooltip;		// 是否显示单元格的Tooltip
 	int					m_nTipRow;			// 当前tip行
