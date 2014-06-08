@@ -117,7 +117,7 @@ BOOL CDuiTreeCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	LoadNode(NULL, pXmlElem);
 
 	// 刷新所有行
-	RefreshNodeRows();
+	//RefreshNodeRows();
 
     return TRUE;
 }
@@ -452,26 +452,8 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo
 		return NULL;
 	}
 
-	int nXPos = 0;//m_rc.left;
-	int nYPos = 0;//m_rc.top;
-	int nVisibleRows = 0;
-	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
-	{
-		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
-		int nItemWidth = m_rc.Width() - 8;
-		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
-
-		rowInfoTemp.rcCheck.SetRect(0,0,0,0);
-
-		nYPos += m_nRowHeight;
-		nVisibleRows++;
-	}
-	m_nVisibleRowCount = nVisibleRows;
-
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible((nVisibleRows * m_nRowHeight) > m_rc.Height());
-
-	UpdateControl(true);
+	// 刷新所有行的位置
+	RefreshNodeRows();
 
 	return pNodeInfo->hNode;
 }
@@ -1368,27 +1350,7 @@ void CDuiTreeCtrl::SetControlRect(CRect rc)
 	}
 
 	// 重新计算所有行的位置
-	int nXPos = 0;
-	int nYPos = 0;
-	int nVisibleRows = 0;
-	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
-	{
-		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
-		if(rowInfoTemp.bHide)
-		{
-			continue;
-		}
-
-		int nItemWidth = m_rc.Width() - 8;
-		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
-
-		nYPos += m_nRowHeight;
-		nVisibleRows++;
-	}
-	m_nVisibleRowCount = nVisibleRows;
-
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible((nVisibleRows * m_nRowHeight) > m_rc.Height());
+	RefreshNodeRows();
 }
 
 // 判断指定的坐标位置是否在某一行中
@@ -1913,7 +1875,6 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					int nCheckImageIndex = ((m_nHoverRow == i) ? ((rowInfo.nCheck==1) ? 4 : 1) : ((rowInfo.nCheck==1) ? 2 : 0));
 					graphics.DrawImage(m_pImageCheckBox, Rect(nXPos, nVI*m_nRowHeight + nCheckImgY, m_sizeCheckBox.cx, m_sizeCheckBox.cy),
 						nCheckImageIndex * m_sizeCheckBox.cx, 0, m_sizeCheckBox.cx, m_sizeCheckBox.cy, UnitPixel);
-					rowInfo.rcCheck.SetRect(nXPos, i*m_nRowHeight + nCheckImgY, nXPos + m_sizeCheckBox.cx, i*m_nRowHeight + nCheckImgY + m_sizeCheckBox.cy);
 					nXPos += (m_sizeCheckBox.cx + 3);
 				}
 
