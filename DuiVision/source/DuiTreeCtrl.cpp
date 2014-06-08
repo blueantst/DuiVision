@@ -39,6 +39,8 @@ CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_sizeCheckBox = CSize(0, 0);
 	m_pImageCollapse = NULL;
 	m_sizeCollapse = CSize(0, 0);
+	m_pImageToggle = NULL;
+	m_sizeToggle = CSize(0, 0);
 
 	m_nBkTransparent = 30;
 
@@ -744,6 +746,39 @@ int CDuiTreeCtrl::GetNodeLastChildRow(HTREEITEM hNode)
 	return nRow;
 }
 
+// 判断一个节点是否有子节点
+BOOL CDuiTreeCtrl::HaveChildNode(HTREEITEM hNode)
+{
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
+		if(rowInfoTemp.hParentNode == hNode)
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+// 获取一个节点的层级
+int CDuiTreeCtrl::GetNodeLevel(HTREEITEM hNode)
+{
+	int nLevel = 0;
+	TreeNodeInfo* pNodeInfo = GetNodeInfo(hNode);
+	while(pNodeInfo != NULL)
+	{
+		if(pNodeInfo->hParentNode == NULL)
+		{
+			break;
+		}
+		nLevel++;
+		pNodeInfo = GetNodeInfo(pNodeInfo->hParentNode);
+	}
+
+	return nLevel;
+}
+
 // 根据节点ID获取节点的句柄
 HTREEITEM CDuiTreeCtrl::GetNodeWithId(CString strId)
 {
@@ -861,6 +896,20 @@ void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
 	rowInfo.bRowColor = TRUE;
 	rowInfo.clrText = clrText;
+}
+
+// 切换节点的缩放状态
+void CDuiTreeCtrl::ToggleNode(HTREEITEM hItem)
+{
+	if(HaveChildNode(hItem))
+	{
+		TreeNodeInfo* pNodeInfo = GetNodeInfo(hItem);
+		if(pNodeInfo != NULL)
+		{
+			pNodeInfo->bCollapse = !pNodeInfo->bCollapse;
+			RefreshNodeRows();
+		}
+	}
 }
 
 // 清空树节点
@@ -1186,6 +1235,84 @@ HRESULT CDuiTreeCtrl::OnAttributeImageCollapse(const CStringA& strValue, BOOL bL
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置树节点图片资源
+BOOL CDuiTreeCtrl::SetToggleImage(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
+{
+	if(m_pImageToggle != NULL)
+	{
+		delete m_pImageToggle;
+		m_pImageToggle = NULL;
+	}
+
+	if(ImageFromIDResource(nResourceID, strType, m_pImageToggle))
+	{
+		m_sizeToggle.SetSize(m_pImageToggle->GetWidth() / 6, m_pImageToggle->GetHeight());
+		return true;
+	}
+	return false;
+}
+
+// 设置树节点图片文件
+BOOL CDuiTreeCtrl::SetToggleImage(CString strImage/* = TEXT("")*/)
+{
+	if(m_pImageToggle != NULL)
+	{
+		delete m_pImageToggle;
+		m_pImageToggle = NULL;
+	}
+
+	m_pImageToggle = Image::FromFile(strImage, TRUE);
+
+	if(m_pImageToggle->GetLastStatus() == Ok)
+	{
+		m_sizeToggle.SetSize(m_pImageToggle->GetWidth() / 6, m_pImageToggle->GetHeight());
+		return true;
+	}
+	return false;
+}
+
+// 从XML设置树节点图片信息属性
+HRESULT CDuiTreeCtrl::OnAttributeImageToggle(const CStringA& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	// 通过Skin读取
+	CStringA strSkin = "";
+	if(strValue.Find("skin:") == 0)
+	{
+		strSkin = DuiSystem::Instance()->GetSkin(strValue);
+		if (strSkin.IsEmpty()) return E_FAIL;
+	}else
+	{
+		strSkin = strValue;
+	}
+
+	if(strSkin.Find(".") != -1)	// 加载图片文件
+	{
+		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		if(strSkin.Find(":") != -1)
+		{
+			strImgFile = CA2T(strSkin, CP_UTF8);
+		}
+		if(!SetToggleImage(strImgFile))
+		{
+			return E_FAIL;
+		}
+	}else	// 加载图片资源
+	{
+		UINT nResourceID = atoi(strSkin);
+		if(!SetToggleImage(nResourceID, TEXT("PNG")))
+		{
+			if(!SetToggleImage(nResourceID, TEXT("BMP")))
+			{
+				return E_FAIL;
+			}
+		}
+	}
+
+	return bLoading?S_FALSE:S_OK;
+}
+
 void CDuiTreeCtrl::SetControlRect(CRect rc)
 {
 	m_rc = rc;
@@ -1273,6 +1400,21 @@ BOOL CDuiTreeCtrl::PtInRowCollapse(CPoint point, TreeNodeInfo& rowInfo)
 		return FALSE;
 	}
 
+	// 判断节点的缩放图片位置
+	if((m_pImageToggle != NULL) && HaveChildNode(rowInfo.hNode))
+	{
+		int nNodeLevel = GetNodeLevel(rowInfo.hNode);
+		CRect rc = rowInfo.rcRow;
+		rc.left = nNodeLevel * m_sizeToggle.cx;
+		rc.right = rc.left + m_sizeToggle.cx;
+		rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
+		if(rc.PtInRect(point))
+		{
+			return TRUE;
+		}
+	}
+
+	// 判断鼠标是否在显示缩放图片的单元格内
 	for(size_t i = 0; i < rowInfo.vecItemInfo.size(); i++)
 	{
 		TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(i);
@@ -1717,6 +1859,21 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				int nVI = nRowIndex;//i - m_nFirstViewRow;
 				nRowIndex++;
 
+				// 画树节点缩放图片(toggle)
+				if(m_pImageToggle != NULL)
+				{
+					int nNodeLevel = GetNodeLevel(rowInfo.hNode);
+					nXPos += (nNodeLevel * m_sizeToggle.cx);
+					if(HaveChildNode(rowInfo.hNode))
+					{
+						int nToggleImgY = (m_nRowHeight - m_sizeToggle.cy) / 2;
+						int nToggleIndex = (m_nHoverRow == i) ? 1 : 0;
+						graphics.DrawImage(m_pImageToggle, Rect(nXPos, nVI*m_nRowHeight + nToggleImgY, m_sizeToggle.cx, m_sizeToggle.cy),
+							rowInfo.bCollapse ? nToggleIndex*m_sizeToggle.cx : (3+nToggleIndex)*m_sizeToggle.cx, 0, m_sizeToggle.cx, m_sizeToggle.cy, UnitPixel);
+						nXPos += m_sizeToggle.cx;
+					}
+				}
+
 				// 画检查框
 				int nCheckImgY = 3;
 				if((m_sizeCheckBox.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
@@ -1877,7 +2034,14 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 							&font, rect, &strFormat, &solidBrushItem);
 					}
 
-					nPosItemX += itemInfo.rcItem.Width();
+					if(j == 0)
+					{
+						// 为了使第二列开始是对齐的,所以第二列开始位置按照第一列的宽度计算
+						nPosItemX = itemInfo.rcItem.Width();
+					}else
+					{
+						nPosItemX += itemInfo.rcItem.Width();
+					}
 				}
 
 				// 画分隔线(采用拉伸模式)

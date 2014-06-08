@@ -84,11 +84,14 @@ public:
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
 	int  GetNodeRow(HTREEITEM hNode);
 	int	 GetNodeLastChildRow(HTREEITEM hNode);
+	BOOL HaveChildNode(HTREEITEM hNode);
+	int  GetNodeLevel(HTREEITEM hNode);
 	HTREEITEM GetNodeWithId(CString strId);
 	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);
 	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
 	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
 	void SetNodeColor(HTREEITEM hNode, Color clrText);
+	void ToggleNode(HTREEITEM hItem);
 	void ClearNodes();
 	void HideChildNodes(HTREEITEM hItem);
 	void RefreshNodeRows();
@@ -99,6 +102,8 @@ public:
 	BOOL SetCheckBoxImage(CString strImage = TEXT(""));
 	BOOL SetCollapseImage(UINT nResourceID = 0, CString strType= TEXT("PNG"));
 	BOOL SetCollapseImage(CString strImage = TEXT(""));
+	BOOL SetToggleImage(UINT nResourceID = 0, CString strType= TEXT("PNG"));
+	BOOL SetToggleImage(CString strImage = TEXT(""));
 
 	BOOL PtInRow(CPoint point, TreeNodeInfo& rowInfo);
 	BOOL PtInRowCheck(CPoint point, TreeNodeInfo& rowInfo);
@@ -124,6 +129,7 @@ protected:
 	HRESULT OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageCheckBox(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageCollapse(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageToggle(const CStringA& strValue, BOOL bLoading);
 
 	// 消息响应
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -150,6 +156,8 @@ public:
 	CSize				m_sizeCheckBox;		// 检查框图片大小
 	Image*				m_pImageCollapse;	// 行缩放图片
 	CSize				m_sizeCollapse;		// 行缩放图片大小
+	Image*				m_pImageToggle;		// 树节点图片
+	CSize				m_sizeToggle;		// 树节点图片大小
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
@@ -170,6 +178,7 @@ public:
 		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)
 		DUI_CUSTOM_ATTRIBUTE("img-collapse", OnAttributeImageCollapse)
+		DUI_CUSTOM_ATTRIBUTE("img-toggle", OnAttributeImageToggle)
 		DUI_CUSTOM_ATTRIBUTE("font-title", OnAttributeFontTitle)
 		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
 		DUI_COLOR_ATTRIBUTE("crhover", m_clrTextHover, FALSE)
