@@ -43,7 +43,8 @@ CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nBkTransparent = 30;
 
 	m_nHoverRow = 0;
-	m_nDownRow = 0;
+	m_nDownRow = -1;
+	m_bEnableDownRow = FALSE;
 	m_bSingleLine = TRUE;
 	m_bTextWrap = FALSE;
 
@@ -230,6 +231,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem)
 			CStringA strContentA = pItemElem->Attribute("content");
 			CStringA strClrTextA = pItemElem->Attribute("crtext");
 			CStringA strImageA = pItemElem->Attribute("image");
+			CStringA strImageCountA = pItemElem->Attribute("img-count");
 			CStringA strLinkA = pItemElem->Attribute("link");
 			CStringA strLinkActionA = pItemElem->Attribute("linkaction");
 			CStringA strFontTitleA = pItemElem->Attribute("font-title");
@@ -277,20 +279,22 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem)
 				// 图片索引
 				nImageIndex = atoi(strSkin);
 			}
+			int nImageCount = atoi(strImageCountA);
 
 			BOOL bUseTitleFont = (strFontTitleA == "1");
 
-			// 设置收缩图片单元格
 			if(bShowCollapse)
 			{
-				SetSubItemCollapse(hNode, nItemIndex);
-			}
-
+				// 设置收缩图片单元格
+				SetSubItemCollapse(hNode, nItemIndex, strImage, nImageCount);
+			}else
 			if(!strLink.IsEmpty())
 			{
+				// 设置链接单元格
 				SetSubItemLink(hNode, nItemIndex, strLink, strLinkAction, nImageIndex, clrText, strImage);
 			}else
 			{
+				// 普通单元格
 				SetSubItem(hNode, nItemIndex, strTitle, strContent, bUseTitleFont, nImageIndex, clrText, strImage);
 			}
 			nItemIndex++;
@@ -492,6 +496,7 @@ BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CStr
 		itemInfo.nImageIndex = -1;
 		itemInfo.pImage = NULL;
 		itemInfo.sizeImage = CSize(0,0);
+		itemInfo.nImageCount = 0;
 		itemInfo.clrText = Color(0, 0, 0, 0);
 		itemInfo.strLink = _T("");
 		itemInfo.strLinkAction = _T("");
@@ -561,6 +566,7 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 		itemInfo.nImageIndex = -1;
 		itemInfo.pImage = NULL;
 		itemInfo.sizeImage = CSize(0,0);
+		itemInfo.nImageCount = 0;
 		itemInfo.clrText = Color(0, 0, 0, 0);
 		itemInfo.strLink = _T("");
 		itemInfo.strLinkAction = _T("");
@@ -609,7 +615,7 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 }
 
 // 设置表格项为收缩图片显示
-BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem)
+BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strImage, int nImageCount)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -630,6 +636,7 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem)
 		itemInfo.nImageIndex = -1;
 		itemInfo.pImage = NULL;
 		itemInfo.sizeImage = CSize(0,0);
+		itemInfo.nImageCount = 0;
 		itemInfo.clrText = Color(0, 0, 0, 0);
 		itemInfo.strLink = _T("");
 		itemInfo.strLinkAction = _T("");
@@ -642,10 +649,30 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem)
 
 	TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(nItem);
 	itemInfo.bShowCollapse = TRUE;
+	itemInfo.nImageCount = nImageCount;
 
 	TreeColumnInfo &columnInfo = m_vecColumnInfo.at(nItem);
 	itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
 			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
+
+	// 收缩图片
+	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
+	{
+		strImage = DuiSystem::GetSkinPath() + strImage;
+	}
+	if(!strImage.IsEmpty())
+	{
+		// 使用行数据指定的图片
+		itemInfo.pImage = Image::FromFile(strImage, TRUE);
+		if(itemInfo.pImage->GetLastStatus() == Ok)
+		{
+			if(itemInfo.nImageCount == 0)
+			{
+				itemInfo.nImageCount = 6;
+			}
+			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / itemInfo.nImageCount, itemInfo.pImage->GetHeight());
+		}
+	}
 
 	return TRUE;
 }
@@ -1460,8 +1487,11 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
 			if(m_nDownRow != m_nHoverRow)
 			{
-				m_nDownRow = m_nHoverRow;
-				m_nHoverRow = -1;
+				if(m_bEnableDownRow)
+				{
+					m_nDownRow = m_nHoverRow;
+					m_nHoverRow = -1;
+				}
 
 				SendMessage(BUTTOM_DOWN, rowInfo.hNode, rowInfo.nHoverItem);
 
@@ -1764,7 +1794,7 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 画单元格图片
 					int nItemImageX = 0;
 					int nImgY = 3;
-					if(itemInfo.pImage != NULL)
+					if((itemInfo.pImage != NULL) && (itemInfo.nImageCount <= 1))
 					{
 						if((itemInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 						{
@@ -1790,11 +1820,19 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					rect.Width -= nItemImageX;
 
 					// 画收缩图片
-					if(itemInfo.bShowCollapse && m_pImageCollapse)
+					if(itemInfo.bShowCollapse)
 					{
 						int nCollapseIndex = (m_nHoverRow == i) ? 1 : 0;
-						graphics.DrawImage(m_pImageCollapse, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-m_sizeCollapse.cy)/2, m_sizeCollapse.cx, m_sizeCollapse.cy),
-							rowInfo.bCollapse ? (4+nCollapseIndex)*m_sizeCollapse.cx : nCollapseIndex*m_sizeCollapse.cx, 0, m_sizeCollapse.cx, m_sizeCollapse.cy, UnitPixel);
+						if(itemInfo.pImage != NULL)
+						{
+							graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-itemInfo.sizeImage.cy)/2, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+								rowInfo.bCollapse ? nCollapseIndex*itemInfo.sizeImage.cx : ((itemInfo.nImageCount / 2)+nCollapseIndex)*itemInfo.sizeImage.cx, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
+						}else
+						if(m_pImageCollapse != NULL)
+						{
+							graphics.DrawImage(m_pImageCollapse, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-m_sizeCollapse.cy)/2, m_sizeCollapse.cx, m_sizeCollapse.cy),
+								rowInfo.bCollapse ? nCollapseIndex*m_sizeCollapse.cx : (4+nCollapseIndex)*m_sizeCollapse.cx, 0, m_sizeCollapse.cx, m_sizeCollapse.cy, UnitPixel);
+						}
 					}
 
 					// 画单元格标题或链接内容

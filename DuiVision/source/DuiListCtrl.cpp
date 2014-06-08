@@ -40,7 +40,8 @@ CDuiListCtrl::CDuiListCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nBkTransparent = 30;
 
 	m_nHoverRow = 0;
-	m_nDownRow = 0;
+	m_nDownRow = -1;
+	m_bEnableDownRow = FALSE;
 	m_bSingleLine = TRUE;
 	m_bTextWrap = FALSE;
 
@@ -785,10 +786,13 @@ BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 			rowInfo.nHoverLink = PtInRowLink(point, rowInfo);
 			if(m_nDownRow != m_nHoverRow)
 			{
-				m_nDownRow = m_nHoverRow;
-				m_nHoverRow = -1;
+				if(m_bEnableDownRow)
+				{
+					m_nDownRow = m_nHoverRow;
+					m_nHoverRow = -1;
+				}
 
-				SendMessage(BUTTOM_DOWN, m_nDownRow, rowInfo.nHoverLink);
+				SendMessage(BUTTOM_DOWN, m_bEnableDownRow ? m_nDownRow : m_nHoverRow, rowInfo.nHoverLink);
 
 				UpdateControl(TRUE);
 
@@ -826,7 +830,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// ¼ì²é¿ò×´Ì¬¸Ä±ä
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(BUTTOM_UP, m_nDownRow, rowInfo.nCheck);
+				SendMessage(BUTTOM_UP, m_nHoverRow, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;

@@ -112,6 +112,7 @@ public:
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
+	BOOL				m_bEnableDownRow;	// 允许显示当前点击行
 
 	int					m_nFirstViewRow;	// 当前显示区的第一行的序号
 	int					m_nLastViewRow;		// 当前显示区的最后一行的序号
@@ -132,6 +133,7 @@ public:
 		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
+		DUI_INT_ATTRIBUTE("down-row", m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
 		DUI_INT_ATTRIBUTE("row-tip", m_bRowTooltip, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()

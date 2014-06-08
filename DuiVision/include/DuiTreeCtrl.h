@@ -23,6 +23,7 @@ struct TreeItemInfo
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
+	int		nImageCount;	// 图片个数
 	Color	clrText;		// 文字颜色
 	CString strLink;		// 链接的文字
 	CString strLinkAction;	// 链接的动作
@@ -78,7 +79,7 @@ public:
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
-	BOOL SetSubItemCollapse(HTREEITEM hNode, int nItem);
+	BOOL SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strImage = _T(""), int nImageCount = 0);
 	BOOL DeleteNode(HTREEITEM hNode);
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
 	int  GetNodeRow(HTREEITEM hNode);
@@ -152,6 +153,7 @@ public:
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
+	BOOL				m_bEnableDownRow;	// 允许显示当前点击行
 
 	int					m_nFirstViewRow;	// 当前显示区的第一行的序号
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
@@ -177,6 +179,7 @@ public:
 		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE("left-pos", m_nLeftPos, FALSE)
 		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
+		DUI_INT_ATTRIBUTE("down-row", m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
 		DUI_INT_ATTRIBUTE("grid-tip", m_bGridTooltip, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
