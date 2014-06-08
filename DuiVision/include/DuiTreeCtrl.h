@@ -110,7 +110,7 @@ public:
 	BOOL PtInRowCollapse(CPoint point, TreeNodeInfo& rowInfo);
 	int  PtInRowItem(CPoint point, TreeNodeInfo& rowInfo);
 
-	void SetGridTooltip(int nRow, int nItem, CString strTooltip);
+	void SetGridTooltip(HTREEITEM hNode, int nItem, CString strTooltip);
 	void ClearGridTooltip();
 
 protected:
@@ -168,7 +168,7 @@ public:
 	int					m_nVisibleRowCount;	// 当前可显示的行数(非折叠行)
 
 	BOOL				m_bGridTooltip;		// 是否显示单元格的Tooltip
-	int					m_nTipRow;			// 当前tip行
+	int					m_nTipNode;			// 当前tip节点
 	int					m_nTipItem;			// 当前tip列
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 

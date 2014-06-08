@@ -51,7 +51,7 @@ CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bTextWrap = FALSE;
 
 	m_bGridTooltip = TRUE;
-	m_nTipRow = -1;
+	m_nTipNode = NULL;
 	m_nTipItem = -1;
 	m_nTipVirtualTop = 0;
 
@@ -964,9 +964,36 @@ void CDuiTreeCtrl::RefreshNodeRows()
 			continue;
 		}
 
+		// 计算行位置
 		int nItemWidth = m_rc.Width() - 8;
 		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
 
+		int nXPos = 0;
+		if(m_pImageToggle != NULL)
+		{
+			int nNodeLevel = GetNodeLevel(rowInfoTemp.hNode);
+			nXPos += (nNodeLevel * m_sizeToggle.cx);
+			if(HaveChildNode(rowInfoTemp.hNode))
+			{
+				nXPos += m_sizeToggle.cx;
+			}
+		}
+
+		// 计算检查框位置
+		if((rowInfoTemp.nCheck != -1) && (m_pImageCheckBox != NULL))
+		{
+			int nCheckImgY = 3;
+			if((m_sizeCheckBox.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+			{
+				nCheckImgY = (m_nRowHeight - m_sizeCheckBox.cy) / 2 + 1;
+			}
+			rowInfoTemp.rcCheck.left = nXPos;
+			rowInfoTemp.rcCheck.right = rowInfoTemp.rcCheck.left + m_sizeCheckBox.cx;
+			rowInfoTemp.rcCheck.top = rowInfoTemp.rcRow.top + nCheckImgY;
+			rowInfoTemp.rcCheck.bottom = rowInfoTemp.rcCheck.top + m_sizeCheckBox.cy;
+		}
+
+		// 计算每个单元格位置
 		for(int j = 0; j < rowInfoTemp.vecItemInfo.size(); j++)
 		{
 			TreeItemInfo &itemInfo = rowInfoTemp.vecItemInfo.at(j);
@@ -1459,17 +1486,18 @@ int CDuiTreeCtrl::PtInRowItem(CPoint point, TreeNodeInfo& rowInfo)
 }
 
 // 设置单元格的Tooltip
-void CDuiTreeCtrl::SetGridTooltip(int nRow, int nItem, CString strTooltip)
+void CDuiTreeCtrl::SetGridTooltip(HTREEITEM hNode, int nItem, CString strTooltip)
 {
-	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
 	{
 		return;
 	}
 
 	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg && ((m_nTipRow != nRow) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop)))
+	if(pDlg && ((m_nTipNode != hNode) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop)))
 	{
-		TreeItemInfo* pGridInfo = GetItemInfo(nRow, nItem);
+		TreeItemInfo* pGridInfo = GetItemInfo(hNode, nItem);
 		if(pGridInfo && (pGridInfo->bNeedTitleTip || pGridInfo->bNeedContentTip))
 		{
 			CRect rc = pGridInfo->rcItem;
@@ -1479,7 +1507,7 @@ void CDuiTreeCtrl::SetGridTooltip(int nRow, int nItem, CString strTooltip)
 		{
 			pDlg->ClearTooltip();
 		}
-		m_nTipRow = nRow;
+		m_nTipNode = hNode;
 		m_nTipItem = nItem;
 		m_nTipVirtualTop = m_nVirtualTop;
 	}
@@ -1492,7 +1520,7 @@ void CDuiTreeCtrl::ClearGridTooltip()
 	if(pDlg)
 	{
 		pDlg->ClearTooltip();
-		m_nTipRow = -1;
+		m_nTipNode = NULL;
 		m_nTipItem = -1;
 		m_nTipVirtualTop = 0;
 	}
@@ -1526,14 +1554,14 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 				if(m_bGridTooltip)	// 设置单元格Tooltip
 				{
-					TreeItemInfo* pGridInfo = GetItemInfo(m_nHoverRow, rowInfo.nHoverItem);
+					TreeItemInfo* pGridInfo = GetItemInfo(rowInfo.hNode, rowInfo.nHoverItem);
 					if(pGridInfo && pGridInfo->bNeedTitleTip)
 					{
-						SetGridTooltip(m_nHoverRow, rowInfo.nHoverItem, pGridInfo->strTitle);
+						SetGridTooltip(rowInfo.hNode, rowInfo.nHoverItem, pGridInfo->strTitle);
 					}else
 					if(pGridInfo && pGridInfo->bNeedContentTip)
 					{
-						SetGridTooltip(m_nHoverRow, rowInfo.nHoverItem, pGridInfo->strContent);
+						SetGridTooltip(rowInfo.hNode, rowInfo.nHoverItem, pGridInfo->strContent);
 					}else
 					{
 						ClearGridTooltip();
@@ -1562,14 +1590,14 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 				if(m_bGridTooltip)	// 设置单元格Tooltip
 				{
-					TreeItemInfo* pGridInfo = GetItemInfo(m_nDownRow, rowInfo.nHoverItem);
+					TreeItemInfo* pGridInfo = GetItemInfo(rowInfo.hNode, rowInfo.nHoverItem);
 					if(pGridInfo && pGridInfo->bNeedTitleTip)
 					{
-						SetGridTooltip(m_nDownRow, rowInfo.nHoverItem, pGridInfo->strTitle);
+						SetGridTooltip(rowInfo.hNode, rowInfo.nHoverItem, pGridInfo->strTitle);
 					}else
 					if(pGridInfo && pGridInfo->bNeedContentTip)
 					{
-						SetGridTooltip(m_nDownRow, rowInfo.nHoverItem, pGridInfo->strContent);
+						SetGridTooltip(rowInfo.hNode, rowInfo.nHoverItem, pGridInfo->strContent);
 					}else
 					{
 						ClearGridTooltip();
