@@ -1501,7 +1501,7 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 	if(m_rc.PtInRect(point))
 	{
-		if((m_nHoverRow != -1) && (m_nHoverRow < m_vecRowInfo.size()))
+		if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 		{
 			TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 			nOldHoverItem = rowInfo.nHoverItem;
@@ -1536,7 +1536,7 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		}
 
 		BOOL bMousenDown = false;
-		if((m_nDownRow != -1) && (m_nDownRow < m_vecRowInfo.size()))
+		if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
 		{
 			TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
 			nOldHoverItem = rowInfo.nHoverItem;
@@ -1611,7 +1611,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	// 设置窗口焦点,否则可能无法进行滚动事件的处理
 	SetWindowFocus();
 
-	if(m_nHoverRow != -1)
+	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 	{
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
@@ -1633,7 +1633,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if(m_nDownRow != -1)
+	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
@@ -1655,7 +1655,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		return false;
 	}
 
-	if(m_nHoverRow != -1)
+	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 	{
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo))
@@ -1677,7 +1677,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if(m_nDownRow != -1)
+	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);

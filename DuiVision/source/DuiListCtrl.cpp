@@ -669,7 +669,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 	if(m_rc.PtInRect(point))
 	{
 		// 如果鼠标在热点行,判断鼠标是否在某个链接位置
-		if((m_nHoverRow != -1) && (m_nHoverRow < m_vecRowInfo.size()))
+		if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 			nOldHoverLink = rowInfo.nHoverLink;
@@ -703,7 +703,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 		// 如果鼠标在当前行,判断鼠标是否在某个链接位置
 		BOOL bMousenDown = false;
-		if((m_nDownRow != -1) && (m_nDownRow < m_vecRowInfo.size()))
+		if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
 			nOldHoverLink = rowInfo.nHoverLink;
@@ -778,7 +778,7 @@ BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	// 设置窗口焦点,否则可能无法进行滚动事件的处理
 	SetWindowFocus();
 
-	if(m_nHoverRow != -1)
+	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 	{
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
@@ -800,7 +800,7 @@ BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if(m_nDownRow != -1)
+	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
@@ -822,7 +822,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		return false;
 	}
 
-	if(m_nHoverRow != -1)
+	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 	{
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo))
@@ -837,7 +837,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if(m_nDownRow != -1)
+	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
