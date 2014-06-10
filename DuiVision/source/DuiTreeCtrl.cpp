@@ -1835,11 +1835,17 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		if(m_vecRowInfo.size() > 0)
 		{
 			int nRowIndex = 0;
-			for(size_t i = m_nFirstViewRow; (nRowIndex < nViewRowCount) && (i < m_vecRowInfo.size()); i++)
+			int nFirstRowCount = 0;
+			for(size_t i = 0; (nRowIndex < nViewRowCount) && (i < m_vecRowInfo.size()); i++)
 			{
 				TreeNodeInfo &rowInfo = m_vecRowInfo.at(i);
 				if(rowInfo.bHide)
 				{
+					continue;
+				}
+				if(nFirstRowCount < m_nFirstViewRow)
+				{
+					nFirstRowCount++;
 					continue;
 				}
 
