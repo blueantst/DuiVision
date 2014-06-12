@@ -91,7 +91,7 @@ public:
 	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
 	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
 	void SetNodeColor(HTREEITEM hNode, Color clrText);
-	void ToggleNode(HTREEITEM hItem);
+	void ToggleNode(HTREEITEM hNode);
 	void ClearNodes();
 	void HideChildNodes(HTREEITEM hItem);
 	void RefreshNodeRows();

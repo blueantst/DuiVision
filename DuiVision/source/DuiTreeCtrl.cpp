@@ -881,11 +881,11 @@ void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 }
 
 // 切换节点的缩放状态
-void CDuiTreeCtrl::ToggleNode(HTREEITEM hItem)
+void CDuiTreeCtrl::ToggleNode(HTREEITEM hNode)
 {
-	if(HaveChildNode(hItem))
+	if(HaveChildNode(hNode))
 	{
-		TreeNodeInfo* pNodeInfo = GetNodeInfo(hItem);
+		TreeNodeInfo* pNodeInfo = GetNodeInfo(hNode);
 		if(pNodeInfo != NULL)
 		{
 			pNodeInfo->bCollapse = !pNodeInfo->bCollapse;
@@ -981,6 +981,12 @@ void CDuiTreeCtrl::RefreshNodeRows()
 			TreeItemInfo &itemInfo = rowInfoTemp.vecItemInfo.at(j);
 			itemInfo.rcItem.top = rowInfoTemp.rcRow.top;
 			itemInfo.rcItem.bottom = rowInfoTemp.rcRow.bottom;
+			// 第一个单元格左侧位置要排除收缩图片的宽度
+			if((j == 0) && (m_pImageToggle != NULL) && HaveChildNode(rowInfoTemp.hNode))
+			{
+				int nNodeLevel = GetNodeLevel(rowInfoTemp.hNode);
+				itemInfo.rcItem.left = (nNodeLevel+1) * m_sizeToggle.cx + rowInfoTemp.rcRow.left;
+			}
 		}
 
 		nYPos += m_nRowHeight;
@@ -1614,7 +1620,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
 	{
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
-		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
+		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo) && !PtInRowCollapse(point, rowInfo))	// 检查框和收缩事件只在鼠标放开时候触发
 		{
 			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
 			if(m_nDownRow != m_nHoverRow)
@@ -2032,7 +2038,7 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					if(j == 0)
 					{
 						// 为了使第二列开始是对齐的,所以第二列开始位置按照第一列的宽度计算
-						nPosItemX = itemInfo.rcItem.Width();
+						nPosItemX = itemInfo.rcItem.right;
 					}else
 					{
 						nPosItemX += itemInfo.rcItem.Width();
