@@ -440,7 +440,7 @@ CString DuiSystem::GetString(CStringA strName)
 // 设置字符串值
 void DuiSystem::SetString(CStringA strName, CString strValue)
 {
-	m_mapStringPool.SetAt(strName, CEncodingUtil::UnicodeToAnsi(strValue));
+	m_mapStringPool.SetAt(strName, CT2A(strValue, CP_UTF8));
 }
 
 // 解析字符串，替换其中的替换内容
