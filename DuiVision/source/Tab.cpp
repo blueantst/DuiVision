@@ -160,9 +160,13 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		CStringA strActive = pTabElem->Attribute("active");
 		CStringA strDivXml = pTabElem->Attribute("div");
 
+		CStringA strScrollA = pTabElem->Attribute("scroll");
+		BOOL bEnableScroll = (strScrollA == "1");
+
 		// 加载Panel控件，每个Tab页都会自动创建一个Panel控件，即使没有加载子XML节点
 		CDuiPanel* pControlPanel = (CDuiPanel*)_CreateControlByName("div");
 		pControlPanel->SetName(CEncodingUtil::AnsiToUnicode(strNameA));	// div控件的名字设置为tab的名字
+		pControlPanel->SetEnableScroll(bEnableScroll);
 		m_vecControl.push_back(pControlPanel);
 		if(!strDivXml.IsEmpty())
 		{

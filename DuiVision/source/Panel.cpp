@@ -18,6 +18,7 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	m_strXmlFile = _T("");
 	m_nVirtualHeight = 0;
 	m_nVirtualTop = 0;
+	m_bEnableScroll = TRUE;
 	m_bInit = false;
 }
 
@@ -299,7 +300,7 @@ void CDuiPanel::DrawControl(CDC &dc, CRect rcUpdate)
 BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 {
 	// 如果不需要滚动条,则直接使用父控件的画图方法
-	if(m_nVirtualHeight < m_rc.Height())
+	if(!m_bEnableScroll || (m_nVirtualHeight < m_rc.Height()))
 	{
 		return __super::DrawSubControls(dc, rcUpdate);
 	}
@@ -355,7 +356,7 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 // 鼠标坐标变换
 BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 {
-	if(m_nVirtualHeight > m_rc.Height())
+	if(m_bEnableScroll && (m_nVirtualHeight > m_rc.Height()))
 	{
 		// 计算显示位置
 		CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
@@ -374,7 +375,7 @@ BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 // 滚动事件处理
 BOOL CDuiPanel::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {
-	if(m_nVirtualHeight < m_rc.Height())
+	if(!m_bEnableScroll || (m_nVirtualHeight < m_rc.Height()))
 	{
 		return false;
 	}
