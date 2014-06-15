@@ -67,7 +67,19 @@ BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
 
-	m_strXmlFile = DuiSystem::GetXmlPath() + strFileName;
+	if(strFileName.Find(_T(":")) == -1)
+	{
+		if(strFileName.Find(_T(".xml")) == -1)
+		{
+			m_strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
+		}else
+		{
+			m_strXmlFile = DuiSystem::GetXmlPath() + strFileName;
+		}
+	}else
+	{
+		m_strXmlFile = strFileName;
+	}
 
 	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile), TIXML_ENCODING_UTF8);
 	if(!xmlDoc.Error())
