@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dlg name="dlg_main" title="[APP_NAME]-任务栏名字" width="800" height="550"
+	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000" appwin="1" resize="1"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+
+  <base>
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="hide-window" show="1"/>
+	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
+	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" action="menu:menu_main"/>
+	<imgbtn name="button.skin" pos="-140,0,-111,29" skin="IDB_BT_SKIN" tip="皮肤" show="1"/>
+	<text name="title" crtext="FFFFFF" crmark="800000" crshadow="808080" font="big"
+			pos="10,4,250,25" title="[APP_NAME]" response="0" show="1" />
+	<text name="user.current" crtext="FFFFFF" crmark="800000" align="right"
+			pos="-250,4,-185,25" title="test" tip="登录用户：test" show="1" />
+	<textbtn name="textbtn" skin="" crtext="FFFFFF"
+			pos="-180,4,-141,25" show="1" title="[LOGIN]" action="dlg:dlg_login" />
+  </base>
+  
+  <body>
+	
+	<tabctrl name="tabctrl.main" image="skins\tab_image.png" img-count="3"
+			img-sep="skin:IDB_TAB_SEPERATOR--" img-hover="skin:IDB_TAB_HOVER"
+			font="bold" item-width="0" tab-height="0" animate="1"
+			pos="1,44,-1,-31">
+		<tab name="tab.home" title="首页" image="skins\icon\duivision.png" img-count="1" active="true" pos="0,75,-0,-0" show="true" >
+		
+			<animateimg name="animateimg_scan" skin="IDB_SCAN_STATUS_360" show="1"
+				pos="30,50" width="102" height="102" index="0" maxindex="17" timer-count="5" run="true" />
+			
+			<text pos="170,50,600,80" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" />
+
+			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,680,375"
+				title="DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine等多个基于DirectUI的界面库开发的。
+DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用Windows控件，所以这些控件都是无句柄的。
+DirectUI技术需要解决的主要问题如下：
+1、窗口的子类化，截获窗口的消息；
+2、封装自己的控件，并将自己的控件绘制到该窗口上；
+3、封装窗口的消息，并分发到自己的控件上，让自己的控件根据消息进行相应和绘制；
+4、根据不同的行为发送自定义消息给窗口，以便程序进行调用；
+5、一般窗口上控件的组织使用XML来描述。
+通常DirectUI的界面库都采用XML配置文件+图片+控制脚本（Lua、Javascript等）的开发方式，非常类似于Web程序的开发方式，当然这里面控制脚本也可以直接使用C++代码来实现。这种开发方式可以大大提高开发效率，将程序员从繁琐的界面工作中解脱出来，并且通过美工的设计，可以使界面更美观。
+
+DuiVision开源下载地址：https://github.com/blueantst/DuiVision
+蓝蚂蚁工作室网站：http://www.blueantstudio.net
+QQ群：325880743
+微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
+					" />
+			
+		</tab>
+		
+		<tab name="tab.controls" title="基础控件" image="skins\icon\iSplit.png" img-count="1" div="tab_controls" />
+		
+		<tab name="tab.listctrl" title="列表控件" image="skins\icon\PDFViewer.png" img-count="1" div="tab_listctrl" />
+		
+		<tab name="tab.gridctrl" title="表格控件" image="skins\icon\ico_report.png" img-count="1" div="tab_gridctrl" />
+
+		<tab name="tab.treectrl" title="树控件" img-index="1" div="tab_treectrl" />
+		
+		<tab name="tab.360" title="360演示" image="skins\icon\logo_360.png" img-count="1" outlink="true" action="dlg:dlg_360" />
+		
+		<tab name="tab.pcmgr" title="PC管家演示" image="skins\icon\softmgr.png" img-count="1" scroll="1" img-scroll="skin:IDB_SCROLL_V" outlink="true" action="dlg:dlg_pcmgr" />
+		
+		<tab tabxml="duivision\tab_ext.xml" />
+				
+	</tabctrl>
+	
+	<div name="footer" pos="0,-26,-0,-0" >
+	
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.0.0.1" title="检查更新"
+				action="link:http://www.blueantstudio.net" />
+	
+		<!--imgbtn name="tools" skin="IDB_BT_TOOL"	pos="-70,0" width="60" height="19" show="1" action="dlg:dlg_tools" /-->
+	</div>	
+	
+  </body>
+  
+</dlg>

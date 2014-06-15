@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabctrl>
+
+	<tab name="tab.outlink" title="外部链接" image="skins\icon\ico_navigate.png" img-count="1" outlink="true" action="link:www.blueantstudio.net" />
+			
+</tabctrl>

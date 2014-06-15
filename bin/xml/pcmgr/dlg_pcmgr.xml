@@ -1,0 +1,61 @@
+<dlg name="dlg_pcmgr" title="DUI界面库演示" width="750" height="500" appwin="0" resize="1"
+	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+
+  <base>
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" show="1"/>
+	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
+	<!--imgbtn name="button.max" pos="-220,0,-195,29" skin="IDB_BT_MIN"/-->
+	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" />
+	<imgbtn name="button.skin" pos="-140,0,-111,29" skin="IDB_BT_SKIN" tip="皮肤" show="1"/>
+	<text name="title" crtext="FFFFFF" crmark="800000" font="big"
+			pos="10,4,250,25" title="[APP_NAME]-仿QQ管家" mask="--" response="0" show="1" />
+	<textbtn name="textbtn" skin="" crtext="FFFFFF"
+			pos="-180,4,-141,25" show="1" title="[LOGIN]" action="dlg:dlg_login" />
+  </base>
+  
+  <body>
+	<!--frame name="frame" pos="0,0,-0,-0" begin-transparent="100" end-transparent="30" /-->
+	<!--area name="area-1" pos="0,60,-0,-0" begin-transparent="100" end-transparent="30" /-->
+	
+	<tabctrl name="tabctrl.pcmgr" img-sep="skin:IDB_TAB_SEPERATOR"
+			font="bold" item-width="0" tab-height="0"
+			pos="0,75,-0,-31">
+		<tab name="首页" image="skins\qq\Tab1.png" active="true" pos="0,45,-0,-0">
+		
+			<animateimg name="animateimg_scan_qq" skin="IDB_SCAN_STATUS_QQ"
+				pos="30,50" width="120" height="132" show="1" index="2" maxindex="10" run="true" />
+			
+			<text name="text" crtext="000000" crmark="800000" font="big"
+				pos="170,50,450,80" title="正在进行体检，请稍后..." mask="" show="1" />
+			
+			<progress name="progress_1" skin="IDB_PROGRESS" 
+				pos="170,85" width="330" height="15" value="40" run="false" show="1" tip="dddddd" />
+			
+			<text name="text" crtext="808080" crmark="800000" font="normal"
+				pos="170,110,450,130" title="正在扫描：XXX，进度为40%" mask="" show="1" />
+			
+			<textbtn name="stop_btn" crtext="000080"
+				pos="170,140,230,160" show="1" title="停止" />
+			
+			<img pos="170,170,-100,171" skin="IDB_LINE_RP" mode="extrude" framesize="1" />
+			
+		</tab>
+		
+		<tab name="tab1" image="skins\qq\Tab2.png" active="false" pos="0,45,-0,-0">					
+		</tab>
+		
+		<tab name="tab2" image="skins\qq\Tab2.png" active="false" pos="0,45,-0,-0">
+		</tab>
+		
+	</tabctrl>
+	
+	<div name="footer" pos="0,-26,-0,-0" >
+	
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.0.1.1" title="检查更新"
+				action="link:http://www.blueantstudio.net" />
+	</div>	
+	
+  </body>
+  
+</dlg>

@@ -1,0 +1,25 @@
+<!-- notice dailog -->
+<!--popup bkmode="frame" bkalpha="0" width="450" height="270" framesize="4" bkimg="skin:IDB_MSGDLG_BK" -->
+<popup bkmode="mid" bkalpha="0" width="450" height="270" bkimg="skin:IDB_MSGDLG_BK"
+	width-lt="10" height-lt="60" width-rb="10" height-rb="5" >
+	
+	<!--area name="area-1" pos="0,0,-0,40" begin-transparent="100" end-transparent="30" />
+	<area name="area-2" pos="0,40,-0,-0" begin-transparent="30" end-transparent="30" />
+	<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+	<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" /-->
+	
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1"/>
+	
+	<!--img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="normal" framesize="0" show="1" /-->
+	
+	<text name="notice.title" crtext="000000" img-scroll="skin:IDB_SCROLL_V" pos="10,10,-130,50" font="big" title="" />
+	<text name="notice.time" crtext="000000" pos="-130,11,-45,31" title="" />
+	<text name="notice.content" crtext="000000" title="" img-scroll="skin:IDB_SCROLL_V"
+			pos="10,65,-10,-10" bk-transparent="0" />
+	
+	<!--linkbtn name="linkbtn1" crtext="800000"
+		pos="170,100,-25,130" show="1" title="点击打开链接" href="" /-->
+	
+	<!--button name="button.ok" skin="IDB_BT_DEFAULT" title="[OK]"	pos="-100,-30,-20,-6" show="1" /-->
+
+</popup>

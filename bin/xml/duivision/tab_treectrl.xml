@@ -1,0 +1,149 @@
+<div pos="0,75,-0,-0" >
+
+	<text crtext="800000" crmark="800000" align="center"
+		pos="0,5,-0,25" title="树控件" font="big" show="1" />
+
+	<treectrl name="treectrl_1" pos="20,30,-20,-5" show="1"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skins\rp_line.png--"
+		img-check="skin:IDB_CHECK_BOX" img-colsep=""
+		img-collapse="skin:IDB_TREE_COLLAPSE"
+		img-toggle="skin:IDB_TREE_TOGGLE"
+		img-count="12" image="skin:IDB_LIST_IMG"
+		left-pos="0" row-height="30" bk-transparent="10"
+		font-title="big" font="default"
+		valign="middle" down-row="0"
+		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
+		crtitle="32,32,32" crsep="200,160,160,160" >
+		<column title="列1" width="400" />
+		<column title="列2" width="100" />
+		<column title="Collapse" width="50" />
+		<node id="1">
+			<item title="应用软件1" font-title="1" />
+			<item collapse="1" />
+			<node id="1-1" image="skin:IDB_ICON_INFO" check="1">
+				<item title="Mozilla Firefox" crtext="0,0,128" image="1" />
+				<item link="一键安装" linkaction="dlg:dlg_option"/>
+			</node>
+			<node id="1-2" image="skin:IDB_ICON_WARN" check="1">
+				<item title="Notepad++" image="2" />
+				<item link="一键安装" linkaction="dlg:dlg_login"/>
+			</node>
+			<node id="1-3" image="skin:IDB_ICON_ERROR" check="1" collapse="1" >
+				<item title="迅雷看看" font-title="1" image="3" />
+				<item link="一键安装" linkaction="dlg:dlg_login"/>
+				<item collapse="1" image="skin:IDB_TREE_TOGGLE" />
+				<node id="1-3-1" image="skin:IDB_ICON_ERROR" check="0">
+					<item title="迅雷看看-1,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
+				</node>
+				<node id="1-3-2" image="skin:IDB_ICON_ERROR" check="0">
+					<item title="迅雷看看-2,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
+				</node>
+			</node>
+			<node id="1-4" image="skin:IDB_ICON_CHECK" check="1">
+				<item title="Axialis IconWorkshop" font-title="1" image="4" />
+				<item link="一键安装" linkaction="dlg:dlg_login"/>
+			</node>
+			<node id="1-5" image="skin:IDB_ICON_INFO" check="0">
+				<item title="Mozilla Firefox" />
+				<item link="一键安装" />
+			</node>
+		</node>
+		<node id="2">
+			<item title="应用软件2" font-title="1" />
+			<item collapse="1" />
+			<node id="2-1" image="skin:IDB_ICON_WARN" check="0">
+				<item title="Notepad++" font-title="1" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-2" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="迅雷看看" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-3" image="skin:IDB_ICON_CHECK" check="0">
+				<item title="Axialis IconWorkshop" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-4" image="skin:IDB_ICON_INFO" check="0">
+				<item title="Mozilla Firefox" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-5" image="skin:IDB_ICON_WARN" check="0">
+				<item title="Notepad++" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-6" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="迅雷看看" />
+				<item title="一键安装" />
+			</node>
+			<node id="2-7" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="Testdjfsdf" />
+				<item title="安装" />
+			</node>
+		</node>
+		<node id="3">
+			<item title="应用软件3" font-title="1" />
+			<item collapse="1" />
+			<node id="2-1" image="skin:IDB_ICON_WARN" check="0">
+				<item title="Notepad++" font-title="1" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-2" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="迅雷看看" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-3" image="skin:IDB_ICON_CHECK" check="0">
+				<item title="Axialis IconWorkshop" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-4" image="skin:IDB_ICON_INFO" check="0">
+				<item title="Mozilla Firefox" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-5" image="skin:IDB_ICON_WARN" check="0">
+				<item title="Notepad++" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-6" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="迅雷看看" />
+				<item title="一键安装" />
+			</node>
+			<node id="2-7" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="Testdjfsdf" />
+				<item title="安装" />
+			</node>
+		</node>
+		<node id="4">
+			<item title="应用软件4" font-title="1" />
+			<item collapse="1" />
+			<node id="2-1" image="skin:IDB_ICON_WARN" check="0">
+				<item title="Notepad++" font-title="1" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-2" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="迅雷看看" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-3" image="skin:IDB_ICON_CHECK" check="0">
+				<item title="Axialis IconWorkshop" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-4" image="skin:IDB_ICON_INFO" check="0">
+				<item title="Mozilla Firefox" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-5" image="skin:IDB_ICON_WARN" check="0">
+				<item title="Notepad++" />
+				<item link="一键安装" />
+			</node>
+			<node id="2-6" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="迅雷看看" />
+				<item title="一键安装" />
+			</node>
+			<node id="2-7" image="skin:IDB_ICON_ERROR" check="0">
+				<item title="Testdjfsdf" />
+				<item title="安装" />
+			</node>
+		</node>
+	</treectrl>
+
+</div>

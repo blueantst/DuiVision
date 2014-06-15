@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu title="TrayMenu" width="150" item-height="25" framesize="30" left="30" bkimg="skin:IDB_MENU_BACK" >
+
+	<menuitem name="restore_mainwnd" skin="" image="" title="恢复窗口" font="bold" action="show-window:dlg_main" />
+	<menuitem separator="1" skin="IDB_MENU_SEP" />
+	<!--menuitem name="item_login" skin="IDB_MENU_AUTH" img-count="3" title="认证" action="dlg:dlg_login.xml" />
+	<menuitem name="item_setup" skin="IDB_CHECK_BOX" select="1" check="true" title="检查框菜单" />
+	<menuitem name="item_update" image="skin:IDB_MENU_UPDATE" title="检查更新" action="link:http://www.blueantstudio.net" /-->
+	<menuitem name="menu_main" menu="menu_main" />
+	<menuitem name="menuitem.sub" title="子菜单" width="150" skin="IDB_MENU_ARROW">
+		<menuitem name="360safe" title="360安全卫士" action="dlg:dlg_login" />
+		<menuitem name="360sd" title="360杀毒" action="dlg:dlg_login" />
+		<menuitem name="menuitem.360.sub1" title="360工具" width="150" skin="IDB_MENU_ARROW">
+			<menuitem name="360driver" title="360驱动修复" action="dlg:dlg_login" />
+			<menuitem name="360soft" title="360软件管家" action="dlg:dlg_login" />
+		</menuitem>
+	</menuitem>
+	<menuitem name="menuitem.runtest" title="执行进程" action="run:{platpath}DuiVisionDemo.2008d.exe|testcmd" />
+	<menuitem separator="1" skin="IDB_MENU_SEP" />
+	<menuitem name="item_help" skin="IDB_MENU_HELP" img-count="3" title="帮助" action="link:http://www.blueantstudio.net" />
+	<!--menuitem name="item_about" skin="" image="" title="关于" action="dlg:dlg_about" /-->
+	<menuitem separator="1" skin="IDB_MENU_SEP" />
+	<menuitem name="close_app" skin="" image="" title="退出" action="close-window:dlg_main" />
+  
+</menu>

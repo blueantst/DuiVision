@@ -1,0 +1,69 @@
+<dlg name="dlg_pcmgr" title="DUI界面库演示" width="750" height="500" appwin="0" resize="1"
+	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+
+  <base>
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" show="1"/>
+	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
+	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" />
+	<imgbtn name="button.skin" pos="-140,0,-111,29" skin="IDB_BT_SKIN" tip="皮肤" show="1"/>
+	<text name="title" crtext="FFFFFF" crmark="800000" font="big"
+			pos="10,4,250,25" title="[APP_NAME]-仿360安全卫士" mask="--" response="0" show="1" />
+	<textbtn name="textbtn" skin="" crtext="FFFFFF"
+			pos="-180,4,-141,25" show="1" title="[LOGIN]" action="dlg:dlg_login" />
+  </base>
+  
+  <body>
+	<!--frame name="frame" pos="0,0,-0,-0" begin-transparent="100" end-transparent="30" /-->
+	<!--area name="area-1" pos="0,60,-0,-0" begin-transparent="100" end-transparent="30" /-->
+	
+	<tabctrl name="tabctrl.360" img-sep="skin:IDB_TAB_SEPERATOR--" 
+			img-hover="skin:IDB_TAB_HOVER"
+			font="bold" item-width="0" tab-height="0" animate="1"
+			pos="1,44,-1,-31">
+		<tab name="tab1" title="电脑体检" image="skins\icon\ico_Examine.png" img-count="1" active="true" pos="0,75,-0,-0">
+		
+			<animateimg name="animateimg_scan_360" skin="IDB_SCAN_STATUS_360"
+				pos="30,50" width="102" height="102" show="1" index="0" maxindex="17" run="true" />
+			
+			<text name="text" crtext="404040" crmark="A04000" font="big"
+				pos="170,50,450,80" title="您的电脑已经 5 天没有体检，建议立即体检" mask="5" show="1" />
+			
+			<text name="text" crtext="808080" crmark="800000" font="normal"
+				pos="170,90,500,110" title="系统可能已经存在大量风险，安全度和性能都在急速下降" mask="" show="1" />
+			<text name="text" crtext="808080" crmark="800000" font="normal"
+				pos="170,115,500,135" title="建议您每天坚持电脑体检，提高电脑的安全和性能" mask="" show="1" />
+			
+			<!--img pos="170,170,-100,171" skin="IDB_LINE_RP" mode="extrude" framesize="1" /-->
+			
+			<button pos="230,190" width="166" height="66" image="skins\360\scanbutton.png" img-count="3"
+				crtext="FFFFFF" animate="1" maxindex="16" />
+			
+		</tab>
+		
+		<tab name="tab2" title="木马查杀" image="skins\icon\ico_dsmain.png" img-count="1" active="false" pos="0,75,-0,-0">					
+		</tab>
+		
+		<tab name="tab3" title="系统修复" image="skins\icon\ico_Tool.png" img-count="1" pos="0,75,-0,-0">					
+		</tab>
+		
+		<tab name="tab4" title="电脑清理" image="skins\icon\ico_TraceCleaner.png" img-count="1" pos="0,75,-0,-0">					
+		</tab>
+		
+		<tab name="tab5" title="优化加速" image="skins\icon\ico_SpeedupOpt.png" img-count="1" pos="0,75,-0,-0">					
+		</tab>
+		
+		<tab name="tab6" title="软件管家" image="skins\icon\ico_softmgr.png" img-count="1" pos="0,75,-0,-0">					
+		</tab>
+		
+	</tabctrl>
+	
+	<div name="footer" pos="0,-26,-0,-0" >
+	
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.0.1.1" title="检查更新"
+				action="link:http://www.blueantstudio.net" />
+	</div>	
+	
+  </body>
+  
+</dlg>

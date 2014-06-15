@@ -1,0 +1,6 @@
+<popup>
+<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
+<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
+<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" />
+<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
+</popup>

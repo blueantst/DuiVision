@@ -1,0 +1,93 @@
+<div pos="0,75,-0,-0" >
+
+	<text crtext="800000" crmark="800000" align="center"
+		pos="0,5,-0,25" title="表格控件" font="big" show="1" />
+	
+	<gridctrl name="gridctrl_1" pos="20,30,-20,-5" show="1"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skins\rp_line.png"
+		img-check="skin:IDB_CHECK_BOX" img-colsep=""
+		img-count="12" image="skin:IDB_LIST_IMG"
+		left-pos="60" row-height="46" header-height="0" bk-transparent="10"
+		font-title="big" font="default"
+		valign="middle" down-row="0"
+		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
+		crtitle="32,32,32" crsep="200,160,160,160" >
+		<column title="列1" width="300" />
+		<column title="列2" width="120" />
+		<column title="列3" width="80" />
+		<column title="列4" />
+		<row image="skin:IDB_ICON_INFO" check="1">
+			<item title="Mozilla Firefox" content="升级新功能;测试tip===================================" crtext="0,0,128" />
+			<item title="24.0.1.1版本------------------" image="1" />
+			<item title="27.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_option"/>
+		</row>
+		<row image="skin:IDB_ICON_WARN" check="1">
+			<item title="Notepad++"  content="修复功能列表崩溃问题－－－－－－－－－－－－－－－－－－－－" />
+			<item title="6.0.1.2版本===================" />
+			<item title="7.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skin:IDB_ICON_ERROR" check="1">
+			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
+			<item title="4.9.14.2版本" />
+			<item title="43.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skin:IDB_ICON_CHECK" check="1">
+			<item title="Axialis IconWorkshop" content="易用性改进" font-title="1" />
+			<item title="6.8.1.2版本" />
+			<item title="39M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skin:IDB_ICON_INFO" check="0">
+			<item title="Mozilla Firefox---------------------------------sdfsdfsdfwer==========" content="升级新功能----------sdasd=============" />
+			<item title="24.0.1.1版本" />
+			<item title="27.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_WARN" check="0">
+			<item title="Notepad++" font-title="1" />
+			<item title="6.0.1.2版本" />
+			<item title="7.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_ERROR" check="0">
+			<item title="迅雷看看" />
+			<item title="4.9.14.2版本" />
+			<item title="43.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_CHECK" check="0">
+			<item title="Axialis IconWorkshop" />
+			<item title="6.8.1.2版本" />
+			<item title="39M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_INFO" check="0">
+			<item title="Mozilla Firefox" />
+			<item title="24.0.1.1版本" />
+			<item title="27.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_WARN" check="0">
+			<item title="Notepad++" />
+			<item title="6.0.1.2版本" />
+			<item title="7.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_ERROR" check="0">
+			<item title="迅雷看看" />
+			<item title="4.9.14.2版本" />
+			<item title="43.5M" />
+			<item title="一键安装" />
+		</row>
+		<row image="skin:IDB_ICON_CHECK" check="0">
+			<item title="Axialis IconWorkshop" />
+			<item title="6.8.1.2版本" />
+			<item title="39M" />
+			<item title="一键安装" />
+		</row>
+	</gridctrl>
+
+</div>

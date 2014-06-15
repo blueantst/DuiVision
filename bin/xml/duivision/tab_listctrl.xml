@@ -1,0 +1,87 @@
+<div pos="0,75,-0,-0" >
+
+	<text name="text_notice" crtext="800000" crmark="800000" align="center"
+		pos="0,5,|-0,25" title="带内容的列表" font="big" show="1" />
+	
+	<listctrl name="listctrl_1" pos="20,30,|-10,-5" show="1" row-tip="1"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skin:IDB_MENU_SEP-"
+		img-count="12" image="skin:IDB_LIST_IMG" down-row="0"
+		img-width="50" row-height="46" bk-transparent="10"
+		font-title="big" font="default"
+		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
+		crtitle="32,32,32" crsep="200,160,160,160" >
+		<row image="0" time="刚刚" title="测试：test - title - 1" content="测试：test-test -----content1..." />
+		<row image="1" time="1小时前" title="测试：test - title - 2" content="测试：test-test content2..." />
+		<row image="2" time="今天" title="测试：test - title - 3" content="测试：test-test -----content3..." />
+		<row image="3" time="昨天" title="测试：test - title - 4 -----------------------------" content="测试：test-test content4..." />
+		<row image="4" crtext="80,80,0" time="星期一" title="测试：test - title - 5--------------------test" content="测试：test-test -----content5-test--------------------test--------------------test----------------------------------test===============================================================================================================================================aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccccccccccccddddddddddddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeeeeeffffffffffffffffffff========================-----------------99999999999999999999999999999999911111111111111111112222222222222222222222222222333333333333333333333333333333444444444444444444444444444444444444455555555555555555555555555555555555666666666666666666666666666666666667777777777777777777788888888888888888888888899999999999999999000000000000000===========================qqqqqqqqqqqqqqqqqqqqqqqqqq" />
+		<row image="5" crtext="80,0,80" time="02-01" title="测试：test - title - 6" content="测试：test-test content6..." />
+		<row image="6" crtext="80,0,80" time="2014-01-20" title="测试：test - title - 7" content="测试：test-test -----content7..." />
+		<row image="7" crtext="80,80,80" time="2014-01-18" title="测试：test - title - 8" content="测试：test-test content8..." />
+		<row image="8" time="2014-01-15" title="测试 - 2：test - title - 1" content="测试：test-test -----content1 ----------------sssssssss-----------------yyyyyyyyyyyyyyyy------------------jjjjjjjjjjjjjj----------" />
+		<row image="9" time="2014-01-10" title="测试 - 2：test - title - 2" content="测试：test-test content2..." />
+		<row image="10" time="2014-01-01" title="测试 - 2：test - title - 3" content="测试：test-test -----content3..." />
+		<row image="11" time="2013-12-05" title="测试 - 2：test - title - 4" content="测试：test-test content4..." />
+		<row image="skin:IDB_ICON_INFO" time="2014-01-20" title="测试 - 2：test - title - 5" content="测试：test-test -----content5..." />
+		<row image="skin:IDB_ICON_WARN" time="2014-01-20" title="测试 - 2：test - title - 6" content="测试：test-test content6..." />
+		<row image="skin:IDB_ICON_ERROR" title="测试 - 2：test - title - 7" content="测试：test-test -----content7..." />
+		<row image="skin:IDB_ICON_CHECK" title="测试 - 2：test - title - 8" content="测试：test-test content8..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 1" content="测试：test-test -----content1..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 2" content="测试：test-test content2..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 3" content="测试：test-test -----content3..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 4" content="测试：test-test content4..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 5" content="测试：test-test -----content5..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 6" content="测试：test-test content6..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 7" content="测试：test-test -----content7..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 3：test - title - 8" content="测试：test-test content8..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 1" content="测试：test-test -----content1..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 2" content="测试：test-test content2..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 3" content="测试：test-test -----content3..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 4" content="测试：test-test content4..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 5" content="测试：test-test -----content5..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 6" content="测试：test-test content6..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 7" content="测试：test-test -----content7..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 4：test - title - 8" content="测试：test-test content8..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 1" content="测试：test-test -----content1..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 2" content="测试：test-test content2..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 3" content="测试：test-test -----content3..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 4" content="测试：test-test content4..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 5" content="测试：test-test -----content5..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 6" content="测试：test-test content6..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 7" content="测试：test-test -----content7..." />
+		<row image="skin:IDB_ICON_INFO" title="测试 - 5：test - title - 8" content="测试：test-test content8..." />
+	</listctrl>
+
+	<text name="text_notice" crtext="800000" crmark="800000" align="center"
+		pos="|-0,5,-0,25" title="只有标题的列表" font="big" show="1" />
+
+	<listctrl name="listctrl_2" pos="|10,30,-20,-5" show="1" row-tip="1"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skins\default\rp_line.png" img-check="skin:IDB_CHECK_BOX"
+		img-count="12" image="skin:IDB_LIST_IMG" down-row="1"
+		img-width="50" row-height="25" bk-transparent="10"
+		font-title="default" font="default" valign="middle"
+		crtext="255,64,64,64" crhover="128,0,0" crpush="255,64,64,64"
+		crtitle="32,32,32" >
+		<row right-img="2" check="1" image="1" title="测试 - 1" />
+		<row right-img="1" check="0" image="2" title="测试 - 2" link1="设置" linkaction1="dlg:dlg_option" link2="查看详情" />
+		<row right-img="2" check="0" image="2" title="测试 - 3" />
+		<row right-img="1" check="1" image="1" title="测试 - 4" link1="设置" linkaction1="run:{platpath}depends.exe" link2="查看详情" />
+		<row right-img="2" title="测试 - 5" />
+		<row right-img="2" title="测试 - 6" />
+		<row right-img="2" title="测试 - 7" />				
+		<row image="0" time="2014-06-04" title="测试 - 8" link1="设置" linkaction1="run:{platpath}depends.exe" />
+		<row right-img="1" check="0" image="2" title="测试 - 9" link1="设置" linkaction1="dlg:dlg_option" link2="查看详情" />
+		<row right-img="2" check="0" image="2" title="测试 - 10" />
+		<row right-img="1" check="1" image="1" title="测试 - 11" link1="设置" linkaction1="run:{platpath}depends.exe" link2="查看详情" />
+		<row right-img="2" title="测试 - 12" />
+		<row right-img="2" title="测试 - 13" />
+		<row right-img="2" title="测试 - 14" />				
+		<row image="0" time="刚刚" title="测试：test - title - 15" />
+		<row right-img="1" check="0" image="2" title="测试 - 16" link1="设置" linkaction1="dlg:dlg_option" link2="查看详情" />
+		<row right-img="2" check="0" image="2" title="测试 - 17" />
+		<row right-img="1" check="1" image="1" title="测试 - 18" link1="设置" linkaction1="run:{platpath}depends.exe" link2="查看详情" />
+		<row right-img="2" title="测试 - 19" />
+		<row right-img="2" title="测试 - 20" />
+	</listctrl>
+
+</div>
