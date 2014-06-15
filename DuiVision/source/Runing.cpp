@@ -31,7 +31,7 @@ CRuning::~CRuning(void)
 // 从XML设置图片个数属性
 HRESULT CRuning::OnAttributeMaxIndex(const CStringA& strValue, BOOL bLoading)
 {
-	if (strValue.IsEmpty()) return E_FAIL;
+	if (strValue.IsEmpty() || (m_pImage == NULL)) return E_FAIL;
 
 	m_nMaxIndex = atoi(strValue);
 	SetBitmapCount(m_nMaxIndex);
