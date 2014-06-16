@@ -23,3 +23,12 @@ DuiVision开源下载地址：https://github.com/blueantst/DuiVision
 QQ群：325880743
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
+
+### 一些界面截图
+![主界面](http://www.blueantstudio.net/duivision/suolue/duivision_home.jpg)
+![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl1.jpg)
+![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl2.jpg)
+![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_listctrl.jpg)
+![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_treectrl.jpg)
+![仿360界面](http://www.blueantstudio.net/duivision/suolue/duivision_360.jpg)
+![仿QQ PC管家界面](http://www.blueantstudio.net/duivision/suolue/duivision_pcmgr.jpg)
