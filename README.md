@@ -29,6 +29,7 @@ QQ群：325880743
 ![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl1.jpg)
 ![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl2.jpg)
 ![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_listctrl.jpg)
+![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_gridctrl.jpg)
 ![控件演示](http://www.blueantstudio.net/duivision/suolue/duivision_treectrl.jpg)
 ![仿360界面](http://www.blueantstudio.net/duivision/suolue/duivision_360.jpg)
 ![仿QQ PC管家界面](http://www.blueantstudio.net/duivision/suolue/duivision_pcmgr.jpg)
