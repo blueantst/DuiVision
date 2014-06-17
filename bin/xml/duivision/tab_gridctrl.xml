@@ -4,83 +4,89 @@
 		pos="0,5,-0,25" title="表格控件" font="big" show="1" />
 	
 	<gridctrl name="gridctrl_1" pos="20,30,-20,-5" show="1"
-		img-scroll="skin:IDB_SCROLL_V" img-sep="skins\rp_line.png"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skin:IDB_LINE_RP"
 		img-check="skin:IDB_CHECK_BOX" img-colsep=""
 		img-count="12" image="skin:IDB_LIST_IMG"
-		left-pos="60" row-height="46" header-height="0" bk-transparent="10"
+		left-pos="70" row-height="50" header-height="0" bk-transparent="10"
 		font-title="big" font="default"
 		valign="middle" down-row="0"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
 		crtitle="32,32,32" crsep="200,160,160,160" >
-		<column title="列1" width="300" />
+		<column title="列1" width="400" />
 		<column title="列2" width="120" />
 		<column title="列3" width="80" />
 		<column title="列4" />
-		<row image="skin:IDB_ICON_INFO" check="1">
-			<item title="Mozilla Firefox" content="升级新功能;测试tip===================================" crtext="0,0,128" />
-			<item title="24.0.1.1版本------------------" image="1" />
-			<item title="27.5M" />
+		<row image="skins\icon\softmgr.png" check="1">
+			<item title="腾讯软件管理" content="1.新的界面，丰富的内容；2.海量软件搜索；3.功能分类清晰呈现，更易选择" font-title="1" />
+			<item title="已装：8.7.0.1" content="最新：10.0.0.1" />
+			<item title="16.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_option"/>
 		</row>
-		<row image="skin:IDB_ICON_WARN" check="1">
-			<item title="Notepad++"  content="修复功能列表崩溃问题－－－－－－－－－－－－－－－－－－－－" />
-			<item title="6.0.1.2版本===================" />
+		<row image="skins\icon\PDFViewer.png" check="1">
+			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
+			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skin:IDB_ICON_ERROR" check="1">
+		<row image="skins\icon\Movies.png" check="1">
 			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
-			<item title="4.9.14.2版本" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skin:IDB_ICON_CHECK" check="1">
-			<item title="Axialis IconWorkshop" content="易用性改进" font-title="1" />
-			<item title="6.8.1.2版本" />
-			<item title="39M" />
+		<row image="skins\icon\iSplit.png" check="1">
+			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skin:IDB_ICON_INFO" check="0">
-			<item title="Mozilla Firefox---------------------------------sdfsdfsdfwer==========" content="升级新功能----------sdasd=============" />
-			<item title="24.0.1.1版本" />
-			<item title="27.5M" />
+		<row image="skins\icon\adrule_rename.png" check="0">
+			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
+			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
+			<item title="29.5M" crtext="0,0,128" />
 			<item link="一键安装" />
 		</row>
-		<row image="skin:IDB_ICON_WARN" check="0">
-			<item title="Notepad++" font-title="1" />
-			<item title="6.0.1.2版本" />
+		<row image="skins\icon\ico_business.png" check="0">
+			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
+			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
 			<item title="7.5M" />
 			<item link="一键安装" />
 		</row>
-		<row image="skin:IDB_ICON_ERROR" check="0">
-			<item title="迅雷看看" />
-			<item title="4.9.14.2版本" />
+		<row image="skins\icon\PDFViewer.png" check="1">
+			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
+			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
+			<item title="7.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\Movies.png" check="1">
+			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\iSplit.png" check="1">
+			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\adrule_rename.png" check="0">
+			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
+			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
+			<item title="29.5M" crtext="0,0,128" />
 			<item link="一键安装" />
 		</row>
-		<row image="skin:IDB_ICON_CHECK" check="0">
-			<item title="Axialis IconWorkshop" />
-			<item title="6.8.1.2版本" />
-			<item title="39M" />
-			<item link="一键安装" />
-		</row>
-		<row image="skin:IDB_ICON_INFO" check="0">
-			<item title="Mozilla Firefox" />
-			<item title="24.0.1.1版本" />
-			<item title="27.5M" />
-			<item link="一键安装" />
-		</row>
-		<row image="skin:IDB_ICON_WARN" check="0">
-			<item title="Notepad++" />
-			<item title="6.0.1.2版本" />
+		<row image="skins\icon\ico_business.png" check="0">
+			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
+			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
 			<item title="7.5M" />
 			<item link="一键安装" />
 		</row>
-		<row image="skin:IDB_ICON_ERROR" check="0">
+		<row image="skins\icon\softmgr.png" check="0">
 			<item title="迅雷看看" />
-			<item title="4.9.14.2版本" />
+			<item title="4.9.14.2版本" image="1" />
 			<item title="43.5M" />
-			<item title="一键安装" />
+			<item link="一键安装" />
 		</row>
 		<row image="skin:IDB_ICON_CHECK" check="0">
 			<item title="Axialis IconWorkshop" />
