@@ -6,9 +6,12 @@
 CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBaseFont(hWnd, pDuiObject)
 {
+	m_bEnableScroll = TRUE;
+	m_nScrollWidth = 8;
+
 	CRect rcScroll = CRect(0,0,0,0);
 	rcScroll.top;
-	rcScroll.left = rcScroll.right - 8;
+	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
@@ -18,7 +21,6 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	m_strXmlFile = _T("");
 	m_nVirtualHeight = 0;
 	m_nVirtualTop = 0;
-	m_bEnableScroll = TRUE;
 	m_bInit = false;
 }
 
@@ -243,7 +245,7 @@ void CDuiPanel::SetControlRect(CRect rc)
 			if(SCROLL_V == uControlID)
 			{
 				rcTemp = m_rc;
-				rcTemp.left = rcTemp.right - 8;
+				rcTemp.left = rcTemp.right - m_nScrollWidth;
 			}else
 			{
 				rcTemp = pControlBase->GetRect();
@@ -328,9 +330,9 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 	CBitmap	virtualBitmap;
 	CDC virtualDC;
 	virtualDC.CreateCompatibleDC(&dc);
-	virtualBitmap.CreateCompatibleBitmap(&dc, m_rc.right-8, m_rc.top + m_nVirtualHeight);
+	virtualBitmap.CreateCompatibleBitmap(&dc, m_rc.right-m_nScrollWidth, m_rc.top + m_nVirtualHeight);
 	CBitmap* pOldVirtualBitmap = virtualDC.SelectObject(&virtualBitmap);
-	virtualDC.BitBlt(m_rc.left, m_rc.top+nVirtualTop, m_rc.Width()-8, m_rc.Height(), &dc, m_rc.left, m_rc.top, SRCCOPY);	// 背景复制到虚拟显示dc
+	virtualDC.BitBlt(m_rc.left, m_rc.top+nVirtualTop, m_rc.Width()-m_nScrollWidth, m_rc.Height(), &dc, m_rc.left, m_rc.top, SRCCOPY);	// 背景复制到虚拟显示dc
 
 	// 更新区域按照显示区域调整
 	rcUpdate.OffsetRect(0, nVirtualTop);
@@ -355,7 +357,7 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 	m_nVirtualTop = nVirtualTop;
 
 	// 虚拟显示dc复制到dc
-	dc.BitBlt(m_rc.left, m_rc.top, m_rc.Width()-8, m_rc.Height(), &virtualDC, m_rc.left, m_rc.top + nVirtualTop, SRCCOPY);
+	dc.BitBlt(m_rc.left, m_rc.top, m_rc.Width()-m_nScrollWidth, m_rc.Height(), &virtualDC, m_rc.left, m_rc.top + nVirtualTop, SRCCOPY);
 
 	// 释放虚拟显示dc
 	virtualDC.SelectObject(pOldVirtualBitmap);

@@ -7,15 +7,6 @@
 CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 			: CDuiPanel(hWnd, pDuiObject)
 {
-	/*CRect rcScroll = CRect(0,0,0,0);
-	rcScroll.top;
-	rcScroll.left = rcScroll.right - 8;
-
- 	CControlBase * pControlBase = NULL;
- 	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
- 	m_vecControl.push_back(pControlBase);
-	m_pControScrollV = (CControlBaseFont*)pControlBase;*/
-
 	CRect rcBk = CRect(0,0,0,0);
 	CControlBase* pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
  	m_vecControl.push_back(pControlBase);
@@ -380,7 +371,7 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
 		GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
-		int nItemWidth = m_rc.Width() - 8;
+		int nItemWidth = m_rc.Width() - m_nScrollWidth;
 		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
 
 		rowInfoTemp.rcCheck.SetRect(0,0,0,0);
@@ -796,13 +787,13 @@ void CDuiGridCtrl::SetControlRect(CRect rc)
 			{
 				rcTemp = m_rc;
 				rcTemp.top += m_nHeaderHeight;
-				rcTemp.left = rcTemp.right - 8;
+				rcTemp.left = rcTemp.right - m_nScrollWidth;
 			}else
 			if(LISTBK_AREA == uControlID)
 			{
 				rcTemp = m_rc;
 				rcTemp.top += m_nHeaderHeight;
-				rcTemp.right -= 8;
+				rcTemp.right -= m_nScrollWidth;
 			}else
 			{
 				continue;
@@ -817,7 +808,7 @@ void CDuiGridCtrl::SetControlRect(CRect rc)
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
 		GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
-		int nItemWidth = m_rc.Width() - 8;
+		int nItemWidth = m_rc.Width() - m_nScrollWidth;
 		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
 
 		nYPos += m_nRowHeight;
@@ -1157,7 +1148,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	// 3.重画时候,根据top坐标位置计算出显示的第一行的序号,根据显示高度计算出显示的最后一行的序号
 	// 4.根据计算出的显示的行,画相应的内容到内存dc中
 	// 5.计算出显示的top坐标进行内存dc的拷贝
-	int nWidth = m_rc.Width() - 8;	// 减去滚动条的宽度
+	int nWidth = m_rc.Width() - m_nScrollWidth;	// 减去滚动条的宽度
 	int nHeightAll = m_vecRowInfo.size()*m_nRowHeight; // 总的虚拟高度 //m_rc.Height();
 	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置

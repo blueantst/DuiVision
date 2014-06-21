@@ -53,11 +53,13 @@ public:
 	CString				m_strXmlFile;				// XML文件名
 	int					m_nVirtualHeight;			// Panel整体的高度
 	CControlBaseFont*	m_pControScrollV;			// 垂直滚动条
+	int					m_nScrollWidth;				// 滚动条宽度
 	int					m_nVirtualTop;				// 当前虚拟显示的顶部位置
 	BOOL				m_bEnableScroll;			// 是否允许滚动
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScroll)
+		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("xml", OnAttributeXml)
 		DUI_INT_ATTRIBUTE("scroll", m_bEnableScroll, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()

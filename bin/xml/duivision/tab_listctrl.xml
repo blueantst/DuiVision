@@ -38,8 +38,9 @@
 	<text name="text_notice" crtext="800000" crmark="800000" align="center"
 		pos="|-0,5,-0,25" title="只有标题的列表" font="big" show="1" />
 
-	<listctrl name="listctrl_2" pos="|10,30,-20,-5" show="1" row-tip="1"
-		img-scroll="skin:IDB_SCROLL_V" img-sep="skin:IDB_MENU_SEP-" img-check="skin:IDB_CHECK_BOX"
+	<listctrl name="listctrl_2" scroll-width="10" pos="|10,30,-20,-5" show="1" row-tip="1"
+		img-scroll="skin:IDB_SCROLL_V" 
+		img-sep="skin:IDB_MENU_SEP-" img-check="skin:IDB_CHECK_BOX"
 		img-count="12" image="skin:IDB_LIST_IMG" down-row="1"
 		img-width="50" row-height="25" bk-transparent="10"
 		font-title="default" font="default" valign="middle"
