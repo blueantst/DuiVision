@@ -7,9 +7,11 @@
 CStaticText::CStaticText(HWND hWnd, CDuiObject* pDuiObject)
 			 : CControlBaseFont(hWnd, pDuiObject)
 {
+	m_nScrollWidth = 8;
+
 	CRect rcScroll = CRect(0,0,0,0);
 	rcScroll.top;
-	rcScroll.left = rcScroll.right - 8;
+	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
@@ -44,9 +46,11 @@ CStaticText::CStaticText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 						 CString strFont, int nFontWidth/* = 12*/, FontStyle fontStyle/* = FontStyleRegular*/, BOOL bIsVisible/* = TRUE*/)
 			 : CControlBaseFont(hWnd, pDuiObject, uControlID, rc, m_strTitle, bIsVisible, FALSE, FALSE, strFont, nFontWidth, fontStyle)
 {
+	m_nScrollWidth = 8;
+
 	CRect rcScroll = CRect(0,0,0,0);
 	rcScroll.top;
-	rcScroll.left = rcScroll.right - 8;
+	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
@@ -213,12 +217,12 @@ void CStaticText::SetControlRect(CRect rc)
 			if((SCROLL_V == uControlID) && m_bScrollV)
 			{
 				rcTemp = m_rc;
-				rcTemp.left = rcTemp.right - 8;
+				rcTemp.left = rcTemp.right - m_nScrollWidth;
 			}else
 			if(LISTBK_AREA == uControlID)
 			{
 				rcTemp = m_rc;
-				rcTemp.right -= 8;
+				rcTemp.right -= m_nScrollWidth;
 			}else
 			{
 				continue;
@@ -453,7 +457,7 @@ void CStaticText::DrawControl(CDC &dc, CRect rcUpdate)
 			int nTextWidth = nWidth - nXPos - point.x;
 			if(m_bScrollV)
 			{
-				nTextWidth -= 8;
+				nTextWidth -= m_nScrollWidth;
 			}
 
 			// œ»ª≠“ı”∞
