@@ -153,15 +153,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\source\ButtonEx.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\source\CheckButton.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\source\ComboBox.cpp"
 				>
 			</File>
 			<File
@@ -181,6 +173,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiComboBox.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiEdit.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiGridCtrl.cpp"
 				>
 			</File>
@@ -193,6 +197,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiMenu.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiObject.cpp"
 				>
 			</File>
@@ -201,11 +209,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\source\DuiTreeCtrl.cpp"
+				RelativePath=".\source\DuiTab.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\source\EditEx.cpp"
+				RelativePath=".\source\DuiText.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiTreeCtrl.cpp"
 				>
 			</File>
 			<File
@@ -226,10 +238,6 @@
 			</File>
 			<File
 				RelativePath=".\source\LinkButton.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\source\MenuEx.cpp"
 				>
 			</File>
 			<File
@@ -273,10 +281,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\source\StaticText.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Stdafx.cpp"
 				>
 				<FileConfiguration
@@ -297,10 +301,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\source\Tab.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\source\TextButton.cpp"
 				>
 			</File>
@@ -319,15 +319,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\ButtonEx.h"
-				>
-			</File>
-			<File
 				RelativePath=".\include\CheckButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\ComboBox.h"
 				>
 			</File>
 			<File
@@ -347,7 +339,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiComboBox.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DuiDef.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiEdit.h"
 				>
 			</File>
 			<File
@@ -367,6 +371,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiMenu.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DuiObject.h"
 				>
 			</File>
@@ -379,15 +387,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiTab.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiText.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DuiTreeCtrl.h"
 				>
 			</File>
 			<File
 				RelativePath=".\include\DuiVision.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\EditEx.h"
 				>
 			</File>
 			<File
@@ -408,10 +420,6 @@
 			</File>
 			<File
 				RelativePath=".\include\LinkButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\MenuEx.h"
 				>
 			</File>
 			<File
@@ -459,15 +467,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\StaticText.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\Tab.h"
 				>
 			</File>
 			<File

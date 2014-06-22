@@ -1,8 +1,8 @@
 #include "StdAfx.h"
-#include "EditEx.h"
+#include "DuiEdit.h"
 
-CEditEx::CEditEx(HWND hWnd, CDuiObject* pDuiObject)
-						   : CControlBaseFont(hWnd, pDuiObject)
+CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
+		: CControlBaseFont(hWnd, pDuiObject)
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bDown = false;
@@ -48,9 +48,9 @@ CEditEx::CEditEx(HWND hWnd, CDuiObject* pDuiObject)
 		DuiSystem::GetDefaultFont()));					// 字体名称
 }
 
-CEditEx::CEditEx(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/* = ""*/, BOOL bPassWord/* = FALSE*/, BOOL bIsVisible/* = TRUE*/, 
-						   BOOL bIsDisable/* = FALSE*/ ,BOOL bIsPressDown/* = FALSE*/)
-						   : CControlBaseFont(hWnd, pDuiObject, uControlID, rc, strTitle, bIsVisible, bIsDisable)
+CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/* = ""*/,
+			BOOL bPassWord/* = FALSE*/, BOOL bIsVisible/* = TRUE*/, BOOL bIsDisable/* = FALSE*/ ,BOOL bIsPressDown/* = FALSE*/)
+		: CControlBaseFont(hWnd, pDuiObject, uControlID, rc, strTitle, bIsVisible, bIsDisable)
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bDown = false;
@@ -96,7 +96,7 @@ CEditEx::CEditEx(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, C
 		DuiSystem::GetDefaultFont()));					// 字体名称
 }
 
-CEditEx::~CEditEx(void)
+CDuiEdit::~CDuiEdit(void)
 {
 	// 删除Windows控件
 	HideEdit();
@@ -119,7 +119,7 @@ CEditEx::~CEditEx(void)
 	}
 }
 
-bool CEditEx::SetLeftBitmap(UINT nResourceID, CString strType)
+bool CDuiEdit::SetLeftBitmap(UINT nResourceID, CString strType)
 {
 	if(ImageFromIDResource(nResourceID, strType, m_pLeftImage))
 	{
@@ -139,7 +139,7 @@ bool CEditEx::SetLeftBitmap(UINT nResourceID, CString strType)
 	return false;
 }
 
-bool CEditEx::SetLeftBitmap(CString strImage)
+bool CDuiEdit::SetLeftBitmap(CString strImage)
 {
 	m_pLeftImage = Image::FromFile(strImage, TRUE);
 
@@ -162,7 +162,7 @@ bool CEditEx::SetLeftBitmap(CString strImage)
 }
 
 // 从XML设置图片信息属性
-HRESULT CEditEx::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiEdit::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -203,7 +203,7 @@ HRESULT CEditEx::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-bool CEditEx::SetSmallBitmap(UINT nResourceID, CString strType)
+bool CDuiEdit::SetSmallBitmap(UINT nResourceID, CString strType)
 {
 	if(ImageFromIDResource(nResourceID, strType, m_pSmallImage))
 	{
@@ -225,7 +225,7 @@ bool CEditEx::SetSmallBitmap(UINT nResourceID, CString strType)
 	return false;
 }
 
-bool CEditEx::SetSmallBitmap(CString strImage)
+bool CDuiEdit::SetSmallBitmap(CString strImage)
 {
 	m_pSmallImage = Image::FromFile(strImage, TRUE);
 
@@ -250,7 +250,7 @@ bool CEditEx::SetSmallBitmap(CString strImage)
 }
 
 // 从XML设置图片信息属性
-HRESULT CEditEx::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiEdit::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -291,7 +291,7 @@ HRESULT CEditEx::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-void  CEditEx::SetControlRect(CRect rc) 
+void  CDuiEdit::SetControlRect(CRect rc) 
 {
 	m_rc = rc;
 	m_rcText = m_rc;
@@ -301,7 +301,7 @@ void  CEditEx::SetControlRect(CRect rc)
 	m_rcText.right -= (3 + m_sizeSmallImage.cx);
 }
 
-BOOL CEditEx::IsDraw(CPoint point)
+BOOL CDuiEdit::IsDraw(CPoint point)
 {
  	if(m_buttonState == enBSDown)
  	{
@@ -328,7 +328,7 @@ BOOL CEditEx::IsDraw(CPoint point)
 }
 
 // 设置控件中的Windows原生控件是否可见的状态
-void CEditEx::SetControlWndVisible(BOOL bIsVisible)
+void CDuiEdit::SetControlWndVisible(BOOL bIsVisible)
 {
 	if(bIsVisible)
 	{
@@ -340,7 +340,7 @@ void CEditEx::SetControlWndVisible(BOOL bIsVisible)
 }
 
 // 设置控件的禁用状态
-void CEditEx::SetControlDisable(BOOL bIsDisable)
+void CDuiEdit::SetControlDisable(BOOL bIsDisable)
 {
 	if(m_bIsDisable != bIsDisable)
 	{
@@ -369,7 +369,7 @@ void CEditEx::SetControlDisable(BOOL bIsDisable)
 }
 
 // 设置控件title
-void CEditEx::SetControlTitle(CString strTitle)
+void CDuiEdit::SetControlTitle(CString strTitle)
 {
 	__super::SetControlTitle(strTitle);
 
@@ -382,7 +382,7 @@ void CEditEx::SetControlTitle(CString strTitle)
 }
 
 // 设置控件的焦点
-BOOL CEditEx::SetControlFocus(BOOL bFocus)
+BOOL CDuiEdit::SetControlFocus(BOOL bFocus)
 {
 	__super::SetControlFocus(bFocus);
 
@@ -412,7 +412,7 @@ BOOL CEditEx::SetControlFocus(BOOL bFocus)
 	return bIsDraw;
 }
 
-BOOL CEditEx::OnControlMouseMove(UINT nFlags, CPoint point)
+BOOL CDuiEdit::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_buttonState;
 	enumButtonState editState = m_EditState;
@@ -458,7 +458,7 @@ BOOL CEditEx::OnControlMouseMove(UINT nFlags, CPoint point)
 	return buttonState != m_buttonState || editState != m_EditState;
 }
 
-BOOL CEditEx::OnControlLButtonDown(UINT nFlags, CPoint point)
+BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_buttonState;	
 	enumButtonState editState = m_EditState;
@@ -517,7 +517,7 @@ BOOL CEditEx::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return buttonState != m_buttonState || editState != m_EditState;
 }
 
-BOOL CEditEx::OnControlLButtonUp(UINT nFlags, CPoint point)
+BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_buttonState;
 	enumButtonState editState = m_EditState;
@@ -581,7 +581,7 @@ BOOL CEditEx::OnControlLButtonUp(UINT nFlags, CPoint point)
 	return buttonState != m_buttonState || editState != m_EditState;
 }
 
-void CEditEx::DrawControl(CDC &dc, CRect rcUpdate)
+void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	Graphics graphics(dc);
 
@@ -669,17 +669,17 @@ void CEditEx::DrawControl(CDC &dc, CRect rcUpdate)
 	}
 }
 
-BOOL CEditEx::GetLButtonDown()
+BOOL CDuiEdit::GetLButtonDown()
 {
 	return m_buttonState == enBSDown;
 }
 
-BOOL CEditEx::GetLButtonUp()
+BOOL CDuiEdit::GetLButtonUp()
 {
 	return FALSE;
 }
 
-CString CEditEx::GetEditText()
+CString CDuiEdit::GetEditText()
 {
 	if(m_pEdit && ::IsWindow(m_pEdit->GetSafeHwnd()))
 	{
@@ -688,7 +688,7 @@ CString CEditEx::GetEditText()
 	return m_strTitle;
 }
 
-void CEditEx::ShowEdit()
+void CDuiEdit::ShowEdit()
 {
 	// 如果是只读属性，则不用创建edit控件
 	if(m_bReadOnly || m_bIsDisable)
@@ -749,7 +749,7 @@ void CEditEx::ShowEdit()
  	}
 }
 
-void CEditEx::HideEdit()
+void CDuiEdit::HideEdit()
 {
 	if(m_pEdit)
 	{
@@ -767,7 +767,7 @@ void CEditEx::HideEdit()
 }
 
 // 消息处理
-LRESULT CEditEx::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CDuiEdit::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	return __super::OnMessage(uID, uMsg, wParam, lParam);
 }

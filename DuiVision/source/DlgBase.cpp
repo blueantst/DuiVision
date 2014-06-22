@@ -1815,19 +1815,19 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 			{
 				SetForegroundWindow();
 				// 加载菜单控件
-				CMenuEx *pMenuEx = new CMenuEx();
-				pMenuEx->SetParent(this);
+				CDuiMenu *pDuiMenu = new CDuiMenu();
+				pDuiMenu->SetParent(this);
 				if(m_pTrayHandler != NULL)
 				{
 					// 设置事件处理对象
-					pMenuEx->RegisterHandler(m_pTrayHandler);
+					pDuiMenu->RegisterHandler(m_pTrayHandler);
 				}
 				CPoint point;
 				GetCursorPos(&point);
-				pMenuEx->LoadXmlFile(strXmlFile, this, point, WM_DUI_MENU);
+				pDuiMenu->LoadXmlFile(strXmlFile, this, point, WM_DUI_MENU);
 				// 计算菜单的位置并显示
 				CRect rc;
-				pMenuEx->GetWindowRect(&rc);
+				pDuiMenu->GetWindowRect(&rc);
 				rc.OffsetRect(rc.Width()/2, -rc.Height());
 				// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
 				int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
@@ -1835,8 +1835,8 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 				{
 					rc.OffsetRect(nScreenWidth - rc.right -10, 0);
 				}
-				pMenuEx->MoveWindow(rc);
-				pMenuEx->ShowWindow(SW_SHOW);
+				pDuiMenu->MoveWindow(rc);
+				pDuiMenu->ShowWindow(SW_SHOW);
 			}
 		}
 		break;

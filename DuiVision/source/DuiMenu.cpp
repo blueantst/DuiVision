@@ -1,7 +1,7 @@
 #include "StdAfx.h"
-#include "MenuEx.h"
+#include "DuiMenu.h"
 
-CMenuEx::CMenuEx(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, FontStyle fontStyle/* = FontStyleRegular*/)
+CDuiMenu::CDuiMenu(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, FontStyle fontStyle/* = FontStyleRegular*/)
 	: CDlgPopup()
 {
 	m_strFont = strFont;
@@ -17,36 +17,35 @@ CMenuEx::CMenuEx(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, Fo
 	m_nSeparatorHeight = 4;
 }
 
-CMenuEx::~CMenuEx(void)
+CDuiMenu::~CDuiMenu(void)
 {
 }
 
-BOOL CMenuEx::Create(CWnd *pParent, CPoint point, UINT uMessageID, UINT nResourceID, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
+BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID, UINT nResourceID, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
 {
 	CRect rc(point.x - nMinWidth / 2, point.y, point.x + nMinWidth / 2, point.y + nMinWidth);
 	return CDlgPopup::Create(pParent, rc, uMessageID, nResourceID, enBackMode, nFrameSize);
 }
 
-BOOL CMenuEx::Create(CWnd *pParent, CPoint point, UINT uMessageID, CString strImage, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
+BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID, CString strImage, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
 {
 	CRect rc(point.x - nMinWidth / 2, point.y, point.x + nMinWidth / 2, point.y + nMinWidth);
 	return CDlgPopup::Create(pParent, rc, uMessageID, strImage, enBackMode, nFrameSize);
 }
 
-BOOL CMenuEx::Create(CWnd *pParent, CPoint point, UINT uMessageID)
+BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID)
 {
 	int nMinWidth = m_nWidth;
 	CRect rc(point.x - nMinWidth / 2, point.y, point.x + nMinWidth / 2, point.y + nMinWidth);
 	return CDlgPopup::Create(pParent, rc, uMessageID);
 }
 
-void CMenuEx::DrawWindowEx(CDC &dc, CRect rcClient)
+void CDuiMenu::DrawWindowEx(CDC &dc, CRect rcClient)
 {
-
 }
 
 // 重载加载XML节点函数，加载下层的Menu item信息
-BOOL CMenuEx::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiMenu::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 {
 	SetRect(CRect(0, 0, m_nWidth, m_nHeight));
 
@@ -119,7 +118,7 @@ BOOL CMenuEx::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 }
 
 // 加载指定名字的菜单节点
-BOOL CMenuEx::LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName)
+BOOL CDuiMenu::LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName)
 {
 	if(pXmlElem == NULL)
 	{
@@ -146,7 +145,7 @@ BOOL CMenuEx::LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName)
 }
 
 // 加载XML节点中定义的菜单和其他控件
-BOOL CMenuEx::LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile)
+BOOL CDuiMenu::LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile)
 {
 	if(pXmlElem == NULL)
 	{
@@ -191,7 +190,7 @@ BOOL CMenuEx::LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile)
 }
 
 // 加载XML文件中定义的菜单
-BOOL CMenuEx::LoadXmlFile(CString strFileName, CString strSubItemName)
+BOOL CDuiMenu::LoadXmlFile(CString strFileName, CString strSubItemName)
 {
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
@@ -235,7 +234,7 @@ BOOL CMenuEx::LoadXmlFile(CString strFileName, CString strSubItemName)
 }
 
 // 加载XML文件
-BOOL CMenuEx::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UINT uMessageID, CString strSubItemName)
+BOOL CDuiMenu::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UINT uMessageID, CString strSubItemName)
 {
 	m_pParent = pParent;
 	m_point = point;
@@ -283,7 +282,7 @@ BOOL CMenuEx::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UINT
 }
 
 // UI初始化,此函数在窗口的OnCreate函数中调用
-void CMenuEx::InitUI(CRect rcClient)
+void CDuiMenu::InitUI(CRect rcClient)
 {
 	// 如果有菜单项的预设置值,则设置相应的值到控件
 	if(m_vecMenuItemValue.size() > 0)
@@ -319,7 +318,7 @@ void CMenuEx::InitUI(CRect rcClient)
 }
 
 // 添加菜单项预设置信息(设置菜单项标题)
-void CMenuEx::SetItemTitle(CString strName, CString strTitle)
+void CDuiMenu::SetItemTitle(CString strName, CString strTitle)
 {
 	MenuItemValue itemValue;
 	itemValue.strName = strName;
@@ -331,7 +330,7 @@ void CMenuEx::SetItemTitle(CString strName, CString strTitle)
 }
 
 // 添加菜单项预设置信息(设置菜单项可见性)
-void CMenuEx::SetItemVisible(CString strName, BOOL bVisible)
+void CDuiMenu::SetItemVisible(CString strName, BOOL bVisible)
 {
 	MenuItemValue itemValue;
 	itemValue.strName = strName;
@@ -343,7 +342,7 @@ void CMenuEx::SetItemVisible(CString strName, BOOL bVisible)
 }
 
 // 添加菜单项预设置信息(设置菜单项是否禁用)
-void CMenuEx::SetItemDisable(CString strName, BOOL bDisable)
+void CDuiMenu::SetItemDisable(CString strName, BOOL bDisable)
 {
 	MenuItemValue itemValue;
 	itemValue.strName = strName;
@@ -355,7 +354,7 @@ void CMenuEx::SetItemDisable(CString strName, BOOL bDisable)
 }
 
 // 添加菜单项预设置信息(设置菜单项是否选择)
-void CMenuEx::SetItemCheck(CString strName, int nCheck)
+void CDuiMenu::SetItemCheck(CString strName, int nCheck)
 {
 	MenuItemValue itemValue;
 	itemValue.strName = strName;
@@ -366,7 +365,7 @@ void CMenuEx::SetItemCheck(CString strName, int nCheck)
 	m_vecMenuItemValue.push_back(itemValue);
 }
 
-int CMenuEx::AddMenu(CString strText, UINT uMenuID, int nResourceID, BOOL bSelect, int nIndex)
+int CDuiMenu::AddMenu(CString strText, UINT uMenuID, int nResourceID, BOOL bSelect, int nIndex)
 {
 	CControlBase * pControlBase = NULL;
 
@@ -403,7 +402,7 @@ int CMenuEx::AddMenu(CString strText, UINT uMenuID, int nResourceID, BOOL bSelec
 	return m_vecControl.size();
 }
 
-int CMenuEx::AddMenu(CString strText, UINT uMenuID, CString strImage, BOOL bSelect, int nIndex)
+int CDuiMenu::AddMenu(CString strText, UINT uMenuID, CString strImage, BOOL bSelect, int nIndex)
 {
 	CControlBase * pControlBase = NULL;
 
@@ -441,7 +440,7 @@ int CMenuEx::AddMenu(CString strText, UINT uMenuID, CString strImage, BOOL bSele
 }
 
 // 添加菜单分隔
-int CMenuEx::AddSeparator(int nIndex)
+int CDuiMenu::AddSeparator(int nIndex)
 {
 	// 可以使用矩形控件，也可以使用图片控件
 	CControlBase * pControlBase = new CRectangle(GetSafeHwnd(),this, -1, CRect(0, 0, 0, 0), Color(254, 227, 229, 230));
@@ -460,7 +459,7 @@ int CMenuEx::AddSeparator(int nIndex)
 }
 
 // 设置菜单项位置
-void CMenuEx::SetMenuPoint()
+void CDuiMenu::SetMenuPoint()
 {
 	int nXPos = 2;
 	int nYPos = 2;
@@ -512,7 +511,7 @@ void CMenuEx::SetMenuPoint()
 }
 
 // 获取父菜单对象
-CMenuEx* CMenuEx::GetParentMenu()
+CDuiMenu* CDuiMenu::GetParentMenu()
 {
 	CDuiObject* pParentObj = GetParent();
 	while((pParentObj != NULL) && (!pParentObj->IsClass("menu")))
@@ -531,14 +530,14 @@ CMenuEx* CMenuEx::GetParentMenu()
 	}
 	if((pParentObj != NULL) && pParentObj->IsClass("menu"))
 	{
-		return (CMenuEx*)pParentObj;
+		return (CDuiMenu*)pParentObj;
 	}
 
 	return NULL;
 }
 
 // 获取当前处于活动状态的子菜单项
-CMenuItem* CMenuEx::GetHoverMenuItem()
+CMenuItem* CDuiMenu::GetHoverMenuItem()
 {
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
@@ -557,7 +556,7 @@ CMenuItem* CMenuEx::GetHoverMenuItem()
 }
 
 // 消息响应
-LRESULT CMenuEx::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
+LRESULT CDuiMenu::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if((Msg != BUTTOM_UP) && (Msg != BUTTOM_CHECK))
 	{
@@ -590,7 +589,7 @@ LRESULT CMenuEx::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 	if(Msg == BUTTOM_UP)
 	{
 		// 如果有父菜单,将父菜单关闭,不采用直接关闭的方法,而是设置自动关闭标识,并通过鼠标事件触发自动关闭
-		CMenuEx* pParentMenu = GetParentMenu();
+		CDuiMenu* pParentMenu = GetParentMenu();
 		if(pParentMenu && !pParentMenu->IsAutoClose())
 		{
 			pParentMenu->SetAutoClose(TRUE);
@@ -605,10 +604,10 @@ LRESULT CMenuEx::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 }
 
 // 重载窗口去激活时候的关闭窗口操作
-BOOL CMenuEx::OnNcCloseWindow()
+BOOL CDuiMenu::OnNcCloseWindow()
 {
 	// 如果有父菜单,将父菜单窗口关闭
-	CMenuEx* pParentMenu = GetParentMenu();
+	CDuiMenu* pParentMenu = GetParentMenu();
 	if(pParentMenu && !pParentMenu->IsAutoClose())
 	{
 		// 如果鼠标在父菜单窗口中,则不关闭父窗口

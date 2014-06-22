@@ -1,14 +1,14 @@
 #pragma once
 #include "ControlBase.h"
 
-class CStaticText : public CControlBaseFont
+class CDuiText : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CStaticText, "text")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiText, "text")
 public:
-	CStaticText(HWND hWnd, CDuiObject* pDuiObject);
-	CStaticText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
+	CDuiText(HWND hWnd, CDuiObject* pDuiObject);
+	CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
 		Color clr = Color(254, 0, 0, 0), CString strFont = DuiSystem::GetDefaultFont(), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular, BOOL bIsVisible = TRUE);
-	virtual ~CStaticText(void);
+	virtual ~CDuiText(void);
 
 	void SetMarkText(CString strMark);
 	void SetTitleMarkText(CString strTitle, CString strMark, int nStart = 0);

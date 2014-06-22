@@ -4,13 +4,13 @@
 #define					BUTTOM				1
 #define					EDIT				2
 
-class CEditEx : public CControlBaseFont
+class CDuiEdit : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CEditEx, "edit")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiEdit, "edit")
 public:
-	CEditEx(HWND hWnd, CDuiObject* pDuiObject);
-	CEditEx(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), BOOL bPassWord = FALSE, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
-	virtual ~CEditEx(void);
+	CDuiEdit(HWND hWnd, CDuiObject* pDuiObject);
+	CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), BOOL bPassWord = FALSE, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
+	virtual ~CDuiEdit(void);
 
 	// …Ë÷√◊Û≤‡–°Õº∆¨
 	bool SetLeftBitmap(UINT nResourceID, CString strType = TEXT("PNG"));

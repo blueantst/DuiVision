@@ -1,5 +1,5 @@
 #pragma once
-#include "EditEx.h"
+#include "DuiEdit.h"
 
 struct ComboListItem
 {
@@ -10,7 +10,7 @@ struct ComboListItem
 	CString strValue;
 };
 
-class CDuiComboBox : public CEditEx
+class CDuiComboBox : public CDuiEdit
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiComboBox, "combobox")
 public:

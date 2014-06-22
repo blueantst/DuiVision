@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "Tab.h"
+#include "DuiTab.h"
 
 CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBaseFont(hWnd, pDuiObject)

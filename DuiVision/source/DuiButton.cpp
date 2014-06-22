@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "ButtonEx.h"
+#include "DuiButton.h"
 
 CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBaseFont(hWnd, pDuiObject)

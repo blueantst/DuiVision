@@ -1,7 +1,7 @@
 #pragma once
 #include "ControlBase.h"
 
-class CMenuEx;
+class CDuiMenu;
 
 class CMenuItem : public CControlBaseFont
 {
@@ -23,7 +23,7 @@ public:
 	BOOL IsHover() { return (m_enButtonState == enBSHover); }
 
 	// 获取父菜单对象
-	CMenuEx* GetParentMenu();
+	CDuiMenu* GetParentMenu();
 	// 设置菜单项的嵌套XML文件名
 	void SetMenuXml(CString strMenuXml) { m_strMenuXml = strMenuXml; }
 	// 获取菜单项的嵌套XML文件名
@@ -31,9 +31,9 @@ public:
 	// 显示弹出菜单
 	void ShowPopupMenu();
 	// 获取弹出菜单
-	CMenuEx* GetPopupMenu() { return m_pPopupMenu; }
+	CDuiMenu* GetPopupMenu() { return m_pPopupMenu; }
 	// 设置弹出菜单
-	void SetPopupMenu(CMenuEx* pPopupMenu) { m_pPopupMenu = pPopupMenu; }
+	void SetPopupMenu(CDuiMenu* pPopupMenu) { m_pPopupMenu = pPopupMenu; }
 	// 设置菜单项和边框之间的距离
 	void SetFrameWidth(int nFrameWidth) { m_nFrameWidth = nFrameWidth; }
 
@@ -56,7 +56,7 @@ public:
 	BOOL				m_bSelect;			// 是否选择,检查框必须是选择的
 	BOOL				m_bIsSeparator;		// 是否分隔线
 	BOOL				m_bIsPopup;			// 是否弹出菜单
-	CMenuEx*			m_pPopupMenu;		// 弹出菜单的对象指针
+	CDuiMenu*			m_pPopupMenu;		// 弹出菜单的对象指针
 	CString				m_strMenuXml;		// 嵌套菜单的XML文件
 	int					m_nLeft;			// 菜单项文字的左边距
 	int					m_nFrameWidth;		// 菜单项距离边框的宽度

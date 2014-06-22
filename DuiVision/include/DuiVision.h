@@ -41,7 +41,7 @@ using namespace Gdiplus;
 
 //////////////////////////////////////////////////////////
 //Button
-#include "ButtonEx.h"
+#include "DuiButton.h"
 #include "CheckButton.h"
 #include "RadioButton.h"
 #include "HideButton.h"
@@ -75,11 +75,11 @@ using namespace Gdiplus;
 
 //////////////////////////////////////////////////////////
 //Tab
-#include "Tab.h"
+#include "DuiTab.h"
 
 //////////////////////////////////////////////////////////
 //Text
-#include "StaticText.h"
+#include "DuiText.h"
 
 //////////////////////////////////////////////////////////
 //Dialog
@@ -90,11 +90,11 @@ using namespace Gdiplus;
 //////////////////////////////////////////////////////////
 //Menu
 #include "MenuItem.h"
-#include "MenuEx.h"
+#include "DuiMenu.h"
 
 //////////////////////////////////////////////////////////
 //Edit
-#include "EditEx.h"
-#include "ComboBox.h"
+#include "DuiEdit.h"
+#include "DuiComboBox.h"
 
 #endif

@@ -30,9 +30,6 @@
     <ClInclude Include="include\Area.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\ButtonEx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\CheckButton.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -48,9 +45,6 @@
     <ClInclude Include="include\DuiVision.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\EditEx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\Frame.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -64,9 +58,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\LinkButton.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MenuEx.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\MenuItem.h">
@@ -85,12 +76,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\SelectBox.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\StaticText.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Tab.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\TextButton.h">
@@ -144,9 +129,6 @@
     <ClInclude Include="include\PopupList.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\ComboBox.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\DuiListCtrl.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -157,6 +139,24 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\DuiTreeCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiComboBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiMenu.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiTab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiText.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -170,9 +170,6 @@
     <ClCompile Include="source\Area.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\ButtonEx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="source\CheckButton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -183,9 +180,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DlgPopup.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="source\EditEx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\Frame.cpp">
@@ -201,9 +195,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\LinkButton.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="source\MenuEx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\MenuItem.cpp">
@@ -222,12 +213,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\SelectBox.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="source\StaticText.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Tab.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\TextButton.cpp">
@@ -272,9 +257,6 @@
     <ClCompile Include="source\PopupList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\ComboBox.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="source\DuiListCtrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -285,6 +267,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiTreeCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiComboBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiMenu.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiTab.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiText.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

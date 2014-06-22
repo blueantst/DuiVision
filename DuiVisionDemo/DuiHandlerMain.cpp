@@ -248,8 +248,8 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 	{
 		CDlgBase* pDlg = GetControlDialog(uID);
 		CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_button"));
-		CMenuEx *pMenuEx = new CMenuEx(DuiSystem::GetDefaultFont(), 12);
-		pMenuEx->SetParent(pButton);
+		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		pDuiMenu->SetParent(pButton);
 		CPoint point;
 		CRect rc = pButton->GetRect();
 		point.SetPoint(rc.left + 75, rc.bottom);
@@ -259,12 +259,12 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		}
 		// 演示如何在菜单加载时候更改菜单项的显示标题、可见性、是否禁用、是否选择等属性
 		// 必须在调用LoadXmlFile之前通过菜单项名字来设置相应菜单项的属性
-		pMenuEx->SetItemTitle(L"item_login", L"认证--修改Title");
-		pMenuEx->SetItemCheck(L"item_setup", 0);
-		pMenuEx->SetItemVisible(L"item_help", FALSE);
-		pMenuEx->SetItemDisable(L"item_about", TRUE);
-		pMenuEx->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU);
-		pMenuEx->ShowWindow(SW_SHOW);
+		pDuiMenu->SetItemTitle(L"item_login", L"认证--修改Title");
+		pDuiMenu->SetItemCheck(L"item_setup", 0);
+		pDuiMenu->SetItemVisible(L"item_help", FALSE);
+		pDuiMenu->SetItemDisable(L"item_about", TRUE);
+		pDuiMenu->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU);
+		pDuiMenu->ShowWindow(SW_SHOW);
 	}else
 	if((strName == _T("listctrl_1")) && (Msg == BUTTOM_DOWN))	// 列表控件点击
 	{
@@ -447,7 +447,7 @@ void CDuiHandlerMain::OnOptionOK(CDlgBase* pDlg)
 
 	// IP地址
 	CString strServerAddr = L"";
-	CEditEx* pControlIp = static_cast<CEditEx*>(pDlg->GetControl(L"config.server.ip"));
+	CDuiEdit* pControlIp = static_cast<CDuiEdit*>(pDlg->GetControl(L"config.server.ip"));
 	if(pControlIp)
 	{
 		strServerAddr = pControlIp->GetEditText();

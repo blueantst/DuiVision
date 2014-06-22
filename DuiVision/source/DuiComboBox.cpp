@@ -1,8 +1,8 @@
 #include "StdAfx.h"
-#include "ComboBox.h"
+#include "DuiComboBox.h"
 
 CDuiComboBox::CDuiComboBox(HWND hWnd, CDuiObject* pDuiObject)
-	: CEditEx(hWnd, pDuiObject)
+	: CDuiEdit(hWnd, pDuiObject)
 {
 	m_bReadOnly = true;
 	m_nResourceIDHeadBitmap = 0;

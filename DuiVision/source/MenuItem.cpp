@@ -55,7 +55,7 @@ BOOL CMenuItem::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	}
 
 	// 如果是嵌套菜单(有menu属性),则通过调用父菜单的Load函数将嵌套菜单作为平级菜单加载
-	CMenuEx* pParentMenu = GetParentMenu();
+	CDuiMenu* pParentMenu = GetParentMenu();
 	if(pParentMenu && !m_strMenuXml.IsEmpty())
 	{
 		pParentMenu->LoadXmlFile(m_strMenuXml);
@@ -67,7 +67,7 @@ BOOL CMenuItem::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 }
 
 // 获取父菜单对象
-CMenuEx* CMenuItem::GetParentMenu()
+CDuiMenu* CMenuItem::GetParentMenu()
 {
 	CDuiObject* pParentObj = GetParent();
 	while((pParentObj != NULL) && (!pParentObj->IsClass("menu")))
@@ -86,7 +86,7 @@ CMenuEx* CMenuItem::GetParentMenu()
 	}
 	if((pParentObj != NULL) && pParentObj->IsClass("menu"))
 	{
-		return (CMenuEx*)pParentObj;
+		return (CDuiMenu*)pParentObj;
 	}
 
 	return NULL;
@@ -103,7 +103,7 @@ void CMenuItem::ShowPopupMenu()
 
 	if(m_bIsPopup)
 	{
-		m_pPopupMenu = new CMenuEx( DuiSystem::GetDefaultFont(), 12);
+		m_pPopupMenu = new CDuiMenu( DuiSystem::GetDefaultFont(), 12);
 		m_pPopupMenu->SetParent(this);
 		CPoint point;
 		CRect rc = GetRect();
@@ -114,7 +114,7 @@ void CMenuItem::ShowPopupMenu()
 		// 如果菜单项定义了XML文件,则使用此菜单项定义的XML文件加载子菜单
 		// 否则查找父菜单对象,找到对应的XML文件名,使用此XML文件名加载子菜单
 		CString strXmlFile = _T("");		
-		CMenuEx* pParentMenu = GetParentMenu();
+		CDuiMenu* pParentMenu = GetParentMenu();
 		if(pParentMenu)
 		{
 			if(!m_strMenuXml.IsEmpty())
@@ -242,7 +242,7 @@ BOOL CMenuItem::OnControlMouseMove(UINT nFlags, CPoint point)
 			if(m_bIsPopup && (m_pPopupMenu != NULL))
 			{
 				// 检查父菜单的各个子菜单,看鼠标当前是否在其他菜单项上面
-				CMenuEx* pParentMenu = GetParentMenu();
+				CDuiMenu* pParentMenu = GetParentMenu();
 				CMenuItem* pHoverItem = pParentMenu->GetHoverMenuItem();
 				if((pHoverItem != NULL) && (pHoverItem != this))
 				{
@@ -254,7 +254,7 @@ BOOL CMenuItem::OnControlMouseMove(UINT nFlags, CPoint point)
 					m_pPopupMenu = NULL;
 				
 					// 父菜单对象设置回自动关闭
-					CMenuEx* pParentMenu = GetParentMenu();
+					CDuiMenu* pParentMenu = GetParentMenu();
 					if(pParentMenu)
 					{
 						pParentMenu->SetAutoClose(TRUE);

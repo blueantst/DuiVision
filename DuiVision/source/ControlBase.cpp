@@ -1081,8 +1081,8 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}else
 	if(m_strAction.Find(_T("menu:")) == 0)	// 动作:打开一个菜单
 	{
-		CMenuEx *pMenuEx = new CMenuEx( DuiSystem::GetDefaultFont(), 12);	// 可以考虑改为通过DuiSystem创建和管理
-		pMenuEx->SetParent(this);
+		CDuiMenu *pDuiMenu = new CDuiMenu( DuiSystem::GetDefaultFont(), 12);	// 可以考虑改为通过DuiSystem创建和管理
+		pDuiMenu->SetParent(this);
 		CPoint point;
 		CRect rc = GetRect();
 		point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
@@ -1093,8 +1093,8 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		CString strXmlFile = m_strAction;
 		strXmlFile.Delete(0, 5);
-		pMenuEx->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU);
-		pMenuEx->ShowWindow(SW_SHOW);
+		pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU);
+		pDuiMenu->ShowWindow(SW_SHOW);
 	}else
 	if(m_strAction.Find(_T("link:")) == 0)	// 动作:打开一个页面链接
 	{

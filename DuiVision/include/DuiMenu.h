@@ -17,7 +17,7 @@ struct MenuItemValue
 
 class CMenuItem;
 
-class CMenuEx : public CDlgPopup
+class CDuiMenu : public CDlgPopup
 {
 public:
 	static LPCSTR GetClassName() { return "menu";}
@@ -28,8 +28,8 @@ public:
 	}
 
 public:
-	CMenuEx(CString strFont = DuiSystem::GetDefaultFont(), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
-	virtual ~CMenuEx(void);
+	CDuiMenu(CString strFont = DuiSystem::GetDefaultFont(), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
+	virtual ~CDuiMenu(void);
 
 	// 创建菜单窗口
 	BOOL Create(CWnd *pParent, CPoint point, UINT uMessageID, UINT nResourceID, int nFrameSize = 4, int nMinWidth = 113, enumBackMode enBackMode = enBMFrame);
@@ -51,7 +51,7 @@ public:
 	void SetMenuPoint();
 
 	// 获取父菜单对象
-	CMenuEx* GetParentMenu();
+	CDuiMenu* GetParentMenu();
 	// 获取当前激活菜单项对象
 	CMenuItem* GetHoverMenuItem();
 

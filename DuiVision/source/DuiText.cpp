@@ -1,11 +1,11 @@
 #include "StdAfx.h"
-#include "StaticText.h"
+#include "DuiText.h"
 
 #define	SCROLL_V	1	// 滚动条控件ID
 #define	LISTBK_AREA	2	// 背景Area控件ID
 
-CStaticText::CStaticText(HWND hWnd, CDuiObject* pDuiObject)
-			 : CControlBaseFont(hWnd, pDuiObject)
+CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
+		: CControlBaseFont(hWnd, pDuiObject)
 {
 	m_nScrollWidth = 8;
 
@@ -42,9 +42,9 @@ CStaticText::CStaticText(HWND hWnd, CDuiObject* pDuiObject)
 	SetBitmapCount(1);
 }
 
-CStaticText::CStaticText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString m_strTitle, Color clr/* = Color(0, 0, 0)*/,
-						 CString strFont, int nFontWidth/* = 12*/, FontStyle fontStyle/* = FontStyleRegular*/, BOOL bIsVisible/* = TRUE*/)
-			 : CControlBaseFont(hWnd, pDuiObject, uControlID, rc, m_strTitle, bIsVisible, FALSE, FALSE, strFont, nFontWidth, fontStyle)
+CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString m_strTitle, Color clr/* = Color(0, 0, 0)*/,
+				CString strFont, int nFontWidth/* = 12*/, FontStyle fontStyle/* = FontStyleRegular*/, BOOL bIsVisible/* = TRUE*/)
+	: CControlBaseFont(hWnd, pDuiObject, uControlID, rc, m_strTitle, bIsVisible, FALSE, FALSE, strFont, nFontWidth, fontStyle)
 {
 	m_nScrollWidth = 8;
 
@@ -79,12 +79,12 @@ CStaticText::CStaticText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	SetBitmapCount(1);
 }
 
-CStaticText::~CStaticText(void)
+CDuiText::~CDuiText(void)
 {
 
 }
 
-void CStaticText::SetMarkText(CString strMark)
+void CDuiText::SetMarkText(CString strMark)
 {
 	if(m_strMark != strMark)
 	{
@@ -93,7 +93,7 @@ void CStaticText::SetMarkText(CString strMark)
 	}
 }
 
-void CStaticText::SetTitleMarkText(CString strTitle, CString strMark, int nStart)
+void CDuiText::SetTitleMarkText(CString strTitle, CString strMark, int nStart)
 {
 	if(m_strTitle != strTitle || m_strMark != strMark)
 	{
@@ -103,7 +103,7 @@ void CStaticText::SetTitleMarkText(CString strTitle, CString strMark, int nStart
 	}
 }
 
-void CStaticText::SetMarkText(CString strMark, Color clrMark, int nStart)
+void CDuiText::SetMarkText(CString strMark, Color clrMark, int nStart)
 {
 	if(m_strMark != strMark || *((DWORD *)&m_clrMark) != *((DWORD *)&clrMark) || m_nStart != nStart)
 	{
@@ -114,7 +114,7 @@ void CStaticText::SetMarkText(CString strMark, Color clrMark, int nStart)
 	}
 }
 
-void CStaticText::SetMarkText(CString strTitle, CString strMark, Color clrMark, int nStart)
+void CDuiText::SetMarkText(CString strTitle, CString strMark, Color clrMark, int nStart)
 {
 	if(m_strTitle != strTitle || m_strMark != strMark || *((DWORD *)&m_clrMark) != *((DWORD *)&clrMark) || m_nStart != nStart)
 	{
@@ -127,7 +127,7 @@ void CStaticText::SetMarkText(CString strTitle, CString strMark, Color clrMark, 
 }
 
 // 从XML设置背景颜色属性
-HRESULT CStaticText::OnAttributeBackColor(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeBackColor(const CStringA& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -138,7 +138,7 @@ HRESULT CStaticText::OnAttributeBackColor(const CStringA& strValue, BOOL bLoadin
 }
 
 // 从XML设置热点颜色属性
-HRESULT CStaticText::OnAttributeTextHoverColor(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeTextHoverColor(const CStringA& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -149,7 +149,7 @@ HRESULT CStaticText::OnAttributeTextHoverColor(const CStringA& strValue, BOOL bL
 }
 
 // 从XML设置阴影颜色属性
-HRESULT CStaticText::OnAttributeTextShadowColor(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeTextShadowColor(const CStringA& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -160,7 +160,7 @@ HRESULT CStaticText::OnAttributeTextShadowColor(const CStringA& strValue, BOOL b
 }
 
 // 从XML设置图片信息属性
-HRESULT CStaticText::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -203,7 +203,7 @@ HRESULT CStaticText::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoad
 	return bLoading?S_FALSE:S_OK;
 }
 
-void CStaticText::SetControlRect(CRect rc)
+void CDuiText::SetControlRect(CRect rc)
 {
 	m_rc = rc;
 
@@ -232,7 +232,7 @@ void CStaticText::SetControlRect(CRect rc)
 	}
 }
 
-BOOL CStaticText::OnControlMouseMove(UINT nFlags, CPoint point)
+BOOL CDuiText::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable && m_enButtonState != enBSDown)
@@ -255,7 +255,7 @@ BOOL CStaticText::OnControlMouseMove(UINT nFlags, CPoint point)
 	return false;
 }
 
-BOOL CStaticText::OnControlLButtonDown(UINT nFlags, CPoint point)
+BOOL CDuiText::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable)
@@ -274,7 +274,7 @@ BOOL CStaticText::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
-BOOL CStaticText::OnControlLButtonUp(UINT nFlags, CPoint point)
+BOOL CDuiText::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable)
@@ -302,7 +302,7 @@ BOOL CStaticText::OnControlLButtonUp(UINT nFlags, CPoint point)
 }
 
 // 滚动事件处理
-BOOL CStaticText::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
+BOOL CDuiText::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {
 	if(!m_pControScrollV->GetVisible())
 	{
@@ -320,14 +320,14 @@ BOOL CStaticText::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 }
 
 // 消息响应
-LRESULT CStaticText::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CDuiText::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	OnMessage(uID, uMsg, wParam, lParam);
 	return 0L; 
 }
 
 // 消息响应
-LRESULT CStaticText::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
+LRESULT CDuiText::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if((uID == SCROLL_V) && (Msg == MSG_SCROLL_CHANGE))
 	{
@@ -339,7 +339,7 @@ LRESULT CStaticText::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 }
 
 // 计算显示的字符串总高度应该是多高
-int CStaticText::GetVirtualHeight()
+int CDuiText::GetVirtualHeight()
 {
 	FontFamily fontFamily(m_strFont.AllocSysString());
 	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
@@ -362,7 +362,7 @@ int CStaticText::GetVirtualHeight()
 	return size.Height;
 }
 
-void CStaticText::DrawControl(CDC &dc, CRect rcUpdate)
+void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
 	int nHeight = m_rc.Height();
