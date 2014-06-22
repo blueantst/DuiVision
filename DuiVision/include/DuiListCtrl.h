@@ -62,11 +62,6 @@ public:
 	int  GetRowCheck(int nRow);
 	void ClearItems();
 
-	BOOL SetSeperator(UINT nResourceID = 0, CString strType= TEXT("PNG"));
-	BOOL SetSeperator(CString strImage = TEXT(""));
-	BOOL SetCheckBoxImage(UINT nResourceID = 0, CString strType= TEXT("PNG"));
-	BOOL SetCheckBoxImage(CString strImage = TEXT(""));
-
 	BOOL PtInRow(CPoint point, ListRowInfo& rowInfo);
 	BOOL PtInRowCheck(CPoint point, ListRowInfo& rowInfo);
 	int  PtInRowLink(CPoint point, ListRowInfo& rowInfo);
@@ -86,8 +81,6 @@ protected:
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 
 	HRESULT OnAttributeFontTitle(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeImageCheckBox(const CStringA& strValue, BOOL bLoading);
 
 	// 消息响应
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -107,11 +100,6 @@ public:
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
 
-	Image*				m_pImageSeperator;	// 行分隔线图片
-	CSize				m_sizeSeperator;	// 行分隔线大小
-	Image*				m_pImageCheckBox;	// 检查框图片
-	CSize				m_sizeCheckBox;		// 检查框图片大小
-
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
 	BOOL				m_bEnableDownRow;	// 允许显示当前点击行
@@ -124,6 +112,8 @@ public:
 	int					m_nTipRow;			// 当前tip行
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)

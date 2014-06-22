@@ -60,7 +60,28 @@ CDuiTreeCtrl::~CDuiTreeCtrl(void)
 		delete m_pImageSeperator;
 		m_pImageSeperator = NULL;
 	}
+	if(m_pImageCheckBox != NULL)
+	{
+		delete m_pImageCheckBox;
+		m_pImageCheckBox = NULL;
+	}
+	if(m_pImageCollapse != NULL)
+	{
+		delete m_pImageCollapse;
+		m_pImageCollapse = NULL;
+	}
+	if(m_pImageToggle != NULL)
+	{
+		delete m_pImageToggle;
+		m_pImageToggle = NULL;
+	}
 }
+
+// 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTreeCtrl, Seperator, 1)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTreeCtrl, CheckBox, 6)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTreeCtrl, Collapse, 8)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTreeCtrl, Toggle, 6)
 
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
 BOOL CDuiTreeCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
@@ -1029,318 +1050,6 @@ HRESULT CDuiTreeCtrl::OnAttributeFontTitle(const CStringA& strValue, BOOL bLoadi
 	m_strFontTitle = fontInfo.strFont;
 	m_nFontTitleWidth = fontInfo.nFontWidth;	
 	m_fontTitleStyle = fontInfo.fontStyle;
-
-	return bLoading?S_FALSE:S_OK;
-}
-
-// 设置分隔线图片资源
-BOOL CDuiTreeCtrl::SetSeperator(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageSeperator != NULL)
-	{
-		delete m_pImageSeperator;
-		m_pImageSeperator = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageSeperator))
-	{
-		m_sizeSeperator.SetSize(m_pImageSeperator->GetWidth(), m_pImageSeperator->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 设置分隔线图片文件
-BOOL CDuiTreeCtrl::SetSeperator(CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageSeperator != NULL)
-	{
-		delete m_pImageSeperator;
-		m_pImageSeperator = NULL;
-	}
-
-	m_pImageSeperator = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageSeperator->GetLastStatus() == Ok)
-	{
-		m_sizeSeperator.SetSize(m_pImageSeperator->GetWidth(), m_pImageSeperator->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置分隔图片信息属性
-HRESULT CDuiTreeCtrl::OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetSeperator(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetSeperator(nResourceID, TEXT("PNG")))
-		{
-			if(!SetSeperator(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
-}
-
-// 设置检查框图片资源
-BOOL CDuiTreeCtrl::SetCheckBoxImage(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageCheckBox != NULL)
-	{
-		delete m_pImageCheckBox;
-		m_pImageCheckBox = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageCheckBox))
-	{
-		m_sizeCheckBox.SetSize(m_pImageCheckBox->GetWidth() / 6, m_pImageCheckBox->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 设置检查框图片文件
-BOOL CDuiTreeCtrl::SetCheckBoxImage(CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageCheckBox != NULL)
-	{
-		delete m_pImageCheckBox;
-		m_pImageCheckBox = NULL;
-	}
-
-	m_pImageCheckBox = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageCheckBox->GetLastStatus() == Ok)
-	{
-		m_sizeCheckBox.SetSize(m_pImageCheckBox->GetWidth() / 6, m_pImageCheckBox->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置检查框图片信息属性
-HRESULT CDuiTreeCtrl::OnAttributeImageCheckBox(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetCheckBoxImage(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetCheckBoxImage(nResourceID, TEXT("PNG")))
-		{
-			if(!SetCheckBoxImage(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
-}
-
-// 设置行缩放图片资源
-BOOL CDuiTreeCtrl::SetCollapseImage(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageCollapse != NULL)
-	{
-		delete m_pImageCollapse;
-		m_pImageCollapse = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageCollapse))
-	{
-		m_sizeCollapse.SetSize(m_pImageCollapse->GetWidth() / 8, m_pImageCollapse->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 设置行缩放图片文件
-BOOL CDuiTreeCtrl::SetCollapseImage(CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageCollapse != NULL)
-	{
-		delete m_pImageCollapse;
-		m_pImageCollapse = NULL;
-	}
-
-	m_pImageCollapse = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageCollapse->GetLastStatus() == Ok)
-	{
-		m_sizeCollapse.SetSize(m_pImageCollapse->GetWidth() / 8, m_pImageCollapse->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置行缩放图片信息属性
-HRESULT CDuiTreeCtrl::OnAttributeImageCollapse(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetCollapseImage(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetCollapseImage(nResourceID, TEXT("PNG")))
-		{
-			if(!SetCollapseImage(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
-}
-
-// 设置树节点图片资源
-BOOL CDuiTreeCtrl::SetToggleImage(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageToggle != NULL)
-	{
-		delete m_pImageToggle;
-		m_pImageToggle = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageToggle))
-	{
-		m_sizeToggle.SetSize(m_pImageToggle->GetWidth() / 6, m_pImageToggle->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 设置树节点图片文件
-BOOL CDuiTreeCtrl::SetToggleImage(CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageToggle != NULL)
-	{
-		delete m_pImageToggle;
-		m_pImageToggle = NULL;
-	}
-
-	m_pImageToggle = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageToggle->GetLastStatus() == Ok)
-	{
-		m_sizeToggle.SetSize(m_pImageToggle->GetWidth() / 6, m_pImageToggle->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置树节点图片信息属性
-HRESULT CDuiTreeCtrl::OnAttributeImageToggle(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetToggleImage(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetToggleImage(nResourceID, TEXT("PNG")))
-		{
-			if(!SetToggleImage(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
 
 	return bLoading?S_FALSE:S_OK;
 }
