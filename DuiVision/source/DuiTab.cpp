@@ -386,7 +386,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, UINT nItemID, CString strName, CString s
 		itemInfo.pImage = NULL;
 	}else
 	{
-		itemInfo.pImage = Image::FromFile(strImage, TRUE);
+		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
 	}
 
 	if(itemInfo.pImage && (itemInfo.pImage->GetLastStatus() == Ok))

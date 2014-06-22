@@ -102,6 +102,7 @@ public:
 	CString GetTooltip() { return m_strTooltip; }
 	void SetAction(CString strAction) { m_strAction = strAction; }
 	CString GetAction() { return m_strAction; }
+	BOOL UseImageECM() { return m_bImageUseECM; }
 
 	virtual	BOOL PtInRect(CPoint point);	// 判断坐标是否在控件范围内
 	UINT GetControlID() { return m_uID; }	// 控件ID就是DUI对象的ID
@@ -175,6 +176,8 @@ protected:
 	BOOL					m_bIsRun;			// 是否有执行功能
 	BOOL					m_bRunTime;			// 执行定时器
 
+	BOOL					m_bImageUseECM;		// 是否使用图片自身的颜色管理信息
+
 	vector<CControlBase *>	m_vecControl;		// 控件列表
 	vector<CControlBase *>	m_vecArea;			// 区域列表(不影响鼠标事件)
 	CControlBase*			m_pControl;			// 当前控件
@@ -211,6 +214,7 @@ protected:
 		DUI_CUSTOM_ATTRIBUTE("height", OnAttributeHeight)
 		DUI_TSTRING_ATTRIBUTE("action", m_strAction, FALSE)
 		DUI_INT_ATTRIBUTE("taskmsg", m_bTaskMsg, TRUE)
+		DUI_INT_ATTRIBUTE("img-ecm", m_bImageUseECM, TRUE)
 		DUI_TSTRING_ATTRIBUTE("tip", m_strTooltip, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("shortcut", OnAttributeShortcut)
     DUI_DECLARE_ATTRIBUTES_END()

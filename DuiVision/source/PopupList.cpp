@@ -128,7 +128,7 @@ void CPopupList::SetHeadBitmap(UINT nResourceID)
 
 void CPopupList::SetHeadBitmap(CString strImage)
 {
-	m_pHeadImage = Image::FromFile(strImage, TRUE);
+	m_pHeadImage = Image::FromFile(strImage, FALSE);
 
 	if(m_pHeadImage->GetLastStatus() == Ok)
 	{
@@ -343,7 +343,7 @@ int CPopupList::AddItem(CString strName, CString strDesc, CString strValue, int 
 	editListItem.sizeImage.SetSize(0 ,0);
  	if(!strImageFile.IsEmpty())
  	{
- 		editListItem.pImage = Image::FromFile(strImageFile, TRUE);
+ 		editListItem.pImage = Image::FromFile(strImageFile, FALSE);
  
  		if(	editListItem.pImage)
  		{

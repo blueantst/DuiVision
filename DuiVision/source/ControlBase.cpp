@@ -34,6 +34,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bIsSelect = false;
 	m_bIsRun = false;
 	m_bRunTime = false;
+	m_bImageUseECM = false;
 
 	m_nShortcutKey = 0;
 	m_nShortcutFlag = 0;
@@ -69,6 +70,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bIsSelect = false;
 	m_bIsRun = false;
 	m_bRunTime = false;
+	m_bImageUseECM = false;
 
 	m_nWidth = 0;
 	m_nHeight = 0;
@@ -1362,7 +1364,7 @@ BOOL CControlBaseFont::SetBitmap(CString strImage)
 		m_pImage = NULL;
 	}
 
-	m_pImage = Image::FromFile(strImage, TRUE);
+	m_pImage = Image::FromFile(strImage, m_bImageUseECM);
 
 	if(m_pImage->GetLastStatus() == Ok)
 	{

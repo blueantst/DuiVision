@@ -388,7 +388,7 @@ void CDlgPopup::SetBackBitmap(UINT nResourceID)
 
 void CDlgPopup::SetBackBitmap(CString strImage)
 {
-	m_pImage = Image::FromFile(strImage, TRUE);
+	m_pImage = Image::FromFile(strImage, FALSE);
 
 	if(	m_pImage)
 	{

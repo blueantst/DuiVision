@@ -141,7 +141,7 @@ bool CDuiEdit::SetLeftBitmap(UINT nResourceID, CString strType)
 
 bool CDuiEdit::SetLeftBitmap(CString strImage)
 {
-	m_pLeftImage = Image::FromFile(strImage, TRUE);
+	m_pLeftImage = Image::FromFile(strImage, m_bImageUseECM);
 
 	if(m_pLeftImage->GetLastStatus() == Ok)
 	{
@@ -227,7 +227,7 @@ bool CDuiEdit::SetSmallBitmap(UINT nResourceID, CString strType)
 
 bool CDuiEdit::SetSmallBitmap(CString strImage)
 {
-	m_pSmallImage = Image::FromFile(strImage, TRUE);
+	m_pSmallImage = Image::FromFile(strImage, m_bImageUseECM);
 
 	if(m_pSmallImage->GetLastStatus() == Ok)
 	{

@@ -104,7 +104,7 @@ BOOL CScrollV::SetBitmap(CString strImage)
 		m_pImage = NULL;
 	}
 
-	m_pImage = Image::FromFile(strImage, TRUE);
+	m_pImage = Image::FromFile(strImage, m_bImageUseECM);
 
 	if(	m_pImage->GetLastStatus() == Ok)
 	{

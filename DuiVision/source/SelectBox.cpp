@@ -160,7 +160,7 @@ BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 			pImage = NULL;
 		}
 
-		pImage = Image::FromFile(strImage, TRUE);
+		pImage = Image::FromFile(strImage, m_bImageUseECM);
 
 		if(pImage->GetLastStatus() == Ok)
 		{
@@ -172,7 +172,7 @@ BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 	else if(nIndex == -1 && m_vecpImage.size() < m_nXCount * m_nYCount)
 	{
 		Image *pImage = NULL;
-		pImage = Image::FromFile(strImage, TRUE);
+		pImage = Image::FromFile(strImage, m_bImageUseECM);
 
 		if(pImage->GetLastStatus() == Ok)
 		{

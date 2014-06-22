@@ -241,7 +241,7 @@ public:                                                             \
 			m_pImage##imgName = NULL;	\
 		}	\
 		\
-		m_pImage##imgName = Image::FromFile(strImage, TRUE);	\
+		m_pImage##imgName = Image::FromFile(strImage, m_bImageUseECM);	\
 		\
 		if(m_pImage##imgName->GetLastStatus() == Ok)	\
 		{	\

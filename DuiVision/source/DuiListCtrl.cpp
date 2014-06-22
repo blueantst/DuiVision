@@ -221,7 +221,7 @@ BOOL CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CStrin
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		rowInfo.pImage = Image::FromFile(strImage, TRUE);
+		rowInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
 		if(rowInfo.pImage->GetLastStatus() == Ok)
 		{
 			rowInfo.sizeImage.SetSize(rowInfo.pImage->GetWidth() / 1, rowInfo.pImage->GetHeight());
@@ -244,7 +244,7 @@ BOOL CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CStrin
 	if(!strRightImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		rowInfo.pRightImage = Image::FromFile(strRightImage, TRUE);
+		rowInfo.pRightImage = Image::FromFile(strRightImage, m_bImageUseECM);
 		if(rowInfo.pRightImage->GetLastStatus() == Ok)
 		{
 			rowInfo.sizeRightImage.SetSize(rowInfo.pRightImage->GetWidth() / 1, rowInfo.pRightImage->GetHeight());
