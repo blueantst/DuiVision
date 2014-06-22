@@ -1674,6 +1674,10 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
 					BOOL bSingleLine = (itemInfo.strContent.IsEmpty() || !itemInfo.strLink.IsEmpty());
 					RectF rect(nPosItemX, nVI*m_nRowHeight + 1, itemInfo.rcItem.Width(), bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2));
+					if(j == 0)
+					{
+						rect.Width -= nPosItemX;
+					}
 
 					// »­µ¥Ôª¸ñÍ¼Æ¬
 					int nItemImageX = 0;
