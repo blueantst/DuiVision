@@ -14,6 +14,8 @@ CDuiMenu::CDuiMenu(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, 
 	m_nHeight = 30;
 	m_nWidth = 113;
 	m_nFrameWidth = 0;
+	m_nTopHeight = 0;
+	m_nBottomHeight = 0;
 	m_nSeparatorHeight = 4;
 }
 
@@ -462,7 +464,7 @@ int CDuiMenu::AddSeparator(int nIndex)
 void CDuiMenu::SetMenuPoint()
 {
 	int nXPos = 2;
-	int nYPos = 2;
+	int nYPos = (m_nTopHeight != 0) ? m_nTopHeight : 2;
 	CRect rc;
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
@@ -491,22 +493,40 @@ void CDuiMenu::SetMenuPoint()
 				rc.SetRect(nXPos, nYPos, m_nWidth - 2, nYPos + m_nHeight);
 				nYPos += m_nHeight;
 			}
+			SetControlRect(pControlBase, rc);
 		}else
 		if(-1 == pControlBase->GetControlID())
 		{
 			rc.SetRect(m_nLeft + 4, nYPos + 1, m_nWidth - 9, nYPos + 2);
 			nYPos += 4;
-		}/*
-		else
-		{
-			rc.SetRect(nXPos, nYPos, m_nWidth - 2, nYPos + m_nHeight);
-			nYPos += m_nHeight;
+			SetControlRect(pControlBase, rc);
 		}
-		*/
-		SetControlRect(pControlBase, rc);
 	}
-	nYPos += 2;
+	nYPos += ((m_nBottomHeight != 0) ? m_nBottomHeight : 2);
 	SetWindowPos(NULL, 0, 0, m_nWidth, nYPos, SWP_NOMOVE);
+	SetRect(CRect(0, 0, m_nWidth, nYPos));	// 设置菜单窗口的大小
+
+	// 设置非菜单项控件的位置(必须在高度计算出来之后设置)
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl[i];
+		if(pControlBase == NULL)
+		{
+			continue;
+		}
+		if(pControlBase->IsClass(CMenuItem::GetClassName()))
+		{
+			continue;
+		}else
+		if(-1 == pControlBase->GetControlID())
+		{
+			continue;
+		}else
+		{
+			pControlBase->OnAttributePosChange(pControlBase->GetPosStr(), FALSE);
+		}
+	}
+
 	InvalidateRect(NULL);
 }
 

@@ -244,10 +244,10 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 			pTabCtrl->SetItemVisible(1, TRUE);
 		}
 	}else
-	if((strName == _T("menu_button")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
+	if((strName == _T("menu_1")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
 	{
 		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_button"));
+		CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_1"));
 		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
 		pDuiMenu->SetParent(pButton);
 		CPoint point;
@@ -264,6 +264,38 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		pDuiMenu->SetItemVisible(L"item_help", FALSE);
 		pDuiMenu->SetItemDisable(L"item_about", TRUE);
 		pDuiMenu->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU);
+		pDuiMenu->ShowWindow(SW_SHOW);
+	}else
+	if((strName == _T("menu_2")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
+	{
+		CDlgBase* pDlg = GetControlDialog(uID);
+		CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_2"));
+		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		pDuiMenu->SetParent(pButton);
+		CPoint point;
+		CRect rc = pButton->GetRect();
+		point.SetPoint(rc.left + 75, rc.bottom);
+		if(pDlg != NULL)
+		{
+			pDlg->ClientToScreen(&point);
+		}
+		pDuiMenu->LoadXmlFile(_T("duivision\\menu_2.xml"), pDlg, point, WM_DUI_MENU);
+		pDuiMenu->ShowWindow(SW_SHOW);
+	}else
+	if((strName == _T("menu_3")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
+	{
+		CDlgBase* pDlg = GetControlDialog(uID);
+		CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_3"));
+		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		pDuiMenu->SetParent(pButton);
+		CPoint point;
+		CRect rc = pButton->GetRect();
+		point.SetPoint(rc.left + 75, rc.bottom);
+		if(pDlg != NULL)
+		{
+			pDlg->ClientToScreen(&point);
+		}
+		pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), pDlg, point, WM_DUI_MENU);
 		pDuiMenu->ShowWindow(SW_SHOW);
 	}else
 	if((strName == _T("listctrl_1")) && (Msg == BUTTOM_DOWN))	// 列表控件点击

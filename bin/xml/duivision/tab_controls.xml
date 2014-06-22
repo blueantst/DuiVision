@@ -53,9 +53,6 @@
 			<button pos="350,20,450,48" skin="IDB_BT_DEFAULT" title="动画按钮"
 				animate="1" maxindex="16" />
 			
-			<button name="menu_button" skin="IDB_BT_DEFAULT" title="菜单演示"
-				pos="500,20,600,48" show="1" animate="1" />
-			
 			<hidebtn name="hidebtn"
 				pos="50,65,150,90" show="1" text="隐藏按钮" title="点击" />
 			
@@ -230,6 +227,15 @@ width-lt,height-lt,width-rb,height-rb" />
 			
 			<button name="timer_button_2" skin="IDB_BT_DEFAULT" title="停止提示定时器"
 				pos="200,60,300,88" show="1" />
+
+			<button name="menu_1" skin="IDB_BT_DEFAULT" title="菜单1"
+				pos="50,100,150,128" tip="自定义背景和控件的菜单" />
+			
+			<button name="menu_2" skin="IDB_BT_DEFAULT" title="菜单2"
+				pos="200,100,300,128" tip="普通菜单，背景1" />
+			
+			<button name="menu_3" skin="IDB_BT_DEFAULT" title="菜单3"
+				pos="350,100,450,128" tip="普通菜单，背景2" />
 
 		</tab>
 		
