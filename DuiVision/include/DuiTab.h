@@ -32,12 +32,6 @@ public:
 	BOOL InsertItem(int nItem, UINT nItemID, CString strName, CString strItemText, CString strAction, CString strImage, CControlBase* pControl, int nImageCount = -1, BOOL bOutLink = FALSE, int nItemWidth = 0);
 	BOOL InsertItem(int nItem, UINT nItemID, CString strName, CString strItemText, CString strAction, int nImageIndex, CControlBase* pControl, BOOL bOutLink = FALSE, int nItemWidth = 0);
 
-	BOOL SetSeperator(BOOL bSeperator, UINT nResourceID = 0, CString strType= TEXT("PNG"));
-	BOOL SetSeperator(BOOL bSeperator, CString strImage = TEXT(""));
-
-	BOOL SetHoverBitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"));
-	BOOL SetHoverBitmap(CString strImage = TEXT(""));
-
 	int  GetItemIndex(CString strTabName);
 	TabItemInfo* GetItemInfo(int nItem);
 	void RefreshItems();
@@ -68,17 +62,10 @@ protected:
 	virtual BOOL DrawSubControls(CDC &dc, CRect rcUpdate);
 
 	BOOL InsertItem(int nItem, TabItemInfo &itemInfo);
-
-	HRESULT OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeImageHover(const CStringA& strValue, BOOL bLoading);
 	
 public:
 	vector<TabItemInfo>		m_vecItemInfo;			// Tab页信息列表
 	vector<CRect>			m_vecRcSeperator;		// tab位置列表
-	Image*					m_pImageSeperator;		// 分隔图片
-	CSize					m_sizeSeperator;		// 分隔图片大小
-	Image*					m_pImageHover;			// 热点图片
-	CSize					m_sizeHover;			// 热点图片大小
 
 	Color					m_clrText;				// 文字颜色
 
@@ -94,6 +81,8 @@ public:
 	int						m_nAnimateCount;		// 切换动画的帧数
 	int						m_nCurXPos;				// 切换过程中当前的横坐标位置
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE("img-hover", OnAttributeImageHover)

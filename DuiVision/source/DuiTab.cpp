@@ -61,6 +61,10 @@ CDuiTabCtrl::~CDuiTabCtrl(void)
 	}
 }
 
+// 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Seperator, 1)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Hover, 2)
+
 // 根据控件名创建控件实例
 CControlBase* CDuiTabCtrl::_CreateControlByName(LPCSTR lpszName)
 {
@@ -487,160 +491,6 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 
 	UpdateControl(true);
 	return true;
-}
-
-// 设置tab页分隔图片
-BOOL CDuiTabCtrl::SetSeperator(BOOL bSeperator, UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageSeperator != NULL)
-	{
-		delete m_pImageSeperator;
-		m_pImageSeperator = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageSeperator))
-	{
-		m_sizeSeperator.SetSize(m_pImageSeperator->GetWidth(), m_pImageSeperator->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-BOOL CDuiTabCtrl::SetSeperator(BOOL bSeperator, CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageSeperator != NULL)
-	{
-		delete m_pImageSeperator;
-		m_pImageSeperator = NULL;
-	}
-
-	m_pImageSeperator = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageSeperator->GetLastStatus() == Ok)
-	{
-		m_sizeSeperator.SetSize(m_pImageSeperator->GetWidth(), m_pImageSeperator->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置分隔图片信息属性
-HRESULT CDuiTabCtrl::OnAttributeImageSeperator(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetSeperator(TRUE, strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetSeperator(TRUE, nResourceID, TEXT("PNG")))
-		{
-			if(!SetSeperator(TRUE, nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
-}
-
-// 设置tab页热点图片
-BOOL CDuiTabCtrl::SetHoverBitmap(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageHover != NULL)
-	{
-		delete m_pImageHover;
-		m_pImageHover = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageHover))
-	{
-		m_sizeHover.SetSize(m_pImageHover->GetWidth() / 2, m_pImageHover->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-BOOL CDuiTabCtrl::SetHoverBitmap(CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageHover != NULL)
-	{
-		delete m_pImageHover;
-		m_pImageHover = NULL;
-	}
-
-	m_pImageHover = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageHover->GetLastStatus() == Ok)
-	{
-		m_sizeHover.SetSize(m_pImageHover->GetWidth() / 2, m_pImageHover->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置热点图片信息属性
-HRESULT CDuiTabCtrl::OnAttributeImageHover(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetHoverBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetHoverBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!SetHoverBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
 }
 
 // 根据tab名字获取索引
