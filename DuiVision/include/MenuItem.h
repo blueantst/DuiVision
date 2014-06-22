@@ -34,6 +34,8 @@ public:
 	CMenuEx* GetPopupMenu() { return m_pPopupMenu; }
 	// 设置弹出菜单
 	void SetPopupMenu(CMenuEx* pPopupMenu) { m_pPopupMenu = pPopupMenu; }
+	// 设置菜单项和边框之间的距离
+	void SetFrameWidth(int nFrameWidth) { m_nFrameWidth = nFrameWidth; }
 
 	HRESULT OnAttributeCheck(const CStringA& strValue, BOOL bLoading);
 
@@ -56,7 +58,8 @@ public:
 	BOOL				m_bIsPopup;			// 是否弹出菜单
 	CMenuEx*			m_pPopupMenu;		// 弹出菜单的对象指针
 	CString				m_strMenuXml;		// 嵌套菜单的XML文件
-	int					m_nLeft;
+	int					m_nLeft;			// 菜单项文字的左边距
+	int					m_nFrameWidth;		// 菜单项距离边框的宽度
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE("select", m_bSelect, FALSE)

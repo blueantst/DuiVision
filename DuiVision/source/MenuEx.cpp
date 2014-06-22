@@ -13,6 +13,7 @@ CMenuEx::CMenuEx(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, Fo
 	m_nLeft = 30;
 	m_nHeight = 30;
 	m_nWidth = 113;
+	m_nFrameWidth = 0;
 	m_nSeparatorHeight = 4;
 }
 
@@ -467,9 +468,14 @@ void CMenuEx::SetMenuPoint()
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
 		CControlBase * pControlBase = m_vecControl[i];
+		if(pControlBase == NULL)
+		{
+			continue;
+		}
 		if(pControlBase->IsClass(CMenuItem::GetClassName()))	// 如果是MenuItem类型控件
 		{
 			CMenuItem* pMenuItem = (CMenuItem*)pControlBase;
+			pMenuItem->SetFrameWidth(m_nFrameWidth);
 			if(!pMenuItem->GetVisible())
 			{
 				// 菜单项不可见

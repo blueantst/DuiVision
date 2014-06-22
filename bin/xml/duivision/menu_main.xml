@@ -1,4 +1,4 @@
-<menu title="Menu" width="150" item-height="25" framesize="30" left="30" bkimg="skin:IDB_MENU_BACK" >
+<menu title="Menu" width="150" item-height="25" framesize="30" left="30" frame-width="3" bkimg="skin:IDB_MENU_BACK" >
 
 	<menuitem name="item_login" skin="IDB_MENU_AUTH" img-count="3" title="认证" action="dlg:dlg_login" />
 	<menuitem name="item_setup" skin="IDB_MENU_SETUP" img-count="3" title="系统设置" taskmsg="1" />

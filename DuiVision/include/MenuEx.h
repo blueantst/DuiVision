@@ -81,6 +81,7 @@ public:
 	int			m_nLeft;				// 左边间隔
 	int			m_nHeight;				// 菜单项默认高度
 	int			m_nWidth;				// 菜单项最大宽度
+	int			m_nFrameWidth;			// 菜单项距离边框的宽度
 	int			m_nSeparatorHeight;		// 分隔线高度
 	CPoint		m_point;				// 菜单位置
 	CWnd*		m_pParent;				// 父窗口
@@ -92,6 +93,7 @@ public:
 		DUI_TSTRING_ATTRIBUTE("font", m_strFont, FALSE)
 		DUI_INT_ATTRIBUTE("fontwidth", m_nFontWidth, FALSE)
 		DUI_INT_ATTRIBUTE("item-height", m_nHeight, FALSE)
+		DUI_INT_ATTRIBUTE("frame-width", m_nFrameWidth, FALSE)
 		DUI_INT_ATTRIBUTE("left", m_nLeft, FALSE)
 		DUI_INT_ATTRIBUTE("sep-height", m_nSeparatorHeight, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()

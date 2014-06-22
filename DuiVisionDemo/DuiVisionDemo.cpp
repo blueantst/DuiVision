@@ -44,7 +44,7 @@ BOOL CDuiVisionDemoApp::InitInstance()
 	SetRegistryKey(_T("Blueant"));
 
 	// 初始化DuiVision界面库,可以指定语言,dwLangID为0表示自动判断当前语言
-	// 1116是应用程序ID，每个DUI应用程序应该使用不同的ID
+	// 1116是应用程序ID,每个DUI应用程序应该使用不同的ID,ID主要用于进程间通信传递命令行时候区分应用
 	DWORD dwLangID = 0;
 	new DuiSystem(m_hInstance, dwLangID, _T(""), 1116, IDD_DUIVISIONDEMO_DIALOG, "");
 
@@ -80,7 +80,7 @@ BOOL CDuiVisionDemoApp::InitInstance()
 	// 初始化提示信息窗口
 	DuiSystem::Instance()->CreateNotifyMsgBox(_T("dlg_notifymsg"));
 
-	// 按照非模式对话框创建主窗口,并默认隐藏
+	// 按照非模式对话框创建主窗口,可以默认隐藏
 	pMainDlg->Create(pMainDlg->GetIDTemplate(), NULL);
 	//pMainDlg->ShowWindow(SW_HIDE);
 	INT_PTR nResponse = pMainDlg->RunModalLoop();

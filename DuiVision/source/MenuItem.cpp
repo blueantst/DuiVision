@@ -15,6 +15,7 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject)
 	m_strMenuXml = _T("");
 
 	m_nLeft = 30;
+	m_nFrameWidth = 0;
 }
 
 CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/*= TEXT("")*/, int nLeft/* = 30*/, BOOL bSelect/* = false*/,
@@ -31,6 +32,7 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect r
 	m_strMenuXml = _T("");
 
 	m_nLeft = nLeft;
+	m_nFrameWidth = 0;
 }
 
 CMenuItem::~CMenuItem(void)
@@ -458,7 +460,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 			if(enBSHover == i || (enBSDown == i && !m_bSelect) || enBSHoverDown == i)
 			{
 				SolidBrush brush(Color(254, 71, 156, 235));
-				graphics.FillRectangle(&brush, i * nWidth, 0, nWidth, nHeight);
+				graphics.FillRectangle(&brush, i * nWidth+m_nFrameWidth, 0, nWidth-m_nFrameWidth*2, nHeight);
 			}
 
 			if(m_pImage != NULL)
@@ -467,7 +469,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					// 如果是分隔线,则采用平铺方式画图
 					TextureBrush tileBrush(m_pImage, WrapModeTile);
-					graphics.FillRectangle(&tileBrush, RectF(rcTemp.left, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, nWidth, m_sizeImage.cy));
+					graphics.FillRectangle(&tileBrush, RectF(rcTemp.left, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, nWidth-m_nFrameWidth*2, m_sizeImage.cy));
 				}else
 				if(m_bIsPopup)
 				{
