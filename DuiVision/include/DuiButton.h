@@ -9,11 +9,6 @@ public:
 	CDuiButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle = TEXT(""), BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
 	virtual ~CDuiButton(void);
 
-	BOOL SetBtnBitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"));
-	BOOL SetBtnBitmap(CString strImage = TEXT(""));
-
-	HRESULT OnAttributeImageBtn(const CStringA& strValue, BOOL bLoading);
-
 	void SetMaxIndex(int nMaxIndex) { m_nMaxIndex = nMaxIndex; }
 
 	virtual BOOL SetControlFocus(BOOL bFocus);
@@ -35,10 +30,9 @@ public:
 	int					m_nIndex;			// 渐变效果的过程索引
 	int					m_nMaxIndex;		// 渐变效果的最大索引
 	BOOL				m_bTimer;			// 是否启用渐变效果定时器
-	Image*				m_pImageBtn;		// 按钮图片
-	CSize				m_sizeBtn;			// 按钮图片大小
 	BOOL				m_bIsFocus;			// 当前是否处于焦点状态
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Btn);		// 定义按钮图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
 		DUI_INT_ATTRIBUTE("animate", m_bTimer, TRUE)

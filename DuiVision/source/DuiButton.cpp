@@ -14,6 +14,7 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject)
 	m_nIndex = 0;
 	m_nMaxIndex = 0;
 	m_pImageBtn = NULL;
+	m_sizeBtn = CSize(0, 0);
 }
 
 CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/*= TEXT("")*/, BOOL bIsVisible/* = TRUE*/, 
@@ -30,6 +31,7 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 	m_nIndex = 0;
 	m_nMaxIndex = 0;
 	m_pImageBtn = NULL;
+	m_sizeBtn = CSize(0, 0);
 }
 
 CDuiButton::~CDuiButton(void)
@@ -41,82 +43,8 @@ CDuiButton::~CDuiButton(void)
 	}
 }
 
-// 设置按钮图片
-BOOL CDuiButton::SetBtnBitmap(UINT nResourceID/* = 0*/, CString strType/*= TEXT("PNG")*/)
-{
-	if(m_pImageBtn != NULL)
-	{
-		delete m_pImageBtn;
-		m_pImageBtn = NULL;
-	}
-
-	if(ImageFromIDResource(nResourceID, strType, m_pImageBtn))
-	{
-		m_sizeBtn.SetSize(m_pImageBtn->GetWidth(), m_pImageBtn->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-BOOL CDuiButton::SetBtnBitmap(CString strImage/* = TEXT("")*/)
-{
-	if(m_pImageBtn != NULL)
-	{
-		delete m_pImageBtn;
-		m_pImageBtn = NULL;
-	}
-
-	m_pImageBtn = Image::FromFile(strImage, TRUE);
-
-	if(m_pImageBtn->GetLastStatus() == Ok)
-	{
-		m_sizeBtn.SetSize(m_pImageBtn->GetWidth(), m_pImageBtn->GetHeight());
-		return true;
-	}
-	return false;
-}
-
-// 从XML设置按钮图片信息属性
-HRESULT CDuiButton::OnAttributeImageBtn(const CStringA& strValue, BOOL bLoading)
-{
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetBtnBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetBtnBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!SetBtnBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
-}
+// 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiButton, Btn, 1)
 
 // 设置控件的焦点
 BOOL CDuiButton::SetControlFocus(BOOL bFocus)

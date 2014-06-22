@@ -206,6 +206,91 @@ public:                                                             \
         else   
 
 
+//////////////////////////////////////////////////////////////////////////
+// 图片属性的定义和实现代码宏,用于简化图片属性的相似代码实现
+// 头文件中的定义,定义图片对象和图片大小对象,并定义设置图片和图片属性映射函数
+#define DUI_IMAGE_ATTRIBUTE_DEFINE(imgName)	\
+	Image*	m_pImage##imgName;	\
+	CSize	m_size##imgName;	\
+	BOOL Set##imgName##Bitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"));	\
+	BOOL Set##imgName##Bitmap(CString strImage = TEXT(""));	\
+	HRESULT OnAttributeImage##imgName(const CStringA& strValue, BOOL bLoading);	\
+
+// CPP代码中的设置图片和图片属性映射函数实现,图片对象和图片大小对象的初始化和析构需要自己写代码
+#define DUI_IMAGE_ATTRIBUTE_IMPLEMENT(theclass, imgName, imgCount)	\
+	BOOL theclass::Set##imgName##Bitmap(UINT nResourceID, CString strType)	\
+	{	\
+		if(m_pImage##imgName != NULL)	\
+		{	\
+			delete m_pImage##imgName;	\
+			m_pImage##imgName = NULL;	\
+		}	\
+		\
+		if(ImageFromIDResource(nResourceID, strType, m_pImage##imgName))	\
+		{	\
+			m_size##imgName.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
+			return true;	\
+		}	\
+		return false;	\
+	}	\
+	BOOL theclass::Set##imgName##Bitmap(CString strImage)	\
+	{	\
+		if(m_pImage##imgName != NULL)	\
+		{	\
+			delete m_pImage##imgName;	\
+			m_pImage##imgName = NULL;	\
+		}	\
+		\
+		m_pImage##imgName = Image::FromFile(strImage, TRUE);	\
+		\
+		if(m_pImage##imgName->GetLastStatus() == Ok)	\
+		{	\
+			m_size##imgName.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
+			return true;	\
+		}	\
+		return false;	\
+	}	\
+	HRESULT theclass::OnAttributeImage##imgName(const CStringA& strValue, BOOL bLoading)	\
+	{	\
+		if (strValue.IsEmpty()) return E_FAIL;	\
+		\
+		CStringA strSkin = "";	\
+		if(strValue.Find("skin:") == 0)	\
+		{	\
+			strSkin = DuiSystem::Instance()->GetSkin(strValue);	\
+			if (strSkin.IsEmpty()) return E_FAIL;	\
+		}else	\
+		{	\
+			strSkin = strValue;	\
+		}	\
+		\
+		if(strSkin.Find(".") != -1)	\
+		{	\
+			CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);	\
+			if(strSkin.Find(":") != -1)	\
+			{	\
+				strImgFile = CA2T(strSkin, CP_UTF8);	\
+			}	\
+			if(!Set##imgName##Bitmap(strImgFile))	\
+			{	\
+				return E_FAIL;	\
+			}	\
+		}else	\
+		{	\
+			UINT nResourceID = atoi(strSkin);	\
+			if(!Set##imgName##Bitmap(nResourceID, TEXT("PNG")))	\
+			{	\
+				if(!Set##imgName##Bitmap(nResourceID, TEXT("BMP")))	\
+				{	\
+					return E_FAIL;	\
+				}	\
+			}	\
+		}	\
+		\
+		return bLoading?S_FALSE:S_OK;	\
+	}	\
+
+
 
 class CControlBase;
 class CDuiHandler;
