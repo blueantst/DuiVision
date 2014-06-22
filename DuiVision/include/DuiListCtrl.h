@@ -58,6 +58,8 @@ public:
 	int  GetItemCount() { return m_vecRowInfo.size(); }
 	ListRowInfo* GetItemInfo(int nRow);
 	void SetRowColor(int nRow, Color clrText);
+	void SetRowCheck(int nRow, int nCheck);
+	int  GetRowCheck(int nRow);
 	void ClearItems();
 
 	BOOL SetSeperator(UINT nResourceID = 0, CString strType= TEXT("PNG"));

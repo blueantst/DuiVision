@@ -593,6 +593,30 @@ void CDuiGridCtrl::SetRowColor(int nRow, Color clrText)
 	rowInfo.clrText = clrText;
 }
 
+// 设置某一个行的检查框状态
+void CDuiGridCtrl::SetRowCheck(int nRow, int nCheck)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.nCheck = nCheck;
+}
+
+// 获取某一行的检查框状态
+int CDuiGridCtrl::GetRowCheck(int nRow)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return -1;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.nCheck;
+}
+
 // 清空列表
 void CDuiGridCtrl::ClearItems()
 {

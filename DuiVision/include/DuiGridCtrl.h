@@ -75,6 +75,8 @@ public:
 	GridRowInfo* GetRowInfo(int nRow);
 	GridItemInfo* GetItemInfo(int nRow, int nItem);
 	void SetRowColor(int nRow, Color clrText);
+	void SetRowCheck(int nRow, int nCheck);
+	int  GetRowCheck(int nRow);
 	void ClearItems();
 
 	BOOL SetSeperator(UINT nResourceID = 0, CString strType= TEXT("PNG"));

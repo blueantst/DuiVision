@@ -348,6 +348,30 @@ void CDuiListCtrl::SetRowColor(int nRow, Color clrText)
 	rowInfo.clrText = clrText;
 }
 
+// 设置某一个行的检查框状态
+void CDuiListCtrl::SetRowCheck(int nRow, int nCheck)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.nCheck = nCheck;
+}
+
+// 获取某一行的检查框状态
+int CDuiListCtrl::GetRowCheck(int nRow)
+{
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	{
+		return -1;
+	}
+
+	ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.nCheck;
+}
+
 // 清空列表
 void CDuiListCtrl::ClearItems()
 {

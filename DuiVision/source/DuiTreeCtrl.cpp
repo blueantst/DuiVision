@@ -885,6 +885,32 @@ void CDuiTreeCtrl::ToggleNode(HTREEITEM hNode)
 	}
 }
 
+// 设置某一个节点的检查框状态
+void CDuiTreeCtrl::SetNodeCheck(HTREEITEM hNode, int nCheck)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.nCheck = nCheck;
+}
+
+// 获取某一个节点的检查框状态
+int CDuiTreeCtrl::GetNodeCheck(HTREEITEM hNode)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return -1;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.nCheck;
+}
+
 // 清空树节点
 void CDuiTreeCtrl::ClearNodes()
 {
