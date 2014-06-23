@@ -291,6 +291,38 @@ public:                                                             \
 	}	\
 
 
+//////////////////////////////////////////////////////////////////////////
+// 对齐方式设置宏
+// 设置水平对齐方式和垂直对齐方式
+#define DUI_STRING_ALIGN_DEFINE()	\
+	StringFormat strFormat;	\
+	if(m_uAlignment == Align_Left)	\
+	{	\
+		strFormat.SetAlignment(StringAlignmentNear);	\
+	}else	\
+	if(m_uAlignment == Align_Center)	\
+	{	\
+		strFormat.SetAlignment(StringAlignmentCenter);	\
+	}else	\
+	if(m_uAlignment == Align_Right)	\
+	{	\
+		strFormat.SetAlignment(StringAlignmentFar);	\
+	}	\
+	\
+	if(m_uVAlignment == VAlign_Top)	\
+	{	\
+		strFormat.SetLineAlignment(StringAlignmentNear);	\
+	}else	\
+	if(m_uVAlignment == VAlign_Middle)	\
+	{	\
+		strFormat.SetLineAlignment(StringAlignmentCenter);	\
+	}else	\
+	if(m_uVAlignment == VAlign_Bottom)	\
+	{	\
+		strFormat.SetLineAlignment(StringAlignmentFar);	\
+	}	\
+
+
 
 class CControlBase;
 class CDuiHandler;

@@ -53,13 +53,13 @@
 			<button pos="350,20,450,48" skin="IDB_BT_DEFAULT" title="动画按钮"
 				animate="1" maxindex="16" />
 			
-			<hidebtn name="hidebtn"
+			<hidebtn name="hidebtn" align="left"
 				pos="50,65,150,90" show="1" text="隐藏按钮" title="点击" />
 			
-			<linkbtn name="linkbtn" crtext="800000"
+			<linkbtn name="linkbtn" crtext="800000" align="center"
 				pos="200,65,300,90" show="1" title="点击打开链接" href="http://www.blueantstudio.net" />
 			
-			<textbtn name="textbtn" crtext="800000"
+			<textbtn name="textbtn" crtext="800000" align="center"
 				pos="350,65,450,90" show="1" title="文字按钮" />
 			
 			<chkbtn name="checkbutton1" skin="IDB_CHECK_BOX"

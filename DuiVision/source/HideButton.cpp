@@ -152,8 +152,9 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 
-		StringFormat strFormat;
-		strFormat.SetAlignment(StringAlignmentNear);
+		// 设置水平和垂直对齐方式
+		DUI_STRING_ALIGN_DEFINE();
+
 		strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 		Size sizeTip = GetTextBounds(font, strFormat, m_strTip);
 		Size sizeText = GetTextBounds(font, strFormat, m_strTitle);

@@ -407,34 +407,8 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 
-		StringFormat strFormat;
-		// 水平对齐
-		if(m_uAlignment == Align_Left)
-		{
-			strFormat.SetAlignment(StringAlignmentNear);	// 左对齐
-		}else
-		if(m_uAlignment == Align_Center)
-		{
-			strFormat.SetAlignment(StringAlignmentCenter);	// 中间对齐
-		}else
-		if(m_uAlignment == Align_Right)
-		{
-			strFormat.SetAlignment(StringAlignmentFar);	// 右对齐
-		}
-
-		// 垂直对齐
-		if(m_uVAlignment == VAlign_Top)
-		{
-			strFormat.SetLineAlignment(StringAlignmentNear);	// 上对其
-		}else
-		if(m_uVAlignment == VAlign_Middle)
-		{
-			strFormat.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
-		}else
-		if(m_uVAlignment == VAlign_Bottom)
-		{
-			strFormat.SetLineAlignment(StringAlignmentFar);	// 下对齐
-		}
+		// 设置水平和垂直对齐方式
+		DUI_STRING_ALIGN_DEFINE();
 
 		//strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 		strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
