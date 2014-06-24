@@ -25,12 +25,14 @@ CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject)
 
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CImageButton(hWnd, this, BT_UP, rcButton);
+	pControlBase->SetTabStop(FALSE);
 	m_pControlUpImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
  
  	rcButton = CRect(0,0,0,0);
  	rcButton.top = rcButton.bottom - m_nArrowLen;
  	pControlBase = new CImageButton(hWnd, this, BT_DOWN, rcButton);
+	pControlBase->SetTabStop(FALSE);
 	m_pControlDownImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
 
@@ -62,11 +64,13 @@ CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CImageButton(hWnd, this, BT_UP, rcButton);
+	pControlBase->SetTabStop(FALSE);
  	m_vecControl.push_back(pControlBase);
  
  	rcButton = rc;
  	rcButton.top = rc.bottom - m_nArrowLen;
  	pControlBase = new CImageButton(hWnd, this, BT_DOWN, rcButton);
+	pControlBase->SetTabStop(FALSE);
  	m_vecControl.push_back(pControlBase);
 
 	// д╛хож╣

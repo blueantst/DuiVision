@@ -97,6 +97,7 @@ public:
 	void SetDisable(BOOL bIsDisable);
 	virtual	void SetControlDisable(BOOL bIsDisable) { m_bIsDisable = bIsDisable; }
 	BOOL GetDisable() { return m_bIsDisable; }
+	void SetTabStop(BOOL bTabStop) { m_bTabStop = bTabStop; }
 	BOOL IsTabStop() { return m_bTabStop; }
 	void SetTooltip(CString strTooltip) { m_strTooltip = strTooltip; }
 	CString GetTooltip() { return m_strTooltip; }
