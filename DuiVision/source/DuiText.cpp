@@ -358,6 +358,7 @@ int CDuiText::GetVirtualHeight()
 
 	// 滚动条只有在需要的总高度大于文本框的高度时候才会显示
 	m_pControScrollV->SetVisible(size.Height > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(size.Height);
 
 	return size.Height;
 }

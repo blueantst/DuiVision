@@ -29,7 +29,7 @@
 			
 			<text pos="170,50,600,80" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" />
 
-			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,680,375"
+			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,-30,-10"
 				title="DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine等多个基于DirectUI的界面库开发的。
 DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用Windows控件，所以这些控件都是无句柄的。
 DirectUI技术需要解决的主要问题如下：

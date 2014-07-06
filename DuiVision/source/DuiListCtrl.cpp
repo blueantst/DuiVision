@@ -79,6 +79,7 @@ BOOL CDuiListCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
 
 	// 加载下层的row节点信息
 	TiXmlElement* pRowElem = NULL;
@@ -303,6 +304,7 @@ BOOL CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
 
 	UpdateControl(true);
 	return true;
@@ -446,6 +448,7 @@ void CDuiListCtrl::SetControlRect(CRect rc)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
 }
 
 // 判断指定的坐标位置是否在某一行中
@@ -786,7 +789,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
 
-	m_nVirtualTop = nCurPos*(nHeightAll-m_rc.Height())/nMaxRange;	// 当前滚动条位置对应的虚拟的top位置
+	m_nVirtualTop = (nMaxRange > 0) ? nCurPos*(nHeightAll-m_rc.Height())/nMaxRange : 0;	// 当前滚动条位置对应的虚拟的top位置
 	m_nFirstViewRow = m_nVirtualTop / m_nRowHeight;					// 显示的第一行序号
 	m_nLastViewRow = (m_nVirtualTop + m_rc.Height()) / m_nRowHeight;	// 显示的最后一行序号
 	if(m_nLastViewRow >= m_vecRowInfo.size())

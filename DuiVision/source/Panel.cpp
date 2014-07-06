@@ -205,6 +205,7 @@ void CDuiPanel::InitUI(CRect rcClient, TiXmlElement* pNode)
 
 		// 需要的总高度大于显示区高度才会显示滚动条
 		m_pControScrollV->SetVisible(m_nVirtualHeight > m_rc.Height());
+		((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
 	}
 
 	m_bInit = true;
@@ -230,6 +231,7 @@ void CDuiPanel::CalcVirtualHeight()
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(m_nVirtualHeight > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
 }
 
 void CDuiPanel::SetControlRect(CRect rc)
@@ -262,6 +264,7 @@ void CDuiPanel::SetControlRect(CRect rc)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(m_nVirtualHeight > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
 }
 
 // 重载设置控件可见性的函数，需要调用子控件的函数
