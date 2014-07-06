@@ -281,7 +281,7 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 			}else
 			{
 				// Panel可见性变化时候,只会隐藏原生控件,不主动显示原生控件
-				if(!bIsVisible)
+				//if(!bIsVisible)
 				{
 					pControlBase->SetControlWndVisible(bIsVisible);
 				}

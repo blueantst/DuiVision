@@ -332,7 +332,7 @@ void CDuiEdit::SetControlWndVisible(BOOL bIsVisible)
 {
 	if(bIsVisible)
 	{
-		ShowEdit();
+		//ShowEdit();
 	}else
 	{
 		HideEdit();
