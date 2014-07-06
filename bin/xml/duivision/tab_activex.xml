@@ -1,0 +1,9 @@
+<div pos="0,75,-0,-0" >
+
+	<activex name="ie_ctrl" show="1"
+		clsid="{8856F961-340A-11D0-A96B-00C04FD705A2}" delaycreate="false"
+		url="http://www.blueantstudio.net"
+		pos="1,1,-1,-1" >
+	</activex>
+
+</div>

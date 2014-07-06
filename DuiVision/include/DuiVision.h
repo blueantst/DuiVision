@@ -97,4 +97,8 @@ using namespace Gdiplus;
 #include "DuiEdit.h"
 #include "DuiComboBox.h"
 
+//////////////////////////////////////////////////////////
+//ActiveX
+#include "DuiActiveX.h"
+
 #endif

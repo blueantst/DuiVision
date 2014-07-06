@@ -56,6 +56,8 @@ QQ群：325880743
 
 		<tab name="tab.treectrl" title="树控件" img-index="1" div="tab_treectrl" />
 		
+		<tab name="tab.activex" title="浏览器" image="skins\icon\ico_navigate.png" img-count="1" div="tab_activex" />
+		
 		<tab name="tab.360" title="360演示" image="skins\icon\logo_360.png" img-count="1" outlink="true" action="dlg:dlg_360" />
 		
 		<tab name="tab.pcmgr" title="PC管家演示" image="skins\icon\softmgr.png" img-count="1" scroll="1" img-scroll="skin:IDB_SCROLL_V" outlink="true" action="dlg:dlg_pcmgr" />

@@ -116,6 +116,7 @@
     <ClInclude Include="include\DlgBase.h" />
     <ClInclude Include="include\DlgPopup.h" />
     <ClInclude Include="include\DlgSkin.h" />
+    <ClInclude Include="include\DuiActiveX.h" />
     <ClInclude Include="include\DuiButton.h" />
     <ClInclude Include="include\DuiComboBox.h" />
     <ClInclude Include="include\DuiDef.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="include\SelectBox.h" />
     <ClInclude Include="include\TextButton.h" />
     <ClInclude Include="include\Timer.h" />
+    <ClInclude Include="include\WndBase.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="tinyxml\tinystr.h" />
@@ -162,6 +164,7 @@
     <ClCompile Include="source\DlgBase.cpp" />
     <ClCompile Include="source\DlgPopup.cpp" />
     <ClCompile Include="source\DlgSkin.cpp" />
+    <ClCompile Include="source\DuiActiveX.cpp" />
     <ClCompile Include="source\DuiButton.cpp" />
     <ClCompile Include="source\DuiComboBox.cpp" />
     <ClCompile Include="source\DuiEdit.cpp" />
@@ -191,6 +194,7 @@
     <ClCompile Include="source\SelectBox.cpp" />
     <ClCompile Include="source\TextButton.cpp" />
     <ClCompile Include="source\Timer.cpp" />
+    <ClCompile Include="source\WndBase.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

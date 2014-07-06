@@ -760,6 +760,8 @@ CControlBase* DuiSystem::CreateControlByName(LPCSTR lpszName, HWND hWnd, CDuiObj
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiEdit);
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiComboBox);
 
+	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiActiveX);
+
 	return NULL;
 }
 

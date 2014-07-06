@@ -159,6 +159,12 @@
     <ClInclude Include="include\DuiText.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\DuiActiveX.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WndBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -285,6 +291,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiText.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiActiveX.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WndBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -173,6 +173,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiActiveX.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiButton.cpp"
 				>
 			</File>
@@ -308,6 +312,10 @@
 				RelativePath=".\source\Timer.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\source\WndBase.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -336,6 +344,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DlgSkin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiActiveX.h"
 				>
 			</File>
 			<File
@@ -476,6 +488,10 @@
 			</File>
 			<File
 				RelativePath=".\include\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\WndBase.h"
 				>
 			</File>
 		</Filter>
