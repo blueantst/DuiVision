@@ -3,6 +3,7 @@
 #include "DuiActiveX.h"
 #include <exdisp.h>
 #include <comdef.h>
+#include <mshtmhst.h>	// IDocHostUIHandler使用
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -210,7 +211,8 @@ class CActiveXCtrl :
     public IOleInPlaceSiteWindowless,
     public IOleControlSite,
     public IObjectWithSite,
-    public IOleContainer
+    public IOleContainer,
+	public IDocHostUIHandler
 {
     friend CDuiActiveX;
     friend CActiveXWnd;
@@ -286,6 +288,48 @@ public:
     // IParseDisplayName
     STDMETHOD(ParseDisplayName)(IBindCtx* pbc, LPOLESTR pszDisplayName, ULONG* pchEaten, IMoniker** ppmkOut);
 
+	// IDocHostUIHandler
+	STDMETHOD(ShowContextMenu)(/* [in] */ DWORD dwID,
+            /* [in] */ POINT __RPC_FAR *ppt,
+            /* [in] */ IUnknown __RPC_FAR *pcmdtReserved,
+            /* [in] */ IDispatch __RPC_FAR *pdispReserved);
+	STDMETHOD(GetHostInfo)( 
+            /* [out][in] */ DOCHOSTUIINFO __RPC_FAR *pInfo);
+	STDMETHOD(ShowUI)( 
+            /* [in] */ DWORD dwID,
+            /* [in] */ IOleInPlaceActiveObject __RPC_FAR *pActiveObject,
+            /* [in] */ IOleCommandTarget __RPC_FAR *pCommandTarget,
+            /* [in] */ IOleInPlaceFrame __RPC_FAR *pFrame,
+            /* [in] */ IOleInPlaceUIWindow __RPC_FAR *pDoc);
+	STDMETHOD(HideUI)(void);
+	STDMETHOD(UpdateUI)(void);
+	STDMETHOD(EnableModeless)(/* [in] */ BOOL fEnable);
+	STDMETHOD(OnDocWindowActivate)(/* [in] */ BOOL fEnable);
+	STDMETHOD(OnFrameWindowActivate)(/* [in] */ BOOL fEnable);
+	STDMETHOD(ResizeBorder)( 
+            /* [in] */ LPCRECT prcBorder,
+            /* [in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
+            /* [in] */ BOOL fRameWindow);
+	STDMETHOD(TranslateAccelerator)( 
+            /* [in] */ LPMSG lpMsg,
+            /* [in] */ const GUID __RPC_FAR *pguidCmdGroup,
+            /* [in] */ DWORD nCmdID);
+	STDMETHOD(GetOptionKeyPath)( 
+            /* [out] */ LPOLESTR __RPC_FAR *pchKey,
+            /* [in] */ DWORD dw);
+	STDMETHOD(GetDropTarget)(
+            /* [in] */ IDropTarget __RPC_FAR *pDropTarget,
+            /* [out] */ IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget);
+    STDMETHOD(GetExternal)( 
+            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
+    STDMETHOD(TranslateUrl)( 
+            /* [in] */ DWORD dwTranslate,
+            /* [in] */ OLECHAR __RPC_FAR *pchURLIn,
+            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut);
+    STDMETHOD(FilterDataObject)( 
+            /* [in] */ IDataObject __RPC_FAR *pDO,
+            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDORet);
+
 protected:
     HRESULT CreateActiveXWnd();
 
@@ -344,6 +388,7 @@ STDMETHODIMP CActiveXCtrl::QueryInterface(REFIID riid, LPVOID *ppvObject)
     else if( riid == IID_IOleControlSite )           *ppvObject = static_cast<IOleControlSite*>(this);
     else if( riid == IID_IOleContainer )             *ppvObject = static_cast<IOleContainer*>(this);
     else if( riid == IID_IObjectWithSite )           *ppvObject = static_cast<IObjectWithSite*>(this);
+	else if( riid == IID_IDocHostUIHandler )         *ppvObject = static_cast<IDocHostUIHandler*>(this);
     if( *ppvObject != NULL ) AddRef();
     return *ppvObject == NULL ? E_NOINTERFACE : S_OK;
 }
@@ -753,6 +798,127 @@ STDMETHODIMP CActiveXCtrl::ParseDisplayName(IBindCtx *pbc, LPOLESTR pszDisplayNa
     return E_NOTIMPL;
 }
 
+STDMETHODIMP  CActiveXCtrl::GetHostInfo( DOCHOSTUIINFO* pInfo )
+{
+	TRACE(_T("AX: CActiveXCtrl::GetHostInfo"));
+	// 显示为新式用户界面
+	//pInfo->dwFlags = DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE |DOCHOSTUIFLAG_FLAT_SCROLLBAR|0x40000;
+	pInfo->dwFlags |= DOCHOSTUIFLAG_NO3DBORDER;	// 去除3D边框
+    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;
+    return S_OK;
+}
+
+STDMETHODIMP  CActiveXCtrl::ShowUI(
+				DWORD /*dwID*/, 
+				IOleInPlaceActiveObject * /*pActiveObject*/,
+				IOleCommandTarget * /*pCommandTarget*/,
+				IOleInPlaceFrame * /*pFrame*/,
+				IOleInPlaceUIWindow * /*pDoc*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::ShowUI"));
+    return S_OK;
+}
+
+STDMETHODIMP  CActiveXCtrl::HideUI(void)
+{
+	TRACE(_T("AX: CActiveXCtrl::HideUI"));
+    return S_OK;
+}
+
+STDMETHODIMP  CActiveXCtrl::UpdateUI(void)
+{
+	TRACE(_T("AX: CActiveXCtrl::UpdateUI"));
+	return S_OK;
+}
+
+STDMETHODIMP  CActiveXCtrl::EnableModeless(BOOL /*fEnable*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::EnableModeless"));
+    return E_NOTIMPL;
+}
+
+STDMETHODIMP  CActiveXCtrl::OnDocWindowActivate(BOOL /*fActivate*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::OnDocWindowActivate"));
+    return E_NOTIMPL;
+}
+
+STDMETHODIMP  CActiveXCtrl::OnFrameWindowActivate(BOOL /*fActivate*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::OnFrameWindowActivate"));
+    return E_NOTIMPL;
+}
+
+STDMETHODIMP CActiveXCtrl::ResizeBorder(
+				LPCRECT /*prcBorder*/, 
+				IOleInPlaceUIWindow* /*pUIWindow*/,
+				BOOL /*fRameWindow*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::ResizeBorder"));
+    return E_NOTIMPL;
+}
+
+STDMETHODIMP  CActiveXCtrl::ShowContextMenu(
+				DWORD /*dwID*/, 
+				POINT* /*pptPosition*/,
+				IUnknown* /*pCommandTarget*/,
+				IDispatch* /*pDispatchObjectHit*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::ShowContextMenu"));
+    return E_NOTIMPL; // We've shown our own context menu. MSHTML.DLL will no longer try to show its own.
+}
+
+STDMETHODIMP  CActiveXCtrl::TranslateAccelerator(LPMSG /*lpMsg*/,
+            /* [in] */ const GUID __RPC_FAR* /*pguidCmdGroup*/,
+            /* [in] */ DWORD /*nCmdID*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::TranslateAccelerator"));
+    return S_FALSE;
+}
+
+STDMETHODIMP  CActiveXCtrl::GetOptionKeyPath(BSTR* /*pbstrKey*/, DWORD)
+{
+	TRACE(_T("AX: CActiveXCtrl::GetOptionKeyPath"));
+	return E_NOTIMPL;
+}
+
+STDMETHODIMP CActiveXCtrl::GetDropTarget( 
+            /* [in] */ IDropTarget __RPC_FAR* /*pDropTarget*/,
+            /* [out] */ IDropTarget __RPC_FAR *__RPC_FAR* /*ppDropTarget*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::GetDropTarget"));
+	return E_NOTIMPL;
+}
+
+STDMETHODIMP CActiveXCtrl::GetExternal( 
+            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR* ppDispatch)
+{
+	TRACE(_T("AX: CActiveXCtrl::GetExternal"));
+	// 创建扩展命令处理器对象
+	//CExCommandHandler* pHandler = new CExCommandHandler();
+	//pHandler->QueryInterface(IID_IDispatch, (void**)ppDispatch);
+	//return S_OK;
+	return E_NOTIMPL;
+}
+        
+STDMETHODIMP CActiveXCtrl::TranslateUrl( 
+            /* [in] */ DWORD /*dwTranslate*/,
+            /* [in] */ OLECHAR __RPC_FAR* /*pchURLIn*/,
+            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR* /*ppchURLOut*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::TranslateUrl"));
+    return E_NOTIMPL;
+}
+        
+STDMETHODIMP CActiveXCtrl::FilterDataObject( 
+            /* [in] */ IDataObject __RPC_FAR* /*pDO*/,
+            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR* /*ppDORet*/)
+{
+	TRACE(_T("AX: CActiveXCtrl::FilterDataObject"));
+    return E_NOTIMPL;
+}
+
+// 创建ActiveX窗口
 HRESULT CActiveXCtrl::CreateActiveXWnd()
 {
     if( m_pWindow != NULL )
