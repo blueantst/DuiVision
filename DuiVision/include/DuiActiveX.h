@@ -1,14 +1,17 @@
-#ifndef __UIACTIVEX_H__
-#define __UIACTIVEX_H__
+#ifndef __DUIACTIVEX_H__
+#define __DUIACTIVEX_H__
 
 #pragma once
 
 #include "WndBase.h"
+#include "../activex/duicomcli.h"
+#include "../activex/flash10t.tlh"
+#include "../activex/wmp.tlh"
 
 struct IOleObject;
 
 /////////////////////////////////////////////////////////////////////////////////////
-//
+// CSafeRelease
 
 class CActiveXCtrl;
 
@@ -23,7 +26,7 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
-//
+// CDuiActiveX
 
 class CDuiActiveX : public CControlBase
 {
@@ -47,10 +50,11 @@ public:
     CString GetModuleName() const;
     void SetModuleName(LPCTSTR pstrText);
 
-	HRESULT Navigate(CString strUrl);
-
+	virtual void OnAxInit();
+	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void SetControlWndVisible(BOOL bIsVisible);
 	virtual void SetControlRect(CRect rc);
+	virtual HRESULT Navigate(CString strUrl);
     void DoPaint(HDC hDC, const RECT& rcPaint);
 
 	HRESULT OnAttributeCLSID(const CStringA& strValue, BOOL bLoading);
@@ -83,5 +87,53 @@ protected:
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
+/////////////////////////////////////////////////////////////////////////////////////
+// CDuiFlashCtrl
 
-#endif // __UIACTIVEX_H__
+class CDuiFlashCtrl : public CDuiActiveX
+{
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiFlashCtrl, "flash")
+
+public:
+    CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject);
+    virtual ~CDuiFlashCtrl();
+
+	CString ParseFilePath(CString strUrl);
+
+	virtual void OnAxInit();
+	virtual void OnAxActivate(IUnknown *pUnknwn);
+	virtual HRESULT Navigate(CString strUrl);
+
+protected:
+    CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash_;
+
+	DUI_DECLARE_ATTRIBUTES_BEGIN()
+	DUI_DECLARE_ATTRIBUTES_END()
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// CDuiMediaPlayer
+
+class CDuiMediaPlayer : public CDuiActiveX
+{
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiMediaPlayer, "mediaplayer")
+
+public:
+    CDuiMediaPlayer(HWND hWnd, CDuiObject* pDuiObject);
+    virtual ~CDuiMediaPlayer();
+
+	CString ParseFilePath(CString strUrl);
+
+	virtual void OnAxInit();
+	virtual void OnAxActivate(IUnknown *pUnknwn);
+	virtual HRESULT Navigate(CString strUrl);
+
+protected:
+    CDuiComQIPtr<WMPLib::IWMPPlayer4> wmp_;
+
+	DUI_DECLARE_ATTRIBUTES_BEGIN()
+	DUI_DECLARE_ATTRIBUTES_END()
+};
+
+#endif // __DUIACTIVEX_H__

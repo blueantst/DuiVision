@@ -7,14 +7,11 @@
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-//
 
 class CActiveXCtrl;
 
-
 /////////////////////////////////////////////////////////////////////////////////////
-//
-//
+// CActiveXWnd
 
 class CActiveXWnd : public CWindowWnd
 {
@@ -41,8 +38,7 @@ protected:
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-//
-//
+// CActiveXEnum
 
 class CActiveXEnum : public IEnumUnknown
 {
@@ -105,8 +101,7 @@ public:
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-//
-//
+// CActiveXFrameWnd
 
 class CActiveXFrameWnd : public IOleInPlaceFrame
 {
@@ -204,7 +199,7 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
-//
+// CActiveXCtrl
 
 class CActiveXCtrl :
     public IOleClientSite,
@@ -1060,6 +1055,7 @@ CDuiActiveX::CDuiActiveX(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBase(hWnd, pDuiObject)
 {
     m_clsid = IID_NULL;
+	::CLSIDFromString(_T("{8856F961-340A-11D0-A96B-00C04FD705A2}"), &m_clsid);	// IE浏览器控件ID
 	m_pUnk = NULL;
 	m_pControl = NULL;
 	m_hwndHost = NULL;
@@ -1103,6 +1099,16 @@ static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
     ::ReleaseDC(NULL, hDCScreen);
     lpSizeInHiMetric->cx = MAP_PIX_TO_LOGHIM(lpSizeInPix->cx, nPixelsPerInchX);
     lpSizeInHiMetric->cy = MAP_PIX_TO_LOGHIM(lpSizeInPix->cy, nPixelsPerInchY);
+}
+
+// ActiveX控件初始化
+void CDuiActiveX::OnAxInit()
+{
+}
+
+// ActiveX控件激活
+void CDuiActiveX::OnAxActivate(IUnknown *pUnknwn)
+{
 }
 
 // 设置控件中的Windows原生控件是否可见的状态
@@ -1235,7 +1241,8 @@ LRESULT CDuiActiveX::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
         if( !IsFocusControl() ) return 0;
     }else
 	{
-        switch( uMsg ) {
+        switch( uMsg )
+		{
         case WM_HELP:
         case WM_CONTEXTMENU:
             bWasHandled = false;
@@ -1334,6 +1341,9 @@ bool CDuiActiveX::DoCreateControl()
     m_bCreated = true;
     IOleControl* pOleControl = NULL;
 
+	// 控件初始化
+	OnAxInit();
+
     HRESULT Hr = -1;
     if( !m_strModuleName.IsEmpty() )
 	{
@@ -1353,6 +1363,8 @@ bool CDuiActiveX::DoCreateControl()
     if( FAILED(Hr) )
 	{
         Hr = ::CoCreateInstance(m_clsid, NULL, CLSCTX_ALL, IID_IOleControl, (LPVOID*)&pOleControl);
+		// 控件激活
+		OnAxActivate(pOleControl);
     }
     ASSERT(SUCCEEDED(Hr));
     if( FAILED(Hr) ) return false;
@@ -1458,4 +1470,149 @@ void CDuiActiveX::SetModuleName(LPCTSTR pstrText)
 
 void CDuiActiveX::DrawControl(CDC &dc, CRect rcUpdate)
 {
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// CDuiFlashCtrl
+
+CDuiFlashCtrl::CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject)
+	: CDuiActiveX(hWnd, pDuiObject)
+{
+}
+
+CDuiFlashCtrl::~CDuiFlashCtrl()
+{
+}
+
+// 文件路径解析
+CString CDuiFlashCtrl::ParseFilePath(CString strUrl)
+{
+	CStringA strUrlA = CEncodingUtil::UnicodeToAnsi(strUrl);
+	// 通过Skin读取
+	CStringA strSkin = "";
+	if(strUrlA.Find("skin:") == 0)
+	{
+		strSkin = DuiSystem::Instance()->GetSkin(strUrlA);
+		if (strSkin.IsEmpty()) return FALSE;
+	}else
+	{
+		strSkin = strUrlA;
+	}
+
+	if(strSkin.Find(".") != -1)	// 加载文件
+	{
+		CString strFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		if(strSkin.Find(":") != -1)
+		{
+			strFile = CA2T(strSkin, CP_UTF8);
+		}
+		return strFile;
+	}else
+	{
+		return CA2T(strSkin, CP_UTF8);
+	}
+}
+
+// ActiveX控件初始化
+void CDuiFlashCtrl::OnAxInit()
+{
+	m_clsid=__uuidof(ShockwaveFlashObjects::ShockwaveFlash);
+}
+
+// ActiveX控件激活
+void CDuiFlashCtrl::OnAxActivate(IUnknown *pUnknwn)
+{
+	// 保存flash控件接口
+	flash_ = pUnknwn;
+}
+
+// 导航到指定的URL
+HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
+{
+	HRESULT hr = S_OK;
+	if(flash_)
+	{
+		flash_->put_WMode(bstr_t(_T("transparent")));
+		if(!m_strUrl.IsEmpty())
+		{
+			flash_->put_Movie(bstr_t(ParseFilePath(m_strUrl)));
+		}
+	}
+
+	return hr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+// CDuiMediaPlayer
+
+CDuiMediaPlayer::CDuiMediaPlayer(HWND hWnd, CDuiObject* pDuiObject)
+	: CDuiActiveX(hWnd, pDuiObject)
+{
+}
+
+CDuiMediaPlayer::~CDuiMediaPlayer()
+{
+}
+
+// 文件路径解析
+CString CDuiMediaPlayer::ParseFilePath(CString strUrl)
+{
+	CStringA strUrlA = CEncodingUtil::UnicodeToAnsi(strUrl);
+	// 通过Skin读取
+	CStringA strSkin = "";
+	if(strUrlA.Find("skin:") == 0)
+	{
+		strSkin = DuiSystem::Instance()->GetSkin(strUrlA);
+		if (strSkin.IsEmpty()) return FALSE;
+	}else
+	{
+		strSkin = strUrlA;
+	}
+
+	if(strSkin.Find(".") != -1)	// 加载文件
+	{
+		CString strFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		if(strSkin.Find(":") != -1)
+		{
+			strFile = CA2T(strSkin, CP_UTF8);
+		}
+		return strFile;
+	}else
+	{
+		return CA2T(strSkin, CP_UTF8);
+	}
+}
+
+// ActiveX控件初始化
+void CDuiMediaPlayer::OnAxInit()
+{
+	m_clsid=__uuidof(WMPLib::WindowsMediaPlayer);
+}
+
+// ActiveX控件激活
+void CDuiMediaPlayer::OnAxActivate(IUnknown *pUnknwn)
+{
+	// 保存flash控件接口
+	wmp_ = pUnknwn;
+	if(wmp_)
+	{
+		wmp_->put_windowlessVideo(VARIANT_TRUE);
+	}
+}
+
+// 导航到指定的URL
+HRESULT CDuiMediaPlayer::Navigate(CString strUrl)
+{
+	HRESULT hr = S_OK;
+	if(wmp_)
+	{
+		wmp_->close();
+		if(!m_strUrl.IsEmpty())
+		{
+			wmp_->put_URL(bstr_t(ParseFilePath(m_strUrl)));
+		}
+	}
+
+	return hr;
 }

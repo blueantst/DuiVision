@@ -625,6 +625,30 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<Filter
+			Name="activex"
+			>
+			<File
+				RelativePath=".\activex\duicomcli.h"
+				>
+			</File>
+			<File
+				RelativePath=".\activex\flash10t.tlh"
+				>
+			</File>
+			<File
+				RelativePath=".\activex\flash10t.tli"
+				>
+			</File>
+			<File
+				RelativePath=".\activex\wmp.tlh"
+				>
+			</File>
+			<File
+				RelativePath=".\activex\wmp.tli"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

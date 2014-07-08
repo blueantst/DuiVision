@@ -106,6 +106,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="activex\duicomcli.h" />
     <ClInclude Include="common\BaseTask.h" />
     <ClInclude Include="common\encoding.h" />
     <ClInclude Include="common\registry.h" />
@@ -222,6 +223,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="activex\flash10t.tlh" />
+    <None Include="activex\flash10t.tli" />
+    <None Include="activex\wmp.tlh" />
+    <None Include="activex\wmp.tli" />
     <None Include="app.ico" />
     <None Include="ReadMe.txt" />
   </ItemGroup>

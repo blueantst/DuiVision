@@ -19,6 +19,9 @@
     <Filter Include="common">
       <UniqueIdentifier>{e51acae4-e9c3-4c5f-a131-0880af71e53d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="activex">
+      <UniqueIdentifier>{f808a5ec-a856-45cd-b40a-345c98091542}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -165,6 +168,9 @@
     <ClInclude Include="include\WndBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="activex\duicomcli.h">
+      <Filter>activex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -304,6 +310,18 @@
     <None Include="ReadMe.txt" />
     <None Include="app.ico">
       <Filter>资源文件</Filter>
+    </None>
+    <None Include="activex\flash10t.tlh">
+      <Filter>activex</Filter>
+    </None>
+    <None Include="activex\flash10t.tli">
+      <Filter>activex</Filter>
+    </None>
+    <None Include="activex\wmp.tlh">
+      <Filter>activex</Filter>
+    </None>
+    <None Include="activex\wmp.tli">
+      <Filter>activex</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

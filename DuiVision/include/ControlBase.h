@@ -93,6 +93,7 @@ public:
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
 	BOOL GetVisible() { return m_bIsVisible; }
+	virtual BOOL IsControlVisible();
 	virtual void SetControlWndVisible(BOOL bIsVisible) { };	// 设置控件中的Windows原生控件是否可见的状态
 	void SetDisable(BOOL bIsDisable);
 	virtual	void SetControlDisable(BOOL bIsDisable) { m_bIsDisable = bIsDisable; }

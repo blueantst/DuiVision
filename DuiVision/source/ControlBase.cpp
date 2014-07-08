@@ -821,6 +821,28 @@ void CControlBase::SetVisible(BOOL bIsVisible)
 	UpdateControl(true, true);
 }
 
+// 获取控件的可见性(遍历父控件,如果父控件不可见,则返回不可见)
+BOOL CControlBase::IsControlVisible()
+{
+	if(!GetVisible())
+	{
+		return FALSE;
+	}
+
+	CDuiObject* pParentObj = GetParent();
+	if(pParentObj == NULL)
+	{
+		return GetVisible();
+	}
+
+	if(pParentObj->IsClass("dlg") || pParentObj->IsClass("popup"))
+	{
+		return GetVisible();
+	}
+
+	return ((CControlBase*)pParentObj)->IsControlVisible();
+}
+
 void  CControlBase::SetDisable(BOOL bIsDisable)
 {
 	if(m_bIsDisable != bIsDisable)
