@@ -376,7 +376,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 	m_nVirtualHeight = GetVirtualHeight();
 	if(m_nVirtualHeight > m_rc.Height())
 	{
-		nVirtualTop = nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange;
+		nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;
 	}else
 	{
 		nVirtualTop = 0;

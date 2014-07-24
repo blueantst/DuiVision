@@ -326,7 +326,7 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
-	int nVirtualTop = nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange;	// 当前显示的是虚拟图片中什么位置开始的图片
+	int nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
 
 	// 根据滚动条位置画子控件
 	// 初始化虚拟显示dc,并复制背景到虚拟显示dc
@@ -379,7 +379,7 @@ BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 		CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
 		int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 		int nMaxRange = pScrollV->GetScrollMaxRange();
-		int nVirtualTop = nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange;	// 当前显示的是虚拟图片中什么位置开始的图片
+		int nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
 
 		point.Offset(0, nVirtualTop);
 
@@ -432,7 +432,7 @@ LRESULT CDuiPanel::OnControlUpdate(CRect rcUpdate, BOOL bUpdate, CControlBase *p
 		CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
 		int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 		int nMaxRange = pScrollV->GetScrollMaxRange();
-		nVirtualTop = nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange;	// 当前显示的是虚拟图片中什么位置开始的图片
+		nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
 	}
 
 	CRect rcAllUpDate = rcUpdate;
