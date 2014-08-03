@@ -71,6 +71,7 @@ public:
 	BOOL SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL DeleteRow(int nItem);
+	void CalcRowsPos();
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);
 	GridItemInfo* GetItemInfo(int nRow, int nItem);

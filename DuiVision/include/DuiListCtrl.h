@@ -55,6 +55,7 @@ public:
 		CString strLink2 = _T(""), CString strLinkAction2 = _T(""));
 	BOOL InsertItem(int nItem, ListRowInfo &rowInfo);
 	BOOL DeleteItem(int nItem);
+	void CalcItemsPos();
 	int  GetItemCount() { return m_vecRowInfo.size(); }
 	ListRowInfo* GetItemInfo(int nRow);
 	void SetRowColor(int nRow, Color clrText);

@@ -375,23 +375,8 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
 		m_vecRowInfo.insert(m_vecRowInfo.begin() + nItem, rowInfo);
 	}
 
-	int nXPos = 0;//m_rc.left;
-	int nYPos = 0;//m_rc.top;
-
-	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
-	{
-		GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
-		int nItemWidth = m_rc.Width() - m_nScrollWidth;
-		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
-
-		rowInfoTemp.rcCheck.SetRect(0,0,0,0);
-
-		nYPos += m_nRowHeight;
-	}
-
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > (m_rc.Height() - m_nHeaderHeight));
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
+	// 计算所有表格行的位置
+	CalcRowsPos();	
 
 	UpdateControl(true);
 	return true;
@@ -551,8 +536,33 @@ BOOL CDuiGridCtrl::DeleteRow(int nItem)
 		nIndex++;
 	}
 
+	// 计算所有表格行的位置
+	CalcRowsPos();
+
 	UpdateControl(true);
 	return true;
+}
+
+// 计算表格行位置
+void CDuiGridCtrl::CalcRowsPos()
+{
+	int nXPos = 0;//m_rc.left;
+	int nYPos = 0;//m_rc.top;
+
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
+		int nItemWidth = m_rc.Width() - m_nScrollWidth;
+		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
+
+		rowInfoTemp.rcCheck.SetRect(0,0,0,0);
+
+		nYPos += m_nRowHeight;
+	}
+
+	// 需要的总高度大于显示区高度才会显示滚动条
+	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > (m_rc.Height() - m_nHeaderHeight));
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
 }
 
 // 获取某一个行信息
