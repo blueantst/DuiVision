@@ -500,6 +500,9 @@ BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CStr
 		itemInfo.bNeedContentTip = FALSE;
 		itemInfo.bUseTitleFont = bUseTitleFont;
 		itemInfo.bShowCollapse = FALSE;
+		TreeColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+		itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+				columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
@@ -570,6 +573,9 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 		itemInfo.bNeedContentTip = FALSE;
 		itemInfo.bUseTitleFont = FALSE;
 		itemInfo.bShowCollapse = FALSE;
+		TreeColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+		itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+				columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
@@ -640,6 +646,9 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strIma
 		itemInfo.bNeedContentTip = FALSE;
 		itemInfo.bUseTitleFont = FALSE;
 		itemInfo.bShowCollapse = FALSE;
+		TreeColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+		itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+				columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
@@ -856,6 +865,9 @@ void CDuiTreeCtrl::SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemIn
 		itemInfo.bNeedContentTip = FALSE;
 		itemInfo.bUseTitleFont = FALSE;
 		itemInfo.bShowCollapse = FALSE;
+		TreeColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+		itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+				columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 

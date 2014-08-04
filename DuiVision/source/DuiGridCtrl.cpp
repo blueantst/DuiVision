@@ -409,6 +409,9 @@ BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString str
 		itemInfo.bNeedTitleTip = FALSE;
 		itemInfo.bNeedContentTip = FALSE;
 		itemInfo.bUseTitleFont = bUseTitleFont;
+		GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+		itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+				columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
@@ -476,6 +479,9 @@ BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString 
 		itemInfo.bNeedTitleTip = FALSE;
 		itemInfo.bNeedContentTip = FALSE;
 		itemInfo.bUseTitleFont = FALSE;
+		GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+		itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfo.rcRow.top,
+				columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 		rowInfo.vecItemInfo.push_back(itemInfo);
 	}
 
