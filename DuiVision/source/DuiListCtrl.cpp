@@ -180,7 +180,7 @@ BOOL CDuiListCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 }
 
 // 添加列表行
-BOOL CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString strContent, CString strTime,
+int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString strContent, CString strTime,
 							  int nImageIndex, Color clrText, CString strImage, int nRightImageIndex, CString strRightImage,
 							  CString strLink1, CString strLinkAction1, CString strLink2, CString strLinkAction2,
 							  int nCheck)
@@ -266,13 +266,14 @@ BOOL CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CStrin
 }
 
 // 添加列表行
-BOOL CDuiListCtrl::InsertItem(int nItem, CString strTitle, int nCheck, Color clrText, int nImageIndex, CString strLink1, CString strLinkAction1, CString strLink2, CString strLinkAction2)
+int CDuiListCtrl::InsertItem(int nItem, CString strTitle, int nCheck, Color clrText, int nImageIndex, CString strLink1, CString strLinkAction1, CString strLink2, CString strLinkAction2)
 {
 	return InsertItem(nItem, _T(""), strTitle, _T(""), _T(""), nImageIndex, clrText, _T(""), -1, _T(""), strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck);
 }
 
-BOOL CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
+int CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
 {
+	int nRetItem = -1;
 	if(m_vecRowInfo.size() > 0)
 	{
 		CRect rc;
@@ -280,17 +281,19 @@ BOOL CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
 	if(nItem <= -1 || nItem >= m_vecRowInfo.size())
 	{
 		m_vecRowInfo.push_back(rowInfo);
+		nRetItem = m_vecRowInfo.size()-1;
 	}
 	else
 	{
 		m_vecRowInfo.insert(m_vecRowInfo.begin() + nItem, rowInfo);
+		nRetItem = nItem;
 	}
 
 	// 计算所有列表行的位置
 	CalcItemsPos();
 
 	UpdateControl(true);
-	return true;
+	return nRetItem;
 }
 
 // 删除列表行

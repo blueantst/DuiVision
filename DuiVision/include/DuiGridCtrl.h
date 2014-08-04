@@ -61,16 +61,16 @@ public:
 	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
-	BOOL InsertRow(int nItem, CString strId,
+	int InsertRow(int nRow, CString strId,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		int nCheck = -1);
-	BOOL InsertRow(int nItem, GridRowInfo &rowInfo);
+	int InsertRow(int nRow, GridRowInfo &rowInfo);
 	BOOL SetSubItem(int nRow, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
-	BOOL DeleteRow(int nItem);
+	BOOL DeleteRow(int nRow);
 	void CalcRowsPos();
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);

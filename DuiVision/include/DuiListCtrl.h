@@ -44,16 +44,16 @@ public:
 
 	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
 
-	BOOL InsertItem(int nItem, CString strId, CString strTitle, CString strContent, CString strTime = _T(""),
+	int InsertItem(int nItem, CString strId, CString strTitle, CString strContent, CString strTime = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		CString strLink1 = _T(""), CString strLinkAction1 = _T(""),
 		CString strLink2 = _T(""), CString strLinkAction2 = _T(""),
 		int nCheck = -1);
-	BOOL InsertItem(int nItem, CString strTitle, int nCheck = -1, Color clrText = Color(0, 0, 0, 0), int nImageIndex = -1,
+	int InsertItem(int nItem, CString strTitle, int nCheck = -1, Color clrText = Color(0, 0, 0, 0), int nImageIndex = -1,
 		CString strLink1 = _T(""), CString strLinkAction1 = _T(""),
 		CString strLink2 = _T(""), CString strLinkAction2 = _T(""));
-	BOOL InsertItem(int nItem, ListRowInfo &rowInfo);
+	int InsertItem(int nItem, ListRowInfo &rowInfo);
 	BOOL DeleteItem(int nItem);
 	void CalcItemsPos();
 	int  GetItemCount() { return m_vecRowInfo.size(); }

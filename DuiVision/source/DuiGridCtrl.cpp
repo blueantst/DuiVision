@@ -296,7 +296,7 @@ BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 }
 
 // 添加行
-BOOL CDuiGridCtrl::InsertRow(int nItem, CString strId, int nImageIndex, Color clrText, CString strImage,
+int CDuiGridCtrl::InsertRow(int nRow, CString strId, int nImageIndex, Color clrText, CString strImage,
 							 int nRightImageIndex, CString strRightImage, int nCheck)
 {
 	GridRowInfo rowInfo;
@@ -360,26 +360,29 @@ BOOL CDuiGridCtrl::InsertRow(int nItem, CString strId, int nImageIndex, Color cl
 		}
 	}
 
-	return InsertRow(nItem, rowInfo);
+	return InsertRow(nRow, rowInfo);
 }
 
 // 添加行
-BOOL CDuiGridCtrl::InsertRow(int nItem, GridRowInfo &rowInfo)
+int CDuiGridCtrl::InsertRow(int nRow, GridRowInfo &rowInfo)
 {
-	if(nItem <= -1 || nItem >= m_vecRowInfo.size())
+	int nRetRow = -1;
+	if(nRow <= -1 || nRow >= m_vecRowInfo.size())
 	{
 		m_vecRowInfo.push_back(rowInfo);
+		nRetRow = m_vecRowInfo.size()-1;
 	}
 	else
 	{
-		m_vecRowInfo.insert(m_vecRowInfo.begin() + nItem, rowInfo);
+		m_vecRowInfo.insert(m_vecRowInfo.begin() + nRow, rowInfo);
+		nRetRow = nRow;
 	}
 
 	// 计算所有表格行的位置
 	CalcRowsPos();	
 
 	UpdateControl(true);
-	return true;
+	return nRetRow;
 }
 
 // 设置表格项内容(文字表格项)
@@ -523,9 +526,9 @@ BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString 
 }
 
 // 删除行
-BOOL CDuiGridCtrl::DeleteRow(int nItem)
+BOOL CDuiGridCtrl::DeleteRow(int nRow)
 {
-	if((nItem < 0) || (nItem >= m_vecRowInfo.size()))
+	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
 	{
 		return FALSE;
 	}
@@ -534,7 +537,7 @@ BOOL CDuiGridCtrl::DeleteRow(int nItem)
 	vector<GridRowInfo>::iterator it;
 	for(it=m_vecRowInfo.begin();it!=m_vecRowInfo.end();++it)
 	{
-		if(nIndex == nItem)
+		if(nIndex == nRow)
 		{
 			m_vecRowInfo.erase(it);
 			break;
