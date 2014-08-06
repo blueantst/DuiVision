@@ -999,14 +999,14 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
 
-	if(m_nHoverItem != -1)
+	if((m_nHoverItem != -1) && (m_nHoverItem < m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
 
 		dc.BitBlt(itemInfo.rc.left,itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC, itemInfo.rc.left - m_rc.left,itemInfo.rc.top - m_rc.top + m_rc.Height(), SRCCOPY);
 	}
 
-	if(m_nDownItem != -1)
+	if((m_nDownItem != -1) && (m_nDownItem < m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nDownItem);
 
