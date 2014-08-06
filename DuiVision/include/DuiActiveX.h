@@ -49,6 +49,9 @@ public:
 	CLSID GetClisd() const;
     CString GetModuleName() const;
     void SetModuleName(LPCTSTR pstrText);
+	CString ParseFilePath(CString strUrl);
+
+	bool GetShowContentMenu() { return m_bShowContentMenu; }
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
@@ -66,24 +69,29 @@ public:
 protected:
     void ReleaseControl();
     bool DoCreateControl();
+	HRESULT InitEvents();
 
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 protected:
-    CLSID m_clsid;
-    CString m_strModuleName;
-	CString m_strUrl;
-    bool m_bCreated;
-    bool m_bDelayCreate;
-    IOleObject* m_pUnk;
-    CActiveXCtrl* m_pControl;
-    HWND m_hwndHost;
+    CLSID					m_clsid;
+    CString					m_strModuleName;
+	CString					m_strUrl;
+    bool					m_bCreated;
+    bool					m_bDelayCreate;
+	bool					m_bShowContentMenu;	// 是否显示右键菜单
+    IOleObject*				m_pUnk;
+	IConnectionPoint*		m_pCP;		// 连接点指针
+	DWORD                   m_dwEventCookie;
+    CActiveXCtrl*			m_pControl;	// ActiveX控件指针
+    HWND					m_hwndHost;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("clsid", OnAttributeCLSID)
 		DUI_TSTRING_ATTRIBUTE("modulename", m_strModuleName, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("url", OnAttributeUrl)
 		DUI_CUSTOM_ATTRIBUTE("delaycreate", OnAttributeDelayCreate)
+		DUI_INT_ATTRIBUTE("show-contextmenu", m_bShowContentMenu, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -97,8 +105,6 @@ class CDuiFlashCtrl : public CDuiActiveX
 public:
     CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiFlashCtrl();
-
-	CString ParseFilePath(CString strUrl);
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
@@ -122,8 +128,6 @@ class CDuiMediaPlayer : public CDuiActiveX
 public:
     CDuiMediaPlayer(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiMediaPlayer();
-
-	CString ParseFilePath(CString strUrl);
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);

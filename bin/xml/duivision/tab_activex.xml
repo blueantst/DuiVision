@@ -3,7 +3,8 @@
 	<activex name="ie_ctrl" show="1"
 		delaycreate="false"
 		url="http://www.blueantstudio.net"
-		pos="1,1,-1,-1" >
+		pos="1,1,-1,-1"
+		show-contextmenu="0" >
 	</activex>
 
 	<!--tabctrl name="tabctrl.activex" img-sep="skin:IDB_TAB_SEPERATOR"
