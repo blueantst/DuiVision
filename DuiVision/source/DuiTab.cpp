@@ -616,6 +616,42 @@ void CDuiTabCtrl::RefreshItems()
 		}
 	}
 
+	// 如果删除了最后一个页面,需要重新计算当前页面的索引
+	if(m_nDownItem >= m_vecItemInfo.size())
+	{
+		m_nDownItem = -1;
+		for(size_t i = m_vecItemInfo.size()-1; i >= 0; i--)
+		{
+			TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
+			if(itemInfoTemp.bVisible && !itemInfoTemp.bOutLink)
+			{
+				m_nDownItem = i;
+				break;
+			}
+		}
+	}
+	if(m_nHoverItem >= m_vecItemInfo.size())
+	{
+		m_nHoverItem = -1;
+	}
+
+	// 刷新显示当前页
+	for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+	{
+		TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+		if(itemInfo.pControl != NULL)
+		{
+			if(i == m_nDownItem)
+			{
+				itemInfo.pControl->SetVisible(TRUE);
+				SetWindowFocus();
+			}else
+			{
+				itemInfo.pControl->SetVisible(FALSE);
+			}
+		}
+	}
+
 	UpdateControl(true);
 }
 
@@ -633,6 +669,11 @@ void CDuiTabCtrl::DeleteItem(int nItem)
 	{
 		if(nIndex == nItem)
 		{
+			TabItemInfo &itemInfo = *it;
+			if(itemInfo.pControl != NULL)
+			{
+				RemoveControl(itemInfo.pControl);
+			}
 			m_vecItemInfo.erase(it);
 			break;
 		}
@@ -652,6 +693,10 @@ void CDuiTabCtrl::DeleteItem(CString strTabName)
 		TabItemInfo &itemInfo = *it;
 		if(itemInfo.strName == strTabName)
 		{
+			if(itemInfo.pControl != NULL)
+			{
+				RemoveControl(itemInfo.pControl);
+			}
 			m_vecItemInfo.erase(it);
 			break;
 		}
