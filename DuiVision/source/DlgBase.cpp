@@ -1170,31 +1170,6 @@ void CDlgBase::DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpd
 
 	// 控件
 	DrawControl(dc, rcUpdate);
-	/*
- 	int nTitle = 8;
- 	// 图标
- 	if (m_hIcon)
- 	{
- 		nTitle += 20;
- 		DrawIconEx(dc.m_hDC, 8, 8, m_hIcon, 16, 16, 0, NULL, DI_NORMAL);
- 	}
- 
- 	// Title 标题
- 	CString szTitile;
- 	GetWindowText(szTitile);
- 
- 	CFont* pOldFont = dc.SelectObject(&m_TitleFont);
- 	dc.SetBkMode(TRANSPARENT);
- 	// 阴影
- 	dc.SetTextColor(RGB(255, 255, 255));
- 	CRect	rcText(nTitle, 8, nTitle + 240, 26);
- 	dc.DrawText(szTitile, rcText, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
- 	// 文字
- 	rcText.OffsetRect(-1, -1);
- 	dc.SetTextColor(RGB(0, 0, 0));
- 	dc.DrawText(szTitile, rcText, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
- 	dc.SelectObject(pOldFont);
-	*/
 }
 
 // 重置控件

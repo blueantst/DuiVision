@@ -33,6 +33,8 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	// TinyXml设置为不压缩空格模式，默认是压缩空格，会导致超过一个的空格解析时候被转换为一个空格
 	TiXmlBase::SetCondenseWhiteSpace(false);
 
+	ZeroMemory(&m_NotifyIconData, sizeof m_NotifyIconData);
+
     createSingletons();
 	//m_rich20=LoadLibrary(_T("riched20.dll"));
 	//if(m_rich20) m_funCreateTextServices= (PCreateTextServices)GetProcAddress(m_rich20,"CreateTextServices");
@@ -1784,6 +1786,13 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 	}
 	if (strTrayIcon.IsEmpty()) return FALSE;
 
+	// 释放图标资源
+	if(m_NotifyIconData.hIcon != NULL)
+	{
+		DestroyIcon(m_NotifyIconData.hIcon);
+		m_NotifyIconData.hIcon = NULL;
+	}
+
 	if(strTrayIcon.Find(".") != -1)	// 加载图标文件
 	{
 		CString strIconFile = DuiSystem::GetSkinPath() + CEncodingUtil::AnsiToUnicode(strTrayIcon);
@@ -1819,6 +1828,11 @@ void DuiSystem::DelTray()
 {
 	if(m_NotifyIconData.cbSize)
 	{
+		// 释放图标资源
+		if(m_NotifyIconData.hIcon != NULL)
+		{
+			DestroyIcon(m_NotifyIconData.hIcon);
+		}
 		Shell_NotifyIcon(NIM_DELETE, &m_NotifyIconData);
 		ZeroMemory(&m_NotifyIconData, sizeof m_NotifyIconData);
 	}
@@ -1830,6 +1844,13 @@ BOOL DuiSystem::SetTrayIcon(CString strIcon)
 	if(m_NotifyIconData.cbSize)
 	{
 		m_NotifyIconData.uFlags = NIF_ICON;
+
+		// 释放图标资源
+		if(m_NotifyIconData.hIcon != NULL)
+		{
+			DestroyIcon(m_NotifyIconData.hIcon);
+			m_NotifyIconData.hIcon = NULL;
+		}
 
 		if(strIcon.Find(_T(":")) == -1)
 		{
