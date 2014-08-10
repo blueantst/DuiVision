@@ -498,15 +498,25 @@ STDMETHODIMP CActiveXCtrl::CanWindowlessActivate(void)
 
 STDMETHODIMP CActiveXCtrl::GetCapture(void)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::GetCapture\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     return m_bCaptured ? S_OK : S_FALSE;
 }
 
 STDMETHODIMP CActiveXCtrl::SetCapture(BOOL fCapture)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::SetCapture\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     m_bCaptured = (fCapture == TRUE);
     if( fCapture ) ::SetCapture(m_pOwner->m_hwndHost); else ::ReleaseCapture();
     return S_OK;
@@ -514,15 +524,25 @@ STDMETHODIMP CActiveXCtrl::SetCapture(BOOL fCapture)
 
 STDMETHODIMP CActiveXCtrl::GetFocus(void)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::GetFocus\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     return m_bFocused ? S_OK : S_FALSE;
 }
 
 STDMETHODIMP CActiveXCtrl::SetFocus(BOOL fFocus)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::SetFocus\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     if( fFocus ) m_pOwner->SetControlFocus(fFocus);
     m_bFocused = (fFocus == TRUE);
     return S_OK;
@@ -530,11 +550,17 @@ STDMETHODIMP CActiveXCtrl::SetFocus(BOOL fFocus)
 
 STDMETHODIMP CActiveXCtrl::GetDC(LPCRECT pRect, DWORD grfFlags, HDC* phDC)
 {
-    TRACE(_T("AX: CActiveXCtrl::GetDC\n"));
-    if( phDC == NULL ) return E_POINTER;
+	if( phDC == NULL ) return E_POINTER;
     if( m_pOwner == NULL ) return E_UNEXPECTED;
-    *phDC = ::GetDC(m_pOwner->m_hwndHost);
-    if( (grfFlags & OLEDC_PAINTBKGND) != 0 ) {
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
+    TRACE(_T("AX: CActiveXCtrl::GetDC\n"));
+	*phDC = ::GetDC(m_pOwner->m_hwndHost);
+    if( (grfFlags & OLEDC_PAINTBKGND) != 0 )
+	{
         CRect rcItem = m_pOwner->GetRect();
         if( !m_bWindowless ) rcItem.MoveToXY(0, 0);
         ::FillRect(*phDC, &rcItem, (HBRUSH) (COLOR_WINDOW + 1));
@@ -544,8 +570,13 @@ STDMETHODIMP CActiveXCtrl::GetDC(LPCRECT pRect, DWORD grfFlags, HDC* phDC)
 
 STDMETHODIMP CActiveXCtrl::ReleaseDC(HDC hDC)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::ReleaseDC\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     ::ReleaseDC(m_pOwner->m_hwndHost, hDC);
     return S_OK;
 }
@@ -553,10 +584,15 @@ STDMETHODIMP CActiveXCtrl::ReleaseDC(HDC hDC)
 // 控件的刷新界面操作
 STDMETHODIMP CActiveXCtrl::InvalidateRect(LPCRECT pRect, BOOL fErase)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::InvalidateRect\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     if( m_pOwner->m_hwndHost == NULL ) return E_FAIL;
-    //return ::InvalidateRect(m_pOwner->m_hwndHost, pRect, fErase) ? S_OK : E_FAIL;
+	//return ::InvalidateRect(m_pOwner->m_hwndHost, pRect, fErase) ? S_OK : E_FAIL;
 	// 调用对应DUI控件的刷新函数
 	m_pOwner->UpdateControl();
 	return S_OK;
@@ -564,8 +600,13 @@ STDMETHODIMP CActiveXCtrl::InvalidateRect(LPCRECT pRect, BOOL fErase)
 
 STDMETHODIMP CActiveXCtrl::InvalidateRgn(HRGN hRGN, BOOL fErase)
 {
+	if( m_pOwner == NULL ) return E_UNEXPECTED;
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
     TRACE(_T("AX: CActiveXCtrl::InvalidateRgn\n"));
-    if( m_pOwner == NULL ) return E_UNEXPECTED;
     return ::InvalidateRgn(m_pOwner->m_hwndHost, hRGN, fErase) ? S_OK : E_FAIL;
 }
 
@@ -733,8 +774,15 @@ STDMETHODIMP CActiveXCtrl::OnPosRectChange(LPCRECT lprcPosRect)
 
 STDMETHODIMP CActiveXCtrl::GetWindow(HWND* phwnd)
 {
-    TRACE(_T("AX: CActiveXCtrl::GetWindow\n"));
     if( m_pOwner == NULL ) return E_UNEXPECTED;
+
+	if(!m_pOwner->IsControlVisible())
+	{
+		return S_FALSE;
+	}
+
+	TRACE(_T("AX: CActiveXCtrl::GetWindow\n"));
+
     if( m_pOwner->m_hwndHost == NULL ) CreateActiveXWnd();
     if( m_pOwner->m_hwndHost == NULL ) return E_FAIL;
     *phwnd = m_pOwner->m_hwndHost;
@@ -946,10 +994,6 @@ HRESULT CActiveXCtrl::CreateActiveXWnd()
 	{
 		return S_OK;
 	}
-	/*if(m_bWindowless)
-	{
-		return S_FALSE;
-	}*/
     m_pWindow = new CActiveXWnd;
     if( m_pWindow == NULL )
 	{
@@ -1880,7 +1924,7 @@ void CDuiFlashCtrl::OnAxActivate(IUnknown *pUnknwn)
 	
 	if(m_bTransparent)
 	{
-		// 创建透明无窗体的Flash控件
+		// 创建透明无窗体的Flash控件,使用DUI控件的窗口句柄画图
 		flash_->put_WMode(bstr_t(_T("transparent")));
 	}
 
@@ -1930,10 +1974,11 @@ void CDuiMediaPlayer::OnAxInit()
 // ActiveX控件激活
 void CDuiMediaPlayer::OnAxActivate(IUnknown *pUnknwn)
 {
-	// 保存flash控件接口
+	// 保存mediaplayer控件接口
 	wmp_ = pUnknwn;
 	if(wmp_)
 	{
+		// 设置为无窗口模式,使用DUI控件的窗口句柄画图
 		wmp_->put_windowlessVideo(VARIANT_TRUE);
 	}
 }
