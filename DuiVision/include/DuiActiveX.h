@@ -60,7 +60,6 @@ public:
 	virtual void SetControlWndVisible(BOOL bIsVisible);
 	virtual void SetControlRect(CRect rc);
 	virtual HRESULT Navigate(CString strUrl);
-    void DoPaint(HDC hDC, const RECT& rcPaint);
 
 	HRESULT OnAttributeCLSID(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeDelayCreate(const CStringA& strValue, BOOL bLoading);
@@ -139,8 +138,10 @@ public:
 
 protected:
     CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash_;
+	bool		m_bTransparent;	// 是否创建背景透明的flash
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_INT_ATTRIBUTE("transparent", m_bTransparent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
