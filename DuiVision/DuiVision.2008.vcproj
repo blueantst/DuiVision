@@ -532,6 +532,14 @@
 				RelativePath=".\common\TaskMgr.h"
 				>
 			</File>
+			<File
+				RelativePath=".\common\XUnzip.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\common\XUnZip.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="TinyXml"

@@ -171,6 +171,9 @@
     <ClInclude Include="activex\duicomcli.h">
       <Filter>activex</Filter>
     </ClInclude>
+    <ClInclude Include="common\XUnZip.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -304,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="source\WndBase.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\XUnzip.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

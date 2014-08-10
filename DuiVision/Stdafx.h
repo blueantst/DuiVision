@@ -33,6 +33,7 @@ using namespace Gdiplus;
 #include "DuiVision.h"
 
 #include "tinyxml/tinyxml.h"
+#include "common/XUnZip.h"
 #include "common/encoding.h"
 //#include "common/registry.h"
 

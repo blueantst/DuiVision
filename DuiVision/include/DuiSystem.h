@@ -92,6 +92,8 @@ public:
 	BOOL LoadResource();
 	// 加载XML资源文件(可以指定加载的风格)
 	BOOL LoadResourceXml(CString strResFile, CStringA strStyleA = "");
+	// 加载ZIP资源文件
+	BYTE* LoadZipFile(CString strFile);
 	// 获取系统配置信息
 	CString GetConfig(CStringA strName);
 	// 获取XML文件
@@ -196,6 +198,7 @@ protected:
     void destroySingletons();
 
 	CString			m_strResourceFile;								// 资源定义文件名
+	HZIP				m_hResourceZip;									// 资源ZIP文件句柄
 	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapCfgPool;				// 系统配置信息
 	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapStylePool;			// 风格信息
 	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapXmlPool;				// XML文件池

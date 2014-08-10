@@ -111,6 +111,7 @@
     <ClInclude Include="common\encoding.h" />
     <ClInclude Include="common\registry.h" />
     <ClInclude Include="common\TaskMgr.h" />
+    <ClInclude Include="common\XUnZip.h" />
     <ClInclude Include="include\Area.h" />
     <ClInclude Include="include\CheckButton.h" />
     <ClInclude Include="include\ControlBase.h" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\TaskMgr.cpp" />
+    <ClCompile Include="common\XUnzip.cpp" />
     <ClCompile Include="DuiVision.cpp" />
     <ClCompile Include="source\Area.cpp" />
     <ClCompile Include="source\CheckButton.cpp" />

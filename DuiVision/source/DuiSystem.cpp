@@ -29,6 +29,7 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	{
 		m_strResourceFile = strResourceFile;
 	}
+	m_hResourceZip = NULL;
 
 	// TinyXml设置为不压缩空格模式，默认是压缩空格，会导致超过一个的空格解析时候被转换为一个空格
 	TiXmlBase::SetCondenseWhiteSpace(false);
@@ -69,6 +70,12 @@ DuiSystem::~DuiSystem(void)
 	m_mapSkinPool.RemoveAll();
 	m_mapStringPool.RemoveAll();
 	m_mapFontPool.RemoveAll();
+
+	if(m_hResourceZip != NULL)
+	{
+		CloseZip(m_hResourceZip);
+		m_hResourceZip = NULL;
+	}
 
 	// 销毁Tray图标
 	DelTray();
@@ -237,8 +244,24 @@ BOOL DuiSystem::LoadResource()
 	m_mapStringPool.RemoveAll();
 	m_mapFontPool.RemoveAll();
 
-	CString strResXmlFile = GetExePath() + m_strResourceFile;
-	return LoadResourceXml(strResXmlFile, m_strCurStyle);
+	CString strResFile = GetExePath() + m_strResourceFile;
+	if((strResFile.Find(_T(".ui")) != -1) && (GetFileAttributes(strResFile) != 0xFFFFFFFF))
+	{
+		// 如果是后缀为ui的文件,表示是ZIP文件,则加载资源ZIP文件
+		if(m_hResourceZip != NULL)
+		{
+			CloseZip(m_hResourceZip);
+			m_hResourceZip = NULL;
+		}
+		m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, 2);
+		if(m_hResourceZip != NULL)
+		{
+			// 如果加载的ZIP资源，则不使用绝对路径加载XML资源定义文件
+			strResFile = _T("xml\\resource.xml");			
+		}
+	}
+	
+	return LoadResourceXml(strResFile, m_strCurStyle);
 }
 
 // 加载XML资源文件
@@ -248,7 +271,32 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 
 	// 加载资源文件
 	TiXmlDocument xmlDoc;
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+	if(m_hResourceZip != NULL)
+	{
+		// 即使有zip文件的情况下,也优先使用目录中的文件
+		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strResFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+		}else
+		{
+			BYTE* pByte = LoadZipFile(strResFile);
+			if(pByte != NULL)
+			{
+				xmlDoc.Parse((const char*)pByte, NULL, TIXML_ENCODING_UTF8);
+				delete[] pByte;
+			}else
+			{
+				return FALSE;
+			}
+		}		
+	}else
+	{
+		xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+	}
 	if(!xmlDoc.Error())
 	{
 		TiXmlElement* pRootElem = xmlDoc.RootElement();
@@ -266,6 +314,10 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 						// 加载资源文件
 						CStringA strFile = pResElem->Attribute("file");
 						CString strFileU = GetExePath() + CA2T(strFile, CP_UTF8);
+						if(m_hResourceZip != NULL)
+						{
+							strFileU = CA2T(strFile, CP_UTF8);
+						}
 						LoadResourceXml(strFileU, strStyleA);
 					}
 				}else
@@ -389,9 +441,57 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 				}
 			}
 		}
+	}else
+	{
+		return FALSE;
 	}
 
 	return TRUE;
+}
+
+// 加载ZIP资源文件
+BYTE* DuiSystem::LoadZipFile(CString strFile)
+{
+	if(m_hResourceZip == NULL)
+	{
+		return NULL;
+	}
+
+	// Zip文件中的路径都使用/
+	strFile.Replace(_T("\\"), _T("/"));
+
+	BYTE* pByte = NULL;
+	ZENTRY ze;
+	int i;
+	if(FindZipItem(m_hResourceZip, (LPCTSTR)strFile, true, &i, &ze) == 0)
+	{
+		DWORD dwSize = ze.unc_size;
+		if( dwSize == 0 )
+		{
+			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, file is empty"), strFile);
+			return NULL;
+		}
+		if ( dwSize > 4096*1024 )
+		{
+			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, file too large"), strFile);
+			return NULL;
+		}
+		pByte = new BYTE[ dwSize ];
+		int res = UnzipItem(m_hResourceZip, i, pByte, dwSize, 3);
+		if( res != 0x00000000 && res != 0x00000600)
+		{
+			delete[] pByte;
+			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, could not unzip file"), strFile);
+			return NULL;
+		}
+
+		return pByte;
+	}else
+	{
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, not found file"), strFile);
+	}
+
+	return NULL;
 }
 
 // 获取系统配置信息
