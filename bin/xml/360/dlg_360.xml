@@ -57,17 +57,17 @@
 		</tab>
 		
 		<tab name="tab.flash" title="Flash" image="skins\icon\ico_PluginCleaner.png" img-count="1" pos="0,75,-0,-0">					
-			<flash name="flash_ctrl" show="1"
+			<flash name="flash_ctrl_1" show="1"
 				url="skins\flash\noon.swf"
 				pos="1,1,-1,-1" >
 			</flash>
 		</tab>
 		
 		<tab name="tab.mediaplayer" title="播放器" image="skins\icon\Movies.png" img-count="1" pos="0,75,-0,-0">					
-			<mediaplayer name="mediaplayer_ctrl" show="1"
+			<!--mediaplayer name="mediaplayer_ctrl" show="1"
 				url="http://www.modrails.com/videos/passenger_nginx.mov"
 				pos="1,1,-1,-1" >
-			</mediaplayer>
+			</mediaplayer-->
 		</tab>
 		
 	</tabctrl>

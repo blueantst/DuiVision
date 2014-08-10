@@ -208,8 +208,7 @@ class CActiveXCtrl :
     public IOleControlSite,
     public IObjectWithSite,
     public IOleContainer,
-	public IDocHostUIHandler,
-	public DWebBrowserEvents2
+	public IDocHostUIHandler
 {
     friend CDuiActiveX;
     friend CActiveXWnd;
@@ -285,14 +284,14 @@ public:
 
     // IParseDisplayName
     STDMETHOD(ParseDisplayName)(IBindCtx* pbc, LPOLESTR pszDisplayName, ULONG* pchEaten, IMoniker** ppmkOut);
-
+/*
 	//DWebBrowserEvents2
     //IDispatch methods
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR* pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid,OLECHAR FAR* FAR* rgszNames,UINT cNames,LCID lcid, DISPID FAR* rgdispid);
     STDMETHOD(Invoke)(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr);
-
+*/
 	// IDocHostUIHandler
 	STDMETHOD(ShowContextMenu)(/* [in] */ DWORD dwID,
             /* [in] */ POINT __RPC_FAR *ppt,
@@ -394,7 +393,6 @@ STDMETHODIMP CActiveXCtrl::QueryInterface(REFIID riid, LPVOID *ppvObject)
     else if( riid == IID_IOleContainer )             *ppvObject = static_cast<IOleContainer*>(this);
     else if( riid == IID_IObjectWithSite )           *ppvObject = static_cast<IObjectWithSite*>(this);
 	else if( riid == IID_IDocHostUIHandler )         *ppvObject = static_cast<IDocHostUIHandler*>(this);
-	else if ((riid == DIID_DWebBrowserEvents2) || (riid == IID_IDispatch))	*ppvObject = static_cast<DWebBrowserEvents2*>(this);
     if( *ppvObject != NULL ) AddRef();
     return *ppvObject == NULL ? E_NOINTERFACE : S_OK;
 }
@@ -928,14 +926,90 @@ STDMETHODIMP CActiveXCtrl::FilterDataObject(
     return E_NOTIMPL;
 }
 
+// 创建ActiveX窗口
+HRESULT CActiveXCtrl::CreateActiveXWnd()
+{
+    if( m_pWindow != NULL )
+	{
+		return S_OK;
+	}
+    m_pWindow = new CActiveXWnd;
+    if( m_pWindow == NULL )
+	{
+		return E_OUTOFMEMORY;
+	}
+    m_pOwner->m_hwndHost = m_pWindow->Init(this, m_pOwner->GetPaintWindow());
+    return S_OK;
+}
+
+
+class CWebBrowserCtrl :
+    public CActiveXCtrl,
+	public DWebBrowserEvents2
+{
+    friend CDuiActiveX;
+    friend CActiveXWnd;
+public:
+    CWebBrowserCtrl();
+    ~CWebBrowserCtrl();
+
+public:
+    // IUnknown
+    STDMETHOD_(ULONG,AddRef)();
+    STDMETHOD_(ULONG,Release)();
+    STDMETHOD(QueryInterface)(REFIID riid, LPVOID *ppvObject);
+
+	//DWebBrowserEvents2
+    //IDispatch methods
+    STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
+    STDMETHOD(GetTypeInfo)(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR* pptinfo);
+    STDMETHOD(GetIDsOfNames)(REFIID riid,OLECHAR FAR* FAR* rgszNames,UINT cNames,LCID lcid, DISPID FAR* rgdispid);
+    STDMETHOD(Invoke)(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr);
+
+};
+
+CWebBrowserCtrl::CWebBrowserCtrl() : 
+	CActiveXCtrl()
+{
+}
+
+CWebBrowserCtrl::~CWebBrowserCtrl()
+{
+}
+
+STDMETHODIMP_(ULONG) CWebBrowserCtrl::AddRef()
+{
+    return ++m_dwRef;
+}
+
+STDMETHODIMP_(ULONG) CWebBrowserCtrl::Release()
+{
+    LONG lRef = --m_dwRef;
+    if( lRef == 0 ) delete this;
+    return lRef;
+}
+
+STDMETHODIMP CWebBrowserCtrl::QueryInterface(REFIID riid, LPVOID *ppvObject)
+{
+	CActiveXCtrl::QueryInterface(riid, ppvObject);
+	if(*ppvObject)
+	{
+		return S_OK;
+	}
+
+	if ((riid == DIID_DWebBrowserEvents2) || (riid == IID_IDispatch))	*ppvObject = static_cast<DWebBrowserEvents2*>(this);
+    if( *ppvObject != NULL ) CActiveXCtrl::AddRef();
+    return *ppvObject == NULL ? E_NOINTERFACE : S_OK;
+}
+
 //---------------------------------------------------------------------------------
 //Description:
 // DWebBrowserEvents and IDispatch methods
 //
 //----------------------------------------------------------------------------------
-STDMETHODIMP CActiveXCtrl::GetTypeInfoCount(UINT FAR* pctinfo)          
+STDMETHODIMP CWebBrowserCtrl::GetTypeInfoCount(UINT FAR* pctinfo)          
 {
-	TRACE(_T("AX: CActiveXCtrl::GetTypeInfoCount"));
+	TRACE(_T("AX: CWebBrowserCtrl::GetTypeInfoCount"));
 	return E_NOTIMPL;
 }
 
@@ -945,9 +1019,9 @@ STDMETHODIMP CActiveXCtrl::GetTypeInfoCount(UINT FAR* pctinfo)
 // DWebBrowserEvents and IDispatch methods
 //
 //----------------------------------------------------------------------------------
-STDMETHODIMP CActiveXCtrl::GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR* pptinfo)   
+STDMETHODIMP CWebBrowserCtrl::GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR* pptinfo)   
 {
-	TRACE(_T("AX: CActiveXCtrl::GetTypeInfo"));
+	TRACE(_T("AX: CWebBrowserCtrl::GetTypeInfo"));
 	return E_NOTIMPL;
 }
 
@@ -957,9 +1031,9 @@ STDMETHODIMP CActiveXCtrl::GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR*
 // DWebBrowserEvents and IDispatch methods
 //
 //----------------------------------------------------------------------------------
-STDMETHODIMP CActiveXCtrl::GetIDsOfNames(REFIID riid,OLECHAR FAR* FAR* rgszNames,UINT cNames,LCID lcid, DISPID FAR* rgdispid)                  
+STDMETHODIMP CWebBrowserCtrl::GetIDsOfNames(REFIID riid,OLECHAR FAR* FAR* rgszNames,UINT cNames,LCID lcid, DISPID FAR* rgdispid)                  
 {
-	TRACE(_T("AX: CActiveXCtrl::GetIDsOfNames"));
+	TRACE(_T("AX: CWebBrowserCtrl::GetIDsOfNames"));
 	return E_NOTIMPL;
 }
 
@@ -969,9 +1043,9 @@ STDMETHODIMP CActiveXCtrl::GetIDsOfNames(REFIID riid,OLECHAR FAR* FAR* rgszNames
 // DWebBrowserEvents and IDispatch methods
 //
 //----------------------------------------------------------------------------------
-STDMETHODIMP CActiveXCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr)    
+STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr)    
 {
-	TRACE(_T("AX: CActiveXCtrl::Invoke"));
+	TRACE(_T("AX: CWebBrowserCtrl::Invoke"));
 	//return DefDWebBrowserEventInvokeProc(dispidMember,riid,lcid,wFlags,pdispparams, pvarResult,pexcepinfo,puArgErr);
 	switch (dispidMember)
 	{
@@ -979,13 +1053,13 @@ STDMETHODIMP CActiveXCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD
 		{
 			if (pdispparams && pdispparams->rgvarg[0].vt == VT_BSTR)
 			{         
-				/*WCHAR szTitle[MAX_URL];
-				int len = wcslen(pdispparams->rgvarg[0].bstrVal);               
-				wcsncpy(szTitle, pdispparams->rgvarg[0].bstrVal, MAX_URL - 5);
-				if(len > MAX_URL - 5)
-				{
-					wcscat(szTitle, L"...");
-				}*/
+				//WCHAR szTitle[MAX_URL];
+				//int len = wcslen(pdispparams->rgvarg[0].bstrVal);               
+				//wcsncpy(szTitle, pdispparams->rgvarg[0].bstrVal, MAX_URL - 5);
+				//if(len > MAX_URL - 5)
+				//{
+				//	wcscat(szTitle, L"...");
+				//}
 
 				//OnTitleChange(szTitle);
 			}
@@ -1002,13 +1076,13 @@ STDMETHODIMP CActiveXCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD
 		{
 			if (pdispparams && pdispparams->rgvarg[0].vt == VT_BSTR)
 			{         
-				/*WCHAR szStatus[MAX_URL];
-				int len = wcslen(pdispparams->rgvarg[0].bstrVal);               
-				wcsncpy(szStatus, pdispparams->rgvarg[0].bstrVal, MAX_URL - 5);
-				if(len > MAX_URL - 5)
-				{
-					wcscat(szStatus, L"...");
-				}*/
+				//WCHAR szStatus[MAX_URL];
+				//int len = wcslen(pdispparams->rgvarg[0].bstrVal);               
+				//wcsncpy(szStatus, pdispparams->rgvarg[0].bstrVal, MAX_URL - 5);
+				//if(len > MAX_URL - 5)
+				//{
+				//	wcscat(szStatus, L"...");
+				//}
 
 				//OnStatusTextChange(szStatus);
 			}
@@ -1079,23 +1153,6 @@ STDMETHODIMP CActiveXCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD
 
 	return E_NOTIMPL;
 }
-
-// 创建ActiveX窗口
-HRESULT CActiveXCtrl::CreateActiveXWnd()
-{
-    if( m_pWindow != NULL )
-	{
-		return S_OK;
-	}
-    m_pWindow = new CActiveXWnd;
-    if( m_pWindow == NULL )
-	{
-		return E_OUTOFMEMORY;
-	}
-    m_pOwner->m_hwndHost = m_pWindow->Init(this, m_pOwner->GetPaintWindow());
-    return S_OK;
-}
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1222,7 +1279,6 @@ CDuiActiveX::CDuiActiveX(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBase(hWnd, pDuiObject)
 {
     m_clsid = IID_NULL;
-	::CLSIDFromString(_T("{8856F961-340A-11D0-A96B-00C04FD705A2}"), &m_clsid);	// IE浏览器控件ID
 	m_pUnk = NULL;
 	m_pCP = NULL;
 	m_pControl = NULL;
@@ -1276,6 +1332,17 @@ void CDuiActiveX::OnAxInit()
 
 // ActiveX控件激活
 void CDuiActiveX::OnAxActivate(IUnknown *pUnknwn)
+{
+}
+
+// ActiveX控件创建控件对象
+void CDuiActiveX::OnAxCreateCtrl()
+{
+	m_pControl = new CActiveXCtrl();
+}
+
+// ActiveX控件初始化完成
+void CDuiActiveX::OnAxInitFinish()
 {
 }
 
@@ -1549,8 +1616,11 @@ bool CDuiActiveX::DoCreateControl()
     if( m_pUnk == NULL ) return false;
 
     // Create the host too
-    m_pControl = new CActiveXCtrl();
-    m_pControl->m_pOwner = this;
+	OnAxCreateCtrl();
+	if(m_pControl != NULL)
+	{
+		m_pControl->m_pOwner = this;
+	}
 
     // More control creation stuff
     DWORD dwMiscStatus = 0;
@@ -1592,8 +1662,8 @@ bool CDuiActiveX::DoCreateControl()
         pSite->Release();
     }
 
-	// 初始化浏览器事件处理
-	InitEvents();
+	// 控件初始化完成
+	OnAxInitFinish();
 
 	// 设置初始的URL
 	if(!m_strUrl.IsEmpty())
@@ -1604,63 +1674,10 @@ bool CDuiActiveX::DoCreateControl()
     return SUCCEEDED(Hr);
 }
 
-// 初始化浏览器控件的事件处理
-HRESULT CDuiActiveX::InitEvents()
-{
-	HRESULT                     hr;
-	IConnectionPointContainer  *pCPCont = NULL;
-	DWebBrowserEvents          *pEvents = NULL;
-
-	IWebBrowser2* pWebBrowser = NULL;
-	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
-	if(!pWebBrowser)
-	{
-		return S_FALSE;
-	}
-
-	hr = pWebBrowser->QueryInterface(IID_IConnectionPointContainer, (LPVOID *)&pCPCont);
-	if(FAILED(hr))
-	{
-		return S_FALSE;
-	}
-
-	hr = pCPCont->FindConnectionPoint(DIID_DWebBrowserEvents2, &m_pCP);
-	if(FAILED(hr))
-	{
-		m_pCP = NULL;
-		goto Cleanup;
-	}
-
-	hr = m_pControl->QueryInterface(DIID_DWebBrowserEvents2, (LPVOID *)(&pEvents));
-	if(FAILED(hr))
-		goto Cleanup;
-	hr = m_pCP->Advise(pEvents, &(m_dwEventCookie));
-	if(FAILED(hr))
-		goto Cleanup;
-
-Cleanup:
-	if(pCPCont)
-		pCPCont->Release();
-	if(pEvents)
-		pEvents->Release();
-	return hr;
-}
-
 // 导航到指定的URL
 HRESULT CDuiActiveX::Navigate(CString strUrl)
 {
-	HRESULT hr = -1;
-	IWebBrowser2* pWebBrowser = NULL;
-	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
-	if( pWebBrowser != NULL )
-	{
-		BSTR bsUrl = strUrl.AllocSysString();
-		hr = pWebBrowser->Navigate(bsUrl,NULL,NULL,NULL,NULL);
-		pWebBrowser->Release();
-		SysFreeString(bsUrl);
-	}
-
-	return hr;
+	return S_FALSE;
 }
 
 // 根据IID获取ActiveX控件
@@ -1728,6 +1745,101 @@ CString CDuiActiveX::ParseFilePath(CString strUrl)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
+// CDuiWebBrowserCtrl
+
+CDuiWebBrowserCtrl::CDuiWebBrowserCtrl(HWND hWnd, CDuiObject* pDuiObject)
+	: CDuiActiveX(hWnd, pDuiObject)
+{
+}
+
+CDuiWebBrowserCtrl::~CDuiWebBrowserCtrl()
+{
+}
+
+// ActiveX控件初始化
+void CDuiWebBrowserCtrl::OnAxInit()
+{
+	::CLSIDFromString(_T("{8856F961-340A-11D0-A96B-00C04FD705A2}"), &m_clsid);	// IE浏览器控件ID
+}
+
+// ActiveX控件激活
+void CDuiWebBrowserCtrl::OnAxActivate(IUnknown *pUnknwn)
+{
+}
+
+// ActiveX控件创建控件对象
+void CDuiWebBrowserCtrl::OnAxCreateCtrl()
+{
+	m_pControl = new CWebBrowserCtrl();   
+}
+
+// ActiveX控件初始化完成
+void CDuiWebBrowserCtrl::OnAxInitFinish()
+{
+	// 初始化浏览器事件处理
+	InitEvents();
+}
+
+// 导航到指定的URL
+HRESULT CDuiWebBrowserCtrl::Navigate(CString strUrl)
+{
+	HRESULT hr = -1;
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	if( pWebBrowser != NULL )
+	{
+		BSTR bsUrl = strUrl.AllocSysString();
+		hr = pWebBrowser->Navigate(bsUrl,NULL,NULL,NULL,NULL);
+		pWebBrowser->Release();
+		SysFreeString(bsUrl);
+	}
+
+	return hr;
+}
+
+// 初始化浏览器控件的事件处理
+HRESULT CDuiWebBrowserCtrl::InitEvents()
+{
+	HRESULT                     hr;
+	IConnectionPointContainer  *pCPCont = NULL;
+	DWebBrowserEvents          *pEvents = NULL;
+
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	if(!pWebBrowser)
+	{
+		return S_FALSE;
+	}
+
+	hr = pWebBrowser->QueryInterface(IID_IConnectionPointContainer, (LPVOID *)&pCPCont);
+	if(FAILED(hr))
+	{
+		return S_FALSE;
+	}
+
+	hr = pCPCont->FindConnectionPoint(DIID_DWebBrowserEvents2, &m_pCP);
+	if(FAILED(hr))
+	{
+		m_pCP = NULL;
+		goto Cleanup;
+	}
+
+	hr = m_pControl->QueryInterface(DIID_DWebBrowserEvents2, (LPVOID *)(&pEvents));
+	if(FAILED(hr))
+		goto Cleanup;
+	hr = m_pCP->Advise(pEvents, &(m_dwEventCookie));
+	if(FAILED(hr))
+		goto Cleanup;
+
+Cleanup:
+	if(pCPCont)
+		pCPCont->Release();
+	if(pEvents)
+		pEvents->Release();
+	return hr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
 // CDuiFlashCtrl
 
 CDuiFlashCtrl::CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject)
@@ -1750,6 +1862,11 @@ void CDuiFlashCtrl::OnAxActivate(IUnknown *pUnknwn)
 {
 	// 保存flash控件接口
 	flash_ = pUnknwn;
+}
+
+// ActiveX控件初始化完成
+void CDuiFlashCtrl::OnAxInitFinish()
+{
 }
 
 // 导航到指定的URL
@@ -1795,6 +1912,11 @@ void CDuiMediaPlayer::OnAxActivate(IUnknown *pUnknwn)
 	{
 		wmp_->put_windowlessVideo(VARIANT_TRUE);
 	}
+}
+
+// ActiveX控件初始化完成
+void CDuiMediaPlayer::OnAxInitFinish()
+{
 }
 
 // 导航到指定的URL

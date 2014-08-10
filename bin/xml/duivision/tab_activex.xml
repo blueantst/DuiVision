@@ -1,11 +1,16 @@
 <div pos="0,75,-0,-0" >
 
-	<activex name="ie_ctrl" show="1"
+	<webbrowser name="ie_ctrl" show="1"
 		delaycreate="false"
 		url="http://www.blueantstudio.net"
 		pos="1,1,-1,-1"
 		show-contextmenu="0" >
-	</activex>
+	</webbrowser>
+	
+	<!--flash name="flash_ctrl" show="1"
+		url="skins\flash\noon.swf"
+		pos="1,1,-1,-1" >
+	</flash-->
 
 	<!--tabctrl name="tabctrl.activex" img-sep="skin:IDB_TAB_SEPERATOR"
 		font="bold" item-width="90" tab-height="29" crtext="800000" animate="1"

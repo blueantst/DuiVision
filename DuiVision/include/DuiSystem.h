@@ -92,6 +92,8 @@ public:
 	BOOL LoadResource();
 	// 加载XML资源文件(可以指定加载的风格)
 	BOOL LoadResourceXml(CString strResFile, CStringA strStyleA = "");
+	// 获取ZIP资源的句柄
+	HZIP GetResourceHZip() { return m_hResourceZip; }
 	// 加载ZIP资源文件
 	BYTE* LoadZipFile(CString strFile);
 	// 获取系统配置信息

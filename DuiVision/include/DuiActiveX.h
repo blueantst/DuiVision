@@ -55,6 +55,8 @@ public:
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
+	virtual void OnAxCreateCtrl();
+	virtual void OnAxInitFinish();
 	virtual void SetControlWndVisible(BOOL bIsVisible);
 	virtual void SetControlRect(CRect rc);
 	virtual HRESULT Navigate(CString strUrl);
@@ -69,7 +71,6 @@ public:
 protected:
     void ReleaseControl();
     bool DoCreateControl();
-	HRESULT InitEvents();
 
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
@@ -96,6 +97,31 @@ protected:
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
+// CDuiWebBrowserCtrl
+
+class CDuiWebBrowserCtrl : public CDuiActiveX
+{
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiWebBrowserCtrl, "webbrowser")
+
+public:
+    CDuiWebBrowserCtrl(HWND hWnd, CDuiObject* pDuiObject);
+    virtual ~CDuiWebBrowserCtrl();
+
+	virtual void OnAxInit();
+	virtual void OnAxActivate(IUnknown *pUnknwn);
+	virtual void OnAxCreateCtrl();
+	virtual void OnAxInitFinish();
+	virtual HRESULT Navigate(CString strUrl);
+
+protected:
+	HRESULT InitEvents();
+
+protected:
+	DUI_DECLARE_ATTRIBUTES_BEGIN()
+	DUI_DECLARE_ATTRIBUTES_END()
+};
+
+/////////////////////////////////////////////////////////////////////////////////////
 // CDuiFlashCtrl
 
 class CDuiFlashCtrl : public CDuiActiveX
@@ -108,6 +134,7 @@ public:
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
+	virtual void OnAxInitFinish();
 	virtual HRESULT Navigate(CString strUrl);
 
 protected:
@@ -131,6 +158,7 @@ public:
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
+	virtual void OnAxInitFinish();
 	virtual HRESULT Navigate(CString strUrl);
 
 protected:
