@@ -391,6 +391,42 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		{
 			OnOptionOK(pDlg);
 		}
+	}else
+	if((strName == _T("textbtn_showflash_1")) && (Msg == BUTTOM_UP))	// 显示Flash1
+	{
+		CDlgBase* pDlg = GetControlDialog(uID);
+		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
+		if(pFlashCtrl)
+		{
+			pFlashCtrl->Navigate(L"skins/flash/afternoon.swf");
+		}
+	}else
+	if((strName == _T("textbtn_showflash_2")) && (Msg == BUTTOM_UP))	// 显示Flash2
+	{
+		CDlgBase* pDlg = GetControlDialog(uID);
+		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
+		if(pFlashCtrl)
+		{
+			pFlashCtrl->Navigate(L"skins/flash/morning.swf");
+		}
+	}else
+	if((strName == _T("textbtn_showflash_3")) && (Msg == BUTTOM_UP))	// 显示Flash3
+	{
+		CDlgBase* pDlg = GetControlDialog(uID);
+		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
+		if(pFlashCtrl)
+		{
+			pFlashCtrl->Navigate(L"skins/flash/night.swf");
+		}
+	}else
+	if((strName == _T("textbtn_showflash_4")) && (Msg == BUTTOM_UP))	// 显示Flash4
+	{
+		CDlgBase* pDlg = GetControlDialog(uID);
+		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
+		if(pFlashCtrl)
+		{
+			pFlashCtrl->Navigate(L"skins/flash/noon.swf");
+		}
 	}
 
     return 0;

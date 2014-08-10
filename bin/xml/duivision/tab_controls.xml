@@ -211,6 +211,9 @@ width-lt,height-lt,width-rb,height-rb" />
 
 			<button name="xml_content_dlg_button" skin="IDB_BT_DEFAULT" title="XML对话框"
 				pos="50,100,150,128" show="1" tip="显示XML对话框"  />
+			
+			<button name="flash_login_dlg_button" skin="IDB_BT_DEFAULT" title="Flash对话框"
+				pos="200,100,300,128" show="1" tip="显示Flash登录对话框" action="dlg:dlg_flashlogin" />
 
 		</tab>
 

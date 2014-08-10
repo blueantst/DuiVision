@@ -27,6 +27,7 @@
 <res type="xml" name="tab_ext" file="xml\duivision\tab_ext.xml"  />
 <res type="xml" name="dlg_about" file="xml\duivision\dlg_about.xml"  />
 <res type="xml" name="dlg_login" file="xml\duivision\dlg_login.xml"  />
+<res type="xml" name="dlg_flashlogin" file="xml\duivision\dlg_flashlogin.xml"  />
 <res type="xml" name="dlg_option" file="xml\duivision\dlg_option.xml"  />
 <res type="xml" name="dlg_notice" file="xml\duivision\dlg_notice.xml"  />
 <res type="xml" name="dlg_skin" file="xml\dlg_skin.xml"  />

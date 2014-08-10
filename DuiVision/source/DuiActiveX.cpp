@@ -550,12 +550,16 @@ STDMETHODIMP CActiveXCtrl::ReleaseDC(HDC hDC)
     return S_OK;
 }
 
+// 控件的刷新界面操作
 STDMETHODIMP CActiveXCtrl::InvalidateRect(LPCRECT pRect, BOOL fErase)
 {
     TRACE(_T("AX: CActiveXCtrl::InvalidateRect\n"));
     if( m_pOwner == NULL ) return E_UNEXPECTED;
     if( m_pOwner->m_hwndHost == NULL ) return E_FAIL;
-    return ::InvalidateRect(m_pOwner->m_hwndHost, pRect, fErase) ? S_OK : E_FAIL;
+    //return ::InvalidateRect(m_pOwner->m_hwndHost, pRect, fErase) ? S_OK : E_FAIL;
+	// 调用对应DUI控件的刷新函数
+	m_pOwner->UpdateControl();
+	return S_OK;
 }
 
 STDMETHODIMP CActiveXCtrl::InvalidateRgn(HRGN hRGN, BOOL fErase)
@@ -1895,8 +1899,9 @@ HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
 	HRESULT hr = S_OK;
 	if(flash_)
 	{
-		if(!m_strUrl.IsEmpty())
+		if(!strUrl.IsEmpty())
 		{
+			m_strUrl = strUrl;
 			flash_->put_Movie(bstr_t(ParseFilePath(m_strUrl)));
 		}
 	}
@@ -1945,8 +1950,9 @@ HRESULT CDuiMediaPlayer::Navigate(CString strUrl)
 	if(wmp_)
 	{
 		wmp_->close();
-		if(!m_strUrl.IsEmpty())
+		if(!strUrl.IsEmpty())
 		{
+			m_strUrl = strUrl;
 			wmp_->put_URL(bstr_t(ParseFilePath(m_strUrl)));
 		}
 	}
