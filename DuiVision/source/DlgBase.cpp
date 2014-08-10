@@ -1113,7 +1113,8 @@ void CDlgBase::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // 用于绘制的设备上下文
+		// 最小化状态不用绘制图标
+		/*CPaintDC dc(this); // 用于绘制的设备上下文
 
  		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
@@ -1126,7 +1127,7 @@ void CDlgBase::OnPaint()
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
 		// 绘制图标
-		dc.DrawIcon(x, y, m_hIcon);
+		dc.DrawIcon(x, y, m_hIcon);*/
 	}
 	else
 	{
@@ -1393,7 +1394,7 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	if (!IsIconic())
+	if (!IsIconic())	// 非最小化状态
 	{
 		BOOL bIsMaximize = IsZoomed();
 		int border_offset[] = {/*3, 2, */1};
