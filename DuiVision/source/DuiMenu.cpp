@@ -96,7 +96,7 @@ BOOL CDuiMenu::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		CString strTitleU = CA2T(strTitle, CP_UTF8);
 		if(strImage.Find(".") != -1)	// 加载图片文件
 		{
-			CString strImgFile = DuiSystem::GetSkinPath() + CEncodingUtil::AnsiToUnicode(strImage);
+			CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strImage, CP_UTF8);
 			AddMenu(strTitleU, nIdIndex, strImgFile);
 		}else
 		if(!strImage.IsEmpty())
@@ -132,7 +132,7 @@ BOOL CDuiMenu::LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName)
 	for (pItemElem = pXmlElem->FirstChildElement(); pItemElem != NULL; pItemElem=pItemElem->NextSiblingElement())
 	{
 		CStringA strNameA = pItemElem->Attribute("name");
-		if(strSubItemName == CEncodingUtil::AnsiToUnicode(strNameA))
+		if(strSubItemName == CA2T(strNameA, CP_UTF8))
 		{
 			// 加载子菜单
 			return Load(pItemElem);

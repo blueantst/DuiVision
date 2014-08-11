@@ -120,7 +120,7 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		}
 
 		CStringA strNameA = pTabElem->Attribute("name");
-		CString strName = CEncodingUtil::AnsiToUnicode(strNameA);
+		CString strName = CA2T(strNameA, CP_UTF8);
 		if(GetItemIndex(strName) != -1)
 		{
 			// 如果已经存在相同名字的tab页,则跳过
@@ -128,7 +128,7 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		}
 
 		CStringA strTabXmlA = pTabElem->Attribute("tabxml");
-		CString strTabXml = CEncodingUtil::AnsiToUnicode(strTabXmlA);
+		CString strTabXml = CA2T(strTabXmlA, CP_UTF8);
 		if(!strTabXmlA.IsEmpty())
 		{
 			// 从xml文件加载嵌套的tab页
@@ -138,7 +138,7 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		}
 
 		CStringA strActionA = pTabElem->Attribute("action");
-		CString strAction = CEncodingUtil::AnsiToUnicode(strActionA);
+		CString strAction = CA2T(strActionA, CP_UTF8);
 		CStringA strOutLinkA = pTabElem->Attribute("outlink");
 		BOOL bOutLink = ((strOutLinkA == "1") || (strOutLinkA == "true"));
 		CStringA strImageA = pTabElem->Attribute("image");
