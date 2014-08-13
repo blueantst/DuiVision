@@ -160,6 +160,7 @@ public:
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxInitFinish();
+	virtual void SetControlWndVisible(BOOL bIsVisible);
 	virtual HRESULT Navigate(CString strUrl);
 
 protected:

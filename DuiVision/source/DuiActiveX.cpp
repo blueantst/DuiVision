@@ -1979,13 +1979,36 @@ void CDuiMediaPlayer::OnAxActivate(IUnknown *pUnknwn)
 	if(wmp_)
 	{
 		// 设置为无窗口模式,使用DUI控件的窗口句柄画图
-		wmp_->put_windowlessVideo(VARIANT_TRUE);
+		//wmp_->put_windowlessVideo(VARIANT_TRUE);
+		// 伸缩画面，使其适合播放窗口
+		//wmp_->put_stretchToFit(TRUE);
+		// 允许右键菜单
+		//wmp_->PutenableContextMenu(TRUE);
 	}
 }
 
 // ActiveX控件初始化完成
 void CDuiMediaPlayer::OnAxInitFinish()
 {
+}
+
+// 设置控件中的Windows原生控件是否可见的状态
+void CDuiMediaPlayer::SetControlWndVisible(BOOL bIsVisible)
+{
+	if(( m_hwndHost != NULL ) && (wmp_ != NULL))
+	{
+		//::ShowWindow(m_hwndHost, bIsVisible ? SW_SHOW : SW_HIDE);
+		//CString str = wmp_->GetuiMode();
+		//TRACE("CDuiMediaPlayer::SetControlWndVisible %s\n", str);
+		if(bIsVisible)
+		{
+			::ShowWindow(m_hwndHost, SW_SHOW);
+			wmp_->PutuiMode("full");
+		}else
+		{
+			wmp_->PutuiMode("Invisible");
+		}
+	}
 }
 
 // 导航到指定的URL
@@ -1999,6 +2022,7 @@ HRESULT CDuiMediaPlayer::Navigate(CString strUrl)
 		{
 			m_strUrl = strUrl;
 			wmp_->put_URL(bstr_t(ParseFilePath(m_strUrl)));
+			//wmp_->openPlayer(bstr_t(ParseFilePath(m_strUrl)));	// 打开单独的播放窗口
 		}
 	}
 
