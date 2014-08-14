@@ -155,6 +155,11 @@ void CMenuItem::ShowPopupMenu()
 					//rc.OffsetRect(nScreenWidth - rc.right -10, 0);	// 移动到屏幕最右侧
 					rc.OffsetRect(-(nMenuWidth + rc.Width()), 0);	// 移动到当前菜单左侧
 				}
+				int nScreenHeight= GetSystemMetrics(SM_CYFULLSCREEN);
+				if(rc.bottom > nScreenHeight)
+				{
+					rc.OffsetRect(0, -(rc.Height() - m_rc.Height()));	// 高度超出屏幕则改为下对齐方式
+				}
 				m_pPopupMenu->MoveWindow(rc);
 				m_pPopupMenu->ShowWindow(SW_SHOW);
 			}else
