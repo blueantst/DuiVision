@@ -96,6 +96,8 @@ public:
 	HZIP GetResourceHZip() { return m_hResourceZip; }
 	// 加载ZIP资源文件
 	BYTE* LoadZipFile(CString strFile);
+	// 加载XML文件
+	BOOL LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName);
 	// 获取系统配置信息
 	CString GetConfig(CStringA strName);
 	// 获取XML文件

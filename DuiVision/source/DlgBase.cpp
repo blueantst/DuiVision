@@ -235,24 +235,18 @@ BOOL CDlgBase::OnInitDialog()
 	// 加载窗口的XML文件
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDlgElem = NULL;
-	//xmlDoc.Parse(strXml, NULL, TIXML_ENCODING_UTF8);
 
-	if(!m_strXmlFile.IsEmpty())	// 加载XML文件
+	BOOL bLoadXml = DuiSystem::Instance()->LoadXmlFile(xmlDoc, m_strXmlFile);
+	if(!bLoadXml)
 	{
-		if(m_strXmlFile.Find(_T("xml:")) == 0)
+		if(!m_strXmlContent.IsEmpty())	// 加载XML内容
 		{
-			m_strXmlFile.Delete(0, 4);
-			m_strXmlFile = DuiSystem::GetXmlPath() + m_strXmlFile;
+			xmlDoc.Parse(CT2A(m_strXmlContent, CP_UTF8), NULL, TIXML_ENCODING_UTF8);
+			bLoadXml = !xmlDoc.Error();
 		}
-		//CStringA strFile = CT2A(m_strXmlFile, CP_UTF8);
-		xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile), TIXML_ENCODING_UTF8);
-	}else
-	if(!m_strXmlContent.IsEmpty())	// 加载XML内容
-	{
-		xmlDoc.Parse(CT2A(m_strXmlContent, CP_UTF8), NULL, TIXML_ENCODING_UTF8);
 	}
-
-	if(!xmlDoc.Error())
+	
+	if(bLoadXml)
 	{
 		pDlgElem = xmlDoc.FirstChildElement("dlg");//RootElement();
 		if(pDlgElem != NULL)
@@ -1774,18 +1768,18 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		{
 			// 显示托盘菜单
-			CString strXmlFile = DuiSystem::Instance()->GetXmlFile("menu_tray");
+			CString strXmlFile = _T("menu_tray"); //DuiSystem::Instance()->GetXmlFile("menu_tray");
 			if(!m_strTrayMenuXml.IsEmpty())	// 如果设置了托盘菜单文件,则使用设置的文件
 			{
 				strXmlFile = m_strTrayMenuXml;
-				if(strXmlFile.Find(_T(".xml")) == -1)
+				/*if(strXmlFile.Find(_T(".xml")) == -1)
 				{
 					strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strXmlFile));
 				}else
 				if(strXmlFile.Find(_T(":")) == -1)
 				{
 					strXmlFile = _T("xml:") + strXmlFile;
-				}
+				}*/
 			}
 			if(!strXmlFile.IsEmpty())
 			{
@@ -1800,19 +1794,24 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 				}
 				CPoint point;
 				GetCursorPos(&point);
-				pDuiMenu->LoadXmlFile(strXmlFile, this, point, WM_DUI_MENU);
-				// 计算菜单的位置并显示
-				CRect rc;
-				pDuiMenu->GetWindowRect(&rc);
-				rc.OffsetRect(rc.Width()/2, -rc.Height());
-				// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
-				int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
-				if(rc.right > nScreenWidth)
+				if(pDuiMenu->LoadXmlFile(strXmlFile, this, point, WM_DUI_MENU))
 				{
-					rc.OffsetRect(nScreenWidth - rc.right -10, 0);
+					// 计算菜单的位置并显示
+					CRect rc;
+					pDuiMenu->GetWindowRect(&rc);
+					rc.OffsetRect(rc.Width()/2, -rc.Height());
+					// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
+					int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
+					if(rc.right > nScreenWidth)
+					{
+						rc.OffsetRect(nScreenWidth - rc.right -10, 0);
+					}
+					pDuiMenu->MoveWindow(rc);
+					pDuiMenu->ShowWindow(SW_SHOW);
+				}else
+				{
+					delete pDuiMenu;
 				}
-				pDuiMenu->MoveWindow(rc);
-				pDuiMenu->ShowWindow(SW_SHOW);
 			}
 		}
 		break;

@@ -285,23 +285,7 @@ BOOL CDuiTabCtrl::LoadTabXml(CString strFileName)
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pTabElem = NULL;
 
-	CString strXmlFile;
-	if(strFileName.Find(_T(":")) == -1)
-	{
-		if(strFileName.Find(_T(".xml")) == -1)
-		{
-			strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
-		}else
-		{
-			strXmlFile = DuiSystem::GetXmlPath() + strFileName;
-		}
-	}else
-	{
-		strXmlFile = strFileName;
-	}
-
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		pTabElem = xmlDoc.FirstChildElement(GetClassName());
 		if(pTabElem != NULL)

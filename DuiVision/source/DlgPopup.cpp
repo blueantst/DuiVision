@@ -228,22 +228,9 @@ BOOL CDlgPopup::LoadXmlFile(CString strFileName)
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
 
-	m_strXmlFile = strFileName;
-	if(m_strXmlFile.Find(_T("xml:")) == 0)
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
-		m_strXmlFile.Delete(0, 4);
-		if(m_strXmlFile.Find(_T(".xml")) == -1)
-		{
-			m_strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile));
-		}else
-		{
-			m_strXmlFile = DuiSystem::GetXmlPath() + m_strXmlFile;
-		}
-	}
-
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile), TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
-	{
+		m_strXmlFile = strFileName;
 		pDivElem = xmlDoc.FirstChildElement(GetClassName());
 		if(pDivElem != NULL)
 		{

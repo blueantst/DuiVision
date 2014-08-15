@@ -197,23 +197,7 @@ BOOL CDuiMenu::LoadXmlFile(CString strFileName, CString strSubItemName)
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
 
-	CString strXmlFile;
-	if(strFileName.Find(_T(":")) == -1)
-	{
-		if(strFileName.Find(_T(".xml")) == -1)
-		{
-			strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
-		}else
-		{
-			strXmlFile = DuiSystem::GetXmlPath() + strFileName;
-		}
-	}else
-	{
-		strXmlFile = strFileName;
-	}
-
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		pDivElem = xmlDoc.FirstChildElement(GetClassName());
 		if(pDivElem != NULL)
@@ -230,9 +214,10 @@ BOOL CDuiMenu::LoadXmlFile(CString strFileName, CString strSubItemName)
 				LoadXmlNode(pDivElem, strFileName);
 			}
 		}
+		return TRUE;
 	}
 
-	return TRUE;
+	return FALSE;
 }
 
 // ¼ÓÔØXMLÎÄ¼þ
@@ -245,24 +230,10 @@ BOOL CDuiMenu::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UIN
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
 
-	if(strFileName.Find(_T(":")) == -1)
-	{
-		if(strFileName.Find(_T(".xml")) == -1)
-		{
-			m_strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
-		}else
-		{
-			m_strXmlFile = DuiSystem::GetXmlPath() + strFileName;
-		}
-	}else
+	BOOL bRet = FALSE;
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		m_strXmlFile = strFileName;
-	}
-
-	BOOL bRet = TRUE;
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile), TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
-	{
 		pDivElem = xmlDoc.FirstChildElement(GetClassName());
 		if(pDivElem != NULL)
 		{

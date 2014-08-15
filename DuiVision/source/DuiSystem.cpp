@@ -494,6 +494,86 @@ BYTE* DuiSystem::LoadZipFile(CString strFile)
 	return NULL;
 }
 
+// 加载XML文件
+// 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到资源目录或资源zip中加载
+// 格式2: filename.xml				-- 指定XML文件名,到资源目录或资源zip中加载
+// 格式3: c:\filename.xml			-- 指定了XML的全路径
+BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
+{
+	CString strXmlFile;
+	if(strFileName.Find(_T("xml:")) == 0)	// 去掉前缀
+	{
+		strFileName.Delete(0, 4);
+	}
+	if(strFileName.Find(_T(".xml")) == -1)	// 需要到资源定义中查找
+	{
+		//strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
+		CStringA strXmlFileA;
+		if(m_mapXmlPool.Lookup(CEncodingUtil::UnicodeToAnsi(strFileName), strXmlFileA))
+		{
+			strXmlFile = CEncodingUtil::AnsiToUnicode(strXmlFileA);
+		}else
+		{
+			strXmlFile = strFileName;
+		}
+	}else
+	{
+		strXmlFile = strFileName;
+	}
+
+	if(m_hResourceZip != NULL)	// 存在资源zip文件
+	{
+		// 即使有zip文件的情况下,也优先使用目录中的文件
+		if(GetFileAttributes(GetExePath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strXmlFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(GetXmlPath() + strXmlFile) != 0xFFFFFFFF)	// 从xml路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strXmlFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(strXmlFile) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
+		}else
+		{
+			BYTE* pByte = LoadZipFile(strXmlFile);
+			if(pByte == NULL)
+			{
+				pByte = LoadZipFile(_T("xml\\") + strXmlFile);	// 尝试从xml子目录加载
+			}
+			if(pByte != NULL)
+			{
+				xmlDoc.Parse((const char*)pByte, NULL, TIXML_ENCODING_UTF8);
+				delete[] pByte;
+			}else
+			{
+				return FALSE;
+			}
+		}
+	}else
+	{
+		if(GetFileAttributes(GetExePath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strXmlFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(GetXmlPath() + strXmlFile) != 0xFFFFFFFF)	// 从xml路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strXmlFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(strXmlFile) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
+		}else
+		{
+			// 文件不存在
+			return FALSE;
+		}
+	}
+
+	return !xmlDoc.Error();
+}
+
 // 获取系统配置信息
 CString DuiSystem::GetConfig(CStringA strName)
 {
@@ -511,7 +591,8 @@ CString DuiSystem::GetXmlFile(CStringA strName)
 	CStringA strXmlFile;
 	if(m_mapXmlPool.Lookup(strName, strXmlFile))
 	{
-		return GetExePath() + CEncodingUtil::AnsiToUnicode(strXmlFile);
+		//return GetExePath() + CEncodingUtil::AnsiToUnicode(strXmlFile);
+		return CEncodingUtil::AnsiToUnicode(strXmlFile);
 	}
 	return _T("");
 }

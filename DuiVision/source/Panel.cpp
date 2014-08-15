@@ -69,23 +69,9 @@ BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
 
-	if(strFileName.Find(_T(":")) == -1)
-	{
-		if(strFileName.Find(_T(".xml")) == -1)
-		{
-			m_strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
-		}else
-		{
-			m_strXmlFile = DuiSystem::GetXmlPath() + strFileName;
-		}
-	}else
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		m_strXmlFile = strFileName;
-	}
-
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile), TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
-	{
 		pDivElem = xmlDoc.FirstChildElement("div");
 		if(pDivElem != NULL)
 		{
@@ -147,11 +133,9 @@ HRESULT CDuiPanel::OnAttributeXml(const CStringA& strValue, BOOL bLoading)
 	TiXmlDocument xmlDoc;
 	TiXmlElement* pDivElem = NULL;
 
-	m_strXmlFile = DuiSystem::GetXmlPath() + CEncodingUtil::AnsiToUnicode(strValue);
-
-	xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(m_strXmlFile), TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, CEncodingUtil::AnsiToUnicode(strValue)))
 	{
+		m_strXmlFile = CEncodingUtil::AnsiToUnicode(strValue);
 		pDivElem = xmlDoc.FirstChildElement("div");
 		if(pDivElem != NULL)
 		{
