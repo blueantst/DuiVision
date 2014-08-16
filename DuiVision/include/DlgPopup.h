@@ -177,6 +177,7 @@ public:
 		DUI_INT_ATTRIBUTE("height-lt", m_nFrameHLT, FALSE)
 		DUI_INT_ATTRIBUTE("width-rb", m_nFrameWRB, FALSE)
 		DUI_INT_ATTRIBUTE("height-rb", m_nFrameHRB, FALSE)
+		DUI_INT_ATTRIBUTE("autoclose", m_bAutoClose, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
