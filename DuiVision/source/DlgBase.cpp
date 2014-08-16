@@ -1785,7 +1785,8 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 			{
 				SetForegroundWindow();
 				// ¼ÓÔØ²Ëµ¥¿Ø¼þ
-				CDuiMenu *pDuiMenu = new CDuiMenu();
+				CDuiMenu* pDuiMenu = new CDuiMenu();
+				pDuiMenu->SetAutoClose(FALSE);
 				pDuiMenu->SetParent(this);
 				if(m_pTrayHandler != NULL)
 				{
@@ -1808,6 +1809,7 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 					}
 					pDuiMenu->MoveWindow(rc);
 					pDuiMenu->ShowWindow(SW_SHOW);
+					pDuiMenu->SetAutoClose(TRUE);
 				}else
 				{
 					delete pDuiMenu;

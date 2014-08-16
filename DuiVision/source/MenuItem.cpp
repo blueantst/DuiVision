@@ -103,7 +103,8 @@ void CMenuItem::ShowPopupMenu()
 
 	if(m_bIsPopup)
 	{
-		m_pPopupMenu = new CDuiMenu( DuiSystem::GetDefaultFont(), 12);
+		m_pPopupMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		m_pPopupMenu->SetAutoClose(FALSE);
 		m_pPopupMenu->SetParent(this);
 		CPoint point;
 		CRect rc = GetRect();
@@ -162,6 +163,7 @@ void CMenuItem::ShowPopupMenu()
 				}
 				m_pPopupMenu->MoveWindow(rc);
 				m_pPopupMenu->ShowWindow(SW_SHOW);
+				m_pPopupMenu->SetAutoClose(TRUE);
 			}else
 			{
 				// 弹出菜单加载失败,删除菜单对象
