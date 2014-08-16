@@ -1768,18 +1768,10 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		{
 			// 显示托盘菜单
-			CString strXmlFile = _T("menu_tray"); //DuiSystem::Instance()->GetXmlFile("menu_tray");
+			CString strXmlFile = _T("menu_tray");
 			if(!m_strTrayMenuXml.IsEmpty())	// 如果设置了托盘菜单文件,则使用设置的文件
 			{
 				strXmlFile = m_strTrayMenuXml;
-				/*if(strXmlFile.Find(_T(".xml")) == -1)
-				{
-					strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strXmlFile));
-				}else
-				if(strXmlFile.Find(_T(":")) == -1)
-				{
-					strXmlFile = _T("xml:") + strXmlFile;
-				}*/
 			}
 			if(!strXmlFile.IsEmpty())
 			{

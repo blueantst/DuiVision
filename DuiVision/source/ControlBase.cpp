@@ -1091,7 +1091,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 			{
 				nIDTemplate = pParentDlg->GetIDTemplate();
 			}
-			CDlgPopup* pPopup =  new CDlgPopup;
+			CDlgPopup* pPopup = new CDlgPopup;
 			pPopup->SetParent(this);
 			CString strXmlFile = m_strAction;
 			strXmlFile.Delete(0, 6);

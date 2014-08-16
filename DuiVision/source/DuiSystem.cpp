@@ -245,19 +245,27 @@ BOOL DuiSystem::LoadResource()
 	m_mapFontPool.RemoveAll();
 
 	CString strResFile = GetExePath() + m_strResourceFile;
-	if((strResFile.Find(_T(".ui")) != -1) && (GetFileAttributes(strResFile) != 0xFFFFFFFF))
+	if(strResFile.Find(_T(".ui")) != -1)
 	{
 		// 如果是后缀为ui的文件,表示是ZIP文件,则加载资源ZIP文件
-		if(m_hResourceZip != NULL)
+		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)
 		{
-			CloseZip(m_hResourceZip);
-			m_hResourceZip = NULL;
-		}
-		m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, 2);
-		if(m_hResourceZip != NULL)
+			if(m_hResourceZip != NULL)
+			{
+				CloseZip(m_hResourceZip);
+				m_hResourceZip = NULL;
+			}
+			m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, 2);
+			if(m_hResourceZip != NULL)
+			{
+				// 如果加载的ZIP资源，则不使用绝对路径加载XML资源定义文件
+				strResFile = _T("xml\\resource.xml");			
+			}
+		}else
 		{
-			// 如果加载的ZIP资源，则不使用绝对路径加载XML资源定义文件
-			strResFile = _T("xml\\resource.xml");			
+			// zip资源文件不存在,则设置为默认的xml文件
+			m_strResourceFile = _T("xml\\resource.xml");
+			strResFile = m_strResourceFile;
 		}
 	}
 	
@@ -274,11 +282,15 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 	if(m_hResourceZip != NULL)
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
-		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)
+		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
 			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strResFile), TIXML_ENCODING_UTF8);
 		}else
-		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)
+		if(GetFileAttributes(GetXmlPath() + strResFile) != 0xFFFFFFFF)	// 从xml路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strResFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)	// 绝对路径查找
 		{
 			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
 		}else
@@ -295,7 +307,18 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 		}		
 	}else
 	{
-		xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strResFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(GetXmlPath() + strResFile) != 0xFFFFFFFF)	// 从xml路径开始查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strResFile), TIXML_ENCODING_UTF8);
+		}else
+		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+		}
 	}
 	if(!xmlDoc.Error())
 	{
@@ -507,7 +530,6 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 	}
 	if(strFileName.Find(_T(".xml")) == -1)	// 需要到资源定义中查找
 	{
-		//strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strFileName));
 		CStringA strXmlFileA;
 		if(m_mapXmlPool.Lookup(CEncodingUtil::UnicodeToAnsi(strFileName), strXmlFileA))
 		{
@@ -1412,7 +1434,10 @@ void DuiSystem::CreateNotifyMsgBox(LPCTSTR lpszXmlTemplate, CString strName)
 	}
 
 	m_pNotifyMsgBox = CreateDuiDialog(lpszXmlTemplate, NULL, strName, FALSE);
-	m_pNotifyMsgBox->ShowWindow(SW_HIDE);
+	if(m_pNotifyMsgBox != NULL)
+	{
+		m_pNotifyMsgBox->ShowWindow(SW_HIDE);
+	}
 }
 
 // 删除动态信息提示框
