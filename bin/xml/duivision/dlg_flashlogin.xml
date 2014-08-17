@@ -1,4 +1,4 @@
-<dlg name="dlg_login" title="" width="380" height="240" appwin="0" resize="0"
+<dlg name="dlg_login" title="" width="380" height="260" appwin="0" resize="0"
 	frame="" bkimg="" crbk="000000" >
 	
 	<base>
@@ -21,10 +21,10 @@
 			pos="1,1,-1,-1" >
 		</flash>
 		
-		<img name="image" pos="16,89" width="87" height="87" skin="IDB_LOGIN_USER" mode="normal" framesize="1" show="1" />
+		<img name="image" pos="16,99" width="87" height="87" skin="IDB_LOGIN_USER" mode="normal" framesize="1" show="1" />
 		
 		<edit name="username" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
-					pos="120,90" width="170" height="32" title="" tip="请输入用户名"
+					pos="120,100" width="170" height="32" title="" tip="请输入用户名"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtext="0,0,0" crtip="128,128,128,128" />
 		
@@ -32,21 +32,21 @@
 				pos="300,96,-10,145" show="1" title="注册帐号" href="http://www.blueantstudio.net" /-->
 		
 		<edit name="pwd" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
-					pos="120,129" width="170" height="32" title="" password="1" tip="请输入密码"
+					pos="120,139" width="170" height="32" title="" password="1" tip="请输入密码"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtext="0,0,0" crtip="128,128,128,128" />
 		
 		<linkbtn name="linkbtn" crtext="800000"
-				pos="300,135,-10,180" show="1" title="找回密码" href="http://www.blueantstudio.net" />
+				pos="300,145,-10,180" show="1" title="找回密码" href="http://www.blueantstudio.net" />
 		
 		<chkbtn name="checkbutton" skin="IDB_CHECK_BOX"
-				pos="120,170" width="100" height="22" show="1" title="记住密码" check="true" />
+				pos="120,180" width="100" height="22" show="1" title="记住密码" check="true" />
 		
 		<chkbtn name="checkbutton" skin="IDB_CHECK_BOX"
-				pos="210,170" width="100" height="22" show="1" title="自动登录" check="false" />
+				pos="210,180" width="100" height="22" show="1" title="自动登录" check="false" />
 		
 		<button name="button.ok" skin="IDB_BT_DEFAULT" title="[LOGIN]"
-				pos="|-130,-40,|130,-10" show="1" shortcut="RETURN" />
+				pos="|-130,-45,|130,-10" show="1" shortcut="RETURN" />
 
 	</body>
   
