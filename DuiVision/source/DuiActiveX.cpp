@@ -1947,6 +1947,7 @@ HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
 		{
 			m_strUrl = strUrl;
 			flash_->put_Movie(bstr_t(ParseFilePath(m_strUrl)));
+			flash_->Play();
 		}
 	}
 

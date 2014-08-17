@@ -383,7 +383,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 		if(pFlashCtrl)
 		{
-			pFlashCtrl->Navigate(L"skins/flash/afternoon.swf");
+			pFlashCtrl->Navigate(L"flash/afternoon.swf");
 		}
 	}else
 	if((strName == _T("textbtn_showflash_2")) && (Msg == BUTTOM_UP))	// ÏÔÊ¾Flash2
@@ -392,7 +392,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 		if(pFlashCtrl)
 		{
-			pFlashCtrl->Navigate(L"skins/flash/morning.swf");
+			pFlashCtrl->Navigate(L"flash/morning.swf");
 		}
 	}else
 	if((strName == _T("textbtn_showflash_3")) && (Msg == BUTTOM_UP))	// ÏÔÊ¾Flash3
@@ -401,7 +401,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 		if(pFlashCtrl)
 		{
-			pFlashCtrl->Navigate(L"skins/flash/night.swf");
+			pFlashCtrl->Navigate(L"flash/night.swf");
 		}
 	}else
 	if((strName == _T("textbtn_showflash_4")) && (Msg == BUTTOM_UP))	// ÏÔÊ¾Flash4
@@ -410,7 +410,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 		if(pFlashCtrl)
 		{
-			pFlashCtrl->Navigate(L"skins/flash/noon.swf");
+			pFlashCtrl->Navigate(L"flash/noon.swf");
 		}
 	}
 

@@ -17,7 +17,7 @@
 
 		<flash name="flash_ctrl_login" show="1" response="0"
 			transparent="1"
-			url="skins\flash\noon.swf"
+			url="flash\noon.swf"
 			pos="1,1,-1,-1" >
 		</flash>
 		

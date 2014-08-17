@@ -60,7 +60,7 @@
 			<flash name="flash_ctrl_1" show="1"
 				transparent="1"
 				delaycreate="true"
-				url="skins\flash\morning.swf"
+				url="flash\morning.swf"
 				pos="10,10,-10,-10" >
 			</flash>
 			

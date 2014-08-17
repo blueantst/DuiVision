@@ -52,7 +52,7 @@
 <res type="font" lang="zh-cn" name="bigbig" font="Tahoma" size="17" os="winxp" />
 
 <!--图片资源-默认风格-->
-<res type="img" name="IDB_TRAY_ICON" file="skins\dui.ico" />
+<res type="img" name="IDB_TRAY_ICON" file="dui.ico" />
 <res type="img" name="IDB_MAIN_FRAME" file="skins\default\WindowsBack.png" />
 <res type="img" name="IDB_BT_CLOSE" file="skins\default\BT_CLOSE.png" />
 <res type="img" name="IDB_BT_MIN" file="skins\default\BT_MIN.png" />
