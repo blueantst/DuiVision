@@ -61,6 +61,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 
 	m_strBkImg = _T("");
 	m_crlBack = RGB(0,0,0);
+	m_nBackTranslucent = 255;	// 背景透明度,255表示不透明,1表示全透明
 
 	m_nTooltipCtrlID = 0;
 
@@ -304,7 +305,8 @@ BOOL CDlgBase::OnInitDialog()
 
 	if(!m_bAppWin)
 	{
-		::SetWindowLong(m_hWnd, GWL_EXSTYLE, WS_EX_TOOLWINDOW);
+		// 不是主窗口(在任务栏不会显示出此窗口),则设置TOOLWINDOWS属性
+		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
 	}
 
 	//加载背景图
@@ -1131,7 +1133,7 @@ void CDlgBase::OnPaint()
 		CRect	rcClient;
  		GetClientRect(&rcClient);
 
-		CPaintDC	dc(this);
+		CPaintDC dc(this);
 		CDC MemDC;
 		MemDC.CreateCompatibleDC(&dc);
 		CBitmap memBmp;
@@ -1508,9 +1510,15 @@ void CDlgBase::SetupRegion(int border_offset[], int nSize)
 		rgn.CombineRgn(&rgn, &rgn_xor, RGN_XOR);
 		rgn_xor.DeleteObject();
 	}
-// 	HWND hWnd = GetSafeHwnd();
-// 	SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
-// 	SetLayeredWindowAttributes(RGB(255, 0, 255), 0, LWA_COLORKEY );	
+
+	// 设置背景透明度
+	if(m_nBackTranslucent != 255)
+	{
+ 		HWND hWnd = GetSafeHwnd();
+ 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
+		SetLayeredWindowAttributes(0, m_nBackTranslucent, LWA_ALPHA);
+ 		//SetLayeredWindowAttributes(RGB(255, 0, 255), 0, LWA_COLORKEY );
+	}
 
 	SetWindowRgn((HRGN)rgn, TRUE);
 	m_Rgn.DeleteObject();

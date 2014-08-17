@@ -214,6 +214,9 @@ width-lt,height-lt,width-rb,height-rb" />
 			
 			<button name="flash_login_dlg_button" skin="IDB_BT_DEFAULT" title="Flash对话框"
 				pos="200,100,300,128" show="1" tip="显示Flash登录对话框" action="dlg:dlg_flashlogin" />
+			
+			<button name="frame_dlg_button" skin="IDB_BT_DEFAULT" title="半透明对话框"
+				pos="350,100,450,128" show="1" tip="显示背景半透明效果对话框" action="dlg:duivision\dlg_translucent.xml" />
 
 		</tab>
 

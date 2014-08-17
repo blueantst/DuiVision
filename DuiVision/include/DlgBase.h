@@ -49,7 +49,7 @@ protected:
 	CString			m_strTitle;					// 窗口标题
 	CFont			m_TitleFont;				// 绘制标题栏的字体
 	HICON			m_hIcon;					// 窗口图标句柄
-	BOOL			m_bAppWin;					// 是否主窗口
+	BOOL			m_bAppWin;					// 是否主窗口(在任务栏会显示出此窗口)
 
 	CDlgPopup		*m_pWndPopup;				// 保存的弹出框指针
 
@@ -68,6 +68,7 @@ protected:
 
 	CString			m_strBkImg;					// 背景图片
 	COLORREF		m_crlBack;					// 背景颜色
+	int				m_nBackTranslucent;			// 背景透明度
 
 	int				m_nFrameTopBottomSpace;
 	int				m_nFrameLeftRightSpace;
@@ -285,6 +286,7 @@ public:
 		DUI_INT_ATTRIBUTE("height-rb", m_nFrameHRB, FALSE)
 		DUI_TSTRING_ATTRIBUTE("bkimg", m_strBkImg, FALSE)
 		DUI_RGBCOLOR_ATTRIBUTE("crbk", m_crlBack, FALSE)
+		DUI_INT_ATTRIBUTE("translucent", m_nBackTranslucent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

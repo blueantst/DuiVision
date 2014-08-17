@@ -47,6 +47,7 @@ protected:
 
 	enumBackMode	m_enBackMode;				// 背景模式
 	BOOL			m_bBackAlpha;				// 背景是否使用Alpha通道
+	int				m_nBackTranslucent;			// 背景透明度
 	int				m_nFrameSize;				// 边框大小
 	int				m_nFrameWLT;				// 边框左上角宽度(九宫格模式)
 	int				m_nFrameHLT;				// 边框左上角高度(九宫格模式)
@@ -174,6 +175,7 @@ public:
 		DUI_CUSTOM_ATTRIBUTE("bkmode", OnAttributeBkMode)
 		DUI_CUSTOM_ATTRIBUTE("bkimg", OnAttributeBkImage)
 		DUI_INT_ATTRIBUTE("bkalpha", m_bBackAlpha, TRUE)
+		DUI_INT_ATTRIBUTE("translucent", m_nBackTranslucent, TRUE)
 		DUI_INT_ATTRIBUTE("width", m_size.cx, FALSE)
 		DUI_INT_ATTRIBUTE("height", m_size.cy, FALSE)
 		DUI_INT_ATTRIBUTE("framesize", m_nFrameSize, FALSE)

@@ -1,6 +1,6 @@
 <!-- notice dailog -->
 <!--popup bkmode="frame" bkalpha="0" width="450" height="270" framesize="4" bkimg="skin:IDB_MSGDLG_BK" -->
-<popup bkmode="mid" bkalpha="0" width="450" height="270" bkimg="skin:IDB_MSGDLG_BK"
+<popup bkmode="mid" bkalpha="1" translucent="240" width="450" height="270" bkimg="skin:IDB_MSGDLG_BK"
 	width-lt="10" height-lt="60" width-rb="10" height-rb="5" autoclose="0" >
 	
 	<!--area name="area-1" pos="0,0,-0,40" begin-transparent="100" end-transparent="30" />

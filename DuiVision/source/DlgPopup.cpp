@@ -21,6 +21,7 @@ CDlgPopup::CDlgPopup() : CDuiObject()
 	m_uMessageID = 0;
 	m_enBackMode = enBMFrame;
 	m_bBackAlpha = TRUE;
+	m_nBackTranslucent = 255;
 	m_nFrameSize = 4;
 	m_nFrameWLT = 0;
 	m_nFrameHLT = 0;
@@ -541,7 +542,7 @@ void CDlgPopup::DrawWindow(CDC *pDC)
 	BLENDFUNCTION blend;
 	memset( &blend, 0, sizeof( blend) );
 	blend.AlphaFormat = AC_SRC_ALPHA ;
-	blend.SourceConstantAlpha = 255;
+	blend.SourceConstantAlpha = m_nBackTranslucent;
 
 	HWND hWnd = GetSafeHwnd();
 	SetWindowLong(hWnd,GWL_EXSTYLE, GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED);
