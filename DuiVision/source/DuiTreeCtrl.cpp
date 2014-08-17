@@ -1789,11 +1789,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 使用拉伸模式属性画图
 					graphics.DrawImage(m_pImageSeperator, RectF(0, (nVI+1)*m_nRowHeight, nWidth-2, m_sizeSeperator.cy),
 							0, 0, m_sizeSeperator.cx, m_sizeSeperator.cy, UnitPixel);
-				}else
+				}/*else
 				{
 					// 未指定图片,则画矩形
 					graphics.FillRectangle(&solidBrushS, 0, (nVI+1)*m_nRowHeight, nWidth-2, 1);
-				}
+				}*/
 			}
 		}
 	}
