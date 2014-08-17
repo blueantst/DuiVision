@@ -322,8 +322,7 @@ int CDuiGridCtrl::InsertRow(int nRow, CString strId, int nImageIndex, Color clrT
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		rowInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(rowInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, rowInfo.pImage))
 		{
 			rowInfo.sizeImage.SetSize(rowInfo.pImage->GetWidth() / 1, rowInfo.pImage->GetHeight());
 		}
@@ -345,8 +344,7 @@ int CDuiGridCtrl::InsertRow(int nRow, CString strId, int nImageIndex, Color clrT
 	if(!strRightImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		rowInfo.pRightImage = Image::FromFile(strRightImage, m_bImageUseECM);
-		if(rowInfo.pRightImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strRightImage, m_bImageUseECM, rowInfo.pRightImage))
 		{
 			rowInfo.sizeRightImage.SetSize(rowInfo.pRightImage->GetWidth() / 1, rowInfo.pRightImage->GetHeight());
 		}
@@ -437,8 +435,7 @@ BOOL CDuiGridCtrl::SetSubItem(int nRow, int nItem, CString strTitle, CString str
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(itemInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
 		}
@@ -507,8 +504,7 @@ BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString 
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(itemInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
 		}

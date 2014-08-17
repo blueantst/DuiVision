@@ -141,9 +141,7 @@ bool CDuiEdit::SetLeftBitmap(UINT nResourceID, CString strType)
 
 bool CDuiEdit::SetLeftBitmap(CString strImage)
 {
-	m_pLeftImage = Image::FromFile(strImage, m_bImageUseECM);
-
-	if(m_pLeftImage->GetLastStatus() == Ok)
+	if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pLeftImage))
 	{
 		// 如果宽高比大于或等于3,则按照4张图片,否则按照宽度和高度相同来设置宽度和高度
 		// 如果是4张图片的情况,才认为小图片是一个按钮
@@ -227,9 +225,7 @@ bool CDuiEdit::SetSmallBitmap(UINT nResourceID, CString strType)
 
 bool CDuiEdit::SetSmallBitmap(CString strImage)
 {
-	m_pSmallImage = Image::FromFile(strImage, m_bImageUseECM);
-
-	if(m_pSmallImage->GetLastStatus() == Ok)
+	if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pSmallImage))
 	{
 		// 如果宽高比大于或等于3,则按照4张图片,否则按照宽度和高度相同来设置宽度和高度
 		// 如果是4张图片的情况,才认为小图片是一个按钮

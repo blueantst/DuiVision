@@ -517,7 +517,7 @@ BYTE* DuiSystem::LoadZipFile(CString strFile)
 	return NULL;
 }
 
-// 加载XML文件
+// 加载XML文件,支持从zip文件中加载
 // 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到资源目录或资源zip中加载
 // 格式2: filename.xml				-- 指定XML文件名,到资源目录或资源zip中加载
 // 格式3: c:\filename.xml			-- 指定了XML的全路径
@@ -594,6 +594,13 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 	}
 
 	return !xmlDoc.Error();
+}
+
+// 加载图片文件,支持从zip文件中加载
+BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManagement, Image*& pImage)
+{
+	BOOL bRet = ImageFromFile(strFileName, useEmbeddedColorManagement, pImage);
+	return bRet;
 }
 
 // 获取系统配置信息

@@ -376,9 +376,7 @@ void CDlgPopup::SetBackBitmap(UINT nResourceID)
 
 void CDlgPopup::SetBackBitmap(CString strImage)
 {
-	m_pImage = Image::FromFile(strImage, FALSE);
-
-	if(	m_pImage)
+	if(DuiSystem::Instance()->LoadImageFile(strImage, FALSE, m_pImage))
 	{
 		m_sizeBKImage.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
 		//DrawWindow();

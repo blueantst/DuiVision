@@ -307,9 +307,7 @@ int CPopupList::AddItem(CString strName, CString strDesc, CString strValue, int 
 	editListItem.sizeImage.SetSize(0 ,0);
  	if(!strImageFile.IsEmpty())
  	{
- 		editListItem.pImage = Image::FromFile(strImageFile, FALSE);
- 
- 		if(	editListItem.pImage)
+		if(DuiSystem::Instance()->LoadImageFile(strImageFile, FALSE, editListItem.pImage))
  		{
  			editListItem.sizeImage.SetSize(editListItem.pImage->GetWidth(), editListItem.pImage->GetHeight());
  		}

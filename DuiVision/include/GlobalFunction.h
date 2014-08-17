@@ -4,8 +4,10 @@
 BOOL LoadImage(const CString strPathFile, CBitmap &bitmap, CSize &size);
 // 读取图片
 BOOL LoadImage(UINT nID, CBitmap &bitmap, CSize &size, CString strType);
-// 加载图片
+// 从资源中加载图片
 BOOL ImageFromIDResource(UINT nID, CString strType, Image * & pImg);
+// 加载图片文件到内存中
+BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & pImg);
 // 取得图片平均颜色
 BOOL GetAverageColor(CDC *pDC, CBitmap &bitmap, const CSize &sizeImage, COLORREF &clrImage);
 // 取得图片大小

@@ -160,9 +160,7 @@ BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 			pImage = NULL;
 		}
 
-		pImage = Image::FromFile(strImage, m_bImageUseECM);
-
-		if(pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, pImage))
 		{
 			m_vecsizeImage[nIndex].SetSize(pImage->GetWidth(), pImage->GetHeight());
 			UpdateControl(true);
@@ -172,9 +170,7 @@ BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 	else if(nIndex == -1 && m_vecpImage.size() < m_nXCount * m_nYCount)
 	{
 		Image *pImage = NULL;
-		pImage = Image::FromFile(strImage, m_bImageUseECM);
-
-		if(pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, pImage))
 		{
 			CSize sizeImage(pImage->GetWidth(), pImage->GetHeight());
 

@@ -387,8 +387,7 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		nodeInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(nodeInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, nodeInfo.pImage))
 		{
 			nodeInfo.sizeImage.SetSize(nodeInfo.pImage->GetWidth() / 1, nodeInfo.pImage->GetHeight());
 		}
@@ -410,8 +409,7 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 	if(!strRightImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		nodeInfo.pRightImage = Image::FromFile(strRightImage, m_bImageUseECM);
-		if(nodeInfo.pRightImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strRightImage, m_bImageUseECM, nodeInfo.pRightImage))
 		{
 			nodeInfo.sizeRightImage.SetSize(nodeInfo.pRightImage->GetWidth() / 1, nodeInfo.pRightImage->GetHeight());
 		}
@@ -525,8 +523,7 @@ BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CStr
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(itemInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
 		}
@@ -598,8 +595,7 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(itemInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
 		}
@@ -668,8 +664,7 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strIma
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
-		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
-		if(itemInfo.pImage->GetLastStatus() == Ok)
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			if(itemInfo.nImageCount == 0)
 			{

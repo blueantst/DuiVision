@@ -241,9 +241,7 @@ public:                                                             \
 			m_pImage##imgName = NULL;	\
 		}	\
 		\
-		m_pImage##imgName = Image::FromFile(strImage, m_bImageUseECM);	\
-		\
-		if(m_pImage##imgName->GetLastStatus() == Ok)	\
+		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pImage##imgName))	\
 		{	\
 			m_size##imgName.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
 			return true;	\

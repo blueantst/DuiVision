@@ -96,8 +96,10 @@ public:
 	HZIP GetResourceHZip() { return m_hResourceZip; }
 	// 加载ZIP资源文件
 	BYTE* LoadZipFile(CString strFile);
-	// 加载XML文件
+	// 加载XML文件,支持从zip文件中加载
 	BOOL LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName);
+	// 加载图片文件,支持从zip文件中加载
+	BOOL LoadImageFile(CString strFileName, BOOL useEmbeddedColorManagement, Image*& pImage);
 	// 获取系统配置信息
 	CString GetConfig(CStringA strName);
 	// 获取XML文件

@@ -1388,9 +1388,7 @@ BOOL CControlBaseFont::SetBitmap(CString strImage)
 		m_pImage = NULL;
 	}
 
-	m_pImage = Image::FromFile(strImage, m_bImageUseECM);
-
-	if(m_pImage->GetLastStatus() == Ok)
+	if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pImage))
 	{
 		m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
 		UpdateControl(true);

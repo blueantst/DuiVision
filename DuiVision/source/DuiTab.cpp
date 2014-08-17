@@ -365,15 +365,16 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, UINT nItemID, CString strName, CString s
 	}
 	itemInfo.nImageIndex = -1;
 
+	BOOL bLoadImageOk = FALSE;
 	if(strImage.IsEmpty())
 	{
 		itemInfo.pImage = NULL;
 	}else
 	{
-		itemInfo.pImage = Image::FromFile(strImage, m_bImageUseECM);
+		bLoadImageOk = DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage);
 	}
 
-	if(itemInfo.pImage && (itemInfo.pImage->GetLastStatus() == Ok))
+	if(itemInfo.pImage && bLoadImageOk)
 	{
 		itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / itemInfo.nImageCount, itemInfo.pImage->GetHeight());
 	}
