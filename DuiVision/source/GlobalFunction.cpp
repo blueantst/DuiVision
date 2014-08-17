@@ -121,9 +121,9 @@ BOOL ImageFromIDResource(UINT nID, CString strType, Image * & pImg)
 // 加载图片文件到内存中
 BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & pImg)
 {
-	pImg = Image::FromFile(strFile, useEmbeddedColorManagement);
-	return (pImg->GetLastStatus() == Ok);
-/*
+	//pImg = Image::FromFile(strFile, useEmbeddedColorManagement);
+	//return (pImg->GetLastStatus() == Ok);
+
 	CFile file;
 	DWORD dwSize;
 
@@ -133,6 +133,7 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 		CFile::shareDenyWrite ) )
 	{
 		TRACE( _T( "Load (file): Error opening file %s\n" ), strFile );
+		pImg = NULL;
 		return FALSE;
 	};
 
@@ -142,6 +143,7 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 	if ( !hGlobal )
 	{
 		TRACE( _T( "Load (file): Error allocating memory\n" ) );
+		pImg = NULL;
 		return FALSE;
 	};
 
@@ -150,6 +152,7 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 	{
 		TRACE( _T( "Load (file): Error locking memory\n" ) );
 		GlobalFree( hGlobal );
+		pImg = NULL;
 		return FALSE;
 	};
 
@@ -165,6 +168,7 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 		GlobalFree( hGlobal );
 		e->Delete();
 		file.Close();
+		pImg = NULL;
 		return FALSE;
 	}
 	END_CATCH
@@ -176,6 +180,7 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 	IStream *pStream = NULL;
 	if ( CreateStreamOnHGlobal( hGlobal, TRUE, &pStream ) != S_OK )
 	{
+		pImg = NULL;
 		return FALSE;
 	}
 
@@ -186,7 +191,7 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 	// 将hGlobal内存（参见msdn对CreateStreamOnHGlobal的说明）
 	pStream->Release();
 
-	return TRUE;*/
+	return TRUE;
 }
 
 // 取得图片平均颜色
