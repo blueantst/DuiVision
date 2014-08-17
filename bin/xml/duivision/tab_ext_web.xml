@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabctrl>
+
+	<tab name="tab.activex" title="浏览器" pos="0,75,-0,-0" image="skins\icon\ico_navigate.png" img-count="1" >
+		<webbrowser name="ie_ctrl" show="1"
+			delaycreate="true"
+			url="http://www.blueantstudio.net"
+			pos="1,1,-1,-1"
+			show-contextmenu="0" >
+		</webbrowser>	
+	</tab>
+			
+</tabctrl>

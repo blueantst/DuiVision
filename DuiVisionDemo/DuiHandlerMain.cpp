@@ -205,43 +205,22 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 			pTabCtrl->SetItemVisible(7, TRUE);
 		}
 	}else
-	if((strName == _T("pic_button_2")) && (Msg == BUTTOM_UP))	// 刷新Tab页
+	if((strName == _T("button_del_tab_web")) && (Msg == BUTTOM_UP))	// 删除Web页面Tab页
 	{
 		CDlgBase* pDlg = GetControlDialog(uID);
 		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)(pDlg->GetControl(_T("tabctrl.main")));
 		if(pTabCtrl)
 		{
-			pTabCtrl->LoadTabXml(L"tab_ext.xml");
+			pTabCtrl->DeleteItem(L"tab.activex");
 		}
 	}else
-	if((strName == _T("button_load_tab")) && (Msg == BUTTOM_UP))	// 加载Tab页XML
+	if((strName == _T("button_load_tab_web")) && (Msg == BUTTOM_UP))	// 加载Web页面Tab页
 	{
 		CDlgBase* pDlg = GetControlDialog(uID);
 		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)(pDlg->GetControl(_T("tabctrl.main")));
 		if(pTabCtrl)
 		{
-			pTabCtrl->DeleteItem(L"tab_5");
-			pTabCtrl->DeleteItem(L"tab_6");
-			pTabCtrl->DeleteItem(L"tab_7");
-			pTabCtrl->LoadTabXml(L"tab_ext.xml");
-		}
-	}else
-	if((strName == _T("button_hide_tab_check2")) && (Msg == BUTTOM_UP))	// 隐藏tab页
-	{
-		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)(pDlg->GetControl(_T("tabctrl.check")));
-		if(pTabCtrl)
-		{
-			pTabCtrl->SetItemVisible(1, FALSE);
-		}
-	}else
-	if((strName == _T("button_show_tab_check2")) && (Msg == BUTTOM_UP))	// 显示tab页
-	{
-		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)(pDlg->GetControl(_T("tabctrl.check")));
-		if(pTabCtrl)
-		{
-			pTabCtrl->SetItemVisible(1, TRUE);
+			pTabCtrl->LoadTabXml(L"duivision\\tab_ext_web.xml");
 		}
 	}else
 	if((strName == _T("menu_1")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
@@ -263,8 +242,10 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		pDuiMenu->SetItemCheck(L"item_setup", 0);
 		pDuiMenu->SetItemVisible(L"item_help", FALSE);
 		pDuiMenu->SetItemDisable(L"item_about", TRUE);
-		pDuiMenu->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU);
-		pDuiMenu->ShowWindow(SW_SHOW);
+		if(pDuiMenu->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU))
+		{
+			pDuiMenu->ShowWindow(SW_SHOW);
+		}
 	}else
 	if((strName == _T("menu_2")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
 	{
@@ -279,8 +260,10 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		{
 			pDlg->ClientToScreen(&point);
 		}
-		pDuiMenu->LoadXmlFile(_T("duivision\\menu_2.xml"), pDlg, point, WM_DUI_MENU);
-		pDuiMenu->ShowWindow(SW_SHOW);
+		if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_2.xml"), pDlg, point, WM_DUI_MENU))
+		{
+			pDuiMenu->ShowWindow(SW_SHOW);
+		}
 	}else
 	if((strName == _T("menu_3")) && (Msg == BUTTOM_UP))	// 菜单演示按钮
 	{
@@ -295,8 +278,10 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		{
 			pDlg->ClientToScreen(&point);
 		}
-		pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), pDlg, point, WM_DUI_MENU);
-		pDuiMenu->ShowWindow(SW_SHOW);
+		if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), pDlg, point, WM_DUI_MENU))
+		{
+			pDuiMenu->ShowWindow(SW_SHOW);
+		}
 	}else
 	if((strName == _T("listctrl_1")) && (Msg == BUTTOM_DOWN))	// 列表控件点击
 	{
@@ -437,12 +422,6 @@ void CDuiHandlerMain::OnTimer(UINT uTimerID, CString strTimerName)
 {
     if(uTimerID == m_uTimerAni)
 	{
-		/*CRuning* pRunning = (CRuning*)GetControl(_T("animateimg_scan"));
-		if(pRunning)
-		{
-			pRunning->SetRun(FALSE, m_nAniIndex);
-		}*/
-
 		CDuiProgress* pProgress1 = (CDuiProgress*)GetControl(_T("progress_1"));
 		if(pProgress1)
 		{
@@ -465,7 +444,6 @@ void CDuiHandlerMain::OnTimer(UINT uTimerID, CString strTimerName)
 	{
 		// 定时显示提示框
 		DuiSystem::AddDuiNotifyMsgTask(_T("这是由定时器触发的提示框！\n触发周期：20秒\n此窗口5秒钟后自动关闭..."), MB_ICONINFORMATION | 2, _T(""), 5000);
-		//DuiSystem::RemoveDuiTimer(_T("timer_notify"));
 	}
 }
 

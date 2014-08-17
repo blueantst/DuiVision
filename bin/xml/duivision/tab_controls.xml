@@ -225,6 +225,12 @@ width-lt,height-lt,width-rb,height-rb" />
 			<button name="button_show_tab" skin="IDB_BT_DEFAULT" title="显示Tab页8"
 				pos="200,20,300,48" show="1" tip="显示第8个Tab页" />
 			
+			<button name="button_del_tab_web" skin="IDB_BT_DEFAULT" title="删除Tab页"
+				pos="350,20,450,48" show="1" tip="删除Web页面Tab页"  />
+			
+			<button name="button_load_tab_web" skin="IDB_BT_DEFAULT" title="加载Tab页"
+				pos="500,20,600,48" show="1" tip="加载Web页面Tab页" />
+			
 			<button name="timer_button_1" skin="IDB_BT_DEFAULT" title="启动提示定时器"
 				pos="50,60,150,88" show="1" />
 			

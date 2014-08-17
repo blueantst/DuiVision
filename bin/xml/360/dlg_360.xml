@@ -59,6 +59,7 @@
 		<tab name="tab.flash" title="Flash" image="skins\icon\ico_PluginCleaner.png" img-count="1" pos="0,75,-0,-0">					
 			<flash name="flash_ctrl_1" show="1"
 				transparent="1"
+				delaycreate="true"
 				url="skins\flash\morning.swf"
 				pos="10,10,-10,-10" >
 			</flash>
@@ -76,10 +77,12 @@
 		</tab>
 		
 		<tab name="tab.mediaplayer" title="播放器" image="skins\icon\Movies.png" img-count="1" pos="0,75,-0,-0">					
-			<!--mediaplayer name="mediaplayer_ctrl" show="1"
-				url="http://www.modrails.com/videos/passenger_nginx.mov"
+			<mediaplayer name="mediaplayer_ctrl_1" show="1"
+				delaycreate="true"
+				url="movie\kiss.asf"
+				url1="http://www.modrails.com/videos/passenger_nginx.mov"
 				pos="1,1,-1,-1" >
-			</mediaplayer-->
+			</mediaplayer>
 		</tab>
 		
 	</tabctrl>
