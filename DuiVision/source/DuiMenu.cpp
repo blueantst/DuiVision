@@ -96,7 +96,7 @@ BOOL CDuiMenu::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		CString strTitleU = CA2T(strTitle, CP_UTF8);
 		if(strImage.Find(".") != -1)	// ╪стьм╪ф╛нд╪Ч
 		{
-			CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strImage, CP_UTF8);
+			CString strImgFile = CA2T(strImage, CP_UTF8);
 			AddMenu(strTitleU, nIdIndex, strImgFile);
 		}else
 		if(!strImage.IsEmpty())

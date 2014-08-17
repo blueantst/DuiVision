@@ -51,10 +51,7 @@ BOOL CDuiComboBox::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 				strImage = CEncodingUtil::AnsiToUnicode(DuiSystem::Instance()->GetSkin(CEncodingUtil::UnicodeToAnsi(strImage)));
 			}
 
-			if(strImage.Find(_T(".")) != -1)	// 加载图片文件
-			{
-				strImage = DuiSystem::GetExePath() + strImage;
-			}else	// 加载图片资源
+			if(strImage.Find(_T(".")) == -1)	// 加载图片资源
 			{
 				nResourceID = _wtoi(strImage);
 				strImage = _T("");
@@ -199,7 +196,7 @@ HRESULT CDuiComboBox::OnAttributeHeadImage(const CStringA& strValue, BOOL bLoadi
 
 	if(strSkin.Find(".") != -1)	// 加载图片文件
 	{
-		m_strImageHeadBitmap = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		m_strImageHeadBitmap = CA2T(strSkin, CP_UTF8);
 		if(strSkin.Find(":") != -1)
 		{
 			m_strImageHeadBitmap = CA2T(strSkin, CP_UTF8);
@@ -231,7 +228,7 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CStringA& strValue, BOOL bLoa
 
 	if(strSkin.Find(".") != -1)	// 加载图片文件
 	{
-		m_strImageDeleteBitmap = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		m_strImageDeleteBitmap = CA2T(strSkin, CP_UTF8);
 		if(strSkin.Find(":") != -1)
 		{
 			m_strImageDeleteBitmap = CA2T(strSkin, CP_UTF8);

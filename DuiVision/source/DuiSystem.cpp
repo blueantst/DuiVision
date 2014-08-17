@@ -295,7 +295,8 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
 		}else
 		{
-			BYTE* pByte = LoadZipFile(strResFile);
+			DWORD dwSize = 0;
+			BYTE* pByte = LoadZipFile(strResFile, dwSize);
 			if(pByte != NULL)
 			{
 				xmlDoc.Parse((const char*)pByte, NULL, TIXML_ENCODING_UTF8);
@@ -473,8 +474,9 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 }
 
 // 加载ZIP资源文件
-BYTE* DuiSystem::LoadZipFile(CString strFile)
+BYTE* DuiSystem::LoadZipFile(CString strFile, DWORD& dwSize)
 {
+	dwSize = 0;
 	if(m_hResourceZip == NULL)
 	{
 		return NULL;
@@ -488,7 +490,7 @@ BYTE* DuiSystem::LoadZipFile(CString strFile)
 	int i;
 	if(FindZipItem(m_hResourceZip, (LPCTSTR)strFile, true, &i, &ze) == 0)
 	{
-		DWORD dwSize = ze.unc_size;
+		dwSize = ze.unc_size;
 		if( dwSize == 0 )
 		{
 			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, file is empty"), strFile);
@@ -559,10 +561,11 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
 		}else
 		{
-			BYTE* pByte = LoadZipFile(strXmlFile);
+			DWORD dwSize = 0;
+			BYTE* pByte = LoadZipFile(strXmlFile, dwSize);
 			if(pByte == NULL)
 			{
-				pByte = LoadZipFile(_T("xml\\") + strXmlFile);	// 尝试从xml子目录加载
+				pByte = LoadZipFile(_T("xml\\") + strXmlFile, dwSize);	// 尝试从xml子目录加载
 			}
 			if(pByte != NULL)
 			{
@@ -613,14 +616,16 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 			bRet = ImageFromFile(strFileName, useEmbeddedColorManagement, pImage);
 		}else
 		{
-			BYTE* pByte = LoadZipFile(strFileName);
+			DWORD dwSize = 0;
+			BYTE* pByte = LoadZipFile(strFileName, dwSize);
 			if(pByte == NULL)
 			{
-				pByte = LoadZipFile(_T("skins\\") + strFileName);	// 尝试从skins子目录加载
+				pByte = LoadZipFile(_T("skins\\") + strFileName, dwSize);	// 尝试从skins子目录加载
 			}
 			if(pByte != NULL)
 			{
-				bRet = ImageFromMem(pByte, sizeof(pByte), useEmbeddedColorManagement, pImage);
+				bRet = ImageFromMem(pByte, dwSize, useEmbeddedColorManagement, pImage);
+				delete[] pByte;
 			}else
 			{
 				return FALSE;

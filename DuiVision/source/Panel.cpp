@@ -101,7 +101,7 @@ HRESULT CDuiPanel::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoadin
 
 	if(strSkin.Find(".") != -1)	// ╪стьм╪ф╛нд╪Ч
 	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		CString strImgFile = CA2T(strSkin, CP_UTF8);
 		if(strSkin.Find(":") != -1)
 		{
 			strImgFile = CA2T(strSkin, CP_UTF8);

@@ -122,7 +122,7 @@ BOOL CDuiListCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		if(strSkin.Find(".") != -1)
 		{
 			// 图片文件
-			strImage = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+			strImage = CA2T(strSkin, CP_UTF8);
 		}else
 		if(!strSkin.IsEmpty())
 		{
@@ -145,7 +145,7 @@ BOOL CDuiListCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		if(strRightSkin.Find(".") != -1)
 		{
 			// 图片文件
-			strRightImage = DuiSystem::GetSkinPath() + CA2T(strRightSkin, CP_UTF8);
+			strRightImage = CA2T(strRightSkin, CP_UTF8);
 		}else
 		if(!strRightSkin.IsEmpty())
 		{
@@ -215,10 +215,6 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 	}
 
 	// 左边图片
-	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
-	{
-		strImage = DuiSystem::GetSkinPath() + strImage;
-	}
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
@@ -237,10 +233,6 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 	}
 
 	// 右边图片
-	if(!strRightImage.IsEmpty() && (strRightImage.Find(_T(":")) == -1))
-	{
-		strRightImage = DuiSystem::GetSkinPath() + strRightImage;
-	}
 	if(!strRightImage.IsEmpty())
 	{
 		// 使用行数据指定的图片

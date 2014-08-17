@@ -1408,7 +1408,7 @@ BOOL CControlBaseFont::SetImage(CStringA strImageA)
 {
 	if(strImageA.Find(".") != -1)	// ╪стьм╪ф╛нд╪Ч
 	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strImageA, CP_UTF8);
+		CString strImgFile = CA2T(strImageA, CP_UTF8);
 		if(strImageA.Find(":") != -1)
 		{
 			strImgFile = CA2T(strImageA, CP_UTF8);

@@ -95,7 +95,7 @@ public:
 	// 获取ZIP资源的句柄
 	HZIP GetResourceHZip() { return m_hResourceZip; }
 	// 加载ZIP资源文件
-	BYTE* LoadZipFile(CString strFile);
+	BYTE* LoadZipFile(CString strFile, DWORD& dwSize);
 	// 加载XML文件,支持从zip文件中加载
 	BOOL LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName);
 	// 加载图片文件,支持从zip文件中加载

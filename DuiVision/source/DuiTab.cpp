@@ -194,7 +194,7 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 
 		if(strSkinA.Find(".") != -1)	// ╪стьм╪ф╛нд╪Ч
 		{
-			CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkinA, CP_UTF8);
+			CString strImgFile = CA2T(strSkinA, CP_UTF8);
 			if(strSkinA.Find(":") != -1)
 			{
 				strImgFile = CA2T(strSkinA, CP_UTF8);

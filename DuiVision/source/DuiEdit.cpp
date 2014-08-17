@@ -177,7 +177,7 @@ HRESULT CDuiEdit::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
 
 	if(strSkin.Find(".") != -1)	// 加载图片文件
 	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		CString strImgFile = CA2T(strSkin, CP_UTF8);
 		if(strSkin.Find(":") != -1)
 		{
 			strImgFile = CA2T(strSkin, CP_UTF8);
@@ -263,7 +263,7 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
 
 	if(strSkin.Find(".") != -1)	// 加载图片文件
 	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+		CString strImgFile = CA2T(strSkin, CP_UTF8);
 		if(strSkin.Find(":") != -1)
 		{
 			strImgFile = CA2T(strSkin, CP_UTF8);

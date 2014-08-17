@@ -171,7 +171,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem)
 		if(strSkin.Find(".") != -1)
 		{
 			// 图片文件
-			strImage = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+			strImage = CA2T(strSkin, CP_UTF8);
 		}else
 		if(!strSkin.IsEmpty())
 		{
@@ -194,7 +194,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem)
 		if(strRightSkin.Find(".") != -1)
 		{
 			// 图片文件
-			strRightImage = DuiSystem::GetSkinPath() + CA2T(strRightSkin, CP_UTF8);
+			strRightImage = CA2T(strRightSkin, CP_UTF8);
 		}else
 		if(!strRightSkin.IsEmpty())
 		{
@@ -286,7 +286,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem)
 			if(strSkin.Find(".") != -1)
 			{
 				// 图片文件
-				strImage = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
+				strImage = CA2T(strSkin, CP_UTF8);
 			}else
 			if(!strSkin.IsEmpty())
 			{
@@ -380,10 +380,6 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 	}
 
 	// 左边图片
-	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
-	{
-		strImage = DuiSystem::GetSkinPath() + strImage;
-	}
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
@@ -402,10 +398,6 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 	}
 
 	// 右边图片
-	if(!strRightImage.IsEmpty() && (strRightImage.Find(_T(":")) == -1))
-	{
-		strRightImage = DuiSystem::GetSkinPath() + strRightImage;
-	}
 	if(!strRightImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
@@ -516,10 +508,6 @@ BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CStr
 			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 
 	// 图片
-	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
-	{
-		strImage = DuiSystem::GetSkinPath() + strImage;
-	}
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
@@ -588,10 +576,6 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 
 	// 图片
-	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
-	{
-		strImage = DuiSystem::GetSkinPath() + strImage;
-	}
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
@@ -657,10 +641,6 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strIma
 			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 
 	// 收缩图片
-	if(!strImage.IsEmpty() && (strImage.Find(_T(":")) == -1))
-	{
-		strImage = DuiSystem::GetSkinPath() + strImage;
-	}
 	if(!strImage.IsEmpty())
 	{
 		// 使用行数据指定的图片
