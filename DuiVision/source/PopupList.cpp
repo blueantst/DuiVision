@@ -4,8 +4,8 @@
 CPopupList::CPopupList(void)
 {
 	m_nHoverItem = -1;
-	m_pHeadImage = NULL;
-	m_pCloseImage = NULL;
+	m_pImageHead = NULL;
+	m_pImageClose = NULL;
 	m_rcClose.SetRectEmpty();
 	m_buttonState = enBSNormal;
 	m_nWidth = 191;
@@ -30,16 +30,16 @@ CPopupList::CPopupList(void)
 CPopupList::~CPopupList(void)
 {
 	// 释放图片资源
-	if(m_pHeadImage != NULL)
+	if(m_pImageHead != NULL)
 	{
-		delete m_pHeadImage;
-		m_pHeadImage = NULL;
+		delete m_pImageHead;
+		m_pImageHead = NULL;
 	}
 
-	if(m_pCloseImage != NULL)
+	if(m_pImageClose != NULL)
 	{
-		delete m_pCloseImage;
-		m_pCloseImage = NULL;
+		delete m_pImageClose;
+		m_pImageClose = NULL;
 	}
 
 	for(int i = 0; i < m_vecItem.size(); i++)
@@ -60,6 +60,10 @@ CPopupList::~CPopupList(void)
 	}
 }
 
+// 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CPopupList, Head, 2)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CPopupList, Close, 4)
+
 // 加载XML节点
 BOOL CPopupList::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 {
@@ -77,10 +81,6 @@ BOOL CPopupList::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		{
 			if(pControlElem != NULL)
 			{
-				//CString strName = CEncodingUtil::AnsiToUnicode(pControlElem->Attribute("name"));
-				//CString strDesc = CEncodingUtil::AnsiToUnicode(pControlElem->Attribute("desc"));
-				//CString strValue = CEncodingUtil::AnsiToUnicode(pControlElem->Attribute("value"));
-				//CString strImage = CEncodingUtil::AnsiToUnicode(pControlElem->Attribute("image"));
 				UINT nResourceID = 0;
 				CStringA strNameA = pControlElem->Attribute("name");
 				DuiSystem::Instance()->ParseDuiString(strNameA);
@@ -116,42 +116,6 @@ BOOL CPopupList::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	}
 
     return TRUE;
-}
-
-void CPopupList::SetHeadBitmap(UINT nResourceID)
-{
-	if(ImageFromIDResource(nResourceID, _T("PNG"), m_pHeadImage))
-	{
-		m_sizeHeadImage.SetSize(m_pHeadImage->GetWidth() / 2, m_pHeadImage->GetHeight());
-	}
-}
-
-void CPopupList::SetHeadBitmap(CString strImage)
-{
-	m_pHeadImage = Image::FromFile(strImage, FALSE);
-
-	if(m_pHeadImage->GetLastStatus() == Ok)
-	{
-		m_sizeHeadImage.SetSize(m_pHeadImage->GetWidth() / 2, m_pHeadImage->GetHeight());
-	}
-}
-
-void CPopupList::SetDeleteBitmap(UINT nResourceID)
-{
-	if(ImageFromIDResource(nResourceID, _T("PNG"), m_pCloseImage))
-	{
-		m_sizeCloseImage.SetSize(m_pCloseImage->GetWidth() / 4, m_pCloseImage->GetHeight());
-	}
-}
-
-void CPopupList::SetDeleteBitmap(CString strImage)
-{
-	m_pCloseImage = Image::FromFile(strImage, FALSE);
-
-	if(m_pCloseImage->GetLastStatus() == Ok)
-	{
-		m_sizeCloseImage.SetSize(m_pCloseImage->GetWidth() / 4, m_pCloseImage->GetHeight());
-	}
 }
 
 // 设置选中的项
@@ -308,10 +272,10 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 		sizeImage = editListItem.sizeImage;
 
 		// 删除按钮
-		if((i == m_nHoverItem) && (m_pCloseImage != NULL))
+		if((i == m_nHoverItem) && (m_pImageClose != NULL))
 		{
-			graphics.DrawImage(m_pCloseImage, RectF(m_rcClose.left, m_rcClose.top, m_rcClose.Width(), m_rcClose.Height()),
-				m_buttonState * m_sizeCloseImage.cx, 0, m_sizeCloseImage.cx, m_sizeCloseImage.cy, UnitPixel); 
+			graphics.DrawImage(m_pImageClose, RectF(m_rcClose.left, m_rcClose.top, m_rcClose.Width(), m_rcClose.Height()),
+				m_buttonState * m_sizeClose.cx, 0, m_sizeClose.cx, m_sizeClose.cy, UnitPixel); 
 		}
 
 		// 列表图片
@@ -321,7 +285,7 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 			graphics.DrawImage(editListItem.pImage, RectF(rcHead.left, rcHead.top, rcHead.Width(), rcHead.Height()),
 				0, 0, editListItem.sizeImage.cx, editListItem.sizeImage.cy, UnitPixel);
 
-			DrawImageFrame(graphics, m_pHeadImage, rcHead, i == m_nHoverItem ? m_sizeHeadImage.cx : 0, 0, m_sizeHeadImage.cx, m_sizeHeadImage.cy, 5);
+			DrawImageFrame(graphics, m_pImageHead, rcHead, i == m_nHoverItem ? m_sizeHead.cx : 0, 0, m_sizeHead.cx, m_sizeHead.cy, 5);
 		}
 	}
 }
@@ -414,10 +378,10 @@ void CPopupList::SetItemPoint()
 			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? 44 : 24);
 			nStratTop += (bHaveDesc ? 44 : 24);
 
-			int nLeft = editListItem.rcItem.right - m_sizeCloseImage.cx - 7;
-			int nTop = editListItem.rcItem.top + ((bHaveDesc ? 44 : 24) - m_sizeCloseImage.cy) / 2 + 1;
+			int nLeft = editListItem.rcItem.right - m_sizeClose.cx - 7;
+			int nTop = editListItem.rcItem.top + ((bHaveDesc ? 44 : 24) - m_sizeClose.cy) / 2 + 1;
 
-			m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeCloseImage.cx, nTop + m_sizeCloseImage.cy);
+			m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeClose.cx, nTop + m_sizeClose.cy);
 		}
 		else
 		{
@@ -447,7 +411,7 @@ BOOL CPopupList::OnMouseMove(CPoint point)
 			EditListItem &editListItem = m_vecItem.at(m_nHoverItem);
 			if(editListItem.rcItem.PtInRect(point))
 			{
-				if((m_pCloseImage != NULL) && m_rcClose.PtInRect(point))
+				if((m_pImageClose != NULL) && m_rcClose.PtInRect(point))
 				{
 					bDraw = m_buttonState != enBSHover;
 					m_buttonState = enBSHover;
@@ -482,7 +446,7 @@ BOOL CPopupList::OnMouseMove(CPoint point)
 			{
 				SetItemPoint();
 			}
-			if((m_pCloseImage != NULL) && m_rcClose.PtInRect(point))
+			if((m_pImageClose != NULL) && m_rcClose.PtInRect(point))
 			{
 				m_buttonState = enBSHover;
 			}
@@ -518,7 +482,7 @@ BOOL  CPopupList::OnLButtonUp(CPoint point)
 	BOOL bDraw = FALSE;
 	if(m_buttonState == enBSDown)
 	{
-		if((m_pCloseImage != NULL) && m_rcClose.PtInRect(point))
+		if((m_pImageClose != NULL) && m_rcClose.PtInRect(point))
 		{
 			if(m_nHoverItem != -1)
 			{

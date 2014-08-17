@@ -55,6 +55,8 @@ protected:
 	BOOL			m_bInitFinish;
 	BOOL			m_bAutoClose;				// 是否自动关闭
 
+	BOOL			m_bImageUseECM;				// 是否使用图片自身的颜色管理信息
+
 	BOOL			m_bNCActive;
 	vector<CControlBase*>	m_vecControl;		// 窗口控件
 	vector<CControlBase*>	m_vecArea;			// 域(不影响鼠标事件)
@@ -82,6 +84,8 @@ public:
 
 	void SetAutoClose(BOOL bAutoClose) { m_bAutoClose = bAutoClose; }
 	BOOL IsAutoClose() { return m_bAutoClose; }
+
+	BOOL UseImageECM() { return m_bImageUseECM; }
 
 	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);
 
@@ -177,6 +181,7 @@ public:
 		DUI_INT_ATTRIBUTE("height-lt", m_nFrameHLT, FALSE)
 		DUI_INT_ATTRIBUTE("width-rb", m_nFrameWRB, FALSE)
 		DUI_INT_ATTRIBUTE("height-rb", m_nFrameHRB, FALSE)
+		DUI_INT_ATTRIBUTE("img-ecm", m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE("autoclose", m_bAutoClose, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

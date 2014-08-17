@@ -28,6 +28,7 @@ CDlgPopup::CDlgPopup() : CDuiObject()
 	m_nFrameHRB = 0;
 	m_bInitFinish = false;
 	m_bAutoClose = true;
+	m_bImageUseECM = false;
 
 	m_pControl = NULL;
 	m_pFocusControl = NULL;

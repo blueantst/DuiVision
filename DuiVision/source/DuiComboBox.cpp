@@ -265,11 +265,11 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 		if(m_nResourceIDDeleteBitmap != 0)
 		{
-			pPopupList->SetDeleteBitmap(m_nResourceIDDeleteBitmap);
+			pPopupList->SetCloseBitmap(m_nResourceIDDeleteBitmap);
 		}else
 		if(!m_strImageDeleteBitmap.IsEmpty())
 		{
-			pPopupList->SetDeleteBitmap(m_strImageDeleteBitmap);
+			pPopupList->SetCloseBitmap(m_strImageDeleteBitmap);
 		}
 		
 		CRect rcClient = GetRect();
