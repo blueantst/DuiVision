@@ -194,6 +194,49 @@ BOOL ImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image * & p
 	return TRUE;
 }
 
+// 从内存中加载图片文件
+BOOL ImageFromMem(BYTE* pByte, DWORD dwSize, BOOL useEmbeddedColorManagement, Image * & pImg)
+{
+	// 根据文件大小分配HGLOBAL内存
+	HGLOBAL hGlobal = GlobalAlloc( GMEM_MOVEABLE | GMEM_NODISCARD, dwSize );
+	if ( !hGlobal )
+	{
+		TRACE( _T( "Load (file): Error allocating memory\n" ) );
+		pImg = NULL;
+		return FALSE;
+	};
+
+	char *pData = reinterpret_cast<char*>(GlobalLock(hGlobal));
+	if ( !pData )
+	{
+		TRACE( _T( "Load (file): Error locking memory\n" ) );
+		GlobalFree( hGlobal );
+		pImg = NULL;
+		return FALSE;
+	};
+
+	// 将文件内容读到HGLOBAL内存中
+	memcpy(pData, pByte, dwSize);
+	GlobalUnlock( hGlobal );
+
+	// 利用hGlobal内存中的数据创建stream
+	IStream *pStream = NULL;
+	if ( CreateStreamOnHGlobal( hGlobal, TRUE, &pStream ) != S_OK )
+	{
+		pImg = NULL;
+		return FALSE;
+	}
+
+	pImg = Gdiplus::Image::FromStream( pStream, useEmbeddedColorManagement );
+
+	// 要加上这一句，否则由GlobalAlloc得来的hGlobal内存没有被释放，导致内存泄露，由于
+	// CreateStreamOnHGlobal第二个参数被设置为TRUE，所以调用pStream->Release()会自动
+	// 将hGlobal内存（参见msdn对CreateStreamOnHGlobal的说明）
+	pStream->Release();
+
+	return TRUE;
+}
+
 // 取得图片平均颜色
 BOOL GetAverageColor(CDC *pDC, CBitmap &bitmap, const CSize &sizeImage, COLORREF &clrImage)
 {
