@@ -517,7 +517,7 @@ void CDlgBase::InitControlValue()
 			}else
 			if(pCtrlValue->strType == _T("image"))
 			{
-				((CControlBaseFont*)pControl)->SetImage(pCtrlValue->strValue);
+				((CControlBaseFont*)pControl)->OnAttributeImage(CEncodingUtil::UnicodeToAnsi(pCtrlValue->strValue), TRUE);
 			}else
 			if(pCtrlValue->strType == _T("check"))
 			{

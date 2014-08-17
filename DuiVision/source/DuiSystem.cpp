@@ -1478,7 +1478,7 @@ void DuiSystem::SetNotifyMsgBoxControlImage(CString strControlName, CString strC
 		CControlBaseFont* pControl = (CControlBaseFont*)(pNotifyMsgBox->GetControl(strControlName));
 		if(pControl)
 		{
-			pControl->SetImage(strControlImage);
+			pControl->OnAttributeImage(CEncodingUtil::UnicodeToAnsi(strControlImage), TRUE);
 		}
 	}
 }

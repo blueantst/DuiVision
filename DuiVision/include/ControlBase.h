@@ -282,7 +282,7 @@ public:
 	virtual BOOL SetBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	virtual BOOL SetBitmap(CString strImage);
 	void SetBitmapCount(int nCount);
-	BOOL SetImage(CString strImage);
+	BOOL SetImage(CStringA strImageA);
 	HRESULT OnAttributeFont(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeImage(const CStringA& strValue, BOOL bLoading);
 	HRESULT OnAttributeSkin(const CStringA& strValue, BOOL bLoading);
@@ -315,7 +315,7 @@ protected:
             DUI_ENUM_VALUE("right", Align_Right)
         DUI_ENUM_END(m_uAlignment)
 		DUI_CUSTOM_ATTRIBUTE("image", OnAttributeImage)
-		DUI_INT_ATTRIBUTE("img-count", m_nImagePicCount, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("skin", OnAttributeSkin)
+		DUI_INT_ATTRIBUTE("img-count", m_nImagePicCount, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

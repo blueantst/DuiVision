@@ -1406,26 +1406,14 @@ void CControlBaseFont::SetBitmapCount(int nCount)
 }
 
 // 设置图片
-BOOL CControlBaseFont::SetImage(CString strImage)
+BOOL CControlBaseFont::SetImage(CStringA strImageA)
 {
-	CStringA strImageA = CEncodingUtil::UnicodeToAnsi(strImage);
-	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strImageA.Find("skin:") == 0)
+	if(strImageA.Find(".") != -1)	// 加载图片文件
 	{
-		strSkin = DuiSystem::Instance()->GetSkin(strImageA);
-		if (strSkin.IsEmpty()) return FALSE;
-	}else
-	{
-		strSkin = strImageA;
-	}
-
-	if(strSkin.Find(".") != -1)	// 加载图片文件
-	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strImageA, CP_UTF8);
+		if(strImageA.Find(":") != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = CA2T(strImageA, CP_UTF8);
 		}
 		if(!SetBitmap(strImgFile))
 		{
@@ -1433,7 +1421,7 @@ BOOL CControlBaseFont::SetImage(CString strImage)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = atoi(strImageA);
 		if(!SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetBitmap(nResourceID, TEXT("BMP")))
@@ -1462,27 +1450,9 @@ HRESULT CControlBaseFont::OnAttributeImage(const CStringA& strValue, BOOL bLoadi
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(!SetImage(strSkin))
 	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!SetBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
+		return E_FAIL;
 	}
 
 	return bLoading?S_FALSE:S_OK;
@@ -1496,27 +1466,9 @@ HRESULT CControlBaseFont::OnAttributeSkin(const CStringA& strValue, BOOL bLoadin
 	CStringA strSkin = DuiSystem::Instance()->GetSkin(strValue);
 	if (strSkin.IsEmpty()) return E_FAIL;
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(!SetImage(strSkin))
 	{
-		CString strImgFile = DuiSystem::GetSkinPath() + CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
-		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
-		}
-		if(!SetBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = atoi(strSkin);
-		if(!SetBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!SetBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
+		return E_FAIL;
 	}
 
 	return bLoading?S_FALSE:S_OK;
