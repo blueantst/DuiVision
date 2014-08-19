@@ -130,7 +130,7 @@ void CTextButton::DrawControl(CDC &dc, CRect rcUpdate)
 		for(int i = 0; i < 4; i++)
 		{
 			SolidBrush solidBrush(clrText[i]);		
-			RectF rect(point.x + i * nWidth, point.y, nWidth - point.x, size.Height);
+			RectF rect((Gdiplus::REAL)(point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - point.x), (Gdiplus::REAL)size.Height);
 			graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
 				rect, &strFormat, &solidBrush);	
 		}

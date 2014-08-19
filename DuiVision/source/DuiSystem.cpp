@@ -655,7 +655,10 @@ CString DuiSystem::GetConfig(CStringA strName)
 	CStringA strCfg;
 	if(m_mapCfgPool.Lookup(strName, strCfg))
 	{
-		return CA2T(strCfg, CP_UTF8);
+		CString strCfgW;
+		strCfgW = CA2T(strCfg, CP_UTF8);
+		return strCfgW;
+		//return CA2T(strCfg, CP_UTF8);
 	}
 	return _T("");
 }
@@ -692,7 +695,10 @@ CString DuiSystem::GetString(CStringA strName)
 	m_mapStringPool.Lookup(strName, strString);
 	// 将字符串中的替换符进行替换
 	ParseDuiString(strString);
-	return CA2T(strString, CP_UTF8);
+	CString strStringW;
+	strStringW = CA2T(strString, CP_UTF8);
+	return strStringW;
+	//return CA2T(strString, CP_UTF8);
 }
 
 // 设置字符串值
@@ -1221,7 +1227,7 @@ CDuiHandler* DuiSystem::GetDuiHandler(int nIndex)
 		return NULL;
 	}
 
-	if(nIndex < 0 || nIndex > (m_vecDuiHandler.size() - 1))
+	if(nIndex < 0 || nIndex > ((int)m_vecDuiHandler.size() - 1))
 	{
 		return NULL;
 	}
@@ -1302,7 +1308,7 @@ void DuiSystem::RemoveDuiDialog(CDlgBase* pDuiDialog)
 // 获取DUI对话框指针(根据索引)
 CDlgBase* DuiSystem::GetDuiDialog(int nIndex)
 {
-	if(nIndex < 0 || nIndex > (m_vecDuiDialog.size() - 1))
+	if(nIndex < 0 || nIndex > ((int)m_vecDuiDialog.size() - 1))
 	{
 		return NULL;
 	}

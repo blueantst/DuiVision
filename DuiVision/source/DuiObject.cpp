@@ -111,9 +111,9 @@ ULONG CDuiObject::HexStringToULong(LPCSTR lpszValue, int nSize)
 Color CDuiObject::HexStringToColor(LPCSTR lpszValue)
 {
     return Color(
-        HexStringToULong(lpszValue, 2), 
-        HexStringToULong(lpszValue + 2, 2), 
-        HexStringToULong(lpszValue + 4, 2)
+		(BYTE)HexStringToULong(lpszValue, 2), 
+        (BYTE)HexStringToULong(lpszValue + 2, 2), 
+        (BYTE)HexStringToULong(lpszValue + 4, 2)
         );
 }
 

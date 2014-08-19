@@ -54,12 +54,12 @@ public:
 	BOOL			m_bIsSmallButton;	// 右侧小图片是否作为按钮来处理
 	int				m_nSmallImageCount;	// 右侧小图片的个数
 
-	bool			m_bPassWord;		// 密码输入
-	bool			m_bMultiLine;		// 多行
-	bool			m_bAutoHScroll;		// 水平滚动
-	bool			m_bAutoVScroll;		// 垂直滚动
-	bool			m_bNumber;			// 只能输入数字
-	bool			m_bReadOnly;		// 只读
+	BOOL			m_bPassWord;		// 密码输入
+	BOOL			m_bMultiLine;		// 多行
+	BOOL			m_bAutoHScroll;		// 水平滚动
+	BOOL			m_bAutoVScroll;		// 垂直滚动
+	BOOL			m_bNumber;			// 只能输入数字
+	BOOL			m_bReadOnly;		// 只读
 	int				m_nMaxChar;			// 最大字符数
 
 	bool			m_bDown;
@@ -74,12 +74,12 @@ public:
 	CEdit*			m_pEdit;			// Windows原生输入控件
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_INT_ATTRIBUTE("password", m_bPassWord, FALSE)
-		DUI_INT_ATTRIBUTE("multiline", m_bMultiLine, FALSE)
-		DUI_INT_ATTRIBUTE("autohscroll", m_bAutoHScroll, FALSE)
-		DUI_INT_ATTRIBUTE("autovscroll", m_bAutoVScroll, FALSE)
-		DUI_INT_ATTRIBUTE("number", m_bNumber, FALSE)
-		DUI_INT_ATTRIBUTE("readonly", m_bReadOnly, FALSE)
+		DUI_BOOL_ATTRIBUTE("password", m_bPassWord, FALSE)
+		DUI_BOOL_ATTRIBUTE("multiline", m_bMultiLine, FALSE)
+		DUI_BOOL_ATTRIBUTE("autohscroll", m_bAutoHScroll, FALSE)
+		DUI_BOOL_ATTRIBUTE("autovscroll", m_bAutoVScroll, FALSE)
+		DUI_BOOL_ATTRIBUTE("number", m_bNumber, FALSE)
+		DUI_BOOL_ATTRIBUTE("readonly", m_bReadOnly, FALSE)
 		DUI_INT_ATTRIBUTE("maxchar", m_nMaxChar, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("left-image", OnAttributeLeftImage)
 		DUI_CUSTOM_ATTRIBUTE("small-image", OnAttributeSmallImage)

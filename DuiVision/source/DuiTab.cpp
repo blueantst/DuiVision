@@ -425,7 +425,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 		CRect rc;
 		m_vecRcSeperator.push_back(rc);
 	}
-	if(nItem <= -1 || nItem >= m_vecItemInfo.size())
+	if(nItem <= -1 || nItem >= (int)m_vecItemInfo.size())
 	{
 		m_vecItemInfo.push_back(itemInfo);
 	}
@@ -437,7 +437,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 	int nXPos = m_rc.left;
 	int nYPos = m_rc.top;
 
-	for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+	for(size_t i = 0; i < (int)m_vecItemInfo.size(); i++)
 	{
 		TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
 		int nItemWidth = itemInfoTemp.rc.Width();
@@ -495,7 +495,7 @@ int CDuiTabCtrl::GetItemIndex(CString strTabName)
 // 获取指定tab页信息
 TabItemInfo* CDuiTabCtrl::GetItemInfo(int nItem)
 {
-	if((nItem < 0) || (nItem >= m_vecItemInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecItemInfo.size()))
 	{
 		return NULL;
 	}
@@ -508,7 +508,7 @@ TabItemInfo* CDuiTabCtrl::GetItemInfo(int nItem)
 int CDuiTabCtrl::SetSelectItem(int nItem)
 {
 	int nOldDownItem = m_nDownItem;
-	if(m_nDownItem != nItem && nItem >= 0 && nItem < m_vecItemInfo.size())
+	if(m_nDownItem != nItem && nItem >= 0 && nItem < (int)m_vecItemInfo.size())
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(nItem);
 		if(itemInfo.bOutLink)	// 外部链接
@@ -602,10 +602,10 @@ void CDuiTabCtrl::RefreshItems()
 	}
 
 	// 如果删除了最后一个页面,需要重新计算当前页面的索引
-	if(m_nDownItem >= m_vecItemInfo.size())
+	if(m_nDownItem >= (int)m_vecItemInfo.size())
 	{
 		m_nDownItem = -1;
-		for(size_t i = m_vecItemInfo.size()-1; i >= 0; i--)
+		for(size_t i = (int)m_vecItemInfo.size()-1; i >= 0; i--)
 		{
 			TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
 			if(itemInfoTemp.bVisible && !itemInfoTemp.bOutLink)
@@ -615,7 +615,7 @@ void CDuiTabCtrl::RefreshItems()
 			}
 		}
 	}
-	if(m_nHoverItem >= m_vecItemInfo.size())
+	if(m_nHoverItem >= (int)m_vecItemInfo.size())
 	{
 		m_nHoverItem = -1;
 	}
@@ -643,7 +643,7 @@ void CDuiTabCtrl::RefreshItems()
 // 删除指定tab页
 void CDuiTabCtrl::DeleteItem(int nItem)
 {
-	if((nItem < 0) || (nItem >= m_vecItemInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecItemInfo.size()))
 	{
 		return;
 	}
@@ -694,7 +694,7 @@ void CDuiTabCtrl::DeleteItem(CString strTabName)
 // 设置tab页的可见性
 void CDuiTabCtrl::SetItemVisible(int nItem, BOOL bVisible)
 {
-	if((nItem < 0) || (nItem >= m_vecItemInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecItemInfo.size()))
 	{
 		return;
 	}
@@ -719,7 +719,7 @@ void CDuiTabCtrl::SetItemVisible(CString strTabName, BOOL bVisible)
 // 获取tab页的可见性
 BOOL CDuiTabCtrl::GetItemVisible(int nItem)
 {
-	if((nItem < 0) || (nItem >= m_vecItemInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecItemInfo.size()))
 	{
 		return FALSE;
 	}
@@ -1000,12 +1000,12 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				// 文字
 				if(!itemInfo.strText.IsEmpty())
 				{
-					RectF rectText(nXPos, nYPos + itemInfo.sizeImage.cy + 1, itemInfo.rc.Width(), m_nTabCtrlHeight - itemInfo.sizeImage.cy - 1);
+					RectF rectText((Gdiplus::REAL)nXPos, (Gdiplus::REAL)(nYPos + itemInfo.sizeImage.cy + 1), (Gdiplus::REAL)itemInfo.rc.Width(),(Gdiplus::REAL)(m_nTabCtrlHeight - itemInfo.sizeImage.cy - 1));
 					if(m_nTabCtrlHeight <= itemInfo.sizeImage.cy)
 					{
 						// 如果tabctrl高度小于图片高度,则文字直接居中显示
-						rectText.Y = nYPos;
-						rectText.Height = m_nTabCtrlHeight;
+						rectText.Y = (Gdiplus::REAL)nYPos;
+						rectText.Height = (Gdiplus::REAL)m_nTabCtrlHeight;
 					}
 					graphics.DrawString(itemInfo.strText.AllocSysString(), (INT)wcslen(itemInfo.strText.AllocSysString()), &font, 
 							rectText, &strFormat, &solidBrush);
@@ -1029,14 +1029,14 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
 
-	if((m_nHoverItem != -1) && (m_nHoverItem < m_vecItemInfo.size()))
+	if((m_nHoverItem != -1) && (m_nHoverItem < (int)m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
 
 		dc.BitBlt(itemInfo.rc.left,itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC, itemInfo.rc.left - m_rc.left,itemInfo.rc.top - m_rc.top + m_rc.Height(), SRCCOPY);
 	}
 
-	if((m_nDownItem != -1) && (m_nDownItem < m_vecItemInfo.size()))
+	if((m_nDownItem != -1) && (m_nDownItem < (int)m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nDownItem);
 

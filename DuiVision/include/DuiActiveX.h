@@ -91,7 +91,7 @@ protected:
 		DUI_TSTRING_ATTRIBUTE("modulename", m_strModuleName, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("url", OnAttributeUrl)
 		DUI_CUSTOM_ATTRIBUTE("delaycreate", OnAttributeDelayCreate)
-		DUI_INT_ATTRIBUTE("show-contextmenu", m_bShowContentMenu, FALSE)
+		DUI_BOOL_ATTRIBUTE("show-contextmenu", m_bShowContentMenu, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -141,7 +141,7 @@ protected:
 	bool		m_bTransparent;	// 是否创建背景透明的flash
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_INT_ATTRIBUTE("transparent", m_bTransparent, FALSE)
+		DUI_BOOL_ATTRIBUTE("transparent", m_bTransparent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

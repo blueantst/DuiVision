@@ -42,7 +42,7 @@ CPopupList::~CPopupList(void)
 		m_pImageClose = NULL;
 	}
 
-	for(int i = 0; i < m_vecItem.size(); i++)
+	for(int i = 0; i < (int)m_vecItem.size(); i++)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
 		if(editListItem.pImage != NULL)
@@ -197,7 +197,7 @@ bool CPopupList::DeleteItem(UINT nItem)
 	if (nItem >= m_vecItem.size())  return false;
 
 	m_vecItem.erase(m_vecItem.begin() + m_nHoverItem);
-	if(m_nHoverItem >= m_vecItem.size())
+	if(m_nHoverItem >= (int)m_vecItem.size())
 	{
 		m_nHoverItem -= 1;
 	}
@@ -274,16 +274,16 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 		// É¾³ý°´Å¥
 		if((i == m_nHoverItem) && (m_pImageClose != NULL))
 		{
-			graphics.DrawImage(m_pImageClose, RectF(m_rcClose.left, m_rcClose.top, m_rcClose.Width(), m_rcClose.Height()),
-				m_buttonState * m_sizeClose.cx, 0, m_sizeClose.cx, m_sizeClose.cy, UnitPixel); 
+			graphics.DrawImage(m_pImageClose, RectF((Gdiplus::REAL)m_rcClose.left, (Gdiplus::REAL)m_rcClose.top, (Gdiplus::REAL)m_rcClose.Width(), (Gdiplus::REAL)m_rcClose.Height()),
+				(Gdiplus::REAL)(m_buttonState * m_sizeClose.cx), 0, (Gdiplus::REAL)m_sizeClose.cx, (Gdiplus::REAL)m_sizeClose.cy, UnitPixel); 
 		}
 
 		// ÁÐ±íÍ¼Æ¬
 		if(editListItem.pImage)
 		{	
 			CRect rcHead(rcItem.left + 1, rcItem.top + 2, rcItem.left + 1 + rcItem.Height() - 4, rcItem.top + 2 + rcItem.Height() - 4);
-			graphics.DrawImage(editListItem.pImage, RectF(rcHead.left, rcHead.top, rcHead.Width(), rcHead.Height()),
-				0, 0, editListItem.sizeImage.cx, editListItem.sizeImage.cy, UnitPixel);
+			graphics.DrawImage(editListItem.pImage, RectF((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height()),
+				0, 0, (Gdiplus::REAL)editListItem.sizeImage.cx, (Gdiplus::REAL)editListItem.sizeImage.cy, UnitPixel);
 
 			DrawImageFrame(graphics, m_pImageHead, rcHead, i == m_nHoverItem ? m_sizeHead.cx : 0, 0, m_sizeHead.cx, m_sizeHead.cy, 5);
 		}

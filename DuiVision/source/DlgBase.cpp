@@ -810,7 +810,7 @@ CControlBase* CDlgBase::GetNextFocusableControl()
 {
 	BOOL bStartSearch = FALSE;
 	// 先按照焦点控件查找一次
-	for (int i = 0; i < m_vecControl.size(); i++)
+	for (int i = 0; i < (int)m_vecControl.size(); i++)
 	{
 		CControlBase* pControlBase = m_vecControl.at(i);
 		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && bStartSearch && pControlBase->IsTabStop())
@@ -828,7 +828,7 @@ CControlBase* CDlgBase::GetNextFocusableControl()
 	{
 		bStartSearch = TRUE;
 	}
-	for (int i = 0; i < m_vecControl.size(); i++)
+	for (int i = 0; i < (int)m_vecControl.size(); i++)
 	{
 		CControlBase* pControlBase = m_vecControl.at(i);
 		if(m_pControl == NULL)

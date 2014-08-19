@@ -82,7 +82,16 @@ public:                                                             \
 #define DUI_INT_ATTRIBUTE(attribname, varname, allredraw)         \
         if (attribname == strAttribName)                            \
         {                                                           \
-            varname = ::StrToIntA(strValue);                        \
+			    varname = ::StrToIntA(strValue);                    \
+            hRet = allredraw ? S_OK : S_FALSE;                      \
+        }                                                           \
+        else                                                        \
+
+// bool = %d StringA
+#define DUI_BOOL_ATTRIBUTE(attribname, varname, allredraw)         \
+        if (attribname == strAttribName)                            \
+        {                                                           \
+		    varname = ::StrToIntA(strValue) > 0 ? true : false;     \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \

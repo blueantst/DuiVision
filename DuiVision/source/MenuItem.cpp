@@ -306,7 +306,7 @@ BOOL CMenuItem::OnControlLButtonDown(UINT nFlags, CPoint point)
 			m_bMouseDown = true;
 			if(m_bSelect)
 			{
-				bool bDown = m_bDown;
+				BOOL bDown = m_bDown;
 				if(m_bDown)
 				{
 					m_enButtonState = enBSHoverDown;					
@@ -336,7 +336,7 @@ BOOL CMenuItem::OnControlLButtonDown(UINT nFlags, CPoint point)
 BOOL CMenuItem::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	bool bSend = false;
-	bool bbDown = false;
+	BOOL bbDown = FALSE;
 	bool bSelect = false;
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable)
@@ -476,7 +476,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					// 如果是分隔线,则采用平铺方式画图
 					TextureBrush tileBrush(m_pImage, WrapModeTile);
-					graphics.FillRectangle(&tileBrush, RectF(rcTemp.left, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, nWidth-m_nFrameWidth*2, m_sizeImage.cy));
+					graphics.FillRectangle(&tileBrush, RectF((Gdiplus::REAL)rcTemp.left, (Gdiplus::REAL)(rcTemp.top + (nHeight - m_sizeImage.cy) / 2), (Gdiplus::REAL)(nWidth-m_nFrameWidth*2), (Gdiplus::REAL)m_sizeImage.cy));
 				}else
 				if(m_bIsPopup)
 				{
@@ -514,7 +514,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				SolidBrush solidBrush(enBSDisable == i ? Color(254, 128, 128, 128) : (enBSHover == i || (enBSDown == i && !m_bSelect) || enBSHoverDown == i ? Color(254, 255, 255, 255) : Color(254, 56, 56, 56)));
 
-				RectF rect(m_nLeft + point.x + i * nWidth, point.y, nWidth - (m_nLeft + point.x), size.Height);
+				RectF rect((Gdiplus::REAL)(m_nLeft + point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - (m_nLeft + point.x)), (Gdiplus::REAL)size.Height);
 				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
 					rect, &strFormat, &solidBrush);				
 			}

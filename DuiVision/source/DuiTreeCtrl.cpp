@@ -328,7 +328,7 @@ BOOL CDuiTreeCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 	columnInfo.strTitle = strTitle;
 	columnInfo.clrText = clrText;
 	columnInfo.nWidth = nWidth;
-	if(nColumn <= -1 || nColumn >= m_vecColumnInfo.size())
+	if(nColumn <= -1 || nColumn >= (int)m_vecColumnInfo.size())
 	{
 		m_vecColumnInfo.push_back(columnInfo);
 	}
@@ -340,7 +340,7 @@ BOOL CDuiTreeCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 	int nXPos = 0;
 	int nYPos = 0;
 
-	for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+	for(size_t i = 0; i < (int)m_vecColumnInfo.size(); i++)
 	{
 		TreeColumnInfo &columnInfoTemp = m_vecColumnInfo.at(i);
 		int nWidth = columnInfoTemp.nWidth;
@@ -468,7 +468,7 @@ BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CStr
 	{
 		return FALSE;
 	}
-	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
 	{
 		return FALSE;
 	}
@@ -536,7 +536,7 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 	{
 		return FALSE;
 	}
-	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
 	{
 		return FALSE;
 	}
@@ -604,7 +604,7 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strIma
 	{
 		return FALSE;
 	}
-	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
 	{
 		return FALSE;
 	}
@@ -794,13 +794,13 @@ TreeItemInfo* CDuiTreeCtrl::GetItemInfo(HTREEITEM hNode, int nItem)
 		return NULL;
 	}
 
-	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
 	{
 		return NULL;
 	}
 
 	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
-	if(nItem >= rowInfo.vecItemInfo.size())
+	if(nItem >= (int)rowInfo.vecItemInfo.size())
 	{
 		return NULL;
 	}
@@ -819,7 +819,7 @@ void CDuiTreeCtrl::SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemIn
 		return;
 	}
 
-	if((nItem < 0) || (nItem >= m_vecColumnInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
 	{
 		return;
 	}
@@ -1001,7 +1001,7 @@ void CDuiTreeCtrl::RefreshNodeRows()
 		}
 
 		// 计算每个单元格位置
-		for(int j = 0; j < rowInfoTemp.vecItemInfo.size(); j++)
+		for(int j = 0; j < (int)rowInfoTemp.vecItemInfo.size(); j++)
 		{
 			TreeItemInfo &itemInfo = rowInfoTemp.vecItemInfo.at(j);
 			itemInfo.rcItem.top = rowInfoTemp.rcRow.top;
@@ -1221,7 +1221,7 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 	if(m_rc.PtInRect(point))
 	{
-		if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
+		if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 		{
 			TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 			nOldHoverItem = rowInfo.nHoverItem;
@@ -1256,7 +1256,7 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		}
 
 		BOOL bMousenDown = false;
-		if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
+		if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
 		{
 			TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
 			nOldHoverItem = rowInfo.nHoverItem;
@@ -1331,7 +1331,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	// 设置窗口焦点,否则可能无法进行滚动事件的处理
 	SetWindowFocus();
 
-	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo) && !PtInRowCollapse(point, rowInfo))	// 检查框和收缩事件只在鼠标放开时候触发
@@ -1353,7 +1353,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
+	if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
@@ -1375,7 +1375,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		return false;
 	}
 
-	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo))
@@ -1397,7 +1397,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
+	if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
@@ -1454,7 +1454,7 @@ LRESULT CDuiTreeCtrl::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam
 	{
 		// 点击了行的某个链接
 		TreeNodeInfo* pRowInfo = GetNodeInfo(wParam);
-		if(pRowInfo && (lParam >= 0) && (lParam < pRowInfo->vecItemInfo.size()))
+		if(pRowInfo && (lParam >= 0) && (lParam < (int)pRowInfo->vecItemInfo.size()))
 		{
 			TreeItemInfo &itemInfo = pRowInfo->vecItemInfo.at(lParam);
 			// 转换为BUTTOM_UP消息,因为DuiSystem任务处理时候只处理BUTTOM_UP消息
@@ -1661,7 +1661,7 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
 					BOOL bSingleLine = (itemInfo.strContent.IsEmpty() || !itemInfo.strLink.IsEmpty());
-					RectF rect(nPosItemX, nVI*m_nRowHeight + 1, itemInfo.rcItem.Width(), bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2));
+					RectF rect((Gdiplus::REAL)nPosItemX, (Gdiplus::REAL)(nVI*m_nRowHeight + 1), (Gdiplus::REAL)(itemInfo.rcItem.Width()), (Gdiplus::REAL)(bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2)));
 					if(j == 0)
 					{
 						rect.Width -= nPosItemX;
@@ -1692,8 +1692,8 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 							itemInfo.nImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 						nItemImageX += (m_sizeImage.cx + 3);
 					}
-					rect.Offset(nItemImageX, 0);
-					rect.Width -= nItemImageX;
+					rect.Offset((Gdiplus::REAL)nItemImageX, 0);
+					rect.Width -= (Gdiplus::REAL)nItemImageX;
 
 					// 画收缩图片
 					if(itemInfo.bShowCollapse)
@@ -1747,8 +1747,8 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 画单元格内容
 					if(!bSingleLine)
 					{
-						rect.Offset(0, m_nRowHeight / 2 + 2);
-						rect.Height = m_nRowHeight / 2 - 4;
+						rect.Offset(0, (Gdiplus::REAL)(m_nRowHeight / 2 + 2));
+						rect.Height = (Gdiplus::REAL)(m_nRowHeight / 2 - 4);
 						graphics.DrawString(itemInfo.strContent.AllocSysString(), (INT)wcslen(itemInfo.strContent.AllocSysString()),
 							&font, rect, &strFormat, &solidBrushItem);
 					}
@@ -1767,8 +1767,8 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if(m_pImageSeperator != NULL)
 				{
 					// 使用拉伸模式属性画图
-					graphics.DrawImage(m_pImageSeperator, RectF(0, (nVI+1)*m_nRowHeight, nWidth-2, m_sizeSeperator.cy),
-							0, 0, m_sizeSeperator.cx, m_sizeSeperator.cy, UnitPixel);
+					graphics.DrawImage(m_pImageSeperator, RectF(0, (Gdiplus::REAL)((nVI+1)*m_nRowHeight), (Gdiplus::REAL)(nWidth-2), (Gdiplus::REAL)m_sizeSeperator.cy),
+							0, 0, (Gdiplus::REAL)m_sizeSeperator.cx, (Gdiplus::REAL)m_sizeSeperator.cy, UnitPixel);
 				}/*else
 				{
 					// 未指定图片,则画矩形

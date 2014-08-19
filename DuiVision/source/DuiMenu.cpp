@@ -362,7 +362,7 @@ int CDuiMenu::AddMenu(CString strText, UINT uMenuID, int nResourceID, BOOL bSele
 		((CMenuItem *)pControlBase)->SetBitmap(nResourceID);
 	}
 
-	if(nIndex >= 0 && nIndex < m_vecControl.size())
+	if(nIndex >= 0 && nIndex < (int)m_vecControl.size())
 	{
 		m_vecControl.insert(m_vecControl.begin() + nIndex, pControlBase);
 	}
@@ -399,7 +399,7 @@ int CDuiMenu::AddMenu(CString strText, UINT uMenuID, CString strImage, BOOL bSel
 		((CMenuItem *)pControlBase)->SetBitmap(strImage);
 	}
 
-	if(nIndex >= 0 && nIndex < m_vecControl.size())
+	if(nIndex >= 0 && nIndex < (int)m_vecControl.size())
 	{
 		m_vecControl.insert(m_vecControl.begin() + nIndex, pControlBase);
 	}
@@ -418,7 +418,7 @@ int CDuiMenu::AddSeparator(int nIndex)
 	// 可以使用矩形控件，也可以使用图片控件
 	CControlBase * pControlBase = new CRectangle(GetSafeHwnd(),this, -1, CRect(0, 0, 0, 0), Color(254, 227, 229, 230));
 
-	if(nIndex >= 0 && nIndex < m_vecControl.size())
+	if(nIndex >= 0 && nIndex < (int)m_vecControl.size())
 	{
 		m_vecControl.insert(m_vecControl.begin() + nIndex, pControlBase);
 	}

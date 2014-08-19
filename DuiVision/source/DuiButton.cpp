@@ -266,7 +266,7 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				Pen pen(Color(128, 128, 128), 1);
 				pen.SetDashStyle(DashStyleDot);
-				RectF rectFocus(rcTemp.left+3, rcTemp.top+3, rcTemp.Width()-7, rcTemp.Height()-7);
+				RectF rectFocus((Gdiplus::REAL)(rcTemp.left+3), (Gdiplus::REAL)(rcTemp.top+3), (Gdiplus::REAL)(rcTemp.Width()-7), (Gdiplus::REAL)(rcTemp.Height()-7));
 				graphics.DrawRectangle(&pen, rectFocus);
 			}
 
@@ -330,7 +330,7 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				SolidBrush solidBrush(enBSDisable == i ? Color(128, 128, 128) : m_clrText);
 
-				RectF rect(point.x + i * nWidth + (enBSDown == i ? 1 : 0), point.y + (enBSDown == i ? 1 : 0), nWidth - point.x, size.Height);
+				RectF rect((Gdiplus::REAL)(point.x + i * nWidth + (enBSDown == i ? 1 : 0)), (Gdiplus::REAL)(point.y + (enBSDown == i ? 1 : 0)), (Gdiplus::REAL)(nWidth - point.x), (Gdiplus::REAL)size.Height);
 				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
 					rect, &strFormat, &solidBrush);				
 			}

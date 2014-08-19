@@ -336,7 +336,7 @@ Size GetTextBounds(const Font& font,const StringFormat& strFormat,int nWidth,con
 	GraphicsPath path;
 	FontFamily fontfamily;
 	font.GetFamily(&fontfamily);
-	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),RectF(0,0,nWidth,0),&strFormat);
+	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),RectF(0,0,(Gdiplus::REAL)nWidth,0),&strFormat);
 	RectF rcBound;
 	path.GetBounds(&rcBound);
 

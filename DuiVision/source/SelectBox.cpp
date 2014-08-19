@@ -115,7 +115,7 @@ BOOL CSelectBox::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 
 BOOL CSelectBox::SetBitmap(UINT nResourceID, int nIndex, CString strType)
 {
-	if(nIndex >= 0 && nIndex < m_vecpImage.size())
+	if(nIndex >= 0 && nIndex < (int)m_vecpImage.size())
 	{
 		Image *&pImage = m_vecpImage[nIndex];
 		if(pImage != NULL)
@@ -131,7 +131,7 @@ BOOL CSelectBox::SetBitmap(UINT nResourceID, int nIndex, CString strType)
 			return true;
 		}
 	}
-	else if(nIndex == -1 && m_vecpImage.size() < m_nXCount * m_nYCount)
+	else if(nIndex == -1 && (int)m_vecpImage.size() < m_nXCount * m_nYCount)
 	{
 		Image *pImage = NULL;
 		if(ImageFromIDResource(nResourceID, strType, pImage))
@@ -151,7 +151,7 @@ BOOL CSelectBox::SetBitmap(UINT nResourceID, int nIndex, CString strType)
 
 BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 {
-	if(nIndex >= 0 && nIndex < m_vecpImage.size())
+	if(nIndex >= 0 && nIndex < (int)m_vecpImage.size())
 	{
 		Image *&pImage = m_vecpImage[nIndex];
 		if(pImage != NULL)
@@ -167,7 +167,7 @@ BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 			return true;
 		}
 	}
-	else if(nIndex == -1 && m_vecpImage.size() < m_nXCount * m_nYCount)
+	else if(nIndex == -1 && (int)m_vecpImage.size() < m_nXCount * m_nYCount)
 	{
 		Image *pImage = NULL;
 		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, pImage))
@@ -187,13 +187,13 @@ BOOL CSelectBox::SetBitmap(CString strImage, int nIndex)
 
 BOOL CSelectBox::SetColor(Color clr, int nIndex/* = -1*/)
 {
-	if(nIndex >= 0 && nIndex < m_vecclr.size())
+	if(nIndex >= 0 && nIndex < (int)m_vecclr.size())
 	{
 		m_vecclr[nIndex] = clr;
 		UpdateControl(true);
 		return true;
 	}
-	else if(nIndex == -1 && m_vecclr.size() < m_nXCount * m_nYCount)
+	else if(nIndex == -1 && (int)m_vecclr.size() < m_nXCount * m_nYCount)
 	{
 		m_vecclr.push_back(clr);
 		UpdateControl(true);
@@ -295,7 +295,7 @@ void CSelectBox::DrawControl(CDC &dc, CRect rcUpdate)
 		int nLineWidth = m_bImage ? 2 : 1;
 		//бЁжа
 		pen.SetColor(m_clrSelect);
-		pen.SetWidth(nLineWidth);
+		pen.SetWidth((Gdiplus::REAL)nLineWidth);
 
 		nYPosTemp = nYPos + nHeight * 2;
 		for(int i = 0; i < m_nYCount; i++)

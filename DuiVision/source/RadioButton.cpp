@@ -109,7 +109,7 @@ BOOL CDuiRadioButton::ResetGroupCheck()
 		return FALSE;
 	}
 
-	for(int i=0; i<pvecControl->size(); i++)
+	for(int i=0; i<(int)pvecControl->size(); i++)
 	{
 		CControlBase* pControlBase = pvecControl->at(i);
 		if(pControlBase->IsClass(CDuiRadioButton::GetClassName()) && pControlBase->GetVisible() && !pControlBase->GetDisable())
@@ -156,7 +156,7 @@ CString CDuiRadioButton::GetGroupValue()
 		return _T("");
 	}
 
-	for(int i=0; i<pvecControl->size(); i++)
+	for(int i=0; i<(int)pvecControl->size(); i++)
 	{
 		CControlBase* pControlBase = pvecControl->at(i);
 		if(pControlBase->IsClass(CDuiRadioButton::GetClassName()) && pControlBase->GetVisible() && !pControlBase->GetDisable())
@@ -396,7 +396,7 @@ void CDuiRadioButton::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				SolidBrush solidBrush(enBSDisable == i ? Color(128, 128, 128) : m_clrText);
 
-				RectF rect(m_sizeImage.cx + 3 + point.x + i * nWidth, point.y, nWidth - m_sizeImage.cx - 3 - point.x, size.Height);
+				RectF rect((Gdiplus::REAL)(m_sizeImage.cx + 3 + point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - m_sizeImage.cx - 3 - point.x), (Gdiplus::REAL)size.Height);
 				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
 					rect, &strFormat, &solidBrush);
 
@@ -405,7 +405,7 @@ void CDuiRadioButton::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					Pen pen(Color(128, 128, 128), 1);
 					pen.SetDashStyle(DashStyleDot);
-					RectF rectFocus(point.x + i * nWidth, point.y, m_sizeImage.cx + 6 + size.Width, size.Height);
+					RectF rectFocus((Gdiplus::REAL)(point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(m_sizeImage.cx + 6 + size.Width), (Gdiplus::REAL)size.Height);
 					graphics.DrawRectangle(&pen, rectFocus);
 				}
 			}

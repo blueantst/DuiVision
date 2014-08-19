@@ -78,8 +78,8 @@ BOOL CDuiListCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	}
 
 	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
+	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 
 	// 加载下层的row节点信息
 	TiXmlElement* pRowElem = NULL;
@@ -268,7 +268,7 @@ int CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
 	{
 		CRect rc;
 	}
-	if(nItem <= -1 || nItem >= m_vecRowInfo.size())
+	if(nItem <= -1 || nItem >= (int)m_vecRowInfo.size())
 	{
 		m_vecRowInfo.push_back(rowInfo);
 		nRetItem = m_vecRowInfo.size()-1;
@@ -289,7 +289,7 @@ int CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
 // 删除列表行
 BOOL CDuiListCtrl::DeleteItem(int nItem)
 {
-	if((nItem < 0) || (nItem >= m_vecRowInfo.size()))
+	if((nItem < 0) || (nItem >= (int)m_vecRowInfo.size()))
 	{
 		return FALSE;
 	}
@@ -333,14 +333,14 @@ void CDuiListCtrl::CalcItemsPos()
 	}
 
 	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
+	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 }
 
 // 获取某一个列表项
 ListRowInfo* CDuiListCtrl::GetItemInfo(int nRow)
 {
-	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
 	{
 		return NULL;
 	}
@@ -352,7 +352,7 @@ ListRowInfo* CDuiListCtrl::GetItemInfo(int nRow)
 // 设置某一个行的颜色
 void CDuiListCtrl::SetRowColor(int nRow, Color clrText)
 {
-	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
 	{
 		return;
 	}
@@ -365,7 +365,7 @@ void CDuiListCtrl::SetRowColor(int nRow, Color clrText)
 // 设置某一个行的检查框状态
 void CDuiListCtrl::SetRowCheck(int nRow, int nCheck)
 {
-	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
 	{
 		return;
 	}
@@ -377,7 +377,7 @@ void CDuiListCtrl::SetRowCheck(int nRow, int nCheck)
 // 获取某一行的检查框状态
 int CDuiListCtrl::GetRowCheck(int nRow)
 {
-	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
 	{
 		return -1;
 	}
@@ -450,8 +450,8 @@ void CDuiListCtrl::SetControlRect(CRect rc)
 	}
 
 	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible((m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_vecRowInfo.size() * m_nRowHeight);
+	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
+	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 }
 
 // 判断指定的坐标位置是否在某一行中
@@ -497,7 +497,7 @@ int CDuiListCtrl::PtInRowLink(CPoint point, ListRowInfo& rowInfo)
 // 设置行的Tooltip
 void CDuiListCtrl::SetRowTooltip(int nRow, CString strTooltip)
 {
-	if((nRow < 0) || (nRow >= m_vecRowInfo.size()))
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
 	{
 		return;
 	}
@@ -543,7 +543,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 	if(m_rc.PtInRect(point))
 	{
 		// 如果鼠标在热点行,判断鼠标是否在某个链接位置
-		if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
+		if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 			nOldHoverLink = rowInfo.nHoverLink;
@@ -577,7 +577,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 		// 如果鼠标在当前行,判断鼠标是否在某个链接位置
 		BOOL bMousenDown = false;
-		if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
+		if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
 		{
 			ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
 			nOldHoverLink = rowInfo.nHoverLink;
@@ -652,7 +652,7 @@ BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	// 设置窗口焦点,否则可能无法进行滚动事件的处理
 	SetWindowFocus();
 
-	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
@@ -674,7 +674,7 @@ BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
+	if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
@@ -696,7 +696,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		return false;
 	}
 
-	if((m_nHoverRow >= 0) && (m_nHoverRow < m_vecRowInfo.size()))
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
 		if(PtInRow(point, rowInfo))
@@ -711,7 +711,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			}
 		}	
 	}else
-	if((m_nDownRow >= 0) && (m_nDownRow < m_vecRowInfo.size()))
+	if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		ListRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
@@ -734,7 +734,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 // 滚动事件处理
 BOOL CDuiListCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {
-	if((m_vecRowInfo.size() * m_nRowHeight) <= m_rc.Height())
+	if(((int)m_vecRowInfo.size() * m_nRowHeight) <= m_rc.Height())
 	{
 		return false;
 	}
@@ -787,7 +787,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	// 4.根据计算出的显示的行,画相应的内容到内存dc中
 	// 5.计算出显示的top坐标进行内存dc的拷贝
 	int nWidth = m_rc.Width() - m_nScrollWidth;	// 减去滚动条的宽度
-	int nHeightAll = m_vecRowInfo.size()*m_nRowHeight; // 总的虚拟高度 //m_rc.Height();
+	int nHeightAll = (int)m_vecRowInfo.size()*m_nRowHeight; // 总的虚拟高度 //m_rc.Height();
 	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
@@ -795,9 +795,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	m_nVirtualTop = (nMaxRange > 0) ? nCurPos*(nHeightAll-m_rc.Height())/nMaxRange : 0;	// 当前滚动条位置对应的虚拟的top位置
 	m_nFirstViewRow = m_nVirtualTop / m_nRowHeight;					// 显示的第一行序号
 	m_nLastViewRow = (m_nVirtualTop + m_rc.Height()) / m_nRowHeight;	// 显示的最后一行序号
-	if(m_nLastViewRow >= m_vecRowInfo.size())
+	if(m_nLastViewRow >= (int)m_vecRowInfo.size())
 	{
-		m_nLastViewRow = m_vecRowInfo.size() - 1;
+		m_nLastViewRow = (int)m_vecRowInfo.size() - 1;
 	}
 	if(m_nLastViewRow < 0)
 	{
@@ -879,7 +879,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		if(m_vecRowInfo.size() > 0)
 		{
-			for(size_t i = m_nFirstViewRow; i <= m_nLastViewRow && i < m_vecRowInfo.size(); i++)
+			for(int i = m_nFirstViewRow; i <= m_nLastViewRow && i < (int)m_vecRowInfo.size(); i++)
 			{
 				ListRowInfo &rowInfo = m_vecRowInfo.at(i);
 				SolidBrush solidBrushRow(rowInfo.clrText);	// 行定义的颜色
@@ -954,7 +954,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}
 
 				// 画内容
-				RectF rect(nXPos, nVI*m_nRowHeight + 1, nWidth-20, m_bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2) );
+				RectF rect((Gdiplus::REAL)nXPos, (Gdiplus::REAL)(nVI*m_nRowHeight + 1), (Gdiplus::REAL)(nWidth-20), (Gdiplus::REAL)(m_bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2)) );
 				if(!rowInfo.strTime.IsEmpty())
 				{
 					Size size = GetTextBounds(font, rowInfo.strTime);
@@ -967,8 +967,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					Size sizeLink = GetTextBounds(font, strFormatRight, rowInfo.strLink2);
 					nLinkWidth += (sizeLink.Width + 10);
-					RectF rectLink(nWidth-nLinkWidth-nRightImageWidth, nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2, sizeLink.Width+8, sizeLink.Height);
-					rowInfo.rcLink2.SetRect(rectLink.X,rectLink.Y,rectLink.X+sizeLink.Width,rectLink.Y+rectLink.Height);
+					RectF rectLink((Gdiplus::REAL)(nWidth-nLinkWidth-nRightImageWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2), (Gdiplus::REAL)(sizeLink.Width+8), (Gdiplus::REAL)sizeLink.Height);
+					rowInfo.rcLink2.SetRect((int)rectLink.X,(int)rectLink.Y,(int)(rectLink.X+sizeLink.Width),(int)(rectLink.Y+rectLink.Height));
 					rowInfo.rcLink2.OffsetRect(0, m_nFirstViewRow*m_nRowHeight);
 					if(((m_nHoverRow == i) || (m_nDownRow == i)) && (rowInfo.nHoverLink == 1))
 					{
@@ -984,8 +984,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					Size sizeLink = GetTextBounds(font, strFormatRight, rowInfo.strLink1);
 					nLinkWidth += (sizeLink.Width + 10);
-					RectF rectLink(nWidth-nLinkWidth-nRightImageWidth, nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2, sizeLink.Width+8, sizeLink.Height);
-					rowInfo.rcLink1.SetRect(rectLink.X,rectLink.Y,rectLink.X+sizeLink.Width,rectLink.Y+rectLink.Height);
+					RectF rectLink((Gdiplus::REAL)(nWidth-nLinkWidth-nRightImageWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2), (Gdiplus::REAL)(sizeLink.Width+8), (Gdiplus::REAL)sizeLink.Height);
+					rowInfo.rcLink1.SetRect((int)rectLink.X,(int)rectLink.Y,(int)(rectLink.X+sizeLink.Width),(int)(rectLink.Y+rectLink.Height));
 					rowInfo.rcLink1.OffsetRect(0, m_nFirstViewRow*m_nRowHeight);
 					if(((m_nHoverRow == i) || (m_nDownRow == i)) && (rowInfo.nHoverLink == 0))
 					{
@@ -1004,7 +1004,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				rowInfo.bNeedContentTip = rect.Width < GetTextBounds(font, rowInfo.strContent).Width;
 				Size sizeTime = GetTextBounds(font, strFormatRight, rowInfo.strTime);
 				int nTimeWidth = sizeTime.Width + 10;
-				RectF rectTime(nWidth-nRightImageWidth-2-nTimeWidth-nLinkWidth, nVI*m_nRowHeight + 1, nTimeWidth, m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2) );
+				RectF rectTime((Gdiplus::REAL)(nWidth-nRightImageWidth-2-nTimeWidth-nLinkWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + 1), (Gdiplus::REAL)nTimeWidth, (Gdiplus::REAL)(m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2)) );
 				if(m_nHoverRow == i)
 				{
 					// 画标题行
@@ -1019,9 +1019,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 画内容行
 					if(!m_bSingleLine)
 					{
-						rect.Offset(0, m_nRowHeight / 2 + 2);
-						rect.Width = nWidth-20;
-						rect.Height = m_nRowHeight / 2 - 4;
+						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
+						rect.Width = (Gdiplus::REAL)nWidth-20;
+						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
 						graphics.DrawString(rowInfo.strContent.AllocSysString(), (INT)wcslen(rowInfo.strContent.AllocSysString()), &font, 
 								rect, &strFormat, &solidBrushH);
 					}
@@ -1040,9 +1040,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 画内容行
 					if(!m_bSingleLine)
 					{
-						rect.Offset(0, m_nRowHeight / 2 + 2);
-						rect.Width = nWidth-20;
-						rect.Height = m_nRowHeight / 2 - 4;
+						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
+						rect.Width = (Gdiplus::REAL)nWidth-20;
+						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
 						graphics.DrawString(rowInfo.strContent.AllocSysString(), (INT)wcslen(rowInfo.strContent.AllocSysString()), &font, 
 								rect, &strFormat, &solidBrushD);
 					}
@@ -1060,9 +1060,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 画内容行
 					if(!m_bSingleLine)
 					{
-						rect.Offset(0, m_nRowHeight / 2 + 2);
-						rect.Width = nWidth-20;
-						rect.Height = m_nRowHeight / 2 - 4;
+						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
+						rect.Width = (Gdiplus::REAL)nWidth-20;
+						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
 						graphics.DrawString(rowInfo.strContent.AllocSysString(), (INT)wcslen(rowInfo.strContent.AllocSysString()), &font, 
 								rect, &strFormat, rowInfo.bRowColor ? &solidBrushRow : &solidBrush);
 					}
@@ -1072,8 +1072,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if(m_pImageSeperator != NULL)
 				{
 					// 使用拉伸模式属性画图
-					graphics.DrawImage(m_pImageSeperator, RectF(0, (nVI+1)*m_nRowHeight, nWidth-2, m_sizeSeperator.cy),
-							0, 0, m_sizeSeperator.cx, m_sizeSeperator.cy, UnitPixel);
+					graphics.DrawImage(m_pImageSeperator, RectF(0, (Gdiplus::REAL)((nVI+1)*m_nRowHeight), (Gdiplus::REAL)(nWidth-2), (Gdiplus::REAL)m_sizeSeperator.cy),
+							0, 0, (Gdiplus::REAL)m_sizeSeperator.cx, (Gdiplus::REAL)m_sizeSeperator.cy, UnitPixel);
 
 					// 使用平铺方式填充矩形(暂不使用这种方式)
 					//TextureBrush tileBrush(m_pImageSeperator, WrapModeTile);

@@ -166,7 +166,7 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 
 		for(int i = 0; i < 4; i++)
 		{
-			RectF rect(i * nWidth, point.y, sizeTip.Width + 10, sizeTip.Height);
+			RectF rect((Gdiplus::REAL)(i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(sizeTip.Width + 10), (Gdiplus::REAL)sizeTip.Height);
 
 			graphics.DrawString(m_strTip.AllocSysString(), (INT)wcslen(m_strTip.AllocSysString()), &font, 
 				rect, &strFormat, &solidBrushTip);	
@@ -174,7 +174,7 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 			if(i > 0)
 			{
 				SolidBrush solidBrush(clrText[i - 1]);	
-				RectF rect(sizeTip.Width + 10 + i * nWidth, point.y, nWidth - (sizeTip.Width + 10), sizeText.Height);
+				RectF rect((Gdiplus::REAL)(sizeTip.Width + 10 + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - (sizeTip.Width + 10)), (Gdiplus::REAL)sizeText.Height);
 				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
 					rect, &strFormat, &solidBrush);	
 			}

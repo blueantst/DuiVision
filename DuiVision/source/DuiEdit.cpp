@@ -12,7 +12,6 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_pLeftImage = NULL;
 	m_pSmallImage = NULL;
 	m_pEdit = NULL;
-	m_bPassWord = FALSE;
 	m_strTitle = _T("");
 
 	SetRect(CRect(0,0,0,0));
@@ -69,7 +68,6 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	SetRect(rc);
 	SetBitmapCount(4);
 
-	m_bPassWord = false;
 	m_bMultiLine = false;
 	m_bAutoHScroll = false;
 	m_bAutoVScroll = false;
@@ -593,12 +591,12 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		if(m_nLeftImageCount > m_buttonState)
 		{
-			graphics.DrawImage(m_pLeftImage, RectF(rc.left , rc.top, rc.Width(), rc.Height()),
-				m_buttonState * m_sizeLeftImage.cx, 0, m_sizeLeftImage.cx, m_sizeLeftImage.cy, UnitPixel);
+			graphics.DrawImage(m_pLeftImage, RectF((Gdiplus::REAL)rc.left , (Gdiplus::REAL)rc.top, (Gdiplus::REAL)rc.Width(), (Gdiplus::REAL)rc.Height()),
+				(Gdiplus::REAL)(m_buttonState * m_sizeLeftImage.cx), 0, (Gdiplus::REAL)m_sizeLeftImage.cx, (Gdiplus::REAL)m_sizeLeftImage.cy, UnitPixel);
 		}else
 		{
-			graphics.DrawImage(m_pLeftImage, RectF(rc.left , rc.top, rc.Width(), rc.Height()),
-				0, 0, m_sizeLeftImage.cx, m_sizeLeftImage.cy, UnitPixel);
+			graphics.DrawImage(m_pLeftImage, RectF((Gdiplus::REAL)rc.left , (Gdiplus::REAL)rc.top, (Gdiplus::REAL)rc.Width(), (Gdiplus::REAL)rc.Height()),
+				0, 0, (Gdiplus::REAL)m_sizeLeftImage.cx, (Gdiplus::REAL)m_sizeLeftImage.cy, UnitPixel);
 		}
 	}
 
@@ -612,12 +610,12 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		if(m_nSmallImageCount > m_buttonState)
 		{
-			graphics.DrawImage(m_pSmallImage, RectF(rc.left , rc.top, rc.Width(), rc.Height()),
-				m_buttonState * m_sizeSmallImage.cx, 0, m_sizeSmallImage.cx, m_sizeSmallImage.cy, UnitPixel);
+			graphics.DrawImage(m_pSmallImage, RectF((Gdiplus::REAL)rc.left , (Gdiplus::REAL)rc.top, (Gdiplus::REAL)rc.Width(), (Gdiplus::REAL)rc.Height()),
+				(Gdiplus::REAL)(m_buttonState * m_sizeSmallImage.cx), 0, (Gdiplus::REAL)m_sizeSmallImage.cx, (Gdiplus::REAL)m_sizeSmallImage.cy, UnitPixel);
 		}else
 		{
-			graphics.DrawImage(m_pSmallImage, RectF(rc.left , rc.top, rc.Width(), rc.Height()),
-				0, 0, m_sizeSmallImage.cx, m_sizeSmallImage.cy, UnitPixel);
+			graphics.DrawImage(m_pSmallImage, RectF((Gdiplus::REAL)rc.left , (Gdiplus::REAL)rc.top, (Gdiplus::REAL)rc.Width(), (Gdiplus::REAL)rc.Height()),
+				0, 0, (Gdiplus::REAL)m_sizeSmallImage.cx, (Gdiplus::REAL)m_sizeSmallImage.cy, UnitPixel);
 		}
 	}
 
@@ -638,7 +636,7 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 		strFormat.SetLineAlignment(StringAlignmentNear);	// 垂直方向上对齐
 	}
 
-	RectF rect(m_rcText.left, m_rcText.top+2, m_rcText.Width(), m_rcText.Height()-2);
+	RectF rect((Gdiplus::REAL)m_rcText.left, (Gdiplus::REAL)(m_rcText.top+2), (Gdiplus::REAL)m_rcText.Width(), (Gdiplus::REAL)(m_rcText.Height()-2));
 
 	if(!m_strTitle.IsEmpty())
 	{
