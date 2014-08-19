@@ -15,11 +15,11 @@ BOOL GetAverageColor(CDC *pDC, CBitmap &bitmap, const CSize &sizeImage, COLORREF
 // 取得图片大小
 BOOL GetSize(CBitmap &bitmap, CSize &size);
 // 取得字体大小
-Size GetTextBounds(const Font& font,const StringFormat& strFormat,const CString& strText);
+Size GetTextBounds(const Gdiplus::Font& font,const StringFormat& strFormat,const CString& strText);
 // 取得字体大小
-Size GetTextBounds(const Font& font,const StringFormat& strFormat, int nWidth, const CString& strText);
+Size GetTextBounds(const Gdiplus::Font& font,const StringFormat& strFormat, int nWidth, const CString& strText);
 // 取得字体大小
-Size GetTextBounds(const Font& font,const CString& strText);
+Size GetTextBounds(const Gdiplus::Font& font,const CString& strText);
 // 取得位置
 CPoint GetOriginPoint(int nWidth, int nHeight, int nChildWidth, int nChildHeight, UINT uAlignment = DT_CENTER, UINT uVAlignment = DT_VCENTER);
 // 取得位置
