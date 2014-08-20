@@ -37,6 +37,14 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	ZeroMemory(&m_NotifyIconData, sizeof m_NotifyIconData);
 
     createSingletons();
+
+	// 初始化COM库
+	HRESULT hr = CoInitialize(NULL);
+	if( FAILED(hr) )
+	{
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CoInitialize failed"));
+	}
+
 	//m_rich20=LoadLibrary(_T("riched20.dll"));
 	//if(m_rich20) m_funCreateTextServices= (PCreateTextServices)GetProcAddress(m_rich20,"CreateTextServices");
 }
@@ -82,6 +90,9 @@ DuiSystem::~DuiSystem(void)
 
 	//if(m_rich20) FreeLibrary(m_rich20);
 	//m_funCreateTextServices=NULL;
+
+	// 释放COM库
+	CoUninitialize();
 
 	// 必须最后调用此函数关闭GDI+，否则会导致关闭GDI+之后还调用GDI+的函数，造成异常
 	destroySingletons();
