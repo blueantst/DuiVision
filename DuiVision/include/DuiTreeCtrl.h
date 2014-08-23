@@ -35,7 +35,7 @@ struct TreeItemInfo
 
 #define HTREEITEM	int
 
-// 行信息
+// 树节点信息
 struct TreeNodeInfo
 {
 	HTREEITEM hParentNode;	// 父节点句柄
@@ -85,6 +85,9 @@ public:
 	int  GetNodeRow(HTREEITEM hNode);
 	int	 GetNodeLastChildRow(HTREEITEM hNode);
 	BOOL HaveChildNode(HTREEITEM hNode);
+	HTREEITEM GetChildNode(HTREEITEM hNode);
+	HTREEITEM GetNextSiblingNode(HTREEITEM hNode);
+	HTREEITEM GetPrevSiblingNode(HTREEITEM hNode);
 	int  GetNodeLevel(HTREEITEM hNode);
 	HTREEITEM GetNodeWithId(CString strId);
 	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);

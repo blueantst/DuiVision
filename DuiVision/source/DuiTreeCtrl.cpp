@@ -739,6 +739,65 @@ BOOL CDuiTreeCtrl::HaveChildNode(HTREEITEM hNode)
 	return FALSE;
 }
 
+// 获取第一个子节点句柄
+HTREEITEM CDuiTreeCtrl::GetChildNode(HTREEITEM hNode)
+{
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
+		if(rowInfoTemp.hParentNode == hNode)
+		{
+			return rowInfoTemp.hNode;
+		}
+	}
+
+	return NULL;
+}
+
+// 获取下一个子节点句柄
+HTREEITEM CDuiTreeCtrl::GetNextSiblingNode(HTREEITEM hNode)
+{
+	BOOL bFind = FALSE;
+	HTREEITEM hParentNode = NULL;
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
+		if(rowInfoTemp.hNode == hNode)
+		{
+			hParentNode = rowInfoTemp.hParentNode;
+			bFind = TRUE;
+		}
+		if(bFind && (rowInfoTemp.hParentNode == hParentNode))
+		{
+			return rowInfoTemp.hNode;
+		}
+	}
+
+	return NULL;
+}
+
+// 获取前一个子节点句柄
+HTREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HTREEITEM hNode)
+{
+	BOOL bFind = FALSE;
+	HTREEITEM hParentNode = NULL;
+	for(size_t i = m_vecRowInfo.size()-1; i >= 0; i--)
+	{
+		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
+		if(rowInfoTemp.hNode == hNode)
+		{
+			hParentNode = rowInfoTemp.hParentNode;
+			bFind = TRUE;
+		}
+		if(bFind && (rowInfoTemp.hParentNode == hParentNode))
+		{
+			return rowInfoTemp.hNode;
+		}
+	}
+
+	return NULL;
+}
+
 // 获取一个节点的层级
 int CDuiTreeCtrl::GetNodeLevel(HTREEITEM hNode)
 {
