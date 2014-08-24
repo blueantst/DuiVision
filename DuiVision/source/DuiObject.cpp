@@ -68,10 +68,24 @@ HRESULT CDuiObject::SetAttribute(CStringA strAttribName, CStringA strValue, BOOL
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
 BOOL CDuiObject::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 {
+	// pos属性需要特殊处理,放在最后进行设置,否则有些属性会受到影响,不能正确的初始化
+	CStringA strPosValue = "";
     for (TiXmlAttribute *pAttrib = pXmlElem->FirstAttribute(); NULL != pAttrib; pAttrib = pAttrib->Next())
     {
-        SetAttribute(pAttrib->Name(), pAttrib->Value(), TRUE);
+		CStringA strNameA = pAttrib->Name();
+		if(strNameA == "pos")
+		{
+			strPosValue = pAttrib->Value();
+		}else
+		{
+			SetAttribute(pAttrib->Name(), pAttrib->Value(), TRUE);
+		}
     }
+
+	if(!strPosValue.IsEmpty())
+	{
+		SetAttribute("pos", strPosValue, TRUE);
+	}
 
     return TRUE;
 }

@@ -16,7 +16,7 @@
 				title="带掩码的文字" mask="掩码" tip="文字中和掩码匹配部分可以用特殊颜色显示" />
 			<text pos="50,140,250,160" crtext="A00000" crshadow="808080" font="big"
 				title="带阴影的文字" tip="带阴影的文字" />
-			<text crtext="000080" img-scroll="skin:IDB_SCROLL_V" pos="50,170,250,280"
+			<text crtext="000080" pos="50,170,250,280" img-scroll="skin:IDB_SCROLL_V"
 				title="带滚动条的多行文字：
 					aaaaa
 					bbbbb
