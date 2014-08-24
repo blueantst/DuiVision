@@ -9,7 +9,7 @@
 		img-width="50" row-height="50" bk-transparent="10"
 		font-title="big" font="default"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
-		crtitle="32,32,32" crsep="200,160,160,160" >
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
 		<row image="0" time="刚刚" title="硬盘智能加速" content="通过优化硬盘传输效率，整理磁盘碎片等方法，让电脑快如闪电" />
 		<row image="1" time="1小时前" title="优化桌面图标缓存" content="优化后可减小开机过程中的I/O量" />
 		<row image="2" time="今天" title="固态硬盘(SSD)优化" content="优化固态硬盘相关设置" />
