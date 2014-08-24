@@ -12,8 +12,6 @@ public:
 		BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE);
 	virtual ~CTextButton(void);
 
-	void SetTitleText(CString strTitle);
-
 protected:
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
