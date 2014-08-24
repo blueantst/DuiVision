@@ -21,6 +21,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrTextDown = Color(0, 112, 235);
 	m_clrTitle = Color(255, 32, 32, 32);
 	m_clrSeperator = Color(200, 160, 160, 160);
+	m_clrRowHover = Color(0, 128, 128, 128);	// 鼠标移动到行显示的背景色,默认是透明色
 	m_nRowHeight = 50;
 	m_nHeaderHeight = 0;
 	m_nLeftPos = 0;
@@ -1139,6 +1140,13 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				int nXPos = 0;
 				int nVI = i - m_nFirstViewRow;
+
+				// 鼠标移动到行时候显示的背景颜色
+				if(m_nHoverRow == i)
+				{
+					SolidBrush brush(m_clrRowHover);
+					graphics.FillRectangle(&brush, 0, m_nHeaderHeight + nVI*m_nRowHeight, nWidth, m_nRowHeight);
+				}
 
 				// 画检查框
 				int nCheckImgY = 3;
