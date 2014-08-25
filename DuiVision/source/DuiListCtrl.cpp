@@ -821,11 +821,15 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		DrawVerticalTransition(m_memDC, dc, CRect(0, nYViewPos, nWidth, m_rc.Height()+nYViewPos),	// 背景透明度
 				m_rc, m_nBkTransparent, m_nBkTransparent);
 		
-		FontFamily fontFamilyTitle(m_strFontTitle.AllocSysString());
+		BSTR bsFontTitle = m_strFontTitle.AllocSysString();
+		FontFamily fontFamilyTitle(bsFontTitle);
 		Font fontTitle(&fontFamilyTitle, (REAL)m_nFontTitleWidth, m_fontTitleStyle, UnitPixel);
+		::SysFreeString(bsFontTitle);
 
-		FontFamily fontFamily(m_strFont.AllocSysString());
+		BSTR bsFont = m_strFont.AllocSysString();
+		FontFamily fontFamily(bsFont);
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+		::SysFreeString(bsFont);
 
 		SolidBrush solidBrush(m_clrText);			// 正常文字画刷
 		SolidBrush solidBrushH(m_clrTextHover);		// 热点文字画刷
@@ -980,12 +984,14 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					rowInfo.rcLink2.OffsetRect(0, m_nFirstViewRow*m_nRowHeight);
 					if(((m_nHoverRow == i) || (m_nDownRow == i)) && (rowInfo.nHoverLink == 1))
 					{
-						graphics.DrawString(rowInfo.strLink2.AllocSysString(), (INT)wcslen(rowInfo.strLink2.AllocSysString()), &font, 
-							rectLink, &strFormatRight, &solidBrushH);
+						BSTR bsLink2 = rowInfo.strLink2.AllocSysString();
+						graphics.DrawString(bsLink2, (INT)wcslen(bsLink2), &font, rectLink, &strFormatRight, &solidBrushH);
+						::SysFreeString(bsLink2);
 					}else
 					{
-						graphics.DrawString(rowInfo.strLink2.AllocSysString(), (INT)wcslen(rowInfo.strLink2.AllocSysString()), &font, 
-							rectLink, &strFormatRight, &solidBrush);
+						BSTR bsLink2 = rowInfo.strLink2.AllocSysString();
+						graphics.DrawString(bsLink2, (INT)wcslen(bsLink2), &font, rectLink, &strFormatRight, &solidBrush);
+						::SysFreeString(bsLink2);
 					}
 				}
 				if(!rowInfo.strLink1.IsEmpty())
@@ -997,12 +1003,14 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					rowInfo.rcLink1.OffsetRect(0, m_nFirstViewRow*m_nRowHeight);
 					if(((m_nHoverRow == i) || (m_nDownRow == i)) && (rowInfo.nHoverLink == 0))
 					{
-						graphics.DrawString(rowInfo.strLink1.AllocSysString(), (INT)wcslen(rowInfo.strLink1.AllocSysString()), &font, 
-							rectLink, &strFormatRight, &solidBrushH);
+						BSTR bsLink1 = rowInfo.strLink1.AllocSysString();
+						graphics.DrawString(bsLink1, (INT)wcslen(bsLink1), &font, rectLink, &strFormatRight, &solidBrushH);
+						::SysFreeString(bsLink1);
 					}else
 					{
-						graphics.DrawString(rowInfo.strLink1.AllocSysString(), (INT)wcslen(rowInfo.strLink1.AllocSysString()), &font, 
-							rectLink, &strFormatRight, &solidBrush);
+						BSTR bsLink1 = rowInfo.strLink1.AllocSysString();
+						graphics.DrawString(bsLink1, (INT)wcslen(bsLink1), &font, rectLink, &strFormatRight, &solidBrush);
+						::SysFreeString(bsLink1);
 					}
 				}
 				
@@ -1016,13 +1024,15 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if(m_nHoverRow == i)
 				{
 					// 画标题行
-					graphics.DrawString(rowInfo.strTitle.AllocSysString(), (INT)wcslen(rowInfo.strTitle.AllocSysString()), &fontTitle, 
-						rect, &strFormat, &solidBrushH);
+					BSTR bsTitle = rowInfo.strTitle.AllocSysString();
+					graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormat, &solidBrushH);
+					::SysFreeString(bsTitle);
 					// 画时间
 					if(!rowInfo.strTime.IsEmpty())
 					{
-						graphics.DrawString(rowInfo.strTime.AllocSysString(), (INT)wcslen(rowInfo.strTime.AllocSysString()), &font, 
-						rectTime, &strFormatRight, &solidBrushH);
+						BSTR bsTime = rowInfo.strTime.AllocSysString();
+						graphics.DrawString(bsTime, (INT)wcslen(bsTime), &font, rectTime, &strFormatRight, &solidBrushH);
+						::SysFreeString(bsTime);
 					}
 					// 画内容行
 					if(!m_bSingleLine)
@@ -1030,20 +1040,23 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
 						rect.Width = (Gdiplus::REAL)nWidth-20;
 						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
-						graphics.DrawString(rowInfo.strContent.AllocSysString(), (INT)wcslen(rowInfo.strContent.AllocSysString()), &font, 
-								rect, &strFormat, &solidBrushH);
+						BSTR bsContent = rowInfo.strContent.AllocSysString();
+						graphics.DrawString(bsContent, (INT)wcslen(bsContent), &font, rect, &strFormat, &solidBrushH);
+						::SysFreeString(bsContent);
 					}
 				}else
 				if(m_nDownRow == i)
 				{
 					// 画标题行
-					graphics.DrawString(rowInfo.strTitle.AllocSysString(), (INT)wcslen(rowInfo.strTitle.AllocSysString()), &fontTitle, 
-						rect, &strFormat, &solidBrushD);
+					BSTR bsTitle = rowInfo.strTitle.AllocSysString();
+					graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormat, &solidBrushD);
+					::SysFreeString(bsTitle);
 					// 画时间
 					if(!rowInfo.strTime.IsEmpty())
 					{
-						graphics.DrawString(rowInfo.strTime.AllocSysString(), (INT)wcslen(rowInfo.strTime.AllocSysString()), &font, 
-						rectTime, &strFormatRight, &solidBrushD);
+						BSTR bsTime = rowInfo.strTime.AllocSysString();
+						graphics.DrawString(bsTime, (INT)wcslen(bsTime), &font, rectTime, &strFormatRight, &solidBrushD);
+						::SysFreeString(bsTime);
 					}
 					// 画内容行
 					if(!m_bSingleLine)
@@ -1051,19 +1064,24 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
 						rect.Width = (Gdiplus::REAL)nWidth-20;
 						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
-						graphics.DrawString(rowInfo.strContent.AllocSysString(), (INT)wcslen(rowInfo.strContent.AllocSysString()), &font, 
-								rect, &strFormat, &solidBrushD);
+						BSTR bsContent = rowInfo.strContent.AllocSysString();
+						graphics.DrawString(bsContent, (INT)wcslen(bsContent), &font, rect, &strFormat, &solidBrushD);
+						::SysFreeString(bsContent);
 					}
 				}else
 				{
 					// 画标题行
-					graphics.DrawString(rowInfo.strTitle.AllocSysString(), (INT)wcslen(rowInfo.strTitle.AllocSysString()), &fontTitle, 
+					BSTR bsTitle = rowInfo.strTitle.AllocSysString();
+					graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, 
 						rect, &strFormat, rowInfo.bRowColor ? &solidBrushRow : &solidBrushT);
+					::SysFreeString(bsTitle);
 					// 画时间
 					if(!rowInfo.strTime.IsEmpty())
 					{
-						graphics.DrawString(rowInfo.strTime.AllocSysString(), (INT)wcslen(rowInfo.strTime.AllocSysString()), &font, 
+						BSTR bsTime = rowInfo.strTime.AllocSysString();
+						graphics.DrawString(bsTime, (INT)wcslen(bsTime), &font, 
 						rectTime, &strFormatRight, rowInfo.bRowColor ? &solidBrushRow : &solidBrush);
+						::SysFreeString(bsTime);
 					}
 					// 画内容行
 					if(!m_bSingleLine)
@@ -1071,8 +1089,10 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
 						rect.Width = (Gdiplus::REAL)nWidth-20;
 						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
-						graphics.DrawString(rowInfo.strContent.AllocSysString(), (INT)wcslen(rowInfo.strContent.AllocSysString()), &font, 
+						BSTR bsContent = rowInfo.strContent.AllocSysString();
+						graphics.DrawString(bsContent, (INT)wcslen(bsContent), &font, 
 								rect, &strFormat, rowInfo.bRowColor ? &solidBrushRow : &solidBrush);
+						::SysFreeString(bsContent);
 					}
 				}
 

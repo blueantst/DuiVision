@@ -938,8 +938,10 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 		Graphics graphics(m_memDC);
 
-		FontFamily fontFamily(m_strFont.AllocSysString());
+		BSTR bsFont = m_strFont.AllocSysString();
+		FontFamily fontFamily(bsFont);
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+		::SysFreeString(bsFont);
 
 		SolidBrush solidBrush(m_clrText);			// Õý³£ÎÄ×Ö»­Ë¢
 
@@ -1007,8 +1009,9 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rectText.Y = (Gdiplus::REAL)nYPos;
 						rectText.Height = (Gdiplus::REAL)m_nTabCtrlHeight;
 					}
-					graphics.DrawString(itemInfo.strText.AllocSysString(), (INT)wcslen(itemInfo.strText.AllocSysString()), &font, 
-							rectText, &strFormat, &solidBrush);
+					BSTR bsText = itemInfo.strText.AllocSysString();
+					graphics.DrawString(bsText, (INT)wcslen(bsText), &font, rectText, &strFormat, &solidBrush);
+					::SysFreeString(bsText);
 				}
 
 				nXPos += itemInfo.rc.Width();

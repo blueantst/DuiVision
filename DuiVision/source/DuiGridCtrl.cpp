@@ -1062,11 +1062,15 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		DrawVerticalTransition(m_memDC, dc, CRect(0, nYViewPos, nWidth, m_rc.Height()+nYViewPos-m_nHeaderHeight),	// 背景透明度
 				m_rc, m_nBkTransparent, m_nBkTransparent);
 		
-		FontFamily fontFamilyTitle(m_strFontTitle.AllocSysString());
+		BSTR bsFontTitle = m_strFontTitle.AllocSysString();
+		FontFamily fontFamilyTitle(bsFontTitle);
 		Font fontTitle(&fontFamilyTitle, (REAL)m_nFontTitleWidth, m_fontTitleStyle, UnitPixel);
+		::SysFreeString(bsFontTitle);
 
-		FontFamily fontFamily(m_strFont.AllocSysString());
+		BSTR bsFont = m_strFont.AllocSysString();
+		FontFamily fontFamily(bsFont);
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+		::SysFreeString(bsFont);
 
 		SolidBrush solidBrush(m_clrText);			// 正常文字画刷
 		SolidBrush solidBrushH(m_clrTextHover);		// 热点文字画刷
@@ -1124,8 +1128,9 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				// 画列标题
 				CString strTitle = columnInfo.strTitle;
-				graphics.DrawString(strTitle.AllocSysString(), (INT)wcslen(strTitle.AllocSysString()),
-					&font, rect, &strFormatHeader, &solidBrushT);
+				BSTR bsTitle = m_strTitle.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormatHeader, &solidBrushT);
+				::SysFreeString(bsTitle);
 
 				nPosItemX += nWidth;
 			}
@@ -1280,16 +1285,19 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						}
 					}
 					// 根据bUseTitleFont决定用标题字体还是普通字体
-					graphics.DrawString(strItemTitle.AllocSysString(), (INT)wcslen(strItemTitle.AllocSysString()),
+					BSTR bsItemTitle = strItemTitle.AllocSysString();
+					graphics.DrawString(bsItemTitle, (INT)wcslen(bsItemTitle),
 						itemInfo.bUseTitleFont ? &fontTitle : &font, rect, &strFormat, itemInfo.bUseTitleFont ? &solidBrushT : &solidBrushItem);
+					::SysFreeString(bsItemTitle);
 
 					// 画单元格内容
 					if(!bSingleLine)
 					{
 						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
 						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
-						graphics.DrawString(itemInfo.strContent.AllocSysString(), (INT)wcslen(itemInfo.strContent.AllocSysString()),
-							&font, rect, &strFormat, &solidBrushItem);
+						BSTR bsItemContent = itemInfo.strContent.AllocSysString();
+						graphics.DrawString(bsItemContent, (INT)wcslen(bsItemContent), &font, rect, &strFormat, &solidBrushItem);
+						::SysFreeString(bsItemContent);
 					}
 
 					nPosItemX += itemInfo.rcItem.Width();

@@ -1853,7 +1853,7 @@ HRESULT CDuiWebBrowserCtrl::Navigate(CString strUrl)
 		BSTR bsUrl = strUrl.AllocSysString();
 		hr = pWebBrowser->Navigate(bsUrl,NULL,NULL,NULL,NULL);
 		pWebBrowser->Release();
-		SysFreeString(bsUrl);
+		::SysFreeString(bsUrl);
 	}
 
 	return hr;

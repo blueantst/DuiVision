@@ -382,9 +382,11 @@ void CDuiRadioButton::DrawControl(CDC &dc, CRect rcUpdate)
 
 			rcTemp.SetRect(0, 0, nWidth, nHeight);
 
-			FontFamily fontFamily(m_strFont.AllocSysString());
+			BSTR bsFont = m_strFont.AllocSysString();
+			FontFamily fontFamily(bsFont);
 			Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 			graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+			::SysFreeString(bsFont);
 
 			StringFormat strFormat;
 			strFormat.SetAlignment(StringAlignmentNear);
@@ -397,8 +399,9 @@ void CDuiRadioButton::DrawControl(CDC &dc, CRect rcUpdate)
 				SolidBrush solidBrush(enBSDisable == i ? Color(128, 128, 128) : m_clrText);
 
 				RectF rect((Gdiplus::REAL)(m_sizeImage.cx + 3 + point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - m_sizeImage.cx - 3 - point.x), (Gdiplus::REAL)size.Height);
-				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrush);
+				BSTR bsTitle = m_strTitle.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+				::SysFreeString(bsTitle);
 
 				// »­½¹µã¿ò(ÐéÏß¿ò)
 				if(m_bIsFocus)

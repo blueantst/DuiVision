@@ -342,8 +342,10 @@ int CDuiMenu::AddMenu(CString strText, UINT uMenuID, int nResourceID, BOOL bSele
 {
 	CControlBase * pControlBase = NULL;
 
-	FontFamily fontFamily(m_strFont.AllocSysString());
-	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);;
+	BSTR bsFont = m_strFont.AllocSysString();
+	FontFamily fontFamily(bsFont);
+	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+	::SysFreeString(bsFont);
 
 	StringFormat strFormat;
 	strFormat.SetAlignment(StringAlignmentNear);
@@ -379,8 +381,10 @@ int CDuiMenu::AddMenu(CString strText, UINT uMenuID, CString strImage, BOOL bSel
 {
 	CControlBase * pControlBase = NULL;
 
-	FontFamily fontFamily(m_strFont.AllocSysString());
-	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);;
+	BSTR bsFont = m_strFont.AllocSysString();
+	FontFamily fontFamily(bsFont);
+	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+	::SysFreeString(bsFont);
 
 	StringFormat strFormat;
 	strFormat.SetAlignment(StringAlignmentNear);

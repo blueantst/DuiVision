@@ -128,9 +128,11 @@ void CLinkButton::DrawControl(CDC &dc, CRect rcUpdate)
 		Color clrText[4] = {m_clrTextNormal, m_clrTextHover, m_clrTextDown, m_clrTextDisable};
 
 		Graphics graphics(m_memDC);
-		FontFamily fontFamily(m_strFont.AllocSysString());
+		BSTR bsFont = m_strFont.AllocSysString();
+		FontFamily fontFamily(bsFont);
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+		::SysFreeString(bsFont);
 
 		// 设置水平和垂直对齐方式
 		DUI_STRING_ALIGN_DEFINE();
@@ -145,8 +147,9 @@ void CLinkButton::DrawControl(CDC &dc, CRect rcUpdate)
 		{
 			SolidBrush solidBrush(clrText[i]);	
 			RectF rect((Gdiplus::REAL)(i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)sizeText.Height);
-			graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-				rect, &strFormat, &solidBrush);	
+			BSTR bsTitle = m_strTitle.AllocSysString();
+			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+			::SysFreeString(bsTitle);
 		}
 	}
 

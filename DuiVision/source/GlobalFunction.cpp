@@ -317,7 +317,9 @@ Size GetTextBounds(const Font& font,const StringFormat& strFormat,const CString&
 	GraphicsPath path;
 	FontFamily fontfamily;
 	font.GetFamily(&fontfamily);
-	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),PointF(0,0),&strFormat);
+	BSTR bsText = strText.AllocSysString();
+	path.AddString(bsText,-1,&fontfamily,font.GetStyle(),font.GetSize(),PointF(0,0),&strFormat);
+	::SysFreeString(bsText);
 	RectF rcBound;
 	path.GetBounds(&rcBound);
 
@@ -336,7 +338,9 @@ Size GetTextBounds(const Font& font,const StringFormat& strFormat,int nWidth,con
 	GraphicsPath path;
 	FontFamily fontfamily;
 	font.GetFamily(&fontfamily);
-	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),RectF(0,0,(Gdiplus::REAL)nWidth,0),&strFormat);
+	BSTR bsText = strText.AllocSysString();
+	path.AddString(bsText,-1,&fontfamily,font.GetStyle(),font.GetSize(),RectF(0,0,(Gdiplus::REAL)nWidth,0),&strFormat);
+	::SysFreeString(bsText);
 	RectF rcBound;
 	path.GetBounds(&rcBound);
 
@@ -361,7 +365,9 @@ Size GetTextBounds(const Font& font,const CString& strText)
 	GraphicsPath path;
 	FontFamily fontfamily;
 	font.GetFamily(&fontfamily);
-	path.AddString(strText.AllocSysString(),-1,&fontfamily,font.GetStyle(),font.GetSize(),PointF(0,0),&strFormat);
+	BSTR bsText = strText.AllocSysString();
+	path.AddString(bsText,-1,&fontfamily,font.GetStyle(),font.GetSize(),PointF(0,0),&strFormat);
+	::SysFreeString(bsText);
 	RectF rcBound;
 	path.GetBounds(&rcBound);
 	REAL rHeight = font.GetHeight(0.0f);
