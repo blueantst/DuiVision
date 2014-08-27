@@ -61,7 +61,7 @@ class DuiSystem : public Singleton<DuiSystem>
 {
 
 public:
-    DuiSystem(HINSTANCE hInst, DWORD dwLangID = 0, CString strResourceFile = _T(""), UINT uAppID = 0, UINT nIDTemplate = 0, CStringA strStyle = "");
+    DuiSystem(HINSTANCE hInst, DWORD dwLangID = 0, CString strResourceFile = _T(""), UINT uAppID = 0, UINT nIDTemplate = 0, CString strStyle = _T(""));
     ~DuiSystem(void);
 
 	static DuiSystem* Instance();
@@ -73,7 +73,7 @@ public:
 	// 获取操作系统版本的主版本号
 	static int GetOSMajorVersion();
 	// 获取当前语言(字符串)
-	static CStringA GetLanguage();
+	static CString GetLanguage();
 	// 获取当前语言(ID)
 	DWORD GetCurrentLanguage();
 	// 设置当前语言(ID)
@@ -91,33 +91,33 @@ public:
 	// 加载资源
 	BOOL LoadResource();
 	// 加载XML资源文件(可以指定加载的风格)
-	BOOL LoadResourceXml(CString strResFile, CStringA strStyleA = "");
+	BOOL LoadResourceXml(CString strResFile, CString strStyle = _T(""));
 	// 获取ZIP资源的句柄
 	HZIP GetResourceHZip() { return m_hResourceZip; }
 	// 加载ZIP资源文件
 	BYTE* LoadZipFile(CString strFile, DWORD& dwSize);
 	// 加载XML文件,支持从zip文件中加载
-	BOOL LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName);
+	BOOL LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName);
 	// 加载图片文件,支持从zip文件中加载
 	BOOL LoadImageFile(CString strFileName, BOOL useEmbeddedColorManagement, Image*& pImage);
 	// 获取系统配置信息
-	CString GetConfig(CStringA strName);
+	CString GetConfig(CString strName);
 	// 获取XML文件
-	CString GetXmlFile(CStringA strName);
+	CString GetXmlFile(CString strName);
 	// 获取Skin
-	CStringA GetSkin(CStringA strName);
+	CString GetSkin(CString strName);
 	// 获取字符串值
-	CString GetString(CStringA strName);
+	CString GetString(CString strName);
 	// 设置字符串值
-	void SetString(CStringA strName, CString strValue);
+	void SetString(CString strName, CString strValue);
 	// 解析字符串，替换其中的替换内容
-	void ParseDuiString(CStringA& strString);
+	void ParseDuiString(CString& strString);
 	// 获取操作系统名字
 	CString GetOSName();
 	// 检查当前操作系统是否在指定的OS字符串范围内
 	BOOL CheckOSName(CString strOS);
 	// 获取字体信息
-	BOOL GetFont(CStringA strName, DuiFontInfo& fontInfo);
+	BOOL GetFont(CString strName, DuiFontInfo& fontInfo);
 	// 获取缺省字体信息(如果给了输入参数,则判断输入参数是否不合适,不合适就换成可以用的)
 	static CString GetDefaultFont(CString strFont = _T(""));
 	// 获取窗口背景信息
@@ -126,7 +126,7 @@ public:
 	BOOL SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, CString strImgFile);
 
 	// 根据控件类名创建控件实例
-	static CControlBase* CreateControlByName(LPCSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
+	static CControlBase* CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
 
 	// 获取子控件对象
 	CControlBase* GetControlFromDuiDialog(UINT uControlID);
@@ -205,18 +205,18 @@ protected:
 
 	CString			m_strResourceFile;								// 资源定义文件名
 	HZIP				m_hResourceZip;									// 资源ZIP文件句柄
-	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapCfgPool;				// 系统配置信息
-	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapStylePool;			// 风格信息
-	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapXmlPool;				// XML文件池
-	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapSkinPool;			// Skin池
-	CMap<CStringA,LPCSTR,CStringA,LPCSTR> m_mapStringPool;			// 字符串池
-	CMap<CStringA,LPCSTR,DuiFontInfo,DuiFontInfo&> m_mapFontPool;	// 字体池
+	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapCfgPool;				// 系统配置信息
+	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapStylePool;			// 风格信息
+	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapXmlPool;				// XML文件池
+	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapSkinPool;			// Skin池
+	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapStringPool;			// 字符串池
+	CMap<CString,LPCTSTR,DuiFontInfo,DuiFontInfo&> m_mapFontPool;	// 字体池
 	
 	HINSTANCE				m_hInst;
 	UINT					m_uAppID;								// 应用ID
 
 	DWORD					m_dwLangID;								// 当前语言ID
-	CStringA				m_strCurStyle;							// 当前风格名
+	CString				m_strCurStyle;							// 当前风格名
 
 	CString					m_strLogFile;							// 日志文件名
 	int						m_nLogLevel;							// 日志级别

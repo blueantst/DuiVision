@@ -23,13 +23,13 @@ struct EditListItem
 
 class CPopupList :  public CDlgPopup
 {
-	static LPCSTR GetClassName() { return "popuplist";}
+	static LPCTSTR GetClassName() { return _T("popuplist");}
 
 public:
 	CPopupList(void);
 	virtual ~CPopupList(void);
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 
 	void SetWidth(int nWidth) { m_nWidth = nWidth; }
 
@@ -65,6 +65,6 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Head);		// 定义列表项左侧图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);		// 定义列表项删除图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_INT_ATTRIBUTE("width", m_nWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width"), m_nWidth, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

@@ -4,7 +4,7 @@
 
 class CImageString : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CImageString, "imgstr")
+	DUIOBJ_DECLARE_CLASS_NAME(CImageString, _T("imgstr"))
 public:
 	CImageString(HWND hWnd, CDuiObject* pDuiObject);
 	CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nNumber, 
@@ -15,7 +15,7 @@ public:
 
 	void SetTitle(int nNumber);
 
-	HRESULT OnAttributeMask(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeMask(const CString& strValue, BOOL bLoading);
 
 protected:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
@@ -27,6 +27,6 @@ public:
 	CString m_strMask;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("mask", OnAttributeMask)
+		DUI_CUSTOM_ATTRIBUTE(_T("mask"), OnAttributeMask)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

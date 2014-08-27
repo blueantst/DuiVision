@@ -6,7 +6,7 @@
 
 class CScrollV : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CScrollV, "scroll")
+	DUIOBJ_DECLARE_CLASS_NAME(CScrollV, _T("scroll"))
 public:
 	CScrollV(HWND hWnd, CDuiObject* pDuiObject);
 	CScrollV(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible = TRUE);
@@ -31,12 +31,12 @@ public:
 
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
-	HRESULT OnAttributeUpImage(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeDownImage(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeMaxRange(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeCurrentPos(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributePageRange(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeRowRange(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeUpImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeDownImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeMaxRange(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeCurrentPos(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributePageRange(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeRowRange(const CString& strValue, BOOL bLoading);
 
 protected:	
 	void DrawRange(CDC &dc, CRect rcUpdate, int nXPos);
@@ -65,11 +65,11 @@ public:
 	int				m_nDownTop;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("maxrange", OnAttributeMaxRange)
-		DUI_CUSTOM_ATTRIBUTE("curpos", OnAttributeCurrentPos)
-		DUI_CUSTOM_ATTRIBUTE("pagerange", OnAttributePageRange)
-		DUI_CUSTOM_ATTRIBUTE("rowrange", OnAttributeRowRange)
-		DUI_CUSTOM_ATTRIBUTE("upimg", OnAttributeUpImage)
-		DUI_CUSTOM_ATTRIBUTE("downimg", OnAttributeDownImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("maxrange"), OnAttributeMaxRange)
+		DUI_CUSTOM_ATTRIBUTE(_T("curpos"), OnAttributeCurrentPos)
+		DUI_CUSTOM_ATTRIBUTE(_T("pagerange"), OnAttributePageRange)
+		DUI_CUSTOM_ATTRIBUTE(_T("rowrange"), OnAttributeRowRange)
+		DUI_CUSTOM_ATTRIBUTE(_T("upimg"), OnAttributeUpImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("downimg"), OnAttributeDownImage)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

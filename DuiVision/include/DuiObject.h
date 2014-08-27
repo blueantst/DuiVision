@@ -1,12 +1,14 @@
 #pragma once
 
+#include "DuiXml.h"
+
 //////////////////////////////////////////////////////////////////////////////////
 // DuiVision Class Name Declaration
 #define DUIOBJ_DECLARE_CLASS_NAME(theclass, classname)   \
 public:                                                 \
-    static CControlBase* CheckAndNew(LPCSTR lpszName, HWND hWnd, CDuiObject* pDuiObject)       \
+    static CControlBase* CheckAndNew(LPCTSTR lpszName, HWND hWnd, CDuiObject* pDuiObject)       \
     {                                                   \
-        if (strcmp(GetClassName(), lpszName)  == 0)     \
+        if (wcscmp(GetClassName(), lpszName)  == 0)     \
 		{\
 			CControlBase* pControl = new theclass(hWnd, pDuiObject);							\
 			return pControl;                        \
@@ -15,23 +17,23 @@ public:                                                 \
             return NULL;                                \
     }                                                   \
                                                         \
-    static LPCSTR GetClassName()                        \
+    static LPCTSTR GetClassName()                        \
     {                                                   \
         return classname;                               \
     }                                                   \
                                                         \
-    virtual LPCSTR GetObjectClass()                     \
+    virtual LPCTSTR GetObjectClass()                     \
     {                                                   \
         return classname;                               \
     }                                                   \
                                                         \
-    virtual BOOL IsClass(LPCSTR lpszName)               \
+    virtual BOOL IsClass(LPCTSTR lpszName)               \
     {                                                   \
-        if(strcmp(GetClassName(), lpszName)  == 0) return TRUE;  \
+        if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;  \
 		return __super::IsClass(lpszName);				\
     }                                                   \
 														\
-	virtual LPCSTR BaseObjectClassName()				\
+	virtual LPCTSTR BaseObjectClassName()				\
 	{													\
 		return __super::GetObjectClass();				\
 	}													\
@@ -44,8 +46,8 @@ public:                                                 \
 #define DUI_DECLARE_ATTRIBUTES_BEGIN()                            \
 public:                                                             \
     virtual HRESULT SetAttribute(                                   \
-        CStringA strAttribName,                                     \
-        CStringA strValue,                                          \
+        CString strAttribName,                                     \
+        CString strValue,                                          \
         BOOL     bLoading)                                          \
     {                                                               \
         HRESULT hRet = __super::SetAttribute(                       \
@@ -82,7 +84,7 @@ public:                                                             \
 #define DUI_INT_ATTRIBUTE(attribname, varname, allredraw)         \
         if (attribname == strAttribName)                            \
         {                                                           \
-			    varname = ::StrToIntA(strValue);                    \
+			    varname = ::StrToInt(strValue);                    \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
@@ -91,7 +93,7 @@ public:                                                             \
 #define DUI_BOOL_ATTRIBUTE(attribname, varname, allredraw)         \
         if (attribname == strAttribName)                            \
         {                                                           \
-		    varname = ::StrToIntA(strValue) > 0 ? true : false;     \
+		    varname = ::StrToInt(strValue) > 0 ? true : false;     \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
@@ -100,7 +102,7 @@ public:                                                             \
 #define DUI_UINT_ATTRIBUTE(attribname, varname, allredraw)        \
         if (attribname == strAttribName)                            \
         {                                                           \
-            varname = (UINT)::StrToIntA(strValue);                  \
+            varname = (UINT)::StrToInt(strValue);                  \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
@@ -109,7 +111,7 @@ public:                                                             \
 #define DUI_DWORD_ATTRIBUTE(attribname, varname, allredraw)       \
         if (attribname == strAttribName)                            \
         {                                                           \
-            varname = (DWORD)::StrToIntA(strValue);                 \
+            varname = (DWORD)::StrToInt(strValue);                 \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
@@ -128,7 +130,7 @@ public:                                                             \
         if (attribname == strAttribName)                            \
         {                                                           \
 			ParseDuiString(strValue);	\
-            varname = CA2T(strValue, CP_UTF8);                      \
+            varname = strValue;                      \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
@@ -146,7 +148,7 @@ public:                                                             \
 #define DUI_COLOR_ATTRIBUTE(attribname, varname, allredraw)       \
         if (attribname == strAttribName)                            \
         {                                                           \
-			if(strValue.Find(",") == -1)	\
+			if(strValue.Find(_T(",")) == -1)	\
 			{	\
 				varname = CDuiObject::HexStringToColor(strValue);        \
 			}else	\
@@ -223,7 +225,7 @@ public:                                                             \
 	CSize	m_size##imgName;	\
 	BOOL Set##imgName##Bitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"));	\
 	BOOL Set##imgName##Bitmap(CString strImage = TEXT(""));	\
-	HRESULT OnAttributeImage##imgName(const CStringA& strValue, BOOL bLoading);	\
+	HRESULT OnAttributeImage##imgName(const CString& strValue, BOOL bLoading);	\
 
 // CPP代码中的设置图片和图片属性映射函数实现,图片对象和图片大小对象的初始化和析构需要自己写代码
 #define DUI_IMAGE_ATTRIBUTE_IMPLEMENT(theclass, imgName, imgCount)	\
@@ -257,12 +259,12 @@ public:                                                             \
 		}	\
 		return false;	\
 	}	\
-	HRESULT theclass::OnAttributeImage##imgName(const CStringA& strValue, BOOL bLoading)	\
+	HRESULT theclass::OnAttributeImage##imgName(const CString& strValue, BOOL bLoading)	\
 	{	\
 		if (strValue.IsEmpty()) return E_FAIL;	\
 		\
-		CStringA strSkin = "";	\
-		if(strValue.Find("skin:") == 0)	\
+		CString strSkin = _T("");	\
+		if(strValue.Find(_T("skin:")) == 0)	\
 		{	\
 			strSkin = DuiSystem::Instance()->GetSkin(strValue);	\
 			if (strSkin.IsEmpty()) return E_FAIL;	\
@@ -271,12 +273,12 @@ public:                                                             \
 			strSkin = strValue;	\
 		}	\
 		\
-		if(strSkin.Find(".") != -1)	\
+		if(strSkin.Find(_T(".")) != -1)	\
 		{	\
-			CString strImgFile = CA2T(strSkin, CP_UTF8);	\
-			if(strSkin.Find(":") != -1)	\
+			CString strImgFile = strSkin;	\
+			if(strSkin.Find(_T(":")) != -1)	\
 			{	\
-				strImgFile = CA2T(strSkin, CP_UTF8);	\
+				strImgFile = strSkin;	\
 			}	\
 			if(!Set##imgName##Bitmap(strImgFile))	\
 			{	\
@@ -284,7 +286,7 @@ public:                                                             \
 			}	\
 		}else	\
 		{	\
-			UINT nResourceID = atoi(strSkin);	\
+			UINT nResourceID = _wtoi(strSkin);	\
 			if(!Set##imgName##Bitmap(nResourceID, TEXT("PNG")))	\
 			{	\
 				if(!Set##imgName##Bitmap(nResourceID, TEXT("BMP")))	\
@@ -341,9 +343,9 @@ public:
 	CDuiObject(void);
 	virtual ~CDuiObject(void);
 
-	virtual BOOL IsClass(LPCSTR lpszName) { return FALSE; }	// 是否此类
-	virtual LPCSTR GetObjectClass() { return NULL; }		// 获取类名
-	virtual LPCSTR BaseObjectClassName() { return NULL; }	// 获取基类名
+	virtual BOOL IsClass(LPCTSTR lpszName) { return FALSE; }	// 是否此类
+	virtual LPCTSTR GetObjectClass() { return NULL; }		// 获取类名
+	virtual LPCTSTR BaseObjectClassName() { return NULL; }	// 获取基类名
 
 	UINT GetID() {return m_uID;};							// 获取DUI对象ID
 	void SetName(CString strName) { m_strName = strName; }	// 设置DUI对象名字
@@ -357,18 +359,18 @@ public:
 	virtual LRESULT OnBaseMessage(UINT	uID, UINT Msg, WPARAM wParam, LPARAM lParam) { return 0L; };
 	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL) { return 0L; };
 	
-	virtual HRESULT SetAttribute(CStringA strAttribName, CStringA strValue, BOOL bLoading);
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual HRESULT SetAttribute(CString strAttribName, CString strValue, BOOL bLoading);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 
 	virtual void SetRect(CRect rc) { m_rc = rc;};
 	virtual CRect GetRect() { return m_rc;};
 
-	static void ParseDuiString(CStringA& strString);
-	static ULONG HexStringToULong(LPCSTR lpszValue, int nSize = -1);
-    static Color HexStringToColor(LPCSTR lpszValue);
-	static Color StringToColor(LPCSTR lpszValue);
-	static COLORREF HexStringToRGBColor(LPCSTR lpszValue);
-	static void ParseKeyCode(LPCSTR lpszValue, UINT& nChar, UINT& nFlag);
+	static void ParseDuiString(CString& strString);
+	static ULONG HexStringToULong(LPCTSTR lpszValue, int nSize = -1);
+    static Color HexStringToColor(LPCTSTR lpszValue);
+	static Color StringToColor(LPCTSTR lpszValue);
+	static COLORREF HexStringToRGBColor(LPCTSTR lpszValue);
+	static void ParseKeyCode(LPCTSTR lpszValue, UINT& nChar, UINT& nFlag);
 
 protected:
 	UINT	m_uID;					// DUI对象ID

@@ -20,10 +20,10 @@ class CMenuItem;
 class CDuiMenu : public CDlgPopup
 {
 public:
-	static LPCSTR GetClassName() { return "menu";}
-	virtual BOOL IsClass(LPCSTR lpszName)
+	static LPCTSTR GetClassName() { return _T("menu");}
+	virtual BOOL IsClass(LPCTSTR lpszName)
 	{
-		if(strcmp(GetClassName(), lpszName)  == 0) return TRUE;
+		if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;
 		return __super::IsClass(lpszName);
 	}
 
@@ -56,13 +56,13 @@ public:
 	CMenuItem* GetHoverMenuItem();
 
 	// 加载菜单
-	BOOL LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName);
-	BOOL LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile = _T(""));
+	BOOL LoadSubMenu(DuiXmlNode pXmlElem, CString strSubItemName);
+	BOOL LoadXmlNode(DuiXmlNode pXmlElem, CString strXmlFile = _T(""));
 	BOOL LoadXmlFile(CString strFileName, CString strSubItemName = _T(""));
 	BOOL LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UINT uMessageID, CString strSubItemName = _T(""));
 
 	virtual void DrawWindowEx(CDC &dc, CRect rcClient);
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	virtual void InitUI(CRect rcClient);
 
 	// 消息响应
@@ -91,14 +91,14 @@ public:
 	vector<MenuItemValue> m_vecMenuItemValue;	// 菜单项预设置信息
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_TSTRING_ATTRIBUTE("title", m_strTitle, FALSE)
-		DUI_TSTRING_ATTRIBUTE("font", m_strFont, FALSE)
-		DUI_INT_ATTRIBUTE("fontwidth", m_nFontWidth, FALSE)
-		DUI_INT_ATTRIBUTE("item-height", m_nHeight, FALSE)
-		DUI_INT_ATTRIBUTE("frame-width", m_nFrameWidth, FALSE)
-		DUI_INT_ATTRIBUTE("top-height", m_nTopHeight, FALSE)
-		DUI_INT_ATTRIBUTE("bottom-height", m_nBottomHeight, FALSE)
-		DUI_INT_ATTRIBUTE("left", m_nLeft, FALSE)
-		DUI_INT_ATTRIBUTE("sep-height", m_nSeparatorHeight, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("font"), m_strFont, FALSE)
+		DUI_INT_ATTRIBUTE(_T("fontwidth"), m_nFontWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("item-height"), m_nHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("frame-width"), m_nFrameWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("top-height"), m_nTopHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("bottom-height"), m_nBottomHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("left"), m_nLeft, FALSE)
+		DUI_INT_ATTRIBUTE(_T("sep-height"), m_nSeparatorHeight, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

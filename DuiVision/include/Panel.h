@@ -7,7 +7,7 @@ using namespace  std;
 
 class CDuiPanel : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiPanel, "div")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiPanel, _T("div"))
 
 public:
 	CDuiPanel(HWND hWnd, CDuiObject* pDuiObject) ;
@@ -15,9 +15,9 @@ public:
 
 	void	SetXmlFile(CString strXmlFile) {m_strXmlFile = strXmlFile;}
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadXmlFile(CString strFileName);
-	HRESULT OnAttributeXml(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeXml(const CString& strValue, BOOL bLoading);
 
 	void SetVirtualHeight(int nHeight) { m_nVirtualHeight = nHeight; }
 	void CalcVirtualHeight();
@@ -35,9 +35,9 @@ protected:
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	// 根据控件名创建控件实例
-	CControlBase* _CreateControlByName(LPCSTR lpszName);
+	CControlBase* _CreateControlByName(LPCTSTR lpszName);
 
-	HRESULT OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScroll(const CString& strValue, BOOL bLoading);
 
 	virtual void SetControlRect(CRect rc);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
@@ -46,7 +46,7 @@ protected:
 	virtual BOOL OnMousePointChange(CPoint& point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 
-	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);
+	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 
 public:
 	BOOL				m_bInit;					// 是否初始化完成

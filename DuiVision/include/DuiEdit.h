@@ -6,7 +6,7 @@
 
 class CDuiEdit : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiEdit, "edit")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiEdit, _T("edit"))
 public:
 	CDuiEdit(HWND hWnd, CDuiObject* pDuiObject);
 	CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), BOOL bPassWord = FALSE, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
@@ -15,12 +15,12 @@ public:
 	// 设置左侧小图片
 	bool SetLeftBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	bool SetLeftBitmap(CString strImage);
-	HRESULT OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeLeftImage(const CString& strValue, BOOL bLoading);
 
 	// 设置右侧小图片
 	bool SetSmallBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	bool SetSmallBitmap(CString strImage);
-	HRESULT OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeSmallImage(const CString& strValue, BOOL bLoading);
 
 	virtual void SetControlRect(CRect rc);
 	virtual BOOL SetControlFocus(BOOL bFocus);
@@ -74,16 +74,16 @@ public:
 	CEdit*			m_pEdit;			// Windows原生输入控件
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_BOOL_ATTRIBUTE("password", m_bPassWord, FALSE)
-		DUI_BOOL_ATTRIBUTE("multiline", m_bMultiLine, FALSE)
-		DUI_BOOL_ATTRIBUTE("autohscroll", m_bAutoHScroll, FALSE)
-		DUI_BOOL_ATTRIBUTE("autovscroll", m_bAutoVScroll, FALSE)
-		DUI_BOOL_ATTRIBUTE("number", m_bNumber, FALSE)
-		DUI_BOOL_ATTRIBUTE("readonly", m_bReadOnly, FALSE)
-		DUI_INT_ATTRIBUTE("maxchar", m_nMaxChar, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("left-image", OnAttributeLeftImage)
-		DUI_CUSTOM_ATTRIBUTE("small-image", OnAttributeSmallImage)
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
-		DUI_COLOR_ATTRIBUTE("crtip", m_clrTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("password"), m_bPassWord, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("multiline"), m_bMultiLine, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("autohscroll"), m_bAutoHScroll, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("autovscroll"), m_bAutoVScroll, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("number"), m_bNumber, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("readonly"), m_bReadOnly, FALSE)
+		DUI_INT_ATTRIBUTE(_T("maxchar"), m_nMaxChar, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("left-image"), OnAttributeLeftImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("small-image"), OnAttributeSmallImage)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtip"), m_clrTooltip, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

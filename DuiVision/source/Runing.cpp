@@ -29,11 +29,11 @@ CRuning::~CRuning(void)
 }
 
 // 从XML设置图片个数属性
-HRESULT CRuning::OnAttributeMaxIndex(const CStringA& strValue, BOOL bLoading)
+HRESULT CRuning::OnAttributeMaxIndex(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty() || (m_pImage == NULL)) return E_FAIL;
 
-	m_nMaxIndex = atoi(strValue);
+	m_nMaxIndex = _wtoi(strValue);
 	SetBitmapCount(m_nMaxIndex);
 
 	m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
@@ -43,11 +43,11 @@ HRESULT CRuning::OnAttributeMaxIndex(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置动画属性
-HRESULT CRuning::OnAttributeRun(const CStringA& strValue, BOOL bLoading)
+HRESULT CRuning::OnAttributeRun(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	BOOL bRun = (strValue == "true");
+	BOOL bRun = (strValue == _T("true"));
 	SetRun(bRun);
 
 	return bLoading?S_FALSE:S_OK;

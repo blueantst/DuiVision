@@ -60,14 +60,14 @@ struct TreeNodeInfo
 
 class CDuiTreeCtrl : public CDuiPanel
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiTreeCtrl, "treectrl")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiTreeCtrl, _T("treectrl"))
 
 public:
 	CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject) ;
 	virtual ~CDuiTreeCtrl(void);
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
-	BOOL LoadNode(HTREEITEM hParentNode, TiXmlElement* pXmlElem);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
+	BOOL LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem);
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
 	HTREEITEM InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
@@ -121,7 +121,7 @@ protected:
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 
-	HRESULT OnAttributeFontTitle(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
 
 	// 消息响应
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -162,21 +162,21 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Collapse);	// 定义行缩放图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Toggle);		// 定义树节点收缩图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
-		DUI_CUSTOM_ATTRIBUTE("img-check", OnAttributeImageCheckBox)
-		DUI_CUSTOM_ATTRIBUTE("img-collapse", OnAttributeImageCollapse)
-		DUI_CUSTOM_ATTRIBUTE("img-toggle", OnAttributeImageToggle)
-		DUI_CUSTOM_ATTRIBUTE("font-title", OnAttributeFontTitle)
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
-		DUI_COLOR_ATTRIBUTE("crhover", m_clrTextHover, FALSE)
-		DUI_COLOR_ATTRIBUTE("crpush", m_clrTextDown, FALSE)
-		DUI_COLOR_ATTRIBUTE("crtitle", m_clrTitle, FALSE)
-		DUI_COLOR_ATTRIBUTE("crsep", m_clrSeperator, FALSE)
-		DUI_INT_ATTRIBUTE("row-height", m_nRowHeight, FALSE)
-		DUI_INT_ATTRIBUTE("left-pos", m_nLeftPos, FALSE)
-		DUI_INT_ATTRIBUTE("wrap", m_bTextWrap, FALSE)
-		DUI_INT_ATTRIBUTE("down-row", m_bEnableDownRow, FALSE)
-		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
-		DUI_INT_ATTRIBUTE("grid-tip", m_bGridTooltip, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-collapse"), OnAttributeImageCollapse)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-toggle"), OnAttributeImageToggle)
+		DUI_CUSTOM_ATTRIBUTE(_T("font-title"), OnAttributeFontTitle)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtitle"), m_clrTitle, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crsep"), m_clrSeperator, FALSE)
+		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)
+		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
+		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
+		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
+		DUI_INT_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

@@ -9,7 +9,7 @@ static UINT g_nIDTemplate = 0;
 static ULONG_PTR gdiplusToken;
 static GdiplusStartupInput gdiplusStartupInput;
 
-DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CStringA strStyle)
+DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CString strStyle)
     :m_hInst(hInst), m_uAppID(uAppID)
 	//,m_funCreateTextServices(NULL)
 {
@@ -31,8 +31,10 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	}
 	m_hResourceZip = NULL;
 
+	/*
 	// TinyXml设置为不压缩空格模式，默认是压缩空格，会导致超过一个的空格解析时候被转换为一个空格
 	TiXmlBase::SetCondenseWhiteSpace(false);
+	*/
 
 	ZeroMemory(&m_NotifyIconData, sizeof m_NotifyIconData);
 
@@ -168,7 +170,7 @@ int DuiSystem::GetOSMajorVersion()
 }
 
 // 获取当前语言(字符串类型)
-CStringA DuiSystem::GetLanguage()
+CString DuiSystem::GetLanguage()
 {
 	DWORD dwLangID = DuiSystem::Instance()->GetCurrentLanguage();
 	if(dwLangID == 0)
@@ -179,16 +181,16 @@ CStringA DuiSystem::GetLanguage()
 	switch(dwLangID)
 	{
 	case LANGUAGE_PAGE_ENGLISH:
-		return "en-us";break;	// 英语
+		return _T("en-us");break;	// 英语
 	case LANGUAGE_PAGE_CHINESE:
-		return "zh-cn";break;	// 简体中文
+		return _T("zh-cn");break;	// 简体中文
 	case LANGUAGE_PAGE_CHINESE_TW:
 	case LANGUAGE_PAGE_CHINESE_HK:
 	case LANGUAGE_PAGE_CHINESE_SGP:
-		return "zh-tw";break;	// 繁体中文
+		return _T("zh-tw");break;	// 繁体中文
 	}
 
-	return "en-us";	// 默认为英文
+	return _T("en-us");	// 默认为英文
 }
 
 // 获取当前语言
@@ -284,33 +286,34 @@ BOOL DuiSystem::LoadResource()
 }
 
 // 加载XML资源文件
-BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
+BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 {
-	m_strCurStyle = strStyleA;
+	m_strCurStyle = strStyle;
 
 	// 加载资源文件
-	TiXmlDocument xmlDoc;
+	DuiXmlDocument xmlDoc;
+	DuiXmlParseResult xmlResult;
 	if(m_hResourceZip != NULL)
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
 		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strResFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetExePath() + strResFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strResFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strResFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetXmlPath() + strResFile);
 		}else
 		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)	// 绝对路径查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(strResFile);
 		}else
 		{
 			DWORD dwSize = 0;
 			BYTE* pByte = LoadZipFile(strResFile, dwSize);
 			if(pByte != NULL)
 			{
-				xmlDoc.Parse((const char*)pByte, NULL, TIXML_ENCODING_UTF8);
+				xmlResult = xmlDoc.load((const char_t*)pByte, NULL);
 				delete[] pByte;
 			}else
 			{
@@ -321,121 +324,118 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 	{
 		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strResFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetExePath() + strResFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strResFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strResFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetXmlPath() + strResFile);
 		}else
 		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)	// 绝对路径查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strResFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(strResFile);
 		}
 	}
-	if(!xmlDoc.Error())
+	if(xmlResult)
 	{
-		TiXmlElement* pRootElem = xmlDoc.RootElement();
-		if(pRootElem != NULL)
-		{
-			TiXmlElement* pResElem = NULL;
-			for (pResElem = pRootElem->FirstChildElement("res"); pResElem != NULL; pResElem=pResElem->NextSiblingElement())
+			DuiXmlNode pResRoot = xmlDoc.child(_T("root"));
+			for (DuiXmlNode pResElem = pResRoot.child(_T("res")); pResElem; pResElem = pResElem.next_sibling(_T("res")))
 			{
-				CStringA strType = pResElem->Attribute("type");
-				if(strType == "res")	// 资源文件
+				CString strType = pResElem.attribute(_T("type")).value();
+				if(strType == _T("res"))	// 资源文件
 				{
-					CStringA strLang = pResElem->Attribute("lang");
+					CString strLang = pResElem.attribute(_T("lang")).value();
 					if(strLang.IsEmpty() || (strLang == DuiSystem::GetLanguage()))
 					{
 						// 加载资源文件
-						CStringA strFile = pResElem->Attribute("file");
-						CString strFileU = GetExePath() + CA2T(strFile, CP_UTF8);
+						CString strFile = pResElem.attribute(_T("file")).value();
+						CString strFileU = GetExePath() + strFile;
 						if(m_hResourceZip != NULL)
 						{
-							strFileU = CA2T(strFile, CP_UTF8);
+							strFileU = strFile;
 						}
-						LoadResourceXml(strFileU, strStyleA);
+						LoadResourceXml(strFileU, strStyle);
 					}
 				}else
 				if(strType == "cfg")	// 全局配置
 				{
-					CStringA strName = pResElem->Attribute("name");
-					CStringA strValue = pResElem->Attribute("value");
+					CString strName = pResElem.attribute(_T("name")).value();
+					CString strValue = pResElem.attribute(_T("value")).value();
 					m_mapCfgPool.SetAt(strName, strValue);
 					// 如果DuiSystem未设置当前风格参数,则可以通过defaultStyle配置来决定当前风格
-					if(m_strCurStyle.IsEmpty() && (strName == "defaultStyle"))
+					if(m_strCurStyle.IsEmpty() && (strName == _T("defaultStyle")))
 					{
-						strStyleA = strValue;
+						strStyle = strValue;
 						m_strCurStyle = strValue;
 					}
 				}else
-				if(strType == "style")	// 风格定义
+				if(strType == _T("style"))	// 风格定义
 				{
-					CStringA strName = pResElem->Attribute("name");
-					CStringA strValue = pResElem->Attribute("value");
+					CString strName = pResElem.attribute(_T("name")).value();
+					CString strValue = pResElem.attribute(_T("value")).value();
 					m_mapStylePool.SetAt(strName, strValue);
 				}else
-				if(strType == "xml")	// XML文件定义
+				if(strType == _T("xml"))	// XML文件定义
 				{
-					CStringA strStyle = pResElem->Attribute("style");
-					CStringA strName = pResElem->Attribute("name");
-					CStringA strFile = pResElem->Attribute("file");
+					CString strStyle = pResElem.attribute(_T("style")).value();
+					CString strName = pResElem.attribute(_T("name")).value();
+					CString strFile = pResElem.attribute(_T("file")).value();
 					if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
 					{
 						m_mapXmlPool.SetAt(strName, strFile);
 					}
 				}else
-				if(strType == "img")	// 图像
+				if(strType == _T("img"))	// 图像
 				{
-					CStringA strStyle = pResElem->Attribute("style");
-					CStringA strName = pResElem->Attribute("name");
-					CStringA strFile = pResElem->Attribute("file");
+					CString strStyle = pResElem.attribute(_T("style")).value();
+					CString strName = pResElem.attribute(_T("name")).value();
+					CString strFile = pResElem.attribute(_T("file")).value();
 					if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
 					{
 						m_mapSkinPool.SetAt(strName, strFile);
 					}
 				}else
-				if(strType == "str")	// 字符串
+				if(strType == _T("str"))	// 字符串
 				{
-					CStringA strLang = pResElem->Attribute("lang");
+					CString strLang = pResElem.attribute(_T("lang")).value();
 					if(strLang.IsEmpty() || (strLang == DuiSystem::GetLanguage()))
 					{
 						// 如果未指定语言或指定了语言并且和当前语言相同，则加载字符串资源
-						CStringA strStyle = pResElem->Attribute("style");
-						CStringA strName = pResElem->Attribute("name");
-						CStringA strValue = pResElem->Attribute("value");
+						CString strStyle = pResElem.attribute(_T("style")).value();
+						CString strName = pResElem.attribute(_T("name")).value();
+						CString strValue = pResElem.attribute(_T("value")).value();
 						if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
 						{
 							m_mapStringPool.SetAt(strName, strValue);
 						}
 					}
 				}else
-				if(strType == "font")	// 字体
+				if(strType == _T("font"))	// 字体
 				{
-					CStringA strLangA = pResElem->Attribute("lang");
-					CStringA strNameA = pResElem->Attribute("name");
-					CStringA strFontA = pResElem->Attribute("font");
-					int nFontWidth = atoi(pResElem->Attribute("size"));
-					CStringA strOSA = pResElem->Attribute("os");
-					CStringA strBoldA = pResElem->Attribute("bold");
+					CString strLang = pResElem.attribute(_T("lang")).value();
+					CString strName = pResElem.attribute(_T("name")).value();
+					CString strFont = pResElem.attribute(_T("font")).value();
+					int nFontWidth = _wtoi(pResElem.attribute(_T("size")).value());
+					CString strOS = pResElem.attribute(_T("os")).value();
+					CString strBold = pResElem.attribute(_T("bold")).value();
 					BOOL bBold = FALSE;
-					if(pResElem->Attribute("bold"))
+					if(pResElem.attribute(_T("bold")).value())
 					{
-						bBold = (strcmp(pResElem->Attribute("bold"), "true") == 0);
+						bBold = (wcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
 					}
 					BOOL bItalic = FALSE;
-					if(pResElem->Attribute("italic"))
+					if(pResElem.attribute(_T("italic")).value())
 					{
-						bItalic = (strcmp(pResElem->Attribute("italic"), "true") == 0);
+						bItalic = (wcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
 					}
 					BOOL bUnderline = FALSE;
-					if(pResElem->Attribute("underline"))
+					if(pResElem.attribute(_T("underline")).value())
 					{
-						bUnderline = (strcmp(pResElem->Attribute("underline"), "true") == 0);
+						bUnderline = (wcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
 					}
 					BOOL bStrikeout = FALSE;
-					if(pResElem->Attribute("strikeout"))
+					if(pResElem.attribute(_T("strikeout")).value())
 					{
-						bStrikeout = (strcmp(pResElem->Attribute("strikeout"), "true") == 0);
+						bStrikeout = (wcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
 					}
 					FontStyle fontStyle = FontStyleRegular;
 					if(bBold)
@@ -455,27 +455,24 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CStringA strStyleA)
 						fontStyle = FontStyle((int)fontStyle + (int)FontStyleStrikeout);
 					}
 					DuiFontInfo fontInfo;
-					fontInfo.strName = CA2T(strNameA, CP_UTF8);
+					fontInfo.strName = strName;
 					// 将字体做一下过滤,对于不支持的字体用缺省字体替换
-					CString strFont = CA2T(strFontA, CP_UTF8);
 					fontInfo.strFont = DuiSystem::GetDefaultFont(strFont);
 					fontInfo.nFontWidth = nFontWidth;
 					fontInfo.fontStyle = fontStyle;
-					fontInfo.strOS = CA2T(strOSA, CP_UTF8);
 					if(!fontInfo.strOS.IsEmpty())
 					{
 						// 如果OS属性非空,则判断当前操作系统是否符合OS属性
 						if(CheckOSName(fontInfo.strOS))
 						{
-							m_mapFontPool.SetAt(strNameA, fontInfo);
+							m_mapFontPool.SetAt(strName, fontInfo);
 						}
 					}else
 					{
-						m_mapFontPool.SetAt(strNameA, fontInfo);
+						m_mapFontPool.SetAt(strName, fontInfo);
 					}
 				}
 			}
-		}
 	}else
 	{
 		return FALSE;
@@ -534,19 +531,18 @@ BYTE* DuiSystem::LoadZipFile(CString strFile, DWORD& dwSize)
 // 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到资源目录或资源zip中加载
 // 格式2: filename.xml				-- 指定XML文件名,到资源目录或资源zip中加载
 // 格式3: c:\filename.xml			-- 指定了XML的全路径
-BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
+BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 {
 	CString strXmlFile;
+	DuiXmlParseResult xmlResult;
 	if(strFileName.Find(_T("xml:")) == 0)	// 去掉前缀
 	{
 		strFileName.Delete(0, 4);
 	}
 	if(strFileName.Find(_T(".xml")) == -1)	// 需要到资源定义中查找
 	{
-		CStringA strXmlFileA;
-		if(m_mapXmlPool.Lookup(CEncodingUtil::UnicodeToAnsi(strFileName), strXmlFileA))
+		if(m_mapXmlPool.Lookup(strFileName, strXmlFile))
 		{
-			strXmlFile = CEncodingUtil::AnsiToUnicode(strXmlFileA);
 		}else
 		{
 			strXmlFile = strFileName;
@@ -561,15 +557,15 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 		// 即使有zip文件的情况下,也优先使用目录中的文件
 		if(GetFileAttributes(GetExePath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strXmlFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetExePath() + strXmlFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strXmlFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strXmlFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetXmlPath() + strXmlFile);
 		}else
 		if(GetFileAttributes(strXmlFile) != 0xFFFFFFFF)	// 绝对路径查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(strXmlFile);
 		}else
 		{
 			DWORD dwSize = 0;
@@ -580,7 +576,7 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 			}
 			if(pByte != NULL)
 			{
-				xmlDoc.Parse((const char*)pByte, NULL, TIXML_ENCODING_UTF8);
+				xmlDoc.load((const char_t*)pByte, NULL);
 				delete[] pByte;
 			}else
 			{
@@ -591,15 +587,15 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 	{
 		if(GetFileAttributes(GetExePath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetExePath() + strXmlFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetExePath() + strXmlFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strXmlFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(GetXmlPath() + strXmlFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(GetXmlPath() + strXmlFile);
 		}else
 		if(GetFileAttributes(strXmlFile) != 0xFFFFFFFF)	// 绝对路径查找
 		{
-			xmlDoc.LoadFile(CEncodingUtil::UnicodeToAnsi(strXmlFile), TIXML_ENCODING_UTF8);
+			xmlResult = xmlDoc.load_file(strXmlFile);
 		}else
 		{
 			// 文件不存在
@@ -607,7 +603,7 @@ BOOL DuiSystem::LoadXmlFile(TiXmlDocument& xmlDoc, CString strFileName)
 		}
 	}
 
-	return !xmlDoc.Error();
+	return xmlResult;
 }
 
 // 加载图片文件,支持从zip文件中加载
@@ -661,81 +657,74 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 }
 
 // 获取系统配置信息
-CString DuiSystem::GetConfig(CStringA strName)
+CString DuiSystem::GetConfig(CString strName)
 {
-	CStringA strCfg;
+	CString strCfg;
 	if(m_mapCfgPool.Lookup(strName, strCfg))
 	{
-		CString strCfgW;
-		strCfgW = CA2T(strCfg, CP_UTF8);
-		return strCfgW;
-		//return CA2T(strCfg, CP_UTF8);
+		return strCfg;
 	}
 	return _T("");
 }
 
 // 获取XML文件
-CString DuiSystem::GetXmlFile(CStringA strName)
+CString DuiSystem::GetXmlFile(CString strName)
 {
-	CStringA strXmlFile;
+	CString strXmlFile;
 	if(m_mapXmlPool.Lookup(strName, strXmlFile))
 	{
-		//return GetExePath() + CEncodingUtil::AnsiToUnicode(strXmlFile);
-		return CEncodingUtil::AnsiToUnicode(strXmlFile);
+		return strXmlFile;
 	}
 	return _T("");
 }
 
 // 获取Skin
-CStringA DuiSystem::GetSkin(CStringA strName)
+CString DuiSystem::GetSkin(CString strName)
 {
-	if(strName.Find("skin:") == 0)
+	if(strName.Find(_T("skin:")) == 0)
 	{
 		strName.Delete(0, 5);
 	}
 
-	CStringA strSkin;
+	CString strSkin;
 	m_mapSkinPool.Lookup(strName, strSkin);
 	return strSkin;
 }
 
 // 获取字符串值
-CString DuiSystem::GetString(CStringA strName)
+CString DuiSystem::GetString(CString strName)
 {
-	CStringA strString;
+	CString strString;
 	m_mapStringPool.Lookup(strName, strString);
 	// 将字符串中的替换符进行替换
 	ParseDuiString(strString);
-	CString strStringW;
-	strStringW = CA2T(strString, CP_UTF8);
-	return strStringW;
-	//return CA2T(strString, CP_UTF8);
+	return strString;
 }
 
 // 设置字符串值
-void DuiSystem::SetString(CStringA strName, CString strValue)
+void DuiSystem::SetString(CString strName, CString strValue)
 {
-	m_mapStringPool.SetAt(strName, CT2A(strValue, CP_UTF8));
+	m_mapStringPool.SetAt(strName, strValue);
 }
 
 // 解析字符串，替换其中的替换内容
-void DuiSystem::ParseDuiString(CStringA& strString)
+void DuiSystem::ParseDuiString(CString& strString)
 {
-	CStringA strTmp = strString;
-	int nPos1 = strTmp.Find("[");
+	CString strTmp = strString;
+	int nPos1 = strTmp.Find(_T("["));
 	while(nPos1 != -1)
 	{
-		int nPos2 = strTmp.Find("]");
+		int nPos2 = strTmp.Find(_T("]"));
 		if(nPos2 > (nPos1 + 1))
 		{
-			CStringA strName = strTmp.Mid(nPos1+1, nPos2-nPos1-1);
-			CStringA strValue;
+			CString strName = strTmp.Mid(nPos1+1, nPos2-nPos1-1);
+			CString strValue;
 			if(m_mapStringPool.Lookup(strName, strValue))
 			{
 				strTmp.Replace(strTmp.Mid(nPos1, nPos2-nPos1+1), strValue);
 			}
 		}
-		nPos1 = strTmp.Find("[", nPos1+1);
+		nPos1 = strTmp.Find(_T("["), nPos1+1);
 	}
 	strString = strTmp;
 }
@@ -898,7 +887,7 @@ BOOL DuiSystem::CheckOSName(CString strOS)
 }
 
 // 获取字体信息
-BOOL DuiSystem::GetFont(CStringA strName, DuiFontInfo& fontInfo)
+BOOL DuiSystem::GetFont(CString strName, DuiFontInfo& fontInfo)
 {
 	return m_mapFontPool.Lookup(strName, fontInfo);
 }
@@ -996,7 +985,7 @@ BOOL DuiSystem::SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, CStrin
 }
 
 // 根据控件类名创建控件实例
-CControlBase* DuiSystem::CreateControlByName(LPCSTR lpszName, HWND hWnd, CDuiObject* pParentObject)
+CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject)
 {
 	CControlBase *pControl = NULL;
 
@@ -1077,7 +1066,7 @@ CControlBase* DuiSystem::GetControl(CDuiObject* pDuiObject, UINT uControlID)
 	}
 
 	// 判断是否下层DUI控件对象
-	if(pDuiObject->IsClass("dlg"))
+	if(pDuiObject->IsClass(_T("dlg")))
 	{
 		CDlgBase* pDlgBase = (CDlgBase*)pDuiObject;
 		CControlBase* pControlBase = pDlgBase->GetControl(uControlID);
@@ -1094,7 +1083,7 @@ CControlBase* DuiSystem::GetControl(CDuiObject* pDuiObject, UINT uControlID)
 			}
 		}
 	}else
-	if(pDuiObject->IsClass("popup"))
+	if(pDuiObject->IsClass(_T("popup")))
 	{
 		CDlgPopup* pDlgPopup = (CDlgPopup*)pDuiObject;
 		CControlBase* pControlBase = pDlgPopup->GetControl(uControlID);
@@ -1131,7 +1120,7 @@ CControlBase* DuiSystem::GetControl(CDuiObject* pDuiObject, CString strControlNa
 	}
 
 	// 判断是否下层DUI控件对象
-	if(pDuiObject->IsClass("dlg"))
+	if(pDuiObject->IsClass(_T("dlg")))
 	{
 		CDlgBase* pDlgBase = (CDlgBase*)pDuiObject;
 		CControlBase* pControlBase = pDlgBase->GetControl(strControlName);
@@ -1148,7 +1137,7 @@ CControlBase* DuiSystem::GetControl(CDuiObject* pDuiObject, CString strControlNa
 			}
 		}
 	}else
-	if(pDuiObject->IsClass("popup"))
+	if(pDuiObject->IsClass(_T("popup")))
 	{
 		CDlgPopup* pDlgPopup = (CDlgPopup*)pDuiObject;
 		CControlBase* pControlBase = pDlgPopup->GetControl(strControlName);
@@ -1362,7 +1351,7 @@ CDlgBase* DuiSystem::CreateDuiDialog(LPCTSTR lpszXmlTemplate, CDuiObject* pParen
 		strXmlFile = lpszXmlTemplate;
 		if(strXmlFile.Find(_T(".xml")) == -1)
 		{
-			strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strXmlFile));
+			strXmlFile = DuiSystem::Instance()->GetXmlFile(strXmlFile);
 		}else
 		if(strXmlFile.Find(_T(":")) == -1)
 		{
@@ -1375,7 +1364,7 @@ CDlgBase* DuiSystem::CreateDuiDialog(LPCTSTR lpszXmlTemplate, CDuiObject* pParen
 	}
 
 	CDlgBase* pParentDlg = NULL;
-	if(pParentObject && pParentObject->IsClass("dlg"))
+	if(pParentObject && pParentObject->IsClass(_T("dlg")))
 	{
 		pParentDlg = ((CDlgBase*)pParentObject);
 		if(nIDTemplate == 0)
@@ -1548,7 +1537,7 @@ void DuiSystem::SetNotifyMsgBoxControlImage(CString strControlName, CString strC
 		CControlBaseFont* pControl = (CControlBaseFont*)(pNotifyMsgBox->GetControl(strControlName));
 		if(pControl)
 		{
-			pControl->OnAttributeImage(CEncodingUtil::UnicodeToAnsi(strControlImage), TRUE);
+			pControl->OnAttributeImage(strControlImage, TRUE);
 		}
 	}
 }
@@ -1759,7 +1748,7 @@ public:
 						}
 						if(strProcess.Find(_T(".exe")) == -1)
 						{
-							strProcess = DuiSystem::Instance()->GetString(CEncodingUtil::UnicodeToAnsi(strProcess));
+							strProcess = DuiSystem::Instance()->GetString(strProcess);
 						}
 						if(strProcess.Find(_T("{platpath}")) == 0)
 						{
@@ -1949,7 +1938,7 @@ CDlgPopup* DuiSystem::CreateDuiPopupWnd(LPCTSTR lpszXmlTemplate, CDuiObject* pPa
 	CString strXmlFile = lpszXmlTemplate;
 	if(strXmlFile.Find(_T(".xml")) == -1)
 	{
-		strXmlFile = DuiSystem::Instance()->GetXmlFile(CEncodingUtil::UnicodeToAnsi(strXmlFile));
+		strXmlFile = DuiSystem::Instance()->GetXmlFile(strXmlFile);
 	}else
 	if(strXmlFile.Find(_T(":")) == -1)
 	{
@@ -1961,7 +1950,7 @@ CDlgPopup* DuiSystem::CreateDuiPopupWnd(LPCTSTR lpszXmlTemplate, CDuiObject* pPa
 	}
 
 	CDlgBase* pParentDlg = NULL;
-	if(pParentObject && pParentObject->IsClass("dlg"))
+	if(pParentObject && pParentObject->IsClass(_T("dlg")))
 	{
 		pParentDlg = ((CDlgBase*)pParentObject);
 		if(nIDTemplate == 0)
@@ -2056,10 +2045,10 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 	m_NotifyIconData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	m_NotifyIconData.uCallbackMessage = WM_SYSTEM_TRAYICON;
 
-	CStringA strTrayIcon = DuiSystem::Instance()->GetSkin("IDB_TRAY_ICON");
+	CString strTrayIcon = DuiSystem::Instance()->GetSkin(_T("IDB_TRAY_ICON"));
 	if(!strIcon.IsEmpty())
 	{
-		strTrayIcon = CEncodingUtil::UnicodeToAnsi(strIcon);
+		strTrayIcon = strIcon;
 	}
 	if (strTrayIcon.IsEmpty()) return FALSE;
 
@@ -2070,18 +2059,18 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 		m_NotifyIconData.hIcon = NULL;
 	}
 
-	if(strTrayIcon.Find(".") != -1)	// 加载图标文件
+	if(strTrayIcon.Find(_T(".")) != -1)	// 加载图标文件
 	{
-		CString strIconFile = DuiSystem::GetSkinPath() + CEncodingUtil::AnsiToUnicode(strTrayIcon);
+		CString strIconFile = DuiSystem::GetSkinPath() + strTrayIcon;
 		WORD wIndex = 0;
 		m_NotifyIconData.hIcon = ::ExtractAssociatedIcon(m_hInst, strIconFile.GetBuffer(0), &wIndex);
 	}else	// 加载图标资源
 	{
-		UINT nResourceID = atoi(strTrayIcon);
+		UINT nResourceID = _wtoi(strTrayIcon);
 		m_NotifyIconData.hIcon = AfxGetApp()->LoadIcon(nResourceID);
 	}
 
-	CString sWindowText = DuiSystem::Instance()->GetString("APP_NAME");
+	CString sWindowText = DuiSystem::Instance()->GetString(_T("APP_NAME"));
 	if(!strTip.IsEmpty())
 	{
 		sWindowText = strTip;
@@ -2169,7 +2158,7 @@ BOOL DuiSystem::SetTrayTip(CString szToolTip)
 	if(m_NotifyIconData.cbSize)
 	{
 		m_NotifyIconData.uFlags = NIF_MESSAGE | NIF_TIP;
-		CString sWindowText = DuiSystem::Instance()->GetString("APP_NAME");
+		CString sWindowText = DuiSystem::Instance()->GetString(_T("APP_NAME"));
 		if(szToolTip != _T(""))
 		{
 			sWindowText += _T("\n");
@@ -2256,13 +2245,13 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 void DuiSystem::InitLog()
 {
 	// 初始化日志文件路径和锁
-	CString strLogFile = GetConfig("logfile");
+	CString strLogFile = GetConfig(_T("logfile"));
 	if(strLogFile.IsEmpty())
 	{
 		return;
 	}
 	m_strLogFile = GetExePath() + strLogFile;
-	m_nLogLevel = _wtoi(GetConfig("loglevel"));
+	m_nLogLevel = _wtoi(GetConfig(_T("loglevel")));
 	m_bLogEnable = TRUE;
 	InitializeCriticalSection(&m_WriteLogMutex);
 

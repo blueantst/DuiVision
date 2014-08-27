@@ -696,26 +696,26 @@ int CControlBase::PositionItem2Value( const DUIDLG_POSITION_ITEM &pos ,int nMin,
 }
 
 // 解析位置信息
-LPCSTR CControlBase::ParsePosition(const char * pszPos,DUIDLG_POSITION_ITEM &pos)
+LPCTSTR CControlBase::ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos)
 {
 	if(!pszPos) return NULL;
 
-	if(pszPos[0]=='|') pos.pit=PIT_CENTER,pszPos++;
-	else if(pszPos[0]=='%') pos.pit=PIT_PERCENT,pszPos++;
+	if(pszPos[0]==_T('|')) pos.pit=PIT_CENTER,pszPos++;
+	else if(pszPos[0]==_T('%')) pos.pit=PIT_PERCENT,pszPos++;
 	else pos.pit=PIT_NORMAL;
 	
-	if(pszPos[0]=='-') pos.bMinus=TRUE,pszPos++;
+	if(pszPos[0]==_T('-')) pos.bMinus=TRUE,pszPos++;
 	else pos.bMinus=FALSE;
 
-	pos.nPos=(float)atof(pszPos);
+	pos.nPos=(float)_tstof(pszPos);
 
-	const char *pNext=strchr(pszPos,',');
+	LPCTSTR pNext=StrChr(pszPos,_T(','));
 	if(pNext) pNext++;
 	return pNext;
 }
 
 // 从XML设置位置信息属性
-HRESULT CControlBase::OnAttributePosChange(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoading)
 {
     if (strValue.IsEmpty()) return E_FAIL;
 
@@ -724,7 +724,7 @@ HRESULT CControlBase::OnAttributePosChange(const CStringA& strValue, BOOL bLoadi
 	DUIDLG_POSITION dlgpos;
 
 	dlgpos.nCount=0;
-	LPCSTR pszValue=strValue;
+	LPCTSTR pszValue=strValue;
 	while(dlgpos.nCount<4 && pszValue)
 	{
 		pszValue=ParsePosition(pszValue,dlgpos.Item[dlgpos.nCount++]);
@@ -784,11 +784,11 @@ HRESULT CControlBase::OnAttributePosChange(const CStringA& strValue, BOOL bLoadi
 }
 
 // 从XML设置宽度信息属性
-HRESULT CControlBase::OnAttributeWidth(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBase::OnAttributeWidth(const CString& strValue, BOOL bLoading)
 {
     if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nWidth = atoi(strValue);
+	m_nWidth = _wtoi(strValue);
 	m_rc.right = m_rc.left + m_nWidth;
 	SetRect(m_rc);
 
@@ -796,11 +796,11 @@ HRESULT CControlBase::OnAttributeWidth(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置高度信息属性
-HRESULT CControlBase::OnAttributeHeight(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBase::OnAttributeHeight(const CString& strValue, BOOL bLoading)
 {
     if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nHeight = atoi(strValue);
+	m_nHeight = _wtoi(strValue);
 	m_rc.bottom = m_rc.top + m_nHeight;
 	SetRect(m_rc);
 
@@ -808,7 +808,7 @@ HRESULT CControlBase::OnAttributeHeight(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置快捷键信息属性
-HRESULT CControlBase::OnAttributeShortcut(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBase::OnAttributeShortcut(const CString& strValue, BOOL bLoading)
 {
 	CDuiObject::ParseKeyCode(strValue, m_nShortcutKey, m_nShortcutFlag);
 
@@ -835,7 +835,7 @@ BOOL CControlBase::IsControlVisible()
 		return GetVisible();
 	}
 
-	if(pParentObj->IsClass("dlg") || pParentObj->IsClass("popup"))
+	if(pParentObj->IsClass(_T("dlg")) || pParentObj->IsClass(_T("popup")))
 	{
 		return GetVisible();
 	}
@@ -871,12 +871,12 @@ void CControlBase::UpdateControl(CRect rc, BOOL bVisible, BOOL bUpdate)
 void CControlBase::InvalidateRect(LPCRECT lpRect, BOOL bErase)
 {
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass("dlg")))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
 		pParentObj = ((CControlBase*)pParentObj)->GetParent();
 	}
 
-	if((pParentObj != NULL) && pParentObj->IsClass("dlg"))
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		((CDlgBase*)pParentObj)->InvalidateRect(lpRect, bErase);
 	}
@@ -1020,7 +1020,7 @@ BOOL CControlBase::RemoveControl(CString strControlName, UINT uControlID)
 }
 
 // 清除指定类型的子控件
-void CControlBase::RemoveControls(CStringA strClassName)
+void CControlBase::RemoveControls(CString strClassName)
 {
 	for (int i = m_vecControl.size()-1; i >= 0; i--)
 	{
@@ -1036,9 +1036,9 @@ void CControlBase::RemoveControls(CStringA strClassName)
 CDlgBase* CControlBase::GetParentDialog(BOOL bEnablePopup)
 {
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass("dlg")))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
-		if(pParentObj->IsClass("popup"))
+		if(pParentObj->IsClass(_T("popup")))
 		{
 			if(!bEnablePopup)	// 如果不允许Popup窗口的控件获取父对话框,则直接返回空
 			{
@@ -1051,7 +1051,7 @@ CDlgBase* CControlBase::GetParentDialog(BOOL bEnablePopup)
 		}
 	}
 
-	if((pParentObj != NULL) && pParentObj->IsClass("dlg"))
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		return (CDlgBase*)pParentObj;
 	}
@@ -1158,7 +1158,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 				}
 				if(strProcess.Find(_T(".exe")) == -1)
 				{
-					strProcess = DuiSystem::Instance()->GetString(CEncodingUtil::UnicodeToAnsi(strProcess));
+					strProcess = DuiSystem::Instance()->GetString(strProcess);
 				}
 				if(strProcess.Find(_T("{platpath}")) == 0)
 				{
@@ -1241,11 +1241,11 @@ LRESULT CControlBase::CallDuiHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			return pDuiHandler->OnDuiMessage(GetID(), GetName(), uMsg, wParam, lParam);
 		}
 
-		if(pParentObj->IsClass("popup"))
+		if(pParentObj->IsClass(_T("popup")))
 		{
 			pParentObj = ((CDlgPopup*)pParentObj)->GetParent();
 		}else
-		if(pParentObj->IsClass("dlg"))	// 如果是对话框，暂时终结，不再找父窗口
+		if(pParentObj->IsClass(_T("dlg")))	// 如果是对话框，暂时终结，不再找父窗口
 		{
 			pParentObj = ((CDlgBase*)pParentObj)->GetParent();
 		}else
@@ -1404,14 +1404,14 @@ void CControlBaseFont::SetBitmapCount(int nCount)
 }
 
 // 设置图片
-BOOL CControlBaseFont::SetImage(CStringA strImageA)
+BOOL CControlBaseFont::SetImage(CString strImage)
 {
-	if(strImageA.Find(".") != -1)	// 加载图片文件
+	if(strImage.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strImageA, CP_UTF8);
-		if(strImageA.Find(":") != -1)
+		CString strImgFile = strImage;
+		if(strImage.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strImageA, CP_UTF8);
+			strImgFile = strImage;
 		}
 		if(!SetBitmap(strImgFile))
 		{
@@ -1419,7 +1419,7 @@ BOOL CControlBaseFont::SetImage(CStringA strImageA)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strImageA);
+		UINT nResourceID = _wtoi(strImage);
 		if(!SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetBitmap(nResourceID, TEXT("BMP")))
@@ -1433,13 +1433,13 @@ BOOL CControlBaseFont::SetImage(CStringA strImageA)
 }
 
 // 从XML设置图片信息属性
-HRESULT CControlBaseFont::OnAttributeImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBaseFont::OnAttributeImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -1457,11 +1457,11 @@ HRESULT CControlBaseFont::OnAttributeImage(const CStringA& strValue, BOOL bLoadi
 }
 
 // 从XML设置Skin属性
-HRESULT CControlBaseFont::OnAttributeSkin(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBaseFont::OnAttributeSkin(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	CStringA strSkin = DuiSystem::Instance()->GetSkin(strValue);
+	CString strSkin = DuiSystem::Instance()->GetSkin(strValue);
 	if (strSkin.IsEmpty()) return E_FAIL;
 
 	if(!SetImage(strSkin))
@@ -1473,7 +1473,7 @@ HRESULT CControlBaseFont::OnAttributeSkin(const CStringA& strValue, BOOL bLoadin
 }
 
 // 从XML设置Font属性
-HRESULT CControlBaseFont::OnAttributeFont(const CStringA& strValue, BOOL bLoading)
+HRESULT CControlBaseFont::OnAttributeFont(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 

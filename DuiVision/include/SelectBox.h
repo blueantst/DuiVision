@@ -15,7 +15,7 @@ struct SelectInfo
 
 class CSelectBox : public CControlBase
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CSelectBox, "selectbox")
+	DUIOBJ_DECLARE_CLASS_NAME(CSelectBox, _T("selectbox"))
 public:
 	CSelectBox(HWND hWnd, CDuiObject* pDuiObject);
 	CSelectBox(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nXCount, int nYCount, BOOL bImage,  
@@ -30,7 +30,7 @@ public:
 	int  GetSelectIndex() { return m_nSelectIndex; }
 	Color GetSelectColor() { return m_clrSelect; }
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 
 protected:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);

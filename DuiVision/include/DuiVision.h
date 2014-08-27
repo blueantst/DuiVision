@@ -19,7 +19,6 @@ using namespace Gdiplus;
 
 #include "duiid.h"
 
-#include "../tinyxml/TinyXml.h"
 #include "../common/XUnZip.h"
 
 //////////////////////////////////////////////////////////

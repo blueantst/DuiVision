@@ -19,7 +19,7 @@ CDuiComboBox::~CDuiComboBox(void)
 }
 
 // 重载加载XML节点函数，加载下层的item内容
-BOOL CDuiComboBox::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiComboBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	__super::Load(pXmlElem);
 
@@ -29,26 +29,21 @@ BOOL CDuiComboBox::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	}
 	
 	// 加载下层的item节点信息
-	TiXmlElement* pItemElem = NULL;
-	for (pItemElem = pXmlElem->FirstChildElement("item"); pItemElem != NULL; pItemElem=pItemElem->NextSiblingElement())
+	for (DuiXmlNode pItemElem = pXmlElem.child(_T("item")); pItemElem; pItemElem=pItemElem.next_sibling(_T("item")))
 	{
-		CStringA strNameA = pItemElem->Attribute("name");
-		DuiSystem::Instance()->ParseDuiString(strNameA);
-		CString strName = CA2T(strNameA, CP_UTF8);
-		CStringA strDescA = pItemElem->Attribute("desc");
-		DuiSystem::Instance()->ParseDuiString(strDescA);
-		CString strDesc = CA2T(strDescA, CP_UTF8);
-		CStringA strValueA = pItemElem->Attribute("value");
-		DuiSystem::Instance()->ParseDuiString(strValueA);
-		CString strValue = CA2T(strValueA, CP_UTF8);
+		CString strName = pItemElem.attribute(_T("name")).value();
+		DuiSystem::Instance()->ParseDuiString(strName);
+		CString strDesc = pItemElem.attribute(_T("desc")).value();
+		DuiSystem::Instance()->ParseDuiString(strDesc);
+		CString strValue = pItemElem.attribute(_T("value")).value();
+		DuiSystem::Instance()->ParseDuiString(strValue);
 		UINT nResourceID = 0;
-		CStringA strImageA = pItemElem->Attribute("image");
-		CString strImage = CA2T(strImageA, CP_UTF8);
+		CString strImage = pItemElem.attribute(_T("image")).value();
 		if(!strImage.IsEmpty())
 		{
 			if(strImage.Find(_T("skin:")) == 0)
 			{
-				strImage = CEncodingUtil::AnsiToUnicode(DuiSystem::Instance()->GetSkin(CEncodingUtil::UnicodeToAnsi(strImage)));
+				strImage = DuiSystem::Instance()->GetSkin(strImage);
 			}
 
 			if(strImage.Find(_T(".")) == -1)	// 加载图片资源
@@ -124,7 +119,7 @@ int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, in
 	{
 		if(strImage.Find(_T("skin:")) == 0)
 		{
-			strImage = CEncodingUtil::AnsiToUnicode(DuiSystem::Instance()->GetSkin(CEncodingUtil::UnicodeToAnsi(strImage)));
+			strImage = DuiSystem::Instance()->GetSkin(strImage);
 		}
 
 		if(strImage.Find(_T(".")) != -1)	// 图片文件
@@ -179,13 +174,13 @@ void CDuiComboBox::ClearItems()
 }
 
 // 从XML设置图片信息属性
-HRESULT CDuiComboBox::OnAttributeHeadImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiComboBox::OnAttributeHeadImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -194,16 +189,16 @@ HRESULT CDuiComboBox::OnAttributeHeadImage(const CStringA& strValue, BOOL bLoadi
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		m_strImageHeadBitmap = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		m_strImageHeadBitmap = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			m_strImageHeadBitmap = CA2T(strSkin, CP_UTF8);
+			m_strImageHeadBitmap = strSkin;
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		m_nResourceIDHeadBitmap = nResourceID;
 	}
 
@@ -211,13 +206,13 @@ HRESULT CDuiComboBox::OnAttributeHeadImage(const CStringA& strValue, BOOL bLoadi
 }
 
 // 从XML设置图片信息属性
-HRESULT CDuiComboBox::OnAttributeDeleteImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiComboBox::OnAttributeDeleteImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -226,16 +221,16 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CStringA& strValue, BOOL bLoa
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		m_strImageDeleteBitmap = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		m_strImageDeleteBitmap = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			m_strImageDeleteBitmap = CA2T(strSkin, CP_UTF8);
+			m_strImageDeleteBitmap = strSkin;
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		m_nResourceIDDeleteBitmap = nResourceID;
 	}
 

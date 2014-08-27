@@ -29,16 +29,16 @@ CDuiPanel::~CDuiPanel(void)
 }
 
 // 根据控件名创建控件实例
-CControlBase* CDuiPanel::_CreateControlByName(LPCSTR lpszName)
+CControlBase* CDuiPanel::_CreateControlByName(LPCTSTR lpszName)
 {
 	HWND hWnd = NULL;
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass("dlg")))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
 		pParentObj = ((CControlBase*)pParentObj)->GetParent();
 	}
 
-	if((pParentObj != NULL) && pParentObj->IsClass("dlg"))
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		return DuiSystem::CreateControlByName(lpszName, ((CDlgBase*)pParentObj)->GetSafeHwnd(), this);
 	}
@@ -47,7 +47,7 @@ CControlBase* CDuiPanel::_CreateControlByName(LPCSTR lpszName)
 }
 
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
-BOOL CDuiPanel::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiPanel::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	if(!__super::Load(pXmlElem))
 	{
@@ -66,13 +66,13 @@ BOOL CDuiPanel::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 // 加载
 BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 {
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDivElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDivElem;
 
 	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		m_strXmlFile = strFileName;
-		pDivElem = xmlDoc.FirstChildElement("div");
+		pDivElem = xmlDoc.child(_T("div"));
 		if(pDivElem != NULL)
 		{
 			// 加载div节点属性
@@ -84,13 +84,13 @@ BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 }
 
 // 从XML设置图片信息属性
-HRESULT CDuiPanel::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiPanel::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -99,12 +99,12 @@ HRESULT CDuiPanel::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoadin
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		if(!m_pControScrollV->SetBitmap(strImgFile))
 		{
@@ -112,7 +112,7 @@ HRESULT CDuiPanel::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoadin
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))
@@ -126,17 +126,17 @@ HRESULT CDuiPanel::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoadin
 }
 
 // 从XML设置XML属性,加载XML文件的内容作为div容器内的内容
-HRESULT CDuiPanel::OnAttributeXml(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiPanel::OnAttributeXml(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDivElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDivElem;
 
-	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, CEncodingUtil::AnsiToUnicode(strValue)))
+	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strValue))
 	{
-		m_strXmlFile = CEncodingUtil::AnsiToUnicode(strValue);
-		pDivElem = xmlDoc.FirstChildElement("div");
+		m_strXmlFile = strValue;
+		pDivElem = xmlDoc.child(_T("div"));
 		if(pDivElem != NULL)
 		{
 			// 加载div节点属性
@@ -148,7 +148,7 @@ HRESULT CDuiPanel::OnAttributeXml(const CStringA& strValue, BOOL bLoading)
 }
 
 // 初始化窗口控件
-void CDuiPanel::InitUI(CRect rcClient, TiXmlElement* pNode)
+void CDuiPanel::InitUI(CRect rcClient, DuiXmlNode pNode)
 {
 	CRect rcTemp;
 	int nStartX = 0;
@@ -159,12 +159,11 @@ void CDuiPanel::InitUI(CRect rcClient, TiXmlElement* pNode)
 	if(pNode)
 	{
 		m_nVirtualHeight = 0;
-		TiXmlElement* pControlElem = NULL;
-		for (pControlElem = pNode->FirstChildElement(); pControlElem != NULL; pControlElem=pControlElem->NextSiblingElement())
+		for (DuiXmlNode pControlElem = pNode.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
 		{
 			if(pControlElem != NULL)
 			{
-				CStringA strControlName = pControlElem->Value();
+				CString strControlName = pControlElem.name();
 				CControlBase* pControl = _CreateControlByName(strControlName);
 				if(pControl)
 				{
@@ -262,7 +261,7 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
-			if(pControlBase->IsClass("div"))
+			if(pControlBase->IsClass(_T("div")))
 			{
 				pControlBase->SetControlVisible(bIsVisible);
 			}else

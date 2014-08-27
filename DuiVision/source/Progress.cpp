@@ -85,11 +85,11 @@ BOOL CDuiProgress::SetRun(BOOL bRun, int nIndex/* = -1*/)
 }
 
 // 从XML设置自动运行属性
-HRESULT CDuiProgress::OnAttributeRun(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiProgress::OnAttributeRun(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	BOOL bRun = (strValue == "true");
+	BOOL bRun = (strValue == _T("true"));
 	SetRun(bRun);
 
 	return bLoading?S_FALSE:S_OK;

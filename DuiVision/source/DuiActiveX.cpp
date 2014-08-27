@@ -1448,31 +1448,31 @@ void CDuiActiveX::SetControlRect(CRect rc)
 }
 
 // 从XML设置CLSID属性
-HRESULT CDuiActiveX::OnAttributeCLSID(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiActiveX::OnAttributeCLSID(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	CreateControl(CA2T(strValue, CP_UTF8));
+	CreateControl(strValue);
 
 	return bLoading?S_FALSE:S_OK;
 }
 
 // 从XML设置DelayCreate属性
-HRESULT CDuiActiveX::OnAttributeDelayCreate(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiActiveX::OnAttributeDelayCreate(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	SetDelayCreate(strValue == "true");
+	SetDelayCreate(strValue == _T("true"));
 
 	return bLoading?S_FALSE:S_OK;
 }
 
 // 从XML设置url属性
-HRESULT CDuiActiveX::OnAttributeUrl(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiActiveX::OnAttributeUrl(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_strUrl = CA2T(strValue, CP_UTF8);
+	m_strUrl = strValue;
 	if(m_pControl != NULL)
 	{
 		Navigate(m_strUrl);
@@ -1780,29 +1780,28 @@ void CDuiActiveX::DrawControl(CDC &dc, CRect rcUpdate)
 // 文件路径解析
 CString CDuiActiveX::ParseFilePath(CString strUrl)
 {
-	CStringA strUrlA = CEncodingUtil::UnicodeToAnsi(strUrl);
 	// 通过Skin读取
-	CStringA strSkinA = "";
-	if(strUrlA.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strUrl.Find(_T("skin:")) == 0)
 	{
-		strSkinA = DuiSystem::Instance()->GetSkin(strUrlA);
-		if (strSkinA.IsEmpty()) return FALSE;
+		strSkin = DuiSystem::Instance()->GetSkin(strUrl);
+		if (strSkin.IsEmpty()) return FALSE;
 	}else
 	{
-		strSkinA = strUrlA;
+		strSkin = strUrl;
 	}
 
-	if(strSkinA.Find(".") != -1)	// 加载文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载文件
 	{
-		CString strFile = DuiSystem::GetSkinPath() + CA2T(strSkinA, CP_UTF8);
-		if(strSkinA.Find(":") != -1)
+		CString strFile = DuiSystem::GetSkinPath() + strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strFile = CA2T(strSkinA, CP_UTF8);
+			strFile = strSkin;
 		}
 		return strFile;
 	}
 
-	CString strFile = CA2T(strSkinA, CP_UTF8);
+	CString strFile = strSkin;
 	return strFile;
 }
 

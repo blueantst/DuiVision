@@ -42,8 +42,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="include;tinyxml"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="include;pugixml"
+				PreprocessorDefinitions="WIN32;_DEBUG;PUGIXML_WCHAR_MODE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -222,6 +222,10 @@
 			</File>
 			<File
 				RelativePath=".\source\DuiTreeCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiXml.cpp"
 				>
 			</File>
 			<File
@@ -415,6 +419,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiXml.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Frame.h"
 				>
 			</File>
@@ -542,98 +550,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="TinyXml"
-			>
-			<File
-				RelativePath=".\tinyxml\tinystr.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\tinyxml\tinystr.h"
-				>
-			</File>
-			<File
-				RelativePath=".\tinyxml\tinyxml.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\tinyxml\tinyxml.h"
-				>
-			</File>
-			<File
-				RelativePath=".\tinyxml\tinyxmlerror.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\tinyxml\tinyxmlparser.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
 			Name="activex"
 			>
 			<File
@@ -654,6 +570,34 @@
 			</File>
 			<File
 				RelativePath=".\activex\wmp.tli"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="pugixml"
+			>
+			<File
+				RelativePath=".\pugixml\foreach.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\pugixml\pugiconfig.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\pugixml\pugixml.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\pugixml\pugixml.hpp"
 				>
 			</File>
 		</Filter>

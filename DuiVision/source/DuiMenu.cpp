@@ -47,7 +47,7 @@ void CDuiMenu::DrawWindowEx(CDC &dc, CRect rcClient)
 }
 
 // 重载加载XML节点函数，加载下层的Menu item信息
-BOOL CDuiMenu::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiMenu::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	SetRect(CRect(0, 0, m_nWidth, m_nHeight));
 
@@ -72,36 +72,35 @@ BOOL CDuiMenu::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	
 	// 加载下层的item节点信息(正常情况下都使用DlgPopup的Load控件方式加载菜单项,下面的解析比较少用到)
 	int nIdIndex = 100;
-	TiXmlElement* pItemElem = NULL;
-	for (pItemElem = pXmlElem->FirstChildElement("item"); pItemElem != NULL; pItemElem=pItemElem->NextSiblingElement())
+	for (DuiXmlNode pItemElem = pXmlElem.child(_T("item")); pItemElem; pItemElem=pItemElem.next_sibling())
 	{
-		CStringA strId = pItemElem->Attribute("id");
+		CString strId = pItemElem.attribute(_T("id")).value();
 		int nId = nIdIndex;
-		if(strId != "")
+		if(strId != _T(""))
 		{
-			nId = atoi(strId);
+			nId = _wtoi(strId);
 		}
 
-		CStringA strType = pItemElem->Attribute("type");
-		CStringA strName = pItemElem->Attribute("name");
-		CStringA strImage = pItemElem->Attribute("image");
-		CStringA strTitle = pItemElem->Attribute("title");
+		CString strType = pItemElem.attribute(_T("type")).value();
+		CString strName = pItemElem.attribute(_T("name")).value();
+		CString strImage = pItemElem.attribute(_T("image")).value();
+		CString strTitle = pItemElem.attribute(_T("title")).value();
 		
-		if(strType == "separator")
+		if(strType == _T("separator"))
 		{
 			// 分隔线也可以用图片的方式
 			AddSeparator();
 			continue;
 		}
-		CString strTitleU = CA2T(strTitle, CP_UTF8);
-		if(strImage.Find(".") != -1)	// 加载图片文件
+		CString strTitleU = strTitle;
+		if(strImage.Find(_T(".")) != -1)	// 加载图片文件
 		{
-			CString strImgFile = CA2T(strImage, CP_UTF8);
+			CString strImgFile = strImage;
 			AddMenu(strTitleU, nIdIndex, strImgFile);
 		}else
 		if(!strImage.IsEmpty())
 		{
-			UINT nResourceID = atoi(strImage);
+			UINT nResourceID = _wtoi(strImage);
 			AddMenu(strTitleU, nIdIndex, nResourceID);
 		}else
 		{
@@ -120,19 +119,18 @@ BOOL CDuiMenu::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 }
 
 // 加载指定名字的菜单节点
-BOOL CDuiMenu::LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName)
+BOOL CDuiMenu::LoadSubMenu(DuiXmlNode pXmlElem, CString strSubItemName)
 {
-	if(pXmlElem == NULL)
+	if(!pXmlElem)
 	{
 		return FALSE;
 	}
 
 	// 递归遍历下层节点,看是否有指定名字的节点
-	TiXmlElement* pItemElem = NULL;
-	for (pItemElem = pXmlElem->FirstChildElement(); pItemElem != NULL; pItemElem=pItemElem->NextSiblingElement())
+	for (DuiXmlNode pItemElem = pXmlElem.first_child(); pItemElem; pItemElem=pItemElem.next_sibling())
 	{
-		CStringA strNameA = pItemElem->Attribute("name");
-		if(strSubItemName == CA2T(strNameA, CP_UTF8))
+		CString strName = pItemElem.attribute(_T("name")).value();
+		if(strSubItemName == strName)
 		{
 			// 加载子菜单
 			return Load(pItemElem);
@@ -147,19 +145,16 @@ BOOL CDuiMenu::LoadSubMenu(TiXmlElement* pXmlElem, CString strSubItemName)
 }
 
 // 加载XML节点中定义的菜单和其他控件
-BOOL CDuiMenu::LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile)
+BOOL CDuiMenu::LoadXmlNode(DuiXmlNode pXmlElem, CString strXmlFile)
 {
 	if(pXmlElem == NULL)
 	{
 		return FALSE;
 	}
 
-	TiXmlElement* pControlElem = NULL;
-	for (pControlElem = pXmlElem->FirstChildElement(); pControlElem != NULL; pControlElem=pControlElem->NextSiblingElement())
+	for (DuiXmlNode pControlElem = pXmlElem.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
 	{
-		if(pControlElem != NULL)
-		{
-			CStringA strControlName = pControlElem->Value();
+		CString strControlName = pControlElem.name();
 			CControlBase* pControl = _CreateControlByName(strControlName);
 			if(pControl)
 			{
@@ -185,7 +180,6 @@ BOOL CDuiMenu::LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile)
 					delete pControl;
 				}
 			}
-		}
 	}
 
 	return TRUE;
@@ -194,12 +188,12 @@ BOOL CDuiMenu::LoadXmlNode(TiXmlElement* pXmlElem, CString strXmlFile)
 // 加载XML文件中定义的菜单
 BOOL CDuiMenu::LoadXmlFile(CString strFileName, CString strSubItemName)
 {
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDivElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDivElem;
 
 	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
-		pDivElem = xmlDoc.FirstChildElement(GetClassName());
+		pDivElem = xmlDoc.child(GetClassName());
 		if(pDivElem != NULL)
 		{
 			if(!strSubItemName.IsEmpty())
@@ -227,15 +221,15 @@ BOOL CDuiMenu::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UIN
 	m_point = point;
 	m_uMessageID = uMessageID;
 
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDivElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDivElem;
 
 	BOOL bRet = FALSE;
 	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		m_strXmlFile = strFileName;
-		pDivElem = xmlDoc.FirstChildElement(GetClassName());
-		if(pDivElem != NULL)
+		pDivElem = xmlDoc.child(GetClassName());
+		if(pDivElem)
 		{
 			if(!strSubItemName.IsEmpty())
 			{
@@ -505,13 +499,13 @@ void CDuiMenu::SetMenuPoint()
 CDuiMenu* CDuiMenu::GetParentMenu()
 {
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass("menu")))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("menu"))))
 	{
-		if(pParentObj->IsClass("popup"))
+		if(pParentObj->IsClass(_T("popup")))
 		{
 			pParentObj = ((CDlgPopup*)pParentObj)->GetParent();
 		}else
-		if(pParentObj->IsClass("dlg"))
+		if(pParentObj->IsClass(_T("dlg")))
 		{
 			pParentObj = ((CDlgBase*)pParentObj)->GetParent();
 		}else
@@ -519,7 +513,7 @@ CDuiMenu* CDuiMenu::GetParentMenu()
 			pParentObj = ((CControlBase*)pParentObj)->GetParent();
 		}
 	}
-	if((pParentObj != NULL) && pParentObj->IsClass("menu"))
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("menu")))
 	{
 		return (CDuiMenu*)pParentObj;
 	}

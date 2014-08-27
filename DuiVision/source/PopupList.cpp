@@ -65,7 +65,7 @@ DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CPopupList, Head, 2)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CPopupList, Close, 4)
 
 // 加载XML节点
-BOOL CPopupList::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CPopupList::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	if(!__super::Load(pXmlElem))
 	{
@@ -76,28 +76,20 @@ BOOL CPopupList::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	if(pXmlElem != NULL)
 	{
 		// 加载图片和颜色列表
-		TiXmlElement* pControlElem = NULL;
-		for (pControlElem = pXmlElem->FirstChildElement("item"); pControlElem != NULL; pControlElem=pControlElem->NextSiblingElement())
+		for (DuiXmlNode pControlElem = pXmlElem.child(_T("item")); pControlElem; pControlElem=pControlElem.next_sibling(_T("item")))
 		{
-			if(pControlElem != NULL)
-			{
 				UINT nResourceID = 0;
-				CStringA strNameA = pControlElem->Attribute("name");
-				DuiSystem::Instance()->ParseDuiString(strNameA);
-				CString strName = CA2T(strNameA, CP_UTF8);
-				CStringA strDescA = pControlElem->Attribute("desc");
-				DuiSystem::Instance()->ParseDuiString(strDescA);
-				CString strDesc = CA2T(strDescA, CP_UTF8);
-				CStringA strValueA = pControlElem->Attribute("value");
-				DuiSystem::Instance()->ParseDuiString(strValueA);
-				CString strValue = CA2T(strValueA, CP_UTF8);
-				CStringA strImageA = pControlElem->Attribute("image");
-				CString strImage = CA2T(strImageA, CP_UTF8);
+				CString strName = pControlElem.attribute(_T("name")).value();
+				DuiSystem::Instance()->ParseDuiString(strName);
+				CString strDesc = pControlElem.attribute(_T("desc")).value();
+				DuiSystem::Instance()->ParseDuiString(strDesc);
+				CString strValue = pControlElem.attribute(_T("value")).value();
+				DuiSystem::Instance()->ParseDuiString(strValue);
+				CString strImage = pControlElem.attribute(_T("image")).value();
 				if(!strImage.IsEmpty())
 				{
 					if(strImage.Find(_T("skin:")) == 0)
 					{
-						strImage = CEncodingUtil::AnsiToUnicode(DuiSystem::Instance()->GetSkin(CEncodingUtil::UnicodeToAnsi(strImage)));
 					}
 
 					if(strImage.Find(_T(".")) != -1)	// 加载图片文件
@@ -112,7 +104,6 @@ BOOL CPopupList::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 
 				AddItem(strName, strDesc, strValue, nResourceID, strImage);
 			}
-		}
 	}
 
     return TRUE;

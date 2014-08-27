@@ -69,17 +69,17 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_strTrayMenuXml = _T("");
 
 	// 初始化图标
-	CStringA strTrayIcon = DuiSystem::Instance()->GetSkin("IDB_TRAY_ICON");
+	CString strTrayIcon = DuiSystem::Instance()->GetSkin(_T("IDB_TRAY_ICON"));
 	if(!strTrayIcon.IsEmpty())
 	{
-		if(strTrayIcon.Find(".") != -1)	// 加载图标文件
+		if(strTrayIcon.Find(_T(".")) != -1)	// 加载图标文件
 		{
-			CString strIconFile = DuiSystem::GetSkinPath() + CEncodingUtil::AnsiToUnicode(strTrayIcon);
+			CString strIconFile = DuiSystem::GetSkinPath() + strTrayIcon;
 			WORD wIndex = 0;
 			m_hIcon = ::ExtractAssociatedIcon(NULL, strIconFile.GetBuffer(0), &wIndex);
 		}else	// 加载图标资源
 		{
-			UINT nResourceID = atoi(strTrayIcon);
+			UINT nResourceID = _wtoi(strTrayIcon);
 			m_hIcon = AfxGetApp()->LoadIcon(nResourceID);
 		}
 	}
@@ -205,7 +205,7 @@ void CDlgBase::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 }
 
 // 根据控件名创建控件实例
-CControlBase* CDlgBase::_CreateControlByName(LPCSTR lpszName)
+CControlBase* CDlgBase::_CreateControlByName(LPCTSTR lpszName)
 {
 	return DuiSystem::CreateControlByName(lpszName, GetSafeHwnd(), this);
 }
@@ -234,23 +234,23 @@ BOOL CDlgBase::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// 加载窗口的XML文件
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDlgElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDlgElem;
 
 	BOOL bLoadXml = DuiSystem::Instance()->LoadXmlFile(xmlDoc, m_strXmlFile);
 	if(!bLoadXml)
 	{
 		if(!m_strXmlContent.IsEmpty())	// 加载XML内容
 		{
-			xmlDoc.Parse(CT2A(m_strXmlContent, CP_UTF8), NULL, TIXML_ENCODING_UTF8);
-			bLoadXml = !xmlDoc.Error();
+			xmlDoc.load(m_strXmlContent);
+			bLoadXml = !xmlDoc.empty();
 		}
 	}
 	
 	if(bLoadXml)
 	{
-		pDlgElem = xmlDoc.FirstChildElement("dlg");//RootElement();
-		if(pDlgElem != NULL)
+		pDlgElem = xmlDoc.child(_T("dlg"));//RootElement();
+		if(pDlgElem)
 		{
 			// 加载dlg节点属性
 			Load(pDlgElem);
@@ -285,16 +285,16 @@ BOOL CDlgBase::OnInitDialog()
 	GetClientRect(rc);
 
 	// 使用XML节点初始化窗口基础控件和普通控件
-	if(pDlgElem != NULL)
+	if(pDlgElem)
 	{
-		TiXmlElement* pBaseElem = pDlgElem->FirstChildElement("base");
-		if(pBaseElem != NULL)
+		DuiXmlNode pBaseElem = pDlgElem.child(_T("base"));
+		if(pBaseElem)
 		{
 			InitBaseUI(rc, pBaseElem);
 		}
 
-		TiXmlElement* pBodyElem = pDlgElem->FirstChildElement("body");
-		if(pBodyElem != NULL)
+		DuiXmlNode pBodyElem = pDlgElem.child(_T("body"));
+		if(pBodyElem)
 		{
 			InitUI(rc, pBodyElem);
 		}
@@ -316,7 +316,7 @@ BOOL CDlgBase::OnInitDialog()
 		CString strBkSkin = _T("");
 		if(m_strBkImg.Find(_T("skin:")) == 0)
 		{
-			strBkSkin = CEncodingUtil::AnsiToUnicode(DuiSystem::Instance()->GetSkin(CEncodingUtil::UnicodeToAnsi(m_strBkImg)));
+			strBkSkin = DuiSystem::Instance()->GetSkin(m_strBkImg);
 		}else
 		{
 			strBkSkin = m_strBkImg;
@@ -362,16 +362,15 @@ BOOL CDlgBase::OnInitDialog()
 }
 
 // 加载窗口基础控件
-void CDlgBase::InitBaseUI(CRect rcClient, TiXmlElement* pNode)
+void CDlgBase::InitBaseUI(CRect rcClient, DuiXmlNode pNode)
 {
 	if(pNode)
 	{
-		TiXmlElement* pControlElem = NULL;
-		for (pControlElem = pNode->FirstChildElement(); pControlElem != NULL; pControlElem=pControlElem->NextSiblingElement())
+		for (DuiXmlNode pControlElem = pNode.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
 		{
-			if(pControlElem != NULL)
+			if(pControlElem)
 			{
-				CStringA strControlName = pControlElem->Value();
+				CString strControlName = pControlElem.name();
 				CControlBase* pControl = _CreateControlByName(strControlName);
 				if(pControl)
 				{
@@ -391,7 +390,7 @@ void CDlgBase::InitBaseUI(CRect rcClient, TiXmlElement* pNode)
 }
 
 // 初始化窗口控件
-void CDlgBase::InitUI(CRect rcClient, TiXmlElement* pNode)
+void CDlgBase::InitUI(CRect rcClient, DuiXmlNode pNode)
 {
 	CRect rcTemp;
 	int nStartX = 0;
@@ -402,7 +401,7 @@ void CDlgBase::InitUI(CRect rcClient, TiXmlElement* pNode)
 	if(!m_strFramePicture.IsEmpty())
 	{
 		pControlBase = new CDuiPicture(GetSafeHwnd(), this, FRAME_MAINWND, rcClient);
-		((CDuiPicture*)pControlBase)->OnAttributeImage(CEncodingUtil::UnicodeToAnsi(m_strFramePicture), FALSE);
+		((CDuiPicture*)pControlBase)->OnAttributeImage(m_strFramePicture, FALSE);
 		if(m_nFrameWLT != 0)
 		{
 			// 九宫格模式
@@ -412,19 +411,18 @@ void CDlgBase::InitUI(CRect rcClient, TiXmlElement* pNode)
 			// 边框模式
 			((CDuiPicture*)pControlBase)->SetShowMode(enSMFrame, m_nFrameSize);
 		}
-		pControlBase->OnAttributePosChange("0,0,-0,-0", FALSE);
+		pControlBase->OnAttributePosChange(_T("0,0,-0,-0"), FALSE);
 		m_vecBaseArea.push_back(pControlBase);
 	}
 
 	// 加载所有窗口控件
 	if(pNode)
 	{
-		TiXmlElement* pControlElem = NULL;
-		for (pControlElem = pNode->FirstChildElement(); pControlElem != NULL; pControlElem=pControlElem->NextSiblingElement())
+		for (DuiXmlNode pControlElem = pNode.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
 		{
-			if(pControlElem != NULL)
+			if(pControlElem)
 			{
-				CStringA strControlName = pControlElem->Value();
+				CString strControlName = pControlElem.name();
 				CControlBase* pControl = _CreateControlByName(strControlName);
 				if(pControl)
 				{
@@ -519,7 +517,7 @@ void CDlgBase::InitControlValue()
 			}else
 			if(pCtrlValue->strType == _T("image"))
 			{
-				((CControlBaseFont*)pControl)->OnAttributeImage(CEncodingUtil::UnicodeToAnsi(pCtrlValue->strValue), TRUE);
+				((CControlBaseFont*)pControl)->OnAttributeImage(pCtrlValue->strValue, TRUE);
 			}else
 			if(pCtrlValue->strType == _T("check"))
 			{
@@ -874,12 +872,12 @@ int CDlgBase::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 // 从XML设置resize属性
-HRESULT CDlgBase::OnAttributeResize(const CStringA& strValue, BOOL bLoading)
+HRESULT CDlgBase::OnAttributeResize(const CString& strValue, BOOL bLoading)
 {
     if (strValue.IsEmpty()) return E_FAIL;
 
 	// 获取resize属性，并重新设置一下窗口风格
-	m_bChangeSize = atoi(strValue);
+	m_bChangeSize = _wtoi(strValue);
 
 	// 设置窗口风格
 	DWORD dwStyle = ::GetWindowLong(m_hWnd, GWL_STYLE)
@@ -930,7 +928,7 @@ void CDlgBase::InitWindowBkSkin()
 	}else
 	{
 		// 默认加载第一张背景图片
-		CString strImgFile = CEncodingUtil::AnsiToUnicode(DuiSystem::Instance()->GetSkin("SKIN_PIC_0"));
+		CString strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
 		strImgFile = DuiSystem::GetSkinPath() + strImgFile;
 		LoadImage(strImgFile);
 	}
@@ -1652,7 +1650,7 @@ void CDlgBase::OnSkin()
 	CRect rc = pControlBase->GetRect();
 	rc.OffsetRect(-95, rc.Height());
 	ClientToScreen(&rc);
-	pDlgSkin->LoadXmlFile(DuiSystem::Instance()->GetXmlFile("dlg_skin"));
+	pDlgSkin->LoadXmlFile(DuiSystem::Instance()->GetXmlFile(_T("dlg_skin")));
 	pDlgSkin->Create(this, rc, WM_SKIN);
 	pDlgSkin->ShowWindow(SW_SHOW);
 }
@@ -1758,7 +1756,7 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 	{
 	case WM_LBUTTONDBLCLK:
 		{
-			CString strTrayDbClickMsg = DuiSystem::Instance()->GetConfig("trayDbClickMsg");
+			CString strTrayDbClickMsg = DuiSystem::Instance()->GetConfig(_T("trayDbClickMsg"));
 			if(strTrayDbClickMsg == _T("1"))
 			{
 				// 发托盘双击消息
@@ -1967,7 +1965,7 @@ BOOL CDlgBase::OnNcActivate(BOOL bActive)
 void CDlgBase::PreSubclassWindow()
 {
 	// 判断是否允许拖拽图片文件作为窗口背景
-	CString strEnableDragFile = DuiSystem::Instance()->GetConfig("enableDragFile");
+	CString strEnableDragFile = DuiSystem::Instance()->GetConfig(_T("enableDragFile"));
 	if(strEnableDragFile == _T("1"))
 	{
 		DragAcceptFiles(TRUE);

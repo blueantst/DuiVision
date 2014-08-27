@@ -34,11 +34,11 @@ CImageString::~CImageString(void)
 }
 
 // 从XML设置图片掩码信息属性
-HRESULT CImageString::OnAttributeMask(const CStringA& strValue, BOOL bLoading)
+HRESULT CImageString::OnAttributeMask(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_strMask = CEncodingUtil::AnsiToUnicode(strValue);
+	m_strMask = strValue;
 	SetBitmapCount(m_strMask.GetLength());
 
 	m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());

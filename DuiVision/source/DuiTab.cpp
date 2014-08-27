@@ -66,16 +66,16 @@ DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Seperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Hover, 2)
 
 // 根据控件名创建控件实例
-CControlBase* CDuiTabCtrl::_CreateControlByName(LPCSTR lpszName)
+CControlBase* CDuiTabCtrl::_CreateControlByName(LPCTSTR lpszName)
 {
 	HWND hWnd = NULL;
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass("dlg")))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
 		pParentObj = ((CControlBase*)pParentObj)->GetParent();
 	}
 
-	if((pParentObj != NULL) && pParentObj->IsClass("dlg"))
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		return DuiSystem::CreateControlByName(lpszName, ((CDlgBase*)pParentObj)->GetSafeHwnd(), this);
 	}
@@ -84,7 +84,7 @@ CControlBase* CDuiTabCtrl::_CreateControlByName(LPCSTR lpszName)
 }
 
 // 重载加载XML节点函数，加载下层的tab页面内容
-BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiTabCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	__super::Load(pXmlElem);
 
@@ -109,27 +109,24 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	
 	// 加载下层的tab页节点信息
 	int nIdIndex = m_vecItemInfo.size();
-	TiXmlElement* pTabElem = NULL;
-	for (pTabElem = pXmlElem->FirstChildElement("tab"); pTabElem != NULL; pTabElem=pTabElem->NextSiblingElement())
+	for (DuiXmlNode pTabElem = pXmlElem.child(_T("tab")); pTabElem; pTabElem=pTabElem.next_sibling(_T("tab")))
 	{
-		CStringA strId = pTabElem->Attribute("id");
+		CString strId = pTabElem.attribute(_T("id")).value();
 		int nId = nIdIndex;
-		if(strId != "")
+		if(strId != _T(""))
 		{
-			nId = atoi(strId);
+			nId = _wtoi(strId);
 		}
 
-		CStringA strNameA = pTabElem->Attribute("name");
-		CString strName = CA2T(strNameA, CP_UTF8);
+		CString strName = pTabElem.attribute(_T("name")).value();
 		if(GetItemIndex(strName) != -1)
 		{
 			// 如果已经存在相同名字的tab页,则跳过
 			continue;
 		}
 
-		CStringA strTabXmlA = pTabElem->Attribute("tabxml");
-		CString strTabXml = CA2T(strTabXmlA, CP_UTF8);
-		if(!strTabXmlA.IsEmpty())
+		CString strTabXml = pTabElem.attribute(_T("tabxml")).value();
+		if(!strTabXml.IsEmpty())
 		{
 			// 从xml文件加载嵌套的tab页
 			LoadTabXml(strTabXml);
@@ -137,44 +134,43 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 			continue;
 		}
 
-		CStringA strActionA = pTabElem->Attribute("action");
-		CString strAction = CA2T(strActionA, CP_UTF8);
-		CStringA strOutLinkA = pTabElem->Attribute("outlink");
-		BOOL bOutLink = ((strOutLinkA == "1") || (strOutLinkA == "true"));
-		CStringA strImageA = pTabElem->Attribute("image");
-		CStringA strImageIndex = pTabElem->Attribute("img-index");
+		CString strAction = pTabElem.attribute(_T("action")).value();
+		CString strOutLink = pTabElem.attribute(_T("outlink")).value();
+		BOOL bOutLink = ((strOutLink == _T("1")) || (strOutLink == _T("true")));
+		CString strImage = pTabElem.attribute(_T("image")).value();
+		CString strImageIndex = pTabElem.attribute(_T("img-index")).value();
 		int nImageIndex = -1;
 		if(!strImageIndex.IsEmpty())
 		{
-			nImageIndex = atoi(strImageIndex);
+			nImageIndex = _wtoi(strImageIndex);
 		}
-		CStringA strImageCount = pTabElem->Attribute("img-count");
+		CString strImageCount = pTabElem.attribute(_T("img-count")).value();
 		int nImageCount = -1;
 		if(!strImageCount.IsEmpty())
 		{
-			nImageCount = atoi(strImageCount);
+			nImageCount = _wtoi(strImageCount);
 		}
 		// visible属性可以用visible或show
-		CStringA strVisibleA = pTabElem->Attribute("visible");
-		if(strVisibleA.IsEmpty())
+		CString strVisible = pTabElem.attribute(_T("visible")).value();
+		if(strVisible.IsEmpty())
 		{
-			strVisibleA = pTabElem->Attribute("show");
+			strVisible = pTabElem.attribute(_T("show")).value();
 		}
-		BOOL bVisible = ((strVisibleA == "1") || (strVisibleA == "true") || (strVisibleA == ""));
-		CStringA strActive = pTabElem->Attribute("active");
-		CStringA strDivXml = pTabElem->Attribute("div");
+		BOOL bVisible = ((strVisible == _T("1")) || (strVisible == _T("true")) || (strVisible == _T("")));
+		CString strActive = pTabElem.attribute(_T("active")).value();
+		CString strDivXml = pTabElem.attribute(_T("div")).value();
 
-		CStringA strScrollA = pTabElem->Attribute("scroll");
-		BOOL bEnableScroll = (strScrollA == "1");
+		CString strScroll = pTabElem.attribute(_T("scroll")).value();
+		BOOL bEnableScroll = (strScroll == _T("1"));
 
 		// 加载Panel控件，每个Tab页都会自动创建一个Panel控件，即使没有加载子XML节点
-		CDuiPanel* pControlPanel = (CDuiPanel*)_CreateControlByName("div");
-		pControlPanel->SetName(CEncodingUtil::AnsiToUnicode(strNameA));	// div控件的名字设置为tab的名字
+		CDuiPanel* pControlPanel = (CDuiPanel*)_CreateControlByName(_T("div"));
+		pControlPanel->SetName(strName);	// div控件的名字设置为tab的名字
 		pControlPanel->SetEnableScroll(bEnableScroll);
 		m_vecControl.push_back(pControlPanel);
 		if(!strDivXml.IsEmpty())
 		{
- 			pControlPanel->LoadXmlFile(CEncodingUtil::AnsiToUnicode(strDivXml));			
+ 			pControlPanel->LoadXmlFile(strDivXml);			
 		}
 
 		// 加载XML中Tab节点的各个下层控件节点
@@ -183,21 +179,21 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		CString strTitle = pControlPanel->GetTitle();
 		
 		// 通过Skin读取
-		CStringA strSkinA = "";
-		if(strImageA.Find("skin:") == 0)
+		CString strSkin = _T("");
+		if(strImage.Find(_T("skin:")) == 0)
 		{
-			strSkinA = DuiSystem::Instance()->GetSkin(strImageA);
+			strSkin = DuiSystem::Instance()->GetSkin(strImage);
 		}else
 		{
-			strSkinA = strImageA;
+			strSkin = strImage;
 		}
 
-		if(strSkinA.Find(".") != -1)	// 加载图片文件
+		if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 		{
-			CString strImgFile = CA2T(strSkinA, CP_UTF8);
-			if(strSkinA.Find(":") != -1)
+			CString strImgFile = strSkin;
+			if(strSkin.Find(_T(":")) != -1)
 			{
-				strImgFile = CA2T(strSkinA, CP_UTF8);
+				strImgFile = strSkin;
 			}
 			InsertItem(-1, nId, strName, strTitle, strAction, strImgFile, pControlPanel, nImageCount, bOutLink);
 		}else
@@ -205,12 +201,12 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		{
 			InsertItem(-1, nId, strName, strTitle, strAction, nImageIndex, pControlPanel, bOutLink);
 		}else
-		if(!strSkinA.IsEmpty())	// 图片资源
+		if(!strSkin.IsEmpty())	// 图片资源
 		{
-			UINT uResourceID = atoi(strSkinA);
+			UINT uResourceID = _wtoi(strSkin);
 			InsertItem(-1, nId, strName, strTitle, strAction, uResourceID, pControlPanel, nImageCount, bOutLink);
 		}else
-		if(strSkinA.IsEmpty())	// 图片为空
+		if(strSkin.IsEmpty())	// 图片为空
 		{
 			InsertItem(-1, nId, strName, strTitle, strAction, _T(""), pControlPanel, nImageCount, bOutLink);
 		}
@@ -222,7 +218,7 @@ BOOL CDuiTabCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 			bAllVisible = FALSE;
 		}
 
-		if(strActive == "true")	// 设置为当前活动的页面
+		if(strActive == _T("true"))	// 设置为当前活动的页面
 		{
 			m_nHoverItem = nIdIndex;
 			m_nDownItem = nIdIndex;
@@ -282,12 +278,12 @@ BOOL CDuiTabCtrl::LoadTabXml(CString strFileName)
 		}
 	}
 
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pTabElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pTabElem;
 
 	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
-		pTabElem = xmlDoc.FirstChildElement(GetClassName());
+		pTabElem = xmlDoc.child(GetClassName());
 		if(pTabElem != NULL)
 		{
 			// 加载下层tab页

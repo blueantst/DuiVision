@@ -3,7 +3,7 @@
 
 class CDuiRadioButton : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiRadioButton, "radiobtn")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiRadioButton, _T("radiobtn"))
 public:
 	CDuiRadioButton(HWND hWnd, CDuiObject* pDuiObject);
 	CDuiRadioButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
@@ -19,7 +19,7 @@ public:
 	void SetControlCheck(BOOL bCheck);
 	BOOL ResetGroupCheck();
 
-	HRESULT OnAttributeCheck(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeCheck(const CString& strValue, BOOL bLoading);
 
 	void SetTextColor(Color clrText) { m_clrText = clrText; };
 
@@ -45,9 +45,9 @@ public:
 	Color			m_clrText;			// ÎÄ×ÖÑÕÉ«
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("check", OnAttributeCheck)
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
-		DUI_TSTRING_ATTRIBUTE("group", m_strGroupName, FALSE)
-		DUI_TSTRING_ATTRIBUTE("value", m_strValue, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("check"), OnAttributeCheck)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("group"), m_strGroupName, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strValue, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

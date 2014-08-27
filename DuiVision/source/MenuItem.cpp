@@ -44,12 +44,12 @@ CMenuItem::~CMenuItem(void)
 }
 
 // 重载加载XML节点函数,判断是否有子菜单
-BOOL CMenuItem::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CMenuItem::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	BOOL bRet = __super::Load(pXmlElem);
 
 	// 判断是否有定义子菜单
-	if(pXmlElem && (pXmlElem->FirstChildElement() != NULL))
+	if(pXmlElem && (pXmlElem.first_child() != NULL))
 	{
 		m_bIsPopup = TRUE;
 	}
@@ -70,13 +70,13 @@ BOOL CMenuItem::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 CDuiMenu* CMenuItem::GetParentMenu()
 {
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass("menu")))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("menu"))))
 	{
-		if(pParentObj->IsClass("popup"))
+		if(pParentObj->IsClass(_T("popup")))
 		{
 			pParentObj = ((CDlgPopup*)pParentObj)->GetParent();
 		}else
-		if(pParentObj->IsClass("dlg"))
+		if(pParentObj->IsClass(_T("dlg")))
 		{
 			pParentObj = ((CDlgBase*)pParentObj)->GetParent();
 		}else
@@ -84,7 +84,7 @@ CDuiMenu* CMenuItem::GetParentMenu()
 			pParentObj = ((CControlBase*)pParentObj)->GetParent();
 		}
 	}
-	if((pParentObj != NULL) && pParentObj->IsClass("menu"))
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("menu")))
 	{
 		return (CDuiMenu*)pParentObj;
 	}
@@ -206,11 +206,11 @@ BOOL CMenuItem::SetCheck(BOOL bCheck)
 }
 
 // 从XML设置检查框属性
-HRESULT CMenuItem::OnAttributeCheck(const CStringA& strValue, BOOL bLoading)
+HRESULT CMenuItem::OnAttributeCheck(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	SetCheck(strValue == "true");
+	SetCheck(strValue == _T("true"));
 
 	return bLoading?S_FALSE:S_OK;
 }

@@ -3,7 +3,7 @@
 
 class CCheckButton : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CCheckButton, "chkbtn")
+	DUIOBJ_DECLARE_CLASS_NAME(CCheckButton, _T("chkbtn"))
 public:
 	CCheckButton(HWND hWnd, CDuiObject* pDuiObject);
 	CCheckButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
@@ -11,7 +11,7 @@ public:
 
 	BOOL GetCheck();
 	BOOL SetCheck(BOOL bCheck);
-	HRESULT OnAttributeCheck(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeCheck(const CString& strValue, BOOL bLoading);
 
 	void SetTextColor(Color clrText) { m_clrText = clrText; };
 
@@ -35,7 +35,7 @@ public:
 	Color			m_clrText;			// ÎÄ×ÖÑÕÉ«
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("check", OnAttributeCheck)
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("check"), OnAttributeCheck)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

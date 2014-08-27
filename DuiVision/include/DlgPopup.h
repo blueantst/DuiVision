@@ -22,10 +22,10 @@ enum enumBackMode
 class CDlgPopup : public CWnd, public CTimer, public CDuiObject
 {
 public:
-	static LPCSTR GetClassName() { return "popup";}
-	virtual BOOL IsClass(LPCSTR lpszName)
+	static LPCTSTR GetClassName() { return _T("popup");}
+	virtual BOOL IsClass(LPCTSTR lpszName)
 	{
-		if(strcmp(GetClassName(), lpszName)  == 0) return TRUE;
+		if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;
 		return __super::IsClass(lpszName);
 	}
 
@@ -78,7 +78,7 @@ public:
 	void SetParent(CDuiObject* pParent) { m_pParentDuiObject = pParent; }
 	virtual CDuiObject* GetParent() { return m_pParentDuiObject; }
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadXmlFile(CString strFileName);
 	BOOL LoadXmlContent(CString strXmlContent);
 	CString GetXmlFile() { return m_strXmlFile; }
@@ -88,7 +88,7 @@ public:
 
 	BOOL UseImageECM() { return m_bImageUseECM; }
 
-	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);
+	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 
 	void SetBackMode(enumBackMode enBackMode);
 	void SetFrameSize(int nFrameSize);
@@ -100,7 +100,7 @@ public:
 	void CloseWindow();
 
 	// 根据控件名创建控件实例
-	CControlBase* _CreateControlByName(LPCSTR lpszName);
+	CControlBase* _CreateControlByName(LPCTSTR lpszName);
 
 	void DrawWindow();	
 	void DrawWindow(CDC &dc);
@@ -112,8 +112,8 @@ public:
 	virtual BOOL OnLButtonDown(CPoint point){ return false;};
 	virtual BOOL OnLButtonUp(CPoint point){ return false;};
 
-	HRESULT OnAttributeBkMode(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeBkImage(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeBkMode(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeBkImage(const CString& strValue, BOOL bLoading);
 
 	// 定时器消息
 	virtual void OnTimer(UINT uTimerID);
@@ -172,19 +172,19 @@ public:
 	afx_msg void OnDestroy();
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("bkmode", OnAttributeBkMode)
-		DUI_CUSTOM_ATTRIBUTE("bkimg", OnAttributeBkImage)
-		DUI_INT_ATTRIBUTE("bkalpha", m_bBackAlpha, TRUE)
-		DUI_INT_ATTRIBUTE("translucent", m_nBackTranslucent, TRUE)
-		DUI_INT_ATTRIBUTE("width", m_size.cx, FALSE)
-		DUI_INT_ATTRIBUTE("height", m_size.cy, FALSE)
-		DUI_INT_ATTRIBUTE("framesize", m_nFrameSize, FALSE)
-		DUI_INT_ATTRIBUTE("width-lt", m_nFrameWLT, FALSE)
-		DUI_INT_ATTRIBUTE("height-lt", m_nFrameHLT, FALSE)
-		DUI_INT_ATTRIBUTE("width-rb", m_nFrameWRB, FALSE)
-		DUI_INT_ATTRIBUTE("height-rb", m_nFrameHRB, FALSE)
-		DUI_INT_ATTRIBUTE("img-ecm", m_bImageUseECM, TRUE)
-		DUI_INT_ATTRIBUTE("autoclose", m_bAutoClose, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("bkmode"), OnAttributeBkMode)
+		DUI_CUSTOM_ATTRIBUTE(_T("bkimg"), OnAttributeBkImage)
+		DUI_INT_ATTRIBUTE(_T("bkalpha"), m_bBackAlpha, TRUE)
+		DUI_INT_ATTRIBUTE(_T("translucent"), m_nBackTranslucent, TRUE)
+		DUI_INT_ATTRIBUTE(_T("width"), m_size.cx, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height"), m_size.cy, FALSE)
+		DUI_INT_ATTRIBUTE(_T("framesize"), m_nFrameSize, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-lt"), m_nFrameWLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-lt"), m_nFrameHLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-rb"), m_nFrameWRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
+		DUI_INT_ATTRIBUTE(_T("autoclose"), m_bAutoClose, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

@@ -117,13 +117,13 @@ BOOL CScrollV::SetBitmap(CString strImage)
 }
 
 // 从XML设置上箭头图片信息属性
-HRESULT CScrollV::OnAttributeUpImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CScrollV::OnAttributeUpImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -132,12 +132,12 @@ HRESULT CScrollV::OnAttributeUpImage(const CStringA& strValue, BOOL bLoading)
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		if(!((CImageButton*)m_pControlUpImage)->SetBitmap(strImgFile))
 		{
@@ -145,7 +145,7 @@ HRESULT CScrollV::OnAttributeUpImage(const CStringA& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		if(!((CImageButton*)m_pControlUpImage)->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!((CImageButton*)m_pControlUpImage)->SetBitmap(nResourceID, TEXT("BMP")))
@@ -161,13 +161,13 @@ HRESULT CScrollV::OnAttributeUpImage(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置下箭头图片信息属性
-HRESULT CScrollV::OnAttributeDownImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CScrollV::OnAttributeDownImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -176,12 +176,12 @@ HRESULT CScrollV::OnAttributeDownImage(const CStringA& strValue, BOOL bLoading)
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		if(!((CImageButton*)m_pControlDownImage)->SetBitmap(strImgFile))
 		{
@@ -189,7 +189,7 @@ HRESULT CScrollV::OnAttributeDownImage(const CStringA& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		if(!((CImageButton*)m_pControlDownImage)->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!((CImageButton*)m_pControlDownImage)->SetBitmap(nResourceID, TEXT("BMP")))
@@ -205,44 +205,44 @@ HRESULT CScrollV::OnAttributeDownImage(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置属性
-HRESULT CScrollV::OnAttributeMaxRange(const CStringA& strValue, BOOL bLoading)
+HRESULT CScrollV::OnAttributeMaxRange(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nMaxRange = atoi(strValue);
+	m_nMaxRange = _wtoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
 }
 
 // 从XML设置属性
-HRESULT CScrollV::OnAttributeCurrentPos(const CStringA& strValue, BOOL bLoading)
+HRESULT CScrollV::OnAttributeCurrentPos(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nCurrentPos = atoi(strValue);
+	m_nCurrentPos = _wtoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
 }
 
 // 从XML设置属性
-HRESULT CScrollV::OnAttributePageRange(const CStringA& strValue, BOOL bLoading)
+HRESULT CScrollV::OnAttributePageRange(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nPageRange = atoi(strValue);
+	m_nPageRange = _wtoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
 }
 
 // 从XML设置属性
-HRESULT CScrollV::OnAttributeRowRange(const CStringA& strValue, BOOL bLoading)
+HRESULT CScrollV::OnAttributeRowRange(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nRowRange = atoi(strValue);
+	m_nRowRange = _wtoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;

@@ -81,14 +81,14 @@ public:
 
 	virtual void InvalidateRect(LPCRECT lpRect, BOOL bErase = TRUE);
 
-	void SetPosStr(CStringA strPos) { m_strPos = strPos; };
-	CStringA GetPosStr() { return m_strPos;};
+	void SetPosStr(CString strPos) { m_strPos = strPos; };
+	CString GetPosStr() { return m_strPos;};
 	int PositionItem2Value( const DUIDLG_POSITION_ITEM &pos ,int nMin, int nMax);
-	LPCSTR ParsePosition(const char * pszPos,DUIDLG_POSITION_ITEM &pos);
-	HRESULT OnAttributePosChange(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeWidth(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeHeight(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeShortcut(const CStringA& strValue, BOOL bLoading);
+	LPCTSTR ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos);
+	HRESULT OnAttributePosChange(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeWidth(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeHeight(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeShortcut(const CString& strValue, BOOL bLoading);
 	
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
@@ -146,7 +146,7 @@ public:
 	void AddControl(CControlBase* pControl);
 	BOOL RemoveControl(CControlBase* pControl);
 	BOOL RemoveControl(CString strControlName, UINT uControlID);
-	void RemoveControls(CStringA strClassName);
+	void RemoveControls(CString strClassName);
 	CDlgBase* GetParentDialog(BOOL bEnablePopup = TRUE);
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 
@@ -161,7 +161,7 @@ protected:
 	CDuiObject*				m_pParentDuiObject;	// 父控件对象
 	HWND					m_hWnd;
 	
-	CStringA				m_strPos;			// 区域(XML定义中的字符串)
+	CString				m_strPos;			// 区域(XML定义中的字符串)
 	BOOL					m_bIsVisible;		// 可见
 	BOOL					m_bIsDisable;		// 是否可用
 	BOOL					m_bRresponse;		// 是否可以响应鼠标事件
@@ -207,18 +207,18 @@ protected:
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
         //DUI_STYLE_ATTRIBUTE("class", m_style, TRUE)
-		DUI_BOOL_ATTRIBUTE("show", m_bIsVisible, TRUE)
-		DUI_BOOL_ATTRIBUTE("disable", m_bIsDisable, TRUE)
-		DUI_BOOL_ATTRIBUTE("response", m_bRresponse, TRUE)
-		DUI_BOOL_ATTRIBUTE("tabstop", m_bTabStop, TRUE)
-		DUI_CUSTOM_ATTRIBUTE("pos", OnAttributePosChange)
-		DUI_CUSTOM_ATTRIBUTE("width", OnAttributeWidth)
-		DUI_CUSTOM_ATTRIBUTE("height", OnAttributeHeight)
-		DUI_TSTRING_ATTRIBUTE("action", m_strAction, FALSE)
-		DUI_INT_ATTRIBUTE("taskmsg", m_bTaskMsg, TRUE)
-		DUI_INT_ATTRIBUTE("img-ecm", m_bImageUseECM, TRUE)
-		DUI_TSTRING_ATTRIBUTE("tip", m_strTooltip, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("shortcut", OnAttributeShortcut)
+		DUI_BOOL_ATTRIBUTE(_T("show"), m_bIsVisible, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("disable"), m_bIsDisable, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("response"), m_bRresponse, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("tabstop"), m_bTabStop, TRUE)
+		DUI_CUSTOM_ATTRIBUTE(_T("pos"), OnAttributePosChange)
+		DUI_CUSTOM_ATTRIBUTE(_T("width"), OnAttributeWidth)
+		DUI_CUSTOM_ATTRIBUTE(_T("height"), OnAttributeHeight)
+		DUI_TSTRING_ATTRIBUTE(_T("action"), m_strAction, FALSE)
+		DUI_INT_ATTRIBUTE(_T("taskmsg"), m_bTaskMsg, TRUE)
+		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
+		DUI_TSTRING_ATTRIBUTE(_T("tip"), m_strTooltip, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("shortcut"), OnAttributeShortcut)
     DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -282,10 +282,10 @@ public:
 	virtual BOOL SetBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	virtual BOOL SetBitmap(CString strImage);
 	void SetBitmapCount(int nCount);
-	BOOL SetImage(CStringA strImageA);
-	HRESULT OnAttributeFont(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeImage(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeSkin(const CStringA& strValue, BOOL bLoading);
+	BOOL SetImage(CString strImageA);
+	HRESULT OnAttributeFont(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeSkin(const CString& strValue, BOOL bLoading);
 
 protected:
 	CString				m_strTitle;			// 标题
@@ -300,22 +300,22 @@ protected:
 	int					m_nImagePicCount;	// Image中默认包含的图片个数
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-        DUI_TSTRING_ATTRIBUTE("title", m_strTitle, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("font", OnAttributeFont)
-		DUI_TSTRING_ATTRIBUTE("fontname", m_strFont, FALSE)
-		DUI_INT_ATTRIBUTE("fontwidth", m_nFontWidth, FALSE)
-		DUI_ENUM_ATTRIBUTE("valign", UINT, TRUE)
-            DUI_ENUM_VALUE("top", VAlign_Top)
-            DUI_ENUM_VALUE("middle", VAlign_Middle)
-            DUI_ENUM_VALUE("bottom", VAlign_Bottom)
+        DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("font"), OnAttributeFont)
+		DUI_TSTRING_ATTRIBUTE(_T("fontname"), m_strFont, FALSE)
+		DUI_INT_ATTRIBUTE(_T("fontwidth"), m_nFontWidth, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("valign"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("top"), VAlign_Top)
+            DUI_ENUM_VALUE(_T("middle"), VAlign_Middle)
+            DUI_ENUM_VALUE(_T("bottom"), VAlign_Bottom)
         DUI_ENUM_END(m_uVAlignment)
-        DUI_ENUM_ATTRIBUTE("align", UINT, TRUE)
-            DUI_ENUM_VALUE("left", Align_Left)
-            DUI_ENUM_VALUE("center", Align_Center)
-            DUI_ENUM_VALUE("right", Align_Right)
+        DUI_ENUM_ATTRIBUTE(_T("align"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("left"), Align_Left)
+            DUI_ENUM_VALUE(_T("center"), Align_Center)
+            DUI_ENUM_VALUE(_T("right"), Align_Right)
         DUI_ENUM_END(m_uAlignment)
-		DUI_CUSTOM_ATTRIBUTE("image", OnAttributeImage)
-		DUI_CUSTOM_ATTRIBUTE("skin", OnAttributeSkin)
-		DUI_INT_ATTRIBUTE("img-count", m_nImagePicCount, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("image"), OnAttributeImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("skin"), OnAttributeSkin)
+		DUI_INT_ATTRIBUTE(_T("img-count"), m_nImagePicCount, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

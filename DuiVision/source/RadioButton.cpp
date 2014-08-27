@@ -89,12 +89,12 @@ BOOL CDuiRadioButton::ResetGroupCheck()
 	}
 
 	vector<CControlBase*>* pvecControl = NULL;
-	if(pParentObj->IsClass("dlg"))
+	if(pParentObj->IsClass(_T("dlg")))
 	{
 		CDlgBase* pDlg = static_cast<CDlgBase*>(pParentObj);
 		pvecControl = pDlg->GetControls();
 	}else
-	if(pParentObj->IsClass("popup"))
+	if(pParentObj->IsClass(_T("popup")))
 	{
 		CDlgPopup* pDlg = static_cast<CDlgPopup*>(pParentObj);
 		pvecControl = pDlg->GetControls();
@@ -136,12 +136,12 @@ CString CDuiRadioButton::GetGroupValue()
 	}
 
 	vector<CControlBase*>* pvecControl = NULL;
-	if(pParentObj->IsClass("dlg"))
+	if(pParentObj->IsClass(_T("dlg")))
 	{
 		CDlgBase* pDlg = static_cast<CDlgBase*>(pParentObj);
 		pvecControl = pDlg->GetControls();
 	}else
-	if(pParentObj->IsClass("popup"))
+	if(pParentObj->IsClass(_T("popup")))
 	{
 		CDlgPopup* pDlg = static_cast<CDlgPopup*>(pParentObj);
 		pvecControl = pDlg->GetControls();
@@ -173,11 +173,11 @@ CString CDuiRadioButton::GetGroupValue()
 }
 
 // ¥”XML…Ë÷√check Ù–‘
-HRESULT CDuiRadioButton::OnAttributeCheck(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiRadioButton::OnAttributeCheck(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	BOOL bCheck = (strValue == "true");
+	BOOL bCheck = (strValue == _T("true"));
 	SetCheck(bCheck);
 
 	return bLoading?S_FALSE:S_OK;

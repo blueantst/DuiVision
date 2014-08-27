@@ -4,7 +4,7 @@
 
 class CRectangle : public CControlBase
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CRectangle, "rect")
+	DUIOBJ_DECLARE_CLASS_NAME(CRectangle, _T("rect"))
 public:
 	CRectangle(HWND hWnd, CDuiObject* pDuiObject);
 	CRectangle(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
@@ -18,6 +18,6 @@ public:
 	Color m_clr;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_COLOR_ATTRIBUTE("color", m_clr, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("color"), m_clr, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

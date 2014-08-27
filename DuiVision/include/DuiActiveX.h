@@ -30,7 +30,7 @@ public:
 
 class CDuiActiveX : public CControlBase
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiActiveX, "activex")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiActiveX, _T("activex"))
 
     friend CActiveXCtrl;
 public:
@@ -61,9 +61,9 @@ public:
 	virtual void SetControlRect(CRect rc);
 	virtual HRESULT Navigate(CString strUrl);
 
-	HRESULT OnAttributeCLSID(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeDelayCreate(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeUrl(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeCLSID(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeDelayCreate(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeUrl(const CString& strValue, BOOL bLoading);
 
     LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
 
@@ -87,11 +87,11 @@ protected:
     HWND					m_hwndHost;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("clsid", OnAttributeCLSID)
-		DUI_TSTRING_ATTRIBUTE("modulename", m_strModuleName, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("url", OnAttributeUrl)
-		DUI_CUSTOM_ATTRIBUTE("delaycreate", OnAttributeDelayCreate)
-		DUI_BOOL_ATTRIBUTE("show-contextmenu", m_bShowContentMenu, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("clsid"), OnAttributeCLSID)
+		DUI_TSTRING_ATTRIBUTE(_T("modulename"), m_strModuleName, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("url"), OnAttributeUrl)
+		DUI_CUSTOM_ATTRIBUTE(_T("delaycreate"), OnAttributeDelayCreate)
+		DUI_BOOL_ATTRIBUTE(_T("show-contextmenu"), m_bShowContentMenu, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -100,7 +100,7 @@ protected:
 
 class CDuiWebBrowserCtrl : public CDuiActiveX
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiWebBrowserCtrl, "webbrowser")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiWebBrowserCtrl, _T("webbrowser"))
 
 public:
     CDuiWebBrowserCtrl(HWND hWnd, CDuiObject* pDuiObject);
@@ -125,7 +125,7 @@ protected:
 
 class CDuiFlashCtrl : public CDuiActiveX
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiFlashCtrl, "flash")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiFlashCtrl, _T("flash"))
 
 public:
     CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject);
@@ -141,7 +141,7 @@ protected:
 	bool		m_bTransparent;	// 是否创建背景透明的flash
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_BOOL_ATTRIBUTE("transparent", m_bTransparent, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("transparent"), m_bTransparent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -151,7 +151,7 @@ protected:
 
 class CDuiMediaPlayer : public CDuiActiveX
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiMediaPlayer, "mediaplayer")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiMediaPlayer, _T("mediaplayer"))
 
 public:
     CDuiMediaPlayer(HWND hWnd, CDuiObject* pDuiObject);

@@ -3,7 +3,7 @@
 
 class CTextButton : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CTextButton, "textbtn")
+	DUIOBJ_DECLARE_CLASS_NAME(CTextButton, _T("textbtn"))
 public:
 	CTextButton(HWND hWnd, CDuiObject* pDuiObject);
 	CTextButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle,
@@ -29,9 +29,9 @@ public:
 	BOOL m_bDown;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrTextNormal, FALSE)
-		DUI_COLOR_ATTRIBUTE("crhover", m_clrTextHover, FALSE)
-		DUI_COLOR_ATTRIBUTE("crpush", m_clrTextDown, FALSE)
-		DUI_COLOR_ATTRIBUTE("crdisable", m_clrTextDisable, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrTextNormal, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crdisable"), m_clrTextDisable, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

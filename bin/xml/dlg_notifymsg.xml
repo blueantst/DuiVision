@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
 <dlg name="dlg_notifymsg" title="NotifyMsg" width="400" height="250" resize="1"	frame="" bkimg="" crbk="000000" >
 	<base>
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1"/>

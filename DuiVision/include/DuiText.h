@@ -3,7 +3,7 @@
 
 class CDuiText : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiText, "text")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiText, _T("text"))
 public:
 	CDuiText(HWND hWnd, CDuiObject* pDuiObject);
 	CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
@@ -19,10 +19,10 @@ public:
 
 	int GetVirtualHeight();
 
-	HRESULT OnAttributeBackColor(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeTextHoverColor(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeTextShadowColor(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeBackColor(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeTextHoverColor(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeTextShadowColor(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScroll(const CString& strValue, BOOL bLoading);
 
 	// 消息响应
 	virtual LRESULT OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -57,14 +57,14 @@ public:
 	int					m_nBkTransparent;	// 背景透明度
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScroll)
-		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("crhover", OnAttributeTextHoverColor)
-		DUI_CUSTOM_ATTRIBUTE("crshadow", OnAttributeTextShadowColor)
-		DUI_CUSTOM_ATTRIBUTE("crback", OnAttributeBackColor)
-		DUI_COLOR_ATTRIBUTE("crmark", m_clrMark, FALSE)
-		DUI_TSTRING_ATTRIBUTE("mask", m_strMark, FALSE)
-		DUI_INT_ATTRIBUTE("bk-transparent", m_nBkTransparent, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-scroll"), OnAttributeImageScroll)
+		DUI_INT_ATTRIBUTE(_T("scroll-width"), m_nScrollWidth, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("crhover"), OnAttributeTextHoverColor)
+		DUI_CUSTOM_ATTRIBUTE(_T("crshadow"), OnAttributeTextShadowColor)
+		DUI_CUSTOM_ATTRIBUTE(_T("crback"), OnAttributeBackColor)
+		DUI_COLOR_ATTRIBUTE(_T("crmark"), m_clrMark, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("mask"), m_strMark, FALSE)
+		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

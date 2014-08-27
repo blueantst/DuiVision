@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!-- skin dailog -->
 <popup bkmode="image" framesize="4" bkimg="skin:IDB_SKIN_BKG" >
 	<imgbtn name="skin.button.customize" pos="193,10" width="24" height="24" skin="IDB_BT_SKIN_CUSTOMIZE" />

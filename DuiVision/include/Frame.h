@@ -4,7 +4,7 @@
 
 class CFrame : public CControlBase
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CFrame, "frame")
+	DUIOBJ_DECLARE_CLASS_NAME(CFrame, _T("frame"))
 public:
 	CFrame(HWND hWnd, CDuiObject* pDuiObject);
 	CFrame(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nBeginTransparent = 50, int nEndTransparent = 50, 

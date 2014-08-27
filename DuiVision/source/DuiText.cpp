@@ -127,7 +127,7 @@ void CDuiText::SetMarkText(CString strTitle, CString strMark, Color clrMark, int
 }
 
 // 从XML设置背景颜色属性
-HRESULT CDuiText::OnAttributeBackColor(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeBackColor(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -138,7 +138,7 @@ HRESULT CDuiText::OnAttributeBackColor(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置热点颜色属性
-HRESULT CDuiText::OnAttributeTextHoverColor(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeTextHoverColor(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -149,7 +149,7 @@ HRESULT CDuiText::OnAttributeTextHoverColor(const CStringA& strValue, BOOL bLoad
 }
 
 // 从XML设置阴影颜色属性
-HRESULT CDuiText::OnAttributeTextShadowColor(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeTextShadowColor(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -160,13 +160,13 @@ HRESULT CDuiText::OnAttributeTextShadowColor(const CStringA& strValue, BOOL bLoa
 }
 
 // 从XML设置图片信息属性
-HRESULT CDuiText::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiText::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -175,12 +175,12 @@ HRESULT CDuiText::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		if(!m_pControScrollV->SetBitmap(strImgFile))
 		{
@@ -188,7 +188,7 @@ HRESULT CDuiText::OnAttributeImageScroll(const CStringA& strValue, BOOL bLoading
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))

@@ -3,7 +3,7 @@
 
 class CHideButton : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CHideButton, "hidebtn")
+	DUIOBJ_DECLARE_CLASS_NAME(CHideButton, _T("hidebtn"))
 public:
 	CHideButton(HWND hWnd, CDuiObject* pDuiObject);
 	CHideButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTip, CString strTitle, Color clrTip = Color(56, 56, 56),
@@ -32,11 +32,11 @@ public:
 	BOOL m_bShowButton;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrTextNormal, FALSE)
-		DUI_COLOR_ATTRIBUTE("crhover", m_clrTextHover, FALSE)
-		DUI_COLOR_ATTRIBUTE("crpush", m_clrTextDown, FALSE)
-		DUI_COLOR_ATTRIBUTE("crdisable", m_clrTextDisable, FALSE)
-		DUI_COLOR_ATTRIBUTE("crtip", m_clrTip, FALSE)
-		DUI_TSTRING_ATTRIBUTE("text", m_strTip, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrTextNormal, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crdisable"), m_clrTextDisable, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtip"), m_clrTip, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("text"), m_strTip, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

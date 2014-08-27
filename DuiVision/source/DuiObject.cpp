@@ -47,17 +47,17 @@ BOOL CDuiObject::RegisterHandler(CDuiHandler* pDuiHandler)
 }
 
 // 设置对象属性的基础函数，负责ID和name属性的设置
-HRESULT CDuiObject::SetAttribute(CStringA strAttribName, CStringA strValue, BOOL bLoading)
+HRESULT CDuiObject::SetAttribute(CString strAttribName, CString strValue, BOOL bLoading)
 {
 	HRESULT hRet = E_FAIL;
-	if ("id" == strAttribName)
+	if (_T("id") == strAttribName)
 	{
-		m_uID = ::StrToIntA(strValue);
+		m_uID = ::StrToInt(strValue);
 		hRet = S_FALSE;
 	}else
-	if ("name" == strAttribName)
+	if (_T("name") == strAttribName)
 	{
-		m_strName = CA2T(strValue, CP_UTF8);
+		m_strName = strValue;
 		hRet = S_FALSE;
 	}else
 		return E_FAIL;
@@ -66,39 +66,43 @@ HRESULT CDuiObject::SetAttribute(CStringA strAttribName, CStringA strValue, BOOL
 }
 
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
-BOOL CDuiObject::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiObject::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	// pos属性需要特殊处理,放在最后进行设置,否则有些属性会受到影响,不能正确的初始化
-	CStringA strPosValue = "";
-    for (TiXmlAttribute *pAttrib = pXmlElem->FirstAttribute(); NULL != pAttrib; pAttrib = pAttrib->Next())
+	CString strPosValue = _T("");
+    for (DuiXmlAttribute pAttrib = pXmlElem.first_attribute(); pAttrib; pAttrib = pAttrib.next_attribute())
     {
-		CStringA strNameA = pAttrib->Name();
-		if(strNameA == "pos")
+		CString strName = pAttrib.name();
+		if(strName == _T("pos"))
 		{
-			strPosValue = pAttrib->Value();
+			strPosValue = pAttrib.value();
 		}else
 		{
-			SetAttribute(pAttrib->Name(), pAttrib->Value(), TRUE);
+			SetAttribute(pAttrib.name(), pAttrib.value(), TRUE);
 		}
     }
 
 	if(!strPosValue.IsEmpty())
 	{
-		SetAttribute("pos", strPosValue, TRUE);
+		SetAttribute(_T("pos"), strPosValue, TRUE);
 	}
 
     return TRUE;
 }
 
 // 解析字符串，替换其中的替换内容
-void CDuiObject::ParseDuiString(CStringA& strString)
+void CDuiObject::ParseDuiString(CString& strString)
 {
 	DuiSystem::Instance()->ParseDuiString(strString);
 }
 
-ULONG CDuiObject::HexStringToULong(LPCSTR lpszValue, int nSize)
+ULONG CDuiObject::HexStringToULong(LPCTSTR lpszValue, int nSize)
 {
-    LPCSTR pchValue = lpszValue;
+	int ret=0;
+	StrToIntEx(lpszValue,STIF_SUPPORT_HEX,&ret);
+	return ret;
+	/*
+    LPCTSTR pchValue = lpszValue;
     ULONG ulValue = 0;
 
     while (*pchValue && nSize != 0)
@@ -119,10 +123,11 @@ ULONG CDuiObject::HexStringToULong(LPCSTR lpszValue, int nSize)
     }
 
     return ulValue;
+	*/
 }
 
 // 16进制字符串转换为Color对象
-Color CDuiObject::HexStringToColor(LPCSTR lpszValue)
+Color CDuiObject::HexStringToColor(LPCTSTR lpszValue)
 {
     return Color(
 		(BYTE)HexStringToULong(lpszValue, 2), 
@@ -132,9 +137,10 @@ Color CDuiObject::HexStringToColor(LPCSTR lpszValue)
 }
 
 // 10进制逗号分隔字符串转换为Color对象
-Color CDuiObject::StringToColor(LPCSTR lpszValue)
+Color CDuiObject::StringToColor(LPCTSTR lpszValue)
 {
-	CStringA strValue = lpszValue;
+	CStringA strValue;
+	strValue = lpszValue;
 	BYTE c1,c2,c3,c4;
 	CStringA s1 = "";
 	CStringA s2 = "";
@@ -178,7 +184,7 @@ Color CDuiObject::StringToColor(LPCSTR lpszValue)
 }
 
 // 16进制字符串转RGB颜色
-COLORREF CDuiObject::HexStringToRGBColor(LPCSTR lpszValue)
+COLORREF CDuiObject::HexStringToRGBColor(LPCTSTR lpszValue)
 {
     return RGB(
         HexStringToULong(lpszValue, 2), 
@@ -188,9 +194,10 @@ COLORREF CDuiObject::HexStringToRGBColor(LPCSTR lpszValue)
 }
 
 // 根据字符串获取键盘码
-void CDuiObject::ParseKeyCode(LPCSTR lpszValue, UINT& nChar, UINT& nFlag)
+void CDuiObject::ParseKeyCode(LPCTSTR lpszValue, UINT& nChar, UINT& nFlag)
 {
-	CStringA strValue = lpszValue;
+	CStringA strValue;
+	strValue = lpszValue;
 	nChar = 0;
 	nFlag = 0;
 	strValue.Trim();

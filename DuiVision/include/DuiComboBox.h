@@ -12,12 +12,12 @@ struct ComboListItem
 
 class CDuiComboBox : public CDuiEdit
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiComboBox, "combobox")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiComboBox, _T("combobox"))
 public:
 	CDuiComboBox(HWND hWnd, CDuiObject* pDuiObject);
 	virtual ~CDuiComboBox(void);
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 
 	void SetComboValue(CString strComboValue);
 	CString GetComboValue();
@@ -25,8 +25,8 @@ public:
 	int AddItem(CString strName, CString strDesc, CString strValue, int nResourceID, CString strImageFile = _T(""));
 	void ClearItems();
 
-	HRESULT OnAttributeHeadImage(const CStringA& strValue, BOOL bLoading);
-	HRESULT OnAttributeDeleteImage(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeHeadImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeDeleteImage(const CString& strValue, BOOL bLoading);
 
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -44,9 +44,9 @@ public:
 	CString		m_strComboValue;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("head-image", OnAttributeHeadImage)
-		DUI_CUSTOM_ATTRIBUTE("del-image", OnAttributeDeleteImage)
-		DUI_TSTRING_ATTRIBUTE("value", m_strComboValue, FALSE)
-		DUI_TSTRING_ATTRIBUTE("xml", m_strXmlFile, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("head-image"), OnAttributeHeadImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("del-image"), OnAttributeDeleteImage)
+		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strComboValue, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("xml"), m_strXmlFile, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

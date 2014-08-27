@@ -158,13 +158,13 @@ bool CDuiEdit::SetLeftBitmap(CString strImage)
 }
 
 // 从XML设置图片信息属性
-HRESULT CDuiEdit::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiEdit::OnAttributeLeftImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -173,12 +173,12 @@ HRESULT CDuiEdit::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		if(!SetLeftBitmap(strImgFile))
 		{
@@ -186,7 +186,7 @@ HRESULT CDuiEdit::OnAttributeLeftImage(const CStringA& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		if(!SetLeftBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetLeftBitmap(nResourceID, TEXT("BMP")))
@@ -244,13 +244,13 @@ bool CDuiEdit::SetSmallBitmap(CString strImage)
 }
 
 // 从XML设置图片信息属性
-HRESULT CDuiEdit::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -259,12 +259,12 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		if(!SetSmallBitmap(strImgFile))
 		{
@@ -272,7 +272,7 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CStringA& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		if(!SetSmallBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetSmallBitmap(nResourceID, TEXT("BMP")))

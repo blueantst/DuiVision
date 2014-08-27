@@ -10,10 +10,10 @@ using namespace  std;
 class  CDlgBase : public CDialog, public CTimer, public CDuiObject
 {
 public:
-	static LPCSTR GetClassName() { return "dlg";}
-	virtual BOOL IsClass(LPCSTR lpszName)
+	static LPCTSTR GetClassName() { return _T("dlg");}
+	virtual BOOL IsClass(LPCTSTR lpszName)
 	{
-		if(strcmp(GetClassName(), lpszName)  == 0) return TRUE;
+		if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;
 		return __super::IsClass(lpszName);
 	}
 
@@ -156,7 +156,7 @@ public:
 	virtual CControlBase * SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
 
 	// 设置resize属性
-	HRESULT OnAttributeResize(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeResize(const CString& strValue, BOOL bLoading);
 
 	// 打开弹出对话框
 	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID);
@@ -164,7 +164,7 @@ public:
 	void CloseDlgPopup();
 
 	// 根据控件名创建控件实例
-	CControlBase* _CreateControlByName(LPCSTR lpszName);
+	CControlBase* _CreateControlByName(LPCTSTR lpszName);
 
 	// 设置不规则窗体区域
 	void SetupRegion(int border_offset[], int nSize);
@@ -199,8 +199,8 @@ public:
 	// 获取当前tooltip控件ID
 	int  GetTooltipCtrlID() { return m_nTooltipCtrlID; }
 
-	void InitBaseUI(CRect rcClient, TiXmlElement* pNode);
-	virtual void InitUI(CRect rcClient, TiXmlElement* pNode);
+	void InitBaseUI(CRect rcClient, DuiXmlNode pNode);
+	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 	virtual void OnSize(CRect rcClient);
 
 	void SetControlValue(CString strName, CString strType, CString strValue);
@@ -273,20 +273,20 @@ public:
 	afx_msg void OnDestroy();
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_INT_ATTRIBUTE("appwin", m_bAppWin, FALSE)
-		DUI_TSTRING_ATTRIBUTE("title", m_strTitle, FALSE)
-		DUI_INT_ATTRIBUTE("width", m_MinSize.cx, FALSE)
-		DUI_INT_ATTRIBUTE("height", m_MinSize.cy, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("resize", OnAttributeResize)
-		DUI_TSTRING_ATTRIBUTE("frame", m_strFramePicture, FALSE)
-		DUI_INT_ATTRIBUTE("framesize", m_nFrameSize, FALSE)
-		DUI_INT_ATTRIBUTE("width-lt", m_nFrameWLT, FALSE)
-		DUI_INT_ATTRIBUTE("height-lt", m_nFrameHLT, FALSE)
-		DUI_INT_ATTRIBUTE("width-rb", m_nFrameWRB, FALSE)
-		DUI_INT_ATTRIBUTE("height-rb", m_nFrameHRB, FALSE)
-		DUI_TSTRING_ATTRIBUTE("bkimg", m_strBkImg, FALSE)
-		DUI_RGBCOLOR_ATTRIBUTE("crbk", m_crlBack, FALSE)
-		DUI_INT_ATTRIBUTE("translucent", m_nBackTranslucent, FALSE)
+		DUI_INT_ATTRIBUTE(_T("appwin"), m_bAppWin, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width"), m_MinSize.cx, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height"), m_MinSize.cy, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("resize"), OnAttributeResize)
+		DUI_TSTRING_ATTRIBUTE(_T("frame"), m_strFramePicture, FALSE)
+		DUI_INT_ATTRIBUTE(_T("framesize"), m_nFrameSize, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-lt"), m_nFrameWLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-lt"), m_nFrameHLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-rb"), m_nFrameWRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("bkimg"), m_strBkImg, FALSE)
+		DUI_RGBCOLOR_ATTRIBUTE(_T("crbk"), m_crlBack, FALSE)
+		DUI_INT_ATTRIBUTE(_T("translucent"), m_nBackTranslucent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

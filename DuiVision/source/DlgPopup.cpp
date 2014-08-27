@@ -187,13 +187,13 @@ int CDlgPopup::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 // 根据控件名创建控件实例
-CControlBase* CDlgPopup::_CreateControlByName(LPCSTR lpszName)
+CControlBase* CDlgPopup::_CreateControlByName(LPCTSTR lpszName)
 {
 	return DuiSystem::CreateControlByName(lpszName, GetSafeHwnd(), this);
 }
 
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
-BOOL CDlgPopup::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDlgPopup::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	if(!__super::Load(pXmlElem))
 	{
@@ -227,14 +227,14 @@ BOOL CDlgPopup::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 // 加载XML文件
 BOOL CDlgPopup::LoadXmlFile(CString strFileName)
 {
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDivElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDivElem;
 
 	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
 		m_strXmlFile = strFileName;
-		pDivElem = xmlDoc.FirstChildElement(GetClassName());
-		if(pDivElem != NULL)
+		pDivElem = xmlDoc.child((const LPCTSTR)GetClassName());
+		if(pDivElem)
 		{
 			// 加载popup节点属性
 			Load(pDivElem);
@@ -247,15 +247,15 @@ BOOL CDlgPopup::LoadXmlFile(CString strFileName)
 // 加载XML内容
 BOOL CDlgPopup::LoadXmlContent(CString strXmlContent)
 {
-	TiXmlDocument xmlDoc;
-	TiXmlElement* pDivElem = NULL;
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDivElem;
 
 	m_strXmlContent = strXmlContent;
-	xmlDoc.Parse(CT2A(m_strXmlContent, CP_UTF8), NULL, TIXML_ENCODING_UTF8);
-	if(!xmlDoc.Error())
+	DuiXmlParseResult result = xmlDoc.load(m_strXmlContent);
+	if(result)
 	{
-		pDivElem = xmlDoc.FirstChildElement(GetClassName());
-		if(pDivElem != NULL)
+		pDivElem = xmlDoc.child((const LPCTSTR)GetClassName());
+		if(pDivElem)
 		{
 			// 加载popup节点属性
 			Load(pDivElem);
@@ -266,7 +266,7 @@ BOOL CDlgPopup::LoadXmlContent(CString strXmlContent)
 }
 
 // 初始化窗口控件
-void CDlgPopup::InitUI(CRect rcClient, TiXmlElement* pNode)
+void CDlgPopup::InitUI(CRect rcClient, DuiXmlNode pNode)
 {
 	CRect rcTemp;
 	int nStartX = 0;
@@ -276,12 +276,11 @@ void CDlgPopup::InitUI(CRect rcClient, TiXmlElement* pNode)
 	// 加载所有窗口控件
 	if(pNode)
 	{
-		TiXmlElement* pControlElem = NULL;
-		for (pControlElem = pNode->FirstChildElement(); pControlElem != NULL; pControlElem=pControlElem->NextSiblingElement())
+		for (DuiXmlNode pControlElem = pNode.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
 		{
-			if(pControlElem != NULL)
+			if(pControlElem)
 			{
-				CStringA strControlName = pControlElem->Value();
+				CString strControlName = pControlElem.name();
 				CControlBase* pControl = _CreateControlByName(strControlName);
 				if(pControl)
 				{
@@ -389,19 +388,19 @@ void CDlgPopup::SetBackBitmap(CString strImage)
 }
 
 // 从XML设置背景模式属性
-HRESULT CDlgPopup::OnAttributeBkMode(const CStringA& strValue, BOOL bLoading)
+HRESULT CDlgPopup::OnAttributeBkMode(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	if(strValue == "image")
+	if(strValue == _T("image"))
 	{
 		m_enBackMode = enBMImage;
 	}else
-	if(strValue == "frame")
+	if(strValue == _T("frame"))
 	{
 		m_enBackMode = enBMFrame;
 	}else
-	if(strValue == "mid")
+	if(strValue == _T("mid"))
 	{
 		m_enBackMode = enBMMID;
 	}else
@@ -413,13 +412,13 @@ HRESULT CDlgPopup::OnAttributeBkMode(const CStringA& strValue, BOOL bLoading)
 }
 
 // 从XML设置图片信息属性
-HRESULT CDlgPopup::OnAttributeBkImage(const CStringA& strValue, BOOL bLoading)
+HRESULT CDlgPopup::OnAttributeBkImage(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	// 通过Skin读取
-	CStringA strSkin = "";
-	if(strValue.Find("skin:") == 0)
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
 	{
 		strSkin = DuiSystem::Instance()->GetSkin(strValue);
 		if (strSkin.IsEmpty()) return E_FAIL;
@@ -428,17 +427,17 @@ HRESULT CDlgPopup::OnAttributeBkImage(const CStringA& strValue, BOOL bLoading)
 		strSkin = strValue;
 	}
 
-	if(strSkin.Find(".") != -1)	// 加载图片文件
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
 	{
-		CString strImgFile = CA2T(strSkin, CP_UTF8);
-		if(strSkin.Find(":") != -1)
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
 		{
-			strImgFile = CA2T(strSkin, CP_UTF8);
+			strImgFile = strSkin;
 		}
 		SetBackBitmap(strImgFile);
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = atoi(strSkin);
+		UINT nResourceID = _wtoi(strSkin);
 		SetBackBitmap(nResourceID);
 	}
 
@@ -988,11 +987,11 @@ BOOL CDlgPopup::SendMessageToParent(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return FALSE;
 	}
 
-	if(pParentObj->IsClass("dlg"))
+	if(pParentObj->IsClass(_T("dlg")))
 	{
 		return ((CDlgBase*)pParentObj)->OnMessage(GetID(), uMsg, wParam, lParam);
 	}else
-	if(pParentObj->IsClass("popup"))
+	if(pParentObj->IsClass(_T("popup")))
 	{
 		return ((CDlgPopup*)pParentObj)->OnMessage(GetID(), uMsg, wParam, lParam);
 	}else

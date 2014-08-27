@@ -64,7 +64,7 @@ BOOL CCheckButton::SetCheck(BOOL bCheck)
 }
 
 // ¥”XML…Ë÷√check Ù–‘
-HRESULT CCheckButton::OnAttributeCheck(const CStringA& strValue, BOOL bLoading)
+HRESULT CCheckButton::OnAttributeCheck(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 

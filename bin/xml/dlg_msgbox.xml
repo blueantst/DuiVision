@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
 <dlg name="dlg_msgbox" title="MsgBox" width="450" height="200" frame="" bkimg="" crbk="000000" >
 	
 	<base>

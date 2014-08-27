@@ -3,7 +3,7 @@
 
 class CLinkButton : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CLinkButton, "linkbtn")
+	DUIOBJ_DECLARE_CLASS_NAME(CLinkButton, _T("linkbtn"))
 public:
 	CLinkButton(HWND hWnd, CDuiObject* pDuiObject);
 	CLinkButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, CString strLink,
@@ -33,10 +33,10 @@ public:
 	BOOL m_bDown;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrTextNormal, FALSE)
-		DUI_COLOR_ATTRIBUTE("crhover", m_clrTextHover, FALSE)
-		DUI_COLOR_ATTRIBUTE("crpush", m_clrTextDown, FALSE)
-		DUI_COLOR_ATTRIBUTE("crdisable", m_clrTextDisable, FALSE)
-		DUI_TSTRING_ATTRIBUTE("href", m_strLink, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrTextNormal, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crdisable"), m_clrTextDisable, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("href"), m_strLink, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

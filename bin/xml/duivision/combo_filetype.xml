@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
 <popup>
 <item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
 <item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />

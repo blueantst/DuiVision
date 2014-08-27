@@ -22,7 +22,7 @@ struct TabItemInfo
 
 class CDuiTabCtrl : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiTabCtrl, "tabctrl")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiTabCtrl, _T("tabctrl"))
 public:
 	CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject);
 	CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
@@ -43,12 +43,12 @@ public:
 	BOOL GetItemVisible(int nItem);
 	BOOL GetItemVisible(CString strTabName);
 
-	virtual BOOL Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadTabXml(CString strFileName);
 	
 protected:
 	// 根据控件名创建控件实例
-	CControlBase* _CreateControlByName(LPCSTR lpszName);
+	CControlBase* _CreateControlByName(LPCTSTR lpszName);
 
 	virtual BOOL OnCheckMouseResponse(UINT nFlags, CPoint point);
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
@@ -84,12 +84,12 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE("img-sep", OnAttributeImageSeperator)
-		DUI_CUSTOM_ATTRIBUTE("img-hover", OnAttributeImageHover)
-		DUI_INT_ATTRIBUTE("item-width", m_nTabItemWidth, FALSE)
-		DUI_INT_ATTRIBUTE("tab-height", m_nTabCtrlHeight, FALSE)
-		DUI_INT_ATTRIBUTE("animate", m_bAnimateChangeTab, FALSE)
-		DUI_INT_ATTRIBUTE("animate-count", m_nAnimateCount, FALSE)
-		DUI_COLOR_ATTRIBUTE("crtext", m_clrText, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
+		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
+		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

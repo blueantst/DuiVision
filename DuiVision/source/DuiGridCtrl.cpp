@@ -68,7 +68,7 @@ DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, Seperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, CheckBox, 6)
 
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
-BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
+BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
 	if(!__super::Load(pXmlElem))
 	{
@@ -86,105 +86,105 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 
 	// 加载下层的cloumn节点信息
-	TiXmlElement* pColumnElem = NULL;
-	for (pColumnElem = pXmlElem->FirstChildElement("column"); pColumnElem != NULL; pColumnElem=pColumnElem->NextSiblingElement())
+	for (DuiXmlNode pColumnElem = pXmlElem.child(_T("column")); pColumnElem; pColumnElem=pColumnElem.next_sibling(_T("column")))
 	{
-		CStringA strTitleA = pColumnElem->Attribute("title");
-		CStringA strClrTextA = pColumnElem->Attribute("crtext");
-		CStringA strWidthA = pColumnElem->Attribute("width");
-		DuiSystem::Instance()->ParseDuiString(strTitleA);
-		CString strTitle = CA2T(strTitleA, CP_UTF8);
+		CString strTitle = pColumnElem.attribute(_T("title")).value();
+		CString strClrText = pColumnElem.attribute(_T("crtext")).value();
+		CString strWidth = pColumnElem.attribute(_T("width")).value();
+		DuiSystem::Instance()->ParseDuiString(strTitle);
 		Color clrText = Color(0,0,0,0);
+		CStringA strClrTextA;
+		strClrTextA = strClrText;
 		if(!strClrTextA.IsEmpty())
 		{
 			if(strClrTextA.Find(",") == -1)
 			{
-				clrText = CDuiObject::HexStringToColor(strClrTextA);
+				clrText = CDuiObject::HexStringToColor(strClrText);
 			}else
 			{
-				clrText = CDuiObject::StringToColor(strClrTextA);
+				clrText = CDuiObject::StringToColor(strClrText);
 			}
 		}
 		int nWidth = -1;
-		if(!strWidthA.IsEmpty())
+		if(!strWidth.IsEmpty())
 		{
-			nWidth = atoi(strWidthA);
+			nWidth = _wtoi(strWidth);
 		}
 		InsertColumn(-1, strTitle, nWidth, clrText);
 	}
 
 	// 加载下层的row节点信息
-	TiXmlElement* pRowElem = NULL;
-	for (pRowElem = pXmlElem->FirstChildElement("row"); pRowElem != NULL; pRowElem=pRowElem->NextSiblingElement())
+	for (DuiXmlNode pRowElem = pXmlElem.child(_T("row")); pRowElem; pRowElem=pRowElem.next_sibling(_T("row")))
 	{
-		CStringA strIdA = pRowElem->Attribute("id");
-		CStringA strCheckA = pRowElem->Attribute("check");
-		CStringA strImageA = pRowElem->Attribute("image");
-		CStringA strRightImageA = pRowElem->Attribute("right-img");
-		CStringA strClrTextA = pRowElem->Attribute("crtext");
+		CString strId = pRowElem.attribute(_T("id")).value();
+		CString strCheck = pRowElem.attribute(_T("check")).value();
+		CString strImage = pRowElem.attribute(_T("image")).value();
+		CString strRightImage = pRowElem.attribute(_T("right-img")).value();
+		CString strClrText = pRowElem.attribute(_T("crtext")).value();
 
 		int nCheck = -1;
-		if(!strCheckA.IsEmpty())
+		if(!strCheck.IsEmpty())
 		{
-			nCheck = atoi(strCheckA);
+			nCheck = _wtoi(strCheck);
 		}
 
 		// 左边图片,通过Skin读取
-		CStringA strSkin = "";
-		if(strImageA.Find("skin:") == 0)
+		CString strSkin = _T("");
+		if(strImage.Find(_T("skin:")) == 0)
 		{
-			strSkin = DuiSystem::Instance()->GetSkin(strImageA);
+			strSkin = DuiSystem::Instance()->GetSkin(strImage);
 		}else
 		{
-			strSkin = strImageA;
+			strSkin = strImage;
 		}
 
 		int nImageIndex = -1;
-		CString strImage = _T("");
-		if(strSkin.Find(".") != -1)
+		strImage = _T("");
+		if(strSkin.Find(_T(".")) != -1)
 		{
 			// 图片文件
-			strImage = CA2T(strSkin, CP_UTF8);
+			strImage = strSkin;
 		}else
 		if(!strSkin.IsEmpty())
 		{
 			// 图片索引
-			nImageIndex = atoi(strSkin);
+			nImageIndex = _wtoi(strSkin);
 		}
 
 		// 右边图片,通过Skin读取
-		CStringA strRightSkin = "";
-		if(strRightImageA.Find("skin:") == 0)
+		CString strRightSkin = _T("");
+		if(strRightImage.Find(_T("skin:")) == 0)
 		{
-			strRightSkin = DuiSystem::Instance()->GetSkin(strRightImageA);
+			strRightSkin = DuiSystem::Instance()->GetSkin(strRightImage);
 		}else
 		{
-			strRightSkin = strRightImageA;
+			strRightSkin = strRightImage;
 		}
 
 		int nRightImageIndex = -1;
-		CString strRightImage = _T("");
-		if(strRightSkin.Find(".") != -1)
+		strRightImage = _T("");
+		if(strRightSkin.Find(_T(".")) != -1)
 		{
 			// 图片文件
-			strRightImage = CA2T(strRightSkin, CP_UTF8);
+			strRightImage = strRightSkin;
 		}else
 		if(!strRightSkin.IsEmpty())
 		{
 			// 图片索引
-			nRightImageIndex = atoi(strRightSkin);
+			nRightImageIndex = _wtoi(strRightSkin);
 		}
 
-		CString strId = CA2T(strIdA, CP_UTF8);
 		Color clrText = Color(0,0,0,0);
+		CStringA strClrTextA;
+		strClrTextA = strClrText;
 		if(!strClrTextA.IsEmpty())
 		{
 			if(strClrTextA.Find(",") == -1)
 			{
-				clrText = CDuiObject::HexStringToColor(strClrTextA);
+				clrText = CDuiObject::HexStringToColor(strClrText);
 			}else
 			{
-				clrText = CDuiObject::StringToColor(strClrTextA);
+				clrText = CDuiObject::StringToColor(strClrText);
 			}
 		}
 		InsertRow(-1, strId, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage, nCheck);
@@ -192,60 +192,57 @@ BOOL CDuiGridCtrl::Load(TiXmlElement* pXmlElem, BOOL bLoadSubControl)
 		int nRowIndex = m_vecRowInfo.size()-1;
 		int nItemIndex = 0;
 		// 加载下层的item节点信息
-		TiXmlElement* pItemElem = NULL;
-		for (pItemElem = pRowElem->FirstChildElement("item"); pItemElem != NULL; pItemElem=pItemElem->NextSiblingElement())
+		for (DuiXmlNode pItemElem = pRowElem.child(_T("item")); pItemElem; pItemElem=pItemElem.next_sibling(_T("item")))
 		{
-			CStringA strTitleA = pItemElem->Attribute("title");
-			CStringA strContentA = pItemElem->Attribute("content");
-			CStringA strClrTextA = pItemElem->Attribute("crtext");
-			CStringA strImageA = pItemElem->Attribute("image");
-			CStringA strLinkA = pItemElem->Attribute("link");
-			CStringA strLinkActionA = pItemElem->Attribute("linkaction");
-			CStringA strFontTitleA = pItemElem->Attribute("font-title");
-			DuiSystem::Instance()->ParseDuiString(strTitleA);
-			DuiSystem::Instance()->ParseDuiString(strContentA);
-			DuiSystem::Instance()->ParseDuiString(strLinkA);
-			DuiSystem::Instance()->ParseDuiString(strLinkActionA);
-			CString strTitle = CA2T(strTitleA, CP_UTF8);
-			CString strContent = CA2T(strContentA, CP_UTF8);
-			CString strLink = CA2T(strLinkA, CP_UTF8);
-			CString strLinkAction = CA2T(strLinkActionA, CP_UTF8);
+			CString strTitle = pItemElem.attribute(_T("title")).value();
+			CString strContent = pItemElem.attribute(_T("content")).value();
+			CString strClrText = pItemElem.attribute(_T("crtext")).value();
+			CString strImage = pItemElem.attribute(_T("image")).value();
+			CString strLink = pItemElem.attribute(_T("link")).value();
+			CString strLinkAction = pItemElem.attribute(_T("linkaction")).value();
+			CString strFontTitle = pItemElem.attribute(_T("font-title")).value();
+			DuiSystem::Instance()->ParseDuiString(strTitle);
+			DuiSystem::Instance()->ParseDuiString(strContent);
+			DuiSystem::Instance()->ParseDuiString(strLink);
+			DuiSystem::Instance()->ParseDuiString(strLinkAction);
 			Color clrText = Color(0,0,0,0);
+			CStringA strClrTextA;
+			strClrTextA = strClrText;
 			if(!strClrTextA.IsEmpty())
 			{
 				if(strClrTextA.Find(",") == -1)
 				{
-					clrText = CDuiObject::HexStringToColor(strClrTextA);
+					clrText = CDuiObject::HexStringToColor(strClrText);
 				}else
 				{
-					clrText = CDuiObject::StringToColor(strClrTextA);
+					clrText = CDuiObject::StringToColor(strClrText);
 				}
 			}
 
 			// 图片,通过Skin读取
-			CStringA strSkin = "";
-			if(strImageA.Find("skin:") == 0)
+			CString strSkin = _T("");
+			if(strImage.Find(_T("skin:")) == 0)
 			{
-				strSkin = DuiSystem::Instance()->GetSkin(strImageA);
+				strSkin = DuiSystem::Instance()->GetSkin(strImage);
 			}else
 			{
-				strSkin = strImageA;
+				strSkin = strImage;
 			}
 
 			int nImageIndex = -1;
-			CString strImage = _T("");
-			if(strSkin.Find(".") != -1)
+			strImage = _T("");
+			if(strSkin.Find(_T(".")) != -1)
 			{
 				// 图片文件
-				strImage = CA2T(strSkin, CP_UTF8);
+				strImage = strSkin;
 			}else
 			if(!strSkin.IsEmpty())
 			{
 				// 图片索引
-				nImageIndex = atoi(strSkin);
+				nImageIndex = _wtoi(strSkin);
 			}
 
-			BOOL bUseTitleFont = (strFontTitleA == "1");
+			BOOL bUseTitleFont = (strFontTitle == _T("1"));
 
 			if(!strLink.IsEmpty())
 			{
@@ -637,7 +634,7 @@ void CDuiGridCtrl::ClearItems()
 }
 
 // 从XML设置Font-title属性
-HRESULT CDuiGridCtrl::OnAttributeFontTitle(const CStringA& strValue, BOOL bLoading)
+HRESULT CDuiGridCtrl::OnAttributeFontTitle(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 

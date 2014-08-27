@@ -4,7 +4,7 @@
 
 class CDuiProgress : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiProgress, "progress")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiProgress, _T("progress"))
 public:
 	CDuiProgress(HWND hWnd, CDuiObject* pDuiObject);
 	CDuiProgress(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nProgress = 0,
@@ -19,7 +19,7 @@ protected:
 	virtual	BOOL OnControlTimer();
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
-	HRESULT OnAttributeRun(const CStringA& strValue, BOOL bLoading);
+	HRESULT OnAttributeRun(const CString& strValue, BOOL bLoading);
 	
 public:
 	//过程索引
@@ -34,10 +34,10 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(BackGround);	// 定义背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ForeGround);	// 定义前景图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_INT_ATTRIBUTE("value", m_nProgress, FALSE)
-		DUI_CUSTOM_ATTRIBUTE("run", OnAttributeRun)
-		DUI_CUSTOM_ATTRIBUTE("img-back", OnAttributeImageBackGround)
-		DUI_CUSTOM_ATTRIBUTE("img-fore", OnAttributeImageForeGround)
-		DUI_INT_ATTRIBUTE("head-len", m_nHeadLength, FALSE)
+		DUI_INT_ATTRIBUTE(_T("value"), m_nProgress, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("run"), OnAttributeRun)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-back"), OnAttributeImageBackGround)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-fore"), OnAttributeImageForeGround)
+		DUI_INT_ATTRIBUTE(_T("head-len"), m_nHeadLength, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

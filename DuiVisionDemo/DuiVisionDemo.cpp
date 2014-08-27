@@ -46,10 +46,10 @@ BOOL CDuiVisionDemoApp::InitInstance()
 	// 初始化DuiVision界面库,可以指定语言,dwLangID为0表示自动判断当前语言
 	// 1116是应用程序ID,每个DUI应用程序应该使用不同的ID,ID主要用于进程间通信传递命令行时候区分应用
 	DWORD dwLangID = 0;
-	new DuiSystem(m_hInstance, dwLangID, _T("DuiVisionDemo.ui"), 1116, IDD_DUIVISIONDEMO_DIALOG, "");
+	new DuiSystem(m_hInstance, dwLangID, _T("DuiVisionDemo.ui"), 1116, IDD_DUIVISIONDEMO_DIALOG, _T(""));
 
 	// 检查是否已经有进程在运行
-	CString strAppMutex = DuiSystem::Instance()->GetConfig("appMutex");	// 从配置文件中获取互斥量名字
+	CString strAppMutex = DuiSystem::Instance()->GetConfig(_T("appMutex"));	// 从配置文件中获取互斥量名字
 	if(!strAppMutex.IsEmpty())
 	{
 		::CreateMutex(NULL,TRUE, _T("Global\\") + strAppMutex);

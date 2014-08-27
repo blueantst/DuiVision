@@ -14,7 +14,7 @@ enum enumShowMode
 
 class CDuiPicture : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CDuiPicture, "img")
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiPicture, _T("img"))
 public:
 	CDuiPicture(HWND hWnd, CDuiObject* pDuiObject);
 	CDuiPicture(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
@@ -36,17 +36,17 @@ public:
 	int				m_nHRB;			// 右下角高度(九宫格模式)
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
- 		DUI_INT_ATTRIBUTE("framesize", m_nFrameSize, FALSE)
-		DUI_INT_ATTRIBUTE("width-lt", m_nWLT, FALSE)
-		DUI_INT_ATTRIBUTE("height-lt", m_nHLT, FALSE)
-		DUI_INT_ATTRIBUTE("width-rb", m_nWRB, FALSE)
-		DUI_INT_ATTRIBUTE("height-rb", m_nHRB, FALSE)
-		DUI_ENUM_ATTRIBUTE("mode", enumShowMode, TRUE)
-            DUI_ENUM_VALUE("normal", enSMNormal)
-            DUI_ENUM_VALUE("tile", enSMTile)
-            DUI_ENUM_VALUE("extrude", enSMExtrude)
-			DUI_ENUM_VALUE("frame", enSMFrame)
-			DUI_ENUM_VALUE("mid", enSMMID)
+ 		DUI_INT_ATTRIBUTE(_T("framesize"), m_nFrameSize, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-lt"), m_nWLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-lt"), m_nHLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-rb"), m_nWRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nHRB, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("mode"), enumShowMode, TRUE)
+            DUI_ENUM_VALUE(_T("normal"), enSMNormal)
+            DUI_ENUM_VALUE(_T("tile"), enSMTile)
+            DUI_ENUM_VALUE(_T("extrude"), enSMExtrude)
+			DUI_ENUM_VALUE(_T("frame"), enSMFrame)
+			DUI_ENUM_VALUE(_T("mid"), enSMMID)
         DUI_ENUM_END(m_enShowMode)
     DUI_DECLARE_ATTRIBUTES_END()
 };
