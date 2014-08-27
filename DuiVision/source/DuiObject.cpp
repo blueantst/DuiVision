@@ -98,11 +98,25 @@ void CDuiObject::ParseDuiString(CString& strString)
 
 ULONG CDuiObject::HexStringToULong(LPCTSTR lpszValue, int nSize)
 {
-	int ret=0;
-	StrToIntEx(lpszValue,STIF_SUPPORT_HEX,&ret);
-	return ret;
 	/*
-    LPCTSTR pchValue = lpszValue;
+	std::wstring ws = lpszValue;
+    ULONG value;
+    std::wistringstream iss(ws);
+    iss >> std::hex >> value;
+	return value;
+	*/
+	/*
+	ULONG ret=0;
+	CString strValue;
+	strValue.Format(_T("0X%s"),lpszValue);
+	StrToIntEx(strValue,STIF_SUPPORT_HEX,&ret);
+	return ret;
+	*/
+
+	CStringA strValueA;
+	strValueA = lpszValue;
+
+    LPCSTR pchValue = strValueA.GetBuffer();;
     ULONG ulValue = 0;
 
     while (*pchValue && nSize != 0)
