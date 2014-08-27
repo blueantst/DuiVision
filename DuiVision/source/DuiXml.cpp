@@ -162,13 +162,13 @@ DuiXmlParseResult DuiXmlDocument::load(const LPCTSTR contents, unsigned int opti
 {
 	//DuiXmlParseResult result;
 	//const char_t* contents = pcontents;
-	return m_document.load(contents, options);
+	return m_document.load(contents, options & ~parse_wconv_attribute);
 	//return result;
 }
 
 DuiXmlParseResult DuiXmlDocument::load_file(const LPCTSTR path, unsigned int options, xml_encoding encoding)
 {
 	//DuiXmlParseResult result;
-	return m_document.load_file(path, options, encoding);
+	return m_document.load_file(path, options & ~parse_wconv_attribute, encoding);
 	//return result;
 }
