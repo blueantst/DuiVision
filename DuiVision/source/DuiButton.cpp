@@ -311,9 +311,11 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 
 			rcTemp.SetRect(0, 0, nWidth, nHeight);
 
-			FontFamily fontFamily(m_strFont.AllocSysString());
+			BSTR bsFont = m_strFont.AllocSysString();
+			FontFamily fontFamily(bsFont);
 			Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 			graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+			::SysFreeString(bsFont);
 
 			StringFormat strFormat;
 			strFormat.SetAlignment(StringAlignmentNear);
@@ -331,8 +333,9 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 				SolidBrush solidBrush(enBSDisable == i ? Color(128, 128, 128) : m_clrText);
 
 				RectF rect((Gdiplus::REAL)(point.x + i * nWidth + (enBSDown == i ? 1 : 0)), (Gdiplus::REAL)(point.y + (enBSDown == i ? 1 : 0)), (Gdiplus::REAL)(nWidth - point.x), (Gdiplus::REAL)size.Height);
-				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrush);				
+				BSTR bsTitle = m_strTitle.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+				::SysFreeString(bsTitle);
 			}
 		}
 	}

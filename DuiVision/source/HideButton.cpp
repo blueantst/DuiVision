@@ -148,9 +148,11 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 		Color clrText[4] = {m_clrTextNormal, m_clrTextHover, m_clrTextDown, m_clrTextDisable};
 
 		Graphics graphics(m_memDC);
-		FontFamily fontFamily(m_strFont.AllocSysString());
+		BSTR bsFont = m_strFont.AllocSysString();
+		FontFamily fontFamily(bsFont);
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+		::SysFreeString(bsFont);
 
 		// 设置水平和垂直对齐方式
 		DUI_STRING_ALIGN_DEFINE();
@@ -168,15 +170,17 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 		{
 			RectF rect((Gdiplus::REAL)(i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(sizeTip.Width + 10), (Gdiplus::REAL)sizeTip.Height);
 
-			graphics.DrawString(m_strTip.AllocSysString(), (INT)wcslen(m_strTip.AllocSysString()), &font, 
-				rect, &strFormat, &solidBrushTip);	
+			BSTR bsTip = m_strTip.AllocSysString();
+			graphics.DrawString(bsTip, (INT)wcslen(bsTip), &font, rect, &strFormat, &solidBrushTip);
+			::SysFreeString(bsTip);
 
 			if(i > 0)
 			{
 				SolidBrush solidBrush(clrText[i - 1]);	
 				RectF rect((Gdiplus::REAL)(sizeTip.Width + 10 + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - (sizeTip.Width + 10)), (Gdiplus::REAL)sizeText.Height);
-				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrush);	
+				BSTR bsTitle = m_strTip.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+				::SysFreeString(bsTip);
 			}
 		}
 	}

@@ -619,11 +619,13 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 		}
 	}
 
-	FontFamily fontFamily(m_strFont.AllocSysString());
+	BSTR bsFont = m_strFont.AllocSysString();
+	FontFamily fontFamily(bsFont);
 	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 	SolidBrush solidBrush(m_clrText);
 	SolidBrush solidBrushTip(m_clrTooltip);
 	graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+	::SysFreeString(bsFont);
 	StringFormat strFormat;
 	strFormat.SetAlignment(StringAlignmentNear);		// 水平方向左对齐
 	if(!m_bMultiLine)
@@ -652,14 +654,16 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 			}
 		}
 
-		graphics.DrawString(strTitle.AllocSysString(), (INT)wcslen(strTitle.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrush);
+		BSTR bsTitle = m_strTitle.AllocSysString();
+		graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+		::SysFreeString(bsTitle);
 	}else
 	if(!m_strTooltip.IsEmpty())
 	{
 		// 如果没有文字,但设置了tooltip,则显示tooltip
-		graphics.DrawString(m_strTooltip.AllocSysString(), (INT)wcslen(m_strTooltip.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrushTip);
+		BSTR bsTooltip = m_strTooltip.AllocSysString();
+		graphics.DrawString(bsTooltip, (INT)wcslen(bsTooltip), &font, rect, &strFormat, &solidBrushTip);
+		::SysFreeString(bsTooltip);
 	}
 }
 

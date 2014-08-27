@@ -341,8 +341,10 @@ LRESULT CDuiText::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 // 计算显示的字符串总高度应该是多高
 int CDuiText::GetVirtualHeight()
 {
-	FontFamily fontFamily(m_strFont.AllocSysString());
+	BSTR bsFont = m_strFont.AllocSysString();
+	FontFamily fontFamily(bsFont);
 	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+	::SysFreeString(bsFont);
 
 	StringFormat strFormat;
 	strFormat.SetAlignment(StringAlignmentNear);
@@ -401,8 +403,10 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 					m_rc, m_nBkTransparent, m_nBkTransparent);
 		}
 		
-		FontFamily fontFamily(m_strFont.AllocSysString());
+		BSTR bsFont = m_strFont.AllocSysString();
+		FontFamily fontFamily(bsFont);
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+		::SysFreeString(bsFont);
 
 		SolidBrush solidBrush(m_clrText);
 		
@@ -440,8 +444,9 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				RectF rectShadow((Gdiplus::REAL)(nXPos + point.x + 1), (Gdiplus::REAL)(point.y + 1), (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)max(size.Height, nHeight));
 				SolidBrush solidBrushS(m_clrTextShadow);
-				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-					rectShadow, &strFormat, &solidBrushS);
+				BSTR bsTitle = m_strTitle.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rectShadow, &strFormat, &solidBrushS);
+				::SysFreeString(bsTitle);
 			}
 
 			// 再画正常的文字
@@ -449,12 +454,14 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			if((m_enButtonState == enBSHover) && m_bEnableHover)
 			{
 				SolidBrush solidBrushH(m_clrTextHover);
-				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrushH);	
+				BSTR bsTitle = m_strTitle.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushH);
+				::SysFreeString(bsTitle);
 			}else
 			{
-				graphics.DrawString(m_strTitle.AllocSysString(), (INT)wcslen(m_strTitle.AllocSysString()), &font, 
-					rect, &strFormat, &solidBrush);	
+				BSTR bsTitle = m_strTitle.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+				::SysFreeString(bsTitle);
 			}
 		}
 		else
@@ -470,26 +477,38 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 
 			if(m_bEnableShadow)
 			{
-				graphics.DrawString(srtL.AllocSysString(), (INT)wcslen(srtL.AllocSysString()), &font, 
+				BSTR bsL = srtL.AllocSysString();
+				graphics.DrawString(bsL, (INT)wcslen(bsL), &font, 
 					PointF((Gdiplus::REAL)(nXPos + point.x + 1), (Gdiplus::REAL)(point.y + 1)), &strFormat, &solidBrushS);
-				graphics.DrawString(m_strMark.AllocSysString(), (INT)wcslen(m_strMark.AllocSysString()), &font, 
+				::SysFreeString(bsL);
+				BSTR bsMark = m_strMark.AllocSysString();
+				graphics.DrawString(bsMark, (INT)wcslen(bsMark), &font, 
 					PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + 2 + 1), (Gdiplus::REAL)(point.y + 1)), &strFormat, &solidBrushS);
+				::SysFreeString(bsMark);
 			}
-			graphics.DrawString(srtL.AllocSysString(), (INT)wcslen(srtL.AllocSysString()), &font, 
+			BSTR bsL = srtL.AllocSysString();
+			graphics.DrawString(bsL, (INT)wcslen(bsL), &font, 
 				PointF((Gdiplus::REAL)(nXPos + point.x), (Gdiplus::REAL)point.y), &strFormat, &solidBrush);
-			graphics.DrawString(m_strMark.AllocSysString(), (INT)wcslen(m_strMark.AllocSysString()), &font, 
+			::SysFreeString(bsL);
+			BSTR bsMark = m_strMark.AllocSysString();
+			graphics.DrawString(bsMark, (INT)wcslen(bsMark), &font, 
 				PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + 2), (Gdiplus::REAL)point.y), &strFormat, &solidBrushM);
+			::SysFreeString(bsMark);
 
 			if(m_bEnableShadow)
 			{
 				RectF rect((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4 + 1), (Gdiplus::REAL)(point.y + 1), (Gdiplus::REAL)(nWidth - (nXPos + sizeL.Width + sizeM.Width + 4 + point.x)), (Gdiplus::REAL)nHeight);
-				graphics.DrawString(srtR.AllocSysString(), (INT)wcslen(srtR.AllocSysString()), &font, 
+				BSTR bsR = srtR.AllocSysString();
+				graphics.DrawString(bsR, (INT)wcslen(bsR), &font, 
 					PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)point.y), &strFormat, &solidBrushS);
+				::SysFreeString(bsR);
 			}
 			//RectF rect(nXPos + point.x + sizeL.Width + sizeM.Width + 4, point.y, nWidth - (nXPos + sizeL.Width + sizeM.Width + 4 + point.x), size.Height);
 			RectF rect((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)(point.y), (Gdiplus::REAL)(nWidth - (nXPos + sizeL.Width + sizeM.Width + 4 + point.x)), (Gdiplus::REAL)nHeight);
-			graphics.DrawString(srtR.AllocSysString(), (INT)wcslen(srtR.AllocSysString()), &font, 
+			BSTR bsR = srtR.AllocSysString();
+			graphics.DrawString(bsR, (INT)wcslen(bsR), &font, 
 				PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)point.y), &strFormat, &solidBrush);
+			::SysFreeString(bsR);
 		}
 	}
 
