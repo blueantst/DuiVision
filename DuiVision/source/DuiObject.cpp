@@ -136,8 +136,9 @@ ULONG CDuiObject::HexStringToULong(LPCTSTR lpszValue, int nSize)
         -- nSize;
     }
 
+	strValueA.ReleaseBuffer();
+
     return ulValue;
-	*/
 }
 
 // 16进制字符串转换为Color对象

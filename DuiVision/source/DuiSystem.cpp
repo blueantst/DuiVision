@@ -460,6 +460,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 					fontInfo.strFont = DuiSystem::GetDefaultFont(strFont);
 					fontInfo.nFontWidth = nFontWidth;
 					fontInfo.fontStyle = fontStyle;
+					fontInfo.strOS = strOS;
 					if(!fontInfo.strOS.IsEmpty())
 					{
 						// 如果OS属性非空,则判断当前操作系统是否符合OS属性
