@@ -242,8 +242,7 @@ BOOL CDlgBase::OnInitDialog()
 	{
 		if(!m_strXmlContent.IsEmpty())	// ¼ÓÔØXMLÄÚÈÝ
 		{
-			xmlDoc.load(m_strXmlContent);
-			bLoadXml = !xmlDoc.empty();
+			bLoadXml = xmlDoc.load(m_strXmlContent);
 		}
 	}
 	

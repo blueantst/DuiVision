@@ -6,9 +6,9 @@
 #define XML_ABOUT_DLG L"<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <dlg name=\"dlg_about\" title=\"MsgBox\" width=\"450\" height=\"230\" appwin=\"0\" >\
 	<base>\
-		\<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\"/>\
+		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\"/>\
 		<text name=\"title\" crtext=\"FFFFFF\" crmark=\"800000\" font=\"big\"\
-				pos=\"10,5,200,25\" title=\"关于[APP_NAME]\" mask=\"[APP_NAME]\" response=\"0\"\ />\
+				pos=\"10,5,200,25\" title=\"关于[APP_NAME]\" mask=\"[APP_NAME]\" response=\"0\" />\
 	</base>\
 	<body>\
 		<area name=\"area-1\" pos=\"0,0,-0,40\" begin-transparent=\"100\" end-transparent=\"30\" />\
@@ -23,7 +23,6 @@
 		<linkbtn name=\"linkbtn1\" crtext=\"800000\"\
 			pos=\"170,100,-25,130\" title=\"点击打开链接\" href=\"http://www.blueantstudio.net\" />\
 		<text crtext=\"000080\" pos=\"170,140,-25,160\" title=\"此对话框由定义的XML内容创建\" />\
-		\
 		<button name=\"button.ok\" skin=\"IDB_BT_DEFAULT\" title=\"[OK]\" pos=\"-100,-30,-20,-6\" />\
 	</body>\
 </dlg>";
