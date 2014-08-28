@@ -178,9 +178,9 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				SolidBrush solidBrush(clrText[i - 1]);	
 				RectF rect((Gdiplus::REAL)(sizeTip.Width + 10 + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - (sizeTip.Width + 10)), (Gdiplus::REAL)sizeText.Height);
-				BSTR bsTitle = m_strTip.AllocSysString();
+				BSTR bsTitle = m_strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
-				::SysFreeString(bsTip);
+				::SysFreeString(bsTitle);
 			}
 		}
 	}
