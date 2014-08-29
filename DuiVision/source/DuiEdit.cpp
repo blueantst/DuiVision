@@ -654,7 +654,7 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 			}
 		}
 
-		BSTR bsTitle = m_strTitle.AllocSysString();
+		BSTR bsTitle = strTitle.AllocSysString();
 		graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
 		::SysFreeString(bsTitle);
 	}else
