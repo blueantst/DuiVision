@@ -1,14 +1,14 @@
 DuiVision
 =========
 
-DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine等多个基于DirectUI的界面库开发的。
+DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine、DuiLib等多个基于DirectUI的界面库开发的。
 
 DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用Windows控件，所以这些控件都是无句柄的。
 
 DirectUI技术需要解决的主要问题如下：
 - 1、窗口的子类化，截获窗口的消息；
 - 2、封装自己的控件，并将自己的控件绘制到该窗口上；
-- 3、封装窗口的消息，并分发到自己的控件上，让自己的控件根据消息进行相应和绘制；
+- 3、封装窗口的消息，并分发到自己的控件上，让自己的控件根据消息进行响应和绘制；
 - 4、根据不同的行为发送自定义消息给窗口，以便程序进行调用；
 - 5、一般窗口上控件的组织使用XML来描述。
 
@@ -20,9 +20,13 @@ DuiVision开源下载地址：https://github.com/blueantst/DuiVision
 
 作者Blog：[http://blog.csdn.net/oceanheart](http://blog.csdn.net/oceanheart)
 
-QQ群：325880743
+QQ群：325880743 (Script.NET社区)
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
+
+下载DuiVision Demo程序：[20140825版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20140825.zip)
+
+下载DuiVision开发手册：[DuiVision开发手册.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C.pdf)
 
 ### 一些界面截图
 ![主界面](http://www.blueantstudio.net/duivision/suolue/duivision_home.jpg)
