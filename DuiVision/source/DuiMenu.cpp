@@ -121,7 +121,7 @@ BOOL CDuiMenu::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 // 加载指定名字的菜单节点
 BOOL CDuiMenu::LoadSubMenu(DuiXmlNode pXmlElem, CString strSubItemName)
 {
-	if(!pXmlElem)
+	if(pXmlElem == NULL)
 	{
 		return FALSE;
 	}
