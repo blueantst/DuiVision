@@ -13,14 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="TinyXml">
-      <UniqueIdentifier>{9dfc8d19-7ee1-49a8-953b-71057e52af2a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="common">
       <UniqueIdentifier>{e51acae4-e9c3-4c5f-a131-0880af71e53d}</UniqueIdentifier>
     </Filter>
     <Filter Include="activex">
       <UniqueIdentifier>{f808a5ec-a856-45cd-b40a-345c98091542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pugixml">
+      <UniqueIdentifier>{e55b9a6e-8a70-4373-8f79-0132f3e94d7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -89,12 +89,6 @@
     </ClInclude>
     <ClInclude Include="include\DuiSystem.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml\tinystr.h">
-      <Filter>TinyXml</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml\tinyxml.h">
-      <Filter>TinyXml</Filter>
     </ClInclude>
     <ClInclude Include="include\DuiDef.h">
       <Filter>头文件</Filter>
@@ -174,6 +168,18 @@
     <ClInclude Include="common\XUnZip.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="pugixml\foreach.hpp">
+      <Filter>pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="pugixml\pugiconfig.hpp">
+      <Filter>pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="pugixml\pugixml.hpp">
+      <Filter>pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiXml.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -239,18 +245,6 @@
     <ClCompile Include="source\DuiSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="tinyxml\tinystr.cpp">
-      <Filter>TinyXml</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxml.cpp">
-      <Filter>TinyXml</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxmlerror.cpp">
-      <Filter>TinyXml</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxmlparser.cpp">
-      <Filter>TinyXml</Filter>
-    </ClCompile>
     <ClCompile Include="source\DuiObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -310,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="common\XUnzip.cpp">
       <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="pugixml\pugixml.cpp">
+      <Filter>pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiXml.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

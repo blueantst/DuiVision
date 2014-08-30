@@ -71,7 +71,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>include;tinyxml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -84,7 +84,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>include;tinyxml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,6 +134,7 @@
     <ClInclude Include="include\DuiText.h" />
     <ClInclude Include="include\DuiTreeCtrl.h" />
     <ClInclude Include="include\DuiVision.h" />
+    <ClInclude Include="include\DuiXml.h" />
     <ClInclude Include="include\Frame.h" />
     <ClInclude Include="include\GlobalFunction.h" />
     <ClInclude Include="include\HideButton.h" />
@@ -152,15 +153,20 @@
     <ClInclude Include="include\TextButton.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\WndBase.h" />
+    <ClInclude Include="pugixml\foreach.hpp" />
+    <ClInclude Include="pugixml\pugiconfig.hpp" />
+    <ClInclude Include="pugixml\pugixml.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
-    <ClInclude Include="tinyxml\tinystr.h" />
-    <ClInclude Include="tinyxml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\TaskMgr.cpp" />
     <ClCompile Include="common\XUnzip.cpp" />
     <ClCompile Include="DuiVision.cpp" />
+    <ClCompile Include="pugixml\pugixml.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="source\Area.cpp" />
     <ClCompile Include="source\CheckButton.cpp" />
     <ClCompile Include="source\ControlBase.cpp" />
@@ -180,6 +186,7 @@
     <ClCompile Include="source\DuiTab.cpp" />
     <ClCompile Include="source\DuiText.cpp" />
     <ClCompile Include="source\DuiTreeCtrl.cpp" />
+    <ClCompile Include="source\DuiXml.cpp" />
     <ClCompile Include="source\Frame.cpp" />
     <ClCompile Include="source\GlobalFunction.cpp" />
     <ClCompile Include="source\HideButton.cpp" />
@@ -202,26 +209,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinystr.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxml.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxmlerror.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="tinyxml\tinyxmlparser.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
