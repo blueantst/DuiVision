@@ -6,6 +6,7 @@ CCheckButton::CCheckButton(HWND hWnd, CDuiObject* pDuiObject)
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bIsFocus = FALSE;
+	m_bShowFocus = TRUE;
 	m_enButtonState = enBSNormal;
 	m_pImage = NULL;
 	m_bDown = false;
@@ -21,6 +22,7 @@ CCheckButton::CCheckButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bIsFocus = FALSE;
+	m_bShowFocus = TRUE;
 	m_enButtonState = enBSNormal;
 	m_pImage = NULL;
 	m_bDown = false;
@@ -293,7 +295,7 @@ void CCheckButton::DrawControl(CDC &dc, CRect rcUpdate)
 				::SysFreeString(bsTitle);
 
 				// 画焦点框(虚线框)
-				if(m_bIsFocus)
+				if(m_bIsFocus && m_bShowFocus)
 				{
 					Pen pen(Color(128, 128, 128), 1);
 					pen.SetDashStyle(DashStyleDot);

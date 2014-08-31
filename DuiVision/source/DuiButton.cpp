@@ -6,6 +6,7 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject)
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bIsFocus = FALSE;
+	m_bShowFocus = TRUE;
 	m_enButtonState = enBSNormal;
 	m_uAlignment = DT_CENTER;
 	m_uVAlignment = DT_VCENTER;
@@ -23,6 +24,7 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bIsFocus = FALSE;
+	m_bShowFocus = TRUE;
 	m_enButtonState = enBSNormal;
 	m_uAlignment = DT_CENTER;
 	m_uVAlignment = DT_VCENTER;
@@ -262,7 +264,7 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 			DrawImageFrame(graphics, m_pImage, rcTemp, i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 4);
 
 			// 画焦点框(虚线框)
-			if(m_bIsFocus)
+			if(m_bIsFocus && m_bShowFocus)
 			{
 				Pen pen(Color(128, 128, 128), 1);
 				pen.SetDashStyle(DashStyleDot);

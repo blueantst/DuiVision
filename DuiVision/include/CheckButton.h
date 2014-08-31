@@ -31,11 +31,13 @@ public:
 	BOOL			m_bDown;
 	BOOL			m_bMouseDown;
 	BOOL			m_bIsFocus;			// 当前是否处于焦点状态
+	BOOL			m_bShowFocus;		// 是否显示焦点框
 
 	Color			m_clrText;			// 文字颜色
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("check"), OnAttributeCheck)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("showfocus"), m_bShowFocus, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

@@ -39,6 +39,7 @@ public:
 	BOOL			m_bDown;
 	BOOL			m_bMouseDown;
 	BOOL			m_bIsFocus;			// 当前是否处于焦点状态
+	BOOL			m_bShowFocus;		// 是否显示焦点框
 	CString			m_strGroupName;		// Radio组名字
 	CString			m_strValue;			// Radio值
 
@@ -49,5 +50,6 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("group"), m_strGroupName, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strValue, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("showfocus"), m_bShowFocus, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

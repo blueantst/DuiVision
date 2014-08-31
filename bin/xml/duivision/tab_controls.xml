@@ -83,7 +83,7 @@
 				title="图片按钮2" tip="图片按钮2" animate="0" maxindex="4" action="dlg:dlg_login" />
 			
 			<button pos="350,220,450,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\SMBPrefs.png"
-				title="图片按钮3" tip="图片按钮3" animate="0" maxindex="4" action="dlg:dlg_option" />
+				title="图片按钮3" tip="图片按钮3，不显示焦点框" animate="0" maxindex="4" showfocus="0" action="dlg:dlg_option" />
 			
 			<button pos="500,220,600,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Connect.png"
 				title="图片按钮4" tip="图片按钮4" animate="0" maxindex="4" />

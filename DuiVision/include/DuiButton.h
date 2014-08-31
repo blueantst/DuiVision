@@ -31,6 +31,7 @@ public:
 	int					m_nMaxIndex;		// 渐变效果的最大索引
 	BOOL				m_bTimer;			// 是否启用渐变效果定时器
 	BOOL				m_bIsFocus;			// 当前是否处于焦点状态
+	BOOL				m_bShowFocus;		// 是否显示焦点框
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Btn);		// 定义按钮图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
@@ -38,6 +39,7 @@ public:
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bTimer, TRUE)
 		DUI_INT_ATTRIBUTE(_T("maxindex"), m_nMaxIndex, TRUE)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-btn"), OnAttributeImageBtn)
+		DUI_BOOL_ATTRIBUTE(_T("showfocus"), m_bShowFocus, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
 
