@@ -24,6 +24,11 @@ UINT CWindowWnd::GetClassStyle() const
     return 0;
 }
 
+LPCTSTR CWindowWnd::GetWindowClassName() const
+{
+    return NULL;
+}
+
 LPCTSTR CWindowWnd::GetSuperClassName() const
 {
     return NULL;
@@ -299,11 +304,57 @@ void CWindowWnd::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
     ::SetWindowPos(m_hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
+// 窗口消息处理函数
 LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
+	// 首先对一些可能被重载的消息进行处理
+	LRESULT lRes;
+    BOOL bHandled = TRUE;
+    switch( uMsg )
+	{
+    case WM_PAINT:         lRes = OnPaint(uMsg, wParam, lParam, bHandled); break;
+    case WM_SETFOCUS:      lRes = OnSetFocus(uMsg, wParam, lParam, bHandled); break;
+    case WM_KILLFOCUS:     lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); break;
+    case WM_ERASEBKGND:    lRes = OnEraseBkgnd(uMsg, wParam, lParam, bHandled); break;
+    case WM_MOUSEACTIVATE: lRes = OnMouseActivate(uMsg, wParam, lParam, bHandled); break;
+    default:
+        bHandled = FALSE;
+    }
+
+	// 如果消息没有被处理,则调用Windows的窗口消息处理函数
+    if( !bHandled )
+	{
+		return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
+	}
+
+    return lRes;
 }
 
 void CWindowWnd::OnFinalMessage(HWND /*hWnd*/)
 {
+}
+
+LRESULT CWindowWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	return 0;
+}
+
+LRESULT CWindowWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	return 0;
+}
+
+LRESULT CWindowWnd::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	return 0;
+}
+
+LRESULT CWindowWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	return 0;
+}
+
+LRESULT CWindowWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	return 0;
 }

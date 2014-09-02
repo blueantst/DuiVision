@@ -19,19 +19,17 @@ class CActiveXWnd : public CWindowWnd
 public:
     HWND Init(CActiveXCtrl* pOwner, HWND hWndParent);
 
-    LPCTSTR GetWindowClassName() const;
-    void OnFinalMessage(HWND hWnd);
-
-    LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual LPCTSTR GetWindowClassName() const;
+    virtual void OnFinalMessage(HWND hWnd);
 
 protected:
     void DoVerb(LONG iVerb);
 
-    LRESULT OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    LRESULT OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	virtual LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 protected:
     CActiveXCtrl* m_pOwner;
@@ -1257,23 +1255,6 @@ void CActiveXWnd::DoVerb(LONG iVerb)
     m_pOwner->QueryInterface(IID_IOleClientSite, (LPVOID*) &pOleClientSite);
     CSafeRelease<IOleClientSite> RefOleClientSite = pOleClientSite;
     pUnk->DoVerb(iVerb, NULL, pOleClientSite, 0, m_hWnd, &m_pOwner->m_pOwner->GetRect());
-}
-
-LRESULT CActiveXWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    LRESULT lRes;
-    BOOL bHandled = TRUE;
-    switch( uMsg ) {
-    case WM_PAINT:         lRes = OnPaint(uMsg, wParam, lParam, bHandled); break;
-    case WM_SETFOCUS:      lRes = OnSetFocus(uMsg, wParam, lParam, bHandled); break;
-    case WM_KILLFOCUS:     lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); break;
-    case WM_ERASEBKGND:    lRes = OnEraseBkgnd(uMsg, wParam, lParam, bHandled); break;
-    case WM_MOUSEACTIVATE: lRes = OnMouseActivate(uMsg, wParam, lParam, bHandled); break;
-    default:
-        bHandled = FALSE;
-    }
-    if( !bHandled ) return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-    return lRes;
 }
 
 LRESULT CActiveXWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
