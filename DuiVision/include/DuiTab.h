@@ -43,6 +43,8 @@ public:
 	BOOL GetItemVisible(int nItem);
 	BOOL GetItemVisible(CString strTabName);
 
+	virtual void SetControlVisible(BOOL bIsVisible);
+
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadTabXml(CString strFileName);
 	

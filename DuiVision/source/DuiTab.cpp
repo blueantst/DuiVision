@@ -736,6 +736,40 @@ BOOL CDuiTabCtrl::GetItemVisible(CString strTabName)
 	return FALSE;
 }
 
+// 重载设置控件可见性的函数，需要调用子控件的函数
+void CDuiTabCtrl::SetControlVisible(BOOL bIsVisible)
+{
+	//__super::SetControlVisible(bIsVisible);
+
+	if(bIsVisible)
+	{
+		// 如果设置为可见状态,则仅可见页的控件设置为可见状态
+		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+		{
+			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+			if((itemInfo.pControl != NULL) && (i == m_nDownItem))
+			{
+				itemInfo.pControl->SetControlVisible(bIsVisible);
+			}else
+			if((itemInfo.pControl != NULL) && (i != m_nDownItem))
+			{
+				itemInfo.pControl->SetControlVisible(FALSE);
+			}
+		}
+	}else
+	{
+		// 如果设置为隐藏状态,则所有页面的控件都需要隐藏
+		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+		{
+			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+			if(itemInfo.pControl != NULL)
+			{
+				itemInfo.pControl->SetControlVisible(FALSE);
+			}
+		}
+	}
+}
+
 // 判断鼠标是否在控件可响应的区域
 BOOL CDuiTabCtrl::OnCheckMouseResponse(UINT nFlags, CPoint point)
 {
@@ -1120,7 +1154,7 @@ BOOL CDuiTabCtrl::DrawSubControls(CDC &dc, CRect rcUpdate)
 
 	// 画旧tab页
 	// 设置旧tab页为可见
-	pOldTabInfo->pControl->SetVisible(TRUE);
+	pOldTabInfo->pControl->SetVisible(TRUE);	// 此处旧页面可见会导致原生控件也被显示出来，最后没有被清掉？
 	pNewTabInfo->pControl->SetVisible(FALSE);
 	// 画旧tab页到动画dc
 	pOldTabInfo->pControl->Draw(animateDCOld, rcUpdate);
