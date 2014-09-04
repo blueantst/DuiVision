@@ -261,7 +261,7 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
-			if(pControlBase->IsClass(_T("div")))
+			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")))
 			{
 				pControlBase->SetControlVisible(bIsVisible);
 			}else
