@@ -128,6 +128,7 @@
     <ClInclude Include="include\duiid.h" />
     <ClInclude Include="include\DuiListCtrl.h" />
     <ClInclude Include="include\DuiMenu.h" />
+    <ClInclude Include="include\DuiNativeWnd.h" />
     <ClInclude Include="include\DuiObject.h" />
     <ClInclude Include="include\DuiSystem.h" />
     <ClInclude Include="include\DuiTab.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="source\DuiHandler.cpp" />
     <ClCompile Include="source\DuiListCtrl.cpp" />
     <ClCompile Include="source\DuiMenu.cpp" />
+    <ClCompile Include="source\DuiNativeWnd.cpp" />
     <ClCompile Include="source\DuiObject.cpp" />
     <ClCompile Include="source\DuiSystem.cpp" />
     <ClCompile Include="source\DuiTab.cpp" />

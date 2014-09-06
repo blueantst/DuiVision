@@ -33,6 +33,7 @@ using namespace Gdiplus;
 #include "GlobalFunction.h"
 #include "DuiHandler.h"
 #include "Panel.h"
+#include "DuiNativeWnd.h"
 #include "DuiSystem.h"
 
 //////////////////////////////////////////////////////////

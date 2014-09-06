@@ -180,6 +180,9 @@
     <ClInclude Include="include\DuiXml.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\DuiNativeWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -309,6 +312,9 @@
       <Filter>pugixml</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiXml.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiNativeWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

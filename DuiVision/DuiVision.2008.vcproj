@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiNativeWnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiObject.cpp"
 				>
 			</File>
@@ -388,6 +392,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiMenu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiNativeWnd.h"
 				>
 			</File>
 			<File

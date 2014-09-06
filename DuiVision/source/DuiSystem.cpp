@@ -991,6 +991,7 @@ CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiOb
 	CControlBase *pControl = NULL;
 
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiPanel);
+	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiNativeWnd);
 
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiButton);
 	CREATE_DUICONTROL_BY_CLASS_NAME(CImageButton);
