@@ -27,6 +27,8 @@
 	</body>\
 </dlg>";
 
+//////////////////////////////////////////////////////////////
+// CDuiHandlerMain
 
 CDuiHandlerMain::CDuiHandlerMain(void) : CDuiHandler()
 {
@@ -53,6 +55,29 @@ void CDuiHandlerMain::OnInit()
 	//pDuiHandlerTools->OnInit();
 	// 启动动画定时器
 	m_uTimerAni = DuiSystem::AddDuiTimer(500);
+
+	// 初始化原生控件
+	CDuiNativeWnd* pNativeWnd = (CDuiNativeWnd*)GetControl(_T("nativewnd_1"));
+	if(pNativeWnd)
+	{
+		CEdit* pEdit = new CEdit;
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_AUTOVSCROLL;
+		pEdit->Create(dwStyle, CRect(0,0,0,0), pNativeWnd->GetPaintWnd(), 1111);
+		pNativeWnd->SetNativeWnd(pEdit);
+
+		/*CListViewCtrlEx* pWndList = new CListViewCtrlEx;
+		DWORD dwStyle = WS_VISIBLE | WS_CHILD | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_SINGLESEL | LVS_OWNERDRAWFIXED;
+		pWndList->Create(pNativeWnd->GetPaintHWnd(), NULL, NULL,
+			dwStyle, 0, 1112, NULL);
+		pWndList->SetObserverWindow(pNativeWnd->GetPaintHWnd());
+		pWndList->InsertColumn(0, L"列1", LVCFMT_CENTER, 50);
+		pWndList->InsertColumn(1, L"列2", LVCFMT_CENTER, 150);
+		pWndList->InsertColumn(2, L"列3", LVCFMT_CENTER, 100);
+		pWndList->SetItemHeight(22);
+		int nItem = pWndList->AppendTitle("row1", Color(80,80,80), LISTITEM_EXPANDABLE|LISTITEM_BOLD);
+		pWndList->AppendSubItem(nItem, "test1", SUBITEM_LINK);
+		pNativeWnd->SetNativeWnd(pWndList);*/
+	}
 }
 
 // 皮肤消息处理(实现皮肤的保存和获取)

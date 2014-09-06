@@ -163,6 +163,11 @@ width-lt,height-lt,width-rb,height-rb" />
 				<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
 			</combobox>
 
+			<text pos="300,130,500,150" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
+			<rect pos="300,160,600,300" response="0" color="808080" />
+			<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
+				pos="301,161,599,299" tip="原生窗口控件"  />
+
 		</tab>
 		
 		<tab name="tab.control.5" image="skin:IDB_TAB_ITEM" title="动画" pos="0,30,-0,-0">
@@ -250,7 +255,7 @@ width-lt,height-lt,width-rb,height-rb" />
 			
 			<button name="menu_3" skin="IDB_BT_DEFAULT" title="菜单3"
 				pos="350,100,450,128" tip="普通菜单，背景2" />
-
+			
 		</tab>
 		
 	</tabctrl>
