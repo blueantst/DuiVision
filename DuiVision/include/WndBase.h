@@ -42,6 +42,7 @@ public:
     void Unsubclass();
     void ShowWindow(bool bShow = true, bool bTakeFocus = true);
     bool ShowModal();
+	void Destory();
     void Close();
     void CenterWindow();
     void SetIcon(UINT nRes);
@@ -49,6 +50,8 @@ public:
     LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
     LRESULT PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
     void ResizeClient(int cx = -1, int cy = -1);
+
+	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 protected:
     virtual LPCTSTR GetWindowClassName() const;
@@ -68,7 +71,7 @@ protected:
     static LRESULT CALLBACK __ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-    HWND		m_hWnd;
+    HWND		m_hWnd;			// 窗口句柄
     WNDPROC		m_OldWndProc;
     bool		m_bSubclassed;	// 是否已子类化
 };

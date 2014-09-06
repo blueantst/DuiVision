@@ -114,6 +114,13 @@ bool CWindowWnd::ShowModal()
     return true;
 }
 
+void CWindowWnd::Destory()
+{
+    ASSERT(::IsWindow(m_hWnd));
+    if( !::IsWindow(m_hWnd) ) return;
+    DestroyWindow(m_hWnd);
+}
+
 void CWindowWnd::Close()
 {
     ASSERT(::IsWindow(m_hWnd));
@@ -357,4 +364,9 @@ LRESULT CWindowWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 LRESULT CWindowWnd::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	return 0;
+}
+
+// ¿Ø¼þ»­Í¼º¯Êý
+void CWindowWnd::DrawControl(CDC &dc, CRect rcUpdate)
+{
 }
