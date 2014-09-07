@@ -25,20 +25,20 @@ CDuiMenu::~CDuiMenu(void)
 
 BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID, UINT nResourceID, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
 {
-	CRect rc(point.x - nMinWidth / 2, point.y, point.x + nMinWidth / 2, point.y + nMinWidth);
+	CRect rc(point.x, point.y, point.x + nMinWidth, point.y + nMinWidth);
 	return CDlgPopup::Create(pParent, rc, uMessageID, nResourceID, enBackMode, nFrameSize);
 }
 
 BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID, CString strImage, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
 {
-	CRect rc(point.x - nMinWidth / 2, point.y, point.x + nMinWidth / 2, point.y + nMinWidth);
+	CRect rc(point.x, point.y, point.x + nMinWidth, point.y + nMinWidth);
 	return CDlgPopup::Create(pParent, rc, uMessageID, strImage, enBackMode, nFrameSize);
 }
 
 BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID)
 {
 	int nMinWidth = m_nWidth;
-	CRect rc(point.x - nMinWidth / 2, point.y, point.x + nMinWidth / 2, point.y + nMinWidth);
+	CRect rc(point.x, point.y, point.x + nMinWidth, point.y + nMinWidth);
 	return CDlgPopup::Create(pParent, rc, uMessageID);
 }
 

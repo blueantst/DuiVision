@@ -255,7 +255,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		pDuiMenu->SetParent(pButton);
 		CPoint point;
 		CRect rc = pButton->GetRect();
-		point.SetPoint(rc.left + 75, rc.bottom);
+		point.SetPoint(rc.left, rc.bottom);
 		if(pDlg != NULL)
 		{
 			pDlg->ClientToScreen(&point);
@@ -279,7 +279,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		pDuiMenu->SetParent(pButton);
 		CPoint point;
 		CRect rc = pButton->GetRect();
-		point.SetPoint(rc.left + 75, rc.bottom);
+		point.SetPoint(rc.left, rc.bottom);
 		if(pDlg != NULL)
 		{
 			pDlg->ClientToScreen(&point);
@@ -297,7 +297,7 @@ LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARA
 		pDuiMenu->SetParent(pButton);
 		CPoint point;
 		CRect rc = pButton->GetRect();
-		point.SetPoint(rc.left + 75, rc.bottom);
+		point.SetPoint(rc.left, rc.bottom);
 		if(pDlg != NULL)
 		{
 			pDlg->ClientToScreen(&point);

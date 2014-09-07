@@ -148,7 +148,6 @@ void CMenuItem::ShowPopupMenu()
 				// 计算菜单的位置并显示
 				CRect rc;
 				m_pPopupMenu->GetWindowRect(&rc);
-				rc.OffsetRect(rc.Width()/2, 0);
 				// 如果超出屏幕右侧范围,则菜单窗口往左移动一些,移动到当前菜单的左侧
 				int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
 				if(rc.right > nScreenWidth)

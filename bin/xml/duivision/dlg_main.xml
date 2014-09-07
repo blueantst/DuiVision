@@ -6,7 +6,7 @@
   <base>
 	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="hide-window" show="1"/>
 	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
-	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" action="menu:menu_main"/>
+	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" action="menu:menu_main" menupos="-75,-0" />
 	<imgbtn name="button.skin" pos="-140,0,-111,29" skin="IDB_BT_SKIN" tip="皮肤" show="1"/>
 	<text name="title" crtext="FFFFFF" crmark="800000" crshadow="808080" font="big"
 			pos="10,4,250,25" title="[APP_NAME]" response="0" show="1" />

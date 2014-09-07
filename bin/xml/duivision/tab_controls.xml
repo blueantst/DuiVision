@@ -56,7 +56,7 @@
 				animate="1" maxindex="16" />
 			
 			<button pos="500,20,600,48" skin="IDB_BT_DEFAULT" title="菜单按钮" tip="菜单按钮"
-				action="menu:menu_main" menupos="75,-0" />
+				action="menu:menu_main" menupos="0,-0" />
 			
 			<hidebtn name="hidebtn" align="left"
 				pos="50,65,150,90" show="1" text="隐藏按钮" title="点击" />
