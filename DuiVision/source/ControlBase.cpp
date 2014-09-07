@@ -75,6 +75,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_nWidth = 0;
 	m_nHeight = 0;
 
+	m_posMenu.nCount = 0;
+
 	m_strTooltip = _T("");
 	m_strAction = _T("");
 	m_bTaskMsg = FALSE;
@@ -807,6 +809,21 @@ HRESULT CControlBase::OnAttributeHeight(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 从XML设置菜单位置信息属性
+HRESULT CControlBase::OnAttributeMenuPosChange(const CString& strValue, BOOL bLoading)
+{
+    if (strValue.IsEmpty()) return E_FAIL;
+
+	m_posMenu.nCount=0;
+	LPCTSTR pszValue=strValue;
+	while(m_posMenu.nCount<4 && pszValue)
+	{
+		pszValue=ParsePosition(pszValue,m_posMenu.Item[m_posMenu.nCount++]);
+	}
+
+    return bLoading?S_FALSE:S_OK;
+}
+
 // 从XML设置快捷键信息属性
 HRESULT CControlBase::OnAttributeShortcut(const CString& strValue, BOOL bLoading)
 {
@@ -1110,7 +1127,18 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		pDuiMenu->SetParent(this);
 		CPoint point;
 		CRect rc = GetRect();
-		point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
+		// 计算菜单的显示位置
+		if(m_posMenu.nCount >= 2)
+		{
+			// 使用设置的菜单位置
+			int nMenuX = PositionItem2Value(m_posMenu.Left, rc.left, rc.right);
+			int nMenuY = PositionItem2Value(m_posMenu.Top, rc.top, rc.bottom);
+			point.SetPoint(nMenuX, nMenuY);
+		}else
+		{
+			// 如果没有设置位置信息,则默认按照控件底部开始显示,水平方向中间对齐
+			point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
+		}
 		CDlgBase* pParentDlg = GetParentDialog();
 		if(pParentDlg != NULL)
 		{

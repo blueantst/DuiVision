@@ -40,9 +40,9 @@ public:
 	// 位置信息中每个点的信息
     struct DUIDLG_POSITION_ITEM
     {
-		PIT pit;
-        BOOL bMinus;
-        float  nPos;
+		PIT pit;			// 位置计算方式	
+        BOOL bMinus;		// 是否负值
+        float  nPos;		// 位置信息
     };
 
 	// 位置信息结构
@@ -88,6 +88,7 @@ public:
 	HRESULT OnAttributePosChange(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeWidth(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeHeight(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeMenuPosChange(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeShortcut(const CString& strValue, BOOL bLoading);
 	
 	void SetVisible(BOOL bIsVisible);
@@ -161,7 +162,7 @@ protected:
 	CDuiObject*				m_pParentDuiObject;	// 父控件对象
 	HWND					m_hWnd;
 	
-	CString				m_strPos;			// 区域(XML定义中的字符串)
+	CString					m_strPos;			// 位置(XML定义中的字符串)
 	BOOL					m_bIsVisible;		// 可见
 	BOOL					m_bIsDisable;		// 是否可用
 	BOOL					m_bRresponse;		// 是否可以响应鼠标事件
@@ -201,6 +202,8 @@ protected:
 	int						m_nWidth;			// 控件宽度
 	int						m_nHeight;			// 控件高度
 
+	DUIDLG_POSITION			m_posMenu;			// 弹出菜单的位置信息
+
 	CString					m_strTooltip;		// 控件的Tooltip
 	CString					m_strAction;		// 控件执行的动作
 	BOOL					m_bTaskMsg;			// 调用事件响应函数时候采用任务方式
@@ -214,6 +217,7 @@ protected:
 		DUI_CUSTOM_ATTRIBUTE(_T("pos"), OnAttributePosChange)
 		DUI_CUSTOM_ATTRIBUTE(_T("width"), OnAttributeWidth)
 		DUI_CUSTOM_ATTRIBUTE(_T("height"), OnAttributeHeight)
+		DUI_CUSTOM_ATTRIBUTE(_T("menupos"), OnAttributeMenuPosChange)
 		DUI_TSTRING_ATTRIBUTE(_T("action"), m_strAction, FALSE)
 		DUI_INT_ATTRIBUTE(_T("taskmsg"), m_bTaskMsg, TRUE)
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
