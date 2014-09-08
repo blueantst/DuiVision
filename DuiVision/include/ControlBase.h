@@ -160,10 +160,10 @@ public:
 protected:
 
 	CDuiObject*				m_pParentDuiObject;	// 父控件对象
-	HWND					m_hWnd;
+	HWND					m_hWnd;				// 父窗口的Windows窗口句柄(一般是对话框的窗口句柄)
 	
 	CString					m_strPos;			// 位置(XML定义中的字符串)
-	BOOL					m_bIsVisible;		// 可见
+	BOOL					m_bIsVisible;		// 是否可见
 	BOOL					m_bIsDisable;		// 是否可用
 	BOOL					m_bRresponse;		// 是否可以响应鼠标事件
 	BOOL					m_bTabStop;			// 是否可以响应Tab键
@@ -177,7 +177,7 @@ protected:
 	BOOL					m_bUpdate;			// 更新贴图
 
 	BOOL					m_bIsRun;			// 是否有执行功能
-	BOOL					m_bRunTime;			// 执行定时器
+	BOOL					m_bRunTime;			// 是否正在执行定时器
 
 	BOOL					m_bImageUseECM;		// 是否使用图片自身的颜色管理信息
 
@@ -292,16 +292,16 @@ public:
 	HRESULT OnAttributeSkin(const CString& strValue, BOOL bLoading);
 
 protected:
-	CString				m_strTitle;			// 标题
-	CString				m_strFont;			// 字体
-	int					m_nFontWidth;		// 字体宽度
-	FontStyle			m_fontStyle;		// 字体Style
-	UINT				m_uAlignment;		// 水平对齐方式
-	UINT				m_uVAlignment;		// 垂直对齐方式
+	CString					m_strTitle;			// 标题
+	CString					m_strFont;			// 字体
+	int						m_nFontWidth;		// 字体宽度
+	FontStyle				m_fontStyle;		// 字体Style
+	UINT					m_uAlignment;		// 水平对齐方式
+	UINT					m_uVAlignment;		// 垂直对齐方式
 
-	Image*				m_pImage;			// 图片
-	CSize				m_sizeImage;		// 图片大小
-	int					m_nImagePicCount;	// Image中默认包含的图片个数
+	Image*					m_pImage;			// 图片
+	CSize					m_sizeImage;		// 图片大小
+	int						m_nImagePicCount;	// Image中默认包含的图片个数
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
         DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
