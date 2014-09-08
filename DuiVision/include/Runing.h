@@ -22,11 +22,10 @@ protected:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 	
 public:
-	//过程索引
-	int m_nIndex;
-	int m_nMaxIndex;
-	int m_nCount;
-	int m_nTimerCount;
+	int				m_nIndex;			// 当前图片索引
+	int				m_nMaxIndex;		// 图片最大索引
+	int				m_nCount;			// 定时器次数计数
+	int				m_nTimerCount;		// 定时多少次图片变化一次
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("index"), m_nIndex, FALSE)

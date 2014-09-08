@@ -12,7 +12,9 @@ public:
 	virtual ~CDuiProgress(void);
 
 	int SetProgress(int nProgress);
-	int GetProgress() { return m_nProgress; };
+	int GetProgress() { return m_nProgress; }
+	int SetMaxProgress(int nMaxProgress) { m_nMaxProgress = nMaxProgress; }
+	int GetMaxProgress() { return m_nMaxProgress; }
 	BOOL SetRun(BOOL bRun, int nIndex = -1);
 	
 protected:
@@ -23,11 +25,10 @@ protected:
 	
 public:
 	//过程索引
-	int				m_nIndex;			// 当前计数(=m_nProgress)
-	int				m_nMaxIndex;		// 最大计数(100)
-	int				m_nCount;			// 定时多少次计数增加一次
-	
 	int				m_nProgress;		// 当前进度(0-100)
+	int				m_nMaxProgress;		// 最大进度值(默认100)
+	int				m_nCount;			// 定时器次数计数
+	int				m_nTimerCount;		// 定时多少次进度增加一次
 
 	int				m_nHeadLength;		// 进度条图片头部长度
 
@@ -35,6 +36,8 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ForeGround);	// 定义前景图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("value"), m_nProgress, FALSE)
+		DUI_INT_ATTRIBUTE(_T("max-value"), m_nMaxProgress, FALSE)
+		DUI_INT_ATTRIBUTE(_T("timer-count"), m_nTimerCount, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("run"), OnAttributeRun)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-back"), OnAttributeImageBackGround)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-fore"), OnAttributeImageForeGround)

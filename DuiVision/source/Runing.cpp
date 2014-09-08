@@ -74,7 +74,7 @@ BOOL CDuiAnimateImage::SetRun(BOOL bRun, int nIndex/* = -1*/)
 		UpdateControl();
 	}
 
-	return bOldRunTime;
+	return m_bRunTime;
 }
 
 BOOL CDuiAnimateImage::OnControlTimer()
@@ -92,7 +92,10 @@ BOOL CDuiAnimateImage::OnControlTimer()
 			m_nIndex = 0;
 		}
 		
-		UpdateControl();
+		if(GetVisible())
+		{
+			UpdateControl();
+		}
 		return true;
 	}
 

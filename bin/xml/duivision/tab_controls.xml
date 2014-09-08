@@ -189,13 +189,13 @@ width-lt,height-lt,width-rb,height-rb" />
 			<text pos="50,180,250,200" crtext="808080" title="进度条：" />
 			
 			<progress name="progress_1" skin="IDB_PROGRESS"
-				pos="50,210" width="330" height="15" value="40" run="false" show="1"
-				tip="直角进度条" />
+				pos="50,210" width="330" height="15" value="40" run="true" show="1"
+				tip="直角进度条，进度自动增加" />
 			
 			<progress name="progress_2"
 				img-back="skin:IDB_PROGRESS_GREEN_BACK" img-fore="skin:IDB_PROGRESS_GREEN_FORE" head-len="5"
 				pos="50,240" width="330" height="12" value="40" run="false" show="1"
-				tip="圆角进度条，需要前景和背景两张图片" />
+				tip="圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
 
 		</tab>
 		

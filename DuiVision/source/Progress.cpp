@@ -5,9 +5,9 @@ CDuiProgress::CDuiProgress(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBaseFont(hWnd, pDuiObject)
 {
 	m_bRunTime = false;
-	m_nIndex = 0;
-	m_nMaxIndex = 100;
+	m_nMaxProgress = 100;
 	m_nCount = 0;
+	m_nTimerCount = 3;
 
 	SetBitmapCount(2);
 
@@ -26,9 +26,9 @@ CDuiProgress::CDuiProgress(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	: CControlBaseFont(hWnd, pDuiObject, uControlID, rc, TEXT(""), bIsVisible, bIsDisable)
 {
 	m_bRunTime = false;
-	m_nIndex = 0;
-	m_nMaxIndex = 100;
+	m_nMaxProgress = 100;
 	m_nCount = 0;
+	m_nTimerCount = 3;
 
 	SetBitmapCount(2);
 
@@ -62,26 +62,51 @@ DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiProgress, ForeGround, 1)
 
 int CDuiProgress::SetProgress(int nProgress)
 {
-	int nOldProgress = m_nProgress;
-	if(nProgress >= 0 && nProgress <= 100 && m_nProgress != nProgress)
+	if(GetDisable())
+	{
+		return m_nProgress;
+	}
+
+	if(nProgress > m_nMaxProgress)
+	{
+		// 设置值超过最大值,自动更改为最大值
+		nProgress = m_nMaxProgress;
+	}
+
+	if(nProgress >= 0 && nProgress <= m_nMaxProgress && m_nProgress != nProgress)
 	{
 		m_nProgress = nProgress;
-		UpdateControl(true);
+		if(GetVisible())
+		{
+			UpdateControl(true);
+		}
 	}
-	return nOldProgress;
+	return m_nProgress;
 }
 
 // 设置是否自动运行
 BOOL CDuiProgress::SetRun(BOOL bRun, int nIndex/* = -1*/)
 {
-	m_bRunTime = bRun;
-	if(nIndex != -1)
+	if(GetDisable())
 	{
-		m_nIndex = nIndex;
+		return m_bRunTime;
+	}
+
+	BOOL bOldRunTime = m_bRunTime;
+	int nOldProgress = m_nProgress;
+	m_bRunTime = bRun;
+
+	if(nIndex >= 0 && nIndex <= m_nMaxProgress)
+	{
 		m_nProgress = nIndex;
 	}
-	UpdateControl();
-	return TRUE;
+
+	if(GetVisible() && ((bOldRunTime != m_bRunTime) || (nOldProgress != m_nProgress)))
+	{
+		UpdateControl(true);
+	}
+
+	return m_bRunTime;
 }
 
 // 从XML设置自动运行属性
@@ -102,15 +127,18 @@ BOOL CDuiProgress::OnControlTimer()
 		return FALSE;
 	}
 
-	if(++m_nCount == 3)
+	if(++m_nCount >= m_nTimerCount)
 	{
 		m_nCount = 0;
-		if(++m_nIndex >= m_nMaxIndex)
+		if(++m_nProgress >= m_nMaxProgress)
 		{
-			m_nIndex = 0;
+			m_nProgress = 0;
 		}
-		m_nProgress = m_nIndex;
-		UpdateControl();
+
+		if(GetVisible())
+		{
+			UpdateControl(true);
+		}
 		return true;
 	}
 

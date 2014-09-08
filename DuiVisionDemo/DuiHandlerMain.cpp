@@ -446,12 +446,6 @@ void CDuiHandlerMain::OnTimer(UINT uTimerID, CString strTimerName)
 {
     if(uTimerID == m_uTimerAni)
 	{
-		CDuiProgress* pProgress1 = (CDuiProgress*)GetControl(_T("progress_1"));
-		if(pProgress1)
-		{
-			pProgress1->SetProgress(m_nAniIndex*10);
-		}
-
 		CDuiProgress* pProgress2 = (CDuiProgress*)GetControl(_T("progress_2"));
 		if(pProgress2)
 		{
