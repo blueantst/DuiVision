@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "Runing.h"
 
-CRuning::CRuning(HWND hWnd, CDuiObject* pDuiObject)
+CDuiAnimateImage::CDuiAnimateImage(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBaseFont(hWnd, pDuiObject)
 {
 	m_bRunTime = false;
@@ -12,7 +12,7 @@ CRuning::CRuning(HWND hWnd, CDuiObject* pDuiObject)
 	SetBitmapCount(m_nMaxIndex);
 }
 
-CRuning::CRuning(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
+CDuiAnimateImage::CDuiAnimateImage(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
 				 UINT uAlignment/* = DT_CENTER*/, UINT uVAlignment/* = DT_VCENTER*/, BOOL bIsVisible/* = TRUE*/, BOOL bIsDisable/* = FALSE*/)
 	: CControlBaseFont(hWnd, pDuiObject, uControlID, rc, TEXT(""), bIsVisible, bIsDisable)
 {
@@ -24,12 +24,12 @@ CRuning::CRuning(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	SetBitmapCount(m_nMaxIndex);
 }
 
-CRuning::~CRuning(void)
+CDuiAnimateImage::~CDuiAnimateImage(void)
 {
 }
 
 // 从XML设置图片个数属性
-HRESULT CRuning::OnAttributeMaxIndex(const CString& strValue, BOOL bLoading)
+HRESULT CDuiAnimateImage::OnAttributeMaxIndex(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty() || (m_pImage == NULL)) return E_FAIL;
 
@@ -43,7 +43,7 @@ HRESULT CRuning::OnAttributeMaxIndex(const CString& strValue, BOOL bLoading)
 }
 
 // 从XML设置动画属性
-HRESULT CRuning::OnAttributeRun(const CString& strValue, BOOL bLoading)
+HRESULT CDuiAnimateImage::OnAttributeRun(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -53,7 +53,7 @@ HRESULT CRuning::OnAttributeRun(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-BOOL CRuning::SetRun(BOOL bRun, int nIndex/* = -1*/)
+BOOL CDuiAnimateImage::SetRun(BOOL bRun, int nIndex/* = -1*/)
 {
 	if(GetDisable())
 	{
@@ -77,7 +77,7 @@ BOOL CRuning::SetRun(BOOL bRun, int nIndex/* = -1*/)
 	return bOldRunTime;
 }
 
-BOOL CRuning::OnControlTimer()
+BOOL CDuiAnimateImage::OnControlTimer()
 {
 	if(!m_bRunTime || !m_bIsVisible)
 	{
@@ -99,7 +99,7 @@ BOOL CRuning::OnControlTimer()
 	return false;
 }
 
-void CRuning::DrawControl(CDC &dc, CRect rcUpdate)
+void CDuiAnimateImage::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
 	int nHeight = m_rc.Height();

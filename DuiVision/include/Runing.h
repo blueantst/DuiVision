@@ -3,14 +3,14 @@
 #include "ControlBase.h"
 
 
-class CRuning : public CControlBaseFont
+class CDuiAnimateImage : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CRuning, _T("animateimg"))
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiAnimateImage, _T("animateimg"))
 public:
-	CRuning(HWND hWnd, CDuiObject* pDuiObject);
-	CRuning(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
+	CDuiAnimateImage(HWND hWnd, CDuiObject* pDuiObject);
+	CDuiAnimateImage(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
 		UINT uAlignment = DT_CENTER, UINT uVAlignment = DT_VCENTER, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE);
-	virtual ~CRuning(void);
+	virtual ~CDuiAnimateImage(void);
 	
 	HRESULT OnAttributeMaxIndex(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeRun(const CString& strValue, BOOL bLoading);
