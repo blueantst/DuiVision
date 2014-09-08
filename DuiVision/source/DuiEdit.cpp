@@ -731,7 +731,7 @@ void CDuiEdit::ShowEdit()
 		{
 			dwStyle |= ES_READONLY;
 		}
-  		m_pEdit->Create(dwStyle, rc, CWnd::FromHandle(m_hWnd), 1111); 
+  		m_pEdit->Create(dwStyle, rc, CWnd::FromHandle(m_hWnd), GetID());
   		m_pEdit->SetFont(&m_fontTemp);
 		m_pEdit->SetWindowText(m_strTitle);	
 		if(m_bPassWord)
