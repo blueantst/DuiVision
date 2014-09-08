@@ -17,6 +17,11 @@ CDuiProgress::CDuiProgress(HWND hWnd, CDuiObject* pDuiObject)
 	m_sizeForeGround = CSize(0, 0);
 	m_nHeadLength = 0;
 
+	m_clrText = Color(254, 128, 128, 128);
+	m_uAlignment = Align_Center;
+	m_uVAlignment = VAlign_Middle;
+	m_bShowText = FALSE;
+
 	m_nProgress = 0;
 	SetProgress(0);
 }
@@ -37,6 +42,11 @@ CDuiProgress::CDuiProgress(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_pImageForeGround = NULL;
 	m_sizeForeGround = CSize(0, 0);
 	m_nHeadLength = 0;
+
+	m_clrText = Color(254, 128, 128, 128);
+	m_uAlignment = Align_Center;
+	m_uVAlignment = VAlign_Middle;
+	m_bShowText = FALSE;
 
 	m_nProgress = 0;
 	SetProgress(nProgress);
@@ -184,6 +194,28 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 				DrawImageFrame(graphics, m_pImage, CRect(0, 0, nWidth * m_nProgress / 100, nHeight), 
 					m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 2);
 			}
+		}
+
+		// 画进度文字
+		if(m_bShowText)
+		{
+			BSTR bsFont = m_strFont.AllocSysString();
+			FontFamily fontFamily(bsFont);
+			Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+			::SysFreeString(bsFont);
+
+			SolidBrush solidBrush(m_clrText);
+			graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+			// 设置水平和垂直对齐方式
+			DUI_STRING_ALIGN_DEFINE();
+			strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
+
+			CString strText;
+			strText.Format(L"%s%d%s", m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? L"%" : L"");
+			BSTR bsTitle = strText.AllocSysString();
+			RectF rect((Gdiplus::REAL)(0), (Gdiplus::REAL)0, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)nHeight);
+			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
+			::SysFreeString(bsTitle);
 		}
 	}
 

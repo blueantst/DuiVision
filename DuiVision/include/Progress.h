@@ -32,6 +32,9 @@ public:
 
 	int				m_nHeadLength;		// 进度条图片头部长度
 
+	Color			m_clrText;			// 进度文字颜色
+	BOOL			m_bShowText;		// 是否显示进度文字
+
 	DUI_IMAGE_ATTRIBUTE_DEFINE(BackGround);	// 定义背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ForeGround);	// 定义前景图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
@@ -42,5 +45,7 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("img-back"), OnAttributeImageBackGround)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-fore"), OnAttributeImageForeGround)
 		DUI_INT_ATTRIBUTE(_T("head-len"), m_nHeadLength, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("show-text"), m_bShowText, TRUE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
