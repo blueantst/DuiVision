@@ -62,7 +62,7 @@ BOOL CLinkButton::OnControlLButtonDown(UINT nFlags, CPoint point)
 		if(m_rcText.PtInRect(point))
 		{
 			m_enButtonState = enBSDown;
-			SendMessage(BUTTOM_DOWN, 0, 0);
+			SendMessage(MSG_BUTTON_DOWN, 0, 0);
 		}
 	}
 	
@@ -104,7 +104,7 @@ BOOL CLinkButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 
 		if(bSend)
 		{
-			SendMessage(BUTTOM_UP, 0, 0);
+			SendMessage(MSG_BUTTON_UP, 0, 0);
 		}
 		return true;
 	}

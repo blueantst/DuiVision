@@ -2,8 +2,6 @@
 
 #include "ControlBase.h"
 
-#define MSG_SCROLL_CHANGE	1	// 滚动条位置变更事件
-
 class CScrollV : public CControlBaseFont
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CScrollV, _T("scroll"))

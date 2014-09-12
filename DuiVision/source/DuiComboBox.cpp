@@ -240,7 +240,7 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CString& strValue, BOOL bLoad
 // 消息处理
 LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if((BUTTOM == wParam) && (BUTTOM_DOWN == lParam) && (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮
+	if((CONTROL_BUTTON == wParam) && (MSG_BUTTON_DOWN == lParam) && (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮
 	{
 		CPopupList *pPopupList = new CPopupList;
 		m_pPopupList = pPopupList;
@@ -323,7 +323,7 @@ BOOL CDuiComboBox::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if(m_bDown && (nChar == VK_DOWN) && (nFlags == 0) && IsFocusControl())
 	{
 		// 模拟鼠标点击
-		SendMessage(m_uID, BUTTOM, BUTTOM_DOWN);
+		SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_DOWN);
 		return true;
 	}
 

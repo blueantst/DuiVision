@@ -1704,7 +1704,7 @@ public:
 			// 如果设置了action,则解析执行
 			if(m_strAction.Find(_T("dlg:")) == 0)	// 动作:打开一个对话框,有内存泄漏，改为通过DuiSystem创建和管理
 			{
-				if(m_uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+				if(m_uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 				{
 					CString strXmlFile = m_strAction;
 					strXmlFile.Delete(0, 4);
@@ -1716,7 +1716,7 @@ public:
 			}else
 			if(m_strAction.Find(_T("link:")) == 0)	// 动作:打开一个页面链接
 			{
-				if(m_uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+				if(m_uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 				{
 					CString strLink = m_strAction;
 					strLink.Delete(0, 5);
@@ -1728,7 +1728,7 @@ public:
 			}else
 			if(m_strAction.Find(_T("run:")) == 0)	// 动作:执行一个进程
 			{
-				if(m_uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+				if(m_uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 				{
 					CString strProcess = m_strAction;
 					strProcess.Delete(0, 4);
@@ -1772,7 +1772,7 @@ public:
 			}else
 			if(m_strAction.Find(ACTION_CLOSE_WINDOW) == 0)	// 动作:关闭指定的窗口
 			{
-				if(m_uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+				if(m_uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 				{
 					CString strWndName = m_strAction;
 					strWndName.Delete(0, 13);
@@ -1789,7 +1789,7 @@ public:
 			}else
 			if(m_strAction.Find(ACTION_SHOW_WINDOW) == 0)	// 动作:显示指定的窗口
 			{
-				if(m_uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+				if(m_uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 				{
 					CString strWndName = m_strAction;
 					strWndName.Delete(0, 12);

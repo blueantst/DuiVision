@@ -480,7 +480,7 @@ BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 					{				
 						m_buttonState = enBSHover;
 					}				
-					SendMessage(m_uID, BUTTOM, BUTTOM_DOWN);
+					SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_DOWN);
 					HideEdit();
 				}
 			}
@@ -493,7 +493,7 @@ BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 				}
 				ShowEdit();
 				
-				SendMessage(m_uID, EDIT, BUTTOM_DOWN);
+				SendMessage(m_uID, CONTROL_EDIT, MSG_BUTTON_DOWN);
 			}		
 		}
 		else
@@ -539,7 +539,7 @@ BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 					{
 						m_buttonState = enBSHover;
 					}	
-					SendMessage(m_uID, BUTTOM, BUTTOM_UP);
+					SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_UP);
 				}
 			}
 			else
@@ -552,7 +552,7 @@ BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 				{
 					m_buttonState = enBSNormal;
 				}	
-				SendMessage(m_uID, EDIT, BUTTOM_UP);
+				SendMessage(m_uID, CONTROL_EDIT, MSG_BUTTON_UP);
 			}			
 		}
 		else

@@ -168,7 +168,7 @@ BOOL CCheckButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(m_bMouseDown)
 			{
 				m_bDown = !m_bDown;
-				SendMessage(BUTTOM_UP, 0, 0);
+				SendMessage(MSG_BUTTON_UP, 0, 0);
 			}
 			if(m_bDown)
 			{

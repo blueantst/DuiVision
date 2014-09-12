@@ -547,7 +547,7 @@ CMenuItem* CDuiMenu::GetHoverMenuItem()
 // 消息响应
 LRESULT CDuiMenu::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if((Msg != BUTTOM_UP) && (Msg != BUTTOM_CHECK))
+	if((Msg != MSG_BUTTON_UP) && (Msg != MSG_BUTTON_CHECK))
 	{
 		return 0;
 	}
@@ -575,7 +575,7 @@ LRESULT CDuiMenu::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 		PostMessage(m_uMessageID, Msg, (LPARAM)pMenuInfo);*/
 	}
 
-	if(Msg == BUTTOM_UP)
+	if(Msg == MSG_BUTTON_UP)
 	{
 		// 如果有父菜单,将父菜单关闭,不采用直接关闭的方法,而是设置自动关闭标识,并通过鼠标事件触发自动关闭
 		CDuiMenu* pParentMenu = GetParentMenu();

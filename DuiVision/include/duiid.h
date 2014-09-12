@@ -55,6 +55,12 @@
 // 系统消息定义
 #define					MSG_TRAY_DBCLICK					1						// 托盘双击消息
 
+// 控件消息定义
+#define					MSG_BUTTON_DOWN						1						// 按钮按下
+#define					MSG_BUTTON_UP						2						// 按钮放开
+#define					MSG_BUTTON_CHECK					3						// 检查框消息
+#define					MSG_SCROLL_CHANGE					4						// 滚动条位置变更事件
+
 
 // 进程间消息内容的结构定义
 struct DUI_INTERPROCESS_MSG

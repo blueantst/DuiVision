@@ -531,58 +531,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash4(UINT uID, CString strName, UINT M
 // DUI事件处理
 LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiHandlerTest::OnDuiMessage:uID=%d, name=%s, msg=%d, wParam=%d, lParam=%d"),
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiHandlerMain::OnDuiMessage:uID=%d, name=%s, msg=%d, wParam=%d, lParam=%d"),
 						uID, strName, Msg, wParam, lParam);
-
-	if(strName == NAME_SKIN_WND)	// 皮肤消息处理
-	{
-		return ProcessSkinMsg(Msg, wParam, lParam);
-	}else
-	if(uID == APP_IPC)	// 进程间消息
-	{
-		ProcessInterprocessMsg(Msg, wParam, (DUI_INTERPROCESS_MSG*)lParam);
-	}else
-	if((strName == NAME_TRAY_ICON) && (Msg == MSG_TRAY_DBCLICK))	// 托盘双击消息
-	{
-		DuiSystem::ShowDuiDialog(_T("dlg_login"), NULL);
-	}else
-
-	if((strName == _T("textbtn_showflash_1")) && (Msg == BUTTOM_UP))	// 显示Flash1
-	{
-		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
-		if(pFlashCtrl)
-		{
-			pFlashCtrl->Navigate(L"flash/afternoon.swf");
-		}
-	}else
-	if((strName == _T("textbtn_showflash_2")) && (Msg == BUTTOM_UP))	// 显示Flash2
-	{
-		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
-		if(pFlashCtrl)
-		{
-			pFlashCtrl->Navigate(L"flash/morning.swf");
-		}
-	}else
-	if((strName == _T("textbtn_showflash_3")) && (Msg == BUTTOM_UP))	// 显示Flash3
-	{
-		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
-		if(pFlashCtrl)
-		{
-			pFlashCtrl->Navigate(L"flash/night.swf");
-		}
-	}else
-	if((strName == _T("textbtn_showflash_4")) && (Msg == BUTTOM_UP))	// 显示Flash4
-	{
-		CDlgBase* pDlg = GetControlDialog(uID);
-		CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
-		if(pFlashCtrl)
-		{
-			pFlashCtrl->Navigate(L"flash/noon.swf");
-		}
-	}
 
     return 0;
 }

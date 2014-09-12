@@ -1,8 +1,9 @@
 #pragma once
 #include "ControlBase.h"
 
-#define					BUTTOM				1
-#define					EDIT				2
+// edit控件中的子控件类型
+#define	CONTROL_BUTTON		1	// 编辑框中的按钮区域
+#define	CONTROL_EDIT		2	// 编辑框中非按钮区域
 
 class CDuiEdit : public CControlBaseFont
 {

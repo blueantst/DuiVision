@@ -1399,7 +1399,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 					m_nHoverRow = -1;
 				}
 
-				SendMessage(BUTTOM_DOWN, rowInfo.hNode, rowInfo.nHoverItem);
+				SendMessage(MSG_BUTTON_DOWN, rowInfo.hNode, rowInfo.nHoverItem);
 
 				UpdateControl(TRUE);
 
@@ -1414,7 +1414,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 		if(PtInRow(point, rowInfo)&& !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
 		{
 			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
-			SendMessage(BUTTOM_DOWN, rowInfo.hNode, rowInfo.nHoverItem);
+			SendMessage(MSG_BUTTON_DOWN, rowInfo.hNode, rowInfo.nHoverItem);
 			return true;
 		}
 	}
@@ -1437,7 +1437,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(BUTTOM_UP, rowInfo.hNode, rowInfo.nCheck);
+				SendMessage(MSG_BUTTON_UP, rowInfo.hNode, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;
@@ -1460,7 +1460,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(BUTTOM_UP, rowInfo.hNode, rowInfo.nCheck);
+				SendMessage(MSG_BUTTON_UP, rowInfo.hNode, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;
@@ -1504,17 +1504,17 @@ LRESULT CDuiTreeCtrl::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam
 		// 如果是滚动条的位置变更事件,则刷新显示
 		UpdateControl(true);
 	}else
-	if((uID == GetID()) && (Msg == BUTTOM_DOWN) && (lParam != -1))
+	if((uID == GetID()) && (Msg == MSG_BUTTON_DOWN) && (lParam != -1))
 	{
 		// 点击了行的某个链接
 		TreeNodeInfo* pRowInfo = GetNodeInfo(wParam);
 		if(pRowInfo && (lParam >= 0) && (lParam < (int)pRowInfo->vecItemInfo.size()))
 		{
 			TreeItemInfo &itemInfo = pRowInfo->vecItemInfo.at(lParam);
-			// 转换为BUTTOM_UP消息,因为DuiSystem任务处理时候只处理BUTTOM_UP消息
+			// 转换为MSG_BUTTON_UP消息,因为DuiSystem任务处理时候只处理MSG_BUTTON_UP消息
 			if(!itemInfo.strLinkAction.IsEmpty())
 			{
-				DuiSystem::AddDuiActionTask(uID, BUTTOM_UP, wParam, lParam, GetName(), itemInfo.strLinkAction, GetParent());
+				DuiSystem::AddDuiActionTask(uID, MSG_BUTTON_UP, wParam, lParam, GetName(), itemInfo.strLinkAction, GetParent());
 			}
 		}
 	}

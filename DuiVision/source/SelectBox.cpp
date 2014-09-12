@@ -402,7 +402,7 @@ BOOL CSelectBox::OnControlLButtonDown(UINT nFlags, CPoint point)
 					selectInfo.clr = m_vecclr[m_nXCount * m_nYSelect + m_nXSelect];
 					m_clrCurSelect = selectInfo.clr;
 				}
-				SendMessage(BUTTOM_DOWN, 0,(LPARAM)&selectInfo);
+				SendMessage(MSG_BUTTON_DOWN, 0,(LPARAM)&selectInfo);
 			}
 		}
 	}

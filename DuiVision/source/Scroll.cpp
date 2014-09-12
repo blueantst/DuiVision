@@ -561,7 +561,7 @@ LRESULT CScrollV::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if(uID == BT_UP)
 	{
-		if(BUTTOM_UP == lParam)
+		if(MSG_BUTTON_UP == lParam)
 		{
 			CRect rcUpdate;
 			rcUpdate.SetRectEmpty();
@@ -570,7 +570,7 @@ LRESULT CScrollV::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 	}
 	else if (uID == BT_DOWN)
 	{
-		if(BUTTOM_UP == lParam)
+		if(MSG_BUTTON_UP == lParam)
 		{
 			CRect rcUpdate;
 			rcUpdate.SetRectEmpty();

@@ -1657,7 +1657,7 @@ void CDlgBase::OnSkin()
 // 窗口最小化按钮的消息处理
 LRESULT CDlgBase::OnMessageButtomMin(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if(BUTTOM_UP == uMsg)
+	if(MSG_BUTTON_UP == uMsg)
 	{
 		OnMinimize();
 	}
@@ -1894,7 +1894,7 @@ LRESULT CDlgBase::OnCheckItsMe(WPARAM wParam, LPARAM lParam)
 // 窗口最大化按钮的消息处理
 LRESULT CDlgBase::OnMessageButtomMax(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if(BUTTOM_UP == uMsg)
+	if(MSG_BUTTON_UP == uMsg)
 	{
 		OnMaximize();
 	}
@@ -1905,7 +1905,7 @@ LRESULT CDlgBase::OnMessageButtomMax(UINT uMsg, WPARAM wParam, LPARAM lParam)
 // 窗口关闭按钮的消息处理
 LRESULT CDlgBase::OnMessageButtomClose(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if(BUTTOM_UP == uMsg)
+	if(MSG_BUTTON_UP == uMsg)
 	{
 		DoClose();
 	}
@@ -1916,7 +1916,7 @@ LRESULT CDlgBase::OnMessageButtomClose(UINT uMsg, WPARAM wParam, LPARAM lParam)
 // 窗口Skin按钮的消息处理
 LRESULT CDlgBase::OnMessageButtomSkin(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if(BUTTOM_UP == uMsg)
+	if(MSG_BUTTON_UP == uMsg)
 	{
 		OnSkin();
 	}

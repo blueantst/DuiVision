@@ -118,7 +118,7 @@ BOOL CDuiButton::OnControlLButtonDown(UINT nFlags, CPoint point)
 			}
 			// 设置为当前处于激活状态
 			m_bIsFocus = TRUE;
-			SendMessage(BUTTOM_DOWN, 0, 0);
+			SendMessage(MSG_BUTTON_DOWN, 0, 0);
 		}
 	}
 	
@@ -161,7 +161,7 @@ BOOL CDuiButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 
 		if(bSend)
 		{
-			SendMessage(BUTTOM_UP, 0, 0);
+			SendMessage(MSG_BUTTON_UP, 0, 0);
 		}
 		return true;
 	}
@@ -174,8 +174,8 @@ BOOL CDuiButton::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 如果当前处于焦点状态,用空格键可以模拟点击按钮
 	if(m_bIsFocus && (nChar == VK_SPACE) && (nFlags == 0))
 	{
-		SendMessage(BUTTOM_DOWN, 0, 0);
-		SendMessage(BUTTOM_UP, 0, 0);
+		SendMessage(MSG_BUTTON_DOWN, 0, 0);
+		SendMessage(MSG_BUTTON_UP, 0, 0);
 		return true;
 	}
 

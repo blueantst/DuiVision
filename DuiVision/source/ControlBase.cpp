@@ -615,8 +615,8 @@ BOOL CControlBase::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 如果快捷键能够匹配控件的快捷键,则发送一个模拟鼠标点击的消息
 	if((m_nShortcutKey != 0) && (nChar == m_nShortcutKey) && (nFlags == m_nShortcutFlag))
 	{
-		SendMessage(BUTTOM_DOWN, 0, 0);
-		SendMessage(BUTTOM_UP, 0, 0);
+		SendMessage(MSG_BUTTON_DOWN, 0, 0);
+		SendMessage(MSG_BUTTON_UP, 0, 0);
 		return true;
 	}
 
@@ -1091,7 +1091,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 	if(m_strAction.Find(_T("dlg:")) == 0)	// 动作:打开一个对话框,有内存泄漏，改为通过DuiSystem创建和管理
 	{
-		if(uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+		if(uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 		{
 			CString strXmlFile = m_strAction;
 			strXmlFile.Delete(0, 4);
@@ -1100,7 +1100,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}else
 	if(m_strAction.Find(_T("popup:")) == 0)	// 动作:打开一个Popup对话框
 	{
-		if(uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+		if(uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 		{
 			/*UINT nIDTemplate = 0;
 			CDlgBase* pParentDlg = GetParentDialog();
@@ -1152,7 +1152,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}else
 	if(m_strAction.Find(_T("link:")) == 0)	// 动作:打开一个页面链接
 	{
-		if(uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+		if(uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 		{
 			CString strLink = m_strAction;
 			strLink.Delete(0, 5);
@@ -1164,7 +1164,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}else
 	if(m_strAction.Find(_T("run:")) == 0)	// 动作:执行一个进程
 	{
-		if(uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+		if(uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 		{
 			CString strProcess = m_strAction;
 			strProcess.Delete(0, 4);
@@ -1208,7 +1208,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}else
 	if(m_strAction.Find(ACTION_CLOSE_WINDOW) == 0)	// 动作:关闭指定的窗口
 	{
-		if(uMsg == BUTTOM_UP)	// 鼠标放开事件才处理
+		if(uMsg == MSG_BUTTON_UP)	// 鼠标放开事件才处理
 		{
 			CString strWndName = m_strAction;
 			strWndName.Delete(0, 13);
@@ -1228,19 +1228,19 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		CDlgBase* pParentDlg = GetParentDialog();
 		if(IsThisObject(BT_OK, NAME_BT_OK))
 		{
-			if((BUTTOM_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoOK(); }
+			if((MSG_BUTTON_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoOK(); }
 		}else
 		if(IsThisObject(BT_CANCEL, NAME_BT_CANCEL))
 		{
-			if((BUTTOM_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoCancel(); }
+			if((MSG_BUTTON_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoCancel(); }
 		}else
 		if(IsThisObject(BT_YES, NAME_BT_YES))
 		{
-			if((BUTTOM_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoYes(); }
+			if((MSG_BUTTON_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoYes(); }
 		}else
 		if(IsThisObject(BT_NO, NAME_BT_NO))
 		{
-			if((BUTTOM_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoNo(); }
+			if((MSG_BUTTON_UP == uMsg) && (pParentDlg != NULL)) { pParentDlg->DoNo(); }
 		}else
 		{
 			// 调用控件的DUI事件处理对象

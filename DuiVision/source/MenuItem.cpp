@@ -314,12 +314,12 @@ BOOL CMenuItem::OnControlLButtonDown(UINT nFlags, CPoint point)
 				{
 					m_enButtonState = enBSHover;
 				}				
-				SendMessage(BUTTOM_CHECK, bDown, true);
+				SendMessage(MSG_BUTTON_CHECK, bDown, true);
 			}
 			else
 			{
 				m_enButtonState = enBSDown;
-				SendMessage(BUTTOM_DOWN, false, false);
+				SendMessage(MSG_BUTTON_DOWN, false, false);
 			}
 		}
 	}
@@ -387,7 +387,7 @@ BOOL CMenuItem::OnControlLButtonUp(UINT nFlags, CPoint point)
 
 		if(bSend)
 		{
-			SendMessage(BUTTOM_UP, bbDown, bSelect);
+			SendMessage(MSG_BUTTON_UP, bbDown, bSelect);
 		}
 		return true;
 	}

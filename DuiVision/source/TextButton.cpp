@@ -60,7 +60,7 @@ BOOL CTextButton::OnControlLButtonDown(UINT nFlags, CPoint point)
 		if(m_rc.PtInRect(point))
 		{
 			m_enButtonState = enBSDown;
-			SendMessage(BUTTOM_DOWN, 0, 0);
+			SendMessage(MSG_BUTTON_DOWN, 0, 0);
 		}
 	}
 	
@@ -81,7 +81,7 @@ BOOL CTextButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 		{
 			if(m_enButtonState == enBSDown)
 			{
-				SendMessage(BUTTOM_UP, 0, 0);
+				SendMessage(MSG_BUTTON_UP, 0, 0);
 			}
 			m_enButtonState = enBSHover;			
 		}

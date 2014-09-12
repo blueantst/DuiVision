@@ -510,14 +510,14 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 		if(itemInfo.bOutLink)	// 外部链接
 		{
 			m_nHoverItem = -1;
-			SendMessage(BUTTOM_DOWN, nItem, 0);
+			SendMessage(MSG_BUTTON_DOWN, nItem, 0);
 		}else
 		{
 			m_nOldItem = m_nDownItem;	// 保存切换前的页面索引,用于切换动画
 			m_nDownItem = nItem;					
 			m_nHoverItem = -1;
 
-			SendMessage(BUTTOM_DOWN, m_nDownItem, 0);
+			SendMessage(MSG_BUTTON_DOWN, m_nDownItem, 0);
 
 			// 只显示当前活动的tab页对应的Panel对象，其他页面的Panel对象都隐藏
 			for(size_t i = 0; i < m_vecItemInfo.size(); i++)
@@ -862,13 +862,13 @@ BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 				if(!itemInfo.strAction.IsEmpty())
 				{
 					// 如果action非空,则执行动作
-					DuiSystem::AddDuiActionTask(GetID(), BUTTOM_UP, nDownItem, 0, GetName(), itemInfo.strAction, GetParent());
+					DuiSystem::AddDuiActionTask(GetID(), MSG_BUTTON_UP, nDownItem, 0, GetName(), itemInfo.strAction, GetParent());
 				}
 
 				if(itemInfo.bOutLink)	// 外部链接
 				{
 					m_nHoverItem = -1;
-					SendMessage(BUTTOM_DOWN, nDownItem, 0);
+					SendMessage(MSG_BUTTON_DOWN, nDownItem, 0);
 				}else
 				{
 					m_nOldItem = m_nDownItem;	// 保存切换前的页面索引,用于切换动画
@@ -883,7 +883,7 @@ BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 					}
 
 					// 点击事件消息
-					SendMessage(BUTTOM_DOWN, m_nDownItem, 0);
+					SendMessage(MSG_BUTTON_DOWN, m_nDownItem, 0);
 
 					// 只显示当前活动的tab页对应的Panel对象，其他页面的Panel对象都隐藏
 					for(size_t i = 0; i < m_vecItemInfo.size(); i++)

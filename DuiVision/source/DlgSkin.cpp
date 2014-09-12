@@ -31,7 +31,7 @@ LRESULT CDlgSkin::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 	if(strControlName == NAME_BT_SKIN_IMAGE)
 	{
-		if(Msg == BUTTOM_UP && !m_bImage)
+		if(Msg == MSG_BUTTON_UP && !m_bImage)
 		{
 			m_bImage = true;
 			CControlBase * pControlBase = GetControl(NAME_SKIN_PIC_SELECT);
@@ -55,7 +55,7 @@ LRESULT CDlgSkin::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 	}
 	else if(strControlName == NAME_BT_SKIN_COLOR)
 	{
-		if(Msg == BUTTOM_UP && m_bImage)
+		if(Msg == MSG_BUTTON_UP && m_bImage)
 		{
 			m_bImage = false;
 			CControlBase * pControlBase = GetControl(NAME_SKIN_PIC_SELECT);
@@ -80,21 +80,21 @@ LRESULT CDlgSkin::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 	}
 	else if(strControlName == NAME_SKIN_BOX_COLOR)
 	{
-		if(Msg == BUTTOM_DOWN)
+		if(Msg == MSG_BUTTON_DOWN)
 		{
 			SendMessage(m_uMessageID, MSG_SKIN, lParam);
 		}
 	}
 	else if(strControlName == NAME_SKIN_BOX_IMAGE)
 	{
-		if(Msg == BUTTOM_DOWN)
+		if(Msg == MSG_BUTTON_DOWN)
 		{
 			SendMessage(m_uMessageID, MSG_SKIN, lParam);
 		}
 	}
 	else if(strControlName == NAME_BT_SKIN_CUSTOMIZE)
 	{
-		if(Msg == BUTTOM_DOWN)
+		if(Msg == MSG_BUTTON_DOWN)
 		{
 			PostMessage(m_uMessageID, MSG_SELECT_SKIN, lParam);
 		}
