@@ -466,7 +466,7 @@ BOOL CPopupList::OnLButtonDown(CPoint point)
 	return FALSE;
 }
 
-BOOL  CPopupList::OnLButtonUp(CPoint point)
+BOOL CPopupList::OnLButtonUp(CPoint point)
 { 
 	BOOL bDraw = FALSE;
 	if(m_buttonState == enBSDown)
@@ -497,4 +497,32 @@ BOOL  CPopupList::OnLButtonUp(CPoint point)
 	}
 	
 	return bDraw;
+}
+
+// 键盘事件处理
+BOOL CPopupList::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	int nItemCount =  m_vecItem.size();
+
+	if((nChar == VK_UP) && (m_nHoverItem == 0))	// 关闭下拉列表
+	{
+		OnNcCloseWindow();
+		return true;
+	}else
+	if((nChar == VK_UP) && (m_nHoverItem > 0))	// 向上移动一项
+	{
+		m_nHoverItem--;
+		SetItemPoint();
+		InvalidateRect(NULL);
+		return true;
+	}else
+	if((nChar == VK_DOWN) && (m_nHoverItem < (nItemCount - 1)))	// 向下移动一项
+	{
+		m_nHoverItem++;
+		SetItemPoint();
+		InvalidateRect(NULL);
+		return true;
+	}
+
+	return false;
 }

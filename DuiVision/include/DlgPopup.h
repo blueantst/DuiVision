@@ -111,6 +111,7 @@ public:
 	virtual BOOL OnMouseMove(CPoint point){ return false;};
 	virtual BOOL OnLButtonDown(CPoint point){ return false;};
 	virtual BOOL OnLButtonUp(CPoint point){ return false;};
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){ return false;};
 
 	HRESULT OnAttributeBkMode(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeBkImage(const CString& strValue, BOOL bLoading);

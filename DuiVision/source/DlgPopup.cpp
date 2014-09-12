@@ -788,6 +788,11 @@ void CDlgPopup::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}	
 	}
 
+	if(OnControlKeyDown(nChar, nRepCnt, nFlags))
+	{
+		return;
+	}
+
 	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 

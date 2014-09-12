@@ -53,6 +53,7 @@ public:
 	virtual BOOL OnMouseMove(CPoint point);
 	virtual BOOL OnLButtonDown(CPoint point);
 	virtual BOOL OnLButtonUp(CPoint point);
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 public:
 	CRect					m_rcClose;			// 列表项的关闭区域
