@@ -153,19 +153,8 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			nRightImageIndex = _wtoi(strRightSkin);
 		}
 
-		Color clrText = Color(0,0,0,0);
-		CStringA strClrTextA;
-		strClrTextA = strClrText;
-		if(!strClrTextA.IsEmpty())
-		{
-			if(strClrTextA.Find(",") == -1)
-			{
-				clrText = CDuiObject::HexStringToColor(strClrText);
-			}else
-			{
-				clrText = CDuiObject::StringToColor(strClrText);
-			}
-		}
+		Color clrText = CDuiObject::StringToColor(strClrText);
+
 		InsertItem(-1, strId, strTitle, strContent, strTime, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage,
 			strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck);
 	}

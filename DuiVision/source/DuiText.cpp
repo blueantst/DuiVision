@@ -131,7 +131,7 @@ HRESULT CDuiText::OnAttributeBackColor(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_clrBack = CDuiObject::HexStringToColor(strValue);
+	m_clrBack = CDuiObject::StringToColor(strValue);
 	m_bBack = true;
 
 	return bLoading?S_FALSE:S_OK;
@@ -142,7 +142,7 @@ HRESULT CDuiText::OnAttributeTextHoverColor(const CString& strValue, BOOL bLoadi
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_clrTextHover = CDuiObject::HexStringToColor(strValue);
+	m_clrTextHover = CDuiObject::StringToColor(strValue);
 	m_bEnableHover = TRUE;
 
 	return bLoading?S_FALSE:S_OK;
@@ -153,7 +153,7 @@ HRESULT CDuiText::OnAttributeTextShadowColor(const CString& strValue, BOOL bLoad
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_clrTextShadow = CDuiObject::HexStringToColor(strValue);
+	m_clrTextShadow = CDuiObject::StringToColor(strValue);
 	m_bEnableShadow = TRUE;
 
 	return bLoading?S_FALSE:S_OK;

@@ -91,18 +91,11 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 				}
 				m_bImage = TRUE;
 			}else
-				if(!strColor.IsEmpty())
-				{
-					Color color;
-					if(strColor.Find(_T(",")) == -1)
-					{
-						color = HexStringToColor(strColor);
-					}else
-					{
-						color = StringToColor(strColor);
-					}
-					SetColor(color);
-				}
+			if(!strColor.IsEmpty())
+			{
+				Color color = StringToColor(strColor);
+				SetColor(color);
+			}
 		}
 	}
 

@@ -92,19 +92,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		CString strClrText = pColumnElem.attribute(_T("crtext")).value();
 		CString strWidth = pColumnElem.attribute(_T("width")).value();
 		DuiSystem::Instance()->ParseDuiString(strTitle);
-		Color clrText = Color(0,0,0,0);
-		CStringA strClrTextA;
-		strClrTextA = strClrText;
-		if(!strClrTextA.IsEmpty())
-		{
-			if(strClrTextA.Find(",") == -1)
-			{
-				clrText = CDuiObject::HexStringToColor(strClrText);
-			}else
-			{
-				clrText = CDuiObject::StringToColor(strClrText);
-			}
-		}
+		Color clrText = CDuiObject::StringToColor(strClrText);
 		int nWidth = -1;
 		if(!strWidth.IsEmpty())
 		{
@@ -174,19 +162,8 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			nRightImageIndex = _wtoi(strRightSkin);
 		}
 
-		Color clrText = Color(0,0,0,0);
-		CStringA strClrTextA;
-		strClrTextA = strClrText;
-		if(!strClrTextA.IsEmpty())
-		{
-			if(strClrTextA.Find(",") == -1)
-			{
-				clrText = CDuiObject::HexStringToColor(strClrText);
-			}else
-			{
-				clrText = CDuiObject::StringToColor(strClrText);
-			}
-		}
+		Color clrText = CDuiObject::StringToColor(strClrText);
+
 		InsertRow(-1, strId, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage, nCheck);
 
 		int nRowIndex = m_vecRowInfo.size()-1;
@@ -205,19 +182,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			DuiSystem::Instance()->ParseDuiString(strContent);
 			DuiSystem::Instance()->ParseDuiString(strLink);
 			DuiSystem::Instance()->ParseDuiString(strLinkAction);
-			Color clrText = Color(0,0,0,0);
-			CStringA strClrTextA;
-			strClrTextA = strClrText;
-			if(!strClrTextA.IsEmpty())
-			{
-				if(strClrTextA.Find(",") == -1)
-				{
-					clrText = CDuiObject::HexStringToColor(strClrText);
-				}else
-				{
-					clrText = CDuiObject::StringToColor(strClrText);
-				}
-			}
+			Color clrText = clrText = CDuiObject::StringToColor(strClrText);
 
 			// Í¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
 			CString strSkin = _T("");

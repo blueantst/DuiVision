@@ -106,17 +106,7 @@ BOOL CDuiTreeCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		CString strWidth = pColumnElem.attribute(_T("width")).value();
 		CString strTitle = pColumnElem.attribute(_T("title")).value();
 		DuiSystem::Instance()->ParseDuiString(strTitle);
-		Color clrText = Color(0,0,0,0);
-		if(!strClrTextA.IsEmpty())
-		{
-			if(strClrTextA.Find(",") == -1)
-			{
-				clrText = CDuiObject::HexStringToColor(strClrText);
-			}else
-			{
-				clrText = CDuiObject::StringToColor(strClrText);
-			}
-		}
+		Color clrText = CDuiObject::StringToColor(strClrText);
 		int nWidth = -1;
 		if(!strWidth.IsEmpty())
 		{
@@ -201,17 +191,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 			nRightImageIndex = _wtoi(strRightSkin);
 		}
 
-		Color clrText = Color(0,0,0,0);
-		if(!strClrText.IsEmpty())
-		{
-			if(strClrText.Find(_T(",")) == -1)
-			{
-				clrText = CDuiObject::HexStringToColor(strClrText);
-			}else
-			{
-				clrText = CDuiObject::StringToColor(strClrText);
-			}
-		}
+		Color clrText = CDuiObject::StringToColor(strClrText);
 
 		TreeNodeInfo nodeInfo;
 		nodeInfo.hParentNode = hParentNode;
@@ -252,19 +232,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 			DuiSystem::Instance()->ParseDuiString(strLink);
 			DuiSystem::Instance()->ParseDuiString(strLinkAction);
 			BOOL bShowCollapse = (strShowCollapse == _T("1"));
-			Color clrText = Color(0,0,0,0);
-			CStringA strClrTextA;
-			strClrTextA = strClrText;
-			if(!strClrTextA.IsEmpty())
-			{
-				if(strClrTextA.Find(",") == -1)
-				{
-					clrText = CDuiObject::HexStringToColor(strClrText);
-				}else
-				{
-					clrText = CDuiObject::StringToColor(strClrText);
-				}
-			}
+			Color clrText = CDuiObject::StringToColor(strClrText);
 
 			// Í¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
 			CString strSkin = _T("");
