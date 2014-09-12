@@ -249,10 +249,10 @@ protected:
 	// 跨进程通知消息
 	LRESULT OnCheckItsMe(WPARAM wParam, LPARAM lParam);
 
-	LRESULT OnMessageButtomMin(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT OnMessageButtomMax(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT OnMessageButtomClose(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT OnMessageButtomSkin(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtonMin(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtonMax(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtonClose(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnMessageButtonSkin(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	
 	//}}AFX_MSG
 

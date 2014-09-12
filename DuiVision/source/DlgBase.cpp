@@ -1655,7 +1655,7 @@ void CDlgBase::OnSkin()
 }
 
 // 窗口最小化按钮的消息处理
-LRESULT CDlgBase::OnMessageButtomMin(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CDlgBase::OnMessageButtonMin(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(MSG_BUTTON_UP == uMsg)
 	{
@@ -1892,7 +1892,7 @@ LRESULT CDlgBase::OnCheckItsMe(WPARAM wParam, LPARAM lParam)
 }
 
 // 窗口最大化按钮的消息处理
-LRESULT CDlgBase::OnMessageButtomMax(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CDlgBase::OnMessageButtonMax(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(MSG_BUTTON_UP == uMsg)
 	{
@@ -1903,7 +1903,7 @@ LRESULT CDlgBase::OnMessageButtomMax(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 // 窗口关闭按钮的消息处理
-LRESULT CDlgBase::OnMessageButtomClose(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CDlgBase::OnMessageButtonClose(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(MSG_BUTTON_UP == uMsg)
 	{
@@ -1914,7 +1914,7 @@ LRESULT CDlgBase::OnMessageButtomClose(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 // 窗口Skin按钮的消息处理
-LRESULT CDlgBase::OnMessageButtomSkin(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CDlgBase::OnMessageButtonSkin(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(MSG_BUTTON_UP == uMsg)
 	{
@@ -2430,11 +2430,11 @@ LRESULT CDlgBase::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		// 2.判断是否几个系统按钮,执行相应的系统操作
 		if(pControlBase->IsThisObject(BT_MIN, NAME_BT_MIN))
 		{
-			OnMessageButtomMin(uMsg, wParam, lParam);
+			OnMessageButtonMin(uMsg, wParam, lParam);
 		}
 		else if(pControlBase->IsThisObject(BT_MAX, NAME_BT_MAX))
 		{
-			OnMessageButtomMax(uMsg, wParam, lParam);
+			OnMessageButtonMax(uMsg, wParam, lParam);
 		}
 		else if(pControlBase->IsThisObject(BT_CLOSE, NAME_BT_CLOSE))
 		{
@@ -2445,12 +2445,12 @@ LRESULT CDlgBase::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 			}else
 			{
 				// 关闭窗口
-				OnMessageButtomClose(uMsg, wParam, lParam);
+				OnMessageButtonClose(uMsg, wParam, lParam);
 			}
 		}
 		else if(pControlBase->IsThisObject(BT_SKIN, NAME_BT_SKIN))
 		{
-			OnMessageButtomSkin(uMsg, wParam, lParam);
+			OnMessageButtonSkin(uMsg, wParam, lParam);
 		}
 		else
 		{
