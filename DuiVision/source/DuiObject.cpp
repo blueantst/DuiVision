@@ -151,11 +151,18 @@ Color CDuiObject::HexStringToColor(LPCTSTR lpszValue)
         );
 }
 
-// 10进制逗号分隔字符串转换为Color对象
+// 10进制逗号分隔字符串或16进制字符串转换为Color对象
 Color CDuiObject::StringToColor(LPCTSTR lpszValue)
 {
 	CStringA strValue;
 	strValue = lpszValue;
+
+	// 没有逗号,则按照10进制处理
+	if(strValue.Find(",") == -1)
+	{
+		return HexStringToColor(lpszValue);
+	}
+
 	BYTE c1,c2,c3,c4;
 	CStringA s1 = "";
 	CStringA s2 = "";
