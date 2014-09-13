@@ -152,10 +152,16 @@ Color CDuiObject::HexStringToColor(LPCTSTR lpszValue)
 }
 
 // 10进制逗号分隔字符串或16进制字符串转换为Color对象
-Color CDuiObject::StringToColor(LPCTSTR lpszValue)
+Color CDuiObject::StringToColor(LPCTSTR lpszValue, Color clrDefault)
 {
 	CStringA strValue;
 	strValue = lpszValue;
+
+	// 字符串为空则返回默认值
+	if(strValue.IsEmpty())
+	{
+		return clrDefault;
+	}
 
 	// 没有逗号,则按照10进制处理
 	if(strValue.Find(",") == -1)
