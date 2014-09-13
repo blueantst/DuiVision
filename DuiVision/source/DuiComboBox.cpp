@@ -284,6 +284,9 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 			pDlg->OpenDlgPopup(pPopupList, rcClient, GetID());
 		}
 
+		pPopupList->SetFont(m_strFont, m_nFontWidth, m_fontStyle);
+		pPopupList->SetHoverColor(m_clrHover);
+
 		// 必须窗口创建之后才能加载内容
 		for (size_t i = 0; i < m_vecItem.size(); i++)
 		{

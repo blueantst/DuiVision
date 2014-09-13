@@ -9,22 +9,10 @@ CPopupList::CPopupList(void)
 	m_rcClose.SetRectEmpty();
 	m_buttonState = enBSNormal;
 	m_nWidth = 191;
-
-	VERIFY(m_font.CreateFont(
-		18,							// 字体的高度  
-		0,							// 字体的宽度  
-		0,							// 字体显示的角度
-		0,							// 字体的角度
-		FW_DONTCARE,				// 字体的磅数
-		FALSE,						// 斜体字体
-		FALSE,						// 带下划线的字体
-		0,							// 带删除线的字体
-		GB2312_CHARSET,				// 所需的字符集
-		OUT_DEFAULT_PRECIS,			// 输出的精度
-		CLIP_DEFAULT_PRECIS,		// 裁减的精度
-		DEFAULT_QUALITY,			// 逻辑字体与输出设备的实际
-		DEFAULT_PITCH | FF_SWISS,	// 字体间距和字体集
-		DuiSystem::GetDefaultFont()));	// 字体名称
+	m_strFont = DuiSystem::GetDefaultFont();
+	m_nFontWidth = 12;
+	m_fontStyle = FontStyleRegular;
+	m_clrHover = Color(225, 0, 147, 209);
 }
 
 CPopupList::~CPopupList(void)
@@ -113,6 +101,20 @@ BOOL CPopupList::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
     return TRUE;
 }
 
+// 设置列表项字体
+void CPopupList::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
+{
+	m_strFont = strFont;
+	m_nFontWidth = nFontWidth;
+	m_fontStyle = fontStyle;
+}
+
+// 设置选择的列表项背景颜色
+void CPopupList::SetHoverColor(Color clrHover)
+{
+	m_clrHover = clrHover;
+}
+
 // 设置选中的项
 void CPopupList::SetCurItem(UINT nItem)
 {
@@ -199,90 +201,6 @@ bool CPopupList::DeleteItem(UINT nItem)
 	SetItemPoint();
 	
 	return true;
-}
-
-// 画文字信息
-void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
-{
-	int nItemCount =  m_vecItem.size();
-	CFont *pOldFont = dc.SelectObject(&m_font);
-	COLORREF clrOld = dc.SetTextColor(RGB(0, 20, 35));
-	CRect rcItem, rcText;
-	CSize sizeImage;
-
-	for(int i = 0; i < nItemCount; i++)
-	{
-		EditListItem &editListItem = m_vecItem.at(i);
-		rcItem = editListItem.rcItem;
-		sizeImage = editListItem.sizeImage;
-		int nLeftStart = 47;
-		if(editListItem.pImage == NULL)
-		{
-			nLeftStart = 5;
-		}
-
-		// 显示当前项
- 		if((i == m_nHoverItem) && !editListItem.strDesc.IsEmpty())
- 		{
- 			dc.FillSolidRect(&rcItem, RGB(0, 147, 209));
- 
-			// 显示name和desc
-			dc.SetTextColor(editListItem.clrText.ToCOLORREF());//RGB(0, 20, 35));
- 			rcText.SetRect(rcItem.left + nLeftStart, rcItem.top + 6, rcItem.right - 2, rcItem.top + 24);
- 			dc.DrawText(editListItem.strName, &rcText, DT_TOP | DT_LEFT | DT_SINGLELINE | DT_WORD_ELLIPSIS);
- 
- 			dc.SetTextColor(editListItem.clrDesc.ToCOLORREF());//RGB(255, 255, 255));
- 			rcText.OffsetRect(0, 21);
- 			dc.DrawText(editListItem.strDesc, &rcText, DT_TOP | DT_LEFT | DT_SINGLELINE | DT_WORD_ELLIPSIS);
- 		}
- 		else
-		{
-			if(i == m_nHoverItem)
-			{
-				dc.FillSolidRect(&rcItem, RGB(0, 147, 209));
-			}
-
-			// 只显示name
-			dc.SetTextColor(editListItem.clrText.ToCOLORREF());//RGB(0, 20, 35));
-			rcText.SetRect(rcItem.left + nLeftStart, rcItem.top, rcItem.right - 2, rcItem.bottom);
-			dc.DrawText(editListItem.strName, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_WORD_ELLIPSIS);
-		}
-	}
-	dc.SelectObject(pOldFont);
-	dc.SetTextColor(clrOld);
-}
-
-// 画图片信息
-void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
-{
-	int nItemCount =  m_vecItem.size();
-	CRect rcItem;
-	CSize sizeImage;
-	Graphics graphics(dc);
-
-	for(int i = 0; i < nItemCount; i++)
-	{
-		EditListItem &editListItem = m_vecItem.at(i);
-		rcItem = editListItem.rcItem;
-		sizeImage = editListItem.sizeImage;
-
-		// 删除按钮
-		if((i == m_nHoverItem) && (m_pImageClose != NULL))
-		{
-			graphics.DrawImage(m_pImageClose, RectF((Gdiplus::REAL)m_rcClose.left, (Gdiplus::REAL)m_rcClose.top, (Gdiplus::REAL)m_rcClose.Width(), (Gdiplus::REAL)m_rcClose.Height()),
-				(Gdiplus::REAL)(m_buttonState * m_sizeClose.cx), 0, (Gdiplus::REAL)m_sizeClose.cx, (Gdiplus::REAL)m_sizeClose.cy, UnitPixel); 
-		}
-
-		// 列表图片
-		if(editListItem.pImage)
-		{	
-			CRect rcHead(rcItem.left + 1, rcItem.top + 2, rcItem.left + 1 + rcItem.Height() - 4, rcItem.top + 2 + rcItem.Height() - 4);
-			graphics.DrawImage(editListItem.pImage, RectF((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height()),
-				0, 0, (Gdiplus::REAL)editListItem.sizeImage.cx, (Gdiplus::REAL)editListItem.sizeImage.cy, UnitPixel);
-
-			DrawImageFrame(graphics, m_pImageHead, rcHead, i == m_nHoverItem ? m_sizeHead.cx : 0, 0, m_sizeHead.cx, m_sizeHead.cy, 5);
-		}
-	}
 }
 
 void CPopupList::InitUI(CRect rcClient)
@@ -532,4 +450,100 @@ BOOL CPopupList::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	return false;
+}
+
+// 画文字信息
+void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
+{
+	int nItemCount =  m_vecItem.size();
+	CRect rcItem, rcText;
+
+	Graphics graphics(dc);
+	BSTR bsFont = m_strFont.AllocSysString();
+	FontFamily fontFamily(bsFont);
+	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
+	graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
+	::SysFreeString(bsFont);
+	StringFormat strFormat;
+	strFormat.SetAlignment(StringAlignmentNear);	// 左对齐
+	strFormat.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
+
+	for(int i = 0; i < nItemCount; i++)
+	{
+		EditListItem &editListItem = m_vecItem.at(i);
+		rcItem = editListItem.rcItem;
+		int nLeftStart = 47;
+		if(editListItem.pImage == NULL)
+		{
+			nLeftStart = 5;
+		}
+
+		// 显示当前项
+ 		if((i == m_nHoverItem) && !editListItem.strDesc.IsEmpty())
+ 		{
+			SolidBrush brushHover(m_clrHover);
+			graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top, rcItem.Width(), rcItem.Height());
+ 
+			// 显示name和desc
+			SolidBrush solidBrushTitle(editListItem.clrText);
+			SolidBrush solidBrushDesc(editListItem.clrDesc);
+			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)(rcItem.top + 1), (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)(rcItem.Height()/2));
+			BSTR bsTitle = editListItem.strName.AllocSysString();
+			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
+			::SysFreeString(bsTitle);
+
+			rect.Offset(0, (Gdiplus::REAL)(rcItem.Height() / 2));
+			BSTR bsDesc = editListItem.strDesc.AllocSysString();
+			graphics.DrawString(bsDesc, (INT)wcslen(bsDesc), &font, rect, &strFormat, &solidBrushDesc);
+			::SysFreeString(bsTitle);
+ 		}
+ 		else
+		{
+			if(i == m_nHoverItem)
+			{
+				SolidBrush brushHover(m_clrHover);
+				graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top, rcItem.Width(), rcItem.Height());
+			}
+
+			// 只显示name
+			SolidBrush solidBrushTitle(editListItem.clrText);
+			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)rcItem.top, (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)rcItem.Height());
+			BSTR bsTitle = editListItem.strName.AllocSysString();
+			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
+			::SysFreeString(bsTitle);
+		}
+	}
+}
+
+// 画图片信息
+void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
+{
+	int nItemCount =  m_vecItem.size();
+	CRect rcItem;
+	CSize sizeImage;
+	Graphics graphics(dc);
+
+	for(int i = 0; i < nItemCount; i++)
+	{
+		EditListItem &editListItem = m_vecItem.at(i);
+		rcItem = editListItem.rcItem;
+		sizeImage = editListItem.sizeImage;
+
+		// 删除按钮
+		if((i == m_nHoverItem) && (m_pImageClose != NULL))
+		{
+			graphics.DrawImage(m_pImageClose, RectF((Gdiplus::REAL)m_rcClose.left, (Gdiplus::REAL)m_rcClose.top, (Gdiplus::REAL)m_rcClose.Width(), (Gdiplus::REAL)m_rcClose.Height()),
+				(Gdiplus::REAL)(m_buttonState * m_sizeClose.cx), 0, (Gdiplus::REAL)m_sizeClose.cx, (Gdiplus::REAL)m_sizeClose.cy, UnitPixel); 
+		}
+
+		// 列表图片
+		if(editListItem.pImage)
+		{	
+			CRect rcHead(rcItem.left + 1, rcItem.top + 2, rcItem.left + 1 + rcItem.Height() - 4, rcItem.top + 2 + rcItem.Height() - 4);
+			graphics.DrawImage(editListItem.pImage, RectF((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height()),
+				0, 0, (Gdiplus::REAL)editListItem.sizeImage.cx, (Gdiplus::REAL)editListItem.sizeImage.cy, UnitPixel);
+
+			DrawImageFrame(graphics, m_pImageHead, rcHead, i == m_nHoverItem ? m_sizeHead.cx : 0, 0, m_sizeHead.cx, m_sizeHead.cy, 5);
+		}
+	}
 }

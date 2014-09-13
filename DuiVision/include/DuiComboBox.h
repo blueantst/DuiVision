@@ -48,7 +48,7 @@ public:
 	CString					m_strComboValue;// 下拉列表选择的项目的值
 	Color					m_clrText;		// 文字颜色
 	Color					m_clrDesc;		// 描述部分文字颜色
-	Color					m_clrHover;		// 列表项背景颜色(鼠标移动到行)
+	Color					m_clrHover;		// 选择的列表项背景颜色(鼠标移动到行)
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("head-image"), OnAttributeHeadImage)

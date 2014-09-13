@@ -1924,6 +1924,7 @@ LRESULT CDlgBase::OnMessageButtonSkin(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+// 窗口的激活状态改变时会调用此函数
 BOOL CDlgBase::OnNcActivate(BOOL bActive)
 {
 	m_bNCActive = bActive;

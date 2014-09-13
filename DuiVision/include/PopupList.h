@@ -34,6 +34,8 @@ public:
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 
 	void SetWidth(int nWidth) { m_nWidth = nWidth; }
+	void SetFont(CString strFont, int nFontWidth, FontStyle fontStyle);
+	void SetHoverColor(Color clrHover);
 
 	bool GetItemDesc(UINT nItem, CString &strDesc);
 	bool GetItemName(UINT nItem, CString &strName);
@@ -46,9 +48,6 @@ public:
 	void SetCurItem(UINT nItem);
 	void SetCurItem(CString strValue);
 
-	virtual void DrawWindow(CDC &dc, CRect rcClient);
-	virtual void DrawWindowEx(CDC &dc, CRect rcClient);
-
 	virtual void InitUI(CRect rcClient);
 
 	void SetItemPoint();
@@ -58,16 +57,22 @@ public:
 	virtual BOOL OnLButtonUp(CPoint point);
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
+	virtual void DrawWindow(CDC &dc, CRect rcClient);
+	virtual void DrawWindowEx(CDC &dc, CRect rcClient);
+
 public:
 	CRect					m_rcClose;			// 列表项的关闭区域
 	enumButtonState			m_buttonState;
-	vector<EditListItem>	m_vecItem;
-	int						m_nHoverItem;
-	CFont					m_font;
+	vector<EditListItem>	m_vecItem;			// 下拉项列表
+	int						m_nHoverItem;		// 当前选择的列表项索引
 	int						m_nWidth;			// 列表宽度
+	CString					m_strFont;			// 字体
+	int						m_nFontWidth;		// 字体宽度
+	FontStyle				m_fontStyle;		// 字体Style
+	Color					m_clrHover;			// 选择的列表项背景颜色(鼠标移动到行)
 
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Head);		// 定义列表项左侧图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);		// 定义列表项删除图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Head);			// 定义列表项左侧图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);			// 定义列表项删除图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("width"), m_nWidth, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
