@@ -53,7 +53,7 @@ protected:
 	int				m_nFrameHLT;				// 边框左上角高度(九宫格模式)
 	int				m_nFrameWRB;				// 边框右下角宽度(九宫格模式)
 	int				m_nFrameHRB;				// 边框右下角高度(九宫格模式)
-	BOOL			m_bInitFinish;
+	BOOL			m_bInitFinish;				// 是否初始化完成
 	BOOL			m_bAutoClose;				// 是否自动关闭
 
 	BOOL			m_bImageUseECM;				// 是否使用图片自身的颜色管理信息
@@ -61,8 +61,8 @@ protected:
 	BOOL			m_bNCActive;
 	vector<CControlBase*>	m_vecControl;		// 窗口控件
 	vector<CControlBase*>	m_vecArea;			// 域(不影响鼠标事件)
-	CControlBase*	m_pControl;
-	CControlBase*	m_pFocusControl;
+	CControlBase*	m_pControl;					// 当前控件
+	CControlBase*	m_pFocusControl;			// 当前焦点控件
 
 	UINT			m_uTimerAnimation;			// 动画定时器
 
