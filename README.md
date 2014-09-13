@@ -24,7 +24,7 @@ QQ群：325880743 (Script.NET社区)
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
 
-下载DuiVision Demo程序：[20140825版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20140825.zip)
+下载DuiVision Demo程序：[20140913版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20140913.zip)
 
 下载DuiVision开发手册：[DuiVision开发手册.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C.pdf)
 
