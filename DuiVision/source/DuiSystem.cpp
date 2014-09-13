@@ -313,7 +313,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 			BYTE* pByte = LoadZipFile(strResFile, dwSize);
 			if(pByte != NULL)
 			{
-				xmlResult = xmlDoc.load((const char_t*)pByte, NULL);
+				xmlResult = xmlDoc.load(CA2T((char*)pByte, CP_UTF8), NULL);
 				delete[] pByte;
 			}else
 			{
@@ -577,7 +577,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 			}
 			if(pByte != NULL)
 			{
-				xmlDoc.load((const char_t*)pByte, NULL);
+				xmlResult = xmlDoc.load(CA2T((char*)pByte, CP_UTF8), NULL);
 				delete[] pByte;
 			}else
 			{
