@@ -85,6 +85,10 @@ BOOL CPopupList::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 				DuiSystem::Instance()->ParseDuiString(strDesc);
 				CString strValue = pControlElem.attribute(_T("value")).value();
 				DuiSystem::Instance()->ParseDuiString(strValue);
+				CString strClrText = pControlElem.attribute(_T("crtext")).value();
+				Color clrText = CDuiObject::StringToColor(strClrText, Color(255, 0, 20, 35));
+				CString strClrDesc = pControlElem.attribute(_T("crdesc")).value();
+				Color clrDesc = CDuiObject::StringToColor(strClrDesc, Color(255, 255, 255, 255));
 				CString strImage = pControlElem.attribute(_T("image")).value();
 				if(!strImage.IsEmpty())
 				{
@@ -102,7 +106,7 @@ BOOL CPopupList::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 					}
 				}
 
-				AddItem(strName, strDesc, strValue, nResourceID, strImage);
+				AddItem(strName, strDesc, strValue, nResourceID, strImage, clrText, clrDesc);
 			}
 	}
 
@@ -223,11 +227,11 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
  			dc.FillSolidRect(&rcItem, RGB(0, 147, 209));
  
 			// 显示name和desc
- 			dc.SetTextColor(RGB(0, 20, 35));
+			dc.SetTextColor(editListItem.clrText.ToCOLORREF());//RGB(0, 20, 35));
  			rcText.SetRect(rcItem.left + nLeftStart, rcItem.top + 6, rcItem.right - 2, rcItem.top + 24);
  			dc.DrawText(editListItem.strName, &rcText, DT_TOP | DT_LEFT | DT_SINGLELINE | DT_WORD_ELLIPSIS);
  
- 			dc.SetTextColor(RGB(255, 255, 255));
+ 			dc.SetTextColor(editListItem.clrDesc.ToCOLORREF());//RGB(255, 255, 255));
  			rcText.OffsetRect(0, 21);
  			dc.DrawText(editListItem.strDesc, &rcText, DT_TOP | DT_LEFT | DT_SINGLELINE | DT_WORD_ELLIPSIS);
  		}
@@ -239,7 +243,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			}
 
 			// 只显示name
-			dc.SetTextColor(RGB(0, 20, 35));
+			dc.SetTextColor(editListItem.clrText.ToCOLORREF());//RGB(0, 20, 35));
 			rcText.SetRect(rcItem.left + nLeftStart, rcItem.top, rcItem.right - 2, rcItem.bottom);
 			dc.DrawText(editListItem.strName, &rcText, DT_VCENTER | DT_LEFT | DT_SINGLELINE | DT_WORD_ELLIPSIS);
 		}
@@ -286,12 +290,15 @@ void CPopupList::InitUI(CRect rcClient)
 }
 
 // 添加列表项
-int CPopupList::AddItem(CString strName, CString strDesc, CString strValue, int nResourceID, CString strImageFile)
+int CPopupList::AddItem(CString strName, CString strDesc, CString strValue, int nResourceID,
+						CString strImageFile, Color clrText, Color clrDesc)
 {
 	EditListItem editListItem;
 	editListItem.strName = strName;
 	editListItem.strDesc = strDesc;
 	editListItem.strValue= strValue;
+	editListItem.clrText = clrText;
+	editListItem.clrDesc = clrDesc;
 	editListItem.strImageFile = strImageFile;
 	editListItem.nResourceID = nResourceID;
 	editListItem.pImage = NULL;

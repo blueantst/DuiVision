@@ -9,6 +9,8 @@ struct ComboListItem
 	CString		strName;			// 列表项名(显示在列表项第一行)
 	CString		strDesc;			// 描述(显示在列表项第二行)
 	CString		strValue;			// 列表项值
+	Color		clrText;			// 文字颜色
+	Color		clrDesc;			// 描述文字颜色
 };
 
 class CDuiComboBox : public CDuiEdit
@@ -23,7 +25,8 @@ public:
 	void SetComboValue(CString strComboValue);
 	CString GetComboValue();
 	int GetItemCount();
-	int AddItem(CString strName, CString strDesc, CString strValue, int nResourceID, CString strImageFile = _T(""));
+	int AddItem(CString strName, CString strDesc, CString strValue, int nResourceID,
+		CString strImageFile = _T(""), Color clrText = Color(255, 0, 20, 35), Color clrDesc = Color(255, 255, 255, 255));
 	void ClearItems();
 
 	HRESULT OnAttributeHeadImage(const CString& strValue, BOOL bLoading);
@@ -43,11 +46,17 @@ public:
 	CPopupList*				m_pPopupList;	// 保存下拉列表框对象指针
 	vector<ComboListItem>	m_vecItem;		// 下拉列表项列表
 	CString					m_strComboValue;// 下拉列表选择的项目的值
+	Color					m_clrText;		// 文字颜色
+	Color					m_clrDesc;		// 描述部分文字颜色
+	Color					m_clrHover;		// 列表项背景颜色(鼠标移动到行)
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("head-image"), OnAttributeHeadImage)
 		DUI_CUSTOM_ATTRIBUTE(_T("del-image"), OnAttributeDeleteImage)
 		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strComboValue, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("xml"), m_strXmlFile, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crdesc"), m_clrDesc, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrHover, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

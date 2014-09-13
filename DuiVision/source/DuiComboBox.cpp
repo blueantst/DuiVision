@@ -12,6 +12,9 @@ CDuiComboBox::CDuiComboBox(HWND hWnd, CDuiObject* pDuiObject)
 	m_strXmlFile = _T("");
 	m_pPopupList = NULL;
 	m_strComboValue = _T("");
+	m_clrText = Color(255, 0, 20, 35);
+	m_clrDesc = Color(255, 255, 255, 255);
+	m_clrHover = Color(225, 0, 147, 209);
 }
 
 CDuiComboBox::~CDuiComboBox(void)
@@ -37,6 +40,10 @@ BOOL CDuiComboBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		DuiSystem::Instance()->ParseDuiString(strDesc);
 		CString strValue = pItemElem.attribute(_T("value")).value();
 		DuiSystem::Instance()->ParseDuiString(strValue);
+		CString strClrText = pItemElem.attribute(_T("crtext")).value();
+		Color clrText = CDuiObject::StringToColor(strClrText, Color(255, 0, 20, 35));
+		CString strClrDesc = pItemElem.attribute(_T("crdesc")).value();
+		Color clrDesc = CDuiObject::StringToColor(strClrDesc, Color(255, 255, 255, 255));
 		UINT nResourceID = 0;
 		CString strImage = pItemElem.attribute(_T("image")).value();
 		if(!strImage.IsEmpty())
@@ -59,6 +66,8 @@ BOOL CDuiComboBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		comboItem.strName = strName;
 		comboItem.strDesc = strDesc;
 		comboItem.strValue = strValue;
+		comboItem.clrText = clrText;
+		comboItem.clrDesc = clrDesc;
 		m_vecItem.push_back(comboItem);
 
 		// 如果是当前值,则更新编辑框的显示内容
@@ -112,7 +121,8 @@ int CDuiComboBox::GetItemCount()
 }
 
 // 添加Combo项
-int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, int nResourceID, CString strImageFile)
+int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, int nResourceID,
+						  CString strImageFile, Color clrText, Color clrDesc)
 {
 	CString strImage = strImageFile;
 	if(!strImage.IsEmpty())
@@ -141,6 +151,8 @@ int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, in
 	comboItem.strName = strName;
 	comboItem.strDesc = strDesc;
 	comboItem.strValue = strValue;
+	comboItem.clrText = clrText;
+	comboItem.clrDesc = clrDesc;
 	m_vecItem.push_back(comboItem);
 
 	// 如果是当前值,则更新编辑框的显示内容
@@ -151,7 +163,7 @@ int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, in
 
 	if(m_pPopupList)
 	{
-		return m_pPopupList->AddItem(strName, strDesc, strValue, nResourceID, strImageFile);
+		return m_pPopupList->AddItem(strName, strDesc, strValue, nResourceID, strImageFile, clrText, clrDesc);
 	}
 	return 0;
 }
@@ -277,7 +289,7 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		{
 			ComboListItem* pItem = &(m_vecItem.at(i));
 			pPopupList->AddItem(pItem->strName, pItem->strDesc, pItem->strValue,
-				pItem->nResourceID, pItem->strImageFile);
+				pItem->nResourceID, pItem->strImageFile, pItem->clrText, pItem->clrDesc);
 		}
 
 		if(!m_strXmlFile.IsEmpty())

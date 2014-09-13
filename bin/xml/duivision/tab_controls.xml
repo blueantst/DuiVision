@@ -152,7 +152,7 @@ width-lt,height-lt,width-rb,height-rb" />
 					pos="300,20" width="300" height="28" title="22-33-44-55-66-77" >
 				<item name="11-22-33-44-55-66" value="1" />
 				<item name="22-33-44-55-66-77" value="2" />
-				<item name="33-44-55-66-77-88" value="3" />
+				<item name="33-44-55-66-77-88" value="3" crtext="800000" />
 			</combobox>
 
 			<combobox name="下拉列表框2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
@@ -162,7 +162,7 @@ width-lt,height-lt,width-rb,height-rb" />
 				pos="300,60" width="300" height="28" title="test" >
 				<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
 				<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
-				<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" />
+				<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" crtext="800000" crdesc="80,0,80" />
 				<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
 			</combobox>
 

@@ -93,7 +93,7 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			}else
 			if(!strColor.IsEmpty())
 			{
-				Color color = StringToColor(strColor);
+				Color color = CDuiObject::StringToColor(strColor);
 				SetColor(color);
 			}
 		}

@@ -19,6 +19,8 @@ struct EditListItem
 	CString		strDesc;		// 描述
 	CString		strValue;		// 值
 	CRect		rcItem;			// 位置
+	Color		clrText;		// 文字颜色
+	Color		clrDesc;		// 描述文字颜色
 };
 
 class CPopupList :  public CDlgPopup
@@ -37,7 +39,8 @@ public:
 	bool GetItemName(UINT nItem, CString &strName);
 	bool GetItemValue(UINT nItem, CString &strValue);
 	bool GetItemImage(UINT nItem, UINT &nResourceID, CString &strImageFile);
-	int AddItem(CString strName, CString strDesc, CString strValue, int nResourceID, CString strImageFile = _T(""));
+	int AddItem(CString strName, CString strDesc, CString strValue, int nResourceID,
+		CString strImageFile = _T(""), Color clrText = Color(255, 0, 20, 35), Color clrDesc = Color(255, 255, 255, 255));
 	bool DeleteItem(UINT nItem);
 
 	void SetCurItem(UINT nItem);
