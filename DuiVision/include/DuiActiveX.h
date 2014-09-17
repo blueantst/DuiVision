@@ -52,6 +52,7 @@ public:
 	CString ParseFilePath(CString strUrl);
 
 	bool GetShowContentMenu() { return m_bShowContentMenu; }
+	bool GetShowScroll() { return m_bShowScroll; }
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
@@ -80,6 +81,7 @@ protected:
     bool					m_bCreated;
     bool					m_bDelayCreate;
 	bool					m_bShowContentMenu;	// 是否显示右键菜单
+	bool					m_bShowScroll;	// 是否显示滚动条
     IOleObject*				m_pUnk;
 	IConnectionPoint*		m_pCP;		// 连接点指针
 	DWORD                   m_dwEventCookie;
@@ -92,6 +94,7 @@ protected:
 		DUI_CUSTOM_ATTRIBUTE(_T("url"), OnAttributeUrl)
 		DUI_CUSTOM_ATTRIBUTE(_T("delaycreate"), OnAttributeDelayCreate)
 		DUI_BOOL_ATTRIBUTE(_T("show-contextmenu"), m_bShowContentMenu, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("show-scroll"), m_bShowScroll, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

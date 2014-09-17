@@ -867,6 +867,10 @@ STDMETHODIMP  CActiveXCtrl::GetHostInfo( DOCHOSTUIINFO* pInfo )
 	// 显示为新式用户界面
 	//pInfo->dwFlags = DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE |DOCHOSTUIFLAG_FLAT_SCROLLBAR|0x40000;
 	pInfo->dwFlags |= DOCHOSTUIFLAG_NO3DBORDER;	// 去除3D边框
+	if(m_pOwner && !m_pOwner->GetShowScroll())
+	{
+		pInfo->dwFlags |= DOCHOSTUIFLAG_SCROLL_NO;	// 不显示滚动条
+	}
     pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;
     return S_OK;
 }
@@ -1326,6 +1330,8 @@ CDuiActiveX::CDuiActiveX(HWND hWnd, CDuiObject* pDuiObject)
 	m_hwndHost = NULL;
 	m_bCreated = false;
 	m_bDelayCreate = false;
+	m_bShowContentMenu = true;
+	m_bShowScroll = true;
 	m_strModuleName = _T("");
 	m_strUrl = _T("");
 }
