@@ -80,6 +80,7 @@ public:
 	CString GetPosStr() { return m_strPos;};
 	int PositionItem2Value( const DUIDLG_POSITION_ITEM &pos ,int nMin, int nMax);
 	LPCTSTR ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos);
+	BOOL SetPositionWithParent(CRect rectParent);
 	HRESULT OnAttributePosChange(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeWidth(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeHeight(const CString& strValue, BOOL bLoading);

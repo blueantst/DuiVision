@@ -716,6 +716,64 @@ LPCTSTR CControlBase::ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos)
 	return pNext;
 }
 
+// 设置位置信息(指定父对象位置)
+BOOL CControlBase::SetPositionWithParent(CRect rectParent)
+{
+	if(m_strPos.IsEmpty())
+	{
+		return FALSE;
+	}
+
+	DUIDLG_POSITION dlgpos;
+
+	dlgpos.nCount = 0;
+	LPCTSTR pszValue = m_strPos;
+	while(dlgpos.nCount < 4 && pszValue)
+	{
+		pszValue=ParsePosition(pszValue, dlgpos.Item[dlgpos.nCount++]);
+	}
+
+    if (2 == dlgpos.nCount || 4 == dlgpos.nCount)
+    {
+		if(4 == dlgpos.nCount)
+		{
+			CRect rect;
+			rect.left = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
+			rect.top = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+			rect.right = PositionItem2Value(dlgpos.Right, rectParent.left, rectParent.right);
+			rect.bottom = PositionItem2Value(dlgpos.Bottom, rectParent.top, rectParent.bottom);
+			SetRect(rect);
+		}else
+		if(2 == dlgpos.nCount)
+		{
+			CRect rect;
+			rect.left = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
+			rect.top = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+			if(m_nWidth != 0)
+			{
+				rect.right = rect.left + m_nWidth;
+			}else
+			{
+				rect.right = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
+			}
+			if(m_nHeight != 0)
+			{
+				rect.bottom = rect.top + m_nHeight;
+			}else
+			{
+				rect.bottom = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+			}
+			SetRect(rect);
+		}
+    }else
+	{
+        dlgpos.nCount = 0;
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 // 从XML设置位置信息属性
 HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoading)
 {
@@ -725,11 +783,11 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 
 	DUIDLG_POSITION dlgpos;
 
-	dlgpos.nCount=0;
-	LPCTSTR pszValue=strValue;
-	while(dlgpos.nCount<4 && pszValue)
+	dlgpos.nCount = 0;
+	LPCTSTR pszValue = strValue;
+	while(dlgpos.nCount < 4 && pszValue)
 	{
-		pszValue=ParsePosition(pszValue,dlgpos.Item[dlgpos.nCount++]);
+		pszValue=ParsePosition(pszValue, dlgpos.Item[dlgpos.nCount++]);
 	}
 
     if (2 == dlgpos.nCount || 4 == dlgpos.nCount)
@@ -748,8 +806,8 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 			rect.right = PositionItem2Value(dlgpos.Right, rectParent.left, rectParent.right);
 			rect.bottom = PositionItem2Value(dlgpos.Bottom, rectParent.top, rectParent.bottom);
 			SetRect(rect);
-		}
-		else if(2 == dlgpos.nCount)
+		}else
+		if(2 == dlgpos.nCount)
 		{
 			//m_uPositionType = (m_uPositionType & ~SizeX_Mask) | SizeX_FitContent;
 			//m_uPositionType = (m_uPositionType & ~SizeY_Mask) | SizeY_FitContent;
@@ -778,9 +836,10 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 			}
 			SetRect(rect);
 		}
-    }
-    else
+    }else
+	{
         dlgpos.nCount = 0;
+	}
 
     return bLoading?S_FALSE:S_OK;
 }
