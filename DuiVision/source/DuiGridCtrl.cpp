@@ -61,6 +61,25 @@ CDuiGridCtrl::~CDuiGridCtrl(void)
 		delete m_pImageCheckBox;
 		m_pImageCheckBox = NULL;
 	}
+
+	// 释放单元格创建的控件
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		GridRowInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
+			{
+				CControlBase* pControl = itemInfo.vecControl.at(k);
+				if(pControl)
+				{
+					delete pControl;
+					pControl = NULL;
+				}
+			}
+		}
+	}
 }
 
 // 图片属性的实现
@@ -216,6 +235,25 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			{
 				SetSubItem(nRowIndex, nItemIndex, strTitle, strContent, bUseTitleFont, nImageIndex, clrText, strImage);
 			}
+
+			// 加载下层的控件节点信息
+			GridItemInfo* pGridInfo = GetItemInfo(nRowIndex, nItemIndex);
+			for (DuiXmlNode pControlElem = pItemElem.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
+			{
+				if((pControlElem != NULL) && (pGridInfo != NULL))
+				{
+					CString strControlName = pControlElem.name();
+					CControlBase* pControl = _CreateControlByName(strControlName);
+					if(pControl)
+					{
+						pControl->Load(pControlElem);
+						//m_vecControl.push_back(pControl);
+						// 将控件指针添加到单元格的控件列表中，并计算控件的位置
+						pGridInfo->vecControl.push_back(pControl);
+					}
+				}
+			}
+
 			nItemIndex++;
 		}
 	}
@@ -1187,7 +1225,15 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
 					BOOL bSingleLine = (itemInfo.strContent.IsEmpty() || !itemInfo.strLink.IsEmpty());
-					RectF rect((Gdiplus::REAL)nPosItemX, (Gdiplus::REAL)(m_nHeaderHeight + nVI*m_nRowHeight + 1), (Gdiplus::REAL)itemInfo.rcItem.Width(), (Gdiplus::REAL)(bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2)));
+					RectF rect((Gdiplus::REAL)nPosItemX,
+						(Gdiplus::REAL)(m_nHeaderHeight + nVI*m_nRowHeight + 1),
+						(Gdiplus::REAL)((j == 0) ? (itemInfo.rcItem.Width() - nPosItemX): itemInfo.rcItem.Width()),
+						(Gdiplus::REAL)(bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2)));
+					if((int)(rect.GetRight()) > nWidth)
+					{
+						// 最后一列需要减去滚动条宽度
+						rect.Width -= m_nScrollWidth;
+					}
 
 					// 画单元格图片
 					int nItemImageX = 0;
@@ -1262,7 +1308,27 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						::SysFreeString(bsItemContent);
 					}
 
-					nPosItemX += itemInfo.rcItem.Width();
+					// 画单元格子控件
+					for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
+					{
+						CControlBase* pControl = itemInfo.vecControl.at(k);
+						if(pControl)
+						{
+							CRect rcParent = CRect((int)(rect.X), (int)(rect.Y),
+								(int)(rect.X+rect.Width), (int)(rect.Y+rect.Height));
+							pControl->SetPositionWithParent(rcParent);
+							pControl->DrawControl(m_memDC, rcParent);
+						}
+					}
+
+					if(j == 0)
+					{
+						// 为了使第二列开始是对齐的,所以第二列开始位置按照第一列的宽度计算
+						nPosItemX = itemInfo.rcItem.right;
+					}else
+					{
+						nPosItemX += itemInfo.rcItem.Width();
+					}
 				}
 
 				// 画分隔线(采用拉伸模式)

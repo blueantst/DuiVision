@@ -29,6 +29,7 @@ struct GridItemInfo
 	BOOL	bNeedTitleTip;	// 是否需要显示title tip(title实际宽度大于显示宽度)
 	BOOL	bNeedContentTip;// 是否需要显示content tip(content实际宽度大于显示宽度)
 	BOOL	bUseTitleFont;	// 是否使用标题字体显示标题
+	vector<CControlBase *>	vecControl;// 控件列表
 };
 
 // 行信息
