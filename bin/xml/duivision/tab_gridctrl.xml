@@ -35,7 +35,7 @@
 			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
 			<item>
-				<button pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="一键安装" tip="普通按钮" />
+				<button name="grid_btn1" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="一键安装" tip="普通按钮" />
 			</item>
 		</row>
 		<row image="skins\icon\iSplit.png" check="1">

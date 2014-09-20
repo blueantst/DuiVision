@@ -61,25 +61,6 @@ CDuiGridCtrl::~CDuiGridCtrl(void)
 		delete m_pImageCheckBox;
 		m_pImageCheckBox = NULL;
 	}
-
-	// 释放单元格创建的控件
-	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
-	{
-		GridRowInfo &rowInfo = m_vecRowInfo.at(i);
-		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
-		{
-			GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
-			for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
-			{
-				CControlBase* pControl = itemInfo.vecControl.at(k);
-				if(pControl)
-				{
-					delete pControl;
-					pControl = NULL;
-				}
-			}
-		}
-	}
 }
 
 // 图片属性的实现
@@ -247,8 +228,9 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 					if(pControl)
 					{
 						pControl->Load(pControlElem);
-						//m_vecControl.push_back(pControl);
-						// 将控件指针添加到单元格的控件列表中，并计算控件的位置
+						// 将控件指针添加到gridctrl控件的子控件列表中
+						m_vecControl.push_back(pControl);
+						// 将控件指针添加到单元格的控件列表中(仅用于按照单元格查找子控件)
 						pGridInfo->vecControl.push_back(pControl);
 					}
 				}
@@ -724,7 +706,11 @@ int CDuiGridCtrl::PtInRowItem(CPoint point, GridRowInfo& rowInfo)
 		GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(i);
 		CRect rc = itemInfo.rcItem;
 		// rcItem坐标是画图时候计算出的按照控件虚拟显示区域为参照的坐标,需要转换为鼠标坐标
-		rc.OffsetRect(m_rc.left + m_nLeftPos, m_rc.top+m_nHeaderHeight-m_nVirtualTop);
+		rc.OffsetRect(m_rc.left + ((i == 0) ? m_nLeftPos : 0), m_rc.top+m_nHeaderHeight-m_nVirtualTop);
+		if(i == 0)
+		{
+			rc.right -= m_nLeftPos;
+		}
 		if(rc.PtInRect(point))
 		{
 			return i;
@@ -1308,16 +1294,15 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						::SysFreeString(bsItemContent);
 					}
 
-					// 画单元格子控件
+					// 设置单元格子控件的位置
 					for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
 					{
 						CControlBase* pControl = itemInfo.vecControl.at(k);
 						if(pControl)
 						{
-							CRect rcParent = CRect((int)(rect.X), (int)(rect.Y),
-								(int)(rect.X+rect.Width), (int)(rect.Y+rect.Height));
+							CRect rcParent = CRect(m_rc.left + (int)(rect.X), m_rc.top + (int)(rect.Y),
+								m_rc.left + (int)(rect.X+rect.Width), m_rc.top + (int)(rect.Y+rect.Height));
 							pControl->SetPositionWithParent(rcParent);
-							pControl->DrawControl(m_memDC, rcParent);
 						}
 					}
 
