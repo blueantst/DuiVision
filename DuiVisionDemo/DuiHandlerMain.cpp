@@ -78,6 +78,14 @@ void CDuiHandlerMain::OnInit()
 		pWndList->AppendSubItem(nItem, "test1", SUBITEM_LINK);
 		pNativeWnd->SetNativeWnd(pWndList);*/
 	}
+
+	// 演示表格控件通过API增加子控件
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
+	CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
+	pControl->SetPosStr(L"100, 3, -10, 25");
+	pControl->SetTitle(L"更新内容");
+	pControl->SetLink(L"http://www.blueantstudio.net");
+	pGridCtrl->AddSubItemControl(1, 0, pControl);
 }
 
 // 皮肤消息处理(实现皮肤的保存和获取)
@@ -419,6 +427,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT 
 			pDlg->OpenDlgPopup(pDlgPopup, rc, 0);
 		}
 	}
+
 	return TRUE;
 }
 
