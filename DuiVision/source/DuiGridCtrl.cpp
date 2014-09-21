@@ -228,6 +228,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 					if(pControl)
 					{
 						pControl->Load(pControlElem);
+						pControl->SetVisible(FALSE);
 						// 将控件指针添加到gridctrl控件的子控件列表中
 						m_vecControl.push_back(pControl);
 						// 将控件指针添加到单元格的控件列表中(仅用于按照单元格查找子控件)
@@ -513,10 +514,13 @@ BOOL CDuiGridCtrl::AddSubItemControl(int nRow, int nItem, CControlBase* pControl
 
 	if(pControl)
 	{
+		pControl->SetParent(this);
+		pControl->SetVisible(FALSE);
 		// 将控件指针添加到gridctrl控件的子控件列表中
 		m_vecControl.push_back(pControl);
 		// 将控件指针添加到单元格的控件列表中(仅用于按照单元格查找子控件)
 		pItemInfo->vecControl.push_back(pControl);
+		UpdateControl(true);
 	}
 
 	return TRUE;
@@ -1334,11 +1338,17 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						CControlBase* pControl = itemInfo.vecControl.at(k);
 						if(pControl)
 						{
-							CRect rcParent = CRect((int)(rect.X), (int)(rect.Y),
-								(int)(rect.X+rect.Width), (int)(rect.Y+rect.Height));
+							CRect rcParent = CRect(nPosItemX, m_nHeaderHeight + nVI*m_nRowHeight + 1,
+								(int)(rect.X+rect.Width), (nVI+1)*m_nRowHeight - 1);
+							if((int)(rect.GetRight()) > nWidth)
+							{
+								// 最后一列需要减去滚动条宽度
+								rcParent.right -= m_nScrollWidth;
+							}
 							rcParent.OffsetRect(m_rc.left, m_rc.top - (nYViewPos + m_nHeaderHeight));
 							pControl->SetPositionWithParent(rcParent);
 							CRect rcControl = pControl->GetRect();
+							// 只有当前在显示范围内的控件设置为可见
 							if((rcControl.top < m_rc.top) || (rcControl.bottom > m_rc.bottom))
 							{
 								pControl->SetVisible(FALSE);
