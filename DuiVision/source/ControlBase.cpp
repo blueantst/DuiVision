@@ -702,17 +702,43 @@ LPCTSTR CControlBase::ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos)
 {
 	if(!pszPos) return NULL;
 
-	if(pszPos[0]==_T('|')) pos.pit=PIT_CENTER,pszPos++;
-	else if(pszPos[0]==_T('%')) pos.pit=PIT_PERCENT,pszPos++;
-	else pos.pit=PIT_NORMAL;
+	// 过滤掉前面的空格
+	while(pszPos[0]==_T(' '))
+	{
+		pszPos++;
+	}
+
+	if(pszPos[0]==_T('|'))	// 从中间开始计算
+	{
+		pos.pit=PIT_CENTER;
+		pszPos++;
+	}else
+	if(pszPos[0]==_T('%'))	// 按照百分比计算
+	{
+		pos.pit=PIT_PERCENT;
+		pszPos++;
+	}else					// 普通的计算方式
+	{
+		pos.pit=PIT_NORMAL;
+	}
 	
-	if(pszPos[0]==_T('-')) pos.bMinus=TRUE,pszPos++;
-	else pos.bMinus=FALSE;
+	if(pszPos[0]==_T('-'))	// 负数
+	{
+		pos.bMinus=TRUE;
+		pszPos++;
+	}else
+	{
+		pos.bMinus=FALSE;
+	}
 
 	pos.nPos=(float)_tstof(pszPos);
 
 	LPCTSTR pNext=StrChr(pszPos,_T(','));
-	if(pNext) pNext++;
+	if(pNext)
+	{
+		pNext++;
+	}
+
 	return pNext;
 }
 
