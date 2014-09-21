@@ -82,11 +82,27 @@ void CDuiHandlerMain::OnInit()
 	// 演示表格控件通过API增加子控件
 	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
 	CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
-	pControl->SetName(L"grid1_updateinfo_link");
-	pControl->SetPosStr(L"100, 3, -10, 25");
-	pControl->SetTitle(L"更新内容");
-	pControl->SetLink(L"http://www.blueantstudio.net");
-	pGridCtrl->AddSubItemControl(1, 0, pControl);
+	if(pControl)
+	{
+		pControl->SetName(L"grid1_updateinfo_link");
+		pControl->SetPosStr(L"100, 3, -10, 25");
+		pControl->SetTitle(L"更新内容");
+		pControl->SetLink(L"http://www.blueantstudio.net");
+		pGridCtrl->AddSubItemControl(1, 0, pControl);
+	}
+
+	// 演示树控件通过API增加子控件
+	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
+	HTREEITEM hNode = pTreeCtrl->GetNodeWithId(L"1-0");
+	pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
+	if(pControl)
+	{
+		pControl->SetName(L"tree1_updateinfo_link");
+		pControl->SetPosStr(L"10, 5, -10, 25");
+		pControl->SetTitle(L"更新内容");
+		pControl->SetLink(L"http://www.blueantstudio.net");
+		pTreeCtrl->AddSubItemControl(hNode, 2, pControl);
+	}
 }
 
 // 皮肤消息处理(实现皮肤的保存和获取)

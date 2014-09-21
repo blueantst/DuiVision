@@ -72,7 +72,7 @@
 			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
 			<item title="7.5M" />
 			<item>
-				<progress name="progress_install" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
+				<progress name="grid_progress_install" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
 				pos="0,17" width="110" height="15" value="20" run="true" show="1"
 				tip="安装进度" />
 			</item>
