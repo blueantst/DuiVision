@@ -930,7 +930,7 @@ void  CControlBase::SetDisable(BOOL bIsDisable)
 
 void CControlBase::UpdateControl(BOOL bUpdate, BOOL bVisible)
 {
-	if(m_bIsVisible || bVisible)
+	if((m_bIsVisible || bVisible) && (m_pParentDuiObject != NULL))
 	{
 		m_pParentDuiObject->OnControlUpdate(m_rc, bUpdate, this);
 	}
@@ -938,7 +938,7 @@ void CControlBase::UpdateControl(BOOL bUpdate, BOOL bVisible)
 
 void CControlBase::UpdateControl(CRect rc, BOOL bVisible, BOOL bUpdate)
 {
-	if(m_bIsVisible || bVisible)
+	if((m_bIsVisible || bVisible) && (m_pParentDuiObject != NULL))
 	{
 		m_pParentDuiObject->OnControlUpdate(rc, bUpdate, this);
 	}
