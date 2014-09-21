@@ -11,6 +11,7 @@
 #define					IDI_TIME_TEST						1
 
 // 系统控件
+#define					ID_NULL								0xFFFFFFFF	// 不存在的控件ID
 #define					APP_IPC								100	// 用于进程间通知的IPC
 #define					TRAY_ICON							800	// 托盘图标
 #define					BT_MIN								900	// 最小化按钮

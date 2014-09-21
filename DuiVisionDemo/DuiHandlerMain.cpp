@@ -82,6 +82,7 @@ void CDuiHandlerMain::OnInit()
 	// 演示表格控件通过API增加子控件
 	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
 	CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
+	pControl->SetName(L"grid1_updateinfo_link");
 	pControl->SetPosStr(L"100, 3, -10, 25");
 	pControl->SetTitle(L"更新内容");
 	pControl->SetLink(L"http://www.blueantstudio.net");

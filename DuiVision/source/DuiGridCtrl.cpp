@@ -526,6 +526,64 @@ BOOL CDuiGridCtrl::AddSubItemControl(int nRow, int nItem, CControlBase* pControl
 	return TRUE;
 }
 
+// 删除表格项的指定子控件(通过控件对象指针删除)
+BOOL CDuiGridCtrl::DeleteSubItemControl(CControlBase* pControl)
+{
+	// 查找所有单元格,删除对应的控件对象引用
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		GridRowInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			vector<CControlBase*>::iterator it;
+			for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+			{
+				CControlBase* _pControl = *it;
+				if(_pControl == pControl)
+				{
+					itemInfo.vecControl.erase(it);
+					break;
+				}
+			}
+		}
+	}
+
+	// 删除子控件中对应的控件对象
+	RemoveControl(pControl);
+
+	return TRUE;
+}
+
+// 删除表格项的指定子控件(通过控件名和控件ID删除)
+BOOL CDuiGridCtrl::DeleteSubItemControl(CString strControlName, UINT uControlID)
+{
+	// 查找所有单元格,删除对应的控件对象引用
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		GridRowInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			vector<CControlBase*>::iterator it;
+			for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+			{
+				CControlBase* _pControl = *it;
+				if(_pControl && _pControl->IsThisObject(uControlID, strControlName))
+				{
+					itemInfo.vecControl.erase(it);
+					break;
+				}
+			}
+		}
+	}
+
+	// 删除子控件中对应的控件对象
+	RemoveControl(strControlName, uControlID);
+
+	return TRUE;
+}
+
 // 删除行
 BOOL CDuiGridCtrl::DeleteRow(int nRow)
 {
