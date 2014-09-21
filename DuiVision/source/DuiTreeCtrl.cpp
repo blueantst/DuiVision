@@ -274,6 +274,27 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 				// 普通单元格
 				SetSubItem(hNode, nItemIndex, strTitle, strContent, bUseTitleFont, nImageIndex, clrText, strImage);
 			}
+
+			// 加载下层的控件节点信息
+			TreeItemInfo* pItemInfo = GetItemInfo(hNode, nItemIndex);
+			for (DuiXmlNode pControlElem = pItemElem.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
+			{
+				if((pControlElem != NULL) && (pItemInfo != NULL))
+				{
+					CString strControlName = pControlElem.name();
+					CControlBase* pControl = _CreateControlByName(strControlName);
+					if(pControl)
+					{
+						pControl->Load(pControlElem);
+						pControl->SetVisible(FALSE);
+						// 将控件指针添加到gridctrl控件的子控件列表中
+						m_vecControl.push_back(pControl);
+						// 将控件指针添加到单元格的控件列表中(仅用于按照单元格查找子控件)
+						pItemInfo->vecControl.push_back(pControl);
+					}
+				}
+			}
+
 			nItemIndex++;
 		}
 
@@ -620,6 +641,102 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strIma
 	return TRUE;
 }
 
+// 给树节点单元格添加子控件
+BOOL CDuiTreeCtrl::AddSubItemControl(HTREEITEM hNode, int nItem, CControlBase* pControl)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return FALSE;
+	}
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
+	{
+		return FALSE;
+	}
+
+	TreeItemInfo* pItemInfo = GetItemInfo(hNode, nItem);
+	if(pItemInfo == NULL)
+	{
+		SetSubItem(hNode, nItem, L"");
+		pItemInfo = GetItemInfo(hNode, nItem);
+	}
+	if(pItemInfo == NULL)
+	{
+		return FALSE;
+	}
+
+	if(pControl)
+	{
+		pControl->SetParent(this);
+		pControl->SetVisible(FALSE);
+		// 将控件指针添加到treectrl控件的子控件列表中
+		m_vecControl.push_back(pControl);
+		// 将控件指针添加到树节点单元格的控件列表中(仅用于按照单元格查找子控件)
+		pItemInfo->vecControl.push_back(pControl);
+		UpdateControl(true);
+	}
+
+	return TRUE;
+}
+
+// 删除树节点单元格的指定子控件(通过控件对象指针删除)
+BOOL CDuiTreeCtrl::DeleteSubItemControl(CControlBase* pControl)
+{
+	// 查找所有单元格,删除对应的控件对象引用
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			vector<CControlBase*>::iterator it;
+			for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+			{
+				CControlBase* _pControl = *it;
+				if(_pControl == pControl)
+				{
+					itemInfo.vecControl.erase(it);
+					break;
+				}
+			}
+		}
+	}
+
+	// 删除子控件中对应的控件对象
+	RemoveControl(pControl);
+
+	return TRUE;
+}
+
+// 删除树节点单元格的指定子控件(通过控件名和控件ID删除)
+BOOL CDuiTreeCtrl::DeleteSubItemControl(CString strControlName, UINT uControlID)
+{
+	// 查找所有单元格,删除对应的控件对象引用
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			vector<CControlBase*>::iterator it;
+			for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+			{
+				CControlBase* _pControl = *it;
+				if(_pControl && _pControl->IsThisObject(uControlID, strControlName))
+				{
+					itemInfo.vecControl.erase(it);
+					break;
+				}
+			}
+		}
+	}
+
+	// 删除子控件中对应的控件对象
+	RemoveControl(strControlName, uControlID);
+
+	return TRUE;
+}
+
 // 删除节点
 BOOL CDuiTreeCtrl::DeleteNode(HTREEITEM hNode)
 {
@@ -958,6 +1075,17 @@ void CDuiTreeCtrl::HideChildNodes(HTREEITEM hItem)
 		if(rowInfoTemp.hParentNode == hItem)
 		{
 			rowInfoTemp.bHide = TRUE;
+			// 隐藏此节点的所有单元格子控件
+			for(size_t j = 0; j < rowInfoTemp.vecItemInfo.size(); j++)
+			{
+				TreeItemInfo &itemInfo = rowInfoTemp.vecItemInfo.at(j);
+				for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
+				{
+					CControlBase* pControl = itemInfo.vecControl.at(k);
+					pControl->SetVisible(FALSE);
+				}
+			}
+			// 遍历下级节点
 			HideChildNodes(rowInfoTemp.hNode);
 		}
 	}
@@ -1691,6 +1819,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						(Gdiplus::REAL)(nVI*m_nRowHeight + 1),
 						(Gdiplus::REAL)((j == 0) ? (itemInfo.rcItem.Width() - nPosItemX): itemInfo.rcItem.Width()),
 						(Gdiplus::REAL)(bSingleLine ? (m_nRowHeight - 2) : (m_nRowHeight / 2 - 2)));
+					if((int)(rect.GetRight()) > nWidth)
+					{
+						// 最后一列需要减去滚动条宽度
+						rect.Width -= m_nScrollWidth;
+					}
 
 					// 画单元格图片
 					int nItemImageX = 0;
@@ -1779,6 +1912,33 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						BSTR bsItemContent = itemInfo.strContent.AllocSysString();
 						graphics.DrawString(bsItemContent, (INT)wcslen(bsItemContent), &font, rect, &strFormat, &solidBrushItem);
 						::SysFreeString(bsItemContent);
+					}
+
+					// 设置单元格子控件的位置
+					for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
+					{
+						CControlBase* pControl = itemInfo.vecControl.at(k);
+						if(pControl)
+						{
+							CRect rcParent = CRect(nPosItemX, nVI*m_nRowHeight + 1,
+								(int)(rect.X+rect.Width), (nVI+1)*m_nRowHeight - 1);
+							if((int)(rect.GetRight()) > nWidth)
+							{
+								// 最后一列需要减去滚动条宽度
+								rcParent.right -= m_nScrollWidth;
+							}
+							rcParent.OffsetRect(m_rc.left, m_rc.top - nYViewPos);
+							pControl->SetPositionWithParent(rcParent);
+							CRect rcControl = pControl->GetRect();
+							// 只有当前在显示范围内的控件设置为可见
+							if((rcControl.top < m_rc.top) || (rcControl.bottom > m_rc.bottom))
+							{
+								pControl->SetVisible(FALSE);
+							}else
+							{
+								pControl->SetVisible(TRUE);
+							}
+						}
 					}
 
 					if(j == 0)

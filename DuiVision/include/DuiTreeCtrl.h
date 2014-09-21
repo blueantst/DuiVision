@@ -31,6 +31,7 @@ struct TreeItemInfo
 	BOOL	bNeedContentTip;// 是否需要显示content tip(content实际宽度大于显示宽度)
 	BOOL	bUseTitleFont;	// 是否使用标题字体显示标题
 	BOOL	bShowCollapse;	// 是否在此单元格显示节点缩放图片
+	vector<CControlBase *>	vecControl;// 控件列表
 };
 
 #define HTREEITEM	int
@@ -80,6 +81,9 @@ public:
 	BOOL SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strImage = _T(""), int nImageCount = 0);
+	BOOL AddSubItemControl(HTREEITEM hNode, int nItem, CControlBase* pControl);
+	BOOL DeleteSubItemControl(CControlBase* pControl);
+	BOOL DeleteSubItemControl(CString strControlName, UINT uControlID = ID_NULL);
 	BOOL DeleteNode(HTREEITEM hNode);
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
 	int  GetNodeRow(HTREEITEM hNode);
