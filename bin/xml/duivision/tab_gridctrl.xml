@@ -18,6 +18,20 @@
 		<column title="列2" width="120" />
 		<column title="列3" width="80" />
 		<column title="列4" />
+		<row image="skins\icon\scriptnet.png" check="1">
+			<item title="Script.NET" content="蓝蚂蚁工作室开发的脚本语言集成开发环境，支持Tcl、Python、Perl、Ruby、Lua、NSIS等脚本语言开发调试" font-title="1" >
+				<img pos="100,0" width="136" height="28" image="skins\script_logo.png" mode="normal" tip="支持Tcl、Python、Perl、Ruby、Lua脚本" />
+				<!--img pos="100,1" width="28" height="28" image="skins\icon\tcl.png" mode="extrude" tip="支持Tcl脚本" />
+				<img pos="130,1" width="28" height="28" image="skins\icon\python.png" mode="extrude" tip="支持Python脚本" />
+				<img pos="160,1" width="28" height="28" image="skins\icon\perl.png" mode="extrude" tip="支持Perl脚本" />
+				<img pos="190,1" width="28" height="28" image="skins\icon\ruby.png" mode="extrude" tip="支持Ruby脚本" />
+				<img pos="220,1" width="28" height="28" image="skins\icon\lua.png" mode="extrude" tip="支持Lua脚本" />
+				<img pos="250,1" width="28" height="28" image="skins\icon\nsis.png" mode="extrude" tip="支持NSIS脚本" /-->
+			</item>
+			<item title="已装：2.2.1.0" content="最新：4.0开源版" />
+			<item title="125.5M" />
+			<item link="点击下载" linkaction="link:http://www.blueantstudio.net/scriptnet/download/download.htm"/>
+		</row>
 		<row image="skins\icon\softmgr.png" check="1">
 			<item title="腾讯软件管理" content="1.新的界面，丰富的内容；2.海量软件搜索；3.功能分类清晰呈现，更易选择" font-title="1" />
 			<item title="已装：8.7.0.1" content="最新：10.0.0.1" />
@@ -57,7 +71,11 @@
 			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
 			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
 			<item title="7.5M" />
-			<item link="一键安装" />
+			<item>
+				<progress name="progress_install" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
 		</row>
 		<row image="skins\icon\PDFViewer.png" check="1">
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
