@@ -218,10 +218,10 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			}
 
 			// 加载下层的控件节点信息
-			GridItemInfo* pGridInfo = GetItemInfo(nRowIndex, nItemIndex);
+			GridItemInfo* pItemInfo = GetItemInfo(nRowIndex, nItemIndex);
 			for (DuiXmlNode pControlElem = pItemElem.first_child(); pControlElem; pControlElem=pControlElem.next_sibling())
 			{
-				if((pControlElem != NULL) && (pGridInfo != NULL))
+				if((pControlElem != NULL) && (pItemInfo != NULL))
 				{
 					CString strControlName = pControlElem.name();
 					CControlBase* pControl = _CreateControlByName(strControlName);
@@ -231,7 +231,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 						// 将控件指针添加到gridctrl控件的子控件列表中
 						m_vecControl.push_back(pControl);
 						// 将控件指针添加到单元格的控件列表中(仅用于按照单元格查找子控件)
-						pGridInfo->vecControl.push_back(pControl);
+						pItemInfo->vecControl.push_back(pControl);
 					}
 				}
 			}
@@ -483,6 +483,40 @@ BOOL CDuiGridCtrl::SetSubItemLink(int nRow, int nItem, CString strLink, CString 
 		{
 			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
 		}
+	}
+
+	return TRUE;
+}
+
+// 给表格项添加子控件
+BOOL CDuiGridCtrl::AddSubItemControl(int nRow, int nItem, CControlBase* pControl)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return FALSE;
+	}
+	if((nItem < 0) || (nItem >= (int)m_vecColumnInfo.size()))
+	{
+		return FALSE;
+	}
+
+	GridItemInfo* pItemInfo = GetItemInfo(nRow, nItem);
+	if(pItemInfo == NULL)
+	{
+		SetSubItem(nRow, nItem, L"");
+		pItemInfo = GetItemInfo(nRow, nItem);
+	}
+	if(pItemInfo == NULL)
+	{
+		return FALSE;
+	}
+
+	if(pControl)
+	{
+		// 将控件指针添加到gridctrl控件的子控件列表中
+		m_vecControl.push_back(pControl);
+		// 将控件指针添加到单元格的控件列表中(仅用于按照单元格查找子控件)
+		pItemInfo->vecControl.push_back(pControl);
 	}
 
 	return TRUE;
@@ -1300,9 +1334,18 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						CControlBase* pControl = itemInfo.vecControl.at(k);
 						if(pControl)
 						{
-							CRect rcParent = CRect(m_rc.left + (int)(rect.X), m_rc.top + (int)(rect.Y),
-								m_rc.left + (int)(rect.X+rect.Width), m_rc.top + (int)(rect.Y+rect.Height));
+							CRect rcParent = CRect((int)(rect.X), (int)(rect.Y),
+								(int)(rect.X+rect.Width), (int)(rect.Y+rect.Height));
+							rcParent.OffsetRect(m_rc.left, m_rc.top - (nYViewPos + m_nHeaderHeight));
 							pControl->SetPositionWithParent(rcParent);
+							CRect rcControl = pControl->GetRect();
+							if((rcControl.top < m_rc.top) || (rcControl.bottom > m_rc.bottom))
+							{
+								pControl->SetVisible(FALSE);
+							}else
+							{
+								pControl->SetVisible(TRUE);
+							}
 						}
 					}
 

@@ -71,6 +71,7 @@ public:
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
 	BOOL SetSubItemLink(int nRow, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
+	BOOL AddSubItemControl(int nRow, int nItem, CControlBase* pControl);
 	BOOL DeleteRow(int nRow);
 	void CalcRowsPos();
 	int  GetRowCount() { return m_vecRowInfo.size(); }
