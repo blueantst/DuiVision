@@ -70,6 +70,7 @@ public:
 	int						m_nFontWidth;		// 字体宽度
 	FontStyle				m_fontStyle;		// 字体Style
 	Color					m_clrHover;			// 选择的列表项背景颜色(鼠标移动到行)
+	BOOL					m_bSingleLine;		// 是否单行的列表
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Head);			// 定义列表项左侧图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);			// 定义列表项删除图片

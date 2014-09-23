@@ -13,6 +13,7 @@ CPopupList::CPopupList(void)
 	m_nFontWidth = 12;
 	m_fontStyle = FontStyleRegular;
 	m_clrHover = Color(225, 0, 147, 209);
+	m_bSingleLine = TRUE;
 }
 
 CPopupList::~CPopupList(void)
@@ -254,12 +255,14 @@ void CPopupList::SetItemPoint()
 
 	// 判断是否有Desc字段,如果都没有的话,则显示的列表一律用相同高度的
 	BOOL bHaveDesc = FALSE;
+	m_bSingleLine = TRUE;
 	for (int i = 0; i < nItemCount; i++)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
 		if(!editListItem.strDesc.IsEmpty())
 		{
 			bHaveDesc = TRUE;
+			m_bSingleLine = FALSE;
 			break;
 		}
 	}
@@ -473,9 +476,13 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 		EditListItem &editListItem = m_vecItem.at(i);
 		rcItem = editListItem.rcItem;
 		int nLeftStart = 47;
-		if(editListItem.pImage == NULL)
+		if(editListItem.pImage == NULL)	// 没有图片,左边距
 		{
 			nLeftStart = 5;
+		}else
+		if(m_bSingleLine)	// 单行,左边距减少一些
+		{
+			nLeftStart = 25;
 		}
 
 		// 显示当前项
