@@ -776,6 +776,11 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	int nMaxRange = pScrollV->GetScrollMaxRange();
 
 	m_nVirtualTop = (nMaxRange > 0) ? nCurPos*(nHeightAll-m_rc.Height())/nMaxRange : 0;	// 当前滚动条位置对应的虚拟的top位置
+	if(m_nVirtualTop < 0)
+	{
+		m_nVirtualTop = 0;
+		pScrollV->SetScrollCurrentPos(0);
+	}
 	m_nFirstViewRow = m_nVirtualTop / m_nRowHeight;					// 显示的第一行序号
 	m_nLastViewRow = (m_nVirtualTop + m_rc.Height()) / m_nRowHeight;	// 显示的最后一行序号
 	if(m_nLastViewRow >= (int)m_vecRowInfo.size())
