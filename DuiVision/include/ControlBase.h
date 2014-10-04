@@ -59,6 +59,7 @@ public:
 
 	virtual CDuiObject* GetParent() { return m_pParentDuiObject; }
 	void SetParent(CDuiObject* pParent) { m_pParentDuiObject = pParent; }
+	HWND GetHWND() { return m_hWnd; }
 
 	void TestMainThread();
 	void Draw(CDC &dc, CRect rcUpdate);
