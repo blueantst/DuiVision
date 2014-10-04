@@ -17,7 +17,7 @@
   </base>
   
   <body>
-	
+
 	<tabctrl name="tabctrl.main" image="skins\tab_image.png" img-count="3"
 			img-sep="skin:IDB_TAB_SEPERATOR--" img-hover="skin:IDB_TAB_HOVER"
 			font="bold" item-width="0" tab-height="0" animate="1"
@@ -74,11 +74,17 @@ QQ群：325880743
 		
 		<tab name="tab.controls" title="基础控件" image="skins\icon\iSplit.png" img-count="1" div="tab_controls" />
 		
-		<tab name="tab.listctrl" title="列表控件" image="skins\icon\PDFViewer.png" img-count="1" div="tab_listctrl" />
+		<!--tab name="tab.listctrl" title="列表控件" image="skins\icon\PDFViewer.png" img-count="1" div="tab_listctrl" /-->
 		
 		<tab name="tab.gridctrl" title="表格控件" image="skins\icon\ico_report.png" img-count="1" div="tab_gridctrl" />
 
 		<tab name="tab.treectrl" title="树控件" img-index="1" div="tab_treectrl" />
+		
+		<tab name="tab.plugin" title="界面插件" image="skins\icon\ico_PluginCleaner.png" img-count="1" pos="0,75,-0,-0">
+			<area name="area-controls" pos="1,1,-1,-0" begin-transparent="0" end-transparent="0" />
+			<img pos="1,1,-1,30" image="skin:IDB_TAB_BACK" mode="frame" framesize="1" show="1" />
+			<div name="tab_controls" pos="0,0,-0,-0" plugin-debug="DuiPluginDemo_d.dll" plugin="DuiPluginDemo.dll" />
+		</tab>
 		
 		<tab name="tab.activex" title="浏览器" image="skins\icon\ico_navigate.png" img-count="1" div="tab_activex" />
 		
@@ -90,12 +96,9 @@ QQ群：325880743
 				
 	</tabctrl>
 	
-	<div name="footer" pos="0,-26,-0,-0" >
-	
-		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.0.0.1" title="检查更新"
+	<div name="footer" pos="0,-26,-0,-0" >	
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.9.0.0" title="检查更新"
 				action="link:http://www.blueantstudio.net" />
-	
-		<!--imgbtn name="tools" skin="IDB_BT_TOOL"	pos="-70,0" width="60" height="19" show="1" action="dlg:dlg_tools" /-->
 	</div>	
 	
   </body>

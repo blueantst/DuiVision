@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
-<div pos="0,75,-0,-0" >
+<div pos="0,75,-0,-0">
 
 	<area name="area-controls" pos="1,1,-1,-0" begin-transparent="0" end-transparent="0" />
 	<img pos="1,1,-1,30" image="skin:IDB_TAB_BACK" mode="frame" framesize="1" show="1" />
+	<!--text pos="50,20,250,40" crtext="808080" title="普通文字，左对齐1" tip="普通文字，左对齐" /-->
 	
 	<tabctrl name="tabctrl.controls" img-sep="skin:IDB_TAB_SEPERATOR" img-hover="skin:IDB_TAB_BACK-"
 		font="bold" item-width="90" tab-height="29" crtext="800000" animate="1"
@@ -230,6 +231,8 @@ width-lt,height-lt,width-rb,height-rb" />
 				pos="350,100,450,128" show="1" tip="显示背景半透明效果对话框" action="dlg:duivision\dlg_translucent.xml" />
 
 		</tab>
+		
+		<tab name="tab.listctrl" image="skin:IDB_TAB_ITEM" title="列表控件" div="tab_listctrl" />
 
 		<tab name="tab.control.7" image="skin:IDB_TAB_ITEM" title="其他" pos="0,30,-0,-0">
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
-<div pos="0,75,-0,-0" >
+<div pos="0,35,-0,-0" >
 
 	<text name="text_notice" crtext="800000" crmark="800000" align="center"
 		pos="0,5,|-0,25" title="带内容的列表" font="big" show="1" />
