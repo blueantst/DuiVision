@@ -581,6 +581,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 				delete[] pByte;
 			}else
 			{
+				DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"DuiSystem::LoadXmlFile %s failed, not found xml in zip file", strXmlFile);
 				return FALSE;
 			}
 		}
@@ -600,6 +601,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 		}else
 		{
 			// 文件不存在
+			DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"DuiSystem::LoadXmlFile %s failed, not found xml file", strXmlFile);
 			return FALSE;
 		}
 	}
@@ -655,6 +657,74 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 		}
 	}
 	return bRet;
+}
+
+// 加载界面插件动态库
+// 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到exe目录加载
+// 格式2: filename.dll				-- 指定文件名,到exe目录加载
+// 格式3: c:\filename.dll			-- 指定了dll的全路径
+typedef LPVOID (*TYPEOF_CreateObject)(LPCSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData);
+BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj)
+{
+	hPluginHandle = NULL;
+	pPluginObj = NULL;
+	CString strPluginFile;
+	if(strFileName.Find(_T(".dll")) == -1)	// 需要到资源定义中查找
+	{
+		if(m_mapXmlPool.Lookup(strFileName, strPluginFile))
+		{
+		}else
+		{
+			strPluginFile = strFileName;
+		}
+	}else
+	{
+		strPluginFile = strFileName;
+	}
+
+	// 加载插件动态库
+	hPluginHandle = NULL;
+	if(GetFileAttributes(DuiSystem::GetExePath() + strPluginFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+	{
+		hPluginHandle = LoadLibrary(DuiSystem::GetExePath() + strPluginFile);
+	}else
+	if(GetFileAttributes(strPluginFile) != 0xFFFFFFFF)	// 绝对路径查找
+	{
+		hPluginHandle = LoadLibrary(strPluginFile);
+	}
+
+	if(hPluginHandle == NULL)
+	{
+		// 加载失败
+		DWORD dwError = ::GetLastError();
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Load UI plugin %s failed, errorcode is %u", strPluginFile, dwError);
+		return FALSE;
+	}
+
+	// 加载VCI组件对象
+	// 获取函数指针
+	TYPEOF_CreateObject fnCreateObject = (TYPEOF_CreateObject)GetProcAddress(hPluginHandle, "CreateObject");
+	if(fnCreateObject == NULL)
+	{
+		FreeLibrary(hPluginHandle);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Load UI plugin %s failed, not found CreateObject function", strPluginFile);
+		return FALSE;
+	}
+
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Load UI plugin %s succ", strPluginFile);
+
+	LPVOID pIVciControl = NULL;
+	pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(strObjType), &pIVciControl, NULL);
+	if(pPluginObj == NULL)
+	{
+		FreeLibrary(hPluginHandle);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Create UI plugin %s - %s object failed", strPluginFile, strObjType);
+		return FALSE;
+	}
+
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Create UI plugin %s - %s object succ", strPluginFile, strObjType);
+
+	return TRUE;
 }
 
 // 获取系统配置信息

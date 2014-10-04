@@ -100,6 +100,8 @@ public:
 	BOOL LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName);
 	// 加载图片文件,支持从zip文件中加载
 	BOOL LoadImageFile(CString strFileName, BOOL useEmbeddedColorManagement, Image*& pImage);
+	// 加载界面插件动态库
+	BOOL LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj);
 	// 获取系统配置信息
 	CString GetConfig(CString strName);
 	// 获取XML文件
@@ -203,8 +205,8 @@ protected:
     void createSingletons();
     void destroySingletons();
 
-	CString			m_strResourceFile;								// 资源定义文件名
-	HZIP				m_hResourceZip;									// 资源ZIP文件句柄
+	CString					m_strResourceFile;						// 资源定义文件名
+	HZIP					m_hResourceZip;							// 资源ZIP文件句柄
 	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapCfgPool;				// 系统配置信息
 	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapStylePool;			// 风格信息
 	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapXmlPool;				// XML文件池
@@ -216,7 +218,7 @@ protected:
 	UINT					m_uAppID;								// 应用ID
 
 	DWORD					m_dwLangID;								// 当前语言ID
-	CString				m_strCurStyle;							// 当前风格名
+	CString					m_strCurStyle;							// 当前风格名
 
 	CString					m_strLogFile;							// 日志文件名
 	int						m_nLogLevel;							// 日志级别

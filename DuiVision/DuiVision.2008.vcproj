@@ -443,6 +443,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\IDuiPlugin.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\ImageString.h"
 				>
 			</File>

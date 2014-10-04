@@ -21,17 +21,41 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	m_strXmlFile = _T("");
 	m_nVirtualHeight = 0;
 	m_nVirtualTop = 0;
+
+	m_hPluginHandle = NULL;
+	m_strPluginFile = _T("");
+	m_pDuiPluginObject = NULL;
+
 	m_bInit = false;
 }
 
 CDuiPanel::~CDuiPanel(void)
 {
+	// 释放界面插件对象和动态库
+	if(m_pDuiPluginObject != NULL)
+	{
+		m_pDuiPluginObject->Release();
+		m_pDuiPluginObject = NULL;
+	}
+
+	if(m_hPluginHandle != NULL)
+	{
+		FreeLibrary(m_hPluginHandle);
+		m_hPluginHandle = NULL;
+	}
 }
 
 // 根据控件名创建控件实例
 CControlBase* CDuiPanel::_CreateControlByName(LPCTSTR lpszName)
 {
-	HWND hWnd = NULL;
+	// 如果已经设置了窗口句柄,使用窗口句柄创建控件
+	HWND hWnd = m_hWnd;
+	if(hWnd != NULL)
+	{
+		return DuiSystem::CreateControlByName(lpszName, hWnd, this);
+	}
+
+	// 查找父对话框的窗口句柄,通过父对话框句柄创建控件
 	CDuiObject* pParentObj = GetParent();
 	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
@@ -63,21 +87,31 @@ BOOL CDuiPanel::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
     return TRUE;
 }
 
-// 加载
+// 加载XML文件
 BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 {
 	DuiXmlDocument xmlDoc;
 	DuiXmlNode pDivElem;
 
-	if(DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
+	if(!DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
-		m_strXmlFile = strFileName;
-		pDivElem = xmlDoc.child(_T("div"));
-		if(pDivElem != NULL)
-		{
-			// 加载div节点属性
-			Load(pDivElem);
-		}
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"CDuiPanel::LoadXmlFile %s failed", strFileName);
+		return FALSE;
+	}
+
+	m_strXmlFile = strFileName;
+	pDivElem = xmlDoc.child(_T("div"));
+	if(pDivElem == NULL)
+	{
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"CDuiPanel::LoadXmlFile %s failed, not found div node", strFileName);
+		return FALSE;
+	}
+
+	// 加载div节点属性
+	if(!Load(pDivElem))
+	{
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"CDuiPanel::LoadXmlFile %s failed, load div node fail", strFileName);
+		return FALSE;
 	}
 
 	return TRUE;
@@ -142,6 +176,34 @@ HRESULT CDuiPanel::OnAttributeXml(const CString& strValue, BOOL bLoading)
 			// 加载div节点属性
 			Load(pDivElem);
 		}
+	}
+
+	return bLoading?S_FALSE:S_OK;
+}
+
+// 从XML设置plugin属性,加载界面插件文件动态库
+HRESULT CDuiPanel::OnAttributePlugin(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	HINSTANCE hPluginHandle = NULL;
+	LPVOID pPluginObj = NULL;
+
+	if(DuiSystem::Instance()->LoadPluginFile(strValue, CEncodingUtil::AnsiToUnicode(IID_IDuiPluginPanel), hPluginHandle, pPluginObj))
+	{
+		m_strPluginFile = strValue;
+		m_hPluginHandle = hPluginHandle;
+		m_pDuiPluginObject = (IDuiPluginPanel*)pPluginObj;
+		// 初始化界面插件
+		UINT nIDTemplate = 0;
+		HWND hWnd = NULL;
+		CDlgBase* pParentDlg = GetParentDialog();
+		if(pParentDlg != NULL)
+		{
+			nIDTemplate = pParentDlg->GetIDTemplate();
+			hWnd = pParentDlg->GetSafeHwnd();
+		}
+		m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, CEncodingUtil::UnicodeToAnsi(GetName()), m_rc);
 	}
 
 	return bLoading?S_FALSE:S_OK;
@@ -220,6 +282,12 @@ void CDuiPanel::CalcVirtualHeight()
 void CDuiPanel::SetControlRect(CRect rc)
 {
 	m_rc = rc;
+
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->SetRect(rc);
+	}
+
 	CRect rcTemp;
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
@@ -274,6 +342,11 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 			}
 		}
 	}
+
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->SetVisible(bIsVisible);
+	}
 }
 
 // 重载设置控件是否禁用的函数，需要调用子控件的函数
@@ -290,10 +363,30 @@ void CDuiPanel::SetControlDisable(BOOL bIsDisable)
 			pControlBase->SetControlDisable(bIsDisable);
 		}
 	}
+
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->SetDisable(bIsDisable);
+	}
+}
+
+// 重载设置控件焦点状态的函数
+BOOL CDuiPanel::SetControlFocus(BOOL bFocus)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->SetFocus(bFocus);
+	}
+
+	return __super::SetControlFocus(bFocus);
 }
 
 void CDuiPanel::DrawControl(CDC &dc, CRect rcUpdate)
 {
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->DrawControl(dc, rcUpdate);
+	}
 }
 
 // 画子控件(支持滚动显示)
@@ -356,6 +449,11 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 // 鼠标坐标变换
 BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 {
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnMousePointChange(point);
+	}
+
 	if(m_bEnableScroll && (m_nVirtualHeight > m_rc.Height()))
 	{
 		// 计算显示位置
@@ -372,9 +470,74 @@ BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 	return FALSE;
 }
 
+// 判断鼠标是否在控件可响应的区域
+BOOL CDuiPanel::OnCheckMouseResponse(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnCheckMouseResponse(nFlags, point);
+	}
+	return TRUE;
+}
+
+// 鼠标移动事件处理
+BOOL CDuiPanel::OnControlMouseMove(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnMouseMove(nFlags, point);
+	}
+	return FALSE;
+}
+
+// 鼠标左键按下事件处理
+BOOL CDuiPanel::OnControlLButtonDown(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnLButtonDown(nFlags, point);
+	}
+	return FALSE;
+}
+
+// 鼠标松开事件处理
+BOOL CDuiPanel::OnControlLButtonUp(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnLButtonUp(nFlags, point);
+	}
+	return FALSE;
+}
+
+// 键盘事件处理
+BOOL CDuiPanel::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnKeyDown(nChar, nRepCnt, nFlags);
+	}
+	return FALSE;
+}
+
+// 定时器事件处理
+BOOL CDuiPanel::OnControlTimer()
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnTimer(0, "");
+	}
+	return __super::OnControlTimer();
+}
+
 // 滚动事件处理
 BOOL CDuiPanel::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->OnScroll(bVertical, nFlags, point);
+	}
+
 	if(!m_bEnableScroll || (m_nVirtualHeight < m_rc.Height()))
 	{
 		return false;
@@ -399,6 +562,7 @@ LRESULT CDuiPanel::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return 0L; 
 }
 
+// 控件界面刷新
 LRESULT CDuiPanel::OnControlUpdate(CRect rcUpdate, BOOL bUpdate, CControlBase *pUpdateControlBase) 
 {
 	if(pUpdateControlBase == NULL) return 0;
@@ -465,6 +629,11 @@ LRESULT CDuiPanel::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 		{
 			return pControlBase->OnMessage(uID, Msg, wParam, lParam);
 		}
+	}
+
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnMessage(uID, Msg, wParam, lParam);
 	}
 
 	// 如果事件未处理,则调用父类的消息函数,最终会送给各事件处理对象进行处理

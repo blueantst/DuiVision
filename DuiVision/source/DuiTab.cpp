@@ -68,7 +68,14 @@ DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Hover, 2)
 // 根据控件名创建控件实例
 CControlBase* CDuiTabCtrl::_CreateControlByName(LPCTSTR lpszName)
 {
-	HWND hWnd = NULL;
+	// 如果已经设置了窗口句柄,使用窗口句柄创建控件
+	HWND hWnd = m_hWnd;
+	if(hWnd != NULL)
+	{
+		return DuiSystem::CreateControlByName(lpszName, hWnd, this);
+	}
+
+	// 查找父对话框的窗口句柄,通过父对话框句柄创建控件
 	CDuiObject* pParentObj = GetParent();
 	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
@@ -601,13 +608,16 @@ void CDuiTabCtrl::RefreshItems()
 	if(m_nDownItem >= (int)m_vecItemInfo.size())
 	{
 		m_nDownItem = -1;
-		for(size_t i = (int)m_vecItemInfo.size()-1; i >= 0; i--)
+		if(m_vecItemInfo.size() > 0)
 		{
-			TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
-			if(itemInfoTemp.bVisible && !itemInfoTemp.bOutLink)
+			for(size_t i = (int)m_vecItemInfo.size()-1; i >= 0; i--)
 			{
-				m_nDownItem = i;
-				break;
+				TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
+				if(itemInfoTemp.bVisible && !itemInfoTemp.bOutLink)
+				{
+					m_nDownItem = i;
+					break;
+				}
 			}
 		}
 	}
@@ -734,6 +744,14 @@ BOOL CDuiTabCtrl::GetItemVisible(CString strTabName)
 	}
 
 	return FALSE;
+}
+
+void CDuiTabCtrl::SetControlRect(CRect rc)
+{
+	__super::SetControlRect(rc);
+
+	// 重新计算所有Tab页的位置
+	RefreshItems();
 }
 
 // 重载设置控件可见性的函数，需要调用子控件的函数

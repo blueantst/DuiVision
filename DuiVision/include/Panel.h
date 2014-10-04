@@ -5,6 +5,7 @@
 
 using namespace  std;
 
+interface IDuiPluginPanel;
 class CDuiPanel : public CControlBaseFont
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiPanel, _T("div"))
@@ -19,6 +20,8 @@ public:
 	BOOL LoadXmlFile(CString strFileName);
 	HRESULT OnAttributeXml(const CString& strValue, BOOL bLoading);
 
+	HRESULT OnAttributePlugin(const CString& strValue, BOOL bLoading);
+
 	void SetVirtualHeight(int nHeight) { m_nVirtualHeight = nHeight; }
 	void CalcVirtualHeight();
 
@@ -27,8 +30,8 @@ public:
 
 	virtual void SetControlVisible(BOOL bIsVisible);
 	virtual	void SetControlDisable(BOOL bIsDisable);
+	virtual	BOOL SetControlFocus(BOOL bFocus);
 
-protected:
 	// 消息响应
 	virtual LRESULT OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL);
@@ -44,7 +47,13 @@ protected:
 	virtual BOOL DrawSubControls(CDC &dc, CRect rcUpdate);
 
 	virtual BOOL OnMousePointChange(CPoint& point);
+	virtual BOOL OnCheckMouseResponse(UINT nFlags, CPoint point);
+	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
+	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
+	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual	BOOL OnControlTimer();
 
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 
@@ -57,10 +66,19 @@ public:
 	int					m_nVirtualTop;				// 当前虚拟显示的顶部位置
 	BOOL				m_bEnableScroll;			// 是否允许滚动
 
+	HINSTANCE			m_hPluginHandle;			// 保存界面插件动态库的句柄
+	CString				m_strPluginFile;			// 界面插件文件名
+	IDuiPluginPanel*	m_pDuiPluginObject;			// 界面插件对象
+
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScroll)
 		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("xml", OnAttributeXml)
+#ifdef _DEBUG
+		DUI_CUSTOM_ATTRIBUTE("plugin-debug", OnAttributePlugin)
+#else
+		DUI_CUSTOM_ATTRIBUTE("plugin", OnAttributePlugin)
+#endif
 		DUI_INT_ATTRIBUTE("scroll", m_bEnableScroll, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

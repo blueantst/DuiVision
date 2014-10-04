@@ -54,6 +54,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_hWnd = hWnd;
 	m_uID = uControlID;
 	m_rc = rc;
+	m_strPos = "";
 	m_bIsVisible = bIsVisible;
 	m_bIsDisable = bIsDisable;
 	m_bRresponse = bRresponse;
@@ -972,6 +973,12 @@ void CControlBase::UpdateControl(CRect rc, BOOL bVisible, BOOL bUpdate)
 
 void CControlBase::InvalidateRect(LPCRECT lpRect, BOOL bErase)
 {
+	if(m_hWnd != NULL)
+	{
+		::InvalidateRect(m_hWnd, lpRect, bErase);
+		return;
+	}
+
 	CDuiObject* pParentObj = GetParent();
 	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
 	{
