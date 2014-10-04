@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionDemo.2008", "DuiVi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVision.2008", "DuiVision\DuiVision.2008.vcproj", "{78D4D293-EFD7-471C-983A-D63EE9B07BD2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiPluginDemo.2008", "DuiPluginDemo\DuiPluginDemo.2008.vcproj", "{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Debug|Win32.Build.0 = Debug|Win32
 		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Release|Win32.ActiveCfg = Release|Win32
 		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Release|Win32.Build.0 = Release|Win32
+		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Debug|Win32.Build.0 = Debug|Win32
+		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Release|Win32.ActiveCfg = Release|Win32
+		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

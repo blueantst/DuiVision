@@ -1,0 +1,7 @@
+; DuiPluginDemo.def : Declares the module parameters for the DLL.
+
+LIBRARY      "DuiPluginDemo"
+DESCRIPTION  'DuiPluginDemo'
+
+EXPORTS
+    ; Explicit exports can go here
