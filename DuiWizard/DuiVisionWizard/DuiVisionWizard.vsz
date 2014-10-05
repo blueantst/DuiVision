@@ -1,0 +1,6 @@
+VSWIZARD 7.0
+Wizard=VsWizard.VsWizardEngine.9.0
+
+Param="WIZARD_NAME = DuiVisionWizard"
+Param="RELATIVE_PATH = vcprojects"
+Param="FALLBACK_LCID = 2052"

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+[!if OPTION_CHECK_SKINWND]
+<dlg name="dlg_main" title="[APP_NAME]" width="800" height="550" translucent="255"
+	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000" appwin="1" resize="1"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+[!else]
+<dlg name="dlg_main" title="[APP_NAME]" width="800" height="550" translucent="255"
+	frame="skin:IDB_MAIN_FRAME" bkimg="skin:SKIN_PIC_0" crbk="000000" appwin="1" resize="1"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+[!endif]
+
+  <base>
+[!if OPTION_CHECK_TRAYICON]
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="hide-window" show="1"/>
+[!else]
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="close-window" show="1"/>
+[!endif]
+	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
+	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" action="menu:menu_main" menupos="-75,-0" />
+[!if OPTION_CHECK_SKINWND]
+	<imgbtn name="button.skin" pos="-140,0,-111,29" skin="IDB_BT_SKIN" tip="皮肤" show="1"/>
+[!endif]
+	<text name="title" crtext="FFFFFF" crmark="800000" crshadow="808080" font="big"
+			pos="10,4,250,25" title="[APP_NAME]" response="0" show="1" />
+[!if OPTION_CHECK_LOGINDLG]
+	<text name="user.current" crtext="FFFFFF" crmark="800000" align="right"
+			pos="-250,4,-185,25" title="test" tip="登录用户：test" show="1" />
+	<textbtn name="textbtn" skin="" crtext="FFFFFF"
+			pos="-180,4,-141,25" show="1" title="[LOGIN]" action="dlg:dlg_login" />
+[!endif]
+  </base>
+  
+  <body>
+
+	<tabctrl name="tabctrl.main" image="skins\tab_image.png" img-count="3"
+			img-sep="" img-hover="skin:IDB_TAB_HOVER"
+			font="bold" item-width="0" tab-height="0" animate="1"
+			pos="1,44,-1,-31">
+[!if TAB_CHECK_1]
+		<tab name="tab.[!output TAB_CLASS_1]" title="[!output TAB_TITLE_1]" image="skins\icon\duivision.png" img-count="1"
+			div="tab_[!output TAB_CLASS_1]" active="true" >
+			
+		</tab>
+[!else]
+		<tab name="tab.Home" title="首页" image="skins\icon\duivision.png" img-count="1"
+			div="tab_Home" active="true" >
+			
+		</tab>
+[!endif]
+[!if TAB_CHECK_2]
+		<tab name="tab.[!output TAB_CLASS_2]" title="[!output TAB_TITLE_2]" image="skins\icon\app.png" img-count="1"
+			div="tab_[!output TAB_CLASS_2]" >
+			
+		</tab>
+[!endif]
+[!if TAB_CHECK_3]
+		<tab name="tab.[!output TAB_CLASS_3]" title="[!output TAB_TITLE_3]" image="skins\icon\ico_message.png" img-count="1"
+			div="tab_[!output TAB_CLASS_3]" >
+			
+		</tab>
+[!endif]
+[!if TAB_CHECK_4]
+		<tab name="tab.[!output TAB_CLASS_4]" title="[!output TAB_TITLE_4]" image="skins\icon\ico_report.png" img-count="1"
+			div="tab_[!output TAB_CLASS_4]" >
+			
+		</tab>
+[!endif]
+[!if TAB_CHECK_5]
+		<tab name="tab.[!output TAB_CLASS_5]" title="[!output TAB_TITLE_5]" image="skins\icon\IM.png" img-count="1"
+			div="tab_[!output TAB_CLASS_5]" >
+			
+		</tab>
+[!endif]
+[!if TAB_CHECK_6]
+		<tab name="tab.[!output TAB_CLASS_6]" title="[!output TAB_TITLE_6]" image="skins\icon\ico_navigate.png" img-count="1"
+			div="tab_[!output TAB_CLASS_6]" >
+			
+		</tab>
+[!endif]			
+	</tabctrl>
+	
+	<div name="footer" pos="0,-26,-0,-0" >	
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.0.0.1" title="检查更新"
+				action="link:http://url" />
+	</div>	
+	
+  </body>
+  
+</dlg>
