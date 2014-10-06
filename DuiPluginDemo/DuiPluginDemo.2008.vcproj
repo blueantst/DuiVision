@@ -173,6 +173,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DuiHandlerPlugin.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DuiPluginDemo.cpp"
 				>
 			</File>
@@ -207,6 +211,10 @@
 			>
 			<File
 				RelativePath=".\CDuiPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DuiHandlerPlugin.h"
 				>
 			</File>
 			<File

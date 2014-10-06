@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CDuiPlugin.h"
+#include "DuiHandlerPlugin.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // 获取平台路径
@@ -93,7 +94,11 @@ int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc)
 	m_pDuiPanel = (CDuiPanel*)DuiSystem::CreateControlByName(L"div", hWnd, NULL);
 	if(m_pDuiPanel)
 	{
-		//m_pDuiPanel->SetParentRect(rc);
+		// 给插件的panel对象注册事件处理对象
+		CDuiHandlerPlugin* pHandler = new CDuiHandlerPlugin();
+		pHandler->SetDuiPanel(m_pDuiPanel);
+		DuiSystem::RegisterHandler(m_pDuiPanel, pHandler);
+		// 加载插件界面文件
 		BOOL bRet = m_pDuiPanel->LoadXmlFile(A2W(lpszName));
 		DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiPlugin::OnInit load %s %s", A2W(lpszName), bRet ? L"succ" : L"fail");
 	}

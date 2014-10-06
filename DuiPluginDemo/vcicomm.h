@@ -695,7 +695,7 @@ public:
 	}
 	virtual CString __stdcall GetErrorInfo(int nErrorCode)
 	{
-		return "";
+		return _T("");
 	}
 
 //////////////////////////////////////////////////////////////////////////
