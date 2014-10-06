@@ -139,6 +139,7 @@
     <ClInclude Include="include\Frame.h" />
     <ClInclude Include="include\GlobalFunction.h" />
     <ClInclude Include="include\HideButton.h" />
+    <ClInclude Include="include\IDuiPlugin.h" />
     <ClInclude Include="include\ImageString.h" />
     <ClInclude Include="include\LinkButton.h" />
     <ClInclude Include="include\MenuItem.h" />

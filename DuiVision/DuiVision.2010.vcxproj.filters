@@ -183,6 +183,9 @@
     <ClInclude Include="include\DuiNativeWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\IDuiPlugin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
