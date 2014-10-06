@@ -3,7 +3,7 @@
 -- '-' => 只拷贝，不需要添加
 -- '[duivision]' => 表示DuiVision库文件,需要拷贝到DuiVision目录下,不做替换
 -- '[bin]' => 表示bin目录下的资源文件
--- '[bktab]' => 表示bkwin的多页对话框中每个页面的xml文件
+-- '[duitab]' => 表示多页界面中每个页面的xml文件和事件处理文件
 
 readme.txt
 

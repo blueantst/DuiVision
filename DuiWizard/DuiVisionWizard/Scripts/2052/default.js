@@ -3,6 +3,8 @@ function OnFinish(selProj, selObj)
 {
 	try
 	{
+		//wizard.YesNoAlert(dte.Version);	// 显示VC版本,9.0=VC2008
+		
 		var strProjectPath = wizard.FindSymbol('PROJECT_PATH');
 		var strProjectName = wizard.FindSymbol('PROJECT_NAME');
 		
@@ -17,8 +19,6 @@ function OnFinish(selProj, selObj)
 		InfFile.Delete();
 
 		selProj.Object.Save();
-		
-		//alert('test');
 		
 		// 添加DuiVision工程到Solution中
 		AddDuiVisionProject(strProjectName, strProjectPath);
@@ -36,9 +36,16 @@ function CreateCustomProject(strProjectName, strProjectPath)
 {
 	try
 	{
+		// 根据VC版本,使用不同的工程后缀
+		var strProjExt = '.vcxproj';
+		if(dte.Version == '9.0')
+		{
+			strProjExt = '.vcproj';
+		}
+		
 		var strProjTemplatePath = wizard.FindSymbol('PROJECT_TEMPLATE_PATH');
 		var strProjTemplate = '';
-		strProjTemplate = strProjTemplatePath + '\\default.vcproj';
+		strProjTemplate = strProjTemplatePath + '\\default' + strProjExt;
 
 		var Solution = dte.Solution;
 		var strSolutionName = "";
@@ -54,7 +61,7 @@ function CreateCustomProject(strProjectName, strProjectPath)
 		}
 
 		var strProjectNameWithExt = '';
-		strProjectNameWithExt = strProjectName + '.vcproj';
+		strProjectNameWithExt = strProjectName + strProjExt;
 
 		var oTarget = wizard.FindSymbol("TARGET");
 		var prj;
@@ -89,7 +96,18 @@ function AddDuiVisionProject(strProjectName, strProjectPath)
 	{
 		//var Solution = dte.Solution;
 		var strSolutionPath = strProjectPath.substr(0, strProjectPath.length - strProjectName.length);
-		var strPrjNameDuiVision = strSolutionPath + '\\DuiVision\\DuiVision.2008' + '.vcproj';
+		var strPrjNameDuiVision = strSolutionPath + '\\DuiVision\\';
+		if(dte.Version == '9.0')
+		{
+			strPrjNameDuiVision += 'DuiVision.2008.vcproj';
+		}else
+		if(dte.Version == '10.0')
+		{
+			strPrjNameDuiVision += 'DuiVision.2010.vcxproj';
+		}else
+		{
+			return;
+		}
 
 		var oTarget = wizard.FindSymbol("TARGET");
 		var prj;
@@ -163,7 +181,15 @@ function AddConfig(proj, strProjectName)
 		LinkTool.SuppressStartupBanner = true;  // nologo
 		LinkTool.OutputFile = "$(outdir)/" + strProjectName + "d.exe";	// 输出文件
 		LinkTool.AdditionalLibraryDirectories = "../Lib;";	// 附加库目录
-		LinkTool.AdditionalDependencies = "DuiVision.2008d.lib";	// 附加依赖项
+		// 附加依赖项
+		if(dte.Version == '9.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2008d.lib";	// VC2008库
+		}else
+		if(dte.Version == '10.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2010d.lib";	// VC2010库
+		}
 
 		// Release设置
 		var config = proj.Object.Configurations('Release');
@@ -189,7 +215,15 @@ function AddConfig(proj, strProjectName)
 		LinkTool.SuppressStartupBanner = true;  // nologo
 		LinkTool.OutputFile = "$(outdir)/" + strProjectName + ".exe";	// 输出文件
 		LinkTool.AdditionalLibraryDirectories = "../Lib;";	// 附加库目录
-		LinkTool.AdditionalDependencies = "DuiVision.2008.lib";	// 附加依赖项
+		// 附加依赖项
+		if(dte.Version == '9.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2008.lib";	// VC2008库
+		}else
+		if(dte.Version == '10.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2010.lib";	// VC2010库
+		}
 	}
 	catch(e)
 	{
@@ -390,6 +424,8 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				    } else {
 				        // 如果没有选择第一页，则添加一个默认的首页
 				        strPageClass = 'Home';
+						wizard.RenderTemplate(strTemplate, strTarget + strPageClass + ".xml", bBinary);
+				        filter.AddFile(strTarget + strPageClass + ".xml");
 				        wizard.AddSymbol('TAB_CLASS', strPageClass);
 						wizard.RenderTemplate(strTemplatePath + '\\DuiHandlerTab.h', "DuiHandler" + strPageClass + ".h", bBinary);
 				        proj.Object.AddFile("DuiHandler" + strPageClass + ".h");
