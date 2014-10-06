@@ -28,31 +28,16 @@ res\[!output PROJECT_NAME].rc2
 
 /////////////////////////////////////////////////////////////////////////////
 
-应用程序向导创建一个对话框类:
-
-DuiVisionDemoDlg.h，DuiVisionDemoDlg.cpp - 对话框
-这些文件包含 CDuiVisionDemoDlg 类。该类定义应用程序主对话框的行为。该对话框的模板位于 DuiVisionDemo.rc 中，该文件可以在 Microsoft Visual C++ 中进行编辑。
-
-
-/////////////////////////////////////////////////////////////////////////////
-
-其他功能:
-
-ActiveX 控件
-应用程序包括对使用 ActiveX 控件的支持。
-
-/////////////////////////////////////////////////////////////////////////////
-
 其他标准文件:
 
 StdAfx.h，StdAfx.cpp
-这些文件用于生成名为 DuiVisionDemo.pch 的预编译头 (PCH) 文件和名为 StdAfx.obj 的预编译类型文件。
+这些文件用于生成名为 [!output PROJECT_NAME].pch 的预编译头 (PCH) 文件和名为 StdAfx.obj 的预编译类型文件。
 
 Resource.h
 这是标准头文件，它定义新的资源 ID。
 Microsoft Visual C++ 读取并更新此文件。
 
-DuiVisionDemo.manifest
+[!output PROJECT_NAME].manifest
 	应用程序清单文件供 Windows XP 用来描述应用程序
 	对特定版本并行程序集的依赖性。加载程序使用此
 	信息从程序集缓存加载适当的程序集或

@@ -393,6 +393,20 @@ function InitDocument(document)
 	// 符号值初始化控件
 	//
 	window.external.Load(document);
+	
+	if(window.external.FindSymbol('APPTYPE_RADIO_DUIPLUGIN'))
+	{
+		document.getElementById('OPTION_CHECK_ONEINSTANCE').checked = false;
+		document.getElementById('OPTION_CHECK_ONEINSTANCE').disabled = 1;
+		document.getElementById('OPTION_CHECK_TRAYICON').checked = false;
+		document.getElementById('OPTION_CHECK_TRAYICON').disabled = 1;
+		document.getElementById('OPTION_CHECK_LOGINDLG').checked = false;
+		document.getElementById('OPTION_CHECK_LOGINDLG').disabled = 1;
+		document.getElementById('OPTION_CHECK_NOTIFYWND').checked = false;
+		document.getElementById('OPTION_CHECK_NOTIFYWND').disabled = 1;
+		document.getElementById('OPTION_CHECK_SKINWND').checked = false;
+		document.getElementById('OPTION_CHECK_SKINWND').disabled = 1;
+	}
 }
 
 // 如果向导多于 1 页，则此 

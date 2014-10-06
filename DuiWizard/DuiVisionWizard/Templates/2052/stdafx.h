@@ -36,10 +36,11 @@
 
 #include "DuiVision.h"
 
-
+[!if APPTYPE_RADIO_DUIAPP]
 // 注册表定义
 #define REG_CONFIG_SUBKEY		_T("Software\\[!output PROJECT_NAME]\\DuiVision\\Config")
 #define REG_CONFIG_BKTYPE		_T("BkType")	// 背景类型(PIC/COLOR)
 #define REG_CONFIG_BKPIC_RES	_T("BkPicRes")	// 背景图片资源ID
 #define REG_CONFIG_BKPIC_FILE	_T("BkPicFile")	// 背景图片文件名
 #define REG_CONFIG_BKCOLOR		_T("BkColor")	// 背景颜色
+[!endif]

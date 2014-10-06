@@ -157,8 +157,22 @@ function AddConfig(proj, strProjectName)
 {
 	try
 	{
+		strProjPlugin = wizard.FindSymbol('APPTYPE_RADIO_DUIPLUGIN');
+		var strProjExeExt = '.exe';
+		if(strProjPlugin)
+		{
+			strProjExeExt = '.dll';
+		}
+		
         // Debug设置
 	    var config = proj.Object.Configurations('Debug');
+		if(strProjPlugin)
+		{
+			config.ConfigurationType = 2; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}else
+		{
+			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}
 	    config.CharacterSet = charSetUNICODE;
 	    config.IntermediateDirectory = '$(ConfigurationName)';
 	    config.OutputDirectory = '$(SolutionDir)bin';
@@ -179,7 +193,7 @@ function AddConfig(proj, strProjectName)
 		LinkTool.GenerateDebugInformation = true;
 		LinkTool.LinkIncremental = linkIncrementalYes;
 		LinkTool.SuppressStartupBanner = true;  // nologo
-		LinkTool.OutputFile = "$(outdir)/" + strProjectName + "d.exe";	// 输出文件
+		LinkTool.OutputFile = "$(outdir)/" + strProjectName + "d" + strProjExeExt;	// 输出文件
 		LinkTool.AdditionalLibraryDirectories = "../Lib;";	// 附加库目录
 		// 附加依赖项
 		if(dte.Version == '9.0')
@@ -193,6 +207,13 @@ function AddConfig(proj, strProjectName)
 
 		// Release设置
 		var config = proj.Object.Configurations('Release');
+		if(strProjPlugin)
+		{
+			config.ConfigurationType = 2; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}else
+		{
+			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}
 		config.CharacterSet = charSetUNICODE;
 		config.IntermediateDirectory = '$(ConfigurationName)';
 		config.OutputDirectory = '$(SolutionDir)bin';
@@ -213,7 +234,7 @@ function AddConfig(proj, strProjectName)
 		LinkTool.GenerateDebugInformation = true;
 		LinkTool.LinkIncremental = linkIncrementalYes;
 		LinkTool.SuppressStartupBanner = true;  // nologo
-		LinkTool.OutputFile = "$(outdir)/" + strProjectName + ".exe";	// 输出文件
+		LinkTool.OutputFile = "$(outdir)/" + strProjectName + strProjExeExt;	// 输出文件
 		LinkTool.AdditionalLibraryDirectories = "../Lib;";	// 附加库目录
 		// 附加依赖项
 		if(dte.Version == '9.0')
@@ -290,11 +311,19 @@ function GetTargetName(strName, strProjectName)
 		if (strName == 'readme.txt')
 			strTarget = 'Readme.txt';
 
+		// DuiApp
 		if (strName == 'res\\DuiVision.ico')
 		    strTarget = 'res\\' + strProjectName + '.ico';
 		if (strName == 'res\\DuiVision.rc2')
 		    strTarget = 'res\\' + strProjectName + '.rc2';
+		
+		// DuiPlugin
+		if (strName == 'DuiPlugin\\res\\DuiPlugin.ico')
+		    strTarget = 'res\\' + strProjectName + '.ico';
+		if (strName == 'DuiPlugin\\res\\DuiPlugin.rc2')
+		    strTarget = 'res\\' + strProjectName + '.rc2';
 
+		// DuiApp
 		if (strName == 'DuiVisionApp.h')
 		    strTarget = strProjectName + '.h';
 
@@ -303,6 +332,31 @@ function GetTargetName(strName, strProjectName)
 
 		if (strName == 'DuiVisionApp.rc')
 		    strTarget = strProjectName + '.rc';
+		
+		// DuiPlugin
+		if (strName == 'DuiPlugin\\vcicomm.h')
+		    strTarget = 'vcicomm.h';
+		
+		if (strName == 'DuiPlugin\\DuiPlugin.def')
+		    strTarget = strProjectName + '.def';
+		
+		if (strName == 'DuiPlugin\\DuiPlugin.rc')
+		    strTarget = strProjectName + '.rc';
+		
+		if (strName == 'DuiPlugin\\DuiPlugin.cpp')
+		    strTarget = strProjectName + '.cpp';
+		
+		if (strName == 'DuiPlugin\\CDuiPlugin.h')
+		    strTarget = 'CDuiPlugin.h';
+		
+		if (strName == 'DuiPlugin\\CDuiPlugin.cpp')
+		    strTarget = 'CDuiPlugin.cpp';
+		
+		if (strName == 'DuiPlugin\\DuiHandlerPlugin.h')
+		    strTarget = 'DuiHandlerPlugin.h';
+		
+		if (strName == 'DuiPlugin\\DuiHandlerPlugin.cpp')
+		    strTarget = 'DuiHandlerPlugin.cpp';
 		
 		if (strName.indexOf('[duitab]') == 0) // duitab
         {

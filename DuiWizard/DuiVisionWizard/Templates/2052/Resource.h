@@ -2,8 +2,10 @@
 // Microsoft Visual C++ generated include file.
 // Used by DuiVisionDemo.rc
 //
+[!if APPTYPE_RADIO_DUIAPP]
 #define IDR_MAINFRAME					128
 #define IDD_DUIVISIONAPP_DIALOG				102
+[!endif]
 
 // 新对象的下一组默认值
 //

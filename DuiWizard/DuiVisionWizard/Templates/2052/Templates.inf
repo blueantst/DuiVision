@@ -7,19 +7,41 @@
 
 readme.txt
 
+[!if APPTYPE_RADIO_DUIAPP]
 res\DuiVision.ico
 res\DuiVision.rc2
+[!endif]
+[!if APPTYPE_RADIO_DUIPLUGIN]
+DuiPlugin\res\DuiPlugin.ico
+DuiPlugin\res\DuiPlugin.rc2
+[!endif]
 
 stdafx.h
 stdafx.cpp
 resource.h
+[!if APPTYPE_RADIO_DUIAPP]
 DuiVisionApp.h
 DuiVisionApp.cpp
 DuiVisionApp.rc
 targetver.h
+[!endif]
+[!if APPTYPE_RADIO_DUIPLUGIN]
+DuiPlugin\vcicomm.h
+DuiPlugin\DuiPlugin.def
+DuiPlugin\DuiPlugin.rc
+DuiPlugin\DuiPlugin.cpp
+DuiPlugin\CDuiPlugin.h
+DuiPlugin\CDuiPlugin.cpp
+[!endif]
 
+[!if APPTYPE_RADIO_DUIAPP]
 DuiHandlerMain.h
 DuiHandlerMain.cpp
+[!endif]
+[!if APPTYPE_RADIO_DUIPLUGIN]
+DuiPlugin\DuiHandlerPlugin.h
+DuiPlugin\DuiHandlerPlugin.cpp
+[!endif]
 
 [duitab]bin\xml\tab_file.xml
 

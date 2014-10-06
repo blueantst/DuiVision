@@ -1,0 +1,7 @@
+; [!output PROJECT_NAME].def : Declares the module parameters for the DLL.
+
+LIBRARY      "[!output PROJECT_NAME]"
+DESCRIPTION  '[!output PROJECT_NAME]'
+
+EXPORTS
+    ; Explicit exports can go here
