@@ -5,7 +5,7 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "DuiVisionWizard"
-!define PRODUCT_DISPLAY_NAME "DuiVision界面库VC向导安装程序-for VC2008"
+!define PRODUCT_DISPLAY_NAME "DuiVision界面库VC向导安装程序"
 !define PRODUCT_VERSION "1.9.0.1"
 !define PRODUCT_PUBLISHER "蓝蚂蚁工作室"
 
@@ -30,6 +30,9 @@ SetCompressor lzma
 
 ; 欢迎页面
 !insertmacro MUI_PAGE_WELCOME
+
+; 组件选择页面
+!insertmacro MUI_PAGE_COMPONENTS
 
 ; 安装目录选择页面
 ;!insertmacro MUI_PAGE_DIRECTORY
@@ -59,7 +62,7 @@ SetCompressor lzma
 
 ;Default installation folder
  ;InstallDir "$PROGRAMFILES\Microsoft Visual Studio 10.0\VC\vcprojects"
- InstallDir "$PROGRAMFILES\Microsoft Visual Studio 9.0\VC\vcprojects"
+ ;InstallDir "$PROGRAMFILES\Microsoft Visual Studio 9.0\VC\vcprojects"
 
 ;Define issue directory, export from svn repos
 !define ISSUEDIR "Issue"
@@ -69,26 +72,52 @@ ShowInstDetails hide
 BrandingText ${PRODUCT_PUBLISHER}
 
 ;基本运行库
-Section
-  SectionIn RO
+;Section
+;  SectionIn RO
   
-  IfFileExists $INSTDIR\emptyproj.vsz step_install
-    MessageBox MB_ICONINFORMATION|MB_OK "未找到VC2008的安装路径，无法安装此向导！"
-    Abort
+;  IfFileExists $INSTDIR\emptyproj.vsz step_install
+;    MessageBox MB_ICONINFORMATION|MB_OK "未找到VC2008的安装路径，无法安装此向导！"
+;    Abort
   
- step_install:
-  SetOverwrite ifnewer
+; step_install:
+;  SetOverwrite ifnewer
   
-  SetOutPath "$INSTDIR\"
-  File /nonfatal /r "${ISSUEDIR}\*.*"
+;  SetOutPath "$INSTDIR\"
+;  File /nonfatal /r "${ISSUEDIR}\*.*"
   
   ;替换vsz文件中的VC路径信息和引擎版本(引擎版本对应表：10.0-VS2010,9.0-VS2008,8.0-VS2005,7.0-VC2003)
   ;!insertmacro ReplaceConfig "$INSTDIR\DuiVisionWizard.vsz" "$$$$ENGINE_VER$$$$" "10"
   ;!insertmacro ReplaceConfig "$INSTDIR\DuiVisionWizard.vsz" "$$$$INST_DIR$$$$" $INSTDIR
   
+;SectionEnd
+
+Section "VC2008" SEC_VC2008
+  IfFileExists "$PROGRAMFILES\Microsoft Visual Studio 9.0\VC\vcprojects\emptyproj.vsz" step_install step_continue
+    MessageBox MB_ICONINFORMATION|MB_OK "未找到VC2008的安装路径，无法安装此向导！"
+ step_install:
+  SetOverwrite ifnewer
+  SetOutPath "$PROGRAMFILES\Microsoft Visual Studio 9.0\VC\vcprojects"
+  File /nonfatal /r "${ISSUEDIR}\*.*"
+ step_continue:
+SectionEnd
+
+Section "VC2010" SEC_VC2010
+  IfFileExists "$PROGRAMFILES\Microsoft Visual Studio 10.0\VC\vcprojects\emptyproj.vsz" step_install step_continue
+    MessageBox MB_ICONINFORMATION|MB_OK "未找到VC2010的安装路径，无法安装此向导！"
+ step_install:
+  SetOverwrite ifnewer
+  SetOutPath "$PROGRAMFILES\Microsoft Visual Studio 10.0\VC\vcprojects"
+  File /nonfatal /r "${ISSUEDIR}\*.*"
+ step_continue:
 SectionEnd
 
 #-- 根据 NSIS 脚本编辑规则，所有 Function 区段必须放置在 Section 区段之后编写，以避免安装程序出现未可预知的问题。--#
+
+; 区段组件描述
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT "VC2008" "安装向导到VC2008"
+  !insertmacro MUI_DESCRIPTION_TEXT "VC2010" "安装向导到VC2010"
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
 FunctionEnd
