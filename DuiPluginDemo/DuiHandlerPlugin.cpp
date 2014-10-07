@@ -6,7 +6,7 @@
 	<base>\
 		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\"/>\
 		<text name=\"title\" crtext=\"FFFFFF\" crmark=\"800000\" font=\"big\"\
-				pos=\"10,5,200,25\" title=\"关于[APP_NAME]-界面插件\" mask=\"[APP_NAME]\" response=\"0\" />\
+				pos=\"10,5,200,25\" title=\"关于[APP_NAME]-插件\" mask=\"[APP_NAME]\" response=\"0\" />\
 	</base>\
 	<body>\
 		<area name=\"area-1\" pos=\"0,0,-0,40\" begin-transparent=\"100\" end-transparent=\"30\" />\
@@ -51,7 +51,8 @@ void CDuiHandlerPlugin::OnInit()
 	{
 		CEdit* pEdit = new CEdit;
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_AUTOVSCROLL;
-		pEdit->Create(dwStyle, CRect(0,0,0,0), pNativeWnd->GetPaintWnd(), 1111);
+		//pEdit->Create(dwStyle, CRect(0,0,0,0), pNativeWnd->GetPaintWnd(), 1111);
+		pEdit->Create(dwStyle, CRect(0,0,0,0), CWnd::FromHandle(m_pPanel->GetHWND()), 1111);
 		pNativeWnd->SetNativeWnd(pEdit);
 
 		/*CListViewCtrlEx* pWndList = new CListViewCtrlEx;
@@ -172,7 +173,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgXmlDlgButton(UINT uID, CString strName, UINT 
 {
 	// 演示通过定义的XML内容加载窗口
 	CString strDlgXmlContent = XML_ABOUT_DLG;
-	CDlgBase* pDlg = DuiSystem::CreateDuiDialog(strDlgXmlContent, GetControlDialog(uID), _T(""), TRUE, 0, TRUE);
+	CDlgBase* pDlg = DuiSystem::CreateDuiDialog(strDlgXmlContent, NULL, _T(""), TRUE, 0, TRUE);
 	if(pDlg != NULL)
 	{
 		int nResponse = pDlg->DoModal();
@@ -184,16 +185,15 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgXmlDlgButton(UINT uID, CString strName, UINT 
 // 菜单1消息处理
 LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_1"));
 	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();
 	point.SetPoint(rc.left, rc.bottom);
-	if(pDlg != NULL)
+	if(m_pPanel)
 	{
-		pDlg->ClientToScreen(&point);
+		::ClientToScreen(m_pPanel->GetHWND(), &point);
 	}
 	// 演示如何在菜单加载时候更改菜单项的显示标题、可见性、是否禁用、是否选择等属性
 	// 必须在调用LoadXmlFile之前通过菜单项名字来设置相应菜单项的属性
@@ -201,7 +201,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT M
 	pDuiMenu->SetItemCheck(L"item_setup", 0);
 	pDuiMenu->SetItemVisible(L"item_help", FALSE);
 	pDuiMenu->SetItemDisable(L"item_about", TRUE);
-	if(pDuiMenu->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU))
+	if(pDuiMenu->LoadXmlFile(_T("menu_tray"), NULL, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);
 	}
@@ -211,18 +211,17 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT M
 // 菜单2消息处理
 LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_2"));
 	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();
 	point.SetPoint(rc.left, rc.bottom);
-	if(pDlg != NULL)
+	if(m_pPanel)
 	{
-		pDlg->ClientToScreen(&point);
+		::ClientToScreen(m_pPanel->GetHWND(), &point);
 	}
-	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_2.xml"), pDlg, point, WM_DUI_MENU))
+	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_2.xml"), NULL, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);
 	}
@@ -232,18 +231,17 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT M
 // 菜单3消息处理
 LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_3"));
 	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();
 	point.SetPoint(rc.left, rc.bottom);
-	if(pDlg != NULL)
+	if(m_pPanel)
 	{
-		pDlg->ClientToScreen(&point);
+		::ClientToScreen(m_pPanel->GetHWND(), &point);
 	}
-	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), pDlg, point, WM_DUI_MENU))
+	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), NULL, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);
 	}
@@ -254,10 +252,9 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton3(UINT uID, CString strName, UINT M
 LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	// 点击了列表控件某一行,显示此行的详细信息,传入参数中wParam表示控件行号
-	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_1"));
 	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
-	if(pDlg && pRowInfo)
+	if(m_pPanel && pRowInfo)
 	{
 		CDlgPopup* pDlgPopup = new CDlgPopup;
 		CRect rc = pListCtrl->GetRect();
@@ -279,7 +276,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UIN
 			//CString strTmp = L"www\nwww\nj";
 			pControlContent->SetTitle(pRowInfo->strContent);
 		}
-		pDlg->OpenDlgPopup(pDlgPopup, rc, 0);
+		m_pPanel->OpenDlgPopup(pDlgPopup, rc, 0);
 	}
 	return TRUE;
 }
@@ -289,10 +286,9 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UIN
 {
 	// 点击了列表控件某一行,显示此行的详细信息
 	// 传入参数中wParam表示控件行号,lParam表示点击的链接的索引(链接1和2分别为0和1)
-	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));
 	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
-	if(pDlg && pRowInfo)
+	if(m_pPanel && pRowInfo)
 	{
 		if(lParam != -1)
 		{
@@ -321,7 +317,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UIN
 			{
 				pControlContent->SetTitle(pRowInfo->strContent);
 			}
-			pDlg->OpenDlgPopup(pDlgPopup, rc, 0);
+			m_pPanel->OpenDlgPopup(pDlgPopup, rc, 0);
 		}
 	}
 
