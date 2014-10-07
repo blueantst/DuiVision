@@ -20,8 +20,11 @@ function OnFinish(selProj, selObj)
 
 		selProj.Object.Save();
 		
-		// 添加DuiVision工程到Solution中
-		AddDuiVisionProject(strProjectName, strProjectPath);
+		if (wizard.FindSymbol("OPTION_CHECK_COPYDUIVISION"))
+		{
+			// 添加DuiVision工程到Solution中
+			AddDuiVisionProject(strProjectName, strProjectPath);
+		}
 	}
 	catch(e)
 	{
@@ -360,7 +363,13 @@ function GetTargetName(strName, strProjectName)
 		
 		if (strName.indexOf('[duitab]') == 0) // duitab
         {
-            strTarget = '..\\bin\\xml\\app\\tab_';
+			if (wizard.FindSymbol("APPTYPE_RADIO_DUIPLUGIN"))
+			{
+				strTarget = '..\\bin\\xml\\plugin\\tab_';
+			}else
+			{
+				strTarget = '..\\bin\\xml\\app\\tab_';
+			}
         }
 
 		if (strName.indexOf('[duivision]') == 0) // DuiVision库文件

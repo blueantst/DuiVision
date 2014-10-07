@@ -205,7 +205,14 @@
   			  </TD>
   			  <TD VALIGN="TOP" COLSPAN="3">
  				<SPAN CLASS="itemTextTop">
-	  				 <INPUT CLASS="CheckBox" TYPE="checkbox" ID="OPTION_CHECK_ONEINSTANCE" checked=true>
+	  				 <INPUT CLASS="CheckBox" TYPE="checkbox" ID="OPTION_CHECK_COPYDUIVISION" checked=true>
+	  	 			 <DIV CLASS="itemTextCheckboxA" ID="DIV0">
+		  			  <LABEL FOR="OPTION_CHECK_COPYDUIVISION" TITLE="拷贝DuiVision库代码和默认资源文件">拷贝DuiVision库代码和默认资源文件</LABEL>
+	  	 			 </DIV>
+
+                     <BR>
+					 
+					 <INPUT CLASS="CheckBox" TYPE="checkbox" ID="OPTION_CHECK_ONEINSTANCE" checked=true>
 	  	 			 <DIV CLASS="itemTextCheckboxA" ID="DIV1">
 		  			  <LABEL FOR="OPTION_CHECK_ONEINSTANCE" TITLE="只允许运行一个实例进程">只允许运行一个实例进程（仅用于应用程序）</LABEL>
 	  	 			 </DIV>
@@ -393,6 +400,12 @@ function InitDocument(document)
 	// 符号值初始化控件
 	//
 	window.external.Load(document);
+	
+	// 在现有解决方案中新建工程,则默认不拷贝DuiVision库文件
+	if (!window.external.FindSymbol("CLOSE_SOLUTION"))
+	{
+		document.getElementById('OPTION_CHECK_COPYDUIVISION').checked = false;
+	}
 	
 	if(window.external.FindSymbol('APPTYPE_RADIO_DUIPLUGIN'))
 	{

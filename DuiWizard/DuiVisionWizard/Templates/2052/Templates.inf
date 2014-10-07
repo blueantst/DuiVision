@@ -45,6 +45,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 
 [duitab]bin\xml\tab_file.xml
 
+[!if OPTION_CHECK_COPYDUIVISION]
 [duivision]app.ico
 [duivision]app.rc
 [duivision]DuiVision.cpp
@@ -342,4 +343,4 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [bin]skins\icon\Synchstep.png
 [bin]skins\icon\tcl.png
 [bin]skins\icon\weTool.png
-
+[!endif]
