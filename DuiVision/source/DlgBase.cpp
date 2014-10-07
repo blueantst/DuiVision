@@ -1618,6 +1618,8 @@ LRESULT CDlgBase::OnUserCloseWindow(WPARAM wParam, LPARAM lParam)
 void CDlgBase::OnMinimize()
 {
 	ShowWindow(SW_MINIMIZE);
+	// 最小化会导致所有拥有的窗口不显示,因此需要显示所有拥有的窗口
+	ShowOwnedPopups();
 }
 
 // 窗口最大化切换
