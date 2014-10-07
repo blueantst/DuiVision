@@ -7,6 +7,7 @@
 using namespace  std;
 
 class CDlgBase;
+class CDlgPopup;
 
 // 按钮状态
 enum enumButtonState
@@ -155,6 +156,11 @@ public:
 	// 发送通知消息
 	LRESULT SendMessage(UINT Msg, WPARAM wParam, LPARAM lParam);
 
+	// 打开弹出对话框
+	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID);
+	// 关闭弹出对话框
+	void CloseDlgPopup();
+
 protected:
 
 	CDuiObject*				m_pParentDuiObject;	// 父控件对象
@@ -205,6 +211,8 @@ protected:
 	CString					m_strTooltip;		// 控件的Tooltip
 	CString					m_strAction;		// 控件执行的动作
 	BOOL					m_bTaskMsg;			// 调用事件响应函数时候采用任务方式
+
+	CDlgPopup*				m_pWndPopup;		// 保存的弹出框指针
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
         //DUI_STYLE_ATTRIBUTE("class", m_style, TRUE)

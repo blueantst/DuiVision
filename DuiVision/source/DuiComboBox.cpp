@@ -173,16 +173,21 @@ void CDuiComboBox::ClearItems()
 {
 	m_vecItem.clear();
 
+	m_buttonState = enBSNormal;
+	m_EditState = enBSNormal;
+	InvalidateRect(GetRect());
+
 	// 关闭popuplist窗口
 	CDlgBase* pDlg = GetParentDialog();
 	if(pDlg)
 	{
-		m_buttonState = enBSNormal;
-		m_EditState = enBSNormal;
-		InvalidateRect(GetRect());
 		pDlg->CloseDlgPopup();
-		m_pPopupList = NULL;
+	}else
+	{
+		CloseDlgPopup();
 	}
+
+	m_pPopupList = NULL;
 }
 
 // 从XML设置图片信息属性
@@ -282,6 +287,10 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		if(pDlg)
 		{
 			pDlg->OpenDlgPopup(pPopupList, rcClient, GetID());
+		}else
+		{
+			// 如果父对话框不存在,则使用ControlBase封装的函数
+			OpenDlgPopup(pPopupList, rcClient, GetID());
 		}
 
 		pPopupList->SetFont(m_strFont, m_nFontWidth, m_fontStyle);
@@ -309,15 +318,18 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		m_pPopupList->GetItemName(lParam, strName);
 		m_pPopupList->GetItemValue(lParam, m_strComboValue);
 		SetTitle(strName);
+		m_buttonState = enBSNormal;
+		m_EditState = enBSNormal;
+		InvalidateRect(GetRect());
 		CDlgBase* pDlg = GetParentDialog();
 		if(pDlg)
 		{
-			m_buttonState = enBSNormal;
-			m_EditState = enBSNormal;
-			InvalidateRect(GetRect());
 			pDlg->CloseDlgPopup();
-			m_pPopupList = NULL;
+		}else
+		{
+			CloseDlgPopup();
 		}
+		m_pPopupList = NULL;
 	}else
 	if((DELETE_ITEM == wParam) && m_pPopupList)	// 删除下拉框列表项
 	{

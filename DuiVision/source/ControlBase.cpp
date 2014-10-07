@@ -45,6 +45,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_strTooltip = _T("");
 	m_strAction = _T("");
 	m_bTaskMsg = FALSE;
+
+	m_pWndPopup = NULL;
 }
 
 CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible, BOOL bIsDisable,
@@ -81,6 +83,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_strTooltip = _T("");
 	m_strAction = _T("");
 	m_bTaskMsg = FALSE;
+
+	m_pWndPopup = NULL;
 }
 
 CControlBase::~CControlBase(void)
@@ -1383,6 +1387,33 @@ LRESULT CControlBase::SendMessage(UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	//return ::SendMessage(m_hWnd, Msg, wParam, lParam);
 	return m_pParentDuiObject->OnBaseMessage(m_uID, Msg, wParam, lParam);
+}
+
+// 打开弹出对话框
+void CControlBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID)
+{
+	ASSERT(pWndPopup);
+	CloseDlgPopup();
+	CPoint point;
+	point.SetPoint(rc.left, rc.top);
+	::ClientToScreen(GetHWND(), &point);
+	rc.OffsetRect(point.x-rc.left, point.y-rc.top);
+	m_pWndPopup = pWndPopup;
+	m_pWndPopup->Create(CWnd::FromHandle(GetHWND()), rc, uMessageID);
+	m_pWndPopup->ShowWindow(SW_SHOW);
+}
+
+// 关闭弹出对话框
+void CControlBase::CloseDlgPopup()
+{
+	if(m_pWndPopup)
+	{
+		if(IsWindow(m_pWndPopup->GetSafeHwnd()))
+		{
+			m_pWndPopup->CloseWindow();			
+		}
+	}
+	m_pWndPopup = NULL;
 }
 
 
