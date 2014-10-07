@@ -24,9 +24,13 @@ QQ群：325880743 (Script.NET社区)
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
 
-下载DuiVision Demo程序：[20140913版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20140913.zip)
+下载DuiVision Demo程序：[20141007版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20141007.zip)
 
-下载DuiVision开发手册：[DuiVision开发手册.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C.pdf)
+下载DuiVision VC向导安装包：[20141007版本](http://www.blueantstudio.net/duivision/DuiVisionWizardSetup-20141007.exe)
+
+下载DuiVision VC向导压缩包：[20141007版本](http://www.blueantstudio.net/duivision/DuiVisionWizard-20141007.zip)
+
+下载DuiVision开发手册：[DuiVision开发手册.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20141007.pdf)
 
 ### 一些界面截图
 ![主界面](http://www.blueantstudio.net/duivision/suolue/duivision_home.jpg)
@@ -40,3 +44,11 @@ QQ群：325880743 (Script.NET社区)
 ![半透明对话框](http://www.blueantstudio.net/duivision/suolue/duivision_translucentdlg.jpg)
 ![Web控件](http://www.blueantstudio.net/duivision/suolue/duivision_webbrowser.jpg)
 ![菜单](http://www.blueantstudio.net/duivision/suolue/duivision_menu.jpg)
+
+### VC工程向导截图
+![选择工程模板](http://www.blueantstudio.net/duivision/suolue/wizard.jpg)
+![向导第1步](http://www.blueantstudio.net/duivision/suolue/wizard_step1.jpg)
+![向导第2步](http://www.blueantstudio.net/duivision/suolue/wizard_step2.jpg)
+![向导第3步](http://www.blueantstudio.net/duivision/suolue/wizard_step3.jpg)
+![向导第4步](http://www.blueantstudio.net/duivision/suolue/wizard_step4.jpg)
+
