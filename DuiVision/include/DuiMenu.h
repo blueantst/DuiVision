@@ -54,6 +54,8 @@ public:
 	CDuiMenu* GetParentMenu();
 	// 获取当前激活菜单项对象
 	CMenuItem* GetHoverMenuItem();
+	// 获取当前处于活动状态的子菜单项(根据鼠标位置查找)
+	CMenuItem* GetMenuItemWithPoint(CPoint point);
 
 	// 加载菜单
 	BOOL LoadSubMenu(DuiXmlNode pXmlElem, CString strSubItemName);

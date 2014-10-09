@@ -249,7 +249,8 @@ BOOL CMenuItem::OnControlMouseMove(UINT nFlags, CPoint point)
 			{
 				// 检查父菜单的各个子菜单,看鼠标当前是否在其他菜单项上面
 				CDuiMenu* pParentMenu = GetParentMenu();
-				CMenuItem* pHoverItem = pParentMenu->GetHoverMenuItem();
+				//CMenuItem* pHoverItem = pParentMenu->GetHoverMenuItem();
+				CMenuItem* pHoverItem = pParentMenu->GetMenuItemWithPoint(point);
 				if((pHoverItem != NULL) && (pHoverItem != this))
 				{
 					// 如果鼠标在其他平级的菜单上,则关闭子菜单

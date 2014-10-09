@@ -544,6 +544,26 @@ CMenuItem* CDuiMenu::GetHoverMenuItem()
 	return NULL;
 }
 
+// 获取当前处于活动状态的子菜单项(根据鼠标位置查找)
+CMenuItem* CDuiMenu::GetMenuItemWithPoint(CPoint point)
+{
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl[i];
+		if(pControlBase->IsClass(CMenuItem::GetClassName()))	// 如果是MenuItem类型控件
+		{
+			CMenuItem* pMenuItem = (CMenuItem*)pControlBase;
+			CRect rc = pMenuItem->GetRect();
+			if(rc.PtInRect(point))
+			{
+				return pMenuItem;
+			}
+		}
+	}
+
+	return NULL;
+}
+
 // 消息响应
 LRESULT CDuiMenu::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
