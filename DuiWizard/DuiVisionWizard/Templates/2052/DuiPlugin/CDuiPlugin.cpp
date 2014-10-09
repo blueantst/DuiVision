@@ -29,6 +29,26 @@ CString GetPlatRootPath()
 	return szPath;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// 获取插件路径
+/////////////////////////////////////////////////////////////////////////////
+CString GetPlugInRootPath()
+{
+	//获取平台路径
+	TCHAR szFullPath[MAX_PATH];
+	TCHAR szdrive[_MAX_DRIVE];
+	TCHAR szdir[_MAX_DIR];
+	::GetModuleFileName(GetDllInstance(), szFullPath, MAX_PATH);
+#ifdef _UNICODE
+	_wsplitpath(szFullPath, szdrive, szdir, NULL, NULL);
+#else
+	_splitpath(szFullPath, szdrive, szdir, NULL, NULL);
+#endif
+	CString szPath;
+	szPath.Format(_T("%s%s"), szdrive, szdir);
+
+	return szPath;
+}
 
 //////////////////////////////////////////////////////////////////////////
 // 功能实现
@@ -85,11 +105,16 @@ int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc)
 	// 调用DuiSystem创建一个Panel控件对象,并加载xml文件
 	TRACE("CDuiPlugin::OnInit, name=%s, rc=%d,%d,%d,%d\n", lpszName, rc.left, rc.top, rc.right, rc.bottom);
 	USES_CONVERSION;
+	
+	// 设置DuiVision库的根目录
+	DuiSystem::SetRootPath(GetPlugInRootPath());
 
 	// 初始化DUI库
 	DWORD dwLangID = 0;
 	new DuiSystem(NULL, dwLangID, _T(""), 11160, nIDTemplate, _T(""));
 
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiPlugin::OnInit root path is %s", GetPlugInRootPath());
+	
 	// 加载xml
 	m_pDuiPanel = (CDuiPanel*)DuiSystem::CreateControlByName(L"div", hWnd, NULL);
 	if(m_pDuiPanel)
