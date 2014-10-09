@@ -80,6 +80,8 @@ public:
 	void SetCurrentLanguage(DWORD dwLangID);
 	// 获取AppID
 	UINT GetAppID() { return m_uAppID; }
+	// 设置根目录
+	static void SetRootPath(CString strPath);
 	// 获取进程路径
 	static CString GetExePath();
 	// 获取Skin路径

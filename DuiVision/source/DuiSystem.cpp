@@ -5,6 +5,7 @@ template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
 static DuiSystem* g_pIns = NULL;
 static UINT g_nIDTemplate = 0;
+static CString g_strRootPath = _T("");
 
 static ULONG_PTR gdiplusToken;
 static GdiplusStartupInput gdiplusStartupInput;
@@ -205,9 +206,20 @@ void DuiSystem::SetCurrentLanguage(DWORD dwLangID)
 	m_dwLangID = dwLangID;
 }
 
+// 设置根目录
+void DuiSystem::SetRootPath(CString strPath)
+{
+	g_strRootPath = strPath;
+}
+
 // 取进程目录
 CString DuiSystem::GetExePath()
 {
+	if(!g_strRootPath.IsEmpty())
+	{
+		return g_strRootPath;
+	}
+
 	TCHAR szFullPath[MAX_PATH];
 	TCHAR szdrive[_MAX_DRIVE];
 	TCHAR szdir[_MAX_DIR];
