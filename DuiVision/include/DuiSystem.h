@@ -190,7 +190,7 @@ public:
 	BOOL SetTrayTip(CString szToolTip);
 
 	// 进程间消息函数
-	BOOL SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strInfo);
+	BOOL SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strAppName, CString strInfo);
 
 	// 日志函数
 	CString GetLogFile() { return m_strLogFile; }

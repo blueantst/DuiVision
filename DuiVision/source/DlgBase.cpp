@@ -1887,6 +1887,13 @@ LRESULT CDlgBase::OnCheckItsMe(WPARAM wParam, LPARAM lParam)
 	UnmapViewOfFile(pViewOfFile);
 	CloseHandle(hFileMapping);
 
+	// 判断应用名是否一致(使用appMutex作为应用名)
+	CString strAppName = interMsg.wAppName;
+	if(DuiSystem::Instance()->GetString(_T("appMutex")) != strAppName)
+	{
+		return FALSE;
+	}
+
 	// 调用事件处理对象进行处理
 	DuiSystem::Instance()->CallDuiHandler(interMsg.uControlID, interMsg.wControlName, interMsg.uMsg, interMsg.wParam, (LPARAM)(&interMsg));
 

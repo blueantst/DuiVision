@@ -2255,7 +2255,7 @@ BOOL DuiSystem::SetTrayTip(CString szToolTip)
 }
 
 // 发送进程间通信消息
-BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strInfo)
+BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strAppName, CString strInfo)
 {
 	// number of characters in memory-mapped file
 	const DWORD dwMemoryFileSize = sizeof(DUI_INTERPROCESS_MSG);
@@ -2301,6 +2301,8 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	// 初始化进程间通知消息
 	DUI_INTERPROCESS_MSG interMsg;
 	memset(&interMsg, 0, sizeof(DUI_INTERPROCESS_MSG));
+	wcscpy_s(interMsg.wAppName, strAppName.GetBuffer(0));
+	strAppName.ReleaseBuffer();
 	interMsg.uControlID = APP_IPC;	// 控件ID使用预定义额进程间消息控件ID
 	interMsg.uMsg = uMsg;
 	interMsg.wParam = wParam;

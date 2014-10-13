@@ -66,6 +66,7 @@
 // 进程间消息内容的结构定义
 struct DUI_INTERPROCESS_MSG
 {
+	WCHAR	wAppName[128];		// 应用名
 	UINT	uControlID;			// 控件ID
 	WCHAR	wControlName[64];	// 控件名字
 	UINT	uMsg;				// 消息
