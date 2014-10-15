@@ -21,6 +21,7 @@ public:
 
 	// DUI消息处理
 	LRESULT OnDuiMsgTrayIconDClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgTrayIconLButtonDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgNotifyButton1(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgNotifyButton2(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgNotifyButton3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -59,6 +60,7 @@ public:
 		DUI_CONTROL_ID_MESSAGE(APP_IPC, OnDuiMsgInterprocess)
 		DUI_CONTROL_NAME_MESSAGE(NAME_SKIN_WND, OnDuiMsgSkin)
 		DUI_CONTROL_NAMEMSG_MESSAGE(NAME_TRAY_ICON, MSG_TRAY_DBCLICK, OnDuiMsgTrayIconDClick)
+		DUI_CONTROL_NAMEMSG_MESSAGE(NAME_TRAY_ICON, MSG_TRAY_LBUTTONDOWN, OnDuiMsgTrayIconLButtonDown)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"notify_button_1", MSG_BUTTON_UP, OnDuiMsgNotifyButton1)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"notify_button_2", MSG_BUTTON_UP, OnDuiMsgNotifyButton2)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"notify_button_3", MSG_BUTTON_UP, OnDuiMsgNotifyButton3)

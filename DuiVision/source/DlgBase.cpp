@@ -1772,6 +1772,12 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 			}
 		}
 		break;
+	case WM_LBUTTONDOWN:
+		{
+			// 发托盘左键单击消息
+			DuiSystem::AddDuiActionTask(TRAY_ICON, MSG_TRAY_LBUTTONDOWN, 0, 0, NAME_TRAY_ICON, _T(""), this);
+		}
+		break;
 	case WM_RBUTTONUP:
 		{
 			// 显示托盘菜单

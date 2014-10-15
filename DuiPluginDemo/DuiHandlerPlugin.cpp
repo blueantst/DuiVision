@@ -4,7 +4,7 @@
 #define XML_ABOUT_DLG L"<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <dlg name=\"dlg_about\" title=\"MsgBox\" width=\"450\" height=\"230\" appwin=\"0\" >\
 	<base>\
-		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\"/>\
+		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\" shortcut=\"ESC\"/>\
 		<text name=\"title\" crtext=\"FFFFFF\" crmark=\"800000\" font=\"big\"\
 				pos=\"10,5,200,25\" title=\"¹ØÓÚ[APP_NAME]-²å¼þ\" mask=\"[APP_NAME]\" response=\"0\" />\
 	</base>\

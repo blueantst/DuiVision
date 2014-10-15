@@ -6,7 +6,7 @@
 #define XML_ABOUT_DLG L"<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <dlg name=\"dlg_about\" title=\"MsgBox\" width=\"450\" height=\"230\" appwin=\"0\" >\
 	<base>\
-		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\"/>\
+		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\" shortcut=\"ESC\"/>\
 		<text name=\"title\" crtext=\"FFFFFF\" crmark=\"800000\" font=\"big\"\
 				pos=\"10,5,200,25\" title=\"关于[APP_NAME]\" mask=\"[APP_NAME]\" response=\"0\" />\
 	</base>\
@@ -166,6 +166,13 @@ LRESULT CDuiHandlerMain::OnDuiMsgSkin(UINT uID, CString strName, UINT Msg, WPARA
 LRESULT CDuiHandlerMain::OnDuiMsgTrayIconDClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	DuiSystem::ShowDuiDialog(_T("dlg_login"), NULL);
+	return TRUE;
+}
+
+// 托盘左键单击消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgTrayIconLButtonDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	//DuiSystem::ShowDuiDialog(_T("dlg_about"), NULL);
 	return TRUE;
 }
 
