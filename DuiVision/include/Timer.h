@@ -22,8 +22,8 @@ public:
 	static UINT				m_uAccuracy;			// 定义分辨率 
 	static BOOL				m_bIsTmierOK;			// 是否可以定时 
 
-	BOOL GetTiemrIsRun(UINT uTimerID);
-	BOOL GetTiemrIsRun(CString strTimerName);
+	BOOL GetTimerIsRun(UINT uTimerID);
+	BOOL GetTimerIsRun(CString strTimerName);
 	CString GetTimerName(UINT uTimerID);
 	BOOL IsAppTimer(UINT uTimerID);
 	int SetTimer(UINT nTimerResolution, CString strTimerName = _T(""), BOOL bAppTimer = FALSE);

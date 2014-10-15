@@ -123,7 +123,7 @@ void CTimer::KillTimer()
 	m_vecTimer.clear();
 }
 
-BOOL CTimer::GetTiemrIsRun(UINT uTimerID) 
+BOOL CTimer::GetTimerIsRun(UINT uTimerID) 
 {
 	for(size_t i = 0; i < m_vecTimer.size(); i++)
 	{
@@ -135,7 +135,7 @@ BOOL CTimer::GetTiemrIsRun(UINT uTimerID)
 	return FALSE; 
 }
 
-BOOL CTimer::GetTiemrIsRun(CString strTimerName) 
+BOOL CTimer::GetTimerIsRun(CString strTimerName) 
 {
 	for(size_t i = 0; i < m_vecTimer.size(); i++)
 	{
