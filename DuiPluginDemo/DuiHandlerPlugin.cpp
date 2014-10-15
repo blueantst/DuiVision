@@ -42,6 +42,8 @@ CDuiHandlerPlugin::~CDuiHandlerPlugin(void)
 // 初始化
 void CDuiHandlerPlugin::OnInit()
 {
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiHandlerPlugin::OnInit");
+
 	// 启动动画定时器
 	m_uTimerAni = DuiSystem::AddDuiTimer(500);
 
@@ -51,9 +53,9 @@ void CDuiHandlerPlugin::OnInit()
 	{
 		CEdit* pEdit = new CEdit;
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_AUTOVSCROLL;
-		//pEdit->Create(dwStyle, CRect(0,0,0,0), pNativeWnd->GetPaintWnd(), 1111);
 		pEdit->Create(dwStyle, CRect(0,0,0,0), CWnd::FromHandle(m_pPanel->GetHWND()), 1111);
 		pNativeWnd->SetNativeWnd(pEdit);
+		DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiHandlerPlugin::OnInit create native edit control");
 
 		/*CListViewCtrlEx* pWndList = new CListViewCtrlEx;
 		DWORD dwStyle = WS_VISIBLE | WS_CHILD | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_SINGLESEL | LVS_OWNERDRAWFIXED;

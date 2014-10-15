@@ -125,6 +125,8 @@ int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc)
 		DuiSystem::RegisterHandler(m_pDuiPanel, pHandler);
 		// 加载插件界面文件
 		BOOL bRet = m_pDuiPanel->LoadXmlFile(A2W(lpszName));
+		// 事件处理对象初始化
+		pHandler->OnInit();
 		DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiPlugin::OnInit load %s %s", A2W(lpszName), bRet ? L"succ" : L"fail");
 	}
 
