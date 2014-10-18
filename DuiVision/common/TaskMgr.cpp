@@ -45,7 +45,7 @@ unsigned CTaskMgr::Run()
 		if(IsExited()) break;
 
 		IBaseTask *pTask;
-		while(!IsExited() && (pTask = GetTask()) != NULL)
+		while(!IsExited() && ((pTask = GetTask()) != NULL))
 		{
 			//
 			// 2.处理任务
