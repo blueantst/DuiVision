@@ -447,12 +447,19 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				}else
 				if (strTpl.indexOf('[duivision]') == 0) // DuiVision¿âÎÄ¼þ
 				{
-				    strTpl = 'DuiVision\\' + strTpl.substr(11);
+				    strTpl = '..\\..\\..\\..\\DuiVision\\' + strTpl.substr(11);
 					bCopyOnly = true;
 				}else
 				if (strTpl.indexOf('[bin]') == 0) // bin
 				{
-				    strTpl = 'bin\\' + strTpl.substr(5);
+					if( (strTpl == '[bin]xml\\resource.xml') ||
+						(strTpl == '[bin]xml\\duivision\\dlg_main.xml') )
+					{
+						strTpl = 'bin\\' + strTpl.substr(5);
+					}else
+					{
+						strTpl = '..\\..\\..\\..\\bin\\' + strTpl.substr(5);
+					}
 				    bCopyOnly = true;
 				}
 
