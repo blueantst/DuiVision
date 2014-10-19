@@ -32,7 +32,32 @@ QQ群：325880743 (Script.NET社区)
 
 下载DuiVision开发手册：[DuiVision开发手册.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20141007.pdf)
 
-### 一些界面截图
+## License
+
+(The MIT License)
+
+Copyright (c) 2013-2014 blueant studio. and other contributors
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## 一些界面截图
 ![主界面](http://www.blueantstudio.net/duivision/suolue/duivision_home.jpg)
 ![控件演示1](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl1.jpg)
 ![控件演示2](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl2.jpg)
@@ -45,7 +70,7 @@ QQ群：325880743 (Script.NET社区)
 ![Web控件](http://www.blueantstudio.net/duivision/suolue/duivision_webbrowser.jpg)
 ![菜单](http://www.blueantstudio.net/duivision/suolue/duivision_menu.jpg)
 
-### VC工程向导截图
+## VC工程向导截图
 ![选择工程模板](http://www.blueantstudio.net/duivision/suolue/wizard.jpg)
 ![向导第1步](http://www.blueantstudio.net/duivision/suolue/wizard_step1.jpg)
 ![向导第2步](http://www.blueantstudio.net/duivision/suolue/wizard_step2.jpg)
