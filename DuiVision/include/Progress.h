@@ -13,7 +13,7 @@ public:
 
 	int SetProgress(int nProgress);
 	int GetProgress() { return m_nProgress; }
-	int SetMaxProgress(int nMaxProgress) { m_nMaxProgress = nMaxProgress; }
+	void SetMaxProgress(int nMaxProgress) { m_nMaxProgress = nMaxProgress; }
 	int GetMaxProgress() { return m_nMaxProgress; }
 	BOOL SetRun(BOOL bRun, int nIndex = -1);
 	
