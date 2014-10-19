@@ -1,0 +1,11 @@
+DuiVision的基础代码有很多是从下面几个界面库移植的：
+1、仿PC管家程序 (http://blog.csdn.net/geniusice18/article/details/16369499)
+2、金山界面库
+3、DuiEngine
+4、DuiLib
+
+其他贡献者：
+blueant  : 移植代码，搭建DuiVision框架
+齐       ：XML库移植到pugixml、XML封装库
+蜡笔小新 ：完善VC向导。。。
+还有很多提出改进建议和改进方法的人，没有一一列出来
