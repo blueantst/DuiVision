@@ -1099,6 +1099,145 @@ CControlBase *CDlgPopup::GetControl(CString strControlName)
 	return NULL;
 }
 
+// 设置当前焦点控件
+void CDlgPopup::SetFocusControl(CControlBase* pFocusControl)
+{
+	if(pFocusControl != m_pFocusControl)
+	{
+		if(m_pFocusControl != NULL)
+		{
+			m_pFocusControl->OnFocus(FALSE);
+		}
+		if(pFocusControl != NULL)
+		{
+			pFocusControl->OnFocus(TRUE);
+		}
+		m_pFocusControl = pFocusControl;
+	}
+}
+
+// 获取当前焦点控件
+CControlBase* CDlgPopup::GetFocusControl()
+{
+	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && (pControlBase == m_pFocusControl) && pControlBase->IsTabStop())
+		{
+			return pControlBase;
+		}else
+		if (pControlBase && (pControlBase == m_pControl))
+		{
+			// 查找子控件
+			pControlBase = pControlBase->GetFocusControl(m_pFocusControl);
+			if(pControlBase != NULL)
+			{
+				return pControlBase;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+// 获取上一个可以获取焦点的子控件
+CControlBase* CDlgPopup::GetPrevFocusableControl()
+{
+	BOOL bStartSearch = FALSE;
+	// 先按照焦点控件查找一次
+	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && bStartSearch && pControlBase->IsTabStop())
+		{
+			return pControlBase;			
+		}else
+		if (pControlBase && (pControlBase == m_pFocusControl))
+		{
+			bStartSearch = TRUE;
+		}
+	}
+
+	// 再遍历子控件查找
+	if(m_pFocusControl == NULL)
+	{
+		bStartSearch = TRUE;
+	}
+	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if(m_pControl == NULL)
+		{
+			m_pControl = pControlBase;
+		}
+		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && bStartSearch && pControlBase->IsTabStop())
+		{
+			return pControlBase;			
+		}else
+		if (pControlBase && (pControlBase == m_pControl))
+		{
+			// 查找子控件
+			pControlBase = pControlBase->GetPrevFocusableControl(m_pFocusControl);
+			if(pControlBase != NULL)
+			{
+				return pControlBase;
+			}
+			//bStartSearch = TRUE;
+		}
+	}
+
+	return NULL;
+}
+
+// 获取下一个可以获取焦点的子控件
+CControlBase* CDlgPopup::GetNextFocusableControl()
+{
+	BOOL bStartSearch = FALSE;
+	// 先按照焦点控件查找一次
+	for (int i = 0; i < (int)m_vecControl.size(); i++)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && bStartSearch && pControlBase->IsTabStop())
+		{
+			return pControlBase;			
+		}else
+		if (pControlBase && (pControlBase == m_pFocusControl))
+		{
+			bStartSearch = TRUE;
+		}
+	}
+
+	// 再遍历子控件查找
+	if(m_pFocusControl == NULL)
+	{
+		bStartSearch = TRUE;
+	}
+	for (int i = 0; i < (int)m_vecControl.size(); i++)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if(m_pControl == NULL)
+		{
+			m_pControl = pControlBase;
+		}
+		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && bStartSearch && pControlBase->IsTabStop())
+		{
+			return pControlBase;			
+		}else
+		if (pControlBase && (pControlBase == m_pControl))
+		{
+			// 查找子控件
+			pControlBase = pControlBase->GetNextFocusableControl(m_pFocusControl);
+			if(pControlBase != NULL)
+			{
+				return pControlBase;
+			}
+			//bStartSearch = TRUE;
+		}
+	}
+
+	return NULL;
+}
+
 // 移动控件
 CControlBase * CDlgPopup::SetControlRect(UINT uControlID, CRect rc)
 {

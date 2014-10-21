@@ -136,6 +136,12 @@ public:
 
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 
+	void SetFocusControl(CControlBase* pFocusControl);
+	void SetFocusControlPtr(CControlBase* pFocusControl) { m_pFocusControl = pFocusControl; }	// 设置焦点控件指针
+	CControlBase* GetFocusControl();
+	CControlBase* GetPrevFocusableControl();
+	CControlBase* GetNextFocusableControl();
+
 	// 移动控件
 	virtual CControlBase * SetControlRect(UINT uControlID, CRect rc);
 	// 移动控件

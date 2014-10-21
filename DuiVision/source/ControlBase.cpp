@@ -1105,6 +1105,15 @@ BOOL CControlBase::RemoveControl(CControlBase* pControl)
 		CControlBase* pControlBase = *it;
 		if (pControlBase == pControl)
 		{
+			// 如果是焦点控件,则需要先将焦点设置为空
+			if(IsFocusControl())
+			{
+				CDlgBase* pDlg = GetParentDialog(FALSE);
+				if(pDlg)
+				{
+					pDlg->SetFocusControlPtr(NULL);
+				}
+			}
 			m_vecControl.erase(it);
 			delete pControlBase;
 			return TRUE;
@@ -1123,6 +1132,15 @@ BOOL CControlBase::RemoveControl(CString strControlName, UINT uControlID)
 		CControlBase* pControlBase = *it;
 		if (pControlBase && pControlBase->IsThisObject(uControlID, strControlName))
 		{
+			// 如果是焦点控件,则需要先将焦点设置为空
+			if(IsFocusControl())
+			{
+				CDlgBase* pDlg = GetParentDialog(FALSE);
+				if(pDlg)
+				{
+					pDlg->SetFocusControlPtr(NULL);
+				}
+			}
 			m_vecControl.erase(it);
 			delete pControlBase;
 			return TRUE;

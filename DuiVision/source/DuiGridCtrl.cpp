@@ -592,6 +592,21 @@ BOOL CDuiGridCtrl::DeleteRow(int nRow)
 		return FALSE;
 	}
 
+	// 查找行的所有单元格,删除对应的子控件对象
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+	{
+		GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+		vector<CControlBase*>::iterator it;
+		for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+		{
+			CControlBase* _pControl = *it;
+			// 删除单元格包含的子控件
+			RemoveControl(_pControl);
+		}
+	}
+
+	// 删除行信息
 	int nIndex = 0;
 	vector<GridRowInfo>::iterator it;
 	for(it=m_vecRowInfo.begin();it!=m_vecRowInfo.end();++it)
