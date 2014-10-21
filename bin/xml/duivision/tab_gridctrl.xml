@@ -42,7 +42,9 @@
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
 			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />
-			<item link="一键安装" linkaction="dlg:dlg_login"/>
+			<item>
+				<button name="grid_btn_delete" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="删除" tip="删除下一行" />
+			</item>
 		</row>
 		<row image="skins\icon\Movies.png" check="1">
 			<item title="迅雷看看" crtext="128,128,0" content="1.修复部分Bug" font-title="1" />

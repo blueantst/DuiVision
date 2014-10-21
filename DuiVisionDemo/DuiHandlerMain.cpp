@@ -461,6 +461,17 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT 
 	return TRUE;
 }
 
+// 表格控件的删除按钮子控件点击消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDelBtnClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 点击了表格控件的删除行按钮子控件
+	CDlgBase* pDlg = GetControlDialog(uID);
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
+	pGridCtrl->DeleteRow(3);
+	
+	return TRUE;
+}
+
 // 树控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
