@@ -1947,7 +1947,12 @@ public:
 	void DoAction()
 	{
 		// 每次都先删除旧的窗口,重新创建一次,否则窗口曾经被关闭过的话,响应消息会有问题
-		DuiSystem::Instance()->CreateNotifyMsgBox(_T("dlg_notifymsg"));
+		// 如果窗口已经被关闭了，则需要重新创建,否则响应消息会有问题
+		CDlgBase* pNotifyMsgBox = DuiSystem::Instance()->GetNotifyMsgBox();
+		if((pNotifyMsgBox == NULL) || !::IsWindow(pNotifyMsgBox->GetSafeHwnd()))
+		{
+			DuiSystem::Instance()->CreateNotifyMsgBox(_T("dlg_notifymsg"));
+		}
 
 		// 文字内容和标题
 		DuiSystem::SetNotifyMsgBoxControlTitle(_T("notify.text"), m_strMsg);
