@@ -11,9 +11,17 @@ public:
 	CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle= TEXT(""), int nLeft = 30, BOOL bSelect = false, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE, BOOL bIsPressDown = FALSE);
 	virtual ~CMenuItem(void);
 
+	// RadioButton操作
+	CString GetGroupName() { return m_strGroupName; }
+	void SetGroupName(CString strGroupName) { m_strGroupName = strGroupName; }
+	CString GetValue() { return m_strValue; }
+	CString GetGroupValue();
+
 	// 检查框状态
 	BOOL GetCheck();
 	BOOL SetCheck(BOOL bCheck);
+	void SetControlCheck(BOOL bCheck);
+	BOOL ResetGroupCheck();
 
 	// 是否分隔线
 	BOOL IsSeparator() { return m_bIsSeparator; }
@@ -60,11 +68,15 @@ public:
 	CString				m_strMenuXml;		// 嵌套菜单的XML文件
 	int					m_nLeft;			// 菜单项文字的左边距
 	int					m_nFrameWidth;		// 菜单项距离边框的宽度
+	CString				m_strGroupName;		// Radio组名字
+	CString				m_strValue;			// Radio值
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("select"), m_bSelect, FALSE)
 		DUI_INT_ATTRIBUTE(_T("separator"), m_bIsSeparator, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("menu"), m_strMenuXml, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("check"), OnAttributeCheck)
+		DUI_TSTRING_ATTRIBUTE(_T("group"), m_strGroupName, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strValue, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

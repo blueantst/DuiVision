@@ -33,6 +33,9 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect r
 
 	m_nLeft = nLeft;
 	m_nFrameWidth = 0;
+
+	m_strGroupName = _T("");
+	m_strValue = _T("");
 }
 
 CMenuItem::~CMenuItem(void)
@@ -199,9 +202,115 @@ BOOL CMenuItem::SetCheck(BOOL bCheck)
 	}
 	if(m_bDown != bDown)
 	{
+		// 如果组名非空,说明是radiobutton组,则刷新同一个组下面其他radiobtn
+		if(!m_strGroupName.IsEmpty())
+		{
+			ResetGroupCheck();
+		}
 		UpdateControl();
 	}
 	return m_bDown;
+}
+
+// 设置控件的选择状态,不会去设置其他控件的状态
+void CMenuItem::SetControlCheck(BOOL bCheck)
+{
+	m_bDown = bCheck;
+	m_enButtonState = bCheck ? enBSDown : enBSNormal;
+	UpdateControl();
+}
+
+// 刷新父控件下面所有同一个组的RadioButton控件的状态
+BOOL CMenuItem::ResetGroupCheck()
+{
+	CDuiObject* pParentObj = GetParent();
+	if(pParentObj == NULL)
+	{
+		return FALSE;
+	}
+
+	vector<CControlBase*>* pvecControl = NULL;
+	if(pParentObj->IsClass(_T("dlg")))
+	{
+		CDlgBase* pDlg = static_cast<CDlgBase*>(pParentObj);
+		pvecControl = pDlg->GetControls();
+	}else
+	if(pParentObj->IsClass(_T("popup")))
+	{
+		CDlgPopup* pDlg = static_cast<CDlgPopup*>(pParentObj);
+		pvecControl = pDlg->GetControls();
+	}else
+	{
+		CControlBase* pControlBase = static_cast<CControlBase*>(pParentObj);
+		pvecControl = pControlBase->GetControls();
+	}
+
+	if(pvecControl == NULL)
+	{
+		return FALSE;
+	}
+
+	for(int i=0; i<(int)pvecControl->size(); i++)
+	{
+		CControlBase* pControlBase = pvecControl->at(i);
+		if(pControlBase->IsClass(CMenuItem::GetClassName()) && pControlBase->GetVisible() && !pControlBase->GetDisable())
+		{
+			CMenuItem* pControl = static_cast<CMenuItem*>(pControlBase);
+			if((pControl->GetGroupName() == m_strGroupName) && (pControl != this))
+			{
+				// 重置控件状态
+				pControl->SetControlCheck(FALSE);
+			}
+		}
+	}
+
+	return TRUE;
+}
+
+// 获取所在Radio组选择的控件的值
+CString CMenuItem::GetGroupValue()
+{
+	CDuiObject* pParentObj = GetParent();
+	if(pParentObj == NULL)
+	{
+		return _T("");
+	}
+
+	vector<CControlBase*>* pvecControl = NULL;
+	if(pParentObj->IsClass(_T("dlg")))
+	{
+		CDlgBase* pDlg = static_cast<CDlgBase*>(pParentObj);
+		pvecControl = pDlg->GetControls();
+	}else
+	if(pParentObj->IsClass(_T("popup")))
+	{
+		CDlgPopup* pDlg = static_cast<CDlgPopup*>(pParentObj);
+		pvecControl = pDlg->GetControls();
+	}else
+	{
+		CControlBase* pControlBase = static_cast<CControlBase*>(pParentObj);
+		pvecControl = pControlBase->GetControls();
+	}
+
+	if(pvecControl == NULL)
+	{
+		return _T("");
+	}
+
+	for(int i=0; i<(int)pvecControl->size(); i++)
+	{
+		CControlBase* pControlBase = pvecControl->at(i);
+		if(pControlBase->IsClass(CMenuItem::GetClassName()) && pControlBase->GetVisible() && !pControlBase->GetDisable())
+		{
+			CMenuItem* pControl = static_cast<CMenuItem*>(pControlBase);
+			if((pControl->GetGroupName() == m_strGroupName) && pControl->GetCheck())
+			{
+				return pControl->GetValue();
+			}
+		}
+	}
+
+	return _T("");
 }
 
 // 从XML设置检查框属性
@@ -355,7 +464,15 @@ BOOL CMenuItem::OnControlLButtonUp(UINT nFlags, CPoint point)
 				}
 				if(m_bMouseDown)
 				{
-					m_bDown = !m_bDown;
+					// 如果组名非空,说明是radiobutton组,则刷新同一个组下面其他radiobtn
+					if(!m_strGroupName.IsEmpty())
+					{
+						m_bDown = true;
+						ResetGroupCheck();
+					}else
+					{
+						m_bDown = !m_bDown;
+					}
 					bSend = false;
 					bbDown = m_bDown;
 					bSelect = true;
