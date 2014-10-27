@@ -12,6 +12,11 @@
 	<menuitem name="restore_mainwnd" skin="" image="" title="恢复窗口" font="bold" action="show-window:dlg_main" />
 	<menuitem separator="1" skin="IDB_MENU_SEP" />
 	<menuitem name="menu_main" menu="menu_main" />
+	<menuitem name="menuitem_checkbox" skin="IDB_CHECK_BOX" select="1" check="true" title="检查框菜单" />
+	<menuitem name="menuitem_radio_1" skin="IDB_RADIO_BUTTON" select="1" title="RadioButton演示１"
+		check="true" group="menu_radio_group_1"  />
+	<menuitem name="menuitem_radio_2" skin="IDB_RADIO_BUTTON" select="1" title="RadioButton演示2"
+		check="false" group="menu_radio_group_1" />
 	<menuitem name="menuitem.sub" title="子菜单" width="150" skin="IDB_MENU_ARROW"
 		bkmode="frame" bkimg="skin:IDB_MENU_BACK" frame-width="3" top-height="0" bottom-height="0" >
 		<menuitem name="360safe" title="360安全卫士" action="dlg:dlg_login" />
