@@ -1106,10 +1106,11 @@ void CDlgBase::OnPaint()
 {
 	if (IsIconic())
 	{
-		// 最小化状态不用绘制图标
-		/*CPaintDC dc(this); // 用于绘制的设备上下文
+		// 最小化状态不用绘制图标,但必须创建CPaintDC,否则会因为WM_PAINT消息得不到正确处理导致不断出发,造成CPU占用率高
+		// CPaintDC的构造和析构函数会调用CWnd::BeginPaint和CWnd::EndPaint,完成WM_PAINT的处理
+		CPaintDC dc(this); // 用于绘制的设备上下文
 
- 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+ 		/*SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
 		// 使图标在工作区矩形中居中
 		int cxIcon = GetSystemMetrics(SM_CXICON);
