@@ -71,6 +71,8 @@ public:
 	CString				m_strGroupName;		// Radio组名字
 	CString				m_strValue;			// Radio值
 
+	Color				m_clrHover;			// 背景颜色(鼠标移动到行)
+
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("select"), m_bSelect, FALSE)
 		DUI_INT_ATTRIBUTE(_T("separator"), m_bIsSeparator, FALSE)
@@ -78,5 +80,6 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("check"), OnAttributeCheck)
 		DUI_TSTRING_ATTRIBUTE(_T("group"), m_strGroupName, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strValue, FALSE)
+		//DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrHover, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

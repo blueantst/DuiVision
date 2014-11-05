@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu title="Menu_3" width="150" item-height="25" framesize="30" left="30" frame-width="0"
+	crrowhover="255,196,196,196"
 	bkimg="skins\menu\menu_back.png" >
 
 	<menuitem name="restore_mainwnd" skin="" image="" title="恢复窗口" font="bold" action="show-window:dlg_main" />
