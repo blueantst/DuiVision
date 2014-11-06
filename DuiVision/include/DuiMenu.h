@@ -90,10 +90,11 @@ public:
 	CPoint		m_point;				// 菜单位置
 	CWnd*		m_pParent;				// 父窗口
 
-	Color		m_clrRowHover;			// 行背景颜色(鼠标移动到行)
+	Color		m_clrRowHover;			// 行背景颜色(鼠标移动到菜单项)
 
 	vector<MenuItemValue> m_vecMenuItemValue;	// 菜单项预设置信息
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(RowHover);	// 定义行背景图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("font"), m_strFont, FALSE)
@@ -105,5 +106,6 @@ public:
 		DUI_INT_ATTRIBUTE(_T("left"), m_nLeft, FALSE)
 		DUI_INT_ATTRIBUTE(_T("sep-height"), m_nSeparatorHeight, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-rowhover"), OnAttributeImageRowHover)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
