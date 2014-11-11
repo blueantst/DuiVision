@@ -20,6 +20,8 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrHover = Color(254, 71, 156, 235);	// 鼠标移动到行显示的背景色
 	m_pImageHover = NULL;
 	m_sizeHover = CSize(0, 0);
+	m_pImagePopupArrow = NULL;
+	m_sizePopupArrow = CSize(0, 0);
 }
 
 CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/*= TEXT("")*/, int nLeft/* = 30*/, BOOL bSelect/* = false*/,
@@ -44,6 +46,8 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect r
 	m_clrHover = Color(254, 71, 156, 235);	// 鼠标移动到行显示的背景色
 	m_pImageHover = NULL;
 	m_sizeHover = CSize(0, 0);
+	m_pImagePopupArrow = NULL;
+	m_sizePopupArrow = CSize(0, 0);
 }
 
 CMenuItem::~CMenuItem(void)
@@ -574,7 +578,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 		// 刷新图片的大小(因为m_bSelect选项有可能在SetBitmap之后有变化)
 		if(m_pImage != NULL)
 		{
-			if(m_bIsPopup)
+			if(m_bIsPopup && (m_pImagePopupArrow == NULL))
 			{
 				m_sizeImage.SetSize(m_pImage->GetWidth() / 2, m_pImage->GetHeight());
 			}else
@@ -615,9 +619,9 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 					TextureBrush tileBrush(m_pImage, WrapModeTile);
 					graphics.FillRectangle(&tileBrush, RectF((Gdiplus::REAL)rcTemp.left, (Gdiplus::REAL)(rcTemp.top + (nHeight - m_sizeImage.cy) / 2), (Gdiplus::REAL)(nWidth-m_nFrameWidth*2), (Gdiplus::REAL)m_sizeImage.cy));
 				}else
-				if(m_bIsPopup)
+				if(m_bIsPopup && (m_pImagePopupArrow == NULL))
 				{
-					// 如果是弹出菜单,则画右侧的箭头图片
+					// 如果是弹出菜单,并且没有设置菜单的箭头图片,则用菜单图片作为右侧的箭头图片
 					graphics.DrawImage(m_pImage, Rect(rcTemp.right - m_sizeImage.cx - 6, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
 						(i % 2) * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}else
@@ -626,6 +630,13 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImage.cx) / 2, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
 						i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}
+			}
+
+			// 如果是弹出菜单,并且设置了菜单的箭头图片,则画右侧的箭头图片
+			if(m_bIsPopup && (m_pImagePopupArrow != NULL))
+			{
+				graphics.DrawImage(m_pImagePopupArrow, Rect(rcTemp.right - m_sizePopupArrow.cx - 6, rcTemp.top + (nHeight - m_sizePopupArrow.cy) / 2, m_sizePopupArrow.cx, m_sizePopupArrow.cy),
+					(i % 2) * m_sizePopupArrow.cx, 0, m_sizePopupArrow.cx, m_sizePopupArrow.cy, UnitPixel);
 			}
 
 			rcTemp.OffsetRect(nWidth, 0);

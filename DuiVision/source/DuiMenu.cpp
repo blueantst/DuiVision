@@ -21,6 +21,8 @@ CDuiMenu::CDuiMenu(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, 
 	m_clrRowHover = Color(254, 71, 156, 235);	// 鼠标移动到行显示的背景色
 	m_pImageRowHover = NULL;
 	m_sizeRowHover = CSize(0, 0);
+	m_pImagePopupArrow = NULL;
+	m_sizePopupArrow = CSize(0, 0);
 }
 
 CDuiMenu::~CDuiMenu(void)
@@ -30,10 +32,16 @@ CDuiMenu::~CDuiMenu(void)
 		delete m_pImageRowHover;
 		m_pImageRowHover = NULL;
 	}
+	if(m_pImagePopupArrow != NULL)
+	{
+		delete m_pImagePopupArrow;
+		m_pImagePopupArrow = NULL;
+	}
 }
 
 // 图片属性的实现
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiMenu, RowHover, 1)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiMenu, PopupArrow, 2)
 
 BOOL CDuiMenu::Create(CWnd *pParent, CPoint point, UINT uMessageID, UINT nResourceID, int nFrameSize/* = 4*/, int nMinWidth/* = 112*/, enumBackMode enBackMode/* = enBMFrame*/)
 {
@@ -481,6 +489,12 @@ void CDuiMenu::SetMenuPoint()
 				}else
 				{
 					pMenuItem->m_clrHover = m_clrRowHover;	// 设置菜单项的背景色
+				}
+				// 设置菜单项的弹出菜单箭头图片
+				if(m_pImagePopupArrow != NULL)
+				{
+					pMenuItem->m_pImagePopupArrow = m_pImagePopupArrow;
+					pMenuItem->m_sizePopupArrow = m_sizePopupArrow;
 				}
 			}
 			SetControlRect(pControlBase, rc);

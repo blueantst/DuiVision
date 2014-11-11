@@ -74,6 +74,8 @@ public:
 	Color				m_clrHover;			// 背景颜色(鼠标移动到菜单项)
 	Image*				m_pImageHover;		// 背景图片(鼠标移动到菜单项)
 	CSize				m_sizeHover;		// 背景图片大小
+	Image*				m_pImagePopupArrow;	// 弹出菜单箭头图片
+	CSize				m_sizePopupArrow;	// 弹出菜单箭头图片大小
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("select"), m_bSelect, FALSE)

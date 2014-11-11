@@ -95,6 +95,7 @@ public:
 	vector<MenuItemValue> m_vecMenuItemValue;	// 菜单项预设置信息
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(RowHover);	// 定义行背景图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(PopupArrow);	// 定义弹出菜单箭头图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("font"), m_strFont, FALSE)
@@ -107,5 +108,6 @@ public:
 		DUI_INT_ATTRIBUTE(_T("sep-height"), m_nSeparatorHeight, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-rowhover"), OnAttributeImageRowHover)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-popuparrow"), OnAttributeImagePopupArrow)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
