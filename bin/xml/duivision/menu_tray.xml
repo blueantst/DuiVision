@@ -2,6 +2,7 @@
 <menu title="TrayMenu" width="250" item-height="25" left="30"
 	frame-width="0" top-height="72" bottom-height="30"
 	bkmode="mid" width-lt="5" height-lt="70" width-rb="5" height-rb="30"
+	img-popuparrow="skin:IDB_MENU_ARROW"
 	bkimg="skins\menu\360TrayMenu_218.png" >
 
 	<text pos="10,5,-10,25" crtext="FFFFFF" font="bold" title="DUI托盘菜单" />
@@ -17,11 +18,11 @@
 		check="true" group="menu_radio_group_1"  />
 	<menuitem name="menuitem_radio_2" skin="IDB_RADIO_BUTTON" select="1" title="RadioButton演示2"
 		check="false" group="menu_radio_group_1" />
-	<menuitem name="menuitem.sub" title="子菜单" width="150" skin="IDB_MENU_ARROW"
+	<menuitem name="menuitem.sub" title="子菜单1" width="150" skin="IDB_MENU_AUTH" img-count="3"
 		bkmode="frame" bkimg="skin:IDB_MENU_BACK" frame-width="3" top-height="0" bottom-height="0" >
 		<menuitem name="360safe" title="360安全卫士" action="dlg:dlg_login" />
 		<menuitem name="360sd" title="360杀毒" action="dlg:dlg_login" />
-		<menuitem name="menuitem.360.sub1" title="360工具" width="150" skin="IDB_MENU_ARROW"
+		<menuitem name="menuitem.360.sub1" title="360工具" width="150"
 			bkmode="frame" bkimg="skin:IDB_MENU_BACK" frame-width="3" top-height="0" bottom-height="0" >
 			<menuitem name="360driver" title="360驱动修复" action="dlg:dlg_login" />
 			<menuitem name="360soft" title="360软件管家" action="dlg:dlg_login" />
@@ -30,11 +31,11 @@
 	<menuitem name="menuitem.runtest" title="执行进程" action="run:{platpath}DuiVisionDemo.2008d.exe|testcmd" />
 	<menuitem separator="1" skin="IDB_MENU_SEP" />
 	<menuitem name="item_help" skin="IDB_MENU_HELP" img-count="3" title="帮助" action="link:http://www.blueantstudio.net" />
-	<menuitem name="menuitem.sub1" title="子菜单" width="150" skin="IDB_MENU_ARROW"
+	<menuitem name="menuitem.sub1" title="子菜单2" width="150"
 		bkmode="frame" bkimg="skin:IDB_MENU_BACK" frame-width="3" top-height="0" bottom-height="0" >
 		<menuitem name="360safe1" title="360安全卫士" action="dlg:dlg_login" />
 		<menuitem name="360sd1" title="360杀毒" action="dlg:dlg_login" />
-		<menuitem name="menuitem.360.sub2" title="360工具" width="150" skin="IDB_MENU_ARROW"
+		<menuitem name="menuitem.360.sub2" title="360工具" width="150"
 			bkmode="frame" bkimg="skin:IDB_MENU_BACK" frame-width="3" top-height="0" bottom-height="0" >
 			<menuitem name="360driver1" title="360驱动修复" action="dlg:dlg_login" />
 			<menuitem name="360soft1" title="360软件管家" action="dlg:dlg_login" />
