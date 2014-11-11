@@ -20,7 +20,7 @@ DuiVision开源下载地址：https://github.com/blueantst/DuiVision
 
 作者Blog：[http://blog.csdn.net/oceanheart](http://blog.csdn.net/oceanheart)
 
-QQ群：325880743 (Script.NET社区)
+QQ群：325880743 (Script.NET&DuiVision社区)
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
 
