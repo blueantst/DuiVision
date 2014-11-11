@@ -77,3 +77,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ![向导第3步](http://www.blueantstudio.net/duivision/suolue/wizard_step3.jpg)
 ![向导第4步](http://www.blueantstudio.net/duivision/suolue/wizard_step4.jpg)
 
+## 贡献者名单
+DuiVision的基础代码有很多是从下面几个界面库移植的：
+- 仿PC管家程序 (http://blog.csdn.net/geniusice18/article/details/16369499)
+- 金山界面库
+- DuiEngine
+- DuiLib
+
+其他贡献者：
+- blueant  : 移植代码，搭建DuiVision框架
+- 齐       : XML库移植到pugixml、XML封装库等
+- 蜡笔小新 : 完善VC向导...
+
+还有很多提出改进建议和改进方法的人，没有一一列出来，欢迎大家参与这个开源项目，共同完善。
