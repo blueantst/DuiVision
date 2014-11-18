@@ -168,10 +168,19 @@ width-lt,height-lt,width-rb,height-rb" />
 				<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
 			</combobox>
 
-			<text pos="300,130,500,150" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
-			<rect pos="300,160,600,300" response="0" color="808080" />
+			<combobox name="下拉列表框3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+					left-image="skins\simage\search_normal.png"
+					value="local" tip="查找应用程序" font="bold" readonly="0"
+					pos="300,100" width="300" height="28" title="Script.NET" >
+				<item name="Script.NET" value="1" image="skins\simage\forum.png" />
+				<item name="Notepad++" value="2" image="skins\simage\forum.png" />
+				<item name="为知笔记" value="3" crtext="800000" image="skins\simage\forum.png" />
+			</combobox>
+			
+			<text pos="300,140,500,160" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
+			<rect pos="300,170,600,300" response="0" color="808080" />
 			<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
-				pos="301,161,599,299" tip="原生窗口控件"  />
+				pos="301,171,599,299" tip="原生窗口控件"  />
 
 		</tab>
 		
