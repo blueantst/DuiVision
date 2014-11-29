@@ -102,6 +102,8 @@ public:
 	BOOL LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName);
 	// 加载图片文件,支持从zip文件中加载
 	BOOL LoadImageFile(CString strFileName, BOOL useEmbeddedColorManagement, Image*& pImage);
+	// 加载图片文件,支持从zip文件中加载
+	BOOL LoadBitmapFile(CString strFileName, CBitmap &bitmap, CSize &size);
 	// 加载界面插件动态库
 	BOOL LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj);
 	// 获取系统配置信息

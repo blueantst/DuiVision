@@ -173,9 +173,9 @@ public:
 	
 	// 初始化窗口背景皮肤
 	void InitWindowBkSkin();
-	// 加载图片
-	void LoadImage(UINT nIDResource, CString strType = TEXT("PNG"));
-	void LoadImage(CString strFileName);
+	// 加载窗口背景图片
+	void LoadBackgroundImage(UINT nIDResource, CString strType = TEXT("PNG"));
+	void LoadBackgroundImage(CString strFileName);
 	// 初始化窗口控件的默认值
 	void InitUIState();
 	// 设置不规则窗体区域

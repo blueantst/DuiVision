@@ -323,12 +323,12 @@ BOOL CDlgBase::OnInitDialog()
 
 		if(strBkSkin.Find(_T(".")) != -1)	// 加载图片文件
 		{
-			CString strImgFile = DuiSystem::GetSkinPath() + strBkSkin;
-			LoadImage(strImgFile);
+			CString strImgFile = strBkSkin;
+			LoadBackgroundImage(strImgFile);
 		}else	// 加载图片资源
 		{
 			UINT nResourceID = _wtoi(strBkSkin);
-			LoadImage(nResourceID, TEXT("PNG"));
+			LoadBackgroundImage(nResourceID, TEXT("PNG"));
 		}
 	}else
 	if(m_crlBack != RGB(0,0,0))	// 如果窗口设置了背景颜色属性，就用此背景颜色
@@ -914,7 +914,7 @@ void CDlgBase::InitWindowBkSkin()
 	{
 		if(nType == BKTYPE_IMAGE_RESOURCE)	// 图片资源
 		{
-			LoadImage(nIDResource);
+			LoadBackgroundImage(nIDResource);
 		}else
 		if(nType == BKTYPE_COLOR)	// 颜色
 		{
@@ -922,14 +922,13 @@ void CDlgBase::InitWindowBkSkin()
 		}else
 		if(nType == BKTYPE_IMAGE_FILE)	// 图片文件
 		{
-			LoadImage(strImgFile);
+			LoadBackgroundImage(strImgFile);
 		}
 	}else
 	{
 		// 默认加载第一张背景图片
 		CString strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
-		strImgFile = DuiSystem::GetSkinPath() + strImgFile;
-		LoadImage(strImgFile);
+		LoadBackgroundImage(strImgFile);
 	}
 }
 
@@ -949,7 +948,7 @@ void CDlgBase::OnDropFiles(HDROP hDropInfo)
 		strFileName = strFileName.Right(3);
 		if (0 == strFileName.CompareNoCase(TEXT("bmp")) || 0 == strFileName.CompareNoCase(TEXT("jpg")) || 0 == strFileName.CompareNoCase(TEXT("png")))
 		{
-			LoadImage(szFileName);
+			LoadBackgroundImage(szFileName);
 			// 保存背景信息
 			DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), szFileName);
 			// 刷新所有窗口的背景皮肤
@@ -960,18 +959,22 @@ void CDlgBase::OnDropFiles(HDROP hDropInfo)
 	// CDialog::OnDropFiles(hDropInfo);
 }
 
-void CDlgBase::LoadImage(UINT nIDResource, CString strType)
+// 加载窗口背景图片(从资源加载)
+void CDlgBase::LoadBackgroundImage(UINT nIDResource, CString strType)
 {
 	CBitmap bitBackground;
-	::LoadImage(nIDResource, bitBackground, m_sizeBKImage, strType);	
-	DrawBackground(bitBackground);	
+	LoadBitmapFromIDResource(nIDResource, bitBackground, m_sizeBKImage, strType);	
+	DrawBackground(bitBackground);
 }
 
-void CDlgBase::LoadImage(CString strFileName)
+// 加载窗口背景图片(从文件或zip资源加载)
+void CDlgBase::LoadBackgroundImage(CString strFileName)
 {
 	CBitmap bitBackground;
-	::LoadImage(strFileName, bitBackground, m_sizeBKImage);	
-	DrawBackground(bitBackground);	
+	if(DuiSystem::Instance()->LoadBitmapFile(strFileName, bitBackground, m_sizeBKImage))
+	{
+		DrawBackground(bitBackground);
+	}
 }
 
 // 画背景图片
@@ -1693,8 +1696,8 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 			else if(pSelectInfo->nType == BKTYPE_IMAGE_RESOURCE)
 			{
 				CString strImgFile;
-				strImgFile.Format(_T("%s\\SKIN_PIC_%d.png"), DuiSystem::GetExePath() + _T("bkimg"), pSelectInfo->uIndex);
-				LoadImage(strImgFile);
+				strImgFile.Format(_T("%s\\SKIN_PIC_%d.png"), _T("bkimg"), pSelectInfo->uIndex);
+				LoadBackgroundImage(strImgFile);
 				// 保存背景信息
 				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), strImgFile);
 				// 刷新所有窗口的背景皮肤
@@ -1718,7 +1721,7 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
  			CString strFileType = strFileName.Right(3);
  			if (0 == strFileType.CompareNoCase(TEXT("bmp")) || 0 == strFileType.CompareNoCase(TEXT("jpg")) || 0 == strFileType.CompareNoCase(TEXT("png")))
  			{
- 				LoadImage(strFileName);
+ 				LoadBackgroundImage(strFileName);
 				// 保存背景信息
 				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), strFileName);
 				// 刷新所有窗口的背景皮肤

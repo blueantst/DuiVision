@@ -1,9 +1,11 @@
 #pragma once
 
-// 加载图片
-BOOL LoadImage(const CString strPathFile, CBitmap &bitmap, CSize &size);
-// 读取图片
-BOOL LoadImage(UINT nID, CBitmap &bitmap, CSize &size, CString strType);
+// 读取图片(从文件读)
+BOOL LoadBitmapFromFile(const CString strPathFile, CBitmap &bitmap, CSize &size);
+// 读取图片(从资源读)
+BOOL LoadBitmapFromIDResource(UINT nID, CBitmap &bitmap, CSize &size, CString strType);
+// 读取图片(从内存中加载)
+BOOL LoadBitmapFromMem(BYTE* pByte, DWORD dwSize, CBitmap &bitmap, CSize &size);
 // 从资源中加载图片
 BOOL ImageFromIDResource(UINT nID, CString strType, Image * & pImg);
 // 加载图片文件到内存中

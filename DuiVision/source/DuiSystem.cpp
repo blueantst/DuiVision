@@ -671,6 +671,55 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 	return bRet;
 }
 
+// 加载图片文件,支持从zip文件中加载
+BOOL DuiSystem::LoadBitmapFile(CString strFileName, CBitmap &bitmap, CSize &size)
+{
+	BOOL bRet = FALSE;
+	if(m_hResourceZip != NULL)	// 存在资源zip文件
+	{
+		// 即使有zip文件的情况下,也优先使用目录中的文件
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从skin路径开始查找
+		{
+			bRet = LoadBitmapFromFile(DuiSystem::GetSkinPath() + strFileName, bitmap, size);
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			bRet = LoadBitmapFromFile(strFileName, bitmap, size);
+		}else
+		{
+			DWORD dwSize = 0;
+			BYTE* pByte = LoadZipFile(strFileName, dwSize);
+			if(pByte == NULL)
+			{
+				pByte = LoadZipFile(_T("skins\\") + strFileName, dwSize);	// 尝试从skins子目录加载
+			}
+			if(pByte != NULL)
+			{
+				bRet = LoadBitmapFromMem(pByte, dwSize, bitmap, size);
+				delete[] pByte;
+			}else
+			{
+				return FALSE;
+			}
+		}
+	}else
+	{
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从skin路径开始查找
+		{
+			bRet = LoadBitmapFromFile(DuiSystem::GetSkinPath() + strFileName, bitmap, size);
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			bRet = LoadBitmapFromFile(strFileName, bitmap, size);
+		}else
+		{
+			// 文件不存在
+			return FALSE;
+		}
+	}
+	return bRet;
+}
+
 // 加载界面插件动态库
 // 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到exe目录加载
 // 格式2: filename.dll				-- 指定文件名,到exe目录加载
