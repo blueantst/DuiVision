@@ -52,7 +52,14 @@ enum OSPack
     SP6,
     SP7,
     SP8
- };
+};
+
+// 内存文件信息定义
+struct MemFileInfo
+{
+	BYTE*	pByte;	// 缓冲区指针
+	DWORD	dwSize;	// 缓冲区大小
+};
 
 class CDlgPopup;
 class CTaskMgr;
@@ -98,6 +105,12 @@ public:
 	HZIP GetResourceHZip() { return m_hResourceZip; }
 	// 加载ZIP资源文件
 	BYTE* LoadZipFile(CString strFile, DWORD& dwSize);
+	// 获取缓存的内存文件信息
+	BOOL GetCachedMemFile(CString strFile, MemFileInfo& memFile);
+	// 设置缓存的内存文件信息
+	void SetCachedMemFile(CString strFile, MemFileInfo& memFile);
+	// 清除所有内存文件缓存
+	void ClearAllCachedMemFile();
 	// 加载XML文件,支持从zip文件中加载
 	BOOL LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName);
 	// 加载图片文件,支持从zip文件中加载
@@ -217,6 +230,7 @@ protected:
 	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapSkinPool;			// Skin池
 	CMap<CString,LPCTSTR,CString,LPCTSTR> m_mapStringPool;			// 字符串池
 	CMap<CString,LPCTSTR,DuiFontInfo,DuiFontInfo&> m_mapFontPool;	// 字体池
+	CMap<CString,LPCTSTR,MemFileInfo,MemFileInfo&> m_mapMemFileCatch;	// 内存文件缓存
 	
 	HINSTANCE				m_hInst;
 	UINT					m_uAppID;								// 应用ID
