@@ -79,7 +79,7 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 
 				if(strImage.Find(_T(".")) != -1)	// 加载图片文件
 				{
-					CString strImgFile = DuiSystem::GetExePath() + strImage;
+					CString strImgFile = strImage;
 					SetBitmap(strImgFile);
 				}else	// 加载图片资源
 				{
