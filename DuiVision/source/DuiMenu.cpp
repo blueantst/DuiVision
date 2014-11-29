@@ -632,6 +632,12 @@ LRESULT CDuiMenu::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 	if(Msg == MSG_BUTTON_UP)
 	{
+		// 如果点击的是弹出菜单,则不用关闭
+		if(pControl && pControl->IsClass(CMenuItem::GetClassName()) && ((CMenuItem*)pControl)->IsPopup())
+		{
+			return 0;
+		}
+
 		// 如果有父菜单,将父菜单关闭,不采用直接关闭的方法,而是设置自动关闭标识,并通过鼠标事件触发自动关闭
 		CDuiMenu* pParentMenu = GetParentMenu();
 		if(pParentMenu && !pParentMenu->IsAutoClose())
