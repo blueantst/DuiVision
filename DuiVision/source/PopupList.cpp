@@ -83,11 +83,12 @@ BOOL CPopupList::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 				{
 					if(strImage.Find(_T("skin:")) == 0)
 					{
+						strImage = DuiSystem::Instance()->GetSkin(strImage);
 					}
 
 					if(strImage.Find(_T(".")) != -1)	// 加载图片文件
 					{
-						strImage = DuiSystem::GetExePath() + strImage;
+						//strImage = DuiSystem::GetExePath() + strImage;
 					}else	// 加载图片资源
 					{
 						nResourceID = _wtoi(strImage);

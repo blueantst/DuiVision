@@ -134,10 +134,10 @@ int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, in
 
 		if(strImage.Find(_T(".")) != -1)	// 图片文件
 		{
-			if(strImage.Find(_T(":")) == -1)
+			/*if(strImage.Find(_T(":")) == -1)
 			{
 				strImage = DuiSystem::GetExePath() + strImage;
-			}
+			}*/
 		}else	// 加载图片资源
 		{
 			nResourceID = _wtoi(strImage);
