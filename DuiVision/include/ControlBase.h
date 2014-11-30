@@ -89,6 +89,7 @@ public:
 	HRESULT OnAttributeHeight(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeMenuPosChange(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeShortcut(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeDisable(const CString& strValue, BOOL bLoading);
 	
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
@@ -217,7 +218,7 @@ protected:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
         //DUI_STYLE_ATTRIBUTE("class", m_style, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("show"), m_bIsVisible, TRUE)
-		DUI_BOOL_ATTRIBUTE(_T("disable"), m_bIsDisable, TRUE)
+		DUI_CUSTOM_ATTRIBUTE(_T("disable"), OnAttributeDisable)
 		DUI_BOOL_ATTRIBUTE(_T("response"), m_bRresponse, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("tabstop"), m_bTabStop, TRUE)
 		DUI_CUSTOM_ATTRIBUTE(_T("pos"), OnAttributePosChange)
