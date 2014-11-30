@@ -363,7 +363,7 @@ void CDlgPopup::SetFrameSize(int nFrameSize)
 
 void CDlgPopup::SetBackBitmap(UINT nResourceID)
 {
-	if(ImageFromIDResource(nResourceID, TEXT("PNG"), m_pImage))
+	if(LoadImageFromIDResource(nResourceID, TEXT("PNG"), m_bImageUseECM, m_pImage))
 	{
 		m_sizeBKImage.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
 		//DrawWindow();

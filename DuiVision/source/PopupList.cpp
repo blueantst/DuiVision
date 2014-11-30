@@ -232,7 +232,7 @@ int CPopupList::AddItem(CString strName, CString strDesc, CString strValue, int 
  	}
 	if(editListItem.pImage == NULL || editListItem.pImage->GetLastStatus() != Ok)
 	{
-		if(ImageFromIDResource(editListItem.nResourceID, _T("PNG"), editListItem.pImage))
+		if(LoadImageFromIDResource(editListItem.nResourceID, _T("PNG"), m_bImageUseECM, editListItem.pImage))
 		{
 			editListItem.sizeImage.SetSize(editListItem.pImage->GetWidth(), editListItem.pImage->GetHeight());
 		}

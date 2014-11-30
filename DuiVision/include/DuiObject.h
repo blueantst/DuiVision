@@ -237,7 +237,7 @@ public:                                                             \
 			m_pImage##imgName = NULL;	\
 		}	\
 		\
-		if(ImageFromIDResource(nResourceID, strType, m_pImage##imgName))	\
+		if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, m_pImage##imgName))	\
 		{	\
 			m_size##imgName.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
 			return true;	\

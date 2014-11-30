@@ -113,7 +113,7 @@ BOOL CSelectBox::SetBitmap(UINT nResourceID, int nIndex, CString strType)
 			pImage = NULL;
 		}
 
-		if(ImageFromIDResource(nResourceID, strType, pImage))
+		if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, pImage))
 		{
 			m_vecsizeImage[nIndex].SetSize(pImage->GetWidth(), pImage->GetHeight());
 			UpdateControl(true);
@@ -123,7 +123,7 @@ BOOL CSelectBox::SetBitmap(UINT nResourceID, int nIndex, CString strType)
 	else if(nIndex == -1 && (int)m_vecpImage.size() < m_nXCount * m_nYCount)
 	{
 		Image *pImage = NULL;
-		if(ImageFromIDResource(nResourceID, strType, pImage))
+		if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, pImage))
 		{
 			CSize sizeImage(pImage->GetWidth(), pImage->GetHeight());
 

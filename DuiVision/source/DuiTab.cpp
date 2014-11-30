@@ -338,7 +338,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, UINT nItemID, CString strName, CString s
 	}
 	itemInfo.nImageIndex = -1;
 
-	if(ImageFromIDResource(nResourceID, strType, itemInfo.pImage))
+	if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, itemInfo.pImage))
 	{
 		itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / itemInfo.nImageCount, itemInfo.pImage->GetHeight());
 	}

@@ -92,7 +92,7 @@ BOOL CScrollV::SetBitmap(UINT nResourceID, CString strType)
 		m_pImage = NULL;
 	}
 
-	if(ImageFromIDResource(nResourceID, strType, m_pImage))
+	if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, m_pImage))
 	{
 		m_sizeImage.SetSize(m_pImage->GetWidth() / 4, m_pImage->GetHeight() / 3);
 		return true;
