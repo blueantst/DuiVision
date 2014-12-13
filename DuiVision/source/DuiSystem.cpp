@@ -276,7 +276,7 @@ BOOL DuiSystem::LoadResource()
 	ClearAllCachedMemFile();
 
 	CString strResFile = GetExePath() + m_strResourceFile;
-	if(strResFile.Find(_T(".ui")) != -1)
+	if(strResFile.Find(_T(".ui")) != -1)	// 从文件加载zip包
 	{
 		// 如果是后缀为ui的文件,表示是ZIP文件,则加载资源ZIP文件
 		if(GetFileAttributes(strResFile) != 0xFFFFFFFF)
@@ -286,7 +286,7 @@ BOOL DuiSystem::LoadResource()
 				CloseZip(m_hResourceZip);
 				m_hResourceZip = NULL;
 			}
-			m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, 2);
+			m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, ZIP_FILENAME);
 			if(m_hResourceZip != NULL)
 			{
 				// 如果加载的ZIP资源，则不使用绝对路径加载XML资源定义文件
@@ -295,6 +295,45 @@ BOOL DuiSystem::LoadResource()
 		}else
 		{
 			// zip资源文件不存在,则设置为默认的xml文件
+			m_strResourceFile = _T("xml\\resource.xml");
+			strResFile = m_strResourceFile;
+		}
+	}else
+	if(m_strResourceFile.Find(_T("res:")) == 0)	// 从资源中加载zip包
+	{
+		strResFile = m_strResourceFile;
+		strResFile.Delete(0, 4);
+		UINT nID = _wtoi(strResFile);
+		if(nID != 0)
+		{
+			// 读取资源
+			HINSTANCE hInst = AfxGetResourceHandle();  
+			HRSRC hRsrc = ::FindResource (hInst,MAKEINTRESOURCE(nID), L"UI");
+			if(hRsrc != NULL)
+			{
+				DWORD dwResFileSize = SizeofResource(hInst, hRsrc);  
+				BYTE* lpRsrc = (BYTE*)::LoadResource(hInst, hRsrc);
+
+				if(m_hResourceZip != NULL)
+				{
+					CloseZip(m_hResourceZip);
+					m_hResourceZip = NULL;
+				}
+				m_hResourceZip = OpenZip((void*)lpRsrc, dwResFileSize, ZIP_MEMORY);
+				if(m_hResourceZip != NULL)
+				{
+					// 如果加载的ZIP资源，则不使用绝对路径加载XML资源定义文件
+					strResFile = _T("xml\\resource.xml");			
+				}
+			}else
+			{
+				// zip资源不存在,则设置为默认的xml文件
+				m_strResourceFile = _T("xml\\resource.xml");
+				strResFile = m_strResourceFile;
+			}
+		}else
+		{
+			// zip资源不存在,则设置为默认的xml文件
 			m_strResourceFile = _T("xml\\resource.xml");
 			strResFile = m_strResourceFile;
 		}
@@ -332,7 +371,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 			if(pByte != NULL)
 			{
 				xmlResult = xmlDoc.load(CA2T((char*)pByte, CP_UTF8), NULL);
-				delete[] pByte;
+				//delete[] pByte;
 			}else
 			{
 				return FALSE;
