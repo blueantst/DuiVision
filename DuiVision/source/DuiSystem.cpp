@@ -275,6 +275,7 @@ BOOL DuiSystem::LoadResource()
 	// 释放图片缓存
 	ClearAllCachedMemFile();
 
+	// 加载zip资源文件
 	CString strResFile = GetExePath() + m_strResourceFile;
 	if(strResFile.Find(_T(".ui")) != -1)	// 从文件加载zip包
 	{
@@ -286,7 +287,30 @@ BOOL DuiSystem::LoadResource()
 				CloseZip(m_hResourceZip);
 				m_hResourceZip = NULL;
 			}
-			m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, ZIP_FILENAME);
+			// 将zip文件先整体加载到内存中,再通过内存的方式解压,这样可以提高加载速度
+			CFile file;
+			DWORD dwSize = 0;
+			char *pData = NULL;
+			if(file.Open(strResFile, CFile::modeRead | CFile::shareDenyWrite))
+			{
+				dwSize = (DWORD)file.GetLength();
+				HGLOBAL hGlobal = GlobalAlloc( GMEM_MOVEABLE | GMEM_NODISCARD, dwSize );
+				if(hGlobal)
+				{
+					pData = reinterpret_cast<char*>(GlobalLock(hGlobal));
+					if(pData)
+					{
+						file.Read( pData, dwSize );
+					}
+					GlobalUnlock( hGlobal );
+				}
+				file.Close();
+			}
+			if(pData)
+			{
+				m_hResourceZip = OpenZip((void*)pData, dwSize, ZIP_MEMORY);
+			}
+			//m_hResourceZip = OpenZip((void*)(LPCTSTR)strResFile, 0, ZIP_FILENAME);
 			if(m_hResourceZip != NULL)
 			{
 				// 如果加载的ZIP资源，则不使用绝对路径加载XML资源定义文件
@@ -303,7 +327,7 @@ BOOL DuiSystem::LoadResource()
 	{
 		strResFile = m_strResourceFile;
 		strResFile.Delete(0, 4);
-		UINT nID = _wtoi(strResFile);
+		UINT nID = _wtoi(strResFile);	// res:后面的表示资源ID
 		if(nID != 0)
 		{
 			// 读取资源
