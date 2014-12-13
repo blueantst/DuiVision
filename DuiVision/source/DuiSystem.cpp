@@ -745,7 +745,7 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 	if(m_hResourceZip != NULL)	// 存在资源zip文件
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
-		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从skin路径开始查找
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
 			bRet = LoadImageFromFile(DuiSystem::GetSkinPath() + strFileName, useEmbeddedColorManagement, pImage);
 		}else
@@ -771,7 +771,7 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 		}
 	}else
 	{
-		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从skin路径开始查找
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
 			bRet = LoadImageFromFile(DuiSystem::GetSkinPath() + strFileName, useEmbeddedColorManagement, pImage);
 		}else
@@ -794,7 +794,7 @@ BOOL DuiSystem::LoadBitmapFile(CString strFileName, CBitmap &bitmap, CSize &size
 	if(m_hResourceZip != NULL)	// 存在资源zip文件
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
-		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从skin路径开始查找
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
 			bRet = LoadBitmapFromFile(DuiSystem::GetSkinPath() + strFileName, bitmap, size);
 		}else
@@ -820,13 +820,62 @@ BOOL DuiSystem::LoadBitmapFile(CString strFileName, CBitmap &bitmap, CSize &size
 		}
 	}else
 	{
-		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从skin路径开始查找
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
 			bRet = LoadBitmapFromFile(DuiSystem::GetSkinPath() + strFileName, bitmap, size);
 		}else
 		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
 		{
 			bRet = LoadBitmapFromFile(strFileName, bitmap, size);
+		}else
+		{
+			// 文件不存在
+			return FALSE;
+		}
+	}
+	return bRet;
+}
+
+// 加载图标文件,支持从zip文件中加载
+BOOL DuiSystem::LoadIconFile(CString strFileName, HICON& hIcon)
+{
+	BOOL bRet = FALSE;
+	if(m_hResourceZip != NULL)	// 存在资源zip文件
+	{
+		// 即使有zip文件的情况下,也优先使用目录中的文件
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			bRet = LoadIconFromFile(DuiSystem::GetSkinPath() + strFileName, hIcon);
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			bRet = LoadIconFromFile(strFileName, hIcon);
+		}else
+		{
+			DWORD dwSize = 0;
+			BYTE* pByte = LoadZipFile(strFileName, dwSize);
+			if(pByte == NULL)
+			{
+				pByte = LoadZipFile(_T("skins\\") + strFileName, dwSize);	// 尝试从skins子目录加载
+			}
+			if(pByte != NULL)
+			{
+				bRet = LoadIconFromMem(pByte, dwSize, hIcon);
+				//delete[] pByte;
+			}else
+			{
+				return FALSE;
+			}
+		}
+	}else
+	{
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			bRet = LoadIconFromFile(DuiSystem::GetSkinPath() + strFileName, hIcon);
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			bRet = LoadIconFromFile(strFileName, hIcon);
 		}else
 		{
 			// 文件不存在
@@ -2315,13 +2364,11 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 
 	if(strTrayIcon.Find(_T(".")) != -1)	// 加载图标文件
 	{
-		CString strIconFile = DuiSystem::GetSkinPath() + strTrayIcon;
-		WORD wIndex = 0;
-		m_NotifyIconData.hIcon = ::ExtractAssociatedIcon(m_hInst, strIconFile.GetBuffer(0), &wIndex);
+		DuiSystem::Instance()->LoadIconFile(strTrayIcon, m_NotifyIconData.hIcon);
 	}else	// 加载图标资源
 	{
 		UINT nResourceID = _wtoi(strTrayIcon);
-		m_NotifyIconData.hIcon = AfxGetApp()->LoadIcon(nResourceID);
+		LoadIconFromIDResource(nResourceID, m_NotifyIconData.hIcon);
 	}
 
 	CString sWindowText = DuiSystem::Instance()->GetString(_T("APP_NAME"));
@@ -2372,24 +2419,13 @@ BOOL DuiSystem::SetTrayIcon(CString strIcon)
 			m_NotifyIconData.hIcon = NULL;
 		}
 
-		if(strIcon.Find(_T(":")) == -1)
+		if(strIcon.Find(_T(".")) != -1)	// 加载图标文件
 		{
-			if(strIcon.Find(_T(".")) != -1)	// 加载图标文件(skins目录下的)
-			{
-				CString strIconFile = DuiSystem::GetSkinPath() + strIcon;
-				WORD wIndex = 0;
-				m_NotifyIconData.hIcon = ::ExtractAssociatedIcon(m_hInst, strIconFile.GetBuffer(0), &wIndex);
-			}else	// 加载图标资源
-			{
-				UINT nResourceID = _wtoi(strIcon);
-				m_NotifyIconData.hIcon = AfxGetApp()->LoadIcon(nResourceID);
-			}
-		}else
+			DuiSystem::Instance()->LoadIconFile(strIcon, m_NotifyIconData.hIcon);
+		}else	// 加载图标资源
 		{
-			// 加载图标文件(绝对路径)
-			CString strIconFile = strIcon;
-			WORD wIndex = 0;
-			m_NotifyIconData.hIcon = ::ExtractAssociatedIcon(m_hInst, strIconFile.GetBuffer(0), &wIndex);
+			UINT nResourceID = _wtoi(strIcon);
+			LoadIconFromIDResource(nResourceID, m_NotifyIconData.hIcon);
 		}
 
 		BOOL bRet = FALSE;

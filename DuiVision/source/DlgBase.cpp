@@ -74,13 +74,11 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	{
 		if(strTrayIcon.Find(_T(".")) != -1)	// 加载图标文件
 		{
-			CString strIconFile = DuiSystem::GetSkinPath() + strTrayIcon;
-			WORD wIndex = 0;
-			m_hIcon = ::ExtractAssociatedIcon(NULL, strIconFile.GetBuffer(0), &wIndex);
+			DuiSystem::Instance()->LoadIconFile(strTrayIcon, m_hIcon);
 		}else	// 加载图标资源
 		{
 			UINT nResourceID = _wtoi(strTrayIcon);
-			m_hIcon = AfxGetApp()->LoadIcon(nResourceID);
+			LoadIconFromIDResource(nResourceID, m_hIcon);
 		}
 	}
 }

@@ -152,6 +152,77 @@ BOOL LoadBitmapFromMem(BYTE* pByte, DWORD dwSize, CBitmap &bitmap, CSize &size)
 	return FALSE;
 }
 
+// 读取图标(从文件读)
+BOOL LoadIconFromFile(CString strPathFile, HICON &hIcon)
+{
+	WORD wIndex = 0;
+	hIcon = ::ExtractAssociatedIcon(NULL, strPathFile.GetBuffer(0), &wIndex);
+	strPathFile.ReleaseBuffer();
+
+	return (hIcon != NULL);
+}
+
+// 读取图标(从资源读)
+BOOL LoadIconFromIDResource(UINT nID, HICON &hIcon)
+{
+	hIcon = AfxGetApp()->LoadIcon(nID);
+
+	return (hIcon != NULL);
+}
+
+// 读取图标(从内存中加载)
+BOOL LoadIconFromMem(BYTE* pByte, DWORD dwSize, HICON &hIcon)
+{
+	// 根据文件大小分配HGLOBAL内存
+	HGLOBAL hGlobal = GlobalAlloc( GMEM_MOVEABLE | GMEM_NODISCARD, dwSize );
+	if ( !hGlobal )
+	{
+		TRACE( _T( "Load (file): Error allocating memory\n" ) );
+		return FALSE;
+	};
+
+	char *pData = reinterpret_cast<char*>(GlobalLock(hGlobal));
+	if ( !pData )
+	{
+		TRACE( _T( "Load (file): Error locking memory\n" ) );
+		GlobalFree( hGlobal );
+		return FALSE;
+	};
+
+	// 将文件内容读到HGLOBAL内存中
+	memcpy(pData, pByte, dwSize);
+	GlobalUnlock( hGlobal );
+
+	// 利用hGlobal内存中的数据创建stream
+	IStream *pStream = NULL;
+	if ( CreateStreamOnHGlobal( hGlobal, TRUE, &pStream ) != S_OK )
+	{
+		return FALSE;
+	}
+
+	Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(pStream);
+
+	// 要加上这一句，否则由GlobalAlloc得来的hGlobal内存没有被释放，导致内存泄露，由于
+	// CreateStreamOnHGlobal第二个参数被设置为TRUE，所以调用pStream->Release()会自动
+	// 将hGlobal内存（参见msdn对CreateStreamOnHGlobal的说明）
+	pStream->Release();
+
+	HBITMAP hBitmap = NULL;
+	Status status = pBitmap->GetLastStatus();
+	if(Ok == status)
+	{
+		status = pBitmap->GetHICON(&hIcon);
+		delete pBitmap;
+
+		if(Ok == status)
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 // 加载图片文件到内存中
 BOOL LoadImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image*& pImg)
 {

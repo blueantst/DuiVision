@@ -6,6 +6,12 @@ BOOL LoadBitmapFromFile(const CString strPathFile, CBitmap &bitmap, CSize &size)
 BOOL LoadBitmapFromIDResource(UINT nID, CBitmap &bitmap, CSize &size, CString strType);
 // 读取图片(从内存中加载)
 BOOL LoadBitmapFromMem(BYTE* pByte, DWORD dwSize, CBitmap &bitmap, CSize &size);
+// 读取图标(从文件读)
+BOOL LoadIconFromFile(CString strPathFile, HICON &hIcon);
+// 读取图标(从资源读)
+BOOL LoadIconFromIDResource(UINT nID, HICON &hIcon);
+// 读取图标(从内存中加载)
+BOOL LoadIconFromMem(BYTE* pByte, DWORD dwSize, HICON &hIcon);
 // 加载图片文件到内存中
 BOOL LoadImageFromFile(CString strFile, BOOL useEmbeddedColorManagement, Image*& pImg);
 // 从资源中加载图片
