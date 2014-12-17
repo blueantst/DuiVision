@@ -32,6 +32,9 @@ public:
 	BOOL GetLButtonUp();
 	CString GetEditText();
 
+	BOOL IsReadOnly() { return m_bReadOnly; }
+	void SetReadOnly(BOOL bReadOnly) { m_bReadOnly = bReadOnly; }
+
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
