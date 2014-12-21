@@ -13,7 +13,7 @@ public:
 		m_hKey = hKey;
 	}
 	
-	CString GetStringValue(HKEY hKey, CString strKeyName, CString strValueName)
+	CString GetStringValue(HKEY hKey, CString strKeyName, CString strValueName, CString strDefaultValue = _T(""))
 	{
 		if(m_reg.Open(m_hKey, strKeyName) == ERROR_SUCCESS)
 		{
@@ -26,10 +26,10 @@ public:
 			}
 			m_reg.Close();
 		}
-		return _T("");
+		return strDefaultValue;
 	}
 
-	DWORD GetDWordValue(HKEY hKey, CString strKeyName, CString strValueName)
+	DWORD GetDWordValue(HKEY hKey, CString strKeyName, CString strValueName, DWORD dwDefaultValue = 0)
 	{
 		if(m_reg.Open(m_hKey, strKeyName) == ERROR_SUCCESS)
 		{
@@ -41,10 +41,10 @@ public:
 			}
 			m_reg.Close();
 		}
-		return 0;
+		return dwDefaultValue;
 	}
 
-	ULONGLONG GetQWordValue(HKEY hKey, CString strKeyName, CString strValueName)
+	ULONGLONG GetQWordValue(HKEY hKey, CString strKeyName, CString strValueName, ULONGLONG qwDefaultValue = 0)
 	{
 		if(m_reg.Open(m_hKey, strKeyName) == ERROR_SUCCESS)
 		{
@@ -56,7 +56,7 @@ public:
 			}
 			m_reg.Close();
 		}
-		return 0;
+		return qwDefaultValue;
 	}
 
 	BOOL SetStringValue(HKEY hKey, CString strKeyName, CString strValueName, CString strValue)
