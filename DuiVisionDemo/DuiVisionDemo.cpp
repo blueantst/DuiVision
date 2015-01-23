@@ -57,9 +57,9 @@ BOOL CDuiVisionDemoApp::InitInstance()
 		{
 			// 读取命令行参数,如果不需要处理命令行可以直接退出
 			CString strCmd = L"";
-			if(__argc > 0)
+			if(__argc > 1)
 			{
-				strCmd = __targv[0];
+				strCmd = __targv[1];
 				DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Command line:%s", strCmd);
 			}
 
