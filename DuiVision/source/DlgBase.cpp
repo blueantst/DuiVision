@@ -1897,7 +1897,7 @@ LRESULT CDlgBase::OnCheckItsMe(WPARAM wParam, LPARAM lParam)
 
 	// 判断应用名是否一致(使用appMutex作为应用名)
 	CString strAppName = interMsg.wAppName;
-	if(DuiSystem::Instance()->GetString(_T("appMutex")) != strAppName)
+	if(DuiSystem::Instance()->GetConfig(_T("appMutex")) != strAppName)
 	{
 		return FALSE;
 	}
