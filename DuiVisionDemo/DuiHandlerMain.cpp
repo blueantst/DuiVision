@@ -455,6 +455,21 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl2DblClick(UINT uID, CString strName, UI
 	return TRUE;
 }
 
+// 表格控件双击消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 双击了表格控件某一行,传入参数中wParam表示控件行号
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
+	GridItemInfo* pItemInfo = pGridCtrl->GetItemInfo(wParam, lParam);
+	if(pItemInfo)
+	{
+		CString strMsg;
+		strMsg.Format(_T("鼠标双击了表格中的单元格\n行号：%d\n列号：%d\n行内容：%s"), wParam, lParam, pItemInfo->strTitle);
+		DuiSystem::DuiMessageBox(NULL, strMsg);
+	}
+	return TRUE;
+}
+
 // 表格控件的删除按钮子控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDelBtnClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -476,6 +491,23 @@ LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlClick(UINT uID, CString strName, UINT M
 	{
 		// 如果点击第一列,则展开或收缩此节点
 		pTreeCtrl->ToggleNode(hNode);
+	}
+	return TRUE;
+}
+
+// 树控件双击消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlDblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 双击了树控件某一节点,传入参数中wParam表示控件节点索引
+	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
+	HTREEITEM hNode = (HTREEITEM)wParam;	// 树节点句柄
+	int nItem = lParam;	// 点击的树控件的第几列
+	TreeItemInfo* pItemInfo = pTreeCtrl->GetItemInfo(hNode, nItem);
+	if(pItemInfo)
+	{
+		CString strMsg;
+		strMsg.Format(_T("鼠标双击了树节点\n节点内容：%s"), pItemInfo->strTitle);
+		DuiSystem::DuiMessageBox(NULL, strMsg);
 	}
 	return TRUE;
 }
