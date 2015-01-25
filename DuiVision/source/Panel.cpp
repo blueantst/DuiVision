@@ -26,6 +26,8 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	m_strPluginFile = _T("");
 	m_pDuiPluginObject = NULL;
 
+	m_bDblClk = true;
+
 	m_bInit = false;
 }
 
@@ -500,12 +502,22 @@ BOOL CDuiPanel::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return FALSE;
 }
 
-// 鼠标松开事件处理
+// 鼠标左键放开事件处理
 BOOL CDuiPanel::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	if(m_pDuiPluginObject)
 	{
 		return m_pDuiPluginObject->OnLButtonUp(nFlags, point);
+	}
+	return FALSE;
+}
+
+// 鼠标左键双击事件处理
+BOOL CDuiPanel::OnControlLButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnLButtonDblClk(nFlags, point);
 	}
 	return FALSE;
 }

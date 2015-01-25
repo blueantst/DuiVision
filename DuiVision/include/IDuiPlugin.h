@@ -28,6 +28,7 @@ interface IDuiPluginPanel : public IUnknown
 	virtual int __stdcall OnLButtonUp(UINT nFlags, CPoint point) = 0;
 	virtual int __stdcall OnScroll(BOOL bVertical, UINT nFlags, CPoint point) = 0;
 	virtual int __stdcall OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) = 0;
+	virtual int __stdcall OnLButtonDblClk(UINT nFlags, CPoint point) = 0;
 	//}}VCI_INTERFACE_END
 };
 
