@@ -31,6 +31,8 @@ CDuiListCtrl::CDuiListCtrl(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_nBkTransparent = 30;
 
+	m_bDblClk = true;
+
 	m_nHoverRow = 0;
 	m_nDownRow = -1;
 	m_bEnableDownRow = FALSE;
@@ -512,6 +514,7 @@ void CDuiListCtrl::ClearRowTooltip()
 	}
 }
 
+// 鼠标移动事件处理
 BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -625,6 +628,7 @@ BOOL CDuiListCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键按下事件处理
 BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -672,6 +676,7 @@ BOOL CDuiListCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键放开事件处理
 BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -706,6 +711,30 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 				SendMessage(MSG_BUTTON_UP, m_nDownRow, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+// 鼠标左键双击事件处理
+BOOL CDuiListCtrl::OnControlLButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(m_vecRowInfo.size() == 0)
+	{
+		return false;
+	}
+
+	if(m_rc.PtInRect(point))
+	{
+		for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+		{
+			ListRowInfo &rowInfo = m_vecRowInfo.at(i);
+			if(PtInRow(point, rowInfo))
+			{
+				SendMessage(MSG_BUTTON_DBLCLK, i, 0);
 				return true;
 			}
 		}

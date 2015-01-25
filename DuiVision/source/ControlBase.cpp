@@ -471,7 +471,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	return bRresponse;
 }
 
-// 鼠标左键事件处理
+// 鼠标左键按下事件处理
 BOOL CControlBase::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if(!m_bIsVisible || !m_bRresponse) return false;
@@ -515,7 +515,7 @@ BOOL CControlBase::OnLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
-// 鼠标左键事件处理
+// 鼠标左键放开事件处理
 BOOL CControlBase::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	if(!m_bIsVisible || !m_bRresponse) return false;
@@ -533,6 +533,39 @@ BOOL CControlBase::OnLButtonUp(UINT nFlags, CPoint point)
 	else
 	{
 		return OnControlLButtonUp(nFlags, point);
+	}
+
+	return false;
+}
+
+// 鼠标左键双击事件处理
+BOOL CControlBase::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+
+	OnMousePointChange(point);
+
+	m_bMouseDown = false;
+	if(m_pControl != NULL)
+	{
+		if(m_pControl->OnLButtonDblClk(nFlags, point))
+		{
+			return true;
+		}else
+		if(!m_pControl->GetDblClk())
+		{
+			// 如果控件不允许双击,则调用单击处理函数
+			return m_pControl->OnLButtonDown(nFlags, point);
+		}
+	}
+	else
+	{
+		if(!GetDblClk())
+		{
+			// 如果控件不允许双击,则调用单击处理函数
+			return OnControlLButtonDown(nFlags, point);
+		}
+		return OnControlLButtonDblClk(nFlags, point);
 	}
 
 	return false;

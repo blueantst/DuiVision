@@ -2182,6 +2182,7 @@ BOOL CDlgBase::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
     return bResponse;
 }
 
+// 鼠标左键按下
 void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	BOOL bIsSelect = false;
@@ -2236,6 +2237,7 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 	CDialog::OnLButtonDown(nFlags, point);
 }
 
+// 鼠标左键放开
 void CDlgBase::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	if (m_bIsSetCapture)
@@ -2269,19 +2271,28 @@ void CDlgBase::OnLButtonUp(UINT nFlags, CPoint point)
 	CDialog::OnLButtonUp(nFlags, point);
 }
 
+// 鼠标左键双击
 void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	m_bIsLButtonDblClk = TRUE;
 
 	if(m_pControl)
 	{
-		if(!m_pControl->GetDblClk())
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
 		{
-			return OnLButtonDown(nFlags, point);
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnLButtonDblClk(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
 		}
 	}
-
-	//OnMaximize();
 
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
@@ -2292,6 +2303,7 @@ void CDlgBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
+// 消息预处理
 BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 {
 	if (( pMsg->message == WM_KEYDOWN ) || ( pMsg->message == WM_SYSKEYDOWN ))

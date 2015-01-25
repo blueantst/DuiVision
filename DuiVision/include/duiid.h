@@ -60,8 +60,9 @@
 // 控件消息定义
 #define					MSG_BUTTON_DOWN						1						// 按钮按下
 #define					MSG_BUTTON_UP						2						// 按钮放开
-#define					MSG_BUTTON_CHECK					3						// 检查框消息
-#define					MSG_SCROLL_CHANGE					4						// 滚动条位置变更事件
+#define					MSG_BUTTON_DBLCLK					3						// 按钮放开
+#define					MSG_BUTTON_CHECK					4						// 检查框消息
+#define					MSG_SCROLL_CHANGE					5						// 滚动条位置变更事件
 
 
 // 进程间消息内容的结构定义

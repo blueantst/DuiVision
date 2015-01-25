@@ -127,6 +127,7 @@ public:
 	BOOL OnMouseMove(UINT nFlags, CPoint point);
 	BOOL OnLButtonDown(UINT nFlags, CPoint point);
 	BOOL OnLButtonUp(UINT nFlags, CPoint point);
+	BOOL OnLButtonDblClk(UINT nFlags, CPoint point);
 	BOOL OnScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	BOOL OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
@@ -137,6 +138,7 @@ public:
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point){ return FALSE; }
+	virtual BOOL OnControlLButtonDblClk(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
@@ -172,8 +174,8 @@ protected:
 	BOOL					m_bIsDisable;		// 是否可用
 	BOOL					m_bRresponse;		// 是否可以响应鼠标事件
 	BOOL					m_bTabStop;			// 是否可以响应Tab键
-	BOOL					m_bIsSelect;		// 是否选中
-	BOOL					m_bDblClk;			// 是否双击
+	BOOL					m_bIsSelect;		// 是否允许选中
+	BOOL					m_bDblClk;			// 是否可以响应双击事件
 	BOOL					m_bMouseDown;		// 是否鼠标按下
 
 	UINT					m_nShortcutKey;		// 快捷键按键
