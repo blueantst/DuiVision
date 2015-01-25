@@ -433,31 +433,25 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT 
 			CString strMsg;
 			strMsg.Format(_T("点击了列表中的链接\n行内容：%s\n链接索引号：%d"), pRowInfo->strTitle, lParam);
 			DuiSystem::DuiMessageBox(NULL, strMsg);
-		}else
-		{
-			CDlgPopup* pDlgPopup = new CDlgPopup;
-			CRect rc = pListCtrl->GetRect();
-			rc.OffsetRect(50, 30);
-			pDlgPopup->LoadXmlFile(_T("xml:dlg_notice"));
-			CControlBaseFont* pControlTitle = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.title")));
-			if(pControlTitle)
-			{
-				pControlTitle->SetTitle(pRowInfo->strTitle);
-			}
-			CControlBaseFont* pControlTime = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.time")));
-			if(pControlTime)
-			{
-				pControlTime->SetTitle(pRowInfo->strTime);
-			}
-			CControlBaseFont* pControlContent = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.content")));
-			if(pControlContent)
-			{
-				pControlContent->SetTitle(pRowInfo->strContent);
-			}
-			pDlg->OpenDlgPopup(pDlgPopup, rc, 0);
 		}
 	}
 
+	return TRUE;
+}
+
+// 列表控件双击消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgListCtrl2DblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 双击了列表控件某一行,传入参数中wParam表示控件行号
+	CDlgBase* pDlg = GetControlDialog(uID);
+	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));
+	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
+	if(pDlg && pRowInfo)
+	{
+		CString strMsg;
+		strMsg.Format(_T("鼠标双击了列表中的行\n行号：%d\n行内容：%s"), wParam, pRowInfo->strTitle);
+		DuiSystem::DuiMessageBox(NULL, strMsg);
+	}
 	return TRUE;
 }
 

@@ -38,7 +38,7 @@
 	</listctrl>
 
 	<text name="text_notice" crtext="800000" crmark="800000" align="center"
-		pos="|-0,5,-0,25" title="只有标题的列表" font="big" show="1" />
+		pos="|-0,5,-0,25" title="只有标题的列表(处理双击消息)" font="big" show="1" />
 
 	<listctrl name="listctrl_2" scroll-width="10" pos="|10,30,-20,-5" show="1" row-tip="1"
 		img-scroll="skin:IDB_SCROLL_V" 
