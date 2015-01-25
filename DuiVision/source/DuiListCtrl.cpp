@@ -734,7 +734,7 @@ BOOL CDuiListCtrl::OnControlLButtonDblClk(UINT nFlags, CPoint point)
 			ListRowInfo &rowInfo = m_vecRowInfo.at(i);
 			if(PtInRow(point, rowInfo))
 			{
-				SendMessage(MSG_BUTTON_DBLCLK, i, 0);
+				SendMessage(MSG_BUTTON_DBLCLK, i, -1);
 				return true;
 			}
 		}
