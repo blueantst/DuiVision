@@ -420,7 +420,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT 
 // 列表控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	// 点击了列表控件某一行,显示此行的详细信息
+	// 点击了列表控件某一行
 	// 传入参数中wParam表示控件行号,lParam表示点击的链接的索引(链接1和2分别为0和1)
 	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));

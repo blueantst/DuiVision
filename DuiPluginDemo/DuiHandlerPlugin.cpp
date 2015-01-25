@@ -273,7 +273,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UIN
 // 列表控件点击消息处理
 LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	// 点击了列表控件某一行,显示此行的详细信息
+	// 点击了列表控件某一行
 	// 传入参数中wParam表示控件行号,lParam表示点击的链接的索引(链接1和2分别为0和1)
 	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));
 	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
@@ -285,30 +285,23 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UIN
 			CString strMsg;
 			strMsg.Format(_T("点击了列表中的链接\n行内容：%s\n链接索引号：%d"), pRowInfo->strTitle, lParam);
 			DuiSystem::DuiMessageBox(NULL, strMsg);
-		}else
-		{
-			CDlgPopup* pDlgPopup = new CDlgPopup;
-			CRect rc = pListCtrl->GetRect();
-			rc.OffsetRect(50, 30);
-			pDlgPopup->LoadXmlFile(_T("xml:dlg_notice"));
-			CControlBaseFont* pControlTitle = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.title")));
-			if(pControlTitle)
-			{
-				pControlTitle->SetTitle(pRowInfo->strTitle);
-			}
-			CControlBaseFont* pControlTime = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.time")));
-			if(pControlTime)
-			{
-				pControlTime->SetTitle(pRowInfo->strTime);
-			}
-			CControlBaseFont* pControlContent = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.content")));
-			if(pControlContent)
-			{
-				pControlContent->SetTitle(pRowInfo->strContent);
-			}
-			m_pPanel->OpenDlgPopup(pDlgPopup, rc, 0);
 		}
 	}
 
+	return TRUE;
+}
+
+// 列表控件双击消息处理
+LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2DblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 双击了列表控件某一行,传入参数中wParam表示控件行号
+	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));
+	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
+	if(m_pPanel && pRowInfo)
+	{
+		CString strMsg;
+		strMsg.Format(_T("鼠标双击了列表中的行\n行号：%d\n行内容：%s"), wParam, pRowInfo->strTitle);
+		DuiSystem::DuiMessageBox(NULL, strMsg);
+	}
 	return TRUE;
 }
