@@ -77,14 +77,15 @@ BEGIN_MESSAGE_MAP(CDlgPopup, CWnd)
 	ON_WM_NCCALCSIZE()
 	ON_WM_NCHITTEST()
 	ON_WM_ERASEBKGND()
+	ON_WM_NCACTIVATE()
 	ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
 	ON_MESSAGE(WM_MOUSEHOVER, OnMouseHover)
 	ON_WM_KEYDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
-	ON_WM_NCACTIVATE()
 	ON_WM_LBUTTONUP()
+	ON_WM_LBUTTONDBLCLK()
 	ON_WM_CLOSE()
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
@@ -618,6 +619,7 @@ BOOL CDlgPopup::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
     return bResponse;
 }
 
+// 鼠标移动事件处理
 void CDlgPopup::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (!m_bTracking)
@@ -681,9 +683,11 @@ void CDlgPopup::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
+// 鼠标左键按下事件处理
 void CDlgPopup::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	BOOL bIsSelect = false;
+	m_bIsLButtonDblClk = FALSE;
 
 	if(m_pFocusControl != m_pControl && m_pFocusControl != NULL)
 	{
@@ -730,6 +734,7 @@ void CDlgPopup::OnLButtonDown(UINT nFlags, CPoint point)
 	//CWnd::OnLButtonDown(nFlags, point);
 }
 
+// 鼠标左键放开事件处理
 void CDlgPopup::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	if (m_bIsSetCapture)
@@ -770,6 +775,39 @@ void CDlgPopup::OnLButtonUp(UINT nFlags, CPoint point)
 	CWnd::OnLButtonUp(nFlags, point);
 }
 
+// 鼠标左键双击事件处理
+void CDlgPopup::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_bIsLButtonDblClk = TRUE;
+
+	if(m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnLButtonDblClk(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	// 调用自身的函数
+	if(OnLButtonDblClk(point))
+	{
+		DrawWindow();
+	}
+
+	CWnd::OnLButtonDblClk(nFlags, point);
+}
+
+// 键盘事件处理
 void CDlgPopup::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// 当前控件是否能处理

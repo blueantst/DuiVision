@@ -2186,6 +2186,7 @@ BOOL CDlgBase::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	BOOL bIsSelect = false;
+	m_bIsLButtonDblClk = FALSE;
 
 	if(m_pFocusControl != m_pControl && m_pFocusControl != NULL)
 	{
