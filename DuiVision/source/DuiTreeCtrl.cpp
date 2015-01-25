@@ -35,6 +35,8 @@ CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_nBkTransparent = 30;
 
+	m_bDblClk = true;
+
 	m_nHoverRow = 0;
 	m_nDownRow = -1;
 	m_bEnableDownRow = FALSE;
@@ -1372,6 +1374,7 @@ void CDuiTreeCtrl::ClearGridTooltip()
 	}
 }
 
+// 鼠标移动事件处理
 BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -1485,6 +1488,7 @@ BOOL CDuiTreeCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键按下事件处理
 BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -1532,6 +1536,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键放开事件处理
 BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	if(m_vecRowInfo.size() == 0)
@@ -1580,6 +1585,31 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 				rowInfo.bCollapse = !rowInfo.bCollapse;
 				RefreshNodeRows();
 
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+// 鼠标左键双击事件处理
+BOOL CDuiTreeCtrl::OnControlLButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(m_vecRowInfo.size() == 0)
+	{
+		return false;
+	}
+
+	if(m_rc.PtInRect(point))
+	{
+		for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+		{
+			TreeNodeInfo &rowInfo = m_vecRowInfo.at(i);
+			if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo) && !PtInRowCollapse(point, rowInfo))
+			{
+				int nClickItem = PtInRowItem(point, rowInfo);
+				SendMessage(MSG_BUTTON_DBLCLK, rowInfo.hNode, nClickItem);
 				return true;
 			}
 		}
