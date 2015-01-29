@@ -179,7 +179,7 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 
 			if(m_nProgress != 0)	// 画前景
 			{
-				DrawImageFrameMID(graphics, m_pImageForeGround, CRect(0, 0, nWidth * m_nProgress / 100, nHeight),
+				DrawImageFrameMID(graphics, m_pImageForeGround, CRect(0, 0, nWidth * m_nProgress / m_nMaxProgress, nHeight),
 					0, 0, m_sizeForeGround.cx, m_sizeForeGround.cy,
 					m_nHeadLength, 0, m_nHeadLength, 0);
 			}
@@ -191,7 +191,7 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 
 			if(m_nProgress != 0)
 			{
-				DrawImageFrame(graphics, m_pImage, CRect(0, 0, nWidth * m_nProgress / 100, nHeight), 
+				DrawImageFrame(graphics, m_pImage, CRect(0, 0, nWidth * m_nProgress / m_nMaxProgress, nHeight), 
 					m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 2);
 			}
 		}
@@ -211,6 +211,7 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 
 			CString strText;
+			// 只有最大值设置为100情况下才会显示百分号
 			strText.Format(L"%s%d%s", m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? L"%" : L"");
 			BSTR bsTitle = strText.AllocSysString();
 			RectF rect((Gdiplus::REAL)(0), (Gdiplus::REAL)0, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)nHeight);
