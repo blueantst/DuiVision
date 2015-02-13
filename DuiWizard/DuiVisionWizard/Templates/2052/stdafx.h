@@ -34,6 +34,14 @@
 
 #include <atlbase.h>
 
+[!if APPTYPE_RADIO_DUIPLUGIN]
+HINSTANCE GetDllInstance();
+
+// ×ÊÔ´ÇÐ»»º¯Êý
+void get_dll_resource(void);
+void reset_dll_resource(void);
+[!endif]
+
 #include "DuiVision.h"
 
 [!if APPTYPE_RADIO_DUIAPP]
