@@ -15,6 +15,7 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bAnimateChangeTab = FALSE;
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
+	m_nTabLeftPading = 0;
 	m_bInit = FALSE;
 }
 
@@ -33,6 +34,7 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_bAnimateChangeTab = FALSE;
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
+	m_nTabLeftPading = 0;
 	m_bInit = FALSE;
 }
 
@@ -560,7 +562,7 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 void CDuiTabCtrl::RefreshItems()
 {
 	// 重新计算每个tab页的位置,并刷新界面
-	int nXPos = m_rc.left;
+	int nXPos = m_rc.left + m_nTabLeftPading;
 	int nYPos = m_rc.top;
 
 	for(size_t i = 0; i < m_vecItemInfo.size(); i++)
@@ -1005,7 +1007,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		{
 			m_memDC.BitBlt(0, i * nHeight, nWidth, nHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
 
-			int nXPos = 0;
+			int nXPos = m_nTabLeftPading;
 			int nYPos = i * nHeight;
 			for(size_t j = 0; j < m_vecItemInfo.size(); j++)
 			{

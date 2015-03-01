@@ -83,6 +83,7 @@ public:
 	int						m_nOldItem;				// 切换前的页面索引
 	int						m_nAnimateCount;		// 切换动画的帧数
 	int						m_nCurXPos;				// 切换过程中当前的横坐标位置
+	int						m_nTabLeftPading;		// Tab页签左侧的空白宽度
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
@@ -91,6 +92,7 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
 		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemWidth, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tab-left-pading"), m_nTabLeftPading, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
