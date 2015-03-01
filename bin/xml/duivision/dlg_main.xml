@@ -20,7 +20,7 @@
 
 	<tabctrl name="tabctrl.main" image="skins\tab_image.png" img-count="3"
 			img-sep="skin:IDB_TAB_SEPERATOR--" img-hover="skin:IDB_TAB_HOVER"
-			font="bold" item-width="0" tab-height="0" animate="1"
+			font="bold" item-width="0" tab-height="0" tab-left-pading="0" animate="1"
 			pos="1,44,-1,-31">
 		<tab name="tab.home" title="首页" image="skins\icon\duivision.png" img-count="1" active="true" pos="0,75,-0,-0" show="true" >
 		
