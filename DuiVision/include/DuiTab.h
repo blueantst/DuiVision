@@ -38,6 +38,7 @@ public:
 	void DeleteItem(int nItem);
 	void DeleteItem(CString strTabName);
 	int  SetSelectItem(int nItem);
+	int  GetSelectItem();
 	void SetItemVisible(int nItem, BOOL bVisible);
 	void SetItemVisible(CString strTabName, BOOL bVisible);
 	BOOL GetItemVisible(int nItem);

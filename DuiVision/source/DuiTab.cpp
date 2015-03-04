@@ -558,6 +558,12 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 	return nOldDownItem;
 }
 
+// 获取选择的tab页
+int CDuiTabCtrl::GetSelectItem()
+{
+	return m_nDownItem;
+}
+
 // 刷新所有Tab页
 void CDuiTabCtrl::RefreshItems()
 {
