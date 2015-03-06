@@ -6,6 +6,7 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 {
 	m_pImageSeperator = NULL;
 	m_pImageHover = NULL;
+	m_pImageClose = NULL;
 	m_nHoverItem = 0;
 	m_nDownItem = 0;
 	m_nOldItem = -1;
@@ -25,6 +26,7 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 {
 	m_pImageSeperator = NULL;
 	m_pImageHover = NULL;
+	m_pImageClose = NULL;
 	m_nHoverItem = 0;
 	m_nDownItem = 0;
 	m_nOldItem = -1;
@@ -52,6 +54,12 @@ CDuiTabCtrl::~CDuiTabCtrl(void)
 		m_pImageHover = NULL;
 	}
 
+	if(m_pImageClose != NULL)
+	{
+		delete m_pImageClose;
+		m_pImageClose = NULL;
+	}
+
 	for(size_t i = 0; i < m_vecItemInfo.size(); i++)
 	{
 		TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
@@ -66,6 +74,7 @@ CDuiTabCtrl::~CDuiTabCtrl(void)
 // 图片属性的实现
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Seperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Hover, 2)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiTabCtrl, Close, 4)
 
 // 根据控件名创建控件实例
 CControlBase* CDuiTabCtrl::_CreateControlByName(LPCTSTR lpszName)
@@ -469,6 +478,16 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 			rc.SetRect(nXPos, nYPos, nXPos + m_sizeSeperator.cx, nYPos + m_sizeSeperator.cy);
 			nXPos += m_sizeSeperator.cx;
 		}
+
+		itemInfoTemp.buttonCloseState = enBSNormal;
+
+		// 设置Tab页签关闭按钮的位置
+		if(m_pImageClose != NULL)
+		{
+			int nLeft = (m_nTabItemWidth * (i+1)) - m_sizeClose.cx -3;
+			int nTop = 3;
+			itemInfoTemp.rcClose.SetRect(nLeft, nTop, nLeft + m_sizeClose.cx, nTop + m_sizeClose.cy);
+		}
 		/*
 		if(itemInfoTemp.pControl != NULL)
 		{
@@ -609,6 +628,14 @@ void CDuiTabCtrl::RefreshItems()
 			CRect &rc = m_vecRcSeperator.at(i);
 			rc.SetRect(nXPos, nYPos, nXPos + m_sizeSeperator.cx, nYPos + m_sizeSeperator.cy);
 			nXPos += m_sizeSeperator.cx;
+		}
+
+		// 设置Tab页签关闭按钮的位置
+		if(m_pImageClose != NULL)
+		{
+			int nLeft = itemInfoTemp.rc.right - m_sizeClose.cx -2;
+			int nTop = itemInfoTemp.rc.top + 2;
+			itemInfoTemp.rcClose.SetRect(nLeft, nTop, nLeft + m_sizeClose.cx, nTop + m_sizeClose.cy);
 		}
 	}
 
@@ -796,6 +823,15 @@ void CDuiTabCtrl::SetControlVisible(BOOL bIsVisible)
 	}
 }
 
+// 判断指定的坐标位置是否在某一个Tab页签的关闭按钮上
+BOOL CDuiTabCtrl::PtInTabClose(CPoint point, TabItemInfo& itemInfo)
+{
+	CRect rc = itemInfo.rcClose;
+	// 鼠标坐标转换
+	rc.OffsetRect(m_rc.left, m_rc.top);
+	return rc.PtInRect(point);
+}
+
 // 判断鼠标是否在控件可响应的区域
 BOOL CDuiTabCtrl::OnCheckMouseResponse(UINT nFlags, CPoint point)
 {
@@ -824,6 +860,7 @@ BOOL CDuiTabCtrl::OnCheckMouseResponse(UINT nFlags, CPoint point)
 BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	int nOldHoverItem = m_nHoverItem;
+	BOOL bTabCloseBtnChange = FALSE;
 
 	if(m_rc.PtInRect(point))
 	{
@@ -866,7 +903,32 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		m_nHoverItem = -1;
 	}
 
-	if(nOldHoverItem != m_nHoverItem)
+	// 计算Tab页签的关闭按钮图片状态
+	if(m_rc.PtInRect(point) && (m_pImageClose != NULL))
+	{
+		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+		{
+			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+			// 鼠标移动到tab页签的关闭按钮
+			if(PtInTabClose(point, itemInfo))
+			{
+				if(itemInfo.buttonCloseState != enBSHover)
+				{
+					bTabCloseBtnChange = TRUE;
+				}
+				itemInfo.buttonCloseState = enBSHover;
+			}else
+			{
+				if(itemInfo.buttonCloseState != enBSNormal)
+				{
+					bTabCloseBtnChange = TRUE;
+				}
+				itemInfo.buttonCloseState = enBSNormal;
+			}
+		}
+	}
+
+	if((nOldHoverItem != m_nHoverItem) || bTabCloseBtnChange)
 	{
 		UpdateControl();
 		return true;
@@ -877,6 +939,23 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 
 BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
+	// 判断Tab页签的关闭按钮点击
+	if(m_rc.PtInRect(point) && (m_pImageClose != NULL))
+	{
+		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
+		{
+			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
+			// 点击了tab页签的关闭按钮,发送消息
+			if(PtInTabClose(point, itemInfo))
+			{
+				itemInfo.buttonCloseState = enBSDown;
+				UpdateControl();
+				SendMessage(MSG_BUTTON_CLOSE, i, 0);
+				return true;
+			}
+		}
+	}
+
 	if(m_nHoverItem != -1)
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
@@ -940,7 +1019,7 @@ BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 				return true;
 			}
 		}		
-	}	
+	}
 	
 	return false;
 }
@@ -1082,6 +1161,25 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 					nXPos += m_sizeSeperator.cx;
 				}
+			}
+		}
+	}
+
+	// 画Tab页签关闭按钮
+	if(m_pImageClose != NULL)
+	{
+		Graphics graphics(m_memDC);
+		for(int i = 0; i < 3; i++)
+		{
+			for(size_t j = 0; j < m_vecItemInfo.size(); j++)
+			{
+				TabItemInfo &itemInfo = m_vecItemInfo.at(j);
+				graphics.DrawImage(m_pImageClose,
+					RectF((Gdiplus::REAL)itemInfo.rcClose.left, (Gdiplus::REAL)(m_rc.Height() * i + itemInfo.rcClose.top),
+					(Gdiplus::REAL)itemInfo.rcClose.Width(), (Gdiplus::REAL)itemInfo.rcClose.Height()),
+					(Gdiplus::REAL)(itemInfo.buttonCloseState * m_sizeClose.cx), 0,
+					(Gdiplus::REAL)m_sizeClose.cx, (Gdiplus::REAL)m_sizeClose.cy,
+					UnitPixel); 
 			}
 		}
 	}

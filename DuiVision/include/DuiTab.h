@@ -16,6 +16,8 @@ struct TabItemInfo
 	UINT			nItemID;	// ID
 	CString			strName;	// 名字
 	BOOL			bOutLink;	// 是否外部链接页面
+	CRect			rcClose;	// tab页签的关闭区域
+	enumButtonState	buttonCloseState;// Tab页签关闭按钮的状态
 	CControlBase*	pControl;	// Tab页对应的子页面容器控件
 };
 
@@ -49,6 +51,8 @@ public:
 
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadTabXml(CString strFileName);
+
+	BOOL PtInTabClose(CPoint point, TabItemInfo& itemInfo);
 	
 protected:
 	// 根据控件名创建控件实例
@@ -88,9 +92,11 @@ public:
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);				// 定义tab页签关闭图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-close"), OnAttributeImageClose)
 		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemWidth, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-left-pading"), m_nTabLeftPading, FALSE)

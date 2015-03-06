@@ -63,6 +63,7 @@
 #define					MSG_BUTTON_DBLCLK					3						// 鼠标在控件双击
 #define					MSG_BUTTON_CHECK					4						// 检查框消息
 #define					MSG_SCROLL_CHANGE					5						// 滚动条位置变更事件
+#define					MSG_BUTTON_CLOSE					6						// 关闭按钮事件
 
 
 // 进程间消息内容的结构定义
