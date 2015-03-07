@@ -16,8 +16,8 @@ struct TabItemInfo
 	UINT			nItemID;	// ID
 	CString			strName;	// 名字
 	BOOL			bOutLink;	// 是否外部链接页面
-	CRect			rcClose;	// tab页签的关闭区域
-	enumButtonState	buttonCloseState;// Tab页签关闭按钮的状态
+	CRect			rcButton;	// tab页签的按钮区域
+	enumButtonState	buttonState;// Tab页签按钮的状态
 	CControlBase*	pControl;	// Tab页对应的子页面容器控件
 };
 
@@ -52,7 +52,9 @@ public:
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadTabXml(CString strFileName);
 
-	BOOL PtInTabClose(CPoint point, TabItemInfo& itemInfo);
+	BOOL PtInTabButton(CPoint point, TabItemInfo& itemInfo);
+
+	HRESULT OnAttributeTabBtnPosChange(const CString& strValue, BOOL bLoading);
 	
 protected:
 	// 根据控件名创建控件实例
@@ -89,14 +91,16 @@ public:
 	int						m_nAnimateCount;		// 切换动画的帧数
 	int						m_nCurXPos;				// 切换过程中当前的横坐标位置
 	int						m_nTabLeftPading;		// Tab页签左侧的空白宽度
+	DUIDLG_POSITION			m_posTabBtn;			// Tab页签的内部按钮位置信息
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);				// 定义tab页签关闭图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(TabBtn);				// 定义tab页签按钮图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
-		DUI_CUSTOM_ATTRIBUTE(_T("img-close"), OnAttributeImageClose)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-tabbtn"), OnAttributeImageTabBtn)
+		DUI_CUSTOM_ATTRIBUTE(_T("tabbtnpos"), OnAttributeTabBtnPosChange)
 		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemWidth, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-left-pading"), m_nTabLeftPading, FALSE)
