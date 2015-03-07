@@ -121,7 +121,7 @@ public:
 	void SetXmlContent(CString strXmlContent) {m_strXmlContent = strXmlContent;}
 
 	void SetTrayHandler(CDuiHandler* pDuiHandler) { m_pTrayHandler = pDuiHandler; }
-	void SetTratMenuXml(CString strMenuXml) { m_strTrayMenuXml = strMenuXml; }
+	void SetTrayMenuXml(CString strMenuXml) { m_strTrayMenuXml = strMenuXml; }
 
 	CControlBase *GetControl(UINT uControlID);
 	CControlBase *GetControl(CString strControlName);

@@ -2340,7 +2340,7 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 	}
 
 	pDlg->SetTrayHandler(pDuiHandler);
-	pDlg->SetTratMenuXml(strMenuXml);
+	pDlg->SetTrayMenuXml(strMenuXml);
 
 	m_NotifyIconData.cbSize = NOTIFYICONDATAA_V1_SIZE;
 	m_NotifyIconData.hWnd = pDlg->m_hWnd;
