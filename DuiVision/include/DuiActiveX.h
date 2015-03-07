@@ -115,6 +115,11 @@ public:
 	virtual void OnAxInitFinish();
 	virtual HRESULT Navigate(CString strUrl);
 
+	HRESULT GoBack();
+	HRESULT GoForward();
+	HRESULT Refresh();
+	HRESULT Stop();
+
 protected:
 	HRESULT InitEvents();
 

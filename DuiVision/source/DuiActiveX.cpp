@@ -1028,7 +1028,6 @@ public:
     STDMETHOD(GetTypeInfo)(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR* pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid,OLECHAR FAR* FAR* rgszNames,UINT cNames,LCID lcid, DISPID FAR* rgdispid);
     STDMETHOD(Invoke)(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr);
-
 };
 
 CWebBrowserCtrl::CWebBrowserCtrl() : 
@@ -1841,6 +1840,66 @@ HRESULT CDuiWebBrowserCtrl::Navigate(CString strUrl)
 		hr = pWebBrowser->Navigate(bsUrl,NULL,NULL,NULL,NULL);
 		pWebBrowser->Release();
 		::SysFreeString(bsUrl);
+	}
+
+	return hr;
+}
+
+// 导航到上一个URL
+HRESULT CDuiWebBrowserCtrl::GoBack()
+{
+	HRESULT hr = -1;
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	if( pWebBrowser != NULL )
+	{
+		hr = pWebBrowser->GoBack();
+		pWebBrowser->Release();
+	}
+
+	return hr;
+}
+
+// 导航到下一个URL
+HRESULT CDuiWebBrowserCtrl::GoForward()
+{
+	HRESULT hr = -1;
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	if( pWebBrowser != NULL )
+	{
+		hr = pWebBrowser->GoForward();
+		pWebBrowser->Release();
+	}
+
+	return hr;
+}
+
+// 刷新页面
+HRESULT CDuiWebBrowserCtrl::Refresh()
+{
+	HRESULT hr = -1;
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	if( pWebBrowser != NULL )
+	{
+		hr = pWebBrowser->Refresh();
+		pWebBrowser->Release();
+	}
+
+	return hr;
+}
+
+// 停止加载页面
+HRESULT CDuiWebBrowserCtrl::Stop()
+{
+	HRESULT hr = -1;
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	if( pWebBrowser != NULL )
+	{
+		hr = pWebBrowser->Stop();
+		pWebBrowser->Release();
 	}
 
 	return hr;
