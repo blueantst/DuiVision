@@ -1110,6 +1110,7 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 {
 	TRACE(_T("AX: CWebBrowserCtrl::Invoke\n"));
 	//return DefDWebBrowserEventInvokeProc(dispidMember,riid,lcid,wFlags,pdispparams, pvarResult,pexcepinfo,puArgErr);
+	m_pOwner->SendMessage(dispidMember, (WPARAM)pdispparams, (LPARAM)pvarResult);
 	switch (dispidMember)
 	{
 		case DISPID_TITLECHANGE:
