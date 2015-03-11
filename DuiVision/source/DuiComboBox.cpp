@@ -259,10 +259,13 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 {
 	if((CONTROL_BUTTON == wParam) && (MSG_BUTTON_DOWN == lParam) && (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮
 	{
+		CRect rcClient = GetRect();
+		rcClient.top = rcClient.bottom;
+
 		CPopupList *pPopupList = new CPopupList;
 		m_pPopupList = pPopupList;
 		pPopupList->SetParent(this);	// 将PopupList的父控件指向combobox
-		pPopupList->SetWidth(m_nWidth);
+		pPopupList->SetWidth(rcClient.Width());
 		if(m_nResourceIDHeadBitmap != 0)
 		{
 			pPopupList->SetHeadBitmap(m_nResourceIDHeadBitmap);
@@ -281,8 +284,6 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 			pPopupList->SetCloseBitmap(m_strImageDeleteBitmap);
 		}
 		
-		CRect rcClient = GetRect();
-		rcClient.top = rcClient.bottom;
 		CDlgBase* pDlg = GetParentDialog();
 		if(pDlg)
 		{
