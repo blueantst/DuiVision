@@ -372,7 +372,7 @@ void CDlgBase::InitBaseUI(CRect rcClient, DuiXmlNode pNode)
 				if(pControl)
 				{
 					pControl->Load(pControlElem);
-					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CFrame::GetClassName()))
+					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CDuiFrame::GetClassName()))
 					{
 						// Area和Frame不能响应鼠标,必须加到Area列表中
 						m_vecBaseArea.push_back(pControl);
@@ -424,7 +424,7 @@ void CDlgBase::InitUI(CRect rcClient, DuiXmlNode pNode)
 				if(pControl)
 				{
 					pControl->Load(pControlElem);
-					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CFrame::GetClassName()))
+					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CDuiFrame::GetClassName()))
 					{
 						// Area和Frame不能响应鼠标,必须加到Area列表中
 						m_vecArea.push_back(pControl);
