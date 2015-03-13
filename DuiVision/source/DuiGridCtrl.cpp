@@ -93,6 +93,8 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		CString strTitle = pColumnElem.attribute(_T("title")).value();
 		CString strClrText = pColumnElem.attribute(_T("crtext")).value();
 		CString strWidth = pColumnElem.attribute(_T("width")).value();
+		CString strAlign = pColumnElem.attribute(_T("align")).value();
+		CString strVAlign = pColumnElem.attribute(_T("valign")).value();
 		DuiSystem::Instance()->ParseDuiString(strTitle);
 		Color clrText = CDuiObject::StringToColor(strClrText);
 		int nWidth = -1;
@@ -100,7 +102,33 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		{
 			nWidth = _wtoi(strWidth);
 		}
-		InsertColumn(-1, strTitle, nWidth, clrText);
+		UINT uAlignment = 0xFFFFUL;
+		if(strAlign == L"left")
+		{
+			uAlignment = Align_Left;
+		}else
+		if(strAlign == L"center")
+		{
+			uAlignment = Align_Center;
+		}else
+		if(strAlign == L"right")
+		{
+			uAlignment = Align_Right;
+		}
+		UINT uVAlignment = 0xFFFFUL;
+		if(strVAlign == L"top")
+		{
+			uVAlignment = VAlign_Top;
+		}else
+		if(strVAlign == L"middle")
+		{
+			uVAlignment = VAlign_Middle;
+		}else
+		if(strVAlign == L"bottom")
+		{
+			uVAlignment = VAlign_Bottom;
+		}
+		InsertColumn(-1, strTitle, nWidth, clrText, uAlignment, uVAlignment);
 	}
 
 	// 加载下层的row节点信息
@@ -247,12 +275,14 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 }
 
 // 添加列
-BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color clrText)
+BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color clrText, UINT uAlignment, UINT uVAlignment)
 {
 	GridColumnInfo columnInfo;
 	columnInfo.strTitle = strTitle;
 	columnInfo.clrText = clrText;
 	columnInfo.nWidth = nWidth;
+	columnInfo.uAlignment = uAlignment;
+	columnInfo.uVAlignment = uVAlignment;
 	if(nColumn <= -1 || nColumn >= (int)m_vecColumnInfo.size())
 	{
 		m_vecColumnInfo.push_back(columnInfo);
@@ -1343,6 +1373,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				int nPosItemX = (m_nLeftPos != 0) ? m_nLeftPos : nXPos;
 				for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
 				{
+					GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
 					GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
 					BOOL bSingleLine = (itemInfo.strContent.IsEmpty() || !itemInfo.strLink.IsEmpty());
 					RectF rect((Gdiplus::REAL)nPosItemX,
@@ -1412,10 +1443,52 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 							solidBrushItem.SetColor((itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue()) ? itemInfo.clrText : m_clrText);
 						}
 					}
+
+					// 设置单元格文字对齐方式,使用列的对齐方式
+					StringFormat strFormatColumn;
+					UINT uAlignment = m_uAlignment;
+					if(columnInfo.uAlignment != 0xFFFFUL)
+					{
+						uAlignment = columnInfo.uAlignment;
+					}
+					if(uAlignment == Align_Left)
+					{
+						strFormatColumn.SetAlignment(StringAlignmentNear);
+					}else
+					if(uAlignment == Align_Center)
+					{
+						strFormatColumn.SetAlignment(StringAlignmentCenter);
+					}else
+					if(uAlignment == Align_Right)
+					{
+						strFormatColumn.SetAlignment(StringAlignmentFar);
+					}
+					UINT uVAlignment = m_uVAlignment;
+					if(columnInfo.uVAlignment != 0xFFFFUL)
+					{
+						uVAlignment = columnInfo.uVAlignment;
+					}
+					if(uVAlignment == VAlign_Top)
+					{
+						strFormatColumn.SetLineAlignment(StringAlignmentNear);
+					}else
+					if(uVAlignment == VAlign_Middle)
+					{
+						strFormatColumn.SetLineAlignment(StringAlignmentCenter);
+					}else
+					if(uVAlignment == VAlign_Bottom)
+					{
+						strFormatColumn.SetLineAlignment(StringAlignmentFar);
+					}
+					if(!m_bTextWrap)
+					{
+						strFormatColumn.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行
+					}
+
 					// 根据bUseTitleFont决定用标题字体还是普通字体
 					BSTR bsItemTitle = strItemTitle.AllocSysString();
 					graphics.DrawString(bsItemTitle, (INT)wcslen(bsItemTitle),
-						itemInfo.bUseTitleFont ? &fontTitle : &font, rect, &strFormat, itemInfo.bUseTitleFont ? &solidBrushT : &solidBrushItem);
+						itemInfo.bUseTitleFont ? &fontTitle : &font, rect, &strFormatColumn, itemInfo.bUseTitleFont ? &solidBrushT : &solidBrushItem);
 					::SysFreeString(bsItemTitle);
 
 					// 画单元格内容
@@ -1424,7 +1497,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rect.Offset(0, (Gdiplus::REAL)m_nRowHeight / 2 + 2);
 						rect.Height = (Gdiplus::REAL)m_nRowHeight / 2 - 4;
 						BSTR bsItemContent = itemInfo.strContent.AllocSysString();
-						graphics.DrawString(bsItemContent, (INT)wcslen(bsItemContent), &font, rect, &strFormat, &solidBrushItem);
+						graphics.DrawString(bsItemContent, (INT)wcslen(bsItemContent), &font, rect, &strFormatColumn, &solidBrushItem);
 						::SysFreeString(bsItemContent);
 					}
 

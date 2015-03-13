@@ -12,6 +12,8 @@ struct GridColumnInfo
 	CString strTitle;		// 标题
 	Color	clrText;		// 文字颜色
 	int		nWidth;			// 列宽度
+	UINT	uAlignment;		// 水平对齐方式
+	UINT	uVAlignment;	// 垂直对齐方式
 };
 
 // 单元格信息
@@ -61,7 +63,8 @@ public:
 
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 
-	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
+	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0),
+		UINT uAlignment = 0xFFFFUL, UINT uVAlignment = 0xFFFFUL);
 	int InsertRow(int nRow, CString strId,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
