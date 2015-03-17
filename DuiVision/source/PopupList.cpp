@@ -451,6 +451,11 @@ BOOL CPopupList::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		SetItemPoint();
 		InvalidateRect(NULL);
 		return true;
+	}else
+	if(nChar == VK_RETURN)	// 回车键选择列表项
+	{
+		SendMessageToParent(m_uMessageID, SELECT_ITEM, m_nHoverItem);
+		return true;
 	}
 
 	return false;
