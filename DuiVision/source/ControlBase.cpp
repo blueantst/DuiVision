@@ -47,6 +47,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bTaskMsg = FALSE;
 
 	m_pWndPopup = NULL;
+
+	m_hCursor = NULL;
 }
 
 CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible, BOOL bIsDisable,
@@ -85,6 +87,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bTaskMsg = FALSE;
 
 	m_pWndPopup = NULL;
+
+	m_hCursor = NULL;
 }
 
 CControlBase::~CControlBase(void)
@@ -436,6 +440,10 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 		}
 	}
 
+	// 调用控件的设置鼠标光标函数
+	OnControlSetCursor(nFlags, point);
+
+	// 调用控件的鼠标移动函数
 	bRresponse = OnControlMouseMove(nFlags, point);
 
 	if(!m_bMouseDown)
@@ -469,6 +477,18 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	return bRresponse;
+}
+
+// 设置控件的鼠标光标
+BOOL CControlBase::OnControlSetCursor(UINT nFlags, CPoint point)
+{
+	if((m_hCursor != NULL) && m_rc.PtInRect(point))
+	{
+		::SetCursor(m_hCursor);
+		return true;
+	}
+
+	return false;
 }
 
 // 鼠标左键按下事件处理
@@ -963,6 +983,43 @@ HRESULT CControlBase::OnAttributeDisable(const CString& strValue, BOOL bLoading)
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	SetControlDisable(::StrToInt(strValue) > 0 ? true : false);
+
+	return bLoading?S_FALSE:S_OK;
+}
+
+// 从XML设置鼠标光标属性
+HRESULT CControlBase::OnAttributeCursor(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	if(strValue == _T("arrow"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_ARROW));	// 箭头
+	}else
+	if(strValue == _T("wait"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_WAIT));	// 沙漏等待
+	}else
+	if(strValue == _T("cross"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_CROSS));	// 十字
+	}else
+	if(strValue == _T("sizewe"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_SIZEWE));	// 双箭头指向东西
+	}else
+	if(strValue == _T("sizens"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_SIZENS));	// 双箭头指向南北
+	}else
+	if(strValue == _T("hand"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_HAND));	// 手型
+	}else
+	if(strValue == _T("help"))
+	{
+		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_HELP));	// 箭头+问号
+	}
 
 	return bLoading?S_FALSE:S_OK;
 }

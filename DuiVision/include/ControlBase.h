@@ -90,6 +90,7 @@ public:
 	HRESULT OnAttributeMenuPosChange(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeShortcut(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeDisable(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeCursor(const CString& strValue, BOOL bLoading);
 	
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
@@ -136,6 +137,7 @@ public:
 	virtual BOOL OnMousePointChange(CPoint& point) { return FALSE; }
 	virtual BOOL OnCheckMouseResponse(UINT nFlags, CPoint point) { return TRUE; }	// 判断鼠标是否在控件可响应的区域
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point){ return FALSE; }
+	virtual BOOL OnControlSetCursor(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlLButtonDblClk(UINT nFlags, CPoint point){ return FALSE; }
@@ -217,6 +219,8 @@ protected:
 
 	CDlgPopup*				m_pWndPopup;		// 保存的弹出框指针
 
+	HCURSOR					m_hCursor;			// 控件的鼠标光标
+
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
         //DUI_STYLE_ATTRIBUTE("class", m_style, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("show"), m_bIsVisible, TRUE)
@@ -232,6 +236,7 @@ protected:
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_TSTRING_ATTRIBUTE(_T("tip"), m_strTooltip, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("shortcut"), OnAttributeShortcut)
+		DUI_CUSTOM_ATTRIBUTE(_T("cursor"), OnAttributeCursor)
     DUI_DECLARE_ATTRIBUTES_END()
 };
 
