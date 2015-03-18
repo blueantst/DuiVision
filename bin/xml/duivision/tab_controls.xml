@@ -80,16 +80,16 @@
 			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2"
 				pos="50,175,600,200" check="false" group="radio_group_1" show="1" />
 
-			<button pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png"
+			<button pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png" cursor="hand"
 				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4" />
 			
-			<button pos="200,220,300,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\IM.png"
+			<button pos="200,220,300,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\IM.png" cursor="wait"
 				title="图片按钮2" tip="图片按钮2" animate="0" maxindex="4" action="dlg:dlg_login" />
 			
-			<button pos="350,220,450,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\SMBPrefs.png"
+			<button pos="350,220,450,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\SMBPrefs.png" cursor="cross"
 				title="图片按钮3" tip="图片按钮3，不显示焦点框" animate="0" maxindex="4" showfocus="0" action="dlg:dlg_option" />
 			
-			<button pos="500,220,600,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Connect.png"
+			<button pos="500,220,600,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Connect.png" cursor="help"
 				title="图片按钮4" tip="图片按钮4" animate="0" maxindex="4" />
 			
 		</tab>
