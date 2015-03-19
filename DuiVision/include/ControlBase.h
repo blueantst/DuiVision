@@ -152,6 +152,7 @@ public:
 	BOOL RemoveControl(CControlBase* pControl);
 	BOOL RemoveControl(CString strControlName, UINT uControlID);
 	void RemoveControls(CString strClassName);
+	void RemoveControls();
 	CDlgBase* GetParentDialog(BOOL bEnablePopup = TRUE);
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 

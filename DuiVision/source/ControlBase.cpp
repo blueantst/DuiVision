@@ -1265,6 +1265,16 @@ void CControlBase::RemoveControls(CString strClassName)
 	}
 }
 
+// 清除所有子控件
+void CControlBase::RemoveControls()
+{
+	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		RemoveControl(pControlBase);
+	}
+}
+
 // 获取父对话框
 CDlgBase* CControlBase::GetParentDialog(BOOL bEnablePopup)
 {
