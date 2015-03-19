@@ -756,6 +756,22 @@ int CDuiGridCtrl::GetRowCheck(int nRow)
 // 清空列表
 void CDuiGridCtrl::ClearItems()
 {
+	// 删除所有子控件
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		GridRowInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			GridItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			vector<CControlBase*>::iterator it;
+			for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+			{
+				CControlBase* pControl = *it;
+				RemoveControl(pControl);
+			}
+		}
+	}
+
 	m_vecRowInfo.clear();
 	m_pControScrollV->SetVisible(FALSE);
 	UpdateControl(true);

@@ -1077,6 +1077,22 @@ int CDuiTreeCtrl::GetNodeCheck(HTREEITEM hNode)
 // 清空树节点
 void CDuiTreeCtrl::ClearNodes()
 {
+	// 删除所有子控件
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfo = m_vecRowInfo.at(i);
+		for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+		{
+			TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+			vector<CControlBase*>::iterator it;
+			for(it=itemInfo.vecControl.begin(); it!=itemInfo.vecControl.end(); ++it)
+			{
+				CControlBase* pControl = *it;
+				RemoveControl(pControl);
+			}
+		}
+	}
+
 	m_vecRowInfo.clear();
 	m_pControScrollV->SetVisible(FALSE);
 	UpdateControl(true);
