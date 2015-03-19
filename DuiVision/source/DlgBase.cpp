@@ -2623,14 +2623,17 @@ LRESULT CDlgBase::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 }
 
 // 打开弹出对话框
-void CDlgBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID)
+void CDlgBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID, BOOL bShow)
 {
 	ASSERT(pWndPopup);
 	CloseDlgPopup();
 	ClientToScreen(&rc);
 	m_pWndPopup = pWndPopup;
 	m_pWndPopup->Create(this, rc, uMessageID);
-	m_pWndPopup->ShowWindow(SW_SHOW);
+	if(bShow)
+	{
+		m_pWndPopup->ShowWindow(SW_SHOW);
+	}
 }
 
 // 关闭弹出对话框

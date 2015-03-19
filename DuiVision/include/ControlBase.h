@@ -162,7 +162,7 @@ public:
 	LRESULT SendMessage(UINT Msg, WPARAM wParam, LPARAM lParam);
 
 	// 打开弹出对话框
-	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID);
+	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID, BOOL bShow=TRUE);
 	// 关闭弹出对话框
 	void CloseDlgPopup();
 

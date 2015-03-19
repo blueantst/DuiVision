@@ -1510,7 +1510,7 @@ LRESULT CControlBase::SendMessage(UINT Msg, WPARAM wParam, LPARAM lParam)
 }
 
 // 打开弹出对话框
-void CControlBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID)
+void CControlBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID, BOOL bShow)
 {
 	ASSERT(pWndPopup);
 	CloseDlgPopup();
@@ -1520,7 +1520,10 @@ void CControlBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID)
 	rc.OffsetRect(point.x-rc.left, point.y-rc.top);
 	m_pWndPopup = pWndPopup;
 	m_pWndPopup->Create(CWnd::FromHandle(GetHWND()), rc, uMessageID);
-	m_pWndPopup->ShowWindow(SW_SHOW);
+	if(bShow)
+	{
+		m_pWndPopup->ShowWindow(SW_SHOW);
+	}
 }
 
 // 关闭弹出对话框

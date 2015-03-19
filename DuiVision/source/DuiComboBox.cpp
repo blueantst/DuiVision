@@ -287,11 +287,12 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		CDlgBase* pDlg = GetParentDialog();
 		if(pDlg)
 		{
-			pDlg->OpenDlgPopup(pPopupList, rcClient, GetID());
+			// 只创建下拉列表窗口,先不显示,避免显示不全
+			pDlg->OpenDlgPopup(pPopupList, rcClient, GetID(), FALSE);
 		}else
 		{
-			// 如果父对话框不存在,则使用ControlBase封装的函数
-			OpenDlgPopup(pPopupList, rcClient, GetID());
+			// 如果父对话框不存在,则使用ControlBase封装的函数,只创建下拉列表窗口,先不显示,避免显示不全
+			OpenDlgPopup(pPopupList, rcClient, GetID(), FALSE);
 		}
 
 		pPopupList->SetFont(m_strFont, m_nFontWidth, m_fontStyle);
@@ -312,6 +313,9 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 		// 设置选择的项
 		SetComboValue(m_strComboValue);
+
+		// 显示下拉列表窗口
+		pPopupList->ShowWindow(SW_SHOW);
 	}else
 	if((SELECT_ITEM == wParam) && m_pPopupList)	// 下拉框选择
 	{
