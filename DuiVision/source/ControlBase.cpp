@@ -1633,6 +1633,42 @@ void CControlBaseFont::SetAlignment(UINT uAlignment, UINT uVAlignment)
 	}
 }
 
+// 转换水平对齐方式为GDI定义方式
+UINT CControlBaseFont::GetGDIAlignment(UINT uAlignment)
+{
+	if(uAlignment == Align_Left)
+	{
+		return DT_LEFT;
+	}else
+	if(uAlignment == Align_Center)
+	{
+		return DT_CENTER;
+	}else
+	if(uAlignment == Align_Right)
+	{
+		return DT_RIGHT;
+	}
+	return DT_LEFT;
+}
+
+// 转换垂直对齐方式为GDI定义方式
+UINT CControlBaseFont::GetGDIVAlignment(UINT uVAlignment)
+{
+	if(uVAlignment == VAlign_Top)
+	{
+		return DT_TOP;
+	}else
+	if(uVAlignment == VAlign_Middle)
+	{
+		return DT_VCENTER;
+	}else
+	if(uVAlignment == VAlign_Bottom)
+	{
+		return DT_BOTTOM;
+	}
+	return DT_TOP;
+}
+
 // 设置字体
 void CControlBaseFont::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
 {

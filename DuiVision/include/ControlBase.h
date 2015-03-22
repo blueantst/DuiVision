@@ -296,6 +296,9 @@ public:
 	virtual void SetVAlignment(UINT uVAlignment);
 	virtual void SetAlignment(UINT uAlignment, UINT uVAlignment);
 
+	UINT GetGDIAlignment(UINT uAlignment);
+	UINT GetGDIVAlignment(UINT uVAlignment);
+
 	virtual void SetFont(CString strFont = _T(""), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
 
 	virtual BOOL SetBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
