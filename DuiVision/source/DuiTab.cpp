@@ -12,6 +12,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nOldItem = -1;
 	m_nTabItemWidth = 0;
 	m_nTabCtrlHeight = 0;
+	m_uAlignment = Align_Center;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(225, 255, 255, 255);
 	m_bAnimateChangeTab = FALSE;
 	m_nAnimateCount = 10;
@@ -39,6 +41,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_nOldItem = -1;
 	m_nTabItemWidth = 0;
 	m_nTabCtrlHeight = 0;
+	m_uAlignment = Align_Center;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(225, 255, 255, 255);
 	m_bAnimateChangeTab = FALSE;
 	m_nAnimateCount = 10;
@@ -1144,11 +1148,9 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 
-		// 文字的对齐方式
-		StringFormat strFormat;
-		strFormat.SetAlignment(StringAlignmentCenter);		// 水平方向中间对齐
-		strFormat.SetLineAlignment(StringAlignmentCenter);	// 垂直方向中间对齐
-		//strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
+		// 设置tab页签文字的水平和垂直对齐方式
+		DUI_STRING_ALIGN_DEFINE();
+		strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 		
 		// 画内存DC的3个层的内容
 		for(int i = 0; i < 3; i++)
