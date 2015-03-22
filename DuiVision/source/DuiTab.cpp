@@ -466,7 +466,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 		m_vecItemInfo.insert(m_vecItemInfo.begin() + nItem, itemInfo);
 	}
 
-	int nXPos = m_rc.left;
+	int nXPos = m_rc.left + m_nTabLeftPading;
 	int nYPos = m_rc.top;
 
 	for(size_t i = 0; i < (int)m_vecItemInfo.size(); i++)

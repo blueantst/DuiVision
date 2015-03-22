@@ -13,13 +13,13 @@ enum enumTabImageMode
 // Tab页信息结构定义
 struct TabItemInfo
 {
-	BOOL			bVisible;	// 是否可见
-	Image*			pImage;		// 图片
-	CSize			sizeImage;	// 图片大小
-	int				nImageCount;// 图片个数(可以是1或3,如果是1,则hover图片使用tabctrl设置的)
-	int				nImageIndex;// 图片索引,如果pImage为空,则使用此索引到tabctrl中查找图片
-	CRect			rc;			// 页面包含的位置
-	CString			strText;	// 文字
+	BOOL			bVisible;	// tab页签是否可见
+	Image*			pImage;		// tab页签图片
+	CSize			sizeImage;	// tab页签图片大小
+	int				nImageCount;// tab页签图片个数(可以是1或3,如果是1,则hover图片使用tabctrl设置的)
+	int				nImageIndex;// tab页签图片索引,如果pImage为空,则使用此索引到tabctrl中查找图片
+	CRect			rc;			// tab页签部分的位置
+	CString			strText;	// tab页签文字
 	CString			strAction;	// 动作属性
 	UINT			nItemID;	// ID
 	CString			strName;	// 名字
