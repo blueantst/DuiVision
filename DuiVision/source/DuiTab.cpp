@@ -18,6 +18,12 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nCurXPos = 0;
 	m_nTabLeftPading = 0;
 	m_posTabBtn.nCount = 0;
+	m_enTabImageMode = enTIMNormal;
+	SetBitmapCount(3);	// tab页签图片默认是3种状态的图片
+	m_nWLT = 0;
+	m_nHLT = 0;
+	m_nWRB = 0;
+	m_nHRB = 0;
 	m_bInit = FALSE;
 }
 
@@ -38,6 +44,13 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
 	m_nTabLeftPading = 0;
+	m_posTabBtn.nCount = 0;
+	m_enTabImageMode = enTIMNormal;
+	SetBitmapCount(3);	// tab页签图片默认是3种状态的图片
+	m_nWLT = 0;
+	m_nHLT = 0;
+	m_nWRB = 0;
+	m_nHRB = 0;
 	m_bInit = FALSE;
 }
 
@@ -1113,10 +1126,11 @@ BOOL CDuiTabCtrl::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
-	int nHeight = m_rc.Height();
+	int nHeight = m_rc.Height();	// 纵向内存DC的高度是整个tabctrl的高度,不只是页签部分高度
 
 	if(!m_bUpdate)
 	{
+		// 创建内存DC,纵向分为三层,分别是tab页签图片、鼠标热点图片、鼠标按下图片三层
 		UpdateMemDC(dc, nWidth, nHeight * 3);
 
 		Graphics graphics(m_memDC);
@@ -1136,10 +1150,13 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		strFormat.SetLineAlignment(StringAlignmentCenter);	// 垂直方向中间对齐
 		//strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 		
+		// 画内存DC的3个层的内容
 		for(int i = 0; i < 3; i++)
 		{
+			// 将背景内容拷贝到内存DC
 			m_memDC.BitBlt(0, i * nHeight, nWidth, nHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
 
+			// 画tab页签
 			int nXPos = m_nTabLeftPading;
 			int nYPos = i * nHeight;
 			for(size_t j = 0; j < m_vecItemInfo.size(); j++)
@@ -1151,7 +1168,8 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					continue;
 				}
 
-				if(itemInfo.pImage != NULL)	// 使用tab页指定的图片
+				// 画tab页签底图
+				if(itemInfo.pImage != NULL)	// 如果页签设置了图片,则使用tab页签指定的图片
 				{
 					int nImageIndex = i;
 					if(itemInfo.nImageCount == 1)
@@ -1162,15 +1180,23 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					graphics.DrawImage(itemInfo.pImage, Rect(nXPos + nX, nYPos,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
 						itemInfo.sizeImage.cx * nImageIndex, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
 				}else
-				if((m_pImage != NULL) && (itemInfo.nImageIndex != -1))	// 使用tabctrl的索引图片
+				if((m_pImage != NULL) && (itemInfo.nImageIndex != -1))	// 如果设置了页签图片索引,使用tabctrl图片的索引图片
 				{
-					// 画底图
-					int nX = (itemInfo.rc.Width() - itemInfo.sizeImage.cx) / 2;
-					graphics.DrawImage(m_pImage, Rect(nXPos + nX, nYPos,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
-						itemInfo.sizeImage.cx * itemInfo.nImageIndex, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
+					if(m_enTabImageMode == enTIMNormal)	// 普通模式
+					{
+						int nX = (itemInfo.rc.Width() - itemInfo.sizeImage.cx) / 2;
+						graphics.DrawImage(m_pImage, Rect(nXPos + nX, nYPos,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+							itemInfo.sizeImage.cx * itemInfo.nImageIndex, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
+					}else
+					if(m_enTabImageMode == enTIMMID)	// 九宫格模式
+					{
+						CRect rcTemp(nXPos, nYPos, nXPos+m_nTabItemWidth, nYPos+m_nTabCtrlHeight);
+						DrawImageFrameMID(graphics, m_pImage, rcTemp, m_sizeImage.cx * i, 0, m_sizeImage.cx, m_sizeImage.cy,
+							m_nWLT, m_nHLT, m_nWRB, m_nHRB);
+					}
 				}
 
-				// 画热点图(如果存在tabctrl设置的热点图的话)
+				// 画tab页签热点图(如果存在tabctrl设置的热点图的话)
 				if((m_pImageHover != NULL) && (i > 0))
 				{
 					int nX = (itemInfo.rc.Width() - m_sizeHover.cx) / 2;
@@ -1182,7 +1208,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						m_sizeHover.cx * (i-1), 0, m_sizeHover.cx, m_sizeHover.cy, UnitPixel);
 				}
 
-				// 文字
+				// 图tab页签文字
 				if(!itemInfo.strText.IsEmpty())
 				{
 					RectF rectText((Gdiplus::REAL)nXPos, (Gdiplus::REAL)(nYPos + itemInfo.sizeImage.cy + 1), (Gdiplus::REAL)itemInfo.rc.Width(),(Gdiplus::REAL)(m_nTabCtrlHeight - itemInfo.sizeImage.cy - 1));
@@ -1199,7 +1225,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				nXPos += itemInfo.rc.Width();
 
-				// 画分隔图片(采用拉伸方式)
+				// 画tab页签之间的分隔图片(采用拉伸方式)
 				if(j < m_vecItemInfo.size() - 1 && m_pImageSeperator != NULL)
 				{
 					CRect &rc = m_vecRcSeperator.at(j);
@@ -1232,20 +1258,25 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		}
 	}
 
+	// 画原图
 	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
 
+	// 画鼠标热点的Tab页签
 	if((m_nHoverItem != -1) && (m_nHoverItem < (int)m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
 
-		dc.BitBlt(itemInfo.rc.left,itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC, itemInfo.rc.left - m_rc.left,itemInfo.rc.top - m_rc.top + m_rc.Height(), SRCCOPY);
+		dc.BitBlt(itemInfo.rc.left, itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC,
+			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + m_rc.Height(), SRCCOPY);
 	}
 
+	// 画鼠标按下的Tab页签
 	if((m_nDownItem != -1) && (m_nDownItem < (int)m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nDownItem);
 
-		dc.BitBlt(itemInfo.rc.left,itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC, itemInfo.rc.left - m_rc.left,itemInfo.rc.top - m_rc.top + m_rc.Height() * 2, SRCCOPY);
+		dc.BitBlt(itemInfo.rc.left, itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC,
+			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + m_rc.Height() * 2, SRCCOPY);
 	}
 }
 
