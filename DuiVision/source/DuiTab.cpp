@@ -1213,7 +1213,10 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				// 图tab页签文字
 				if(!itemInfo.strText.IsEmpty())
 				{
-					RectF rectText((Gdiplus::REAL)nXPos, (Gdiplus::REAL)(nYPos + itemInfo.sizeImage.cy + 1), (Gdiplus::REAL)itemInfo.rc.Width(),(Gdiplus::REAL)(m_nTabCtrlHeight - itemInfo.sizeImage.cy - 1));
+					RectF rectText((Gdiplus::REAL)nXPos,
+							(Gdiplus::REAL)(nYPos + itemInfo.sizeImage.cy + 1),
+							(Gdiplus::REAL)((m_pImageTabBtn != NULL) ? (itemInfo.rc.Width()-m_sizeTabBtn.cx) : itemInfo.rc.Width()),
+							(Gdiplus::REAL)(m_nTabCtrlHeight - itemInfo.sizeImage.cy - 1));
 					if(m_nTabCtrlHeight <= itemInfo.sizeImage.cy)
 					{
 						// 如果tabctrl高度小于图片高度,则文字直接居中显示
