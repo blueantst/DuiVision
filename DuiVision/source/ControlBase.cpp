@@ -49,6 +49,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_pWndPopup = NULL;
 
 	m_hCursor = NULL;
+	m_bDuiMsgMouseMove = FALSE;
+	m_bMouseLeave = TRUE;
 }
 
 CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible, BOOL bIsDisable,
@@ -89,6 +91,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_pWndPopup = NULL;
 
 	m_hCursor = NULL;
+	m_bDuiMsgMouseMove = FALSE;
+	m_bMouseLeave = TRUE;
 }
 
 CControlBase::~CControlBase(void)
@@ -445,6 +449,25 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 
 	// 调用控件的鼠标移动函数
 	bRresponse = OnControlMouseMove(nFlags, point);
+
+	// 发送鼠标移动的DUI消息
+	if(m_bDuiMsgMouseMove)
+	{
+		if(PtInRect(point))
+		{
+			// 发送鼠标在控件范围内移动的消息
+			SendMessage(MSG_MOUSE_MOVE, (WPARAM)nFlags, (LPARAM)(&point));
+			m_bMouseLeave = FALSE;
+		}else
+		{
+			if(!m_bMouseLeave)
+			{
+				// 发送鼠标离开控件的消息(离开之后仅发送一次离开消息)
+				SendMessage(MSG_MOUSE_LEAVE, (WPARAM)nFlags, (LPARAM)(&point));
+				m_bMouseLeave = TRUE;
+			}
+		}
+	}
 
 	if(!m_bMouseDown)
 	{
@@ -1019,6 +1042,37 @@ HRESULT CControlBase::OnAttributeCursor(const CString& strValue, BOOL bLoading)
 	if(strValue == _T("help"))
 	{
 		m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_HELP));	// 箭头+问号
+	}
+
+	return bLoading?S_FALSE:S_OK;
+}
+
+// 从XML设置是否发送指定的DUI消息的属性
+HRESULT CControlBase::OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	// 解析需要发送的DUI消息列表
+	CStringArray asDuiMsg;
+	CString strDuiMsg = strValue;
+	int nPos = -1;
+	while((nPos = strDuiMsg.Find(L"|")) != -1)
+	{
+		CString strTemp = strDuiMsg.Left(nPos);
+		strDuiMsg.Delete(0, nPos+1);
+		asDuiMsg.Add(strTemp);
+	}
+	if(!strDuiMsg.IsEmpty())
+	{
+		asDuiMsg.Add(strDuiMsg);
+	}
+
+	for(int i=0; i<asDuiMsg.GetSize(); i++)
+	{
+		if(strValue == _T("mousemove"))	// 发送鼠标移动的DUI消息
+		{
+			m_bDuiMsgMouseMove = TRUE;
+		}
 	}
 
 	return bLoading?S_FALSE:S_OK;

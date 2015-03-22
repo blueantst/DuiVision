@@ -64,6 +64,8 @@
 #define					MSG_BUTTON_CHECK					4						// 检查框消息
 #define					MSG_SCROLL_CHANGE					5						// 滚动条位置变更事件
 #define					MSG_CONTROL_BUTTON					6						// 控件内的按钮点击事件
+#define					MSG_MOUSE_MOVE						7						// 鼠标移动事件
+#define					MSG_MOUSE_LEAVE						8						// 鼠标离开事件
 
 
 // 进程间消息内容的结构定义

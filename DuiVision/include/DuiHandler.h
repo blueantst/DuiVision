@@ -13,9 +13,12 @@ public:                                                             \
             );                                                      \
         if (nRet)                                        \
             return nRet;                                            \
-		DuiSystem::LogEvent(LOG_LEVEL_DEBUG,						\
-		_T("%s::OnDuiMessage:uID=%d, name=%s, msg=%d, wParam=%d, lParam=%d"),	\
-		_T(#classname), uID, strName, Msg, wParam, lParam);						\
+		if (Msg != MSG_MOUSE_MOVE)	\
+		{	\
+			DuiSystem::LogEvent(LOG_LEVEL_DEBUG,						\
+			_T("%s::OnDuiMessage:uID=%d, name=%s, msg=%d, wParam=%d, lParam=%d"),	\
+			_T(#classname), uID, strName, Msg, wParam, lParam);						\
+		}	\
 
 // 控件ID对应的事件处理
 #define DUI_CONTROL_ID_MESSAGE(controlid, msghandler)     \

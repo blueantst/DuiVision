@@ -91,6 +91,7 @@ public:
 	HRESULT OnAttributeShortcut(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeDisable(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeCursor(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoading);
 	
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
@@ -222,6 +223,9 @@ protected:
 
 	HCURSOR					m_hCursor;			// 控件的鼠标光标
 
+	BOOL					m_bDuiMsgMouseMove;	// 是否发送鼠标移动DUI消息
+	BOOL					m_bMouseLeave;		// 鼠标是否已经离开控件
+
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
         //DUI_STYLE_ATTRIBUTE("class", m_style, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("show"), m_bIsVisible, TRUE)
@@ -238,6 +242,7 @@ protected:
 		DUI_TSTRING_ATTRIBUTE(_T("tip"), m_strTooltip, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("shortcut"), OnAttributeShortcut)
 		DUI_CUSTOM_ATTRIBUTE(_T("cursor"), OnAttributeCursor)
+		DUI_CUSTOM_ATTRIBUTE(_T("duimsg"), OnAttributeSendDuiMsg)
     DUI_DECLARE_ATTRIBUTES_END()
 };
 
