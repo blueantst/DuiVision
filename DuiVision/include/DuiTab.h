@@ -2,6 +2,14 @@
 #pragma once
 #include "ControlBase.h"
 
+// Tab页签图片显示模式
+enum enumTabImageMode
+{
+	enTIMNormal = 0,			// 正常
+	enTIMExtrude,				// 拉伸
+	enTIMMID					// 九宫格边框
+};
+
 // Tab页信息结构定义
 struct TabItemInfo
 {
@@ -93,6 +101,12 @@ public:
 	int						m_nTabLeftPading;		// Tab页签左侧的空白宽度
 	DUIDLG_POSITION			m_posTabBtn;			// Tab页签的内部按钮位置信息
 
+	enumTabImageMode		m_enTabImageMode;		// Tab页签图片的显示模式(普通、拉伸、九宫格)
+	int						m_nWLT;					// 左上角宽度(Tab页签图片的九宫格模式)
+	int						m_nHLT;					// 左上角高度(Tab页签图片的九宫格模式)
+	int						m_nWRB;					// 右下角宽度(Tab页签图片的九宫格模式)
+	int						m_nHRB;					// 右下角高度(Tab页签图片的九宫格模式)
+
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(TabBtn);				// 定义tab页签按钮图片
@@ -107,5 +121,14 @@ public:
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-lt"), m_nWLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-lt"), m_nHLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("width-rb"), m_nWRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nHRB, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("tabimg-mode"), enumTabImageMode, TRUE)
+            DUI_ENUM_VALUE(_T("normal"), enTIMNormal)
+            DUI_ENUM_VALUE(_T("extrude"), enTIMExtrude)
+			DUI_ENUM_VALUE(_T("mid"), enTIMMID)
+        DUI_ENUM_END(m_enTabImageMode)
     DUI_DECLARE_ATTRIBUTES_END()
 };
