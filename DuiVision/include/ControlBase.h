@@ -225,6 +225,7 @@ protected:
 	HCURSOR					m_hCursor;			// 控件的鼠标光标
 
 	BOOL					m_bDuiMsgMouseMove;	// 是否发送鼠标移动DUI消息
+	BOOL					m_bDuiMsgKeyDown;	// 是否发送键盘按下DUI消息
 	BOOL					m_bMouseLeave;		// 鼠标是否已经离开控件
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()

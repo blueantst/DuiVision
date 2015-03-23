@@ -50,6 +50,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_hCursor = NULL;
 	m_bDuiMsgMouseMove = FALSE;
+	m_bDuiMsgKeyDown = FALSE;
 	m_bMouseLeave = TRUE;
 }
 
@@ -92,6 +93,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 
 	m_hCursor = NULL;
 	m_bDuiMsgMouseMove = FALSE;
+	m_bDuiMsgKeyDown = TRUE;
 	m_bMouseLeave = TRUE;
 }
 
@@ -677,6 +679,12 @@ BOOL CControlBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		return true;
 	}
 
+	// 发送键盘按下DUI消息
+	if(m_bDuiMsgKeyDown)
+	{
+		SendMessage(MSG_KEY_DOWN, (WPARAM)nChar, (LPARAM)nFlags);
+	}
+
 	// 此控件没有处理,则遍历子控件看是否能处理
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
@@ -711,6 +719,11 @@ BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
 	if(strDuiMsg == _T("mousemove"))	// 发送鼠标移动的DUI消息
 	{
 		m_bDuiMsgMouseMove = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("keydown"))		// 发送键盘按下DUI消息
+	{
+		m_bDuiMsgKeyDown = TRUE;
 		return TRUE;
 	}
 
