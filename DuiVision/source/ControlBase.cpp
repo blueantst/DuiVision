@@ -704,6 +704,19 @@ BOOL CControlBase::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	return false;
 }
 
+// 设置控件的DUI消息发送标识
+BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
+{
+	CString strDuiMsg = lpszDuiMsg;
+	if(strDuiMsg == _T("mousemove"))	// 发送鼠标移动的DUI消息
+	{
+		m_bDuiMsgMouseMove = TRUE;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 BOOL CControlBase::OnTimer()
 {
 	BOOL bRresponse = false;
@@ -1069,10 +1082,7 @@ HRESULT CControlBase::OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoadi
 
 	for(int i=0; i<asDuiMsg.GetSize(); i++)
 	{
-		if(strValue == _T("mousemove"))	// 发送鼠标移动的DUI消息
-		{
-			m_bDuiMsgMouseMove = TRUE;
-		}
+		OnControlSetDuiMsg(asDuiMsg[i]);
 	}
 
 	return bLoading?S_FALSE:S_OK;

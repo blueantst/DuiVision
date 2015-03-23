@@ -144,6 +144,7 @@ public:
 	virtual BOOL OnControlLButtonDblClk(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual BOOL OnControlSetDuiMsg(LPCTSTR lpszDuiMsg);
 
 	virtual	BOOL OnControlTimer() { return FALSE;};
 
