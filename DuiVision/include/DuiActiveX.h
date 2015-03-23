@@ -79,13 +79,13 @@ protected:
     CString					m_strModuleName;
 	CString					m_strUrl;
     bool					m_bCreated;
-    bool					m_bDelayCreate;
+    bool					m_bDelayCreate;		// 是否延迟创建
 	bool					m_bShowContentMenu;	// 是否显示右键菜单
-	bool					m_bShowScroll;	// 是否显示滚动条
+	bool					m_bShowScroll;		// 是否显示滚动条
     IOleObject*				m_pUnk;
-	IConnectionPoint*		m_pCP;		// 连接点指针
+	IConnectionPoint*		m_pCP;				// 连接点指针
 	DWORD                   m_dwEventCookie;
-    CActiveXCtrl*			m_pControl;	// ActiveX控件指针
+    CActiveXCtrl*			m_pControl;			// ActiveX控件指针
     HWND					m_hwndHost;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
@@ -109,6 +109,9 @@ public:
     CDuiWebBrowserCtrl(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiWebBrowserCtrl();
 
+	BOOL IsDuiMsgInvoke() {return m_bDuiMsgInvoke; }
+	virtual BOOL OnControlSetDuiMsg(LPCTSTR lpszDuiMsg);
+
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxCreateCtrl();
@@ -122,6 +125,8 @@ public:
 
 protected:
 	HRESULT InitEvents();
+
+	BOOL					m_bDuiMsgInvoke;	// 是否发送浏览器Invoke消息到DUI消息
 
 protected:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()

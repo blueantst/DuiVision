@@ -1030,6 +1030,9 @@ public:
     STDMETHOD(Invoke)(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr);
 };
 
+
+/////////////////////////////////////////////////////////////////
+// 浏览器控件
 CWebBrowserCtrl::CWebBrowserCtrl() : 
 	CActiveXCtrl()
 {
@@ -1108,8 +1111,12 @@ STDMETHODIMP CWebBrowserCtrl::GetIDsOfNames(REFIID riid,OLECHAR FAR* FAR* rgszNa
 STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr)    
 {
 	TRACE(_T("AX: CWebBrowserCtrl::Invoke\n"));
-	//return DefDWebBrowserEventInvokeProc(dispidMember,riid,lcid,wFlags,pdispparams, pvarResult,pexcepinfo,puArgErr);
-	m_pOwner->SendMessage(dispidMember, (WPARAM)pdispparams, (LPARAM)pvarResult);
+	// 发送Invoke消息到DUI消息
+	if(((CDuiWebBrowserCtrl*)m_pOwner)->IsDuiMsgInvoke())
+	{
+		m_pOwner->SendMessage(dispidMember, (WPARAM)pdispparams, (LPARAM)pvarResult);
+	}
+
 	switch (dispidMember)
 	{
 		case DISPID_TITLECHANGE:
@@ -1798,6 +1805,7 @@ CString CDuiActiveX::ParseFilePath(CString strUrl)
 CDuiWebBrowserCtrl::CDuiWebBrowserCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	: CDuiActiveX(hWnd, pDuiObject)
 {
+	m_bDuiMsgInvoke = FALSE;
 }
 
 CDuiWebBrowserCtrl::~CDuiWebBrowserCtrl()
@@ -1813,6 +1821,24 @@ void CDuiWebBrowserCtrl::OnAxInit()
 // ActiveX控件激活
 void CDuiWebBrowserCtrl::OnAxActivate(IUnknown *pUnknwn)
 {
+}
+
+// 设置控件的DUI消息发送标识
+BOOL CDuiWebBrowserCtrl::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
+{
+	if(__super::OnControlSetDuiMsg(lpszDuiMsg))
+	{
+		return TRUE;
+	}
+
+	CString strDuiMsg = lpszDuiMsg;
+	if(strDuiMsg == _T("invoke"))	// 发送Invoke的DUI消息
+	{
+		m_bDuiMsgInvoke = TRUE;
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 // ActiveX控件创建控件对象
