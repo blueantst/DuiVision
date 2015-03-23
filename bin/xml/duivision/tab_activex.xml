@@ -7,7 +7,8 @@
 		url="http://www.blueantstudio.net"
 		pos="1,1,-1,-1"
 		show-contextmenu="0"
-		show-scroll="1"		>
+		show-scroll="1"
+		duimsg="invoke" >
 	</webbrowser>
 	
 	<!--flash name="flash_ctrl" show="1"
