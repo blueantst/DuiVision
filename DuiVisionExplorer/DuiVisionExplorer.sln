@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionExplorer", "DuiVisionExplorer\DuiVisionExplorer.vcproj", "{42AB7796-E646-40E1-9859-BD1B9F7242A4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVision.2008", "..\DuiVision\DuiVision.2008.vcproj", "{78D4D293-EFD7-471C-983A-D63EE9B07BD2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42AB7796-E646-40E1-9859-BD1B9F7242A4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{42AB7796-E646-40E1-9859-BD1B9F7242A4}.Debug|Win32.Build.0 = Debug|Win32
+		{42AB7796-E646-40E1-9859-BD1B9F7242A4}.Release|Win32.ActiveCfg = Release|Win32
+		{42AB7796-E646-40E1-9859-BD1B9F7242A4}.Release|Win32.Build.0 = Release|Win32
+		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Debug|Win32.Build.0 = Debug|Win32
+		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Release|Win32.ActiveCfg = Release|Win32
+		{78D4D293-EFD7-471C-983A-D63EE9B07BD2}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
