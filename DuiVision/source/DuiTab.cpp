@@ -545,6 +545,12 @@ int CDuiTabCtrl::GetItemCount()
 // 根据tab名字获取索引
 int CDuiTabCtrl::GetItemIndex(CString strTabName)
 {
+	// 如果名字为空,则不用查找,直接返回-1
+	if(strTabName.IsEmpty())
+	{
+		return -1;
+	}
+
 	for(size_t i = 0; i < m_vecItemInfo.size(); i++)
 	{
 		TabItemInfo &itemInfoTemp = m_vecItemInfo.at(i);
