@@ -30,6 +30,16 @@ public:                                                             \
         }                                                           \
         else                                                        \
 
+// 控件Msg对应的事件处理
+#define DUI_CONTROL_MSG_MESSAGE(msg, msghandler)     \
+        if (msg == Msg)                            \
+        {                                                           \
+			nRet = msghandler(uID, strName, Msg, wParam, lParam);	\
+            if(nRet)                      \
+				return nRet;                      \
+        }                                                           \
+        else                                                        \
+
 // 控件ID和Msg对应的事件处理
 #define DUI_CONTROL_IDMSG_MESSAGE(controlid, msg, msghandler)     \
         if (controlid == uID && msg == Msg)                            \
