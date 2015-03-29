@@ -42,6 +42,7 @@ public:
 	BOOL InsertItem(int nItem, UINT nItemID, CString strName, CString strItemText, CString strAction, CString strImage, CControlBase* pControl, int nImageCount = -1, BOOL bOutLink = FALSE, int nItemWidth = 0);
 	BOOL InsertItem(int nItem, UINT nItemID, CString strName, CString strItemText, CString strAction, int nImageIndex, CControlBase* pControl, BOOL bOutLink = FALSE, int nItemWidth = 0);
 
+	int  GetItemCount();
 	int  GetItemIndex(CString strTabName);
 	TabItemInfo* GetItemInfo(int nItem);
 	void RefreshItems();

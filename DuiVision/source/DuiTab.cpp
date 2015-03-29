@@ -536,6 +536,12 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 	return true;
 }
 
+// 获取tab页签数量
+int CDuiTabCtrl::GetItemCount()
+{
+	return m_vecItemInfo.size();
+}
+
 // 根据tab名字获取索引
 int CDuiTabCtrl::GetItemIndex(CString strTabName)
 {
