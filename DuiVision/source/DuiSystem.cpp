@@ -361,6 +361,9 @@ BOOL DuiSystem::LoadResource()
 			m_strResourceFile = _T("xml\\resource.xml");
 			strResFile = m_strResourceFile;
 		}
+	}else
+	{
+		strResFile = m_strResourceFile;
 	}
 	
 	return LoadResourceXml(strResFile, m_strCurStyle);
