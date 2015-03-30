@@ -673,15 +673,14 @@ BOOL CControlBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		return true;
 	}
 
-	// 发送键盘按下DUI消息
-	if(m_bDuiMsgKeyDown)
-	{
-		SendMessage(MSG_KEY_DOWN, (WPARAM)nChar, (LPARAM)nFlags);
-	}
-
 	// 控件自身是否可以处理此事件
 	if(OnControlKeyDown(nChar, nRepCnt, nFlags))
 	{
+		// 发送键盘按下DUI消息
+		if(m_bDuiMsgKeyDown)
+		{
+			SendMessage(MSG_KEY_DOWN, (WPARAM)nChar, (LPARAM)nFlags);
+		}
 		return true;
 	}
 
@@ -691,8 +690,19 @@ BOOL CControlBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase && pControlBase->OnKeyDown(nChar, nRepCnt, nFlags))
 		{
+			// 发送键盘按下DUI消息
+			if(m_bDuiMsgKeyDown)
+			{
+				SendMessage(MSG_KEY_DOWN, (WPARAM)nChar, (LPARAM)nFlags);
+			}
 			return true;
 		}
+	}
+
+	// 发送键盘按下DUI消息
+	if(m_bDuiMsgKeyDown)
+	{
+		SendMessage(MSG_KEY_DOWN, (WPARAM)nChar, (LPARAM)nFlags);
 	}
 
 	return false;
