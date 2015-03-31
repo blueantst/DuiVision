@@ -1330,6 +1330,10 @@ CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiOb
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiFlashCtrl);
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiMediaPlayer);
 
+	#ifdef USE_WKE_CONTROL
+	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiWkeView);
+	#endif // USE_WKE_CONTROL
+
 	return NULL;
 }
 

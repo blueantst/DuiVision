@@ -103,4 +103,8 @@ using namespace Gdiplus;
 //ActiveX
 #include "DuiActiveX.h"
 
+//////////////////////////////////////////////////////////
+//wke
+#include "DuiWkeView.h"
+
 #endif

@@ -229,6 +229,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiWkeView.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiXml.cpp"
 				>
 			</File>
@@ -424,6 +428,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiVision.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiWkeView.h"
 				>
 			</File>
 			<File
