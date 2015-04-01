@@ -59,6 +59,20 @@ enum wkeMouseMsg
 typedef void* jsExecState;
 typedef __int64 jsValue;
 
+typedef void* wkeString;
+typedef void (*ON_TITLE_CHANGED) (const struct _wkeClientHandler* clientHandler, const wkeString title);
+typedef void (*ON_URL_CHANGED) (const struct _wkeClientHandler* clientHandler, const wkeString url);
+
+typedef struct _wkeClientHandler {
+    ON_TITLE_CHANGED onTitleChanged;
+    ON_URL_CHANGED onURLChanged;
+} wkeClientHandler;
+
+typedef struct _wkeBufHandler
+{
+	virtual void onBufUpdated (const HDC hdc,int x, int y, int cx, int cy) = 0;
+}wkeBufHandler;
+
 /*
  *c++ interface
  *-----------------------------------------------------------------------------------------------------------
@@ -112,6 +126,8 @@ namespace wke
 
         virtual void layoutIfNeeded() = 0;
         virtual void paint(void* bits, int pitch) = 0;
+		virtual void tick() = 0;
+		virtual void paint(HDC hdc,int x,int y,int cx,int cy,int xSrc,int ySrc,bool fKeepAlpha) = 0;
 
         virtual bool canGoBack() const = 0;
         virtual bool goBack() = 0;
@@ -154,6 +170,12 @@ namespace wke
         virtual float zoomFactor() const = 0;
 
         virtual void setEditable(bool editable) = 0;
+
+        virtual void setClientHandler(const wkeClientHandler* handler) = 0;
+        virtual const wkeClientHandler* getClientHandler() const = 0;
+
+		virtual void setBufHandler(wkeBufHandler *handler) = 0;
+		virtual const wkeBufHandler * getBufHandler() const  = 0;
     };
 }
 
@@ -287,6 +309,11 @@ WKE_API float wkeZoomFactor(wkeWebView webView);
 
 WKE_API void wkeSetEditable(wkeWebView webView, bool editable);
 
+WKE_API void wkeSetClientHandler(wkeWebView webView, const wkeClientHandler* handler);
+WKE_API const wkeClientHandler* wkeGetClientHandler(wkeWebView webView);
+
+WKE_API const utf8* wkeToString(const wkeString string);
+WKE_API const wchar_t* wkeToStringW(const wkeString string);
 
 /***JavaScript Bind***/
 #define JS_CALL __fastcall
