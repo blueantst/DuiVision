@@ -19,6 +19,7 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	m_bCreated = false;
 	m_bCreating = false;
 	m_bDelayCreate = false;
+	m_bTransparent = FALSE;
 	m_pWebView = NULL;
 	m_strUrl = L"";
 
@@ -187,6 +188,7 @@ bool CDuiWkeView::CreateControl()
 
 		// 创建wke视图,并加载url
 		m_pWebView = wkeCreateWebView();
+		m_pWebView->setTransparent(m_bTransparent);
 		//m_pWebView->setBufHandler(this);
 		m_pWebView->loadURL(m_strUrl);
 

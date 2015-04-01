@@ -156,6 +156,7 @@ protected:
     bool					m_bCreated;		// 是否已创建
 	bool					m_bCreating;	// 是否正在创建
     bool					m_bDelayCreate;	// 是否延迟创建控件
+	BOOL					m_bTransparent;	// 是否背景透明
 	wkeWebView				m_pWebView;		// wke视图对象指针
 	CRenderGDI				m_render;		// wke渲染对象
 	CString					m_strUrl;		// URL
@@ -163,6 +164,7 @@ protected:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("delaycreate"), OnAttributeDelayCreate)
 		DUI_CUSTOM_ATTRIBUTE(_T("url"), OnAttributeUrl)
+		DUI_BOOL_ATTRIBUTE(_T("transparent"), m_bTransparent, TRUE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
