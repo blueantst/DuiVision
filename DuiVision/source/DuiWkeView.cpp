@@ -231,6 +231,8 @@ void CDuiWkeView::DrawControl(CDC &dc, CRect rcUpdate)
 
 	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd) && m_pWebView)
     {
+		// 强制wke视图刷新
+		m_pWebView->setDirty(true);
 		// wke渲染
 		m_render.render(m_pWebView);
     }
