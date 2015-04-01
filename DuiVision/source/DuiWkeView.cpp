@@ -502,4 +502,62 @@ void CDuiWkeView::Navigate(CString strUrl)
 	}
 }
 
+// 加载页面内容
+void CDuiWkeView::loadHTML(CString strHtml)
+{
+	if(m_pWebView)
+	{
+		m_pWebView->loadHTML(strHtml);
+	}
+}
+
+// 加载本地文件
+void CDuiWkeView::loadFile(CString strFile)
+{
+	if(m_pWebView)
+	{
+		m_pWebView->loadFile(strFile);
+	}
+}
+
+// 是否可以回退
+bool CDuiWkeView::canGoBack()
+{
+	if(m_pWebView)
+	{
+		return m_pWebView->canGoBack();
+	}
+	return false;
+}
+
+// 回退
+bool CDuiWkeView::goBack()
+{
+	if(m_pWebView)
+	{
+		return m_pWebView->goBack();
+	}
+	return false;
+}
+
+// 是否可以前进
+bool CDuiWkeView::canGoForward()
+{
+	if(m_pWebView)
+	{
+		return m_pWebView->canGoForward();
+	}
+	return false;
+}
+
+// 前进
+bool CDuiWkeView::goForward()
+{
+	if(m_pWebView)
+	{
+		return m_pWebView->goForward();
+	}
+	return false;
+}
+
 #endif // USE_WKE_CONTROL

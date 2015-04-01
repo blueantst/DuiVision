@@ -131,6 +131,13 @@ public:
 	HRESULT OnAttributeUrl(const CString& strValue, BOOL bLoading);
 
 	virtual void Navigate(CString strUrl);
+	virtual void loadHTML(CString strHtml);
+	virtual void loadFile(CString strFile);
+
+	virtual bool canGoBack();
+	virtual bool goBack();
+	virtual bool canGoForward();
+	virtual bool goForward();
 
 protected:
     void ReleaseControl();
