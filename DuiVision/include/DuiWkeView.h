@@ -113,6 +113,9 @@ public:
     CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiWkeView();
 
+	static void WkeInit();
+	static void WkeShutdown();
+
     HWND GetNativeHWnd() const;
 	HWND GetPaintHWnd();
 

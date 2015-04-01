@@ -141,6 +141,11 @@ void DuiSystem::createSingletons()
 
 void DuiSystem::destroySingletons()
 {
+	#ifdef USE_WKE_CONTROL
+	// wke库释放
+	CDuiWkeView::WkeShutdown();
+	#endif // USE_WKE_CONTROL
+
 	// 停止任务管理器线程
 	m_TaskMsg.Shutdown();
 

@@ -22,14 +22,28 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	m_pWebView = NULL;
 	m_strUrl = L"";
 
-	if(!g_wkeInited)
-	{
-		wkeInit();
-		g_wkeInited = true;
-	}
+	CDuiWkeView::WkeInit();
 }
 
 CDuiWkeView::~CDuiWkeView()
+{
+}
+
+// wkeø‚≥ı ºªØ
+void CDuiWkeView::WkeInit()
+{
+	if(g_wkeInited)
+	{
+		return;
+	}
+
+    wkeInit();
+
+	g_wkeInited = true;
+}
+
+// wkeø‚ Õ∑≈
+void CDuiWkeView::WkeShutdown()
 {
 	wkeShutdown();
 }
