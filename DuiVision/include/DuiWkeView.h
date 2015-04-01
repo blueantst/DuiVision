@@ -116,9 +116,6 @@ public:
 	static void WkeInit();
 	static void WkeShutdown();
 
-    HWND GetNativeHWnd() const;
-	HWND GetPaintHWnd();
-
     bool IsDelayCreate() const;
     void SetDelayCreate(bool bDelayCreate = true);
 
@@ -133,6 +130,8 @@ public:
 	HRESULT OnAttributeDelayCreate(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeUrl(const CString& strValue, BOOL bLoading);
 
+	virtual void Navigate(CString strUrl);
+
 protected:
     void ReleaseControl();
 
@@ -145,7 +144,7 @@ protected:
 	virtual LRESULT WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 protected:
-	HWND					m_hNativeWnd;	// 原生窗口句柄
+	HWND					m_hNativeWnd;	// 原生窗口句柄(用于显示wke视图)
 	WNDPROC					m_OldWndProc;	// 保存旧的窗口事件处理函数
     bool					m_bCreated;		// 是否已创建
 	bool					m_bCreating;	// 是否正在创建

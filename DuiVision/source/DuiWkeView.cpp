@@ -48,22 +48,6 @@ void CDuiWkeView::WkeShutdown()
 	wkeShutdown();
 }
 
-HWND CDuiWkeView::GetNativeHWnd() const
-{
-    return m_hNativeWnd;
-}
-
-// 获取控件的父窗口句柄
-HWND CDuiWkeView::GetPaintHWnd()
-{
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg)
-	{
-		return pDlg->GetSafeHwnd();
-	}
-    return NULL;
-}
-
 static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
 #define HIMETRIC_PER_INCH   2540
@@ -505,6 +489,15 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
         return DefWindowProc(hWnd, message, wParam, lParam);
 
     return 0;
+}
+
+// URL导航
+void CDuiWkeView::Navigate(CString strUrl)
+{
+	if(m_pWebView)
+	{
+		m_pWebView->loadURL(strUrl);
+	}
 }
 
 #endif // USE_WKE_CONTROL
