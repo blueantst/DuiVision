@@ -43,6 +43,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_nHeight = 0;
 
 	m_strTooltip = _T("");
+	m_nTipWidth = 0;
 	m_strAction = _T("");
 	m_bTaskMsg = FALSE;
 
@@ -86,6 +87,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_posMenu.nCount = 0;
 
 	m_strTooltip = _T("");
+	m_nTipWidth = 0;
 	m_strAction = _T("");
 	m_bTaskMsg = FALSE;
 
@@ -441,7 +443,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 		CDlgBase* pDlg = GetParentDialog();
 		if(pDlg && (pDlg->GetTooltipCtrlID() != GetID()))
 		{
-			pDlg->SetTooltip(this, m_strTooltip, m_rc);
+			pDlg->SetTooltip(this, m_strTooltip, m_rc, FALSE, m_nTipWidth);
 			pDlg->SetTooltipCtrlID(GetID());
 		}
 	}

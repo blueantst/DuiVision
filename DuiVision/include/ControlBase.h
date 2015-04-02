@@ -217,6 +217,7 @@ protected:
 	DUIDLG_POSITION			m_posMenu;			// 弹出菜单的位置信息
 
 	CString					m_strTooltip;		// 控件的Tooltip
+	int						m_nTipWidth;		// Tooltip的宽度
 	CString					m_strAction;		// 控件执行的动作
 	BOOL					m_bTaskMsg;			// 调用事件响应函数时候采用任务方式
 
@@ -242,6 +243,7 @@ protected:
 		DUI_INT_ATTRIBUTE(_T("taskmsg"), m_bTaskMsg, TRUE)
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_TSTRING_ATTRIBUTE(_T("tip"), m_strTooltip, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tip-width"), m_nTipWidth, TRUE)
 		DUI_CUSTOM_ATTRIBUTE(_T("shortcut"), OnAttributeShortcut)
 		DUI_CUSTOM_ATTRIBUTE(_T("cursor"), OnAttributeCursor)
 		DUI_CUSTOM_ATTRIBUTE(_T("duimsg"), OnAttributeSendDuiMsg)

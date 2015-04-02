@@ -192,7 +192,7 @@ public:
 	void UpdateHover();
 
 	// 设置Tooltip
-	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth = FALSE);
+	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth = FALSE, int nTipWidth = 0);
 	// 清除Tooltip
 	void ClearTooltip();
 	// 设置当前tooltip控件ID

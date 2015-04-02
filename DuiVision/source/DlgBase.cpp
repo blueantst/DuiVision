@@ -1992,7 +1992,7 @@ void CDlgBase::PreSubclassWindow()
 }
 
 // 设置当前的Tooltip
-void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth)
+void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth, int nTipWidth)
 {
 	m_wndToolTip.DelTool(this, 1);
 	m_wndToolTip.Activate(FALSE);
@@ -2002,6 +2002,11 @@ void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect
 		if(bControlWidth)
 		{
 			m_wndToolTip.SetMaxTipWidth(pControl->GetRect().Width());
+		}else
+		if(nTipWidth > 0)
+		{
+			// 指定tooltip的宽度
+			m_wndToolTip.SetMaxTipWidth(nTipWidth);
 		}
 		m_wndToolTip.AddTool(this, strTooltip, rect, 1);//Tooltip默认都用1作为ID, pControl->GetID());
 		m_wndToolTip.Activate(TRUE);
