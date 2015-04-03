@@ -105,7 +105,10 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////
 // CDuiWkeView - wke控件类
 
-class CDuiWkeView : public CControlBase// ,protected wkeBufHandler
+#define WKE_EVENT_URLCHANGED	100	// URL变更事件
+#define WKE_EVENT_TITLECHANGED	101	// 网页标题变更事件
+
+class CDuiWkeView : public CControlBase ,protected wkeBufHandler
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiWkeView, _T("wkeview"))
 
@@ -115,6 +118,9 @@ public:
 
 	static void WkeInit();
 	static void WkeShutdown();
+
+	static CDuiWkeView* GetWkeViewByClientHandler(const wkeClientHandler* pWkeClientHandler);
+	wkeClientHandler* GetWkeClientHandler();
 
     bool IsDelayCreate() const;
     void SetDelayCreate(bool bDelayCreate = true);
@@ -133,6 +139,7 @@ public:
 	virtual void Navigate(CString strUrl);
 	virtual void loadHTML(CString strHtml);
 	virtual void loadFile(CString strFile);
+	virtual void stopLoading();
 
 	virtual bool canGoBack();
 	virtual bool goBack();
@@ -144,11 +151,14 @@ protected:
 
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
-	//virtual void onBufUpdated (const HDC hdc,int x, int y, int cx, int cy);
+	virtual void onBufUpdated (const HDC hdc,int x, int y, int cx, int cy);
 
 	static LRESULT CALLBACK __WebViewWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	virtual LRESULT WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	static void onURLChanged(const struct _wkeClientHandler* clientHandler, const wkeString URL);
+	static void onTitleChanged(const struct _wkeClientHandler* clientHandler, const wkeString title);
 
 protected:
 	HWND					m_hNativeWnd;	// 原生窗口句柄(用于显示wke视图)
@@ -156,8 +166,9 @@ protected:
     bool					m_bCreated;		// 是否已创建
 	bool					m_bCreating;	// 是否正在创建
     bool					m_bDelayCreate;	// 是否延迟创建控件
-	BOOL					m_bTransparent;	// 是否背景透明
+	bool					m_bTransparent;	// 是否背景透明
 	wkeWebView				m_pWebView;		// wke视图对象指针
+	wkeClientHandler		m_wkeHander;	// wke网页标题改变和URL改变的回调
 	CRenderGDI				m_render;		// wke渲染对象
 	CString					m_strUrl;		// URL
 

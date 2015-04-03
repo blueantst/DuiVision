@@ -7,6 +7,7 @@
 #pragma message("Automatically linking with wke.lib")
 
 static bool g_wkeInited = false;	// wke库是否已经初始化
+static CPtrList	g_duiWkeViews;		// Wke视图对象列表
 
 /////////////////////////////////////////////////////////////////////////////////////
 // CDuiWkeView
@@ -19,15 +20,28 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	m_bCreated = false;
 	m_bCreating = false;
 	m_bDelayCreate = false;
-	m_bTransparent = FALSE;
+	m_bTransparent = false;
 	m_pWebView = NULL;
 	m_strUrl = L"";
 
 	CDuiWkeView::WkeInit();
+	g_duiWkeViews.AddTail(this);
 }
 
 CDuiWkeView::~CDuiWkeView()
 {
+	// 删除wke对象列表中的项
+	int count = g_duiWkeViews.GetCount();
+	for(int i = 0; i < count; i ++)
+	{
+		POSITION pos = g_duiWkeViews.FindIndex(i);
+		CDuiWkeView* pDuiWkeView = (CDuiWkeView*)g_duiWkeViews.GetAt(pos);
+		if(pDuiWkeView == this) 
+		{
+			g_duiWkeViews.RemoveAt(pos);
+			return;
+		}
+	}
 }
 
 // wke库初始化
@@ -47,6 +61,28 @@ void CDuiWkeView::WkeInit()
 void CDuiWkeView::WkeShutdown()
 {
 	wkeShutdown();
+}
+
+// 根据回调指针获取wke对象指针
+CDuiWkeView* CDuiWkeView::GetWkeViewByClientHandler(const wkeClientHandler* pWkeClientHandler)
+{
+	int count = g_duiWkeViews.GetCount();
+	for(int i = 0; i < count; i ++)
+	{
+		POSITION pos = g_duiWkeViews.FindIndex(i);
+		CDuiWkeView* pDuiWkeView = (CDuiWkeView*)g_duiWkeViews.GetAt(pos);
+		if(pWkeClientHandler == pDuiWkeView->GetWkeClientHandler())
+		{
+			return pDuiWkeView;
+		}
+	}
+	return NULL;
+}
+
+// 获取wke回调指针
+wkeClientHandler* CDuiWkeView::GetWkeClientHandler()
+{
+	return &m_wkeHander;
 }
 
 static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
@@ -186,10 +222,15 @@ bool CDuiWkeView::CreateControl()
 	{
 		m_bCreating = true;
 
+		// 设置wke事件回调函数
+		m_wkeHander.onTitleChanged = onTitleChanged;
+		m_wkeHander.onURLChanged = onURLChanged;
+
 		// 创建wke视图,并加载url
 		m_pWebView = wkeCreateWebView();
 		m_pWebView->setTransparent(m_bTransparent);
-		//m_pWebView->setBufHandler(this);
+		m_pWebView->setClientHandler(&m_wkeHander);
+		m_pWebView->setBufHandler(this);
 		m_pWebView->loadURL(m_strUrl);
 
 		// 注册窗口类
@@ -240,15 +281,13 @@ void CDuiWkeView::DrawControl(CDC &dc, CRect rcUpdate)
     }
 }
 
-/*
 void CDuiWkeView::onBufUpdated( const HDC hdc,int x, int y, int cx, int cy )
 {
 	RECT rcClient;
 	GetClientRect(m_hWnd,&rcClient);
 	RECT rcInvalid = {rcClient.left + x, rcClient.top + y, rcClient.left + x + cx, rcClient.top + y + cy};
-	InvalidateRect(m_hWnd, &rcInvalid ,TRUE);
+	::InvalidateRect(m_hWnd, &rcInvalid ,TRUE);
 }
-*/
 
 // 窗口消息处理函数
 LRESULT CALLBACK CDuiWkeView::__WebViewWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -495,6 +534,28 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
     return 0;
 }
 
+// URL变更的回调函数
+void CDuiWkeView::onURLChanged(const struct _wkeClientHandler* clientHandler, const wkeString URL)
+{
+	// 查找对应的控件对象
+	CDuiWkeView* pDuiWkeView = CDuiWkeView::GetWkeViewByClientHandler(clientHandler);
+	if(pDuiWkeView)
+	{
+		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_URLCHANGED, (LPARAM)URL);
+	}
+}
+
+// 页面标题变更的回调函数
+void CDuiWkeView::onTitleChanged(const struct _wkeClientHandler* clientHandler, const wkeString title)
+{
+	// 查找对应的控件对象
+	CDuiWkeView* pDuiWkeView = CDuiWkeView::GetWkeViewByClientHandler(clientHandler);
+	if(pDuiWkeView)
+	{
+		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_TITLECHANGED, (LPARAM)title);
+	}
+}
+
 // URL导航
 void CDuiWkeView::Navigate(CString strUrl)
 {
@@ -519,6 +580,15 @@ void CDuiWkeView::loadFile(CString strFile)
 	if(m_pWebView)
 	{
 		m_pWebView->loadFile(strFile);
+	}
+}
+
+// 停止加载页面
+void CDuiWkeView::stopLoading()
+{
+	if(m_pWebView)
+	{
+		m_pWebView->stopLoading();
 	}
 }
 
