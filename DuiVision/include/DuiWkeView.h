@@ -120,6 +120,7 @@ public:
 	static void WkeShutdown();
 
 	static CDuiWkeView* GetWkeViewByClientHandler(const wkeClientHandler* pWkeClientHandler);
+	wkeWebView GetWkeWebView();
 	wkeClientHandler* GetWkeClientHandler();
 
     bool IsDelayCreate() const;
@@ -135,6 +136,10 @@ public:
 
 	HRESULT OnAttributeDelayCreate(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeUrl(const CString& strValue, BOOL bLoading);
+
+	CString getTitle();
+	CString getURL();
+	void setURL(CString strUrl);
 
 	virtual void Navigate(CString strUrl);
 	virtual void loadHTML(CString strHtml);

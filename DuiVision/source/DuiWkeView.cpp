@@ -79,6 +79,12 @@ CDuiWkeView* CDuiWkeView::GetWkeViewByClientHandler(const wkeClientHandler* pWke
 	return NULL;
 }
 
+// 获取wke视图指针
+wkeWebView CDuiWkeView::GetWkeWebView()
+{
+	return m_pWebView;
+}
+
 // 获取wke回调指针
 wkeClientHandler* CDuiWkeView::GetWkeClientHandler()
 {
@@ -541,7 +547,8 @@ void CDuiWkeView::onURLChanged(const struct _wkeClientHandler* clientHandler, co
 	CDuiWkeView* pDuiWkeView = CDuiWkeView::GetWkeViewByClientHandler(clientHandler);
 	if(pDuiWkeView)
 	{
-		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_URLCHANGED, (LPARAM)URL);
+		pDuiWkeView->setURL(wkeToStringW(URL));
+		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_URLCHANGED, (LPARAM)wkeToStringW(URL));
 	}
 }
 
@@ -552,8 +559,31 @@ void CDuiWkeView::onTitleChanged(const struct _wkeClientHandler* clientHandler, 
 	CDuiWkeView* pDuiWkeView = CDuiWkeView::GetWkeViewByClientHandler(clientHandler);
 	if(pDuiWkeView)
 	{
-		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_TITLECHANGED, (LPARAM)title);
+		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_TITLECHANGED, (LPARAM)wkeToStringW(title));
 	}
+}
+
+// 获取网页标题
+CString CDuiWkeView::getTitle()
+{
+	if(m_pWebView)
+	{
+		return m_pWebView->titleW();
+	}
+
+	return L"";
+}
+
+// 获取网页URL
+CString CDuiWkeView::getURL()
+{
+	return m_strUrl;
+}
+
+// 设置网页URL
+void CDuiWkeView::setURL(CString strUrl)
+{
+	m_strUrl = strUrl;
 }
 
 // URL导航
