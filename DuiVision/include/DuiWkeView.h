@@ -126,8 +126,6 @@ public:
     bool IsDelayCreate() const;
     void SetDelayCreate(bool bDelayCreate = true);
 
-	bool SetNativeHWnd(HWND hWnd);
-
 	bool RegisterWindowClass();
     bool CreateControl();
 
@@ -176,6 +174,7 @@ protected:
 	wkeClientHandler		m_wkeHander;	// wke网页标题改变和URL改变的回调
 	CRenderGDI				m_render;		// wke渲染对象
 	CString					m_strUrl;		// URL
+	CString					m_strHtml;		// Html内容
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("delaycreate"), OnAttributeDelayCreate)

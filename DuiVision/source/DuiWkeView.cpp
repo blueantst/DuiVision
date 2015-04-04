@@ -23,6 +23,7 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	m_bTransparent = false;
 	m_pWebView = NULL;
 	m_strUrl = L"";
+	m_strHtml = L"";
 
 	CDuiWkeView::WkeInit();
 	g_duiWkeViews.AddTail(this);
@@ -168,30 +169,15 @@ bool CDuiWkeView::IsDelayCreate() const
 // 设置延迟加载属性
 void CDuiWkeView::SetDelayCreate(bool bDelayCreate)
 {
-    if( m_bDelayCreate == bDelayCreate ) return;
-	CreateControl();
-    m_bDelayCreate = bDelayCreate;
-}
-
-// 设置原生控件对象的窗口句柄
-bool CDuiWkeView::SetNativeHWnd(HWND hWnd)
-{
-	if(hWnd == NULL)
+    if(m_bDelayCreate == bDelayCreate)
 	{
-		return false;
+		return;
 	}
-
-	ReleaseControl();
-	m_hNativeWnd = hWnd;
-	bool bRet = false;
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd) && m_pWebView)
+	if(!bDelayCreate)
 	{
-		SetControlWndVisible(FALSE);
-		OnAttributePosChange(GetPosStr(), FALSE);
-		bRet = true;
+		CreateControl();
 	}
-
-	return bRet;
+	m_bDelayCreate = bDelayCreate;
 }
 
 const LPCWSTR wkeWebViewClassName = L"class::wkeWebView";	// wke窗口类名
@@ -224,42 +210,46 @@ bool CDuiWkeView::CreateControl()
 	}
 
     m_bCreated = false;
-    if( !m_bDelayCreate )
+	m_bCreating = true;
+
+	// 设置wke事件回调函数
+	m_wkeHander.onTitleChanged = onTitleChanged;
+	m_wkeHander.onURLChanged = onURLChanged;
+
+	// 创建wke视图,并加载url
+	m_pWebView = wkeCreateWebView();
+	m_pWebView->setTransparent(m_bTransparent);
+	m_pWebView->setClientHandler(&m_wkeHander);
+	m_pWebView->setBufHandler(this);
+	m_pWebView->loadURL(m_strUrl);
+
+	// 注册窗口类
+	RegisterWindowClass();
+
+	// 创建用于显示wke视图的窗口
+	DWORD dwExStyle = 0;
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+	HWND hWnd = ::CreateWindowEx(dwExStyle, wkeWebViewClassName,
+		L"wkeWebView", dwStyle,
+		0, 0, 0, 0,
+		m_hWnd, NULL,
+		DuiSystem::Instance()->GetInstance(), this);
+
+	// 设置窗口句柄
+	if(hWnd && ::IsWindow(hWnd))
 	{
-		m_bCreating = true;
-
-		// 设置wke事件回调函数
-		m_wkeHander.onTitleChanged = onTitleChanged;
-		m_wkeHander.onURLChanged = onURLChanged;
-
-		// 创建wke视图,并加载url
-		m_pWebView = wkeCreateWebView();
-		m_pWebView->setTransparent(m_bTransparent);
-		m_pWebView->setClientHandler(&m_wkeHander);
-		m_pWebView->setBufHandler(this);
-		m_pWebView->loadURL(m_strUrl);
-
-		// 注册窗口类
-		RegisterWindowClass();
-
-		// 创建用于显示wke视图的窗口
-		DWORD dwExStyle = 0;
-		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-		HWND hWnd = ::CreateWindowEx(dwExStyle, wkeWebViewClassName,
-			L"wkeWebView", dwStyle,
-			0, 0, 0, 0,
-			m_hWnd, NULL,
-			DuiSystem::Instance()->GetInstance(), this);
-
-		// 设置窗口句柄
-		SetNativeHWnd(hWnd);
-
-		// 初始化wke渲染对象,将渲染对象关联到视图窗口
-		m_render.init(m_hNativeWnd);
-
-		m_bCreated = true;
-		m_bCreating = false;
+		ReleaseControl();
+		m_hNativeWnd = hWnd;
+		//OnAttributePosChange(GetPosStr(), FALSE);
 	}
+
+	// 初始化wke渲染对象,将渲染对象关联到视图窗口
+	m_render.init(m_hNativeWnd);
+	//m_render.render(m_pWebView);
+
+	m_bCreated = true;
+	m_bCreating = false;
+
     return true;
 }
 
@@ -346,7 +336,31 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
     case WM_COMMAND:
 		::SendMessage(m_hWnd, message, wParam, lParam);
         return 0;
+/*
+	case WM_PAINT:
+        if (m_pWebView)
+        {
+			PAINTSTRUCT ps = { 0 };
+			HDC hDcPaint = ::BeginPaint(hWnd, &ps);
 
+			RECT rcClip;	
+			::GetClipBox(hDcPaint,&rcClip);	
+
+			RECT rcClient;
+			::GetClientRect(hWnd, &rcClient);
+			
+			RECT rcInvalid;
+			::IntersectRect(&rcInvalid, &rcClip,&rcClient);
+
+			m_pWebView->paint(hDcPaint,rcInvalid.left,rcInvalid.top,
+				rcInvalid.right - rcInvalid.left, rcInvalid.bottom - rcInvalid.top,
+				rcInvalid.left-rcClient.left,
+				rcInvalid.top-rcClient.top,true);
+
+			::EndPaint(hWnd, &ps);
+        }
+        break;
+*/
     case WM_SIZE:
         if (m_pWebView)
         {
@@ -367,6 +381,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
             //flags = HIWORD(lParam);
 
             handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
+			m_render.render(m_pWebView);
         }
         break;
 
@@ -382,6 +397,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
             //flags = HIWORD(lParam);
 
             handled = m_pWebView->keyUp(virtualKeyCode, flags, false);
+			m_render.render(m_pWebView);
         }
         break;
 
@@ -397,6 +413,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
             //flags = HIWORD(lParam);
 
             handled = m_pWebView->keyPress(charCode, flags, false);
+			m_render.render(m_pWebView);
         }
         break;
 
@@ -442,6 +459,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
             //flags = wParam;
 
             handled = m_pWebView->mouseEvent(message, x, y, flags);
+			m_render.render(m_pWebView);
         }
         break;
 
@@ -469,6 +487,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
                 flags |= WKE_RBUTTON;
 
             handled = m_pWebView->contextMenuEvent(pt.x, pt.y, flags);
+			m_render.render(m_pWebView);
         }
         break;
 
@@ -498,15 +517,18 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
             //flags = wParam;
 
             handled = m_pWebView->mouseWheel(pt.x, pt.y, delta, flags);
+			m_render.render(m_pWebView);
         }
         break;
 
     case WM_SETFOCUS:
         m_pWebView->focus();
+		m_render.render(m_pWebView);
         break;
 
     case WM_KILLFOCUS:
         m_pWebView->unfocus();
+		m_render.render(m_pWebView);
         break;
 /*
     case WM_IME_STARTCOMPOSITION:
@@ -592,6 +614,7 @@ void CDuiWkeView::Navigate(CString strUrl)
 	if(m_pWebView)
 	{
 		m_pWebView->loadURL(strUrl);
+		m_render.render(m_pWebView);
 	}
 }
 
@@ -601,6 +624,7 @@ void CDuiWkeView::loadHTML(CString strHtml)
 	if(m_pWebView)
 	{
 		m_pWebView->loadHTML(strHtml);
+		m_render.render(m_pWebView);
 	}
 }
 
@@ -610,6 +634,7 @@ void CDuiWkeView::loadFile(CString strFile)
 	if(m_pWebView)
 	{
 		m_pWebView->loadFile(strFile);
+		m_render.render(m_pWebView);
 	}
 }
 
@@ -619,6 +644,7 @@ void CDuiWkeView::stopLoading()
 	if(m_pWebView)
 	{
 		m_pWebView->stopLoading();
+		m_render.render(m_pWebView);
 	}
 }
 
