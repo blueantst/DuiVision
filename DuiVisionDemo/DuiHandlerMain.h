@@ -51,6 +51,7 @@ public:
 	LRESULT OnDuiMsgBtnShowFlash2(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgBtnShowFlash3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgBtnShowFlash4(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgTabCtrlClose(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	
 	//virtual LRESULT OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	virtual void OnTimer(UINT uTimerID, CString strTimerName);
@@ -94,5 +95,6 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"textbtn_showflash_2", MSG_BUTTON_UP, OnDuiMsgBtnShowFlash2)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"textbtn_showflash_3", MSG_BUTTON_UP, OnDuiMsgBtnShowFlash3)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"textbtn_showflash_4", MSG_BUTTON_UP, OnDuiMsgBtnShowFlash4)
+		DUI_CONTROL_NAMEMSG_MESSAGE(L"tabctrl.controls", MSG_CONTROL_BUTTON, OnDuiMsgTabCtrlClose)
 	DUI_DECLARE_MESSAGE_END()
 };

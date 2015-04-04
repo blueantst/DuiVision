@@ -603,6 +603,11 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash4(UINT uID, CString strName, UINT M
 	return TRUE;
 }
 
+// 进程间消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgTabCtrlClose(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
 /*
 // DUI事件处理
 LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)

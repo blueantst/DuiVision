@@ -3,8 +3,8 @@
 
 #ifdef USE_WKE_CONTROL
 
-#pragma comment(lib, "../DuiVision/third-part/wke/wke.lib")		// 自动链接wke库
-#pragma message("Automatically linking with wke.lib")
+//#pragma comment(lib, "../DuiVision/third-part/wke/wke.lib")		// 自动链接wke库
+//#pragma message("Automatically linking with wke.lib")
 
 static bool g_wkeInited = false;	// wke库是否已经初始化
 static CPtrList	g_duiWkeViews;		// Wke视图对象列表

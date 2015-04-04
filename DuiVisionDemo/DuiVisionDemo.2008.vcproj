@@ -68,10 +68,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="DuiVision.2008d.lib"
+				AdditionalDependencies="DuiVision.2008d.lib wke.lib"
 				OutputFile="$(OutDir)\$(ProjectName)d.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../Lib"
+				AdditionalLibraryDirectories="../Lib;&quot;../DuiVision/third-part/wke&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -152,9 +152,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="DuiVision.2008.lib"
+				AdditionalDependencies="DuiVision.2008.lib wke.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="../Lib"
+				AdditionalLibraryDirectories="../Lib;&quot;../DuiVision/third-part/wke&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
