@@ -101,6 +101,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DuiText.h
 [duivision]include\DuiTreeCtrl.h
 [duivision]include\DuiVision.h
+[duivision]include\DuiWkeView.h
 [duivision]include\DuiXml.h
 [duivision]include\Frame.h
 [duivision]include\GlobalFunction.h
@@ -142,6 +143,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DuiTab.cpp
 [duivision]source\DuiText.cpp
 [duivision]source\DuiTreeCtrl.cpp
+[duivision]source\DuiWkeView.cpp
 [duivision]source\DuiXml.cpp
 [duivision]source\Frame.cpp
 [duivision]source\GlobalFunction.cpp
@@ -161,6 +163,9 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\TextButton.cpp
 [duivision]source\Timer.cpp
 [duivision]source\WndBase.cpp
+
+[duivision]third-part\wke\wke.h
+[duivision]third-part\wke\wke.lib
 
 [bin]dui.ico
 

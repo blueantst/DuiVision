@@ -197,15 +197,15 @@ function AddConfig(proj, strProjectName)
 		LinkTool.LinkIncremental = linkIncrementalYes;
 		LinkTool.SuppressStartupBanner = true;  // nologo
 		LinkTool.OutputFile = "$(outdir)/" + strProjectName + "d" + strProjExeExt;	// 输出文件
-		LinkTool.AdditionalLibraryDirectories = "../Lib;";	// 附加库目录
+		LinkTool.AdditionalLibraryDirectories = "../Lib;../DuiVision/third-part/wke;";	// 附加库目录
 		// 附加依赖项
 		if(dte.Version == '9.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2008d.lib";	// VC2008库
+			LinkTool.AdditionalDependencies = "DuiVision.2008d.lib wke.lib";	// VC2008库
 		}else
 		if(dte.Version == '10.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2010d.lib";	// VC2010库
+			LinkTool.AdditionalDependencies = "DuiVision.2010d.lib wke.lib";	// VC2010库
 		}
 
 		// Release设置
@@ -238,15 +238,15 @@ function AddConfig(proj, strProjectName)
 		LinkTool.LinkIncremental = linkIncrementalYes;
 		LinkTool.SuppressStartupBanner = true;  // nologo
 		LinkTool.OutputFile = "$(outdir)/" + strProjectName + strProjExeExt;	// 输出文件
-		LinkTool.AdditionalLibraryDirectories = "../Lib;";	// 附加库目录
+		LinkTool.AdditionalLibraryDirectories = "../Lib;../DuiVision/third-part/wke;";	// 附加库目录
 		// 附加依赖项
 		if(dte.Version == '9.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2008.lib";	// VC2008库
+			LinkTool.AdditionalDependencies = "DuiVision.2008.lib wke.lib";	// VC2008库
 		}else
 		if(dte.Version == '10.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2010.lib";	// VC2010库
+			LinkTool.AdditionalDependencies = "DuiVision.2010.lib wke.lib";	// VC2010库
 		}
 	}
 	catch(e)
@@ -447,19 +447,12 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				}else
 				if (strTpl.indexOf('[duivision]') == 0) // DuiVision库文件
 				{
-				    strTpl = '..\\..\\..\\..\\DuiVision\\' + strTpl.substr(11);
+				    strTpl = 'DuiVision\\' + strTpl.substr(11);
 					bCopyOnly = true;
 				}else
 				if (strTpl.indexOf('[bin]') == 0) // bin
 				{
-					if( (strTpl == '[bin]xml\\resource.xml') ||
-						(strTpl == '[bin]xml\\duivision\\dlg_main.xml') )
-					{
-						strTpl = 'bin\\' + strTpl.substr(5);
-					}else
-					{
-						strTpl = '..\\..\\..\\..\\bin\\' + strTpl.substr(5);
-					}
+				    strTpl = 'bin\\' + strTpl.substr(5);
 				    bCopyOnly = true;
 				}
 
