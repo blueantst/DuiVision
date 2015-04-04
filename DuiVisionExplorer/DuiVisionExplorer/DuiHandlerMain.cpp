@@ -126,8 +126,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgInterprocess(UINT uID, CString strName, UINT Ms
 	return TRUE;
 }
 
-// 获取Tab页中的浏览器控件
-CDuiWebBrowserCtrl* CDuiHandlerMain::GetTabWebControl(CControlBase* pTabCtrl)
+// 获取Tab页中的IE浏览器控件
+CDuiWebBrowserCtrl* CDuiHandlerMain::GetTabWebIEControl(CControlBase* pTabCtrl)
 {
 	if(pTabCtrl == NULL)
 	{
@@ -150,6 +150,30 @@ CDuiWebBrowserCtrl* CDuiHandlerMain::GetTabWebControl(CControlBase* pTabCtrl)
 	return NULL;
 }
 
+// 获取Tab页中的wke浏览器控件
+CDuiWkeView* CDuiHandlerMain::GetTabWebWkeControl(CControlBase* pTabCtrl)
+{
+	if(pTabCtrl == NULL)
+	{
+		return NULL;
+	}
+
+	vector<CControlBase*>* paControls = pTabCtrl->GetControls();
+	if(paControls)
+	{
+		for (size_t i = 0; i < paControls->size(); i++)
+		{
+			CControlBase* pControl = paControls->at(i);
+			if(pControl && pControl->IsClass(CDuiWkeView::GetClassName()))
+			{
+				return (CDuiWkeView*)pControl;
+			}
+		}
+	}
+
+	return NULL;
+}
+
 // 获取Tab页中某个控件ID对应的Tab页信息
 TabItemInfo* CDuiHandlerMain::GetTabInfoByWebCtrlId(UINT uID)
 {
@@ -162,10 +186,17 @@ TabItemInfo* CDuiHandlerMain::GetTabInfoByWebCtrlId(UINT uID)
 			TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(i);
 			if(pTabInfo && pTabInfo->pControl)
 			{
-				CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)GetTabWebControl(pTabInfo->pControl);
+				CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl);
 				if(pWebControl && (pWebControl->GetID() == uID))
 				{
 					return pTabInfo;
+				}else
+				{
+					CDuiWkeView* pWebControl = (CDuiWkeView*)GetTabWebWkeControl(pTabInfo->pControl);
+					if(pWebControl && (pWebControl->GetID() == uID))
+					{
+						return pTabInfo;
+					}
 				}
 			}
 		}
@@ -174,8 +205,8 @@ TabItemInfo* CDuiHandlerMain::GetTabInfoByWebCtrlId(UINT uID)
 	return NULL;
 }
 
-// 获取当前页面的浏览器控件
-CDuiWebBrowserCtrl* CDuiHandlerMain::GetCurTabWebControl()
+// 获取当前页面的IE浏览器控件
+CDuiWebBrowserCtrl* CDuiHandlerMain::GetCurTabWebIEControl()
 {
 	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
 	if(pTabCtrl)
@@ -184,8 +215,25 @@ CDuiWebBrowserCtrl* CDuiHandlerMain::GetCurTabWebControl()
 		TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(nItem);
 		if(pTabInfo && pTabInfo->pControl)
 		{
-			//CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)(pTabInfo->pControl->GetControl(L"webbrowser"));
-			CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)GetTabWebControl(pTabInfo->pControl);
+			CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl);
+			return pWebControl;
+		}
+	}
+
+	return NULL;
+}
+
+// 获取当前页面的wke浏览器控件
+CDuiWkeView* CDuiHandlerMain::GetCurTabWebWkeControl()
+{
+	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+	if(pTabCtrl)
+	{
+		int nItem = pTabCtrl->GetSelectItem();
+		TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(nItem);
+		if(pTabInfo && pTabInfo->pControl)
+		{
+			CDuiWkeView* pWebControl = (CDuiWkeView*)GetTabWebWkeControl(pTabInfo->pControl);
 			return pWebControl;
 		}
 	}
@@ -199,19 +247,42 @@ void CDuiHandlerMain::InsertExplorerTab(int nIndex, CString strTitle, CString st
 	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
 	if(pTabCtrl)
 	{
-		pTabCtrl->LoadTabXml(L"tab_webbrowser");
-		int nCount = pTabCtrl->GetItemCount();
-		pTabCtrl->SetSelectItem(nCount-1);
-		TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(nCount - 1);
-		if(pTabInfo && pTabInfo->pControl)
+		// 浏览器类型
+		CRegistryUtil reg(HKEY_CURRENT_USER);
+		CString strWebType = reg.GetStringValue(NULL, REG_EXPLORER_SUBKEY, REG_EXPLORER_WEBTYPE);
+		BOOL bWebTypeIE = (strWebType != L"wke");
+
+		if(bWebTypeIE)
 		{
-			pTabInfo->strText = strTitle;
-			pTabInfo->nImageIndex = 0;
-			//CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)(pTabInfo->pControl->GetControl(L"webbrowser"));
-			CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)GetTabWebControl(pTabInfo->pControl);
-			if(pWebControl)
+			pTabCtrl->LoadTabXml(L"tab_webie");
+			int nCount = pTabCtrl->GetItemCount();
+			pTabCtrl->SetSelectItem(nCount-1);
+			TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(nCount - 1);
+			if(pTabInfo && pTabInfo->pControl)
 			{
-				pWebControl->Navigate(strUrl);
+				pTabInfo->strText = strTitle;
+				pTabInfo->nImageIndex = 0;
+				CDuiWebBrowserCtrl* pWebControl = (CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl);
+				if(pWebControl)
+				{
+					pWebControl->Navigate(strUrl);
+				}
+			}
+		}else
+		{
+			pTabCtrl->LoadTabXml(L"tab_webwke");
+			int nCount = pTabCtrl->GetItemCount();
+			pTabCtrl->SetSelectItem(nCount-1);
+			TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(nCount - 1);
+			if(pTabInfo && pTabInfo->pControl)
+			{
+				pTabInfo->strText = strTitle;
+				pTabInfo->nImageIndex = 0;
+				CDuiWkeView* pWebControl = (CDuiWkeView*)GetTabWebWkeControl(pTabInfo->pControl);
+				if(pWebControl)
+				{
+					pWebControl->Navigate(strUrl);
+				}
 			}
 		}
 	}
@@ -242,13 +313,58 @@ void CDuiHandlerMain::InsertExplorerTab(int nIndex, CString strTitle, CString st
 */
 }
 
+// 显示系统设置对话框菜单消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgMenuOption(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDlgBase* pDlg = DuiSystem::CreateDuiDialog(_T("dlg_option"), m_pDlg, _T(""), TRUE, 0, TRUE);
+	if(pDlg == NULL)
+	{
+		return FALSE;
+	}
+
+	// 浏览器类型
+	CRegistryUtil reg(HKEY_CURRENT_USER);
+	CString strWebType = reg.GetStringValue(NULL, REG_EXPLORER_SUBKEY, REG_EXPLORER_WEBTYPE);
+	BOOL bWebTypeIE = (strWebType != L"wke");
+	pDlg->SetControlValue(L"option.webtype.ie", L"check", bWebTypeIE ? L"true" : L"false");
+	pDlg->SetControlValue(L"option.webtype.wke", L"check", !bWebTypeIE ? L"true" : L"false");
+
+	int nResponse = pDlg->DoModal();
+	DuiSystem::Instance()->RemoveDuiDialog(pDlg);
+	return TRUE;
+}
+
+// 系统设置对话框的确认按钮消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgOptionDlgOK(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDlgBase* pDlg = GetControlDialog(uID);
+	if(pDlg == NULL)
+	{
+		return FALSE;
+	}
+
+	// 浏览器类型
+	CDuiRadioButton* pControlWebTypeIE = static_cast<CDuiRadioButton*>(pDlg->GetControl(L"option.webtype.ie"));
+	CString strWebType = pControlWebTypeIE->GetGroupValue();
+	CRegistryUtil reg(HKEY_CURRENT_USER);
+	reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY, REG_EXPLORER_WEBTYPE, strWebType);
+
+	pDlg->DoOK();
+	return TRUE;
+}
+
 // 导航到上一页
 LRESULT CDuiHandlerMain::OnDuiMsgButtonGoBack(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDuiWebBrowserCtrl* pWebControl = GetCurTabWebControl();
-	if(pWebControl)
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
 	{
-		pWebControl->GoBack();
+		pWebControlIE->GoBack();
+	}else
+	if(pWebControlWke)
+	{
+		pWebControlWke->goBack();
 	}
 
 	return TRUE;
@@ -257,10 +373,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonGoBack(UINT uID, CString strName, UINT Ms
 // 导航到下一页
 LRESULT CDuiHandlerMain::OnDuiMsgButtonGoForward(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDuiWebBrowserCtrl* pWebControl = GetCurTabWebControl();
-	if(pWebControl)
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
 	{
-		pWebControl->GoForward();
+		pWebControlIE->GoForward();
+	}else
+	if(pWebControlWke)
+	{
+		pWebControlWke->goForward();
 	}
 
 	return TRUE;
@@ -269,10 +390,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonGoForward(UINT uID, CString strName, UINT
 // 刷新web页面
 LRESULT CDuiHandlerMain::OnDuiMsgButtonRefresh(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDuiWebBrowserCtrl* pWebControl = GetCurTabWebControl();
-	if(pWebControl)
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
 	{
-		pWebControl->Refresh();
+		pWebControlIE->Refresh();
+	}else
+	if(pWebControlWke)
+	{
+		//pWebControlWke->();
 	}
 
 	return TRUE;
@@ -281,10 +407,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonRefresh(UINT uID, CString strName, UINT M
 // 导航到首页
 LRESULT CDuiHandlerMain::OnDuiMsgButtonHome(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	CDuiWebBrowserCtrl* pWebControl = GetCurTabWebControl();
-	if(pWebControl)
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
 	{
-		pWebControl->Navigate(L"http://www.blueantstudio.net");
+		pWebControlIE->Navigate(L"http://www.blueantstudio.net");
+	}else
+	if(pWebControlWke)
+	{
+		pWebControlWke->Navigate(L"http://www.blueantstudio.net");
 	}
 
 	return TRUE;
@@ -305,10 +436,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT
 		strUrl = pUrlCtrl->GetEditText();
 	}
 
-	CDuiWebBrowserCtrl* pWebControl = GetCurTabWebControl();
-	if(pWebControl)
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
 	{
-		pWebControl->Navigate(strUrl);
+		pWebControlIE->Navigate(strUrl);
+	}else
+	if(pWebControlWke)
+	{
+		pWebControlWke->Navigate(strUrl);
 	}
 
 	return TRUE;
@@ -329,10 +465,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrl(UINT uID, CString strName, UINT Msg, W
 		strUrl = pUrlCtrl->GetEditText();
 	}
 
-	CDuiWebBrowserCtrl* pWebControl = GetCurTabWebControl();
-	if(pWebControl)
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
 	{
-		pWebControl->Navigate(strUrl);
+		pWebControlIE->Navigate(strUrl);
+	}else
+	if(pWebControlWke)
+	{
+		pWebControlWke->Navigate(strUrl);
 	}
 
 	return TRUE;
@@ -361,8 +502,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonCloseTab(UINT uID, CString strName, UINT 
 }
 
 #define MAX_URL 256
-// 浏览器页面的标题变更事件
-LRESULT CDuiHandlerMain::OnDuiMsgWebTitleChange(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+// IE浏览器页面的标题变更事件
+LRESULT CDuiHandlerMain::OnDuiMsgWebIETitleChange(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	// 获取页面标题
 	CString strTitle = L"";
@@ -386,6 +527,27 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebTitleChange(UINT uID, CString strName, UINT 
 	{
 		pTabInfo->strText = strTitle;
 		pTabCtrl->RefreshItems();
+	}
+
+	return TRUE;
+}
+
+// wke浏览器事件
+LRESULT CDuiHandlerMain::OnDuiMsgWebWkeEvent(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	if(wParam == WKE_EVENT_TITLECHANGED)	// 页面标题变更
+	{
+		// 获取页面标题
+		CString strTitle = (LPCTSTR)lParam;
+
+		// 找对对应的浏览器控件,并设置对应的tab页签文字
+		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+		TabItemInfo* pTabInfo = GetTabInfoByWebCtrlId(uID);
+		if(pTabInfo && pTabCtrl)
+		{
+			pTabInfo->strText = strTitle;
+			pTabCtrl->RefreshItems();
+		}
 	}
 
 	return TRUE;

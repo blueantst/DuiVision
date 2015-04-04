@@ -18,13 +18,15 @@
 
 <!--XML资源-默认风格-->
 <res type="xml" name="dlg_main" file="xml\duivision\dlg_main.xml" />
-<res type="xml" name="dlg_skin" file="xml\dlg_skin.xml"  />
-<res type="xml" name="dlg_notifymsg" file="xml\dlg_notifymsg.xml"  />
-<res type="xml" name="dlg_msgbox" file="xml\dlg_msgbox.xml"  />
-<res type="xml" name="dlg_about" file="xml\duivision\dlg_about.xml"  />
-<res type="xml" name="dlg_login" file="xml\duivision\dlg_login.xml"  />
-<res type="xml" name="menu_main" file="xml\duivision\menu_main.xml"  />
-<res type="xml" name="tab_webbrowser" file="xml\duiexplorer\tab_webbrowser.xml" />
+<res type="xml" name="dlg_skin" file="xml\dlg_skin.xml" />
+<res type="xml" name="dlg_notifymsg" file="xml\dlg_notifymsg.xml" />
+<res type="xml" name="dlg_msgbox" file="xml\dlg_msgbox.xml" />
+<res type="xml" name="dlg_about" file="xml\duivision\dlg_about.xml" />
+<res type="xml" name="dlg_login" file="xml\duivision\dlg_login.xml" />
+<res type="xml" name="dlg_option" file="xml\duiexplorer\dlg_option.xml" />
+<res type="xml" name="menu_main" file="xml\duivision\menu_main.xml" />
+<res type="xml" name="tab_webie" file="xml\duiexplorer\tab_webbrowser.xml" />
+<res type="xml" name="tab_webwke" file="xml\duiexplorer\tab_wkeview.xml" />
 
 
 <!--字体资源-->

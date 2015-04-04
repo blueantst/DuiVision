@@ -4,7 +4,7 @@
 	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
 
   <base>
-	<img pos="5,5" width="40" height="40" image="skins\icon\Synchstep.png" mode="extrude" framesize="1"  />
+	<img pos="5,5" width="40" height="40" image="skins\icon\Synchstep.png" mode="extrude" framesize="1" response="0" />
 	
 	<text name="title" crtext="E0E0E0" crmark="800000" crshadow="202020" font="default"
 			pos="60,4,250,19" title="[APP_NAME][APP_VER]" response="0" show="1" />

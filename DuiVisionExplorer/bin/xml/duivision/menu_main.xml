@@ -2,7 +2,7 @@
 
 <menu title="Menu" width="150" item-height="25" framesize="30" left="30" frame-width="3" bkimg="skin:IDB_MENU_BACK" >
 
-	<menuitem name="item_login" skin="IDB_MENU_AUTH" img-count="3" title="认证" action="dlg:dlg_login" />
+	<menuitem name="item_login" skin="IDB_MENU_AUTH" img-count="3" title="登录" action="dlg:dlg_login" />
 	<menuitem name="item_setup" skin="IDB_MENU_SETUP" img-count="3" title="系统设置" taskmsg="1" />
 	<menuitem name="item_update" image="skin:IDB_MENU_UPDATE" title="检查更新" action="link:http://www.blueantstudio.net" />
 	<menuitem separator="1" skin="IDB_MENU_SEP" />

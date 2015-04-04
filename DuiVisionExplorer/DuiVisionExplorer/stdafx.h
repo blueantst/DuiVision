@@ -47,3 +47,4 @@
 #define REG_CONFIG_BKCOLOR		_T("BkColor")	// 背景颜色
 
 #define REG_EXPLORER_SUBKEY		_T("Software\\DuiVisionExplorer\\Expiorer")
+#define REG_EXPLORER_WEBTYPE	_T("WebType")	// 浏览器内核类型(ie|wke)
