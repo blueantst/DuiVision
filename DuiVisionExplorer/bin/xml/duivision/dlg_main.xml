@@ -6,7 +6,7 @@
   <base>
 	<img pos="5,5" width="40" height="40" image="skins\icon\Synchstep.png" mode="extrude" framesize="1"  />
 	
-	<text name="title" crtext="808080" crmark="800000" font="default"
+	<text name="title" crtext="E0E0E0" crmark="800000" crshadow="202020" font="default"
 			pos="60,4,250,19" title="[APP_NAME][APP_VER]" response="0" show="1" />
 	
     <imgbtn name="button.goback" pos="60,20,91,51" skin="IDB_BT_PREVIEW" tip="上一页" showfocus="0" shortcut="LEFT" />
@@ -22,6 +22,9 @@
 	<imgbtn name="button.close" pos="-40,0,-0,19"  image="skins\default\close.png" tip="关闭" showfocus="0" action="close-window" show="1" />    
     <imgbtn name="button.max"   pos="-67,0,-40,19"  image="skins\default\restore.png" tip="最大化" showfocus="0" />    
     <imgbtn name="button.min"   pos="-94,0,-67,19" image="skins\default\min.png" tip="最小化" showfocus="0" />
+	
+	<imgbtn name="button.menu" pos="-130,0,-97,29" skin="IDB_BT_MENU" tip="菜单" showfocus="0" action="menu:menu_main" menupos="-75,-0" />
+	<imgbtn name="button.skin" pos="-160,0,-131,29" skin="IDB_BT_SKIN" tip="皮肤" showfocus="0" show="1"/>
 	
 	<!--imgbtn name="button.close" pos="-45,0,-0,29"  image="skins\default\close.png" tip="关闭" action="close-window" show="1" />    
     <imgbtn name="button.max"   pos="-66,4,-46,24"  image="skins\default\restore.png" tip="最大化" />    
@@ -60,7 +63,7 @@
 			tabimg-mode="mid" width-lt="2" height-lt="2" width-rb="2" height-rb="2"
 			img-tabbtn="skins\default\btn_delete.png" tabbtnpos="-21,2"
 			crtext="808080" font="default" item-width="154" tab-height="27" animate="0"
-			pos="1,50,-1,-28">
+			pos="1,50,-1,-30">
 		<!--tab name="tab.Home" title="首页" pos="0,27,-0,-0" img-index="0" active="true" >
 			<webbrowser name="ie_ctrl_home" show="1"
 				delaycreate="true"

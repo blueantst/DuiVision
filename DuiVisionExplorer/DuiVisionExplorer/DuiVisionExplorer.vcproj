@@ -59,11 +59,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="DuiVision.2008d.lib"
+				AdditionalDependencies="DuiVision.2008d.lib wke.lib"
 				OutputFile="$(outdir)/DuiVisionExplorerd.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../Lib;"
+				AdditionalLibraryDirectories="../Lib;&quot;../../DuiVision/third-part/wke&quot;"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
@@ -132,11 +132,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="DuiVision.2008.lib"
+				AdditionalDependencies="DuiVision.2008.lib wke.lib"
 				OutputFile="$(outdir)/DuiVisionExplorer.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../Lib;"
+				AdditionalLibraryDirectories="../Lib;&quot;../../DuiVision/third-part/wke&quot;"
 				GenerateDebugInformation="true"
 			/>
 			<Tool
