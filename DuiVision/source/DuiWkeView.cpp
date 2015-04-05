@@ -31,6 +31,11 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 
 CDuiWkeView::~CDuiWkeView()
 {
+	if(m_hNativeWnd != NULL)
+	{
+		::DestroyWindow(m_hNativeWnd);
+	}
+
 	// 删除wke对象列表中的项
 	int count = g_duiWkeViews.GetCount();
 	for(int i = 0; i < count; i ++)
