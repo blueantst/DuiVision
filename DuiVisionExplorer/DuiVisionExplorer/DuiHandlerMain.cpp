@@ -438,6 +438,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT
 
 	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
 	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if((pWebControlIE == NULL) && (pWebControlWke == NULL))
+	{
+		// 如果没有创建浏览器窗口,需要先创建
+		InsertExplorerTab(-1, L"", L"");
+		pWebControlIE = GetCurTabWebIEControl();
+		pWebControlWke = GetCurTabWebWkeControl();
+	}
+
+	// 导航到输入的url
 	if(pWebControlIE)
 	{
 		pWebControlIE->Navigate(strUrl);
@@ -467,6 +476,15 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrl(UINT uID, CString strName, UINT Msg, W
 
 	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
 	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if((pWebControlIE == NULL) && (pWebControlWke == NULL))
+	{
+		// 如果没有创建浏览器窗口,需要先创建
+		InsertExplorerTab(-1, L"", L"");
+		pWebControlIE = GetCurTabWebIEControl();
+		pWebControlWke = GetCurTabWebWkeControl();
+	}
+
+	// 导航到输入的url
 	if(pWebControlIE)
 	{
 		pWebControlIE->Navigate(strUrl);
@@ -484,6 +502,34 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonNewTab(UINT uID, CString strName, UINT Ms
 {
 	// 新建web页面
 	InsertExplorerTab(-1, L"", L"");
+
+	return TRUE;
+}
+
+// 切换页面
+LRESULT CDuiHandlerMain::OnDuiMsgTabCtrlSwitch(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+	CDuiComboBox* pUrlCtrl = (CDuiComboBox*)GetControl(_T("combo.url"));
+	if((pTabCtrl == NULL) || (pUrlCtrl == NULL))
+	{
+		return FALSE;
+	}
+
+	int nTabItem = wParam;
+
+	// 刷新输入框的url
+	CString strUrl = L"";
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+	if(pWebControlIE)
+	{
+	}else
+	if(pWebControlWke)
+	{
+		strUrl = pWebControlWke->getURL();
+		pUrlCtrl->SetTitle(strUrl);
+	}
 
 	return TRUE;
 }
@@ -535,6 +581,12 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebIETitleChange(UINT uID, CString strName, UIN
 // wke浏览器事件
 LRESULT CDuiHandlerMain::OnDuiMsgWebWkeEvent(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
+	TabItemInfo* pTabInfo = GetTabInfoByWebCtrlId(uID);
+	if(pTabInfo == NULL)
+	{
+		return FALSE;
+	}
+
 	if(wParam == WKE_EVENT_TITLECHANGED)	// 页面标题变更
 	{
 		// 获取页面标题
@@ -542,11 +594,28 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebWkeEvent(UINT uID, CString strName, UINT Msg
 
 		// 找对对应的浏览器控件,并设置对应的tab页签文字
 		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
-		TabItemInfo* pTabInfo = GetTabInfoByWebCtrlId(uID);
-		if(pTabInfo && pTabCtrl)
+		if(pTabCtrl)
 		{
 			pTabInfo->strText = strTitle;
 			pTabCtrl->RefreshItems();
+		}
+	}else
+	if(wParam == WKE_EVENT_URLCHANGED)	// URL变更
+	{
+		// 获取URL
+		CString strUrl = (LPCTSTR)lParam;
+
+		// 找对对应的浏览器控件,如果是当前页面,则刷新URL输入框内容
+		CDuiComboBox* pUrlCtrl = (CDuiComboBox*)GetControl(_T("combo.url"));
+		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+		if(pUrlCtrl && pTabCtrl && pTabInfo->pControl)
+		{
+			CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+			CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
+			if((pWebControlWke != NULL) && ((CDuiWkeView*)GetTabWebWkeControl(pTabInfo->pControl) == pWebControlWke))
+			{
+				pUrlCtrl->SetTitle(strUrl);
+			}
 		}
 	}
 
