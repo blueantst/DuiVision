@@ -894,6 +894,22 @@ HTREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HTREEITEM hNode)
 	return NULL;
 }
 
+// 获取某个节点的子节点个数
+int CDuiTreeCtrl::GetChildNodeCount(HTREEITEM hNode)
+{
+	int nCount = 0;
+	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
+		if(rowInfoTemp.hParentNode == hNode)
+		{
+			nCount++;
+		}
+	}
+
+	return nCount;
+}
+
 // 获取一个节点的层级
 int CDuiTreeCtrl::GetNodeLevel(HTREEITEM hNode)
 {

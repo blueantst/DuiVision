@@ -92,6 +92,7 @@ public:
 	HTREEITEM GetChildNode(HTREEITEM hNode);
 	HTREEITEM GetNextSiblingNode(HTREEITEM hNode);
 	HTREEITEM GetPrevSiblingNode(HTREEITEM hNode);
+	int  GetChildNodeCount(HTREEITEM hNode);
 	int  GetNodeLevel(HTREEITEM hNode);
 	HTREEITEM GetNodeWithId(CString strId);
 	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);
