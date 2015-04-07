@@ -1,7 +1,11 @@
 #include "StdAfx.h"
 #include "DuiWkeView.h"
+#include <Imm.h>
 
 #ifdef USE_WKE_CONTROL
+
+#pragma comment(lib, "imm32.lib")		// 自动链接imm库
+#pragma message("Automatically linking with imm32.lib")
 
 //#pragma comment(lib, "../DuiVision/third-part/wke/wke.lib")		// 自动链接wke库
 //#pragma message("Automatically linking with wke.lib")
@@ -15,6 +19,7 @@ static CPtrList	g_duiWkeViews;		// Wke视图对象列表
 CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBase(hWnd, pDuiObject)
 {
+	m_bTabStop = TRUE;	// 可以响应tab键
 	m_hNativeWnd = NULL;
 	m_OldWndProc = ::DefWindowProc;
 	m_bCreated = false;
@@ -191,7 +196,7 @@ const LPCWSTR wkeWebViewClassName = L"class::wkeWebView";	// wke窗口类名
 bool CDuiWkeView::RegisterWindowClass()
 {
     WNDCLASS wc = { 0 };
-    wc.style = 0;
+    wc.style = CS_DBLCLKS;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hIcon = NULL;
@@ -232,13 +237,12 @@ bool CDuiWkeView::CreateControl()
 	RegisterWindowClass();
 
 	// 创建用于显示wke视图的窗口
-	DWORD dwExStyle = 0;
-	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-	HWND hWnd = ::CreateWindowEx(dwExStyle, wkeWebViewClassName,
-		L"wkeWebView", dwStyle,
-		0, 0, 0, 0,
-		m_hWnd, NULL,
-		DuiSystem::Instance()->GetInstance(), this);
+	HWND hWnd = ::CreateWindow(wkeWebViewClassName, 0, 
+        WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+        0, 0, 0, 0, 
+        m_hWnd, 
+        0, 
+        DuiSystem::Instance()->GetInstance(), this);
 
 	// 设置窗口句柄
 	if(hWnd && ::IsWindow(hWnd))
@@ -250,7 +254,6 @@ bool CDuiWkeView::CreateControl()
 
 	// 初始化wke渲染对象,将渲染对象关联到视图窗口
 	m_render.init(m_hNativeWnd);
-	//m_render.render(m_pWebView);
 
 	m_bCreated = true;
 	m_bCreating = false;
@@ -282,6 +285,20 @@ void CDuiWkeView::DrawControl(CDC &dc, CRect rcUpdate)
     }
 }
 
+// 控件的30毫秒定时器
+BOOL CDuiWkeView::OnControlTimer()
+{
+	if(!m_bIsVisible || !m_bCreated)
+	{
+		return FALSE;
+	}
+
+	// 给wke窗口发送定时器消息,用于刷新页面
+	::SendMessage(m_hNativeWnd, WM_TIMER, 0, 0);
+
+	return TRUE;
+}
+
 void CDuiWkeView::onBufUpdated( const HDC hdc,int x, int y, int cx, int cy )
 {
 	RECT rcClient;
@@ -310,9 +327,6 @@ LRESULT CALLBACK CDuiWkeView::__WebViewWndProc(HWND hWnd, UINT message, WPARAM w
             //LRESULT lRes = ::CallWindowProc(pThis->m_OldWndProc, hWnd, message, wParam, lParam);
             ::SetWindowLongPtr(hWnd, GWLP_USERDATA, 0L);
 			pThis->ReleaseControl();
-			//pThis->m_hNativeWnd = NULL;
-			//pThis->m_render.destroy();
-			//pThis->m_pWebView->destroy();
             return 0;//lRes;
         }
     }
@@ -385,8 +399,20 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 
             //flags = HIWORD(lParam);
 
-            handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
+			handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
 			m_render.render(m_pWebView);
+
+			/*// 下面的转换不起作用
+			MSG msg;
+			msg.hwnd = hWnd;
+			msg.message = message;
+			msg.wParam = wParam;
+			msg.lParam = lParam;
+			::TranslateMessage(&msg);
+			if((msg.message == WM_CHAR) || (msg.message == WM_IME_CHAR))
+			{
+				::DispatchMessage(&msg);
+			}*/
         }
         break;
 
@@ -407,6 +433,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
         break;
 
     case WM_CHAR:
+	case WM_IME_CHAR:
         {
             unsigned int charCode = wParam;
             unsigned int flags = 0;
@@ -535,7 +562,11 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
         m_pWebView->unfocus();
 		m_render.render(m_pWebView);
         break;
-/*
+
+	case WM_TIMER:
+		m_render.render(m_pWebView);
+        break;
+
     case WM_IME_STARTCOMPOSITION:
         {
             wkeRect caret = m_pWebView->getCaret();
@@ -555,7 +586,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
             ImmReleaseContext(hWnd, hIMC);
         }
         break;
-*/
+
     default:
         handled = false;
         break;

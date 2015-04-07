@@ -153,6 +153,7 @@ protected:
     void ReleaseControl();
 
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
+	virtual	BOOL OnControlTimer();
 
 	virtual void onBufUpdated (const HDC hdc,int x, int y, int cx, int cy);
 
