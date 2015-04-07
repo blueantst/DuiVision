@@ -248,6 +248,7 @@ HRESULT CScrollV::OnAttributeRowRange(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置滚动条当前位置
 BOOL CScrollV::SetScrollCurrentPos(int nCurrentPos)
 {
 	m_nCurrentPos = nCurrentPos;
@@ -255,6 +256,7 @@ BOOL CScrollV::SetScrollCurrentPos(int nCurrentPos)
 	return TRUE;
 }
 
+// 设置滚动条最大值
 BOOL CScrollV::SetScrollMaxRange(int nMaxRange)
 {
 	m_nMaxRange = nMaxRange;
@@ -262,6 +264,7 @@ BOOL CScrollV::SetScrollMaxRange(int nMaxRange)
 	return TRUE;
 }
 
+// 设置滚动条行和页的像素数
 BOOL CScrollV::SetScrollSize(int nPageRange, int nRowRange)
 {
 	m_nPageRange = nPageRange;
@@ -280,6 +283,7 @@ BOOL CScrollV::SetScrollInfo(int nMaxRange, int nCurrentPos, int nPageRange, int
 	return TRUE;
 }
 
+// 滚动指定的行数
 BOOL CScrollV::ScrollRow(int nRow)
 {
 	int nNewPos = m_nCurrentPos + nRow * m_nRowRange;
@@ -297,6 +301,7 @@ BOOL CScrollV::ScrollRow(int nRow)
 	return bRet;
 }
 
+// 鼠标移动
 BOOL  CScrollV::OnControlMouseMove(UINT nFlags, CPoint point)
 {		
 	if(!m_bShowScroll)
@@ -332,6 +337,7 @@ BOOL  CScrollV::OnControlMouseMove(UINT nFlags, CPoint point)
 		}
 		else
 		{
+			// 鼠标按着滚动块,拖动的情况下,移动滚动块范围
 			m_nDownTop += MoveRange(point.y - m_nDownTop);
 			return true;
 		}
@@ -346,6 +352,7 @@ BOOL  CScrollV::OnControlMouseMove(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键按下
 BOOL CScrollV::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	if(!m_bShowScroll)
@@ -358,11 +365,13 @@ BOOL CScrollV::OnControlLButtonDown(UINT nFlags, CPoint point)
 	{
 		if(m_rcBlock.PtInRect(point))
 		{
+			// 如果在滚动块内,则记录鼠标位置
 			m_enButtonState = enBSDown;
 			m_nDownTop = point.y;
 		}
 		else
 		{
+			// 不在滚动块内,则移动滚动块
 			int nRangeHeight = m_rc.Height() - m_nArrowLen*2;
 			int nMove = m_nPageRange * nRangeHeight / m_nMaxRange;
 
@@ -378,6 +387,7 @@ BOOL CScrollV::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键放开
 BOOL  CScrollV::OnControlLButtonUp(UINT nFlags, CPoint point)
 {	
 	if(!m_bShowScroll)
@@ -462,6 +472,7 @@ void CScrollV::DrawRange(CDC &dc, CRect rc, int nXPos)
 	DrawImageFrame(graphics, m_pImage, rcTemp, nXPos, m_sizeImage.cy * 2, m_sizeImage.cx, m_sizeImage.cy, 2);
 }
 
+// 移动滚动块
 int CScrollV::MoveRange(int nMove)
 {
 	if(nMove != 0)
@@ -503,6 +514,7 @@ int CScrollV::MoveRange(int nMove)
 	return nMove;
 }
 
+// 计算位置信息,以及是否显示滚动条
 int CScrollV::SetRange()
 {
 	m_nPageRange = m_rc.Height();

@@ -45,10 +45,10 @@ protected:
 	virtual LRESULT OnMessage(UINT	uID, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 public:	
-	CBitmap			m_bitmap;	
-	enumButtonState m_enButtonState;
-	BOOL			m_bHover;
-	BOOL			m_bShowScroll;
+	CBitmap			m_bitmap;
+	enumButtonState m_enButtonState;		// 鼠标状态
+	BOOL			m_bHover;				// 是否鼠标热点状态
+	BOOL			m_bShowScroll;			// 是否显示滚动条
 
 	CControlBase*	m_pControlUpImage;		// 上箭头控件
 	CControlBase*	m_pControlDownImage;	// 下箭头控件
@@ -60,7 +60,7 @@ public:
 	int				m_nPageRange;			// 一页翻多少
 	int				m_nRowRange;			// 一行翻多少
 	CRect			m_rcBlock;				// 滚动块大小
-	int				m_nDownTop;
+	int				m_nDownTop;				// 鼠标点击时候的纵向坐标位置
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("maxrange"), OnAttributeMaxRange)
