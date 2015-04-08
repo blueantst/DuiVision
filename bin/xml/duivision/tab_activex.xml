@@ -11,6 +11,14 @@
 		duimsg="invoke" >
 	</webbrowser>
 	
+	<!--wkeview name="webkit" show="1"
+		delaycreate="true"
+		transparent="0"
+		url="http://www.blueantstudio.net"
+		pos="1,1,-1,-1"
+		show-contextmenu="0" >
+	</wkeview-->
+	
 	<!--flash name="flash_ctrl" show="1"
 		url="skins\flash\noon.swf"
 		pos="1,1,-1,-1" >

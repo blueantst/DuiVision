@@ -7,6 +7,7 @@
 	<!--text pos="50,20,250,40" crtext="808080" title="普通文字，左对齐1" tip="普通文字，左对齐" /-->
 	
 	<tabctrl name="tabctrl.controls" img-sep="skin:IDB_TAB_SEPERATOR" img-hover="skin:IDB_TAB_BACK-"
+		img-tabbtn-="skins\default\btn_close.png" tabbtnpos="-21,3"
 		font="bold" item-width="90" tab-height="29" crtext="800000" animate="1"
 		pos="1,1,-1,-31">
 		
@@ -75,10 +76,10 @@
 				pos="200,100,300,125" show="1" title="检查框2" check="false" />
 			
 			<radiobtn name="radio_button_1" skin="IDB_RADIO_BUTTON" title="RadioButton演示1"
-				pos="50,140,600,165" check="true" group="radio_group_1" show="1" />
+				pos="50,140,300,165" check="true" group="radio_group_1" show="1" />
 			
 			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2"
-				pos="50,175,600,200" check="false" group="radio_group_1" show="1" />
+				pos="50,175,300,200" check="false" group="radio_group_1" show="1" />
 
 			<button pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png" cursor="hand"
 				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4" />
@@ -91,7 +92,7 @@
 			
 			<button pos="500,220,600,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Connect.png" cursor="help"
 				title="图片按钮4" tip="图片按钮4" animate="0" maxindex="4" />
-			
+	
 		</tab>
 		
 		<tab name="tab.control.3" image="skin:IDB_TAB_ITEM" title="图片" pos="0,30,-0,-0">
@@ -189,25 +190,46 @@ width-lt,height-lt,width-rb,height-rb" />
 			<text pos="50,20,250,40" crtext="808080" title="动画图片：" />
 			
 			<animateimg name="animateimg_scan_1" skin="IDB_SCAN_STATUS_360" show="1"
-				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="5" run="true" />
+				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="10" run="true" />
 			
 			<animateimg name="animateimg_repair_1" skin="IDB_REPAIR_STATUS_360" show="1"
-				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="5" run="true" />
+				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="10" run="true" />
 			
 			<animateimg name="animateimg_scan_2" skin="IDB_SCAN_ANIMATE" show="1"
-				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="5" run="true" />
+				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="10" run="true" />
 
 			<text pos="50,180,250,200" crtext="808080" title="进度条：" />
 			
 			<progress name="progress_1" skin="IDB_PROGRESS" show-text="1" crtext="808080" title="进度："
-				pos="50,210" width="330" height="15" value="40" run="true" show="1"
+				pos="50,210" width="300" height="15" value="40" run="true" show="1"
 				tip="直角进度条，进度自动增加，显示进度文字" />
 			
 			<progress name="progress_2"
 				img-back="skin:IDB_PROGRESS_GREEN_BACK" img-fore="skin:IDB_PROGRESS_GREEN_FORE" head-len="5"
-				pos="50,240" width="330" height="12" value="40" run="false" show="1"
+				pos="50,240" width="300" height="12" value="40" run="false" show="1"
 				tip="圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
 
+			<text pos="400,20,-10,40" crtext="808080" title="通过div使子控件支持滚动的演示：" />
+			<div pos="400,45,-10,-10" img-scroll="skin:IDB_SCROLL_V" >
+			
+				<animateimg skin="IDB_SCAN_STATUS_QQ"
+					pos="0,10" width="120" height="132" show="1" index="1" maxindex="10"
+					timer-count="30" run="true" />
+
+				<text pos="0,150,250,170" crtext="808080" title="图片列表：" />
+				
+				<selectbox pos="0,175" width="350" height="300" image="1" col="2" row="3" tip="图片列表"
+					crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
+					<item image="bkimg\SKIN_PIC_0.png" />
+					<item image="bkimg\SKIN_PIC_1.png" />
+					<item image="bkimg\SKIN_PIC_2.png" />
+					<item image="bkimg\SKIN_PIC_3.png" />
+					<item image="bkimg\SKIN_PIC_4.png" />
+					<item image="bkimg\SKIN_PIC_5.png" />
+				</selectbox>
+
+			</div>
+			
 		</tab>
 		
 		<tab name="tab.control.6" image="skin:IDB_TAB_ITEM" title="对话框" pos="0,30,-0,-0">
@@ -238,6 +260,12 @@ width-lt,height-lt,width-rb,height-rb" />
 			
 			<button name="frame_dlg_button" skin="IDB_BT_DEFAULT" title="半透明对话框"
 				pos="350,100,450,128" show="1" tip="显示背景半透明效果对话框" action="dlg:duivision\dlg_translucent.xml" />
+
+			<!--button name="wke_dlg_button" skin="IDB_BT_DEFAULT" title="Web对话框"
+				pos="50,140,150,168" show="1" tip="显示webkit内核的web对话框" action="dlg:duivision\dlg_wke.xml"  />
+
+			<button name="wke_flash_dlg_button" skin="IDB_BT_DEFAULT" title="Wke Flash"
+				pos="200,140,300,168" show="1" tip="显示webkit内核的Flash窗口" action="dlg:duivision\dlg_wke_flash.xml" /-->
 
 		</tab>
 		
