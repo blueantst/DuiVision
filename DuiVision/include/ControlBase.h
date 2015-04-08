@@ -105,6 +105,7 @@ public:
 	BOOL IsTabStop() { return m_bTabStop; }
 	void SetTooltip(CString strTooltip) { m_strTooltip = strTooltip; }
 	CString GetTooltip() { return m_strTooltip; }
+	void SetTipWidth(int nTipWidth) { m_nTipWidth = nTipWidth; }
 	void SetAction(CString strAction) { m_strAction = strAction; }
 	CString GetAction() { return m_strAction; }
 	BOOL UseImageECM() { return m_bImageUseECM; }
