@@ -468,6 +468,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 
 	int nXPos = m_rc.left + m_nTabLeftPading;
 	int nYPos = m_rc.top;
+	int nXTabBtnPos = m_nTabLeftPading;
 
 	for(size_t i = 0; i < (int)m_vecItemInfo.size(); i++)
 	{
@@ -486,23 +487,13 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 			m_nTabCtrlHeight = nItemHeight;
 		}
 
+		// 设置tab页签的位置
 		itemInfoTemp.rc.SetRect(nXPos, nYPos, nXPos + m_nTabItemWidth, nYPos + m_nTabCtrlHeight);
-
-		nXPos += m_nTabItemWidth;
-
-		if(i < m_vecItemInfo.size() - 1 && m_pImageSeperator != NULL)
-		{
-			CRect &rc = m_vecRcSeperator.at(i);
-			rc.SetRect(nXPos, nYPos, nXPos + m_sizeSeperator.cx, nYPos + m_sizeSeperator.cy);
-			nXPos += m_sizeSeperator.cx;
-		}
-
-		itemInfoTemp.buttonState = enBSNormal;
 
 		// 设置Tab页签按钮的位置
 		if(m_pImageTabBtn != NULL)
 		{
-			int nLeft = m_nTabLeftPading + (m_nTabItemWidth * i);
+			int nLeft = nXTabBtnPos;
 			int nTop = 3;
 
 			// 计算Tab页签按钮的显示位置
@@ -522,6 +513,20 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 
 			itemInfoTemp.rcButton.SetRect(nLeft, nTop, nLeft + m_sizeTabBtn.cx, nTop + m_sizeTabBtn.cy);
 		}
+
+		nXPos += m_nTabItemWidth;
+		nXTabBtnPos += m_nTabItemWidth;
+
+		if(i < m_vecItemInfo.size() - 1 && m_pImageSeperator != NULL)
+		{
+			CRect &rc = m_vecRcSeperator.at(i);
+			rc.SetRect(nXPos, nYPos, nXPos + m_sizeSeperator.cx, nYPos + m_sizeSeperator.cy);
+			nXPos += m_sizeSeperator.cx;
+			nXTabBtnPos += m_sizeSeperator.cx;
+		}
+
+		itemInfoTemp.buttonState = enBSNormal;
+		
 		/*
 		if(itemInfoTemp.pControl != NULL)
 		{
