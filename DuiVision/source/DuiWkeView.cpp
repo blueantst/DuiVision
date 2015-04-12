@@ -129,11 +129,12 @@ void CDuiWkeView::SetControlRect(CRect rc)
 // 设置当前焦点控件
 void CDuiWkeView::SetCurrentFocusControl(BOOL bFocus) 
 {
-	CDlgBase* pDlg = GetParentDialog(FALSE);
+	// 暂时不能设置,否则会导致tab切换到edit控件时候异常
+	/*CDlgBase* pDlg = GetParentDialog(FALSE);
 	if(pDlg)
 	{
 		pDlg->SetFocusControl(bFocus ? this : NULL);
-	}
+	}*/
 }
 
 // 从XML设置DelayCreate属性
@@ -253,6 +254,12 @@ bool CDuiWkeView::CreateControl()
 // 释放原生控件
 void CDuiWkeView::ReleaseControl()
 {
+	// 如果是焦点控件,则将当前焦点控件设置为空
+	if(IsFocusControl())
+	{
+		SetCurrentFocusControl(NULL);
+	}
+	// 删除宿主窗口
 	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
 	{
 		DestroyWindow(m_hNativeWnd);
