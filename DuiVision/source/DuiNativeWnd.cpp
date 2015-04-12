@@ -9,7 +9,6 @@
 CDuiNativeWnd::CDuiNativeWnd(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBase(hWnd, pDuiObject)
 {
-	m_hNativeWnd = NULL;
 	m_pNativeWnd = NULL;
 	m_bCreated = false;
 	m_bDelayCreate = false;
@@ -18,11 +17,6 @@ CDuiNativeWnd::CDuiNativeWnd(HWND hWnd, CDuiObject* pDuiObject)
 CDuiNativeWnd::~CDuiNativeWnd()
 {
     ReleaseControl();
-}
-
-HWND CDuiNativeWnd::GetNativeHWnd() const
-{
-    return m_hNativeWnd;
 }
 
 CWnd* CDuiNativeWnd::GetNativeWnd() const
@@ -52,21 +46,6 @@ CWnd* CDuiNativeWnd::GetPaintWnd()
     return NULL;
 }
 
-static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
-{
-#define HIMETRIC_PER_INCH   2540
-#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
-#define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
-    int nPixelsPerInchX;    // Pixels per logical inch along width
-    int nPixelsPerInchY;    // Pixels per logical inch along height
-    HDC hDCScreen = ::GetDC(NULL);
-    nPixelsPerInchX = ::GetDeviceCaps(hDCScreen, LOGPIXELSX);
-    nPixelsPerInchY = ::GetDeviceCaps(hDCScreen, LOGPIXELSY);
-    ::ReleaseDC(NULL, hDCScreen);
-    lpSizeInHiMetric->cx = MAP_PIX_TO_LOGHIM(lpSizeInPix->cx, nPixelsPerInchX);
-    lpSizeInHiMetric->cy = MAP_PIX_TO_LOGHIM(lpSizeInPix->cy, nPixelsPerInchY);
-}
-
 // 设置控件中的Windows原生控件是否可见的状态
 void CDuiNativeWnd::SetControlWndVisible(BOOL bIsVisible)
 {
@@ -84,12 +63,6 @@ void CDuiNativeWnd::SetControlRect(CRect rc)
 	{
 		CreateControl();
 	}
-
-    SIZEL hmSize = { 0 };
-    SIZEL pxSize = { 0 };
-    pxSize.cx = m_rc.right - m_rc.left;
-    pxSize.cy = m_rc.bottom - m_rc.top;
-    PixelToHiMetric(&pxSize, &hmSize);
 
     if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
 	{

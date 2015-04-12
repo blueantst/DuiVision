@@ -61,6 +61,7 @@ public:
 	virtual CDuiObject* GetParent() { return m_pParentDuiObject; }
 	void SetParent(CDuiObject* pParent) { m_pParentDuiObject = pParent; }
 	HWND GetHWND() { return m_hWnd; }
+	HWND GetNativeHWnd() { return m_hNativeWnd; }
 
 	void TestMainThread();
 	void Draw(CDC &dc, CRect rcUpdate);
@@ -174,6 +175,7 @@ protected:
 
 	CDuiObject*				m_pParentDuiObject;	// 父控件对象
 	HWND					m_hWnd;				// 父窗口的Windows窗口句柄(一般是对话框的窗口句柄)
+	HWND					m_hNativeWnd;		// 原生窗口句柄(原生控件使用)
 	
 	CString					m_strPos;			// 位置(XML定义中的字符串)
 	BOOL					m_bIsVisible;		// 是否可见

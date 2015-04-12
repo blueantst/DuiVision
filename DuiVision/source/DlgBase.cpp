@@ -2193,25 +2193,11 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 	BOOL bIsSelect = false;
 	m_bIsLButtonDblClk = FALSE;
 
-	if(m_pFocusControl != m_pControl && m_pFocusControl != NULL)
+	// 如果鼠标点击的不是原来的焦点控件,则清除原来的焦点控件
+	if((m_pFocusControl != m_pControl) && (m_pFocusControl != NULL))
 	{
-		m_pFocusControl->OnFocus(false);
-		m_pFocusControl = NULL;
+		SetFocusControl(NULL);
 	}
-	/*// 切换焦点控件
-	CControlBase* pFocusControl = GetFocusControl();
-	if(pFocusControl != m_pFocusControl)
-	{
-		if(m_pFocusControl != NULL)
-		{
-			m_pFocusControl->OnFocus(FALSE);
-		}
-		if(pFocusControl != NULL)
-		{
-			pFocusControl->OnFocus(TRUE);
-		}
-		m_pFocusControl = pFocusControl;
-	}*/
 
 	if (m_pControl)
 	{
@@ -2330,15 +2316,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 			CControlBase* pNextControl = GetNextFocusableControl();
 			if(pNextControl != pFocusControl)
 			{
-				if(pFocusControl != NULL)
-				{
-					pFocusControl->OnFocus(FALSE);
-				}
-				if(pNextControl != NULL)
-				{
-					pNextControl->OnFocus(TRUE);
-				}
-				m_pFocusControl = pNextControl;
+				SetFocusControl(pNextControl);
 				return TRUE;
 			}
 		}else
@@ -2348,15 +2326,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 			CControlBase* pPrevControl = GetPrevFocusableControl();
 			if(pPrevControl != pFocusControl)
 			{
-				if(pFocusControl != NULL)
-				{
-					pFocusControl->OnFocus(FALSE);
-				}
-				if(pPrevControl != NULL)
-				{
-					pPrevControl->OnFocus(TRUE);
-				}
-				m_pFocusControl = pPrevControl;
+				SetFocusControl(pPrevControl);
 				return TRUE;
 			}
 		}
@@ -2397,6 +2367,24 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 			return TRUE;
 		}
 	}else
+	/*if ( pMsg->message == WM_CHAR)
+	{
+		//DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"WM_CHAR:%d,%d", pMsg->wParam, pMsg->lParam);
+		//CControlBase* pFocusControl = GetFocusControl();
+		//if(pFocusControl && (pFocusControl->GetNativeHWnd() != NULL))
+		//{
+		//	::SendMessage(pFocusControl->GetNativeHWnd(), WM_CHAR, pMsg->wParam, pMsg->lParam);
+		//}
+		// 用户控件
+		for (size_t i = 0; i < m_vecControl.size(); i++)
+		{
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase && (pControlBase->GetNativeHWnd() != NULL))
+			{
+				::SendMessage(pControlBase->GetNativeHWnd(), WM_CHAR, pMsg->wParam, pMsg->lParam);
+			}	
+		}
+	}else*/
 	if ( pMsg->message == WM_MOUSEMOVE ||
 		 pMsg->message == WM_LBUTTONDOWN ||
 		 pMsg->message == WM_LBUTTONUP )
@@ -2646,10 +2634,9 @@ void CDlgBase::CloseDlgPopup()
 {
 	if(m_pWndPopup)
 	{
- 		if(m_pFocusControl && m_pControl != m_pFocusControl)
+ 		if(m_pFocusControl && (m_pControl != m_pFocusControl))
  		{
- 			m_pFocusControl->OnFocus(false);
- 			m_pFocusControl = NULL;
+ 			SetFocusControl(NULL);
  		}
 		if(IsWindow(m_pWndPopup->GetSafeHwnd()))
 		{

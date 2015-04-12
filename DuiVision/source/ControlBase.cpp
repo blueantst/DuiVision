@@ -13,6 +13,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 {
 	m_pParentDuiObject = pDuiObject;
 	m_hWnd = hWnd;
+	m_hNativeWnd = NULL;
 	m_uID = g_nControlId++;
 	if(g_nControlId > 20000)	// 超过某个值之后重置
 	{
@@ -62,6 +63,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 {
 	m_pParentDuiObject = pDuiObject;
 	m_hWnd = hWnd;
+	m_hNativeWnd = NULL;
 	m_uID = uControlID;
 	m_rc = rc;
 	m_strPos = "";
@@ -296,7 +298,7 @@ BOOL CControlBase::IsFocusControl()
 	return FALSE;
 }
 
-// 获取当前焦点控件
+// 获取可以成为焦点控件的控件(遍历子控件查询)
 CControlBase* CControlBase::GetFocusControl(CControlBase* pFocusControl)
 {
 	for (int i = m_vecControl.size()-1; i >= 0; i--)

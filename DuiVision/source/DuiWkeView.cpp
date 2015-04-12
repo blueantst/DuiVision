@@ -20,7 +20,6 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBase(hWnd, pDuiObject)
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
-	m_hNativeWnd = NULL;
 	m_OldWndProc = ::DefWindowProc;
 	m_bCreated = false;
 	m_bCreating = false;
@@ -102,21 +101,6 @@ wkeClientHandler* CDuiWkeView::GetWkeClientHandler()
 	return &m_wkeHander;
 }
 
-static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
-{
-#define HIMETRIC_PER_INCH   2540
-#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
-#define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
-    int nPixelsPerInchX;    // Pixels per logical inch along width
-    int nPixelsPerInchY;    // Pixels per logical inch along height
-    HDC hDCScreen = ::GetDC(NULL);
-    nPixelsPerInchX = ::GetDeviceCaps(hDCScreen, LOGPIXELSX);
-    nPixelsPerInchY = ::GetDeviceCaps(hDCScreen, LOGPIXELSY);
-    ::ReleaseDC(NULL, hDCScreen);
-    lpSizeInHiMetric->cx = MAP_PIX_TO_LOGHIM(lpSizeInPix->cx, nPixelsPerInchX);
-    lpSizeInHiMetric->cy = MAP_PIX_TO_LOGHIM(lpSizeInPix->cy, nPixelsPerInchY);
-}
-
 // 设置控件中的Windows原生控件是否可见的状态
 void CDuiWkeView::SetControlWndVisible(BOOL bIsVisible)
 {
@@ -126,6 +110,7 @@ void CDuiWkeView::SetControlWndVisible(BOOL bIsVisible)
 	}
 }
 
+// 设置控件的位置
 void CDuiWkeView::SetControlRect(CRect rc) 
 {
 	m_rc = rc;
@@ -135,16 +120,20 @@ void CDuiWkeView::SetControlRect(CRect rc)
 		CreateControl();
 	}
 
-    SIZEL hmSize = { 0 };
-    SIZEL pxSize = { 0 };
-    pxSize.cx = m_rc.right - m_rc.left;
-    pxSize.cy = m_rc.bottom - m_rc.top;
-    PixelToHiMetric(&pxSize, &hmSize);
-
     if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
 	{
 		::MoveWindow(m_hNativeWnd, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
     }
+}
+
+// 设置当前焦点控件
+void CDuiWkeView::SetCurrentFocusControl(BOOL bFocus) 
+{
+	CDlgBase* pDlg = GetParentDialog(FALSE);
+	if(pDlg)
+	{
+		pDlg->SetFocusControl(bFocus ? this : NULL);
+	}
 }
 
 // 从XML设置DelayCreate属性
@@ -299,6 +288,20 @@ BOOL CDuiWkeView::OnControlTimer()
 	return TRUE;
 }
 
+// 键盘事件处理
+BOOL CDuiWkeView::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 如果当前处于焦点状态,则处理回车键和ESC键
+	if(IsFocusControl() && ((nChar == VK_RETURN) || (nChar == VK_ESCAPE)) && (nFlags == 0) && m_pWebView)
+	{
+		m_pWebView->keyDown(nChar, nFlags, false);
+		m_render.render(m_pWebView);
+		return true;
+	}
+
+	return false;
+}
+
 void CDuiWkeView::onBufUpdated( const HDC hdc,int x, int y, int cx, int cy )
 {
 	RECT rcClient;
@@ -344,11 +347,17 @@ LRESULT CALLBACK CDuiWkeView::__WebViewWndProc(HWND hWnd, UINT message, WPARAM w
 // wke窗口的windows消息处理
 LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if( !GetRresponse() ) //&& message >= WM_MOUSEFIRST && message <= WM_MOUSELAST )
+	if( !GetRresponse() )
 	{
 		return 0;
 	}
 
+	// 对于键盘消息,如果此控件不是焦点控件,则退出
+	if( message >= WM_KEYFIRST && message <= WM_KEYLAST )
+	{
+        if( !IsFocusControl() ) return 0;
+    }
+	
     bool handled = true;
 	switch (message)
 	{
@@ -556,11 +565,15 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
     case WM_SETFOCUS:
         m_pWebView->focus();
 		m_render.render(m_pWebView);
+		// 设置对话框的焦点控件为此控件
+		SetCurrentFocusControl(TRUE);
         break;
 
     case WM_KILLFOCUS:
         m_pWebView->unfocus();
 		m_render.render(m_pWebView);
+		// 清除对话框的焦点控件
+		//SetCurrentFocusControl(FALSE);
         break;
 
 	case WM_TIMER:
