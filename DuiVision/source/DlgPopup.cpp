@@ -1157,7 +1157,7 @@ void CDlgPopup::SetFocusControl(CControlBase* pFocusControl)
 // 获取当前焦点控件
 CControlBase* CDlgPopup::GetFocusControl()
 {
-	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	/*for (int i = m_vecControl.size()-1; i >= 0; i--)
 	{
 		CControlBase* pControlBase = m_vecControl.at(i);
 		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && (pControlBase == m_pFocusControl) && pControlBase->IsTabStop())
@@ -1175,7 +1175,8 @@ CControlBase* CDlgPopup::GetFocusControl()
 		}
 	}
 
-	return NULL;
+	return NULL;*/
+	return m_pFocusControl;
 }
 
 // 获取上一个可以获取焦点的子控件
