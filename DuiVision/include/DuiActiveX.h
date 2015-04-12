@@ -37,8 +37,7 @@ public:
     CDuiActiveX(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiActiveX();
 
-    HWND GetHostWindow() const;
-	HWND GetPaintWindow();
+ 	HWND GetPaintWindow();
 
     bool IsDelayCreate() const;
     void SetDelayCreate(bool bDelayCreate = true);

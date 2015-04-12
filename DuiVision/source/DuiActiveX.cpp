@@ -1347,11 +1347,6 @@ CDuiActiveX::~CDuiActiveX()
     ReleaseControl();
 }
 
-HWND CDuiActiveX::GetHostWindow() const
-{
-    return m_hwndHost;
-}
-
 // 获取控件的父窗口句柄
 HWND CDuiActiveX::GetPaintWindow()
 {
