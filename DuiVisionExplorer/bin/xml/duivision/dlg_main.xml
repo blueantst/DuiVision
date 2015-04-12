@@ -9,17 +9,17 @@
 	<text name="title" crtext="E0E0E0" crmark="800000" crshadow="202020" font="default"
 			pos="60,4,250,19" title="[APP_NAME][APP_VER]" response="0" show="1" />
 	
-    <imgbtn name="button.goback" pos="60,20,91,51" skin="IDB_BT_PREVIEW" tip="上一页" tabstop="0" shortcut="LEFT" />
-    <imgbtn name="button.goforward" pos="92,20,123,51" skin="IDB_BT_NEXTVIEW" tip="下一页" tabstop="0" shortcut="RIGHT" />
-    <imgbtn name="button.reflush" pos="124,20,155,51" skin="IDB_BT_REFLUSH" tip="刷新" tabstop="0" shortcut="F5" />
-    <imgbtn name="button.home" pos="156,20,187,51" skin="IDB_BT_HOME" tip="主页" tabstop="0" />
+    <imgbtn name="button.goback" pos="60,20,91,51" skin="IDB_BT_PREVIEW" tip="上一页" tabstop="0" showfocus="0" shortcut="LEFT" />
+    <imgbtn name="button.goforward" pos="92,20,123,51" skin="IDB_BT_NEXTVIEW" tip="下一页" tabstop="0" showfocus="0" shortcut="RIGHT" />
+    <imgbtn name="button.reflush" pos="124,20,155,51" skin="IDB_BT_REFLUSH" tip="刷新" tabstop="0" showfocus="0" shortcut="F5" />
+    <imgbtn name="button.home" pos="156,20,187,51" skin="IDB_BT_HOME" tip="主页" tabstop="0" showfocus="0" />
 	
-	<imgbtn name="button.close" pos="-40,0,-0,19"  image="skins\default\close.png" tip="关闭" tabstop="0" action="close-window" show="1" />    
-    <imgbtn name="button.max"   pos="-67,0,-40,19"  image="skins\default\restore.png" tip="最大化" tabstop="0" />    
-    <imgbtn name="button.min"   pos="-94,0,-67,19" image="skins\default\min.png" tip="最小化" tabstop="0" />
+	<imgbtn name="button.close" pos="-40,0,-0,19"  image="skins\default\close.png" tip="关闭" tabstop="0" showfocus="0" action="close-window" show="1" />    
+    <imgbtn name="button.max"   pos="-67,0,-40,19"  image="skins\default\restore.png" tip="最大化" tabstop="0" showfocus="0" />    
+    <imgbtn name="button.min"   pos="-94,0,-67,19" image="skins\default\min.png" tip="最小化" tabstop="0" showfocus="0" />
 	
-	<imgbtn name="button.menu" pos="-130,0,-97,29" skin="IDB_BT_MENU" tip="菜单" tabstop="0" action="menu:menu_main" menupos="-75,-0" />
-	<imgbtn name="button.skin" pos="-160,0,-131,29" skin="IDB_BT_SKIN" tip="皮肤" tabstop="0" show="1"/>
+	<imgbtn name="button.menu" pos="-130,0,-97,29" skin="IDB_BT_MENU" tip="菜单" tabstop="0" showfocus="0" action="menu:menu_main" menupos="-75,-0" />
+	<imgbtn name="button.skin" pos="-160,0,-131,29" skin="IDB_BT_SKIN" tip="皮肤" tabstop="0" showfocus="0" show="1"/>
 
   </base>
   
@@ -92,10 +92,10 @@ QQ群：325880743
 	<div name="footer" pos="0,-26,-0,-0" >	
 		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：[APP_VER]" title="检查更新" action="link:http://www.blueantstudio.net" />
 		
-		<imgbtn name="button.download" pos="-130,4,-116,18" img-btn="skins\simage\download.png" img-count="1" tip="下载" tabstop="0" />
+		<imgbtn name="button.download" pos="-130,4,-116,18" img-btn="skins\simage\download.png" img-count="1" tip="下载" tabstop="0" showfocus="0" />
 		<textbtn name="button.download.text" crtext="808080" pos="-115,3,-80,20" show="1" title="下载" />
 		
-		<imgbtn name="button.size" pos="-80,0,-58,22" img-btn="skins\simage\search_normal.png" img-count="1" tip="缩放页面比例" tabstop="0" />
+		<imgbtn name="button.size" pos="-80,0,-58,22" img-btn="skins\simage\search_normal.png" img-count="1" tip="缩放页面比例" tabstop="0" showfocus="0" />
 		<textbtn name="button.size.text" crtext="808080" pos="-57,3,-14,20" show="1" title="100%" tip="缩放页面比例" />
 	</div>	
 	
