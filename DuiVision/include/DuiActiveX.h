@@ -86,7 +86,6 @@ protected:
 	IConnectionPoint*		m_pCP;				// 连接点指针
 	DWORD                   m_dwEventCookie;
     CActiveXCtrl*			m_pControl;			// ActiveX控件指针
-    HWND					m_hwndHost;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("clsid"), OnAttributeCLSID)

@@ -49,12 +49,13 @@ CWnd* CDuiNativeWnd::GetPaintWnd()
 // 设置控件中的Windows原生控件是否可见的状态
 void CDuiNativeWnd::SetControlWndVisible(BOOL bIsVisible)
 {
-	if( m_hNativeWnd != NULL )
+	if( m_hwndHost != NULL )
 	{
-		::ShowWindow(m_hNativeWnd, bIsVisible ? SW_SHOW : SW_HIDE);
+		::ShowWindow(m_hwndHost, bIsVisible ? SW_SHOW : SW_HIDE);
 	}
 }
 
+// 设置控件的位置信息
 void CDuiNativeWnd::SetControlRect(CRect rc) 
 {
 	m_rc = rc;
@@ -64,9 +65,9 @@ void CDuiNativeWnd::SetControlRect(CRect rc)
 		CreateControl();
 	}
 
-    if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+    if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
-		::MoveWindow(m_hNativeWnd, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
+		::MoveWindow(m_hwndHost, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
     }
 }
 
@@ -82,7 +83,7 @@ HRESULT CDuiNativeWnd::OnAttributeDelayCreate(const CString& strValue, BOOL bLoa
 
 LRESULT CDuiNativeWnd::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
 {
-    if((m_hNativeWnd == NULL) || !::IsWindow(m_hNativeWnd))
+    if((m_hwndHost == NULL) || !::IsWindow(m_hwndHost))
 	{
 		return 0;
 	}
@@ -142,9 +143,9 @@ bool CDuiNativeWnd::SetNativeHWnd(HWND hWnd)
 	}
 
 	ReleaseControl();
-	m_hNativeWnd = hWnd;
+	m_hwndHost = hWnd;
 	bool bRet = false;
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
 		SetControlWndVisible(FALSE);
 		OnAttributePosChange(GetPosStr(), FALSE);
@@ -185,11 +186,11 @@ bool CDuiNativeWnd::CreateControl()
 // 释放原生控件
 void CDuiNativeWnd::ReleaseControl()
 {
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
-		DestroyWindow(m_hNativeWnd);
+		DestroyWindow(m_hwndHost);
 	}
-    m_hNativeWnd = NULL;
+    m_hwndHost = NULL;
 
 	if(m_pNativeWnd != NULL)
 	{
@@ -203,7 +204,7 @@ void CDuiNativeWnd::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	if( !::IntersectRect(&rcUpdate, &rcUpdate, &m_rc) ) return;
 
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
     {
 		// 调用原生控件的画图(发送WM_PAINT消息给控件)
 		//m_pWindowWnd->DrawControl(dc, rcUpdate);

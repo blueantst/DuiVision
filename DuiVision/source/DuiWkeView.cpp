@@ -35,9 +35,9 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 
 CDuiWkeView::~CDuiWkeView()
 {
-	if(m_hNativeWnd != NULL)
+	if(m_hwndHost != NULL)
 	{
-		::DestroyWindow(m_hNativeWnd);
+		::DestroyWindow(m_hwndHost);
 	}
 
 	// 删除wke对象列表中的项
@@ -104,9 +104,9 @@ wkeClientHandler* CDuiWkeView::GetWkeClientHandler()
 // 设置控件中的Windows原生控件是否可见的状态
 void CDuiWkeView::SetControlWndVisible(BOOL bIsVisible)
 {
-	if( m_hNativeWnd != NULL )
+	if( m_hwndHost != NULL )
 	{
-		::ShowWindow(m_hNativeWnd, bIsVisible ? SW_SHOW : SW_HIDE);
+		::ShowWindow(m_hwndHost, bIsVisible ? SW_SHOW : SW_HIDE);
 	}
 }
 
@@ -120,9 +120,9 @@ void CDuiWkeView::SetControlRect(CRect rc)
 		CreateControl();
 	}
 
-    if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+    if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
-		::MoveWindow(m_hNativeWnd, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
+		::MoveWindow(m_hwndHost, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
     }
 }
 
@@ -238,12 +238,11 @@ bool CDuiWkeView::CreateControl()
 	if(hWnd && ::IsWindow(hWnd))
 	{
 		ReleaseControl();
-		m_hNativeWnd = hWnd;
-		//OnAttributePosChange(GetPosStr(), FALSE);
+		m_hwndHost = hWnd;
 	}
 
 	// 初始化wke渲染对象,将渲染对象关联到视图窗口
-	m_render.init(m_hNativeWnd);
+	m_render.init(m_hwndHost);
 
 	m_bCreated = true;
 	m_bCreating = false;
@@ -251,7 +250,7 @@ bool CDuiWkeView::CreateControl()
     return true;
 }
 
-// 释放原生控件
+// 释放控件
 void CDuiWkeView::ReleaseControl()
 {
 	// 如果是焦点控件,则将当前焦点控件设置为空
@@ -260,11 +259,11 @@ void CDuiWkeView::ReleaseControl()
 		SetCurrentFocusControl(NULL);
 	}
 	// 删除宿主窗口
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
-		DestroyWindow(m_hNativeWnd);
+		DestroyWindow(m_hwndHost);
 	}
-    m_hNativeWnd = NULL;
+    m_hwndHost = NULL;
 }
 
 // 控件画图函数
@@ -272,7 +271,7 @@ void CDuiWkeView::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	if( !::IntersectRect(&rcUpdate, &rcUpdate, &m_rc) ) return;
 
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd) && m_pWebView)
+	if(m_hwndHost && ::IsWindow(m_hwndHost) && m_pWebView)
     {
 		// 强制wke视图刷新
 		m_pWebView->setDirty(true);
@@ -290,7 +289,7 @@ BOOL CDuiWkeView::OnControlTimer()
 	}
 
 	// 给wke窗口发送定时器消息,用于刷新页面
-	::SendMessage(m_hNativeWnd, WM_TIMER, 0, 0);
+	::SendMessage(m_hwndHost, WM_TIMER, 0, 0);
 
 	return TRUE;
 }

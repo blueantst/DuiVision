@@ -1334,7 +1334,6 @@ CDuiActiveX::CDuiActiveX(HWND hWnd, CDuiObject* pDuiObject)
 	m_pUnk = NULL;
 	m_pCP = NULL;
 	m_pControl = NULL;
-	m_hwndHost = NULL;
 	m_bCreated = false;
 	m_bDelayCreate = false;
 	m_bShowContentMenu = true;

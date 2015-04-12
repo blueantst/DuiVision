@@ -13,7 +13,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 {
 	m_pParentDuiObject = pDuiObject;
 	m_hWnd = hWnd;
-	m_hNativeWnd = NULL;
+	m_hwndHost = NULL;	// 原生控件的宿主窗口
 	m_uID = g_nControlId++;
 	if(g_nControlId > 20000)	// 超过某个值之后重置
 	{
@@ -63,7 +63,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 {
 	m_pParentDuiObject = pDuiObject;
 	m_hWnd = hWnd;
-	m_hNativeWnd = NULL;
+	m_hwndHost = NULL;	// 原生控件的宿主窗口
 	m_uID = uControlID;
 	m_rc = rc;
 	m_strPos = "";
