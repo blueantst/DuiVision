@@ -433,6 +433,11 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT
 	CDuiComboBox* pUrlCtrl = (CDuiComboBox*)GetControl(_T("combo.url"));
 	if(pUrlCtrl != NULL)
 	{
+		// 如果url输入控件不是焦点控件,则退出
+		if(!pUrlCtrl->IsFocusControl())
+		{
+			return FALSE;
+		}
 		strUrl = pUrlCtrl->GetEditText();
 	}
 
