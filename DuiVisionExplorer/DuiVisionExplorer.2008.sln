@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionExplorer", "DuiVisionExplorer\DuiVisionExplorer.vcproj", "{42AB7796-E646-40E1-9859-BD1B9F7242A4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionExplorer.2008", "DuiVisionExplorer\DuiVisionExplorer.2008.vcproj", "{42AB7796-E646-40E1-9859-BD1B9F7242A4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVision.2008", "..\DuiVision\DuiVision.2008.vcproj", "{78D4D293-EFD7-471C-983A-D63EE9B07BD2}"
 EndProject
