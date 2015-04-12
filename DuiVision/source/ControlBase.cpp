@@ -836,7 +836,7 @@ void CControlBase::OnPositionChange()
 }
 
 // 计算位置信息的具体坐标值
-int CControlBase::PositionItem2Value( const DUIDLG_POSITION_ITEM &pos ,int nMin, int nMax)
+int CControlBase::PositionItem2Value( const DUI_POSITION_ITEM &pos ,int nMin, int nMax)
 {
 	int nRet=0;
 	int nWid=nMax-nMin;
@@ -863,7 +863,7 @@ int CControlBase::PositionItem2Value( const DUIDLG_POSITION_ITEM &pos ,int nMin,
 }
 
 // 解析位置信息
-LPCTSTR CControlBase::ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos)
+LPCTSTR CControlBase::ParsePosition(LPCTSTR pszPos,DUI_POSITION_ITEM &pos)
 {
 	if(!pszPos) return NULL;
 
@@ -915,50 +915,50 @@ BOOL CControlBase::SetPositionWithParent(CRect rectParent)
 		return FALSE;
 	}
 
-	DUIDLG_POSITION dlgpos;
+	DUI_POSITION pos;
 
-	dlgpos.nCount = 0;
+	pos.nCount = 0;
 	LPCTSTR pszValue = m_strPos;
-	while(dlgpos.nCount < 4 && pszValue)
+	while(pos.nCount < 4 && pszValue)
 	{
-		pszValue=ParsePosition(pszValue, dlgpos.Item[dlgpos.nCount++]);
+		pszValue=ParsePosition(pszValue, pos.Item[pos.nCount++]);
 	}
 
-    if (2 == dlgpos.nCount || 4 == dlgpos.nCount)
+    if (2 == pos.nCount || 4 == pos.nCount)
     {
-		if(4 == dlgpos.nCount)
+		if(4 == pos.nCount)
 		{
 			CRect rect;
-			rect.left = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
-			rect.top = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
-			rect.right = PositionItem2Value(dlgpos.Right, rectParent.left, rectParent.right);
-			rect.bottom = PositionItem2Value(dlgpos.Bottom, rectParent.top, rectParent.bottom);
+			rect.left = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
+			rect.top = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
+			rect.right = PositionItem2Value(pos.Right, rectParent.left, rectParent.right);
+			rect.bottom = PositionItem2Value(pos.Bottom, rectParent.top, rectParent.bottom);
 			SetRect(rect);
 		}else
-		if(2 == dlgpos.nCount)
+		if(2 == pos.nCount)
 		{
 			CRect rect;
-			rect.left = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
-			rect.top = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+			rect.left = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
+			rect.top = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
 			if(m_nWidth != 0)
 			{
 				rect.right = rect.left + m_nWidth;
 			}else
 			{
-				rect.right = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
+				rect.right = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
 			}
 			if(m_nHeight != 0)
 			{
 				rect.bottom = rect.top + m_nHeight;
 			}else
 			{
-				rect.bottom = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+				rect.bottom = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
 			}
 			SetRect(rect);
 		}
     }else
 	{
-        dlgpos.nCount = 0;
+        pos.nCount = 0;
 		return FALSE;
 	}
 
@@ -972,18 +972,18 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 
 	m_strPos = strValue;
 
-	DUIDLG_POSITION dlgpos;
+	DUI_POSITION pos;
 
-	dlgpos.nCount = 0;
+	pos.nCount = 0;
 	LPCTSTR pszValue = strValue;
-	while(dlgpos.nCount < 4 && pszValue)
+	while(pos.nCount < 4 && pszValue)
 	{
-		pszValue=ParsePosition(pszValue, dlgpos.Item[dlgpos.nCount++]);
+		pszValue=ParsePosition(pszValue, pos.Item[pos.nCount++]);
 	}
 
-    if (2 == dlgpos.nCount || 4 == dlgpos.nCount)
+    if (2 == pos.nCount || 4 == pos.nCount)
     {
-		if(4 == dlgpos.nCount)
+		if(4 == pos.nCount)
 		{
 			CRect rectParent = CRect(0,0,0,0);
 			CDuiObject* pParent = GetParent();
@@ -992,13 +992,13 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 				rectParent = pParent->GetRect();
 			}
 			CRect rect;
-			rect.left = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
-			rect.top = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
-			rect.right = PositionItem2Value(dlgpos.Right, rectParent.left, rectParent.right);
-			rect.bottom = PositionItem2Value(dlgpos.Bottom, rectParent.top, rectParent.bottom);
+			rect.left = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
+			rect.top = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
+			rect.right = PositionItem2Value(pos.Right, rectParent.left, rectParent.right);
+			rect.bottom = PositionItem2Value(pos.Bottom, rectParent.top, rectParent.bottom);
 			SetRect(rect);
 		}else
-		if(2 == dlgpos.nCount)
+		if(2 == pos.nCount)
 		{
 			//m_uPositionType = (m_uPositionType & ~SizeX_Mask) | SizeX_FitContent;
 			//m_uPositionType = (m_uPositionType & ~SizeY_Mask) | SizeY_FitContent;
@@ -1009,27 +1009,27 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 				rectParent = pParent->GetRect();
 			}
 			CRect rect;
-			rect.left = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
-			rect.top = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+			rect.left = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
+			rect.top = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
 			if(m_nWidth != 0)
 			{
 				rect.right = rect.left + m_nWidth;
 			}else
 			{
-				rect.right = PositionItem2Value(dlgpos.Left, rectParent.left, rectParent.right);
+				rect.right = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
 			}
 			if(m_nHeight != 0)
 			{
 				rect.bottom = rect.top + m_nHeight;
 			}else
 			{
-				rect.bottom = PositionItem2Value(dlgpos.Top, rectParent.top, rectParent.bottom);
+				rect.bottom = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
 			}
 			SetRect(rect);
 		}
     }else
 	{
-        dlgpos.nCount = 0;
+        pos.nCount = 0;
 	}
 
     return bLoading?S_FALSE:S_OK;

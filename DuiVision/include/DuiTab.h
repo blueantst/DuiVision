@@ -100,7 +100,7 @@ public:
 	int						m_nAnimateCount;		// 切换动画的帧数
 	int						m_nCurXPos;				// 切换过程中当前的横坐标位置
 	int						m_nTabLeftPading;		// Tab页签左侧的空白宽度
-	DUIDLG_POSITION			m_posTabBtn;			// Tab页签的内部按钮位置信息
+	DUI_POSITION			m_posTabBtn;			// Tab页签的内部按钮位置信息
 
 	enumTabImageMode		m_enTabImageMode;		// Tab页签图片的显示模式(普通、拉伸、九宫格)
 	int						m_nWLT;					// 左上角宽度(Tab页签图片的九宫格模式)

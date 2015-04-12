@@ -20,8 +20,36 @@ enum enumButtonState
 	enBSDisableDown
 };
 
+// 位置的计算方式,普通、以中心为0计算、按照百分比计算
+enum PIT{PIT_NORMAL=0,PIT_CENTER,PIT_PERCENT};
+
+// 位置信息中每个点的信息
+struct DUI_POSITION_ITEM
+{
+	PIT pit;			// 位置计算方式	
+    BOOL bMinus;		// 是否负值
+    float  nPos;		// 位置信息
+};
+
+// 位置信息结构
+struct DUI_POSITION
+{
+    int nCount;
+    union
+    {
+        struct
+        {
+            DUI_POSITION_ITEM Left;
+            DUI_POSITION_ITEM Top;
+            DUI_POSITION_ITEM Right;
+            DUI_POSITION_ITEM Bottom;
+        };
+        DUI_POSITION_ITEM Item[4];
+    };
+};
+
 // 菜单ID定义
-#define					WM_DUI_MENU		(WM_USER + 20)	
+#define	WM_DUI_MENU		(WM_USER + 20)	
 
 class CControlBase : public CDuiObject
 {
@@ -30,34 +58,7 @@ public:
 	CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE , BOOL bRresponse = TRUE) ;
 	virtual ~CControlBase(void);
 
-	// 位置的计算方式,普通、以中心为0计算、按照百分比计算
-	enum PIT{PIT_NORMAL=0,PIT_CENTER,PIT_PERCENT};
-
-	// 位置信息中每个点的信息
-    struct DUIDLG_POSITION_ITEM
-    {
-		PIT pit;			// 位置计算方式	
-        BOOL bMinus;		// 是否负值
-        float  nPos;		// 位置信息
-    };
-
-	// 位置信息结构
-    struct DUIDLG_POSITION
-    {
-        int nCount;
-        union
-        {
-            struct
-            {
-                DUIDLG_POSITION_ITEM Left;
-                DUIDLG_POSITION_ITEM Top;
-                DUIDLG_POSITION_ITEM Right;
-                DUIDLG_POSITION_ITEM Bottom;
-            };
-            DUIDLG_POSITION_ITEM Item[4];
-        };
-    };
-
+	// 对象和句柄
 	virtual CDuiObject* GetParent() { return m_pParentDuiObject; }
 	void SetParent(CDuiObject* pParent) { m_pParentDuiObject = pParent; }
 	HWND GetHWND() { return m_hWnd; }
@@ -73,27 +74,29 @@ public:
 	void UpdateMemDC(CDC &dc, int nWidth, int nHeight);
 	void UpdateAnimateDC(CDC &dc, int nWidth, int nHeight);
 
+	// 位置信息
 	virtual void SetRect(CRect rc);
 	virtual void SetControlRect(CRect rc) { m_rc = rc; };
 	virtual CRect GetRect() { return m_rc;};
 	virtual void OnPositionChange();	// 位置刷新
-
 	virtual void InvalidateRect(LPCRECT lpRect, BOOL bErase = TRUE);
 
 	void SetPosStr(CString strPos) { m_strPos = strPos; };
 	CString GetPosStr() { return m_strPos;};
-	int PositionItem2Value( const DUIDLG_POSITION_ITEM &pos ,int nMin, int nMax);
-	LPCTSTR ParsePosition(LPCTSTR pszPos,DUIDLG_POSITION_ITEM &pos);
+	int PositionItem2Value( const DUI_POSITION_ITEM &pos ,int nMin, int nMax);
+	LPCTSTR ParsePosition(LPCTSTR pszPos,DUI_POSITION_ITEM &pos);
 	BOOL SetPositionWithParent(CRect rectParent);
 	HRESULT OnAttributePosChange(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeWidth(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeHeight(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeMenuPosChange(const CString& strValue, BOOL bLoading);
+
 	HRESULT OnAttributeShortcut(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeDisable(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeCursor(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoading);
 	
+	// 属性
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
 	BOOL GetVisible() { return m_bIsVisible; }
@@ -102,6 +105,8 @@ public:
 	void SetDisable(BOOL bIsDisable);
 	virtual	void SetControlDisable(BOOL bIsDisable) { m_bIsDisable = bIsDisable; }
 	BOOL GetDisable() { return m_bIsDisable; }
+	void SetRresponse(BOOL bRresponse) { m_bRresponse = bRresponse; }
+	BOOL GetRresponse() { return m_bRresponse; }
 	void SetTabStop(BOOL bTabStop) { m_bTabStop = bTabStop; }
 	BOOL IsTabStop() { return m_bTabStop; }
 	void SetTooltip(CString strTooltip) { m_strTooltip = strTooltip; }
@@ -117,6 +122,7 @@ public:
 	void UpdateControl(CRect rc, BOOL bVisible = false, BOOL bUpdate = false);
 	BOOL GetDblClk() { return m_bDblClk; }
 
+	// 焦点
 	virtual	BOOL SetWindowFocus();				// 设置窗口焦点
 	BOOL OnFocus(BOOL bFocus);
 	virtual	BOOL SetControlFocus(BOOL bFocus) { return FALSE; }		// 设置控件的焦点
@@ -124,10 +130,8 @@ public:
 	CControlBase* GetFocusControl(CControlBase* pFocusControl);
 	CControlBase* GetPrevFocusableControl(CControlBase* pFocusControl);
 	CControlBase* GetNextFocusableControl(CControlBase* pFocusControl);
-	
-	void SetRresponse(BOOL bRresponse) { m_bRresponse = bRresponse;};
-	BOOL GetRresponse() {return m_bRresponse;};
 
+	// 鼠标键盘消息
 	BOOL OnMouseMove(UINT nFlags, CPoint point);
 	BOOL OnLButtonDown(UINT nFlags, CPoint point);
 	BOOL OnLButtonUp(UINT nFlags, CPoint point);
@@ -148,8 +152,9 @@ public:
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual BOOL OnControlSetDuiMsg(LPCTSTR lpszDuiMsg);
 
-	virtual	BOOL OnControlTimer() { return FALSE;};
+	virtual	BOOL OnControlTimer() { return FALSE; }
 
+	// 控件和子控件
 	CControlBase *GetControl(UINT uControlID);
 	CControlBase *GetControl(CString strControlName);
 	void AddControl(CControlBase* pControl);
@@ -160,6 +165,7 @@ public:
 	CDlgBase* GetParentDialog(BOOL bEnablePopup = TRUE);
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 
+	// 消息处理
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT CallDuiHandler(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -172,7 +178,6 @@ public:
 	void CloseDlgPopup();
 
 protected:
-
 	CDuiObject*				m_pParentDuiObject;	// 父控件对象
 	HWND					m_hWnd;				// 父窗口的Windows窗口句柄(一般是对话框的窗口句柄)
 	HWND					m_hNativeWnd;		// 原生窗口句柄(原生控件使用)
@@ -217,7 +222,7 @@ protected:
 	int						m_nWidth;			// 控件宽度
 	int						m_nHeight;			// 控件高度
 
-	DUIDLG_POSITION			m_posMenu;			// 弹出菜单的位置信息
+	DUI_POSITION			m_posMenu;			// 弹出菜单的位置信息
 
 	CString					m_strTooltip;		// 控件的Tooltip
 	int						m_nTipWidth;		// Tooltip的宽度
@@ -263,38 +268,38 @@ struct DuiFontInfo
 	CString strOS;		// 操作系统
 };
 
+// 位置和对齐方式
+enum {
+    // Specify by "width" attribute
+    SizeX_Mask          = 0x0007UL, 
+    SizeX_Specify       = 0x0001UL, // width > 0
+    SizeX_FitContent    = 0x0002UL, // width <= 0
+    SizeX_FitParent     = 0x0004UL, // width = "full" default
+
+    // Specify by "height" attribute
+    SizeY_Mask          = 0x0070UL, 
+    SizeY_Specify       = 0x0010UL, // height > 0
+    SizeY_FitContent    = 0x0020UL, // height <= 0 default
+    SizeY_FitParent     = 0x0040UL, // height = "full" default
+    // Specify by "float" attribute
+
+    Position_Mask       = 0x0300UL, 
+    Position_Relative   = 0x0100UL, // float = 0 default
+    Position_Float      = 0x0200UL, // float = 1
+
+    // Specify by "valign" and "align" attribute, only using at float = 1 or panel control (Vert-Align)
+    Align_Mask          = 0xF000UL, 
+    VAlign_Top          = 0x0000UL, // valign = top
+    VAlign_Middle       = 0x1000UL, // valign = middle
+    VAlign_Bottom       = 0x2000UL, // valign = bottom
+    Align_Left          = 0x0000UL, // align = left
+    Align_Center        = 0x4000UL, // align = center
+    Align_Right         = 0x8000UL, // align = right
+};
+
 // 具有文字的控件基类
 class CControlBaseFont : public CControlBase
 {
-public:
-	enum {
-        // Specify by "width" attribute
-        SizeX_Mask          = 0x0007UL, 
-        SizeX_Specify       = 0x0001UL, // width > 0
-        SizeX_FitContent    = 0x0002UL, // width <= 0
-        SizeX_FitParent     = 0x0004UL, // width = "full" default
-
-        // Specify by "height" attribute
-        SizeY_Mask          = 0x0070UL, 
-        SizeY_Specify       = 0x0010UL, // height > 0
-        SizeY_FitContent    = 0x0020UL, // height <= 0 default
-        SizeY_FitParent     = 0x0040UL, // height = "full" default
-        // Specify by "float" attribute
-
-        Position_Mask       = 0x0300UL, 
-        Position_Relative   = 0x0100UL, // float = 0 default
-        Position_Float      = 0x0200UL, // float = 1
-
-        // Specify by "valign" and "align" attribute, only using at float = 1 or panel control (Vert-Align)
-        Align_Mask          = 0xF000UL, 
-        VAlign_Top          = 0x0000UL, // valign = top
-        VAlign_Middle       = 0x1000UL, // valign = middle
-        VAlign_Bottom       = 0x2000UL, // valign = bottom
-        Align_Left          = 0x0000UL, // align = left
-        Align_Center        = 0x4000UL, // align = center
-        Align_Right         = 0x8000UL, // align = right
-    };
-
 public:
 	CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject);
 	CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE , BOOL bRresponse = TRUE,
@@ -302,8 +307,10 @@ public:
 	virtual ~CControlBaseFont(void);
 
 	void SetTitle(CString strTitle);
-	virtual void SetControlTitle(CString strTitle) { m_strTitle = strTitle; };
-	virtual CString GetTitle() { return m_strTitle;};
+	virtual void SetControlTitle(CString strTitle) { m_strTitle = strTitle; }
+	virtual CString GetTitle() { return m_strTitle; }
+
+	// 对齐方式
 	virtual void SetAlignment(UINT uAlignment);
 	virtual void SetVAlignment(UINT uVAlignment);
 	virtual void SetAlignment(UINT uAlignment, UINT uVAlignment);
@@ -311,8 +318,8 @@ public:
 	UINT GetGDIAlignment(UINT uAlignment);
 	UINT GetGDIVAlignment(UINT uVAlignment);
 
+	// 字体和图片属性
 	virtual void SetFont(CString strFont = _T(""), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
-
 	virtual BOOL SetBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	virtual BOOL SetBitmap(CString strImage);
 	void SetBitmapCount(int nCount);
