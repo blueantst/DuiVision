@@ -50,6 +50,12 @@
 <res type="font" lang="zh-cn" name="big" font="Tahoma" size="12" bold="true" italic="false" underline="false" strikeout="false" os="winxp" />
 <res type="font" lang="zh-cn" name="bigbig" font="微软雅黑" size="18" />
 <res type="font" lang="zh-cn" name="bigbig" font="Tahoma" size="17" os="winxp" />
+<res type="font" lang="zh-cn" name="italic" font="微软雅黑" size="12" bold="false" italic="true" />
+<res type="font" lang="zh-cn" name="italic" font="Tahoma" size="11" bold="false" italic="true" os="winxp" />
+<res type="font" lang="zh-cn" name="underline" font="微软雅黑" size="12" bold="false" underline="true" />
+<res type="font" lang="zh-cn" name="underline" font="Tahoma" size="11" bold="false" underline="true" os="winxp" />
+<res type="font" lang="zh-cn" name="strikeout" font="微软雅黑" size="12" bold="false" strikeout="true" />
+<res type="font" lang="zh-cn" name="strikeout" font="Tahoma" size="11" bold="false" strikeout="true" os="winxp" />
 
 <!--图片资源-默认风格-->
 <res type="img" name="IDB_TRAY_ICON" file="dui.ico" />

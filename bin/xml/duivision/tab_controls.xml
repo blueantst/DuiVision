@@ -16,11 +16,15 @@
 			<text pos="50,20,250,40" crtext="808080" title="普通文字，左对齐" tip="普通文字，左对齐" />
 			<text pos="50,50,250,70" crtext="808080" title="普通文字，中间对齐" align="center" tip="普通文字，中间对齐" />
 			<text pos="50,80,250,100" crtext="808080" title="普通文字，右对齐" align="right" tip="普通文字，右对齐" />
-			<text pos="50,110,250,130" crtext="808080" crmark="904000" font="big"
+			<text pos="50,110,100,130" crtext="808080" font="italic" title="斜体" tip="演示斜体文字" />
+			<text pos="110,110,170,130" crtext="808080" font="underline" title="下划线" tip="演示下划线文字" />
+			<text pos="180,110,250,130" crtext="808080" font="strikeout" title="删除线" tip="演示删除线文字" />
+
+			<text pos="50,140,250,160" crtext="808080" crmark="904000" font="big"
 				title="带掩码的文字" mask="掩码" tip="文字中和掩码匹配部分可以用特殊颜色显示" />
-			<text pos="50,140,250,160" crtext="A00000" crshadow="808080" font="big"
+			<text pos="50,170,250,190" crtext="A00000" crshadow="808080" font="big"
 				title="带阴影的文字" tip="带阴影的文字" />
-			<text crtext="000080" pos="50,170,250,280" img-scroll="skin:IDB_SCROLL_V"
+			<text crtext="000080" pos="50,200,250,310" img-scroll="skin:IDB_SCROLL_V"
 				title="带滚动条的多行文字：
 					aaaaa
 					bbbbb
