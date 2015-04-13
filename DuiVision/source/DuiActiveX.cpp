@@ -1114,7 +1114,7 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 	// 发送Invoke消息到DUI消息
 	if(((CDuiWebBrowserCtrl*)m_pOwner)->IsDuiMsgInvoke())
 	{
-		m_pOwner->SendMessage(dispidMember, (WPARAM)pdispparams, (LPARAM)pvarResult);
+		return m_pOwner->SendMessage(dispidMember, (WPARAM)pdispparams, (LPARAM)pvarResult);
 	}
 
 	switch (dispidMember)

@@ -1605,7 +1605,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}else
 		{
 			// 调用控件的DUI事件处理对象
-			CallDuiHandler(uMsg, wParam, lParam);
+			return CallDuiHandler(uMsg, wParam, lParam);
 		}
 	}
 
