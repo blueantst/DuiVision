@@ -1119,7 +1119,9 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 
 	switch (dispidMember)
 	{
-		case DISPID_TITLECHANGE:
+		// The parameter for this DISPID:
+		// [0]: Document title - VT_BSTR
+		case DISPID_TITLECHANGE:	// web页面标题变更
 		{
 			if (pdispparams && pdispparams->rgvarg[0].vt == VT_BSTR)
 			{         
@@ -1136,13 +1138,16 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 			return S_OK;
 		}
 
+		// The user has told Internet Explorer to close.
 		case DISPID_ONQUIT:
 		{
 			//OnQuit();
 			return S_OK;
 		}
 
-		case DISPID_STATUSTEXTCHANGE:
+		// The parameters for this DISPID:
+		// [0]: New status bar text - VT_BSTR
+		case DISPID_STATUSTEXTCHANGE:	// 状态栏文字变更
 		{
 			if (pdispparams && pdispparams->rgvarg[0].vt == VT_BSTR)
 			{         
@@ -1159,13 +1164,27 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 			return S_OK;
 		}
 
-		case DISPID_PROGRESSCHANGE:
+		// The parameters for this DISPID:
+		// [0]: Maximum progress - VT_I4				-- 最大进度值
+		// [1]: Amount of total progress - VT_I4		-- 当前进度值
+		case DISPID_PROGRESSCHANGE:	// 页面加载进度变更
 		{
 			//OnProgressChange(pdispparams->rgvarg[1].lVal,pdispparams->rgvarg[0].lVal);
 			return S_OK;
 		}
 
-		case DISPID_FILEDOWNLOAD:
+		// The parameter for this DISPID:
+		// [0]: Name of property that changed - VT_BSTR
+		case DISPID_PROPERTYCHANGE:	// 属性变更
+		{
+			if ((pdispparams->cArgs > 0) && (pdispparams->rgvarg[0].vt == VT_BSTR))
+			{
+				CString strProp = OLE2T(pdispparams->rgvarg[0].bstrVal);
+			}
+			return S_OK;
+		}
+
+		case DISPID_FILEDOWNLOAD:	// 文件下载
 		{   
 			BOOL bCancel = FALSE;
 			//OnFileDownload(&bCancel);
@@ -1180,30 +1199,58 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 			return S_OK;
 		}
 
-		case DISPID_DOWNLOADBEGIN:
+		case DISPID_DOWNLOADBEGIN:	// 开始下载
 		{
 			//OnDownloadBegin();
 			return S_OK;
 		}
 
-		case DISPID_DOWNLOADCOMPLETE:
+		case DISPID_DOWNLOADCOMPLETE:	// 下载完成
 		{
 			//OnDownloadComplete();
 			return S_OK;
 		}
 
+		// The parameters for this DISPID:
+		// [0]: Enabled state - VT_BOOL
+		// [1]: Command identifier - VT_I4
 		case DISPID_COMMANDSTATECHANGE:
 		{
 			return S_OK;
 		}
 
+		// The parameters for this DISPID are as follows:
+		// [0]: Cancel flag  - VT_BYREF|VT_BOOL
+		// [1]: HTTP headers - VT_BYREF|VT_VARIANT
+		// [2]: Address of HTTP POST data  - VT_BYREF|VT_VARIANT
+		// [3]: Target frame name - VT_BYREF|VT_VARIANT
+		// [4]: Option flags - VT_BYREF|VT_VARIANT
+		// [5]: URL to navigate to - VT_BYREF|VT_VARIANT
+		// [6]: An object that evaluates to the top-level or frame
+		//      WebBrowser object corresponding to the event
 		case DISPID_BEFORENAVIGATE2:	// 导航到指定URL之前
 		{
+			if ((pdispparams->cArgs >= 5) && (pdispparams->rgvarg[5].vt == (VT_BYREF|VT_VARIANT)))
+			{
+				CComVariant varURL(*pdispparams->rgvarg[5].pvarVal);
+				varURL.ChangeType(VT_BSTR);
+				CString strUrl = OLE2T(varURL.bstrVal);
+			}
 			return S_OK;
 		}
 
+		// The parameters for this DISPID:
+		// [0]: URL navigated to - VT_BYREF|VT_VARIANT
+		// [1]: An object that evaluates to the top-level or frame
+		//      WebBrowser object corresponding to the event.
 		case DISPID_NAVIGATECOMPLETE2:	// 导航完成
 		{
+			if (pdispparams->rgvarg[0].vt == (VT_BYREF|VT_VARIANT))
+			{
+				CComVariant varURL(*pdispparams->rgvarg[0].pvarVal);
+				varURL.ChangeType(VT_BSTR);
+				CString strUrl = OLE2T(varURL.bstrVal);
+			}
 			return S_OK;
 		}
 
@@ -1212,7 +1259,27 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 			return S_OK;
 		}
 
+		// The parameters for this DISPID are as follows:
+		// [0]: Cancel flag - VT_BYREF|VT_BOOL
+		// [1]: HTTP headers - VT_BYREF|VT_VARIANT
+		// [2]: Address of HTTP POST data - VT_BYREF|VT_VARIANT 
+		// [3]: Target frame name - VT_BYREF|VT_VARIANT 
+		// [4]: Option flags - VT_BYREF|VT_VARIANT
+		// [5]: URL to navigate to - VT_BYREF|VT_VARIANT
+		// [6]: An object that evaluates to the top-level or frame
+		//      WebBrowser object corresponding to the event.
 		case DISPID_NEWWINDOW2:	// 新建窗口
+		{
+			return S_OK;
+		}
+
+		// The parameters for this DISPID are as follows:
+		//0 : bstrUrl         弹出窗口的URL
+		//1 : bstrContext     所在网页的URL 
+		//2 : dwFlags  
+		//3 : *bCancel   是否允许打开该窗口
+		//4 : **pDisp
+		case DISPID_NEWWINDOW3:	// 新建窗口
 		{
 			return S_OK;
 		}
