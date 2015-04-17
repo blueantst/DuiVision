@@ -2,7 +2,7 @@
 
 <!-- notice dailog -->
 <!--popup bkmode="frame" bkalpha="0" width="450" height="270" framesize="4" bkimg="skin:IDB_MSGDLG_BK" -->
-<popup bkmode="mid" bkalpha="1" translucent="240" width="450" height="270" bkimg="skin:IDB_MSGDLG_BK"
+<popup bkmode="mid" bkalpha="1" translucent="240" width="550" height="300" bkimg="skin:IDB_MSGDLG_BK"
 	width-lt="10" height-lt="60" width-rb="10" height-rb="5" autoclose="0" >
 	
 	<!--area name="area-1" pos="0,0,-0,40" begin-transparent="100" end-transparent="30" />
@@ -15,13 +15,134 @@
 	<!--img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="normal" framesize="0" show="1" /-->
 	
 	<text name="notice.title" crtext="000000" img-scroll="skin:IDB_SCROLL_V" pos="10,10,-130,50" font="big" title="" />
-	<text name="notice.time" crtext="000000" pos="-130,11,-45,31" title="" />
+	<text name="notice.time" crtext="000000" pos="-130,11,-47,31" title="" align="right" />
 	<text name="notice.content" crtext="000000" title="" img-scroll="skin:IDB_SCROLL_V"
-			pos="10,65,-10,-10" bk-transparent="0" />
+			pos="10,40,-10,60" bk-transparent="0" />
 	
 	<!--linkbtn name="linkbtn1" crtext="800000"
 		pos="170,100,-25,130" show="1" title="点击打开链接" href="" /-->
 	
 	<!--button name="button.ok" skin="IDB_BT_DEFAULT" title="[OK]"	pos="-100,-30,-20,-6" show="1" /-->
+	
+	<gridctrl name="gridctrl_popup" pos="10,65,-10,-10" show="1"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skin:IDB_LINE_RP"
+		img-check="skin:IDB_CHECK_BOX" img-colsep=""
+		img-count="12" image="skin:IDB_LIST_IMG"
+		left-pos="70" row-height="50" header-height="0" bk-transparent="10"
+		font-title="big" font="default"
+		valign="middle" down-row="0"
+		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
+		<column title="列1" width="400" />
+		<column title="列2" width="120" />
+		<column title="列3" width="80" align="center" />
+		<column title="列4" />
+		<row image="skins\icon\scriptnet.png" check="1">
+			<item title="Script.NET" content="蓝蚂蚁工作室开发的脚本语言集成开发环境，支持Tcl、Python、Perl、Ruby、Lua、NSIS等脚本语言开发调试" font-title="1" >
+				<img pos="100,0" width="136" height="28" image="skins\script_logo.png" mode="normal" tip="支持Tcl、Python、Perl、Ruby、Lua脚本" />
+				<!--img pos="100,1" width="28" height="28" image="skins\icon\tcl.png" mode="extrude" tip="支持Tcl脚本" />
+				<img pos="130,1" width="28" height="28" image="skins\icon\python.png" mode="extrude" tip="支持Python脚本" />
+				<img pos="160,1" width="28" height="28" image="skins\icon\perl.png" mode="extrude" tip="支持Perl脚本" />
+				<img pos="190,1" width="28" height="28" image="skins\icon\ruby.png" mode="extrude" tip="支持Ruby脚本" />
+				<img pos="220,1" width="28" height="28" image="skins\icon\lua.png" mode="extrude" tip="支持Lua脚本" />
+				<img pos="250,1" width="28" height="28" image="skins\icon\nsis.png" mode="extrude" tip="支持NSIS脚本" /-->
+			</item>
+			<item title="已装：2.2.1.0" content="最新：4.0开源版" />
+			<item title="125.5M" />
+			<item link="点击下载" linkaction="link:http://www.blueantstudio.net/scriptnet/download/download.htm"/>
+		</row>
+		<row image="skins\icon\softmgr.png" check="1">
+			<item title="腾讯软件管理" content="1.新的界面，丰富的内容；2.海量软件搜索；3.功能分类清晰呈现，更易选择" font-title="1" />
+			<item title="已装：8.7.0.1" content="最新：10.0.0.1" />
+			<item title="16.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_option"/>
+		</row>
+		<row image="skins\icon\PDFViewer.png" check="1">
+			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
+			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
+			<item title="7.5M" />
+			<item>
+				<button name="grid_btn_delete" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="删除" tip="删除下一行" />
+			</item>
+		</row>
+		<row image="skins\icon\Movies.png" check="1">
+			<item title="迅雷看看" crtext="128,128,0" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
+			<item title="43.5M" />
+			<item>
+				<button name="grid_btn1" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="一键安装" tip="普通按钮" />
+			</item>
+		</row>
+		<row image="skins\icon\iSplit.png" check="1">
+			<item title="Axialis IconWorkshop" crtext="640064" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\adrule_rename.png" check="0">
+			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
+			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
+			<item title="29.5M" crtext="0,0,128" />
+			<item>
+				<button name="grid_btn_resume" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
+				<button name="grid_btn_cancel" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+			</item>
+		</row>
+		<row image="skins\icon\ico_business.png" check="0">
+			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
+			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
+			<item title="7.5M" />
+			<item>
+				<progress name="grid_progress_install" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
+		</row>
+		<row image="skins\icon\PDFViewer.png" check="1">
+			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
+			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
+			<item title="7.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\Movies.png" check="1">
+			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
+			<item title="43.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\iSplit.png" check="1">
+			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\icon\adrule_rename.png" check="0">
+			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
+			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
+			<item title="29.5M" crtext="0,0,128" />
+			<item link="一键安装" />
+		</row>
+		<row image="skins\icon\ico_business.png" check="0">
+			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
+			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
+			<item title="7.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skins\icon\softmgr.png" check="0">
+			<item title="迅雷看看" />
+			<item title="4.9.14.2版本" image="1" />
+			<item title="43.5M" />
+			<item>
+				<button name="grid_btn_resume2" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
+				<button name="grid_btn_cancel2" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+			</item>
+		</row>
+		<row image="skin:IDB_ICON_CHECK" check="0">
+			<item title="Axialis IconWorkshop" />
+			<item title="6.8.1.2版本" />
+			<item title="39M" />
+			<item title="一键安装" />
+		</row>
+	</gridctrl>
 
 </popup>

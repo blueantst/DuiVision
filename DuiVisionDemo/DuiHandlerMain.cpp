@@ -394,7 +394,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT 
 	{
 		CDlgPopup* pDlgPopup = new CDlgPopup;
 		CRect rc = pListCtrl->GetRect();
-		rc.OffsetRect(50, 30);
+		rc.OffsetRect(50, 20);
 		pDlgPopup->LoadXmlFile(_T("xml:dlg_notice"));
 		CControlBaseFont* pControlTitle = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.title")));
 		if(pControlTitle)
