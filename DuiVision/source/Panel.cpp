@@ -570,8 +570,7 @@ BOOL CDuiPanel::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 // 消息响应
 LRESULT CDuiPanel::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	OnMessage(uID, uMsg, wParam, lParam);
-	return 0L; 
+	return OnMessage(uID, uMsg, wParam, lParam);
 }
 
 // 控件界面刷新

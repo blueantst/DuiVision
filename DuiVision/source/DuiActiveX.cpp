@@ -1671,7 +1671,7 @@ bool CDuiActiveX::DoCreateControl()
     m_pControl->QueryInterface(IID_IOleClientSite, (LPVOID*) &pOleClientSite);
     CSafeRelease<IOleClientSite> RefOleClientSite = pOleClientSite;
 
-    // Initialize control
+    // Initialize control,设置用户site
     if( (dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST) != 0 ) m_pUnk->SetClientSite(pOleClientSite);
     IPersistStreamInit* pPersistStreamInit = NULL;
     m_pUnk->QueryInterface(IID_IPersistStreamInit, (LPVOID*) &pPersistStreamInit);
@@ -1688,7 +1688,7 @@ bool CDuiActiveX::DoCreateControl()
     if( FAILED(Hr) ) Hr = m_pUnk->QueryInterface(IID_IViewObject2, (LPVOID*) &m_pControl->m_pViewObject);
     if( FAILED(Hr) ) Hr = m_pUnk->QueryInterface(IID_IViewObject, (LPVOID*) &m_pControl->m_pViewObject);
 
-    // Activate and done...
+    // Activate and done...,激活浏览器控件
     m_pUnk->SetHostNames(OLESTR("UIActiveX"), NULL);
     //if( m_pManager != NULL ) m_pManager->SendNotify((CControlUI*)this, _T("showactivex"), 0, 0, false);
     if( (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0 )
@@ -1707,7 +1707,7 @@ bool CDuiActiveX::DoCreateControl()
 	// 控件初始化完成
 	OnAxInitFinish();
 
-	// 设置初始的URL
+	// 设置初始的URL,导航到URL
 	if(!m_strUrl.IsEmpty())
 	{
 		Navigate(m_strUrl);
