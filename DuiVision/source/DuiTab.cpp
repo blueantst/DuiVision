@@ -106,7 +106,7 @@ CControlBase* CDuiTabCtrl::_CreateControlByName(LPCTSTR lpszName)
 
 	// 查找父对话框的窗口句柄,通过父对话框句柄创建控件
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))) && (!pParentObj->IsClass(_T("popup"))))
 	{
 		pParentObj = ((CControlBase*)pParentObj)->GetParent();
 	}
@@ -114,6 +114,10 @@ CControlBase* CDuiTabCtrl::_CreateControlByName(LPCTSTR lpszName)
 	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		return DuiSystem::CreateControlByName(lpszName, ((CDlgBase*)pParentObj)->GetSafeHwnd(), this);
+	}else
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("popup")))
+	{
+		return DuiSystem::CreateControlByName(lpszName, ((CDlgPopup*)pParentObj)->GetSafeHwnd(), this);
 	}
 
 	return NULL;

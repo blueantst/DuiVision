@@ -1221,7 +1221,7 @@ void CControlBase::InvalidateRect(LPCRECT lpRect, BOOL bErase)
 	}
 
 	CDuiObject* pParentObj = GetParent();
-	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))))
+	while((pParentObj != NULL) && (!pParentObj->IsClass(_T("dlg"))) && (!pParentObj->IsClass(_T("popup"))))
 	{
 		pParentObj = ((CControlBase*)pParentObj)->GetParent();
 	}
@@ -1229,6 +1229,10 @@ void CControlBase::InvalidateRect(LPCRECT lpRect, BOOL bErase)
 	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		((CDlgBase*)pParentObj)->InvalidateRect(lpRect, bErase);
+	}else
+	if((pParentObj != NULL) && pParentObj->IsClass(_T("popup")))
+	{
+		//((CDlgPopup*)pParentObj)->InvalidateRect(lpRect, bErase);
 	}
 }
 
