@@ -62,10 +62,10 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>DuiVision.2010d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DuiVision.2010d.lib;wke.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)DuiPluginDemo_d.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Lib;../DuiVision/third-part/wke;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -79,10 +79,10 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>DuiVision.2010.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DuiVision.2010.lib;wke.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)DuiPluginDemo.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Lib;../DuiVision/third-part/wke;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
