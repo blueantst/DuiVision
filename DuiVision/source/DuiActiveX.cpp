@@ -1235,6 +1235,7 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 				CComVariant varURL(*pdispparams->rgvarg[5].pvarVal);
 				varURL.ChangeType(VT_BSTR);
 				CString strUrl = OLE2T(varURL.bstrVal);
+				//DuiSystem::DuiMessageBox(NULL, strUrl);
 			}
 			return S_OK;
 		}
@@ -1268,6 +1269,7 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 		// [5]: URL to navigate to - VT_BYREF|VT_VARIANT
 		// [6]: An object that evaluates to the top-level or frame
 		//      WebBrowser object corresponding to the event.
+		// 实际情况:DISPID_NEWWINDOW2只有两个参数,后面5个参数都没有
 		case DISPID_NEWWINDOW2:	// 新建窗口
 		{
 			return S_OK;
@@ -1277,7 +1279,7 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 		//0 : bstrUrl         弹出窗口的URL
 		//1 : bstrContext     所在网页的URL 
 		//2 : dwFlags  
-		//3 : *bCancel   是否允许打开该窗口
+		//3 : *bCancel        是否允许打开该窗口
 		//4 : **pDisp
 		case DISPID_NEWWINDOW3:	// 新建窗口
 		{
