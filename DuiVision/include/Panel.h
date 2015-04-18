@@ -23,7 +23,6 @@ public:
 	HRESULT OnAttributePlugin(const CString& strValue, BOOL bLoading);
 
 	void SetVirtualHeight(int nHeight) { m_nVirtualHeight = nHeight; }
-	void CalcVirtualHeight();
 
 	void SetEnableScroll(BOOL bEnableScroll) { m_bEnableScroll = bEnableScroll; }
 	BOOL GetEnableScroll() { return m_bEnableScroll; }

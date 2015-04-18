@@ -262,29 +262,7 @@ void CDuiPanel::InitUI(CRect rcClient, DuiXmlNode pNode)
 	m_bInit = true;
 }
 
-// 计算虚拟高度
-void CDuiPanel::CalcVirtualHeight()
-{
-	CRect rcTemp;
-	for (size_t i = 0; i < m_vecControl.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecControl.at(i);
-		if (pControlBase)
-		{
-			rcTemp = pControlBase->GetRect();
-			if(rcTemp.bottom > m_nVirtualHeight)
-			{
-				// 刷新Panel的虚拟高度
-				m_nVirtualHeight = rcTemp.bottom - m_rc.top;
-			}
-		}
-	}
-
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible(m_nVirtualHeight > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
-}
-
+// 设置控件的位置
 void CDuiPanel::SetControlRect(CRect rc)
 {
 	m_rc = rc;
@@ -387,6 +365,7 @@ BOOL CDuiPanel::SetControlFocus(BOOL bFocus)
 	return __super::SetControlFocus(bFocus);
 }
 
+// 画控件
 void CDuiPanel::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	if(m_pDuiPluginObject)
@@ -437,11 +416,12 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 		}
 	}
 
-	m_pControScrollV->Draw(dc, rcUpdate);
+	// 画垂直滚动条,滚动条整个区域都需要更新
+	m_pControScrollV->Draw(dc, m_pControScrollV->GetRect());
 
 	m_nVirtualTop = nVirtualTop;
 
-	// 虚拟显示dc复制到dc
+	// 虚拟显示dc复制到dc(滚动条部分不用复制)
 	dc.BitBlt(m_rc.left, m_rc.top, m_rc.Width()-m_nScrollWidth, m_rc.Height(), &virtualDC, m_rc.left, m_rc.top + nVirtualTop, SRCCOPY);
 
 	// 释放虚拟显示dc
