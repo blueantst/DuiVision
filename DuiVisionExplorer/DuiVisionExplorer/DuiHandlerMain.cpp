@@ -583,6 +583,30 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebIETitleChange(UINT uID, CString strName, UIN
 	return TRUE;
 }
 
+// IE浏览器新窗口事件
+LRESULT CDuiHandlerMain::OnDuiMsgWebIENewWindow(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 1.阻止IE浏览器自己的行为,必须pbCancel设置为VARIANT_TRUE才能阻止
+	DISPPARAMS FAR* pDispParams = (DISPPARAMS FAR*)wParam;
+	VARIANT_BOOL* pbCancel = pDispParams->rgvarg[3].pboolVal;
+	*pbCancel = VARIANT_TRUE;
+
+	// 2.新建一个页面,导航到需要跳转的页面
+	if(pDispParams && ((pDispParams->rgvarg[0].vt & VT_BSTR) == VT_BSTR))
+	{
+		/*这样的转换方法会异常
+		CComVariant varURL(*pDispParams->rgvarg[0].pvarVal);
+		varURL.ChangeType(VT_BSTR);
+		CString strUrl = OLE2T(varURL.bstrVal);*/
+		WCHAR szUrl[MAX_URL];
+		int len = wcslen(pDispParams->rgvarg[0].bstrVal);               
+		wcsncpy(szUrl, pDispParams->rgvarg[0].bstrVal, MAX_URL - 5);
+		InsertExplorerTab(-1, L"", szUrl);
+	}
+
+	return S_OK;
+}
+
 // wke浏览器事件
 LRESULT CDuiHandlerMain::OnDuiMsgWebWkeEvent(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
