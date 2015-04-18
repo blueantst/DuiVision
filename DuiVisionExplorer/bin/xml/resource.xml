@@ -66,6 +66,7 @@
 <res type="img" name="IDB_TAB_SEPERATOR" file="skins\default\Tab_seperator.png" />
 <res type="img" name="IDB_TAB_ITEM" file="skins\default\tab.png" />
 <res type="img" name="IDB_TAB_BACK" file="skins\default\tab_background.png" />
+<res type="img" name="IDB_TAB_ITEM_QQ" file="skins\default\tab_qq.png" />
 <res type="img" name="IDB_LIST_IMG" file="skins\default\list_img.png" />
 <res type="img" name="IDB_MSGDLG_BK" file="skins\default\msgdlg_bk.png" />
 <res type="img" name="IDB_TREE_COLLAPSE" file="skins\default\tree_collapse.png" />

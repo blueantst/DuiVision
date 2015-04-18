@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabctrl>
-	<tab pos="0,27,-0,-0" >
+	<tab pos="0,25,-0,-0" >
 		<webbrowser show="1"
 			delaycreate="true"
 			url=""
