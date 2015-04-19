@@ -529,6 +529,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgTabCtrlSwitch(UINT uID, CString strName, UINT M
 	CDuiWkeView* pWebControlWke = GetCurTabWebWkeControl();
 	if(pWebControlIE)
 	{
+		strUrl = pWebControlIE->getURL();
+		pUrlCtrl->SetTitle(strUrl);
 	}else
 	if(pWebControlWke)
 	{
@@ -583,6 +585,40 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebIETitleChange(UINT uID, CString strName, UIN
 	return TRUE;
 }
 
+// IE浏览器导航完成事件
+LRESULT CDuiHandlerMain::OnDuiMsgWebIENavigateComplete(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	TabItemInfo* pTabInfo = GetTabInfoByWebCtrlId(uID);
+	if(pTabInfo == NULL)
+	{
+		return FALSE;
+	}
+
+	// 获取URL
+	DISPPARAMS FAR* pDispParams = (DISPPARAMS FAR*)wParam;
+	if(pDispParams && (pDispParams->rgvarg[0].vt == (VT_BYREF|VT_VARIANT)))
+	{
+		// VT_BYREF|VT_VARIANT类型字符串用下面的方法转换
+		CComVariant varURL(*pDispParams->rgvarg[0].pvarVal);
+		varURL.ChangeType(VT_BSTR);
+		CString strUrl = OLE2T(varURL.bstrVal);
+
+		// 找对对应的浏览器控件,如果是当前页面,则刷新URL输入框内容
+		CDuiComboBox* pUrlCtrl = (CDuiComboBox*)GetControl(_T("combo.url"));
+		CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+		if(pUrlCtrl && pTabCtrl && pTabInfo->pControl)
+		{
+			CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+			if((pWebControlIE != NULL) && ((CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl) == pWebControlIE))
+			{
+				pUrlCtrl->SetTitle(strUrl);
+			}
+		}
+	}
+
+	return TRUE;
+}
+
 // IE浏览器新窗口事件
 LRESULT CDuiHandlerMain::OnDuiMsgWebIENewWindow(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -594,10 +630,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebIENewWindow(UINT uID, CString strName, UINT 
 	// 2.新建一个页面,导航到需要跳转的页面
 	if(pDispParams && ((pDispParams->rgvarg[0].vt & VT_BSTR) == VT_BSTR))
 	{
-		/*这样的转换方法会异常
-		CComVariant varURL(*pDispParams->rgvarg[0].pvarVal);
-		varURL.ChangeType(VT_BSTR);
-		CString strUrl = OLE2T(varURL.bstrVal);*/
+		// VT_BSTR类型字符串用下面的方法转换
 		WCHAR szUrl[MAX_URL];
 		int len = wcslen(pDispParams->rgvarg[0].bstrVal);               
 		wcsncpy(szUrl, pDispParams->rgvarg[0].bstrVal, MAX_URL - 5);

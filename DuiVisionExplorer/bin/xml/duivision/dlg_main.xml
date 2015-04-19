@@ -33,6 +33,8 @@
 			title="http://www.blueantstudio.net" tip="" >
 		<item name="http://www.blueantstudio.net" value="http://www.blueantstudio.net" image="skins\simage\home.png" />
 		<item name="https://github.com/blueantst/DuiVision" value="https://github.com/blueantst/DuiVision" image="skins\simage\home.png" />
+		<item name="http://www.haosou.com" value="http://www.haosou.com" image="skins\simage\home.png" />
+		<item name="http://www.baidu.com" value="http://www.baidu.com" image="skins\simage\home.png" />
 	</combobox>
 	
 	<edit name="edit.search" skin="IDB_EDIT" left-image="skins\simage\search_normal.png"
