@@ -336,6 +336,7 @@ HRESULT CMenuItem::OnAttributeCheck(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 鼠标移动事件处理
 BOOL CMenuItem::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
@@ -418,6 +419,7 @@ BOOL CMenuItem::OnControlMouseMove(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键按下事件处理
 BOOL CMenuItem::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
@@ -455,6 +457,7 @@ BOOL CMenuItem::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标左键放开事件处理
 BOOL CMenuItem::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	bool bSend = false;
@@ -500,6 +503,18 @@ BOOL CMenuItem::OnControlLButtonUp(UINT nFlags, CPoint point)
 		}
 		else
 		{
+			// 如果存在弹出菜单,并且鼠标不在弹出菜单范围内,则关闭父菜单
+			if(m_bIsPopup)
+			{
+				// 父菜单对象设置回自动关闭
+				CDuiMenu* pParentMenu = GetParentMenu();
+				if(pParentMenu)
+				{
+					pParentMenu->SetAutoClose(TRUE);
+					pParentMenu->SetForegroundWindow();
+				}
+			}
+
 			if(m_bDown)
 			{
 				m_enButtonState = enBSDown;
@@ -525,6 +540,7 @@ BOOL CMenuItem::OnControlLButtonUp(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 设置控件禁用属性
 void  CMenuItem::SetControlDisable(BOOL bIsDisable)
 {
 	if(m_bIsDisable != bIsDisable)
@@ -556,6 +572,7 @@ void  CMenuItem::SetControlDisable(BOOL bIsDisable)
 	}
 }
 
+// 画控件
 void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
@@ -611,6 +628,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 				
 			}
 
+			// 画菜单项图片
 			if(m_pImage != NULL)
 			{
 				if(m_bIsSeparator)
@@ -642,6 +660,7 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 			rcTemp.OffsetRect(nWidth, 0);
 		}
 		
+		// 画菜单项文字
 		if(!m_strTitle.IsEmpty())
 		{
 			m_memDC.SetBkMode(TRANSPARENT);
