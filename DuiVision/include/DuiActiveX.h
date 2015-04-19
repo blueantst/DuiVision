@@ -7,6 +7,7 @@
 #include "../activex/duicomcli.h"
 #include "../activex/flash10t.tlh"
 #include "../activex/wmp.tlh"
+#include <exdisp.h>
 
 struct IOleObject;
 
@@ -114,8 +115,11 @@ public:
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxCreateCtrl();
 	virtual void OnAxInitFinish();
-	virtual HRESULT Navigate(CString strUrl);
 
+	IWebBrowser2* GetIWebBrowser2();
+	CString getURL();
+
+	virtual HRESULT Navigate(CString strUrl);
 	HRESULT GoBack();
 	HRESULT GoForward();
 	HRESULT Refresh();

@@ -2,7 +2,6 @@
 #include "WndBase.h"
 #include "DuiActiveX.h"
 #include "exdispid.h"
-#include <exdisp.h>
 #include <comdef.h>
 #include <mshtmhst.h>	// IDocHostUIHandler使用
 
@@ -1915,6 +1914,30 @@ void CDuiWebBrowserCtrl::OnAxInitFinish()
 {
 	// 初始化浏览器事件处理
 	InitEvents();
+}
+
+// 获取IWebBrowser2接口指针
+IWebBrowser2* CDuiWebBrowserCtrl::GetIWebBrowser2()
+{
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	return pWebBrowser;
+}
+
+// 获取当前的URL
+CString CDuiWebBrowserCtrl::getURL()
+{
+	IWebBrowser2* pIWebBrowser = GetIWebBrowser2();
+	if(pIWebBrowser != NULL)
+	{
+		BSTR bstrURL;
+		HRESULT hr = pIWebBrowser->get_LocationURL(&bstrURL);
+		if(SUCCEEDED(hr))
+		{
+			return bstrURL;
+		}
+	}
+	return L"";
 }
 
 // 导航到指定的URL
