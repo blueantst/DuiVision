@@ -518,7 +518,21 @@ void CDlgBase::InitControlValue()
 			}else
 			if(pCtrlValue->strType == _T("check"))
 			{
-				((CCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+				if(pControl->IsClass(CCheckButton::GetClassName()))
+				{
+					((CCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+				}else
+				if(pControl->IsClass(CDuiRadioButton::GetClassName()))
+				{
+					((CDuiRadioButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+				}
+			}else
+			if(pCtrlValue->strType == _T("value"))
+			{
+				if(pControl->IsClass(CDuiComboBox::GetClassName()))
+				{
+					((CDuiComboBox*)pControl)->SetComboValue(pCtrlValue->strValue);
+				}
 			}
 		}
 	}
