@@ -49,4 +49,5 @@
 #define REG_EXPLORER_SUBKEY		_T("Software\\DuiVisionExplorer\\Explorer")
 #define REG_EXPLORER_WEBTYPE	_T("WebType")	// 浏览器内核类型(ie|wke)
 #define REG_EXPLORER_STARTOPEN	_T("StartOpen")	// 启动时打开的页面(last|home|none)
+#define REG_EXPLORER_SEARCHTYPE	_T("SearchType")// 默认搜索引擎类型(haosou|baidu|google)
 #define REG_EXPLORER_SUBKEY_URL	_T("Software\\DuiVisionExplorer\\Explorer\\URL")

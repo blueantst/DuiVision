@@ -38,7 +38,7 @@
 	</combobox>
 	
 	<edit name="edit.search" skin="IDB_EDIT" left-image="skins\simage\search_normal.png"
-					pos="-245,22,-10,49" tip="搜索"
+					pos="-245,22,-10,49" tip="搜索" duimsg="keydown"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="100"
 					font="default" />
 

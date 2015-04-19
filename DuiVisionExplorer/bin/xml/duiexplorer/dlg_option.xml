@@ -44,7 +44,7 @@
 				<text crtext="202020" pos="20,180,200,200" font="bold" title="搜索引擎：" />
 
 				<chkbtn name="option.check.urlsearch" skin="IDB_CHECK_BOX" show="1"
-					pos="50,205,300,225" title="启用地址栏搜索" check="true" />
+					pos="50,205,300,225" title="启用地址栏搜索" check="false" disable="1" />
 
 				<combobox name="option.search.engine" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
 						left-image="skins\simage\search_normal.png"

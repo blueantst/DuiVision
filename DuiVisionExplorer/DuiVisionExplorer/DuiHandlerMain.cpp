@@ -389,6 +389,10 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuOption(UINT uID, CString strName, UINT Msg,
 	pDlg->SetControlValue(L"option.startopen.home", L"check", (strStartOpen == L"home") ? L"true" : L"false");
 	pDlg->SetControlValue(L"option.startopen.none", L"check", (strStartOpen == L"none") ? L"true" : L"false");
 
+	// 默认搜索引擎
+	CString strSearchEngineType = reg.GetStringValue(NULL, REG_EXPLORER_SUBKEY, REG_EXPLORER_SEARCHTYPE);
+	pDlg->SetControlValue(L"option.search.engine", L"value", strSearchEngineType);
+
 	int nResponse = pDlg->DoModal();
 	DuiSystem::Instance()->RemoveDuiDialog(pDlg);
 	return TRUE;
@@ -414,6 +418,11 @@ LRESULT CDuiHandlerMain::OnDuiMsgOptionDlgOK(UINT uID, CString strName, UINT Msg
 	CDuiRadioButton* pControlStartOpenLast = static_cast<CDuiRadioButton*>(pDlg->GetControl(L"option.startopen.last"));
 	CString strStartOpen = pControlStartOpenLast->GetGroupValue();
 	reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY, REG_EXPLORER_STARTOPEN, strStartOpen);
+
+	// 默认搜索引擎
+	CDuiComboBox* pSearchEngineCtrl = static_cast<CDuiComboBox*>(pDlg->GetControl(L"option.search.engine"));
+	CString strSearchEngineType = pSearchEngineCtrl->GetComboValue();
+	reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY, REG_EXPLORER_SEARCHTYPE, strSearchEngineType);
 
 	pDlg->DoOK();
 	return TRUE;
@@ -487,7 +496,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonHome(UINT uID, CString strName, UINT Msg,
 	return TRUE;
 }
 
-// URL输入框的键盘事件处理
+// URL输入框的键盘事件处理(仅处理回车事件)
 LRESULT CDuiHandlerMain::OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if(wParam != VK_RETURN)
@@ -530,7 +539,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT
 	return TRUE;
 }
 
-// URL输入框的事件处理
+// URL输入框的事件处理(目前仅处理URL输入框的下拉列表选择事件)
 LRESULT CDuiHandlerMain::OnDuiMsgComboUrl(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if(wParam != SELECT_ITEM)
@@ -563,6 +572,71 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrl(UINT uID, CString strName, UINT Msg, W
 	if(pWebControlWke)
 	{
 		pWebControlWke->Navigate(strUrl);
+	}
+
+	return TRUE;
+}
+
+// 搜索输入框的键盘事件处理(仅处理回车事件)
+LRESULT CDuiHandlerMain::OnDuiMsgEditSearchKeyDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	if(wParam != VK_RETURN)
+	{
+		return FALSE;
+	}
+
+	CDuiEdit* pSearchEditCtrl = (CDuiEdit*)GetControl(_T("edit.search"));
+	if((pSearchEditCtrl == NULL) || !pSearchEditCtrl->IsFocusControl())
+	{
+		return FALSE;
+	}
+
+	// 获取搜索框输入内容
+	CString strSearch = pSearchEditCtrl->GetEditText();
+	if(strSearch.IsEmpty())
+	{
+		return FALSE;
+	}
+
+	// 获取浏览器控件
+	CDuiWebBrowserCtrl* pWebControlIE = NULL;
+	CDuiWkeView* pWebControlWke = NULL;
+	if((pWebControlIE == NULL) && (pWebControlWke == NULL))
+	{
+		// 如果没有创建浏览器窗口,需要先创建
+		InsertExplorerTab(-1, L"", L"");
+		pWebControlIE = GetCurTabWebIEControl();
+		pWebControlWke = GetCurTabWebWkeControl();
+	}
+
+	// 获取默认搜索引擎
+	CRegistryUtil reg(HKEY_CURRENT_USER);
+	CString strSearchEngineType = reg.GetStringValue(NULL, REG_EXPLORER_SUBKEY, REG_EXPLORER_SEARCHTYPE);
+	CString strSearchUrl;
+	if(strSearchEngineType == L"haosou")
+	{
+		strSearchUrl.Format(L"http://www.haosou.com/s?ie=utf-8&src=duivision_explorer&q=%s", strSearch);
+	}else
+	if(strSearchEngineType == L"baidu")
+	{
+		strSearchUrl.Format(L"http://www.baidu.com/s?wd=%s&ie={utf-8}", strSearch);
+	}else
+	if(strSearchEngineType == L"google")
+	{
+		strSearchUrl.Format(L"{google:baseURL}search?client=duivision_explorer&ie={utf-8}&q=%s&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:bookmarkBarPinned}{google:searchClient}{google:instantExtendedEnabledParameter}{google:omniboxStartMarginParameter}", strSearch);
+	}else
+	{
+		return FALSE;
+	}
+
+	// 导航到输入的url
+	if(pWebControlIE)
+	{
+		pWebControlIE->Navigate(strSearchUrl);
+	}else
+	if(pWebControlWke)
+	{
+		pWebControlWke->Navigate(strSearchUrl);
 	}
 
 	return TRUE;
@@ -622,6 +696,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgButtonCloseTab(UINT uID, CString strName, UINT 
 	{
 		// wParam参数表示tab页索引
 		pTabCtrl->DeleteItem(wParam);
+		// URL纪录写入注册表
+		SaveExplorerUrls();
 	}
 
 	return TRUE;

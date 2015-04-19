@@ -30,6 +30,7 @@ public:
 	LRESULT OnDuiMsgButtonHome(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgComboUrl(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgEditSearchKeyDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgButtonNewTab(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgTabCtrlSwitch(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgButtonCloseTab(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -64,6 +65,7 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"button.home", MSG_BUTTON_UP, OnDuiMsgButtonHome)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"combo.url", MSG_KEY_DOWN, OnDuiMsgComboUrlKeyDown)
 		DUI_CONTROL_NAME_MESSAGE(L"combo.url", OnDuiMsgComboUrl)
+		DUI_CONTROL_NAMEMSG_MESSAGE(L"edit.search", MSG_KEY_DOWN, OnDuiMsgEditSearchKeyDown)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"button.new", MSG_BUTTON_UP, OnDuiMsgButtonNewTab)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"tabctrl.main", MSG_BUTTON_DOWN, OnDuiMsgTabCtrlSwitch)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"tabctrl.main", MSG_CONTROL_BUTTON, OnDuiMsgButtonCloseTab)
