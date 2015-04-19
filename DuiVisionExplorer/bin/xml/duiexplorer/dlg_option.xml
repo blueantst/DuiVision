@@ -24,7 +24,7 @@
 				<text crtext="202020" pos="20,20,200,40" font="bold" title="浏览器内核选择：" />
 
 				<radiobtn name="option.webtype.ie" skin="IDB_RADIO_BUTTON" title="使用IE浏览器内核"
-					pos="50,45,300,65" check="true" group="option.group.webtype" value="id" show="1" />
+					pos="50,45,300,65" check="true" group="option.group.webtype" value="ie" show="1" />
 				<radiobtn name="option.webtype.wke" skin="IDB_RADIO_BUTTON" title="使用wke(webkit)浏览器内核"
 					pos="50,65,300,85" check="false" group="option.group.webtype" value="wke" show="1" />
 				
@@ -33,9 +33,11 @@
 				<text crtext="202020" pos="20,100,200,120" font="bold" title="启动时打开：" />
 
 				<radiobtn name="option.startopen.last" skin="IDB_RADIO_BUTTON" title="上次退出时未关闭的页面"
-					pos="50,125,300,145" check="true" group="option.group.startopen" value="last" show="1" />
-				<radiobtn name="option.startopen.home" skin="IDB_RADIO_BUTTON" title="主页 http://www.blueantstudio.net"
-					pos="50,145,300,165" check="false" group="option.group.startopen" value="home" show="1" />
+					pos="50,125,300,145" check="false" group="option.group.startopen" value="last" show="1" />
+				<!--radiobtn name="option.startopen.home" skin="IDB_RADIO_BUTTON" title="主页 http://www.blueantstudio.net"
+					pos="50,145,300,165" check="false" group="option.group.startopen" value="home" show="1" /-->
+				<radiobtn name="option.startopen.none" skin="IDB_RADIO_BUTTON" title="不打开任何页面"
+					pos="50,145,300,165" check="true" group="option.group.startopen" value="none" show="1" />
 
 				<img pos="20,171,-20,172" skin="IDB_LINE_RP" mode="extrude" framesize="0" />
 				

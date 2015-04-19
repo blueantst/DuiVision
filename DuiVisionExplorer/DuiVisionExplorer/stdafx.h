@@ -46,5 +46,7 @@
 #define REG_CONFIG_BKPIC_FILE	_T("BkPicFile")	// 背景图片文件名
 #define REG_CONFIG_BKCOLOR		_T("BkColor")	// 背景颜色
 
-#define REG_EXPLORER_SUBKEY		_T("Software\\DuiVisionExplorer\\Expiorer")
+#define REG_EXPLORER_SUBKEY		_T("Software\\DuiVisionExplorer\\Explorer")
 #define REG_EXPLORER_WEBTYPE	_T("WebType")	// 浏览器内核类型(ie|wke)
+#define REG_EXPLORER_STARTOPEN	_T("StartOpen")	// 启动时打开的页面(last|home|none)
+#define REG_EXPLORER_SUBKEY_URL	_T("Software\\DuiVisionExplorer\\Explorer\\URL")

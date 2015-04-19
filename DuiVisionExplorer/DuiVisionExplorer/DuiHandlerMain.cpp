@@ -19,25 +19,28 @@ CDuiHandlerMain::~CDuiHandlerMain(void)
 // 初始化
 void CDuiHandlerMain::OnInit()
 {
-	// 获取保存的浏览器页签URL
 	CRegistryUtil reg(HKEY_CURRENT_USER);
-	for(int i=1; i<=20; i++)
+	CString strStartOpen = reg.GetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY, REG_EXPLORER_STARTOPEN);
+	if(strStartOpen == L"last")	// 打开上次退出时未关闭的页面
 	{
-		CString strUrlKey;
-		strUrlKey.Format(L"url%d", i);
-		CString strUrl = reg.GetStringValue(NULL, REG_EXPLORER_SUBKEY, strUrlKey);
-		if(!strUrl.IsEmpty())
+		// 获取保存的浏览器页签URL
+		for(int i=1; i<=20; i++)
 		{
-			m_asUrl.Add(strUrl);
+			CString strUrlKey;
+			strUrlKey.Format(L"url%d", i);
+			CString strUrl = reg.GetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY_URL, strUrlKey);
+			if(!strUrl.IsEmpty())
+			{
+				m_asUrl.Add(strUrl);
+			}
+		}
+
+		// 创建页面
+		for(int i=0; i<m_asUrl.GetSize(); i++)
+		{
+			InsertExplorerTab(1, L"", m_asUrl[i]);
 		}
 	}
-
-	// 创建页面
-	for(int i=0; i<m_asUrl.GetSize(); i++)
-	{
-	}
-
-	//InsertExplorerTab(1, L"aaa", L"http://www.csdn.net");
 
 	// 启动动画定时器
 	m_uTimerAni = DuiSystem::AddDuiTimer(500);
@@ -313,6 +316,57 @@ void CDuiHandlerMain::InsertExplorerTab(int nIndex, CString strTitle, CString st
 */
 }
 
+// 保存打开的所有页面URL到注册表
+void CDuiHandlerMain::SaveExplorerUrls()
+{
+	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+	if(pTabCtrl == NULL)
+	{
+		return;
+	}
+
+	m_asUrl.RemoveAll();
+	int nCount = pTabCtrl->GetItemCount();
+	for(int i=0; i<nCount; i++)
+	{
+		TabItemInfo* pTabInfo = pTabCtrl->GetItemInfo(i);
+		if(pTabInfo && pTabInfo->pControl)
+		{
+			CDuiWebBrowserCtrl* pWebControlIE = (CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl);
+			CDuiWkeView* pWebControlWke = (CDuiWkeView*)GetTabWebWkeControl(pTabInfo->pControl);
+			CString strUrl = L"";
+			if(pWebControlIE != NULL)
+			{
+				strUrl = pWebControlIE->getURL();
+			}else
+			if(pWebControlWke != NULL)
+			{
+				strUrl = pWebControlWke->getURL();
+			}
+
+			if(!strUrl.IsEmpty())
+			{
+				m_asUrl.Add(strUrl);
+			}
+		}
+	}
+
+	CRegistryUtil reg(HKEY_CURRENT_USER);
+	// 更新注册表中的URL列表,最多纪录20个URL
+	for(int i=1; i<=20; i++)
+	{
+		CString strUrlKey;
+		strUrlKey.Format(L"url%d", i);
+		if(m_asUrl.GetSize() >= i)
+		{
+			reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY_URL, strUrlKey, m_asUrl[i-1]);
+		}else
+		{
+			reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY_URL, strUrlKey, L"");
+		}
+	}
+}
+
 // 显示系统设置对话框菜单消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgMenuOption(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -329,6 +383,12 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuOption(UINT uID, CString strName, UINT Msg,
 	pDlg->SetControlValue(L"option.webtype.ie", L"check", bWebTypeIE ? L"true" : L"false");
 	pDlg->SetControlValue(L"option.webtype.wke", L"check", !bWebTypeIE ? L"true" : L"false");
 
+	// 启动时打开的页面
+	CString strStartOpen = reg.GetStringValue(NULL, REG_EXPLORER_SUBKEY, REG_EXPLORER_STARTOPEN);
+	pDlg->SetControlValue(L"option.startopen.last", L"check", (strStartOpen == L"last") ? L"true" : L"false");
+	pDlg->SetControlValue(L"option.startopen.home", L"check", (strStartOpen == L"home") ? L"true" : L"false");
+	pDlg->SetControlValue(L"option.startopen.none", L"check", (strStartOpen == L"none") ? L"true" : L"false");
+
 	int nResponse = pDlg->DoModal();
 	DuiSystem::Instance()->RemoveDuiDialog(pDlg);
 	return TRUE;
@@ -343,11 +403,17 @@ LRESULT CDuiHandlerMain::OnDuiMsgOptionDlgOK(UINT uID, CString strName, UINT Msg
 		return FALSE;
 	}
 
+	CRegistryUtil reg(HKEY_CURRENT_USER);
+
 	// 浏览器类型
 	CDuiRadioButton* pControlWebTypeIE = static_cast<CDuiRadioButton*>(pDlg->GetControl(L"option.webtype.ie"));
 	CString strWebType = pControlWebTypeIE->GetGroupValue();
-	CRegistryUtil reg(HKEY_CURRENT_USER);
 	reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY, REG_EXPLORER_WEBTYPE, strWebType);
+
+	// 启动时打开的页面
+	CDuiRadioButton* pControlStartOpenLast = static_cast<CDuiRadioButton*>(pDlg->GetControl(L"option.startopen.last"));
+	CString strStartOpen = pControlStartOpenLast->GetGroupValue();
+	reg.SetStringValue(HKEY_CURRENT_USER, REG_EXPLORER_SUBKEY, REG_EXPLORER_STARTOPEN, strStartOpen);
 
 	pDlg->DoOK();
 	return TRUE;
@@ -619,6 +685,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebIENavigateComplete(UINT uID, CString strName
 			if((pWebControlIE != NULL) && ((CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl) == pWebControlIE))
 			{
 				pUrlCtrl->SetTitle(strUrl);
+				// URL纪录写入注册表
+				SaveExplorerUrls();
 			}
 		}
 	}
@@ -732,6 +800,8 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebWkeEvent(UINT uID, CString strName, UINT Msg
 			if((pWebControlWke != NULL) && ((CDuiWkeView*)GetTabWebWkeControl(pTabInfo->pControl) == pWebControlWke))
 			{
 				pUrlCtrl->SetTitle(strUrl);
+				// URL纪录写入注册表
+				SaveExplorerUrls();
 			}
 		}
 	}

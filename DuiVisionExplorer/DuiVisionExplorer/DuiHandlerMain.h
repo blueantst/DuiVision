@@ -45,6 +45,7 @@ public:
 	CDuiWebBrowserCtrl* GetCurTabWebIEControl();
 	CDuiWkeView* GetCurTabWebWkeControl();
 	void InsertExplorerTab(int nIndex, CString strTitle, CString strUrl);
+	void SaveExplorerUrls();
 
 	CDlgBase*		m_pDlg;
 	UINT			m_uTimerAni;	// ¶¯»­¶¨Ê±Æ÷
