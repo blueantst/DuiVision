@@ -538,6 +538,13 @@ LRESULT CDuiHandlerMain::OnDuiMsgTabCtrlSwitch(UINT uID, CString strName, UINT M
 		pUrlCtrl->SetTitle(strUrl);
 	}
 
+	// 隐藏页面加载进度条
+	CDuiProgress* pProgress = (CDuiProgress*)GetControl(_T("progress.webload"));
+	if(pProgress != NULL)
+	{
+		pProgress->SetVisible(FALSE);
+	}
+
 	return TRUE;
 }
 
@@ -635,6 +642,54 @@ LRESULT CDuiHandlerMain::OnDuiMsgWebIENewWindow(UINT uID, CString strName, UINT 
 		int len = wcslen(pDispParams->rgvarg[0].bstrVal);               
 		wcsncpy(szUrl, pDispParams->rgvarg[0].bstrVal, MAX_URL - 5);
 		InsertExplorerTab(-1, L"", szUrl);
+	}
+
+	return S_OK;
+}
+
+// IE浏览器页面加载进度更新事件
+LRESULT CDuiHandlerMain::OnDuiMsgWebIEProgressChange(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)GetControl(_T("tabctrl.main"));
+	if(pTabCtrl == NULL)
+	{
+		return S_OK;
+	}
+
+	TabItemInfo* pTabInfo = GetTabInfoByWebCtrlId(uID);
+	if(pTabInfo == NULL)
+	{
+		return S_OK;
+	}
+
+	// 如果不是当前页面的消息则不处理
+	CDuiWebBrowserCtrl* pWebControlIE = GetCurTabWebIEControl();
+	if((pWebControlIE == NULL) || ((CDuiWebBrowserCtrl*)GetTabWebIEControl(pTabInfo->pControl) != pWebControlIE))
+	{
+		return S_OK;
+	}
+
+	// 获取进度条控件
+	CDuiProgress* pProgress = (CDuiProgress*)GetControl(_T("progress.webload"));
+	if(pProgress == NULL)
+	{
+		return S_OK;
+	}
+
+	DISPPARAMS FAR* pDispParams = (DISPPARAMS FAR*)wParam;
+	int nCurProgress = pDispParams->rgvarg[1].lVal;
+	int nMaxProgress = pDispParams->rgvarg[0].lVal;
+
+	if ((nMaxProgress > 0) && (nCurProgress >= 0))
+	{
+		// 显示进度条
+		pProgress->SetMaxProgress(nMaxProgress);
+		pProgress->SetProgress(nCurProgress);
+		pProgress->SetVisible(TRUE);
+	}else
+	{
+		// nCurProgress为-1表示已经加载完成,需要隐藏进度条
+		pProgress->SetVisible(FALSE);
 	}
 
 	return S_OK;

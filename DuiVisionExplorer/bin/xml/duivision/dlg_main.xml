@@ -94,6 +94,10 @@ QQ群：325880743
 	<div name="footer" pos="0,-26,-0,-0" >	
 		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：[APP_VER]" title="检查更新" action="link:http://www.blueantstudio.net" />
 		
+		<progress name="progress.webload" skin="IDB_PROGRESS" show-text="0" crtext="808080" title=""
+				pos="-400,3,-140,20" value="0" run="false" show="0"
+				tip="页面加载进度" />
+
 		<imgbtn name="button.download" pos="-130,4,-116,18" img-btn="skins\simage\download.png" img-count="1" tip="下载" tabstop="0" showfocus="0" />
 		<textbtn name="button.download.text" crtext="808080" pos="-115,3,-80,20" show="1" title="下载" />
 		
