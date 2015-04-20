@@ -155,6 +155,8 @@ public:
 	virtual CControlBase * SetControlDisable(UINT uControlID, BOOL bDisable);
 	// 禁用控件
 	virtual CControlBase * SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
+	// 重置控件
+	virtual void ResetControl();
 	// 更新选中
 	void UpdateHover();
 

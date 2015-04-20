@@ -567,6 +567,7 @@ LRESULT CDlgPopup::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 		if (m_pControl)
 		{
 			m_pControl->OnMouseMove(0, CPoint(-1, -1));
+			ResetControl();
 		}
 
 		m_pControl = NULL;
@@ -639,6 +640,7 @@ void CDlgPopup::OnMouseMove(UINT nFlags, CPoint point)
 		if(((m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point)) || m_bIsLButtonDown) && m_bTracking)
 		{			
 			m_pControl->OnMouseMove(nFlags, point);
+			ResetControl();
 			return;
 		}
 	}
@@ -680,6 +682,8 @@ void CDlgPopup::OnMouseMove(UINT nFlags, CPoint point)
 		{
 			DrawWindow();
 		}
+
+		ResetControl();
 	}
 }
 
@@ -718,6 +722,7 @@ void CDlgPopup::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		SetCapture();
 		m_bIsSetCapture = TRUE;
+		ResetControl();
 
 		return;
 	}
@@ -725,9 +730,11 @@ void CDlgPopup::OnLButtonDown(UINT nFlags, CPoint point)
 	// 调用自身的函数
 	if(OnLButtonDown(point))
 	{
-		DrawWindow();		
+		DrawWindow();	
 		return;
 	}
+
+	ResetControl();
 
 	//PostMessage(WM_NCLBUTTONDOWN,HTCAPTION,MAKELPARAM(point.x, point.y));
 
@@ -772,6 +779,8 @@ void CDlgPopup::OnLButtonUp(UINT nFlags, CPoint point)
 		DrawWindow();
 	}
 
+	ResetControl();
+
 	CWnd::OnLButtonUp(nFlags, point);
 }
 
@@ -803,6 +812,8 @@ void CDlgPopup::OnLButtonDblClk(UINT nFlags, CPoint point)
 	{
 		DrawWindow();
 	}
+
+	ResetControl();
 
 	CWnd::OnLButtonDblClk(nFlags, point);
 }
@@ -1344,6 +1355,30 @@ CControlBase * CDlgPopup::SetControlDisable(CControlBase *pControlBase, BOOL bDi
 		UpdateHover();
 	}
 	return pControlBase;
+}
+
+// 重置控件
+void CDlgPopup::ResetControl()
+{
+	for (size_t i = 0; i < m_vecArea.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecArea.at(i);
+		if (pControlBase)
+		{
+			pControlBase->SetUpdate(FALSE);//, m_clrBK);
+		}
+	}
+
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			pControlBase->SetUpdate(FALSE);//, m_clrBK);			
+		}
+	}
+
+	InvalidateRect(NULL);
 }
 
 // 更新选中
