@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+<!--中文字符串资源-->
+<res type="str" lang="zh-cn" name="TEST" value="测试" />
+</root>

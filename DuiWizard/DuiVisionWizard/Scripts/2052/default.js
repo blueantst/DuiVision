@@ -383,6 +383,12 @@ function GetTargetName(strName, strProjectName)
             strName = strName.substr(5);
             strTarget = '..\\bin\\' + strName;
         }
+		
+		if (strName.indexOf('[bin_source]') == 0) // bin目录下的文件
+        {
+            strName = strName.substr(12);
+            strTarget = '..\\bin\\' + strName;
+        }
 
 		return strTarget;
 	}
@@ -445,14 +451,19 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				    filter = filterXml;
 				    isTabFile = true;
 				}else
-				if (strTpl.indexOf('[duivision]') == 0) // DuiVision库文件
+				if (strTpl.indexOf('[duivision]') == 0) // DuiVision库文件,从代码库目录拷贝
 				{
-				    strTpl = 'DuiVision\\' + strTpl.substr(11);
+				    strTpl = '..\\..\\..\\..\\DuiVision\\' + strTpl.substr(11);
 					bCopyOnly = true;
 				}else
-				if (strTpl.indexOf('[bin]') == 0) // bin
+				if (strTpl.indexOf('[bin]') == 0) // 生成bin目录下的可能需要替换的文件,从向导目录拷贝
 				{
 				    strTpl = 'bin\\' + strTpl.substr(5);
+				    bCopyOnly = true;
+				}else
+				if (strTpl.indexOf('[bin_source]') == 0) // bin目录下的依赖库文件,从代码库目录拷贝
+				{
+				    strTpl = '..\\..\\..\\..\\bin\\' + strTpl.substr(12);
 				    bCopyOnly = true;
 				}
 
@@ -460,7 +471,8 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				var strFile = strProjectPath + '\\' + strTarget;
 
 				var strExt = strName.substr(strName.lastIndexOf("."));
-				if(strExt==".bmp" || strExt==".png" || strExt==".jpg" || strExt==".ico" || strExt==".gif" || strExt==".rtf" || strExt==".css")
+				if(strExt==".bmp" || strExt==".png" || strExt==".jpg" || strExt==".ico" || strExt==".gif"
+					|| strExt==".rtf" || strExt==".css" || strExt==".lib" || strExt==".dll")
 				    bBinary = true;
 				if (!isTabFile) {
                     // 复制文件和添加到工程
