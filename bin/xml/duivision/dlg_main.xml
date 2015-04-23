@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dlg name="dlg_main" title="[APP_NAME]-任务栏名字22" width="800" height="550" translucent="255"
 	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000" appwin="1" resize="1"
-	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30"
+	shadow-size="4">
 
   <base>
 	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="hide-window" show="1"/>
