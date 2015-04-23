@@ -156,6 +156,7 @@
     <ClInclude Include="include\TextButton.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\WndBase.h" />
+    <ClInclude Include="include\WndShadow.h" />
     <ClInclude Include="pugixml\foreach.hpp" />
     <ClInclude Include="pugixml\pugiconfig.hpp" />
     <ClInclude Include="pugixml\pugixml.hpp" />
@@ -210,6 +211,7 @@
     <ClCompile Include="source\TextButton.cpp" />
     <ClCompile Include="source\Timer.cpp" />
     <ClCompile Include="source\WndBase.cpp" />
+    <ClCompile Include="source\WndShadow.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

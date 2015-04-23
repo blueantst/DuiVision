@@ -328,6 +328,10 @@
 				RelativePath=".\source\WndBase.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\source\WndShadow.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -520,6 +524,10 @@
 			</File>
 			<File
 				RelativePath=".\include\WndBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\WndShadow.h"
 				>
 			</File>
 		</Filter>

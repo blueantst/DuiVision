@@ -4,6 +4,7 @@
 #define __DLG_MY_BASE_X_H__
 #include <vector>
 #include "DuiVision.h"
+#include "WndShadow.h"
 
 using namespace  std;
 
@@ -86,6 +87,8 @@ protected:
 	BOOL			m_bAutoHide;				// 窗口自动隐藏标志
 	UINT			m_uAutoCloseDelayTime;		// 窗口自动关闭的延迟时间
 
+	BOOL			m_bImageUseECM;				// 是否使用图片自身的颜色管理信息
+
 	CToolTipCtrl	m_wndToolTip;				// Tooltip
 	int				m_nTooltipCtrlID;			// 当前Tooltip显示的控件ID
 
@@ -98,6 +101,14 @@ protected:
 	CControlBase	*m_pFocusControl;			// 当前焦点的控件对象
 
 	vector<CONTROL_VALUE>	m_vecControlValue;	// 控件预设置信息
+
+	// 窗口阴影
+	CWndShadow		m_Shadow;					// 阴影对象
+	int				m_nShadowWLT;				// 阴影图片左上角宽度(九宫格模式)
+	int				m_nShadowHLT;				// 阴影图片左上角高度(九宫格模式)
+	int				m_nShadowWRB;				// 阴影图片右下角宽度(九宫格模式)
+	int				m_nShadowHRB;				// 阴影图片右下角高度(九宫格模式)
+	int				m_nShadowSize;				// 阴影宽度(算法阴影)
 
 private:
 	vector<CControlBase *>	m_vecBaseControl;	// 窗口自身用到的一些默认控件
@@ -116,6 +127,8 @@ public:
 	virtual CDuiObject* GetParent() { return m_pParentDuiObject; }
 
 	void TestMainThread();	// 测试是否在主线程
+
+	BOOL UseImageECM() { return m_bImageUseECM; }
 
 	void SetXmlFile(CString strXmlFile) {m_strXmlFile = strXmlFile;}
 	void SetXmlContent(CString strXmlContent) {m_strXmlContent = strXmlContent;}
@@ -273,6 +286,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnDestroy();
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Shadow);			// 定义阴影图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("appwin"), m_bAppWin, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
@@ -287,7 +301,13 @@ public:
 		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("bkimg"), m_strBkImg, FALSE)
 		DUI_RGBCOLOR_ATTRIBUTE(_T("crbk"), m_crlBack, FALSE)
+		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE(_T("translucent"), m_nBackTranslucent, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-wlt"), m_nShadowWLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-hlt"), m_nShadowHLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-wrb"), m_nShadowWRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-hrb"), m_nShadowHRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-size"), m_nShadowSize, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

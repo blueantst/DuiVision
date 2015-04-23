@@ -37,6 +37,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_bIsSetCapture = false;
 	m_clrBK = RGB(186, 226, 239);
 	m_bDrawImage = FALSE;
+	m_bImageUseECM = false;
 
 	m_bIsLButtonDown = FALSE;
 	m_bIsLButtonDblClk = FALSE;
@@ -51,6 +52,12 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_nFrameHLT = 0;
 	m_nFrameWRB = 0;
 	m_nFrameHRB = 0;
+
+	m_nShadowWLT = 0;
+	m_nShadowHLT = 0;
+	m_nShadowWRB = 0;
+	m_nShadowHRB = 0;
+	m_nShadowSize = 0;
 
 	m_uTimerAnimation = 0;
 	m_uTimerAutoClose = 0;
@@ -143,6 +150,9 @@ CDlgBase::~CDlgBase()
 		}		
 	}
 }
+
+// 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDlgBase, Shadow, 1)
 
 BEGIN_MESSAGE_MAP(CDlgBase, CDialog)
 	ON_WM_PAINT()
@@ -340,6 +350,15 @@ BOOL CDlgBase::OnInitDialog()
 
 	CenterWindow();
 	ShowWindow(SW_SHOW);
+
+	// 显示窗口阴影
+	if(m_nShadowSize > 0)
+	{
+		CWndShadow::Initialize(AfxGetInstanceHandle()); 
+		m_Shadow.Create(GetSafeHwnd());
+		m_Shadow.SetSize(m_nShadowSize);
+		m_Shadow.SetPosition(0, 0);
+	}
 
 	//启动定时器
 	m_uTimerAnimation = CTimer::SetTimer(30);

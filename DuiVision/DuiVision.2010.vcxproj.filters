@@ -189,6 +189,9 @@
     <ClInclude Include="include\DuiWkeView.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\WndShadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -324,6 +327,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiWkeView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WndShadow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
