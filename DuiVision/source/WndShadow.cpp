@@ -30,6 +30,7 @@
 #include "WndShadow.h"
 #include "math.h"
 #include "crtdbg.h"
+#include "GlobalFunction.h"
 
 // Some extra work to make this work in VC++ 6.0
 
@@ -73,6 +74,11 @@ CWndShadow::CWndShadow(void)
 , m_WndSize(0)
 , m_bUpdate(false)
 {
+	m_pShadowImage = NULL;
+	m_nShadowWLT = 0;
+	m_nShadowHLT = 0;
+	m_nShadowWRB = 0;
+	m_nShadowHRB = 0;
 }
 
 CWndShadow::~CWndShadow(void)
@@ -173,9 +179,18 @@ LRESULT CALLBACK CWndShadow::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		{
 			RECT WndRect;
 			GetWindowRect(hwnd, &WndRect);
-			SetWindowPos(pThis->m_hWnd, 0,
-				WndRect.left + pThis->m_nxOffset - pThis->m_nSize, WndRect.top + pThis->m_nyOffset - pThis->m_nSize,
-				0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+			if(pThis->m_pShadowImage != NULL)
+			{
+				// 九宫格方式的阴影窗口移动位置
+				SetWindowPos(pThis->m_hWnd, 0,
+					WndRect.left - pThis->m_nShadowWLT, WndRect.top - pThis->m_nShadowHLT,
+					0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+			}else
+			{
+				SetWindowPos(pThis->m_hWnd, 0,
+					WndRect.left + pThis->m_nxOffset - pThis->m_nSize, WndRect.top + pThis->m_nyOffset - pThis->m_nSize,
+					0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+			}
 		}
 		break;
 
@@ -280,8 +295,19 @@ void CWndShadow::Update(HWND hParent)
 
 	RECT WndRect;
 	GetWindowRect(hParent, &WndRect);
-	int nShadWndWid = WndRect.right - WndRect.left + m_nSize * 2;
-	int nShadWndHei = WndRect.bottom - WndRect.top + m_nSize * 2;
+	int nShadWndWid = 0;
+	int nShadWndHei = 0;
+	if(m_pShadowImage != NULL)
+	{
+		// 九宫格方式,计算阴影窗口总的宽度和高度
+		nShadWndWid = WndRect.right - WndRect.left + m_nShadowWLT + m_nShadowWRB;
+		nShadWndHei = WndRect.bottom - WndRect.top + m_nShadowHLT + m_nShadowHRB;
+	}else
+	{
+		// 算法阴影方式,计算阴影窗口总的宽度和高度
+		nShadWndWid = WndRect.right - WndRect.left + m_nSize * 2;
+		nShadWndHei = WndRect.bottom - WndRect.top + m_nSize * 2;
+	}
 
 	// Create the alpha blending bitmap
 	BITMAPINFO bmi;        // bitmap header
@@ -297,14 +323,37 @@ void CWndShadow::Update(HWND hParent)
 
 	BYTE *pvBits;          // pointer to DIB section
 	HBITMAP hbitmap = CreateDIBSection(NULL, &bmi, DIB_RGB_COLORS, (void **)&pvBits, NULL, 0);
-
-	ZeroMemory(pvBits, bmi.bmiHeader.biSizeImage);
-	MakeShadow((UINT32 *)pvBits, hParent, &WndRect);
-
 	HDC hMemDC = CreateCompatibleDC(NULL);
 	HBITMAP hOriBmp = (HBITMAP)SelectObject(hMemDC, hbitmap);
 
-	POINT ptDst = {WndRect.left + m_nxOffset - m_nSize, WndRect.top + m_nyOffset - m_nSize};
+	if(m_pShadowImage != NULL)
+	{
+		// 九宫格方式画阴影图片
+		Graphics graphics(hMemDC);
+		CRect rcTemp(0, 0, nShadWndWid, nShadWndHei);
+		DrawImageFrameMID(graphics, m_pShadowImage, rcTemp,
+			0, 0, m_pShadowImage->GetWidth(), m_pShadowImage->GetHeight(),
+			m_nShadowWLT, m_nShadowHLT, m_nShadowWRB, m_nShadowHRB);
+	}else
+	{
+		// 画算法阴影
+		ZeroMemory(pvBits, bmi.bmiHeader.biSizeImage);
+		MakeShadow((UINT32 *)pvBits, hParent, &WndRect);
+	}
+
+	// 计算阴影窗口偏移位置
+	POINT ptDst;  
+    if(m_pShadowImage != NULL)  
+    {
+        ptDst.x = WndRect.left - m_nShadowWLT;  
+        ptDst.y = WndRect.top - m_nShadowHLT;  
+    }  
+    else  
+    {  
+        ptDst.x = WndRect.left + m_nxOffset - m_nSize;  
+        ptDst.y = WndRect.top + m_nyOffset - m_nSize;  
+    }
+
 	POINT ptSrc = {0, 0};
 	SIZE WndSize = {nShadWndWid, nShadWndHei};
 	BLENDFUNCTION blendPixelFunction= { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
@@ -588,5 +637,16 @@ bool CWndShadow::SetColor(COLORREF NewColor)
 	m_Color = NewColor;
 	if(SS_VISABLE & m_Status)
 		Update(GetParent(m_hWnd));
+	return true;
+}
+
+// 设置九宫格方式的图片阴影
+bool CWndShadow::SetShadowImage(Image* pImage, int nWLT, int nHLT, int nWRB, int nHRB)
+{
+	m_pShadowImage = pImage;
+	m_nShadowWLT = nWLT;
+	m_nShadowHLT = nHLT;
+	m_nShadowWRB = nWRB;
+	m_nShadowHRB = nHRB;
 	return true;
 }

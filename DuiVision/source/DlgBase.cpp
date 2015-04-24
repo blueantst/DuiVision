@@ -53,6 +53,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_nFrameWRB = 0;
 	m_nFrameHRB = 0;
 
+	m_pImageShadow = NULL;
 	m_nShadowWLT = 0;
 	m_nShadowHLT = 0;
 	m_nShadowWRB = 0;
@@ -148,6 +149,12 @@ CDlgBase::~CDlgBase()
 		{
 			delete pControlBase;
 		}		
+	}
+
+	if(m_pImageShadow != NULL)
+	{
+		delete m_pImageShadow;
+		m_pImageShadow = NULL;
 	}
 }
 
@@ -352,7 +359,14 @@ BOOL CDlgBase::OnInitDialog()
 	ShowWindow(SW_SHOW);
 
 	// 显示窗口阴影
-	if(m_nShadowSize > 0)
+	if(m_pImageShadow != NULL)	// 九宫格方式的图片阴影
+	{
+		CWndShadow::Initialize(AfxGetInstanceHandle()); 
+		m_Shadow.Create(GetSafeHwnd());
+		m_Shadow.SetShadowImage(m_pImageShadow, m_nShadowWLT, m_nShadowHLT, m_nShadowWRB, m_nShadowHRB);
+		m_Shadow.SetPosition(0, 0);
+	}else
+	if(m_nShadowSize > 0)	// 算法阴影
 	{
 		CWndShadow::Initialize(AfxGetInstanceHandle()); 
 		m_Shadow.Create(GetSafeHwnd());
@@ -1434,7 +1448,7 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 		}
 		else
 		{
-			SetupRegion(border_offset, 1/*3*/);
+			SetupRegion(border_offset, 0/*3*/);
 			m_nFrameLeftRightSpace = m_nFrameTopBottomSpace = 3;	// 设置可以鼠标拖动改变窗口大小的区域宽度
 		}	
 

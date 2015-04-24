@@ -53,9 +53,9 @@ protected:
 		BLENDFUNCTION *pblend, DWORD dwFlags);
 	static pfnUpdateLayeredWindow s_UpdateLayeredWindow;
 
-	HWND m_hWnd;
+	HWND			m_hWnd;
 
-	LONG m_OriParentProc;	// Original WndProc of parent window
+	LONG			m_OriParentProc;	// Original WndProc of parent window
 
 	enum ShadowStatus
 	{
@@ -64,24 +64,30 @@ protected:
 		SS_PARENTVISIBLE = 1<< 2,	// Parent window is visible, if not, the above one is always false
 	    SS_DISABLEDBYAERO = 1 << 3	// Shadow is enabled, but do not show because areo is enabled
 	};
-	BYTE m_Status;
+	BYTE			m_Status;
 
-	unsigned char m_nDarkness;	// Darkness, transparency of blurred area
-	unsigned char m_nSharpness;	// Sharpness, width of blurred border of shadow window
-	signed char m_nSize;	// Shadow window size, relative to parent window size
+	unsigned char	m_nDarkness;	// Darkness, transparency of blurred area
+	unsigned char	m_nSharpness;	// Sharpness, width of blurred border of shadow window
+	signed char		m_nSize;	// Shadow window size, relative to parent window size
 
 	// The X and Y offsets of shadow window,
 	// relative to the parent window, at center of both windows (not top-left corner), signed
-	signed char m_nxOffset;
-	signed char m_nyOffset;
+	signed char		m_nxOffset;
+	signed char		m_nyOffset;
 
 	// Restore last parent window size, used to determine the update strategy when parent window is resized
-	LPARAM m_WndSize;
+	LPARAM			m_WndSize;
 
 	// Set this to true if the shadow should not be update until next WM_PAINT is received
-	bool m_bUpdate;
+	bool			m_bUpdate;
 
-	COLORREF m_Color;	// Color of shadow
+	COLORREF		m_Color;			// Color of shadow
+
+	Image*			m_pShadowImage;		// 阴影图片
+	int				m_nShadowWLT;		// 阴影图片左上角宽度(九宫格模式)
+	int				m_nShadowHLT;		// 阴影图片左上角高度(九宫格模式)
+	int				m_nShadowWRB;		// 阴影图片右下角宽度(九宫格模式)
+	int				m_nShadowHRB;		// 阴影图片右下角高度(九宫格模式)
 
 public:
 	static bool Initialize(HINSTANCE hInstance);
@@ -92,6 +98,9 @@ public:
 	bool SetDarkness(unsigned int NewDarkness = 200);
 	bool SetPosition(int NewXOffset = 5, int NewYOffset = 5);
 	bool SetColor(COLORREF NewColor = 0);
+
+	// 设置九宫格方式的图片阴影(参数分别是图片和九宫格位置)
+    bool SetShadowImage(Image* pImage, int nWLT, int nHLT, int nWRB, int nHRB); 
 
 protected:
 	//static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
