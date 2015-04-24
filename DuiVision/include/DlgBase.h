@@ -191,6 +191,8 @@ public:
 	void LoadBackgroundImage(CString strFileName);
 	// 初始化窗口控件的默认值
 	void InitUIState();
+	// 设置窗口背景透明度
+	void SetupBackTranslucent();
 	// 设置不规则窗体区域
 	void SetupRegion(int nSize);
 	// 画背景图片

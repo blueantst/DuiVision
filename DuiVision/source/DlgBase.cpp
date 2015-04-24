@@ -1440,7 +1440,8 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 	if (!IsIconic())	// 非最小化状态
 	{
 		BOOL bIsMaximize = IsZoomed();
-		int border_offset[] = {/*3, 2, */1};
+		// 设置圆角矩形和鼠标拖动区域宽度
+		int border_offset[] = {3, 2, 1};
 		if (bIsMaximize)
 		{				
 			SetupRegion(border_offset, 0);
@@ -1448,9 +1449,12 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 		}
 		else
 		{
-			SetupRegion(border_offset, 0/*3*/);
+			SetupRegion(border_offset, 0);	// 暂不设置圆角矩形
 			m_nFrameLeftRightSpace = m_nFrameTopBottomSpace = 3;	// 设置可以鼠标拖动改变窗口大小的区域宽度
-		}	
+		}
+
+		// 设置窗口背景透明度
+		SetupBackTranslucent();
 
 		// 主窗口的透明渐变层蒙板在九宫格模式或非最大化情况下才会可见
 		CControlBase *pControlBase = GetBaseControl(FRAME_MAINWND);
@@ -1467,49 +1471,65 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 	OnSize(rc);
 
 	// 调整各个控件的位置
-	// 基础AREA的大小设置
-	for (size_t i = 0; i < m_vecBaseArea.size(); i++)
+	if (!IsIconic())	// 非最小化状态
 	{
-		CControlBase * pControlBase = m_vecBaseArea.at(i);
-		if (pControlBase)
+		// 基础AREA的大小设置
+		for (size_t i = 0; i < m_vecBaseArea.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecBaseArea.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
-	}
-	// 基础控件的大小设置
-	for (size_t i = 0; i < m_vecBaseControl.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecBaseControl.at(i);
-		if (pControlBase)
+		// 基础控件的大小设置
+		for (size_t i = 0; i < m_vecBaseControl.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecBaseControl.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
-	}
 
-	// 用户AREA的大小设置
-	for (size_t i = 0; i < m_vecArea.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecArea.at(i);
-		if (pControlBase)
+		// 用户AREA的大小设置
+		for (size_t i = 0; i < m_vecArea.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecArea.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
-	}
-	// 用户控件的大小设置
-	for (size_t i = 0; i < m_vecControl.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecControl.at(i);
-		if (pControlBase)
+		// 用户控件的大小设置
+		for (size_t i = 0; i < m_vecControl.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
 	}
 
 	InvalidateRect(NULL);
+}
+
+// 设置窗口背景透明度
+void CDlgBase::SetupBackTranslucent()
+{
+	// 设置背景透明度
+	if(m_nBackTranslucent != 255)
+	{
+ 		HWND hWnd = GetSafeHwnd();
+ 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
+		SetLayeredWindowAttributes(0, m_nBackTranslucent, LWA_ALPHA);
+ 		//SetLayeredWindowAttributes(RGB(255, 0, 255), 0, LWA_COLORKEY );
+	}
 }
 
 // 设置窗口区域
@@ -1521,6 +1541,7 @@ void CDlgBase::SetupRegion(int border_offset[], int nSize)
 	GetWindowRect(rc);
 	rc.OffsetRect(-rc.left, -rc.top);
 
+	// 通过区域裁剪的方式画窗口的圆角矩形,nSize表示圆角矩形的半径
 	CRgn	rgn;
 	rgn.CreateRectRgn(0, 0, rc.Width(), rc.Height());
 	CRgn	rgn_xor;
@@ -1556,15 +1577,6 @@ void CDlgBase::SetupRegion(int border_offset[], int nSize)
 		rgn_xor.CreateRectRgn(rc.right - border_offset[y], rc.bottom - y - 1, rc.right,rc.bottom -  y);
 		rgn.CombineRgn(&rgn, &rgn_xor, RGN_XOR);
 		rgn_xor.DeleteObject();
-	}
-
-	// 设置背景透明度
-	if(m_nBackTranslucent != 255)
-	{
- 		HWND hWnd = GetSafeHwnd();
- 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
-		SetLayeredWindowAttributes(0, m_nBackTranslucent, LWA_ALPHA);
- 		//SetLayeredWindowAttributes(RGB(255, 0, 255), 0, LWA_COLORKEY );
 	}
 
 	SetWindowRgn((HRGN)rgn, TRUE);
