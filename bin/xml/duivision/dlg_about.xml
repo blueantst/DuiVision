@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dlg name="dlg_about" title="MsgBox" width="450" height="230" appwin="1" resize="1"
-	translucent="245" frame="" bkimg="skin:SKIN_PIC_7" crbk="000000" >
+	translucent="245" frame="" bkimg="skin:SKIN_PIC_7" crbk="000000"
+	img-shadow="skins\default\winback_shadow.png" shadow-wlt="36" shadow-hlt="34" shadow-wrb="36" shadow-hrb="35">
+	<!--img-shadow="skins\360\bk_shadow.png" shadow-wlt="7" shadow-hlt="7" shadow-wrb="6" shadow-hrb="8" -->
 	
 	<base>
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1"/>

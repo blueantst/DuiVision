@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
-<dlg name="dlg_option" title="" width="400" height="200" resize="0"	frame="" bkimg="" crbk="000000" >
+<dlg name="dlg_option" title="" width="400" height="200" resize="0"	frame="" bkimg="" crbk="000000"
+	shadow-size="3" >
 	
 	<base>
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" shortcut="ESC" />
