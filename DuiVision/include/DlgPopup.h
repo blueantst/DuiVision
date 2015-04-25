@@ -55,6 +55,7 @@ protected:
 	int				m_nFrameHRB;				// 边框右下角高度(九宫格模式)
 	BOOL			m_bInitFinish;				// 是否初始化完成
 	BOOL			m_bAutoClose;				// 是否自动关闭
+	BOOL			m_bTopMost;					// 窗口总在最前面
 
 	BOOL			m_bImageUseECM;				// 是否使用图片自身的颜色管理信息
 
@@ -196,6 +197,7 @@ public:
 		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE(_T("autoclose"), m_bAutoClose, FALSE)
+		DUI_INT_ATTRIBUTE(_T("topmost"), m_bTopMost, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

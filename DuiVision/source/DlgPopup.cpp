@@ -29,6 +29,7 @@ CDlgPopup::CDlgPopup() : CDuiObject()
 	m_nFrameHRB = 0;
 	m_bInitFinish = false;
 	m_bAutoClose = true;
+	m_bTopMost = true;
 	m_bImageUseECM = false;
 
 	m_pControl = NULL;
@@ -104,7 +105,12 @@ BOOL CDlgPopup::Create(CWnd *pParent, CRect rc, UINT uMessageID, UINT nResourceI
 
 	SetBackBitmap(nResourceID);
 
-	if(CWnd::CreateEx(WS_EX_TOPMOST | WS_EX_TOOLWINDOW,sWindowClassName ,NULL,WS_POPUP, rc, pParent, 0, NULL))
+	DWORD dwStyle = WS_EX_TOOLWINDOW;
+	if(m_bTopMost)	// 窗口总在最前面
+	{
+		dwStyle |= WS_EX_TOPMOST;
+	}
+	if(!CWnd::CreateEx(dwStyle, sWindowClassName, NULL, WS_POPUP, rc, pParent, 0, NULL))
 	{
 		return	FALSE;
 	}
@@ -125,7 +131,12 @@ BOOL CDlgPopup::Create(CWnd *pParent, CRect rc, UINT uMessageID, CString strImag
 
 	SetBackBitmap(strImage);
 
-	if(CWnd::CreateEx(WS_EX_TOPMOST | WS_EX_TOOLWINDOW,sWindowClassName ,NULL,WS_POPUP, rc, pParent, 0, NULL))
+	DWORD dwStyle = WS_EX_TOOLWINDOW;
+	if(m_bTopMost)	// 窗口总在最前面
+	{
+		dwStyle |= WS_EX_TOPMOST;
+	}
+	if(!CWnd::CreateEx(dwStyle, sWindowClassName, NULL, WS_POPUP, rc, pParent, 0, NULL))
 	{
 		return	FALSE;
 	}
@@ -150,7 +161,12 @@ BOOL CDlgPopup::Create(CWnd *pParent, CRect rc, UINT uMessageID)
 		rc.bottom = rc.top + m_size.cy;
 	}
 
-	if(CWnd::CreateEx(WS_EX_TOPMOST | WS_EX_TOOLWINDOW,sWindowClassName ,NULL,WS_POPUP, rc, pParent, 0, NULL))
+	DWORD dwStyle = WS_EX_TOOLWINDOW;
+	if(m_bTopMost)	// 窗口总在最前面
+	{
+		dwStyle |= WS_EX_TOPMOST;
+	}
+	if(!CWnd::CreateEx(dwStyle, sWindowClassName, NULL, WS_POPUP, rc, pParent, 0, NULL))
 	{
 		return	FALSE;
 	}
