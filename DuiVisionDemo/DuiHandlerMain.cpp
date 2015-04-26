@@ -94,6 +94,32 @@ void CDuiHandlerMain::OnInit()
 		}
 	}
 
+	// 演示通过API添加gridctrl行
+	if(pGridCtrl)
+	{
+		for(int i=0; i<10; i++)
+		{
+			CString strId;
+			strId.Format(L"id_%d", i);
+			int nRow = pGridCtrl->InsertRow(-1,	// 插入的行序号,-1表示添加到最后
+				strId,							// 行id字符串
+				-1,								// 行左侧图片(索引图片方式,无索引图片填-1)
+				Color(0, 0, 0, 0),				// 行文字颜色,全0表示默认(不使用行文字颜色,使用表格全局颜色)
+				L"skins\\icon\\scriptnet.png",	// 行左侧的图片文件
+				-1,								// 行右侧图片(索引图片方式,无索引图片填-1)
+				L"",							// 行右侧的图片文件
+				(i % 2));						// 行左侧的检查框状态(-1表示不显示检查框)
+			CString strText;
+			strText.Format(L"程序名%d", i);
+			CString strContent;
+			strContent.Format(L"程序说明%d", i);
+			pGridCtrl->SetSubItem(nRow, 0, strText, strContent, TRUE);
+			pGridCtrl->SetSubItem(nRow, 1, L"已装：1.0.0.1", L"最新：2.3.0.1");
+			pGridCtrl->SetSubItem(nRow, 2, L"11M");
+			pGridCtrl->SetSubItem(nRow, 3, L"安装");
+		}
+	}
+
 	// 演示树控件通过API增加子控件
 	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
 	if(pTreeCtrl)
