@@ -46,6 +46,7 @@ protected:
 	CSize			m_MinSize;					// 窗口限定最小大小
 	CRgn			m_Rgn;						// 不规则窗口区域
 	COLORREF		m_clrBK;					// 自定义前景颜色
+	BOOL			m_bTopMost;					// 窗口总在最前面
 
 	CString			m_strTitle;					// 窗口标题
 	CFont			m_TitleFont;				// 绘制标题栏的字体
@@ -311,6 +312,7 @@ public:
 		DUI_INT_ATTRIBUTE(_T("shadow-wrb"), m_nShadowWRB, FALSE)
 		DUI_INT_ATTRIBUTE(_T("shadow-hrb"), m_nShadowHRB, FALSE)
 		DUI_INT_ATTRIBUTE(_T("shadow-size"), m_nShadowSize, FALSE)
+		DUI_INT_ATTRIBUTE(_T("topmost"), m_bTopMost, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

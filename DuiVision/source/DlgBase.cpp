@@ -70,6 +70,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_strBkImg = _T("");
 	m_crlBack = RGB(0,0,0);
 	m_nBackTranslucent = 255;	// 背景透明度,255表示不透明,1表示全透明
+	m_bTopMost = false;
 
 	m_nTooltipCtrlID = 0;
 
@@ -293,7 +294,14 @@ BOOL CDlgBase::OnInitDialog()
 
 	m_TitleFont.CreateFontIndirect(&font);
 
-	::SetWindowPos(m_hWnd, NULL, 0, 0, m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
+	if(m_bTopMost)
+	{
+		// 窗口显示在桌面的最前面
+		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0,0,m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
+	}else
+	{
+		::SetWindowPos(m_hWnd, NULL, 0, 0, m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
+	}
 	
 	CRect	rc;
 	GetClientRect(rc);
