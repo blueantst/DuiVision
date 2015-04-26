@@ -84,6 +84,8 @@
 <res type="img" name="IDB_COMPUTER" file="skins\simage\computer.png" />
 <res type="img" name="IDB_EDIT_PWD" file="skins\simage\password.png" />
 <res type="img" name="IDB_LINE_RP" file="skins\default\rp_line.png" />
+<res type="img" name="IDB_WINBACK_SHADOW" file="skins\default\winback_shadow.png" />
+<res type="img" name="IDB_WINDOW_SHADOW" file="skins\default\window_shadow.png" />
 
 <res type="img" name="IDB_MENU_BACK" file="skins\menu\menu_bkg.png" />
 <res type="img" name="IDB_MENU_SEP" file="skins\menu\menu_sep.png" />

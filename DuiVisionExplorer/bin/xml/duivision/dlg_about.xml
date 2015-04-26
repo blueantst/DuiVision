@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <dlg name="dlg_about" title="MsgBox" width="450" height="230" appwin="1" resize="1"
-	translucent="245" frame="" bkimg="skin:SKIN_PIC_4" crbk="000000" >
+	translucent="245" frame="" bkimg="skin:SKIN_PIC_4" crbk="000000"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
 	
 	<base>
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1"/>

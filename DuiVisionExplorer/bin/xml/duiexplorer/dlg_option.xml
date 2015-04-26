@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <dlg name="dlg_option" title="" width="450" height="400" resize="0"
-	translucent="245" frame="" bkimg="skin:SKIN_PIC_4" crbk="000000" >
+	translucent="245" frame="" bkimg="skin:SKIN_PIC_4" crbk="000000"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
 	
 	<base>
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" shortcut="ESC" />
