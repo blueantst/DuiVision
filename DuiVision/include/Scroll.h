@@ -17,8 +17,8 @@ public:
 	int GetScrollCurrentPos() { return m_nCurrentPos; }
 	BOOL SetScrollMaxRange(int nMaxRange);
 	int GetScrollMaxRange() { return m_nMaxRange; }
-	BOOL SetScrollSize(int nPageRange, int nRowRange);
-	BOOL SetScrollInfo(int nMaxRange, int nCurrentPos, int nPageRange, int nRowRange);
+	BOOL SetScrollSize(int nPageRange, int nRowRange = 0);
+	BOOL SetScrollInfo(int nMaxRange, int nCurrentPos, int nPageRange = 0, int nRowRange = 0);
 	BOOL ScrollRow(int nRow);
 
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
@@ -60,6 +60,7 @@ public:
 	int				m_nPageRange;			// 一页翻多少
 	int				m_nRowRange;			// 一行翻多少
 	CRect			m_rcBlock;				// 滚动块大小
+	BOOL			m_bAutoCalcRange;		// 是否自动计算的翻页范围
 	int				m_nDownTop;				// 鼠标点击时候的纵向坐标位置
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()

@@ -7,16 +7,13 @@
 CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBaseFont(hWnd, pDuiObject)
 {
-	m_nMaxRange = 0;
-	m_nCurrentPos = 0;
-	m_nPageRange = 0;
-	m_nRowRange = 0;
 	m_rcBlock.SetRectEmpty();
 
 	m_bShowScroll = false;
 	m_bHover = false;
 	m_enButtonState = enBSNormal;
 	m_nDownTop = -1;
+	m_bAutoCalcRange = FALSE;
 
 	m_nArrowLen = 0;
 	
@@ -39,6 +36,7 @@ CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject)
 	// 默认值
 	m_nMaxRange = 400;
 	m_nCurrentPos = 0;
+	m_nPageRange = 0;
 	m_nRowRange = 10;
 	SetRange();
 }
@@ -46,16 +44,13 @@ CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject)
 CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible/* = TRUE*/)
 			: CControlBaseFont(hWnd, pDuiObject, uControlID, rc, TEXT(""), bIsVisible, FALSE)
 {
-	m_nMaxRange = 0;
-	m_nCurrentPos = 0;
-	m_nPageRange = 0;
-	m_nRowRange = 0;
 	m_rcBlock.SetRectEmpty();
 
 	m_bShowScroll = false;
 	m_bHover = false;
 	m_enButtonState = enBSNormal;
 	m_nDownTop = -1;
+	m_bAutoCalcRange = FALSE;
 
 	m_nArrowLen = 0;
 	
@@ -76,6 +71,7 @@ CScrollV::CScrollV(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	// 默认值
 	m_nMaxRange = 400;
 	m_nCurrentPos = 0;
+	m_nPageRange = 0;
 	m_nRowRange = 10;
 	SetRange();
 }
@@ -260,6 +256,11 @@ BOOL CScrollV::SetScrollCurrentPos(int nCurrentPos)
 BOOL CScrollV::SetScrollMaxRange(int nMaxRange)
 {
 	m_nMaxRange = nMaxRange;
+	if(m_bAutoCalcRange)
+	{
+		// 如果是自动计算滚动页范围,则重置页范围,好重新计算
+		m_nPageRange = 0;
+	}
 	SetRange();
 	return TRUE;
 }
@@ -268,7 +269,14 @@ BOOL CScrollV::SetScrollMaxRange(int nMaxRange)
 BOOL CScrollV::SetScrollSize(int nPageRange, int nRowRange)
 {
 	m_nPageRange = nPageRange;
-	m_nRowRange = nRowRange;
+	if(m_nPageRange != 0)
+	{
+		m_bAutoCalcRange = FALSE;
+	}
+	if(nRowRange != 0)
+	{
+		m_nRowRange = nRowRange;
+	}
 	SetRange();
 	return TRUE;
 }
@@ -277,8 +285,15 @@ BOOL CScrollV::SetScrollInfo(int nMaxRange, int nCurrentPos, int nPageRange, int
 {
 	m_nMaxRange = nMaxRange;
 	m_nCurrentPos = nCurrentPos;
-	m_nPageRange = nPageRange;
-	m_nRowRange = nRowRange;
+	if(nPageRange != 0)
+	{
+		m_nPageRange = nPageRange;
+		m_bAutoCalcRange = FALSE;
+	}
+	if(nRowRange != 0)
+	{
+		m_nRowRange = nRowRange;
+	}
 	SetRange();
 	return TRUE;
 }
@@ -500,7 +515,12 @@ int CScrollV::MoveRange(int nMove)
 			m_rcBlock.OffsetRect(0, nMove);
 
 			int nRangeHeight = m_rc.Height() - m_nArrowLen*2;
-			int nBlockHeight = __max(m_nArrowLen/2,  m_nPageRange * nRangeHeight / m_nMaxRange);
+			int nBlockHeight = (int)__max(m_nArrowLen/2, ((double)m_nPageRange / m_nMaxRange) * nRangeHeight);
+			if(nBlockHeight < 100)
+			{
+				// 如果计算出的滚动快太小,则设置一个滚动块长度的下限值
+				nBlockHeight = (int)__min(100, nRangeHeight-50);
+			}
 			m_nCurrentPos = (m_rcBlock.top - m_rc.top - m_nArrowLen)  * m_nMaxRange / (nRangeHeight - nBlockHeight);
 
 			UpdateControl(true);
@@ -517,9 +537,24 @@ int CScrollV::MoveRange(int nMove)
 // 计算位置信息,以及是否显示滚动条
 int CScrollV::SetRange()
 {
-	m_nPageRange = m_rc.Height();
+	if(m_nPageRange == 0)
+	{
+		// 如果没有设置页滚动范围,则设置为滚动条高度
+		m_nPageRange = m_rc.Height();
+		// 如果总高度大于页滚动范围的10倍,则设置页滚动范围为总高度的1/10,避免滚动太慢
+		if(m_nMaxRange > (m_nPageRange * 10))
+		{
+			m_nPageRange = m_nMaxRange / 10;
+		}
+		m_bAutoCalcRange = TRUE;
+	}
 	int nRangeHeight = m_rc.Height() - m_nArrowLen*2;
 	int nBlockHeight = (int)__max(m_nArrowLen/2, ((double)m_nPageRange / m_nMaxRange) * nRangeHeight);
+	if(nBlockHeight < 100)
+	{
+		// 如果计算出的滚动快太小,则设置一个滚动块长度的下限值
+		nBlockHeight = (int)__min(100, nRangeHeight-50);
+	}
 	int nRangeTop = (int)__min(m_rc.bottom - m_nArrowLen - m_nArrowLen/2, __max(m_rc.top + m_nArrowLen, m_rc.top + m_nArrowLen + ((double)m_nCurrentPos / m_nMaxRange) * (nRangeHeight - nBlockHeight)));
 
 	m_rcBlock.SetRect(m_rc.left, nRangeTop, m_rc.right, nRangeTop + nBlockHeight);
