@@ -20,7 +20,7 @@ CDuiListCtrl::CDuiListCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrTextHover = Color(128, 0, 0);
 	m_clrTextDown = Color(0, 112, 235);
 	m_clrTitle = Color(255, 32, 32, 32);
-	m_clrSeperator = Color(200, 160, 160, 160);
+	m_clrSeperator = Color(0, 0, 0, 0);
 	m_clrRowHover = Color(0, 128, 128, 128);	// 鼠标移动到行显示的背景色,默认是透明色
 	m_nRowHeight = 50;
 
@@ -896,8 +896,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				int nXPos = 0;
 				int nVI = i - m_nFirstViewRow;
 
-				// 鼠标移动到行时候显示的背景颜色
-				if(m_nHoverRow == i)
+				// 鼠标移动到行时候显示的背景颜色(如果设置为全0,则不显示行背景颜色)
+				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
 					graphics.FillRectangle(&brush, 0, nVI*m_nRowHeight, nWidth, m_nRowHeight);
@@ -1111,8 +1111,9 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					//TextureBrush tileBrush(m_pImageSeperator, WrapModeTile);
 					//graphics.FillRectangle(&tileBrush, RectF(0, (nVI+1)*m_nRowHeight, nWidth-2, m_sizeSeperator.cy));
 				}else
+				if(m_clrSeperator.GetValue() != Color(0, 0, 0, 0).GetValue())
 				{
-					// 未指定图片,则画矩形
+					// 未指定图片,并且分隔线显色不是全0,则画矩形
 					graphics.FillRectangle(&solidBrushS, 0, (nVI+1)*m_nRowHeight, nWidth-2, 1);
 				}
 			}

@@ -20,7 +20,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrTextHover = Color(128, 0, 0);
 	m_clrTextDown = Color(0, 112, 235);
 	m_clrTitle = Color(255, 32, 32, 32);
-	m_clrSeperator = Color(200, 160, 160, 160);
+	m_clrSeperator = Color(0, 0, 0, 0);
 	m_clrRowHover = Color(0, 128, 128, 128);	// 鼠标移动到行显示的背景色,默认是透明色
 	m_nRowHeight = 50;
 	m_nHeaderHeight = 0;
@@ -1312,8 +1312,8 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				int nXPos = 0;
 				int nVI = i - m_nFirstViewRow;
 
-				// 鼠标移动到行时候显示的背景颜色
-				if(m_nHoverRow == i)
+				// 鼠标移动到行时候显示的背景颜色(如果设置为全0,则不显示行背景颜色)
+				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
 					graphics.FillRectangle(&brush, 0, m_nHeaderHeight + nVI*m_nRowHeight, nWidth, m_nRowHeight);
@@ -1432,17 +1432,21 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 					// 画单元格标题或链接内容
 					SolidBrush solidBrushItem(m_clrText);
-					if(m_nHoverRow == i)
+					if((m_nHoverRow == i) && (m_clrTextHover.GetValue() != Color(0, 0, 0, 0).GetValue()))	// 设置了鼠标移动颜色,则使用
 					{
 						solidBrushItem.SetColor(m_clrTextHover);
 					}else
-					if(m_nDownRow == i)
+					if((m_nDownRow == i) && (m_clrTextDown.GetValue() != Color(0, 0, 0, 0).GetValue()))	// 设置了鼠标按下颜色,则使用
 					{
 						solidBrushItem.SetColor(m_clrTextDown);
 					}else
-					if(itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
+					if(itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue())	// 设置了单元格颜色,则使用
 					{
 						solidBrushItem.SetColor(itemInfo.clrText);
+					}else
+					if(rowInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue())	// 设置了行颜色,则使用
+					{
+						solidBrushItem.SetColor(rowInfo.clrText);
 					}
 					CString strItemTitle = itemInfo.strTitle;
 					// 计算是否需要显示tip
@@ -1557,12 +1561,13 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				// 画分隔线(采用拉伸模式)
 				if(m_pImageSeperator != NULL)
 				{
-					// 使用拉伸模式属性画图
+					// 使用拉伸模式画图
 					graphics.DrawImage(m_pImageSeperator, RectF(0, (Gdiplus::REAL)(m_nHeaderHeight + (nVI+1)*m_nRowHeight), (Gdiplus::REAL)(nWidth-2), (Gdiplus::REAL)m_sizeSeperator.cy),
 							0, 0, (Gdiplus::REAL)m_sizeSeperator.cx, (Gdiplus::REAL)m_sizeSeperator.cy, UnitPixel);
 				}else
+				if(m_clrSeperator.GetValue() != Color(0, 0, 0, 0).GetValue())
 				{
-					// 未指定图片,则画矩形
+					// 未指定图片,并且分隔线显色不是全0,则画矩形
 					graphics.FillRectangle(&solidBrushS, 0, m_nHeaderHeight + (nVI+1)*m_nRowHeight, nWidth-2, 1);
 				}
 			}
