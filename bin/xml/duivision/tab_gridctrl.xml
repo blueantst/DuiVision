@@ -60,7 +60,7 @@
 			<item title="13M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skins\icon\adrule_rename.png" check="0">
+		<row image="skins\icon\adrule_rename.png" check="0" crtext="128,128,0">
 			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
 			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
 			<item title="29.5M" crtext="0,0,128" />

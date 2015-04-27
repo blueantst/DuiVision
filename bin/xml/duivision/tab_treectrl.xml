@@ -15,7 +15,7 @@
 		font-title="big" font="default"
 		valign="middle" down-row="0"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
-		crtitle="32,32,32" crsep="200,160,160,160" >
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
 		<column title="列1" width="400" />
 		<column title="列2" width="100" />
 		<column title="Collapse" />

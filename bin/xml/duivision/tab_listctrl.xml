@@ -47,7 +47,7 @@
 		img-width="50" row-height="25" bk-transparent="10"
 		font-title="default" font="default" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="255,64,64,64"
-		crtitle="32,32,32" >
+		crsep="200,160,160,160" crtitle="32,32,32" >
 		<row right-img="2" check="1" image="1" title="启动项1" />
 		<row right-img="1" check="0" image="2" title="英特尔显卡接口辅助程序" link1="设置" linkaction1="dlg:dlg_option" link2="查看详情" />
 		<row right-img="2" check="0" image="2" title="腾讯微云" />
