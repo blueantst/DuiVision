@@ -11,6 +11,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nDownItem = 0;
 	m_nOldItem = -1;
 	m_nTabItemWidth = 0;
+	m_nTabItemMaxWidth = 0;
+	m_nTabItemMinWidth = 0;
 	m_nTabCtrlHeight = 0;
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
@@ -19,6 +21,7 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
 	m_nTabLeftPading = 0;
+	m_nTabRightPading = 0;
 	m_posTabBtn.nCount = 0;
 	m_enTabImageMode = enTIMNormal;
 	SetBitmapCount(3);	// tab页签图片默认是3种状态的图片
@@ -40,6 +43,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_nDownItem = 0;
 	m_nOldItem = -1;
 	m_nTabItemWidth = 0;
+	m_nTabItemMaxWidth = 0;
+	m_nTabItemMinWidth = 0;
 	m_nTabCtrlHeight = 0;
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
@@ -48,6 +53,7 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
 	m_nTabLeftPading = 0;
+	m_nTabRightPading = 0;
 	m_posTabBtn.nCount = 0;
 	m_enTabImageMode = enTIMNormal;
 	SetBitmapCount(3);	// tab页签图片默认是3种状态的图片
@@ -139,6 +145,7 @@ BOOL CDuiTabCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		m_nTabCtrlHeight = m_sizeHover.cy;
 	}
 
+	m_nTabItemWidth = m_nTabItemMaxWidth;
 	// 如果没有设置tab项的宽度,则按照hover图片的宽度
 	if((m_pImageHover != NULL) && (m_nTabItemWidth == 0))
 	{
@@ -541,6 +548,9 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, TabItemInfo &itemInfo)
 		}*/
 	}
 
+	// 调整tab页签的宽度
+	SetItemWidth(m_nTabItemMaxWidth, m_nTabItemMinWidth);
+
 	UpdateControl(true);
 	return true;
 }
@@ -636,6 +646,53 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 int CDuiTabCtrl::GetSelectItem()
 {
 	return m_nDownItem;
+}
+
+// 设置Tab页签的宽度
+void CDuiTabCtrl::SetItemWidth(int nTabItemMaxWidth, int nTabItemMinWidth, BOOL bRefresh)
+{
+	if(nTabItemMaxWidth != m_nTabItemMaxWidth)
+	{
+		m_nTabItemMaxWidth = nTabItemMaxWidth;
+	}
+	if(nTabItemMinWidth != m_nTabItemMinWidth)
+	{
+		m_nTabItemMinWidth = nTabItemMinWidth;
+	}
+
+	if(GetItemCount() == 0)
+	{
+		return;
+	}
+
+	int nTabItemWidth = m_nTabItemMaxWidth;
+	if(m_nTabItemMinWidth > 0)
+	{
+		// 如果设置了页签的最小宽度,则计算页签实际宽度
+		int nTabTotalWidth = m_rc.Width() - m_nTabLeftPading - m_nTabRightPading;
+		int nTabItemCount = GetItemCount();
+		int nTabItemAveWidth = nTabTotalWidth / nTabItemCount;
+		if((nTabItemAveWidth < m_nTabItemMaxWidth) && (nTabItemAveWidth >= m_nTabItemMinWidth))
+		{
+			// 如果平均宽度介于最小宽度和最大宽度之间,则设置为平均宽度
+			nTabItemWidth = nTabItemAveWidth;
+		}else
+		if(nTabItemAveWidth < m_nTabItemMinWidth)
+		{
+			// 如果平均宽度小于最小宽度,则设置为最小宽度
+			nTabItemWidth = m_nTabItemMinWidth;
+		}
+	}
+
+	// 如果计算出的宽度和之前的宽度不一致,则刷新tab页
+	if(nTabItemWidth != m_nTabItemWidth)
+	{
+		m_nTabItemWidth = nTabItemWidth;
+		if(bRefresh)	// 是否刷新tab页
+		{
+			RefreshItems();
+		}
+	}
 }
 
 // 刷新所有Tab页
@@ -777,6 +834,9 @@ void CDuiTabCtrl::DeleteItem(int nItem)
 		nIndex++;
 	}
 
+	// 调整tab页签的宽度
+	SetItemWidth(m_nTabItemMaxWidth, m_nTabItemMinWidth, FALSE);
+
 	// 重新计算每个tab页的位置,并刷新界面
 	RefreshItems();
 }
@@ -798,6 +858,9 @@ void CDuiTabCtrl::DeleteItem(CString strTabName)
 			break;
 		}
 	}
+
+	// 调整tab页签的宽度
+	SetItemWidth(m_nTabItemMaxWidth, m_nTabItemMinWidth, FALSE);
 
 	// 重新计算每个tab页的位置,并刷新界面
 	RefreshItems();
@@ -855,6 +918,9 @@ BOOL CDuiTabCtrl::GetItemVisible(CString strTabName)
 void CDuiTabCtrl::SetControlRect(CRect rc)
 {
 	__super::SetControlRect(rc);
+
+	// 调整tab页签的宽度
+	SetItemWidth(m_nTabItemMaxWidth, m_nTabItemMinWidth, FALSE);
 
 	// 重新计算所有Tab页的位置
 	RefreshItems();

@@ -45,6 +45,7 @@ public:
 	int  GetItemCount();
 	int  GetItemIndex(CString strTabName);
 	TabItemInfo* GetItemInfo(int nItem);
+	void SetItemWidth(int nTabItemMaxWidth, int nTabItemMinWidth, BOOL bRefresh = TRUE);
 	void RefreshItems();
 	void DeleteItem(int nItem);
 	void DeleteItem(CString strTabName);
@@ -88,7 +89,9 @@ public:
 
 	Color					m_clrText;				// 文字颜色
 
-	int						m_nTabItemWidth;		// 每个Tab页的宽度
+	int						m_nTabItemWidth;		// 每个Tab页的当前宽度
+	int						m_nTabItemMaxWidth;		// 每个Tab页的最大宽度(默认宽度)
+	int						m_nTabItemMinWidth;		// 每个Tab页的最小宽度(如果设置了值,则实际宽度会自动调整)
 	int						m_nTabCtrlHeight;		// TabCtrl部分的高度
 
 	BOOL					m_bInit;				// 是否初始化完成
@@ -100,6 +103,7 @@ public:
 	int						m_nAnimateCount;		// 切换动画的帧数
 	int						m_nCurXPos;				// 切换过程中当前的横坐标位置
 	int						m_nTabLeftPading;		// Tab页签左侧的空白宽度
+	int						m_nTabRightPading;		// Tab页签右侧的空白宽度
 	DUI_POSITION			m_posTabBtn;			// Tab页签的内部按钮位置信息
 
 	enumTabImageMode		m_enTabImageMode;		// Tab页签图片的显示模式(普通、拉伸、九宫格)
@@ -116,9 +120,11 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-tabbtn"), OnAttributeImageTabBtn)
 		DUI_CUSTOM_ATTRIBUTE(_T("tabbtnpos"), OnAttributeTabBtnPosChange)
-		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemMaxWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("item-width-min"), m_nTabItemMinWidth, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-left-pading"), m_nTabLeftPading, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tab-right-pading"), m_nTabRightPading, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
