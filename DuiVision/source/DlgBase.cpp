@@ -1875,12 +1875,20 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 					// 计算菜单的位置并显示
 					CRect rc;
 					pDuiMenu->GetWindowRect(&rc);
+					int nMenuWidth = rc.Width();
 					rc.OffsetRect(0, -rc.Height());
 					// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
 					int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
 					if(rc.right > nScreenWidth)
 					{
-						rc.OffsetRect(nScreenWidth - rc.right -10, 0);
+						//rc.OffsetRect(nScreenWidth - rc.right -10, 0);
+						rc.OffsetRect(-(nMenuWidth + rc.Width()), 0);	// 移动到当前菜单左侧
+					}
+					// 如果菜单顶部小于屏幕顶部,则菜单顶部改为屏幕顶部位置
+					//int nScreenHeight= GetSystemMetrics(SM_CYFULLSCREEN);
+					if(rc.top < 0)
+					{
+						rc.OffsetRect(0, 10 - rc.top);
 					}
 					pDuiMenu->MoveWindow(rc);
 					pDuiMenu->ShowWindow(SW_SHOW);
