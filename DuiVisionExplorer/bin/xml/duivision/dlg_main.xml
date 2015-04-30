@@ -49,7 +49,8 @@
 	<tabctrl name="tabctrl.main" img-count="3" image="skin:IDB_TAB_ITEM_QQ" 
 			tabimg-mode="mid" width-lt="2" height-lt="2" width-rb="2" height-rb="2"
 			img-tabbtn="skins\default\tab_close_btn.png" tabbtnpos="-14,5"
-			crtext="808080" font="default" item-width="154" tab-height="25" animate="0"
+			crtext="808080" font="default"
+			item-width="154" item-width-min="30" tab-right-pading="30" tab-height="25" animate="0"
 			pos="1,53,-1,-30">
 		<!--tab name="tab.Home" title="首页" pos="0,27,-0,-0" img-index="0" active="true" >
 			<webbrowser name="ie_ctrl_home" show="1"
