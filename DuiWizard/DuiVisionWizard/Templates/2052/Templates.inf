@@ -122,6 +122,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\TextButton.h
 [duivision]include\Timer.h
 [duivision]include\WndBase.h
+[duivision]include\WndShadow.h
 
 [duivision]source\Area.cpp
 [duivision]source\CheckButton.cpp
@@ -163,6 +164,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\TextButton.cpp
 [duivision]source\Timer.cpp
 [duivision]source\WndBase.cpp
+[duivision]source\WndShadow.cpp
 
 [duivision]third-part\wke\wke.h
 [duivision]third-part\wke\wke.lib
