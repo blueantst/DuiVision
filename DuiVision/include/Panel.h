@@ -62,6 +62,7 @@ public:
 	CString				m_strXmlFile;				// XML文件名
 	int					m_nVirtualHeight;			// Panel整体的高度
 	CControlBaseFont*	m_pControScrollV;			// 垂直滚动条
+	CControlBaseFont*	m_pControScrollH;			// 水平滚动条
 	int					m_nScrollWidth;				// 滚动条宽度
 	int					m_nVirtualTop;				// 当前虚拟显示的顶部位置
 	BOOL				m_bEnableScroll;			// 是否允许滚动

@@ -82,7 +82,7 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 
 	// 加载下层的row节点信息
 	for (DuiXmlNode pRowElem = pXmlElem.child(_T("row")); pRowElem; pRowElem=pRowElem.next_sibling(_T("row")))
@@ -319,7 +319,7 @@ void CDuiListCtrl::CalcItemsPos()
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 }
 
 // 获取某一个列表项
@@ -436,7 +436,7 @@ void CDuiListCtrl::SetControlRect(CRect rc)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 }
 
 // 判断指定的坐标位置是否在某一行中
@@ -752,7 +752,7 @@ BOOL CDuiListCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	}
 
 	// 更新滚动条,并刷新界面
-	CScrollV* pScroll = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScroll = (CDuiScrollVertical*)m_pControScrollV;
 	if(pScroll->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
 	{
 		UpdateControl(true);
@@ -800,7 +800,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	// 5.计算出显示的top坐标进行内存dc的拷贝
 	int nWidth = m_rc.Width() - m_nScrollWidth;	// 减去滚动条的宽度
 	int nHeightAll = (int)m_vecRowInfo.size()*m_nRowHeight; // 总的虚拟高度 //m_rc.Height();
-	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
 

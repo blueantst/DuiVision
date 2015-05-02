@@ -1,7 +1,8 @@
 #include "StdAfx.h"
 #include "Panel.h"
 
-#define	SCROLL_V	1	// 滚动条控件ID
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
 
 CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBaseFont(hWnd, pDuiObject)
@@ -13,8 +14,7 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	rcScroll.top;
 	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
- 	CControlBase * pControlBase = NULL;
- 	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
+ 	CControlBase* pControlBase = new CDuiScrollVertical(hWnd, this, SCROLL_V, rcScroll);
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 
@@ -256,7 +256,7 @@ void CDuiPanel::InitUI(CRect rcClient, DuiXmlNode pNode)
 
 		// 需要的总高度大于显示区高度才会显示滚动条
 		m_pControScrollV->SetVisible(m_nVirtualHeight > m_rc.Height());
-		((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
+		((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
 	}
 
 	m_bInit = true;
@@ -299,7 +299,7 @@ void CDuiPanel::SetControlRect(CRect rc)
 
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(m_nVirtualHeight > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
 }
 
 // 重载设置控件可见性的函数，需要调用子控件的函数
@@ -384,7 +384,7 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 	}
 
 	// 计算显示位置
-	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
 	int nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
@@ -443,7 +443,7 @@ BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 	if(m_bEnableScroll && (m_nVirtualHeight > m_rc.Height()))
 	{
 		// 计算显示位置
-		CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
+		CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
 		int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 		int nMaxRange = pScrollV->GetScrollMaxRange();
 		int nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
@@ -540,7 +540,7 @@ BOOL CDuiPanel::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	}
 
 	// 更新滚动条,并刷新界面
-	CScrollV* pScroll = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScroll = (CDuiScrollVertical*)m_pControScrollV;
 	if(pScroll->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
 	{
 		UpdateControl(true);
@@ -571,7 +571,7 @@ LRESULT CDuiPanel::OnControlUpdate(CRect rcUpdate, BOOL bUpdate, CControlBase *p
 	if(m_nVirtualHeight > m_rc.Height())
 	{
 		// 计算显示位置
-		CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
+		CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
 		int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 		int nMaxRange = pScrollV->GetScrollMaxRange();
 		nVirtualTop = (nMaxRange > 0) ? nCurPos*(m_nVirtualHeight-m_rc.Height())/nMaxRange : 0;	// 当前显示的是虚拟图片中什么位置开始的图片

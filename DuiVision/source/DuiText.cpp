@@ -14,7 +14,7 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
 	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
- 	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
+ 	pControlBase = new CDuiScrollVertical(hWnd, this, SCROLL_V, rcScroll);
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 	m_bScrollV = FALSE;
@@ -53,7 +53,7 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
- 	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
+ 	pControlBase = new CDuiScrollVertical(hWnd, this, SCROLL_V, rcScroll);
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 	m_bScrollV = FALSE;
@@ -310,7 +310,7 @@ BOOL CDuiText::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	}
 
 	// 更新滚动条,并刷新界面
-	CScrollV* pScroll = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScroll = (CDuiScrollVertical*)m_pControScrollV;
 	if(pScroll->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
 	{
 		UpdateControl(true);
@@ -360,7 +360,7 @@ int CDuiText::GetVirtualHeight()
 
 	// 滚动条只有在需要的总高度大于文本框的高度时候才会显示
 	m_pControScrollV->SetVisible(size.Height > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(size.Height);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(size.Height);
 
 	return size.Height;
 }
@@ -371,7 +371,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 	int nHeight = m_rc.Height();
 	
 	// 计算显示位置
-	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
 	int nVirtualTop = 0;	// 当前显示的是虚拟图片中什么位置开始的图片
