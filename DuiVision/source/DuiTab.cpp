@@ -17,6 +17,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(225, 255, 255, 255);
+	m_clrTextHover = Color(0, 0, 0, 0);
+	m_clrTextDown = Color(0, 0, 0, 0);
 	m_bAnimateChangeTab = FALSE;
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
@@ -49,6 +51,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(225, 255, 255, 255);
+	m_clrTextHover = Color(0, 0, 0, 0);
+	m_clrTextDown = Color(0, 0, 0, 0);
 	m_bAnimateChangeTab = FALSE;
 	m_nAnimateCount = 10;
 	m_nCurXPos = 0;
@@ -1217,12 +1221,13 @@ BOOL CDuiTabCtrl::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
-	int nHeight = m_rc.Height();	// 纵向内存DC的高度是整个tabctrl的高度,不只是页签部分高度
+	//int nHeight = m_rc.Height();	// 纵向内存DC的高度是整个tabctrl的高度,不只是页签部分高度
+	int nTabHeight = m_nTabCtrlHeight;
 
 	if(!m_bUpdate)
 	{
 		// 创建内存DC,纵向分为三层,分别是tab页签图片、鼠标热点图片、鼠标按下图片三层
-		UpdateMemDC(dc, nWidth, nHeight * 3);
+		UpdateMemDC(dc, nWidth, nTabHeight * 3);
 
 		Graphics graphics(m_memDC);
 
@@ -1231,7 +1236,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 		::SysFreeString(bsFont);
 
-		SolidBrush solidBrush(m_clrText);			// 正常文字画刷
+		//SolidBrush solidBrush(m_clrText);			// 正常文字画刷
 
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 
@@ -1243,11 +1248,11 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		for(int i = 0; i < 3; i++)
 		{
 			// 将背景内容拷贝到内存DC
-			m_memDC.BitBlt(0, i * nHeight, nWidth, nHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
+			m_memDC.BitBlt(0, i * nTabHeight, nWidth, nTabHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
 
 			// 画tab页签
 			int nXPos = m_nTabLeftPading;
-			int nYPos = i * nHeight;
+			int nYPos = i * nTabHeight;
 			for(size_t j = 0; j < m_vecItemInfo.size(); j++)
 			{
 				TabItemInfo &itemInfo = m_vecItemInfo.at(j);
@@ -1300,6 +1305,17 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				// 图tab页签文字
 				if(!itemInfo.strText.IsEmpty())
 				{
+					// 设置页签文字颜色
+					SolidBrush solidBrushItem(m_clrText);
+					if((m_nHoverItem == j) && (m_clrTextHover.GetValue() != Color(0, 0, 0, 0).GetValue()))	// 设置了鼠标移动颜色,则使用
+					{
+						solidBrushItem.SetColor(m_clrTextHover);
+					}else
+					if((m_nDownItem == j) && (m_clrTextDown.GetValue() != Color(0, 0, 0, 0).GetValue()))	// 设置了鼠标按下颜色,则使用
+					{
+						solidBrushItem.SetColor(m_clrTextDown);
+					}
+
 					RectF rectText((Gdiplus::REAL)nXPos,
 							(Gdiplus::REAL)(nYPos + itemInfo.sizeImage.cy + 1),
 							(Gdiplus::REAL)((m_pImageTabBtn != NULL) ? (itemInfo.rc.Width()-m_sizeTabBtn.cx) : itemInfo.rc.Width()),
@@ -1311,7 +1327,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rectText.Height = (Gdiplus::REAL)m_nTabCtrlHeight;
 					}
 					BSTR bsText = itemInfo.strText.AllocSysString();
-					graphics.DrawString(bsText, (INT)wcslen(bsText), &font, rectText, &strFormat, &solidBrush);
+					graphics.DrawString(bsText, (INT)wcslen(bsText), &font, rectText, &strFormat, &solidBrushItem);
 					::SysFreeString(bsText);
 				}
 
@@ -1341,7 +1357,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				TabItemInfo &itemInfo = m_vecItemInfo.at(j);
 				graphics.DrawImage(m_pImageTabBtn,
-					RectF((Gdiplus::REAL)itemInfo.rcButton.left, (Gdiplus::REAL)(m_rc.Height() * i + itemInfo.rcButton.top),
+					RectF((Gdiplus::REAL)itemInfo.rcButton.left, (Gdiplus::REAL)(nTabHeight * i + itemInfo.rcButton.top),
 					(Gdiplus::REAL)itemInfo.rcButton.Width(), (Gdiplus::REAL)itemInfo.rcButton.Height()),
 					(Gdiplus::REAL)(itemInfo.buttonState * m_sizeTabBtn.cx), 0,
 					(Gdiplus::REAL)m_sizeTabBtn.cx, (Gdiplus::REAL)m_sizeTabBtn.cy,
@@ -1351,7 +1367,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	}
 
 	// 画原图
-	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
+	dc.BitBlt(m_rc.left,m_rc.top, nWidth, nTabHeight, &m_memDC, 0, 0, SRCCOPY);
 
 	// 画鼠标热点的Tab页签
 	if((m_nHoverItem != -1) && (m_nHoverItem < (int)m_vecItemInfo.size()))
@@ -1359,7 +1375,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
 
 		dc.BitBlt(itemInfo.rc.left, itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC,
-			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + m_rc.Height(), SRCCOPY);
+			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + nTabHeight, SRCCOPY);
 	}
 
 	// 画鼠标按下的Tab页签
@@ -1368,7 +1384,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nDownItem);
 
 		dc.BitBlt(itemInfo.rc.left, itemInfo.rc.top, itemInfo.rc.Width(), itemInfo.rc.Height(), &m_memDC,
-			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + m_rc.Height() * 2, SRCCOPY);
+			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + nTabHeight * 2, SRCCOPY);
 	}
 }
 

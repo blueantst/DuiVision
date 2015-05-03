@@ -88,6 +88,8 @@ public:
 	vector<CRect>			m_vecRcSeperator;		// tab位置列表
 
 	Color					m_clrText;				// 文字颜色
+	Color					m_clrTextHover;			// 文字颜色(鼠标移动)
+	Color					m_clrTextDown;			// 文字颜色(鼠标按下)
 
 	int						m_nTabItemWidth;		// 每个Tab页的当前宽度
 	int						m_nTabItemMaxWidth;		// 每个Tab页的最大宽度(默认宽度)
@@ -128,6 +130,8 @@ public:
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
 		DUI_INT_ATTRIBUTE(_T("width-lt"), m_nWLT, FALSE)
 		DUI_INT_ATTRIBUTE(_T("height-lt"), m_nHLT, FALSE)
 		DUI_INT_ATTRIBUTE(_T("width-rb"), m_nWRB, FALSE)
