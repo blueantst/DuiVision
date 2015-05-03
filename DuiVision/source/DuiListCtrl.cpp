@@ -1,8 +1,9 @@
 #include "StdAfx.h"
 #include "DuiListCtrl.h"
 
-#define	SCROLL_V	1	// 滚动条控件ID
-#define	LISTBK_AREA	2	// 背景Area控件ID
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
+#define	LISTBK_AREA	3	// 背景Area控件ID
 
 CDuiListCtrl::CDuiListCtrl(HWND hWnd, CDuiObject* pDuiObject)
 			: CDuiPanel(hWnd, pDuiObject)
@@ -80,10 +81,6 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		InitUI(m_rc, pXmlElem);
 	}
 
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
-	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
-
 	// 加载下层的row节点信息
 	for (DuiXmlNode pRowElem = pXmlElem.child(_T("row")); pRowElem; pRowElem=pRowElem.next_sibling(_T("row")))
 	{
@@ -160,6 +157,9 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		InsertItem(-1, strId, strTitle, strContent, strTime, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage,
 			strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck);
 	}
+
+	// 计算每一行的位置和滚动条
+	CalcItemsPos();
 
     return TRUE;
 }

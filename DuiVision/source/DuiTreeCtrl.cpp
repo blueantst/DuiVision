@@ -1,8 +1,9 @@
 #include "StdAfx.h"
 #include "DuiTreeCtrl.h"
 
-#define	SCROLL_V	1	// 滚动条控件ID
-#define	LISTBK_AREA	2	// 背景Area控件ID
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
+#define	LISTBK_AREA	3	// 背景Area控件ID
 
 CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 			: CDuiPanel(hWnd, pDuiObject)
@@ -1660,8 +1661,8 @@ BOOL CDuiTreeCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	}
 
 	// 更新滚动条,并刷新界面
-	CDuiScrollVertical* pScroll = (CDuiScrollVertical*)m_pControScrollV;
-	if(pScroll->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	if(pScrollV->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
 	{
 		UpdateControl(true);
 	}

@@ -1,8 +1,9 @@
 #include "StdAfx.h"
 #include "DuiListCtrl.h"
 
-#define	SCROLL_V	1	// 滚动条控件ID
-#define	LISTBK_AREA	2	// 背景Area控件ID
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
+#define	LISTBK_AREA	3	// 背景Area控件ID
 
 CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 			: CDuiPanel(hWnd, pDuiObject)
@@ -82,10 +83,6 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 	{
 		InitUI(m_rc, pXmlElem);
 	}
-
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > (m_rc.Height() - m_nHeaderHeight));
-	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 
 	// 加载下层的cloumn节点信息
 	for (DuiXmlNode pColumnElem = pXmlElem.child(_T("column")); pColumnElem; pColumnElem=pColumnElem.next_sibling(_T("column")))
@@ -271,6 +268,9 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		}
 	}
 
+	// 计算每一行的位置和滚动条
+	CalcRowsPos();
+
     return TRUE;
 }
 
@@ -299,9 +299,13 @@ BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 	{
 		GridColumnInfo &columnInfoTemp = m_vecColumnInfo.at(i);
 		int nWidth = columnInfoTemp.nWidth;
-		if(nWidth == -1)
+		if(nWidth == -1)	// -1表示最后一列为自适应宽度
 		{
 			nWidth = m_rc.Width() - nXPos;
+			if(nWidth < 0)
+			{
+				nWidth = 100;	// 如果宽度不够,设置一个最小值
+			}
 		}
 		columnInfoTemp.rcHeader.SetRect(nXPos, nYPos, nXPos + nWidth, nYPos + m_nRowHeight);
 		nXPos += columnInfoTemp.nWidth;
@@ -309,6 +313,29 @@ BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 
 	UpdateControl(true);
 	return true;
+}
+
+// 获取总的列宽
+int CDuiGridCtrl::GetTotalColumnWidth()
+{
+	int nTotalWidth = 0;
+
+	for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+	{
+		GridColumnInfo &columnInfoTemp = m_vecColumnInfo.at(i);
+		int nWidth = columnInfoTemp.nWidth;
+		if(nWidth == -1)	// -1表示最后一列为自适应宽度
+		{
+			nWidth = m_rc.Width() - nTotalWidth;
+			if(nWidth < 0)
+			{
+				nWidth = 100;	// 如果宽度不够,设置一个最小值
+			}
+		}
+		nTotalWidth += nWidth;
+	}
+
+	return nTotalWidth;
 }
 
 // 添加行
@@ -795,6 +822,8 @@ HRESULT CDuiGridCtrl::OnAttributeFontTitle(const CString& strValue, BOOL bLoadin
 
 void CDuiGridCtrl::SetControlRect(CRect rc)
 {
+	int nTotalColumnWidth = GetTotalColumnWidth();
+
 	m_rc = rc;
 	CRect rcTemp;
 	for (size_t i = 0; i < m_vecControl.size(); i++)
@@ -808,6 +837,12 @@ void CDuiGridCtrl::SetControlRect(CRect rc)
 				rcTemp = m_rc;
 				rcTemp.top += m_nHeaderHeight;
 				rcTemp.left = rcTemp.right - m_nScrollWidth;
+			}else
+			if((SCROLL_H == uControlID) && (nTotalColumnWidth > m_rc.Width()))
+			{
+				rcTemp = m_rc;
+				rcTemp.top = rcTemp.bottom - m_nScrollWidth;
+				rcTemp.right = rcTemp.right - m_nScrollWidth;
 			}else
 			if(LISTBK_AREA == uControlID)
 			{
@@ -837,6 +872,10 @@ void CDuiGridCtrl::SetControlRect(CRect rc)
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > (m_rc.Height() - m_nHeaderHeight));
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+
+	// 总的列宽大于控件宽度,则显示水平滚动条
+	m_pControScrollH->SetVisible(nTotalColumnWidth > m_rc.Width());
+	((CDuiScrollHorizontal*)m_pControScrollH)->SetScrollMaxRange(nTotalColumnWidth);
 }
 
 // 判断指定的坐标位置是否在某一行中
@@ -1149,7 +1188,7 @@ BOOL CDuiGridCtrl::OnControlLButtonDblClk(UINT nFlags, CPoint point)
 	return false;
 }
 
-// 滚动事件处理
+// 垂直滚动事件处理
 BOOL CDuiGridCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {
 	if(((int)m_vecRowInfo.size() * m_nRowHeight) <= m_rc.Height())
@@ -1158,8 +1197,8 @@ BOOL CDuiGridCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	}
 
 	// 更新滚动条,并刷新界面
-	CDuiScrollVertical* pScroll = (CDuiScrollVertical*)m_pControScrollV;
-	if(pScroll->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	if(pScrollV->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
 	{
 		UpdateControl(true);
 	}
@@ -1204,10 +1243,13 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 	int nWidth = m_rc.Width() - m_nScrollWidth;	// 减去滚动条的宽度
 	int nHeightAll = m_vecRowInfo.size()*m_nRowHeight; // 总的虚拟高度 //m_rc.Height();
 	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
-	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
-	int nMaxRange = pScrollV->GetScrollMaxRange();
+	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	int nMaxRangeV = pScrollV->GetScrollMaxRange();
 
-	m_nVirtualTop = (nMaxRange > 0) ? (int)((double)nCurPos*(nHeightAll-m_rc.Height())/nMaxRange) : 0;	// 当前滚动条位置对应的虚拟的top位置
+	CDuiScrollHorizontal* pScrollH = (CDuiScrollHorizontal*)m_pControScrollH;
+	int nCurPosH = pScrollH->GetScrollCurrentPos();	// 当前left位置
+
+	m_nVirtualTop = (nMaxRangeV > 0) ? (int)((double)nCurPosV*(nHeightAll-m_rc.Height())/nMaxRangeV) : 0;	// 当前滚动条位置对应的虚拟的top位置
 	if(m_nVirtualTop < 0)
 	{
 		m_nVirtualTop = 0;

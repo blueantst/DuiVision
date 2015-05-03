@@ -1,4 +1,4 @@
-// Panel控件，此控件是一个控件容器
+// 表格控件
 #pragma once
 
 #include "Panel.h"
@@ -65,6 +65,7 @@ public:
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0),
 		UINT uAlignment = 0xFFFFUL, UINT uVAlignment = 0xFFFFUL);
+	int GetTotalColumnWidth();
 	int InsertRow(int nRow, CString strId,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),

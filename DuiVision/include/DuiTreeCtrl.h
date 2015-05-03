@@ -1,4 +1,4 @@
-// Panel控件，此控件是一个控件容器
+// 树控件
 #pragma once
 
 #include "Panel.h"
