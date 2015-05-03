@@ -68,7 +68,7 @@ public:
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
-// 纵向滚动条
+// 垂直方向滚动条
 class CDuiScrollVertical : public CDuiScroll
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiScrollVertical, _T("scrollv"))
@@ -105,7 +105,7 @@ public:
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
-// 横向滚动条
+// 水平方向滚动条
 class CDuiScrollHorizontal : public CDuiScroll
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiScrollHorizontal, _T("scrollh"))

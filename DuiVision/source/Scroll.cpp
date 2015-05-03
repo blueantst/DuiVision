@@ -876,7 +876,7 @@ int CDuiScrollHorizontal::MoveRange(int nMove)
 		
 		if(nMove != 0)
 		{
-			m_rcBlock.OffsetRect(nMove, m_nDownLeft);
+			m_rcBlock.OffsetRect(nMove, 0);
 
 			int nRangeWidth = m_rc.Width() - m_nArrowLen*2;
 			int nBlockWidth = (int)__max(m_nArrowLen/2, ((double)m_nPageRange / m_nMaxRange) * nRangeWidth);
@@ -903,8 +903,8 @@ int CDuiScrollHorizontal::SetRange()
 {
 	if(m_nPageRange == 0)
 	{
-		// 如果没有设置页滚动范围,则设置为滚动条高度
-		m_nPageRange = m_rc.Height();
+		// 如果没有设置页滚动范围,则设置为滚动条宽度
+		m_nPageRange = m_rc.Width();
 		// 如果总高度大于页滚动范围的10倍,则设置页滚动范围为总高度的1/10,避免滚动太慢
 		if(m_nMaxRange > (m_nPageRange * 10))
 		{
