@@ -189,18 +189,18 @@ width-lt,height-lt,width-rb,height-rb" />
 
 		</tab>
 		
-		<tab name="tab.control.5" image="skin:IDB_TAB_ITEM" title="动画" pos="0,30,-0,-0">
+		<tab name="tab.control.5" image="skin:IDB_TAB_ITEM" title="动画&滚动" pos="0,30,-0,-0">
 
 			<text pos="50,20,250,40" crtext="808080" title="动画图片：" />
 			
 			<animateimg name="animateimg_scan_1" skin="IDB_SCAN_STATUS_360" show="1"
-				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="10" run="true" />
+				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="15" run="true" />
 			
 			<animateimg name="animateimg_repair_1" skin="IDB_REPAIR_STATUS_360" show="1"
-				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="10" run="true" />
+				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="30" run="true" />
 			
 			<animateimg name="animateimg_scan_2" skin="IDB_SCAN_ANIMATE" show="1"
-				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="10" run="true" />
+				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="30" run="true" />
 
 			<text pos="50,180,250,200" crtext="808080" title="进度条：" />
 			
@@ -213,16 +213,11 @@ width-lt,height-lt,width-rb,height-rb" />
 				pos="50,240" width="300" height="12" value="40" run="false" show="1"
 				tip="圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
 
-			<text pos="400,20,-10,40" crtext="808080" title="通过div使子控件支持滚动的演示：" />
-			<div pos="400,45,-10,-10" img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" >
-			
-				<animateimg skin="IDB_SCAN_STATUS_QQ"
-					pos="0,10" width="120" height="132" show="1" index="1" maxindex="10"
-					timer-count="30" run="true" />
-
-				<text pos="0,150,250,170" crtext="808080" title="图片列表：" />
+			<text pos="400,20,-10,40" crtext="808080" title="通过div使子控件支持垂直滚动的演示：" />
+			<div pos="400,45,-10,200" img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" >
+				<text pos="0,0,250,20" crtext="808080" title="图片列表：" />
 				
-				<selectbox pos="0,175" width="350" height="300" image="1" col="2" row="3" tip="图片列表"
+				<selectbox pos="0,25" width="350" height="300" image="1" col="2" row="3" tip="图片列表"
 					crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
 					<item image="bkimg\SKIN_PIC_0.png" />
 					<item image="bkimg\SKIN_PIC_1.png" />
@@ -231,7 +226,19 @@ width-lt,height-lt,width-rb,height-rb" />
 					<item image="bkimg\SKIN_PIC_4.png" />
 					<item image="bkimg\SKIN_PIC_5.png" />
 				</selectbox>
+			</div>
 
+			<text pos="400,210,-10,230" crtext="808080" title="通过div使子控件支持水平滚动的演示：" />
+			<div pos="400,235,-10,-10" img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" >
+				<selectbox pos="0,0" width="1000" height="85" image="1" col="6" row="1" tip="图片列表"
+					crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
+					<item image="bkimg\SKIN_PIC_0.png" />
+					<item image="bkimg\SKIN_PIC_1.png" />
+					<item image="bkimg\SKIN_PIC_2.png" />
+					<item image="bkimg\SKIN_PIC_3.png" />
+					<item image="bkimg\SKIN_PIC_4.png" />
+					<item image="bkimg\SKIN_PIC_5.png" />
+				</selectbox>
 			</div>
 			
 		</tab>
