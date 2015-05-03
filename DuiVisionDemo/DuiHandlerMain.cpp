@@ -135,6 +135,23 @@ void CDuiHandlerMain::OnInit()
 			pTreeCtrl->AddSubItemControl(hNode, 2, pControl);
 		}
 	}
+
+	// 演示在div中动态添加子控件(添加到基础控件的编辑框页面)
+	CControlBase* pDiv = (CControlBase*)GetControl(_T("tab.control.4"));
+	if(pDiv)
+	{
+		CDuiEdit* pControlEdit = static_cast<CDuiEdit*>(DuiSystem::CreateControlByName(L"edit", m_pDlg->GetSafeHwnd(), pDiv));
+		if(pControlEdit)
+		{
+			pDiv->AddControl(pControlEdit);
+			pControlEdit->SetName(L"btnName");
+			pControlEdit->SetTitle(L"动态添加的编辑框控件");
+			pControlEdit->SetPosStr(L"50,220,250,250");
+			pControlEdit->OnAttributeSkin(L"skin:IDB_EDIT", FALSE);
+			pControlEdit->OnAttributeLeftImage(L"skin:IDB_COMPUTER", FALSE);
+			pControlEdit->OnPositionChange();
+		}
+	}
 }
 
 // 皮肤消息处理(实现皮肤的保存和获取)
