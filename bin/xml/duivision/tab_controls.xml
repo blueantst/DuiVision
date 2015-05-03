@@ -133,27 +133,27 @@ width-lt,height-lt,width-rb,height-rb" />
 		
 		<tab name="tab.control.4" image="skin:IDB_TAB_ITEM" title="编辑框" pos="0,30,-0,-0">
 
-			<edit name="编辑框1" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
+			<edit name="edit1" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
 					pos="50,20" width="200" height="26" title="test"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" />
 			
-			<edit name="编辑框2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
+			<edit name="edit2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
 					pos="50,60" width="200" height="50" title="test"
 					multiline="1" autohscroll="0" autovscroll="1" number="0" readonly="0" maxchar="150"
 					font="default"/>
 			
-			<edit name="编辑框3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+			<edit name="edit3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
 					pos="50,130" width="200" height="30" title="" tip="请输入用户名"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtip="128,128,128,128" />
 			
-			<edit name="编辑框4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
+			<edit name="edit4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
 					pos="50,170" width="200" height="30" title="" tip="请输入密码"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtip="128,128,128,128" />
 
-			<combobox name="下拉列表框1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+			<combobox name="combobox1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
 					value="local" tip="选择MAC地址" font="bold"
 					pos="300,20" width="300" height="28" title="22-33-44-55-66-77" >
 				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
@@ -161,7 +161,7 @@ width-lt,height-lt,width-rb,height-rb" />
 				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
 			</combobox>
 
-			<combobox name="下拉列表框2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+			<combobox name="combobox2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
 				head-image="skin:IDB_COMBO_ITEM" del-image="skin:IDB_COMBO_ITEM_CLOSE"
 				left-image="skin:IDB_COMPUTER" tip="选择文件类型"
 				xml="xml:duivision\combo_filetype.xml--" value="pdf"
@@ -173,7 +173,7 @@ width-lt,height-lt,width-rb,height-rb" />
 				<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
 			</combobox>
 
-			<combobox name="下拉列表框3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+			<combobox name="combobox3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
 					left-image="skins\simage\search_normal.png"
 					value="local" tip="查找应用程序" font="bold" readonly="0"
 					pos="300,100" width="300" height="28" title="Script.NET" >
@@ -194,10 +194,10 @@ width-lt,height-lt,width-rb,height-rb" />
 			<text pos="50,20,250,40" crtext="808080" title="动画图片：" />
 			
 			<animateimg name="animateimg_scan_1" skin="IDB_SCAN_STATUS_360" show="1"
-				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="15" run="true" />
+				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="20" run="true" />
 			
 			<animateimg name="animateimg_repair_1" skin="IDB_REPAIR_STATUS_360" show="1"
-				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="30" run="true" />
+				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="40" run="true" />
 			
 			<animateimg name="animateimg_scan_2" skin="IDB_SCAN_ANIMATE" show="1"
 				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="30" run="true" />
@@ -205,7 +205,7 @@ width-lt,height-lt,width-rb,height-rb" />
 			<text pos="50,180,250,200" crtext="808080" title="进度条：" />
 			
 			<progress name="progress_1" skin="IDB_PROGRESS" show-text="1" crtext="808080" title="进度："
-				pos="50,210" width="300" height="15" value="40" run="true" show="1"
+				pos="50,210" width="300" height="15" value="40" timer-count="20" run="true" show="1"
 				tip="直角进度条，进度自动增加，显示进度文字" />
 			
 			<progress name="progress_2"
