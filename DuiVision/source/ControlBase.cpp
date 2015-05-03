@@ -4,7 +4,8 @@
 
 #pragma comment(lib,"Winmm.lib")
 
-#define	SCROLL_V	1	// 滚动条控件ID
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
 
 // 控件ID自动生成变量，控件ID从1000开始生成
 static int g_nControlId = 1000;
@@ -433,7 +434,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 		CPoint pt = point;
 		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
 		UINT uControlID = m_pControl->GetControlID();
-		if(SCROLL_V == uControlID)
+		if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
 		{
 			pt = oldPoint;
 		}
@@ -496,7 +497,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 				CPoint pt = point;
 				// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
 				UINT uControlID = pControlBase->GetControlID();
-				if(SCROLL_V == uControlID)
+				if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
 				{
 					pt = oldPoint;
 				}
@@ -568,7 +569,7 @@ BOOL CControlBase::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
 		UINT uControlID = m_pControl->GetControlID();
-		if(SCROLL_V == uControlID)
+		if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
 		{
 			point = oldPoint;
 		}
@@ -606,7 +607,7 @@ BOOL CControlBase::OnLButtonUp(UINT nFlags, CPoint point)
 	{
 		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
 		UINT uControlID = m_pControl->GetControlID();
-		if(SCROLL_V == uControlID)
+		if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
 		{
 			point = oldPoint;
 		}
@@ -637,7 +638,7 @@ BOOL CControlBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 	{
 		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
 		UINT uControlID = m_pControl->GetControlID();
-		if(SCROLL_V == uControlID)
+		if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
 		{
 			point = oldPoint;
 		}

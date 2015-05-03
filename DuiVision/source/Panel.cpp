@@ -531,7 +531,7 @@ BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 		return m_pDuiPluginObject->OnMousePointChange(point);
 	}
 
-	if(m_bEnableScroll && (m_nVirtualHeight > m_rc.Height()))
+	if(m_bEnableScroll && ((m_nVirtualHeight > m_rc.Height()) || (m_nVirtualWidth > m_rc.Width())))
 	{
 		// º∆À„œ‘ æŒª÷√
 		CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
