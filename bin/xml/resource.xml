@@ -78,6 +78,7 @@
 <res type="img" name="IDB_PROGRESS_GREEN_BACK" file="skins\default\progress_background_icon.png" />
 <res type="img" name="IDB_PROGRESS_GREEN_FORE" file="skins\default\progress_foreground_icon.png" />
 <res type="img" name="IDB_SCROLL_V" file="skins\default\SCROLL_V.png" />
+<res type="img" name="IDB_SCROLL_H" file="skins\default\SCROLL_H.png" />
 <res type="img" name="IDB_BT_SCROLL_UP" file="skins\default\BT_SCROLL_UP.png" />
 <res type="img" name="IDB_BT_SCROLL_DOWN" file="skins\default\BT_SCROLL_DOWN.png" />
 <res type="img" name="IDB_TAB_SEPERATOR" file="skins\default\Tab_seperator.png" />

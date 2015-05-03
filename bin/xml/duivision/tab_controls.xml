@@ -214,7 +214,7 @@ width-lt,height-lt,width-rb,height-rb" />
 				tip="圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
 
 			<text pos="400,20,-10,40" crtext="808080" title="通过div使子控件支持滚动的演示：" />
-			<div pos="400,45,-10,-10" img-scroll="skin:IDB_SCROLL_V" >
+			<div pos="400,45,-10,-10" img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" >
 			
 				<animateimg skin="IDB_SCAN_STATUS_QQ"
 					pos="0,10" width="120" height="132" show="1" index="1" maxindex="10"
