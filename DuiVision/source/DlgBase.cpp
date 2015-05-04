@@ -1878,14 +1878,14 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 					int nMenuWidth = rc.Width();
 					rc.OffsetRect(0, -rc.Height());
 					// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
-					int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
+					// 注:SM_CXSCREEN表示整个屏幕的宽度,SM_CXFULLSCREEN表示显示屏幕的宽度,不包括任务栏部分
+					int nScreenWidth= GetSystemMetrics(SM_CXSCREEN);
 					if(rc.right > nScreenWidth)
 					{
-						//rc.OffsetRect(nScreenWidth - rc.right -10, 0);
-						rc.OffsetRect(-(nMenuWidth + rc.Width()), 0);	// 移动到当前菜单左侧
+						rc.OffsetRect(-nMenuWidth, 0);	// 移动到当前菜单左侧
 					}
 					// 如果菜单顶部小于屏幕顶部,则菜单顶部改为屏幕顶部位置
-					//int nScreenHeight= GetSystemMetrics(SM_CYFULLSCREEN);
+					//int nScreenHeight= GetSystemMetrics(SM_CYSCREEN);
 					if(rc.top < 0)
 					{
 						rc.OffsetRect(0, 10 - rc.top);
