@@ -1742,8 +1742,8 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 {
 	if(MSG_CLOSE == wParam)
 	{
-	}
-	else if(MSG_SKIN == wParam)
+	}else
+	if(MSG_SKIN == wParam)
 	{
 		// 选择了背景皮肤
 		SelectInfo *pSelectInfo = (SelectInfo *)lParam;
@@ -1758,11 +1758,13 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_COLOR, 0, crlBack, _T(""));
 				// 刷新所有窗口的背景皮肤
 				DuiSystem::Instance()->ResetAllWindowsBkSkin();
-			}
-			else if(pSelectInfo->nType == BKTYPE_IMAGE_RESOURCE)
+			}else
+			if(pSelectInfo->nType == BKTYPE_IMAGE_RESOURCE)
 			{
-				CString strImgFile;
-				strImgFile.Format(_T("%s\\SKIN_PIC_%d.png"), _T("bkimg"), pSelectInfo->uIndex);
+				// 获取背景图片文件名,并加载
+				CString strBkSkin;
+				strBkSkin.Format(_T("SKIN_PIC_%d"), pSelectInfo->uIndex);
+				CString strImgFile = DuiSystem::Instance()->GetSkin(strBkSkin);
 				LoadBackgroundImage(strImgFile);
 				// 保存背景信息
 				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), strImgFile);
@@ -1770,8 +1772,8 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 				DuiSystem::Instance()->ResetAllWindowsBkSkin();
 			}
 		}
-	}
-	else if(MSG_SELECT_SKIN == wParam)
+	}else
+	if(MSG_SELECT_SKIN == wParam)
 	{
 		// 选择皮肤文件
  		CFileDialog DlgFile(TRUE,NULL,NULL, OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY ,

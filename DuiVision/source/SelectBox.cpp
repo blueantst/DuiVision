@@ -75,6 +75,7 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			{
 				if(strImage.Find(_T("skin:")) == 0)
 				{
+					strImage = DuiSystem::Instance()->GetSkin(strImage);
 				}
 
 				if(strImage.Find(_T(".")) != -1)	// ╪стьм╪ф╛нд╪Ч
