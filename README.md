@@ -70,6 +70,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ![支持复杂控件的弹出窗](http://www.blueantstudio.net/duivision/suolue/duivision_popuplist.jpg)
 ![仿360界面](http://www.blueantstudio.net/duivision/suolue/duivision_360.jpg)
 ![仿QQ PC管家界面](http://www.blueantstudio.net/duivision/suolue/duivision_pcmgr.jpg)
+![仿360 10.0界面](http://www.blueantstudio.net/duivision/suolue/dui360.10.jpg)
 ![Flash对话框](http://www.blueantstudio.net/duivision/suolue/duivision_flashdlg.jpg)
 ![半透明对话框](http://www.blueantstudio.net/duivision/suolue/duivision_translucentdlg.jpg)
 ![Web控件](http://www.blueantstudio.net/duivision/suolue/duivision_webbrowser.jpg)
