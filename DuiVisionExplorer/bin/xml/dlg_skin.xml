@@ -101,14 +101,14 @@
 	
 	<selectbox name="skin.box.image" pos="9,45" width="205" height="127" image="1" col="3" row="3"
 		crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
-		<item image="bkimg\SKIN_PIC_0.png" />
-		<item image="bkimg\SKIN_PIC_1.png" />
-		<item image="bkimg\SKIN_PIC_2.png" />
-		<item image="bkimg\SKIN_PIC_3.png" />
-		<item image="bkimg\SKIN_PIC_4.png" />
-		<item image="bkimg\SKIN_PIC_5.png" />
-		<item image="bkimg\SKIN_PIC_6.png" />
-		<item image="bkimg\SKIN_PIC_7.png" />
-		<item image="bkimg\SKIN_PIC_8.png" />
+		<item image="skin:SKIN_PIC_0" />
+		<item image="skin:SKIN_PIC_1" />
+		<item image="skin:SKIN_PIC_2" />
+		<item image="skin:SKIN_PIC_3" />
+		<item image="skin:SKIN_PIC_4" />
+		<item image="skin:SKIN_PIC_5" />
+		<item image="skin:SKIN_PIC_6" />
+		<item image="skin:SKIN_PIC_7" />
+		<item image="skin:SKIN_PIC_8" />
 	</selectbox>
 </popup>
