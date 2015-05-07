@@ -333,7 +333,7 @@ void CWndShadow::Update(HWND hParent)
 		CRect rcTemp(0, 0, nShadWndWid, nShadWndHei);
 		DrawImageFrameMID(graphics, m_pShadowImage, rcTemp,
 			0, 0, m_pShadowImage->GetWidth(), m_pShadowImage->GetHeight(),
-			m_nShadowWLT, m_nShadowHLT, m_nShadowWRB, m_nShadowHRB);
+			m_nShadowWLT, m_nShadowHLT, m_nShadowWRB+1, m_nShadowHRB+1);
 	}else
 	{
 		// ª≠À„∑®“ı”∞
