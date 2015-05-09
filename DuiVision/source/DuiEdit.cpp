@@ -22,6 +22,7 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_bPassWord = false;
 	m_bMultiLine = false;
+	m_bWantReturn = true;
 	m_bAutoHScroll = false;
 	m_bAutoVScroll = false;
 	m_bNumber = false;
@@ -575,6 +576,19 @@ BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 	return buttonState != m_buttonState || editState != m_EditState;
 }
 
+// 键盘事件处理
+BOOL CDuiEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 如果是回车键,则转换为字符事件传递给原生控件
+	if((nChar == VK_RETURN) && m_pEdit && ::IsWindow(m_pEdit->GetSafeHwnd()))
+	{
+		m_pEdit->SendMessage(WM_CHAR, VK_RETURN, nFlags);
+		return true;
+	}
+
+	return false;
+}
+
 void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	Graphics graphics(dc);
@@ -714,6 +728,10 @@ void CDuiEdit::ShowEdit()
 		if(m_bMultiLine)
 		{
 			dwStyle |= ES_MULTILINE;
+		}
+		if(m_bWantReturn)
+		{
+			dwStyle |= ES_WANTRETURN;
 		}
 		if(m_bAutoHScroll)
 		{

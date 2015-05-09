@@ -41,6 +41,7 @@ protected:
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 	virtual	void SetControlDisable(BOOL bIsDisable);
@@ -60,6 +61,7 @@ public:
 
 	BOOL			m_bPassWord;		// 密码输入
 	BOOL			m_bMultiLine;		// 多行
+	BOOL			m_bWantReturn;		// 是否允许回车换行
 	BOOL			m_bAutoHScroll;		// 水平滚动
 	BOOL			m_bAutoVScroll;		// 垂直滚动
 	BOOL			m_bNumber;			// 只能输入数字
@@ -80,6 +82,7 @@ public:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_BOOL_ATTRIBUTE(_T("password"), m_bPassWord, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("multiline"), m_bMultiLine, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("wantreturn"), m_bWantReturn, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("autohscroll"), m_bAutoHScroll, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("autovscroll"), m_bAutoVScroll, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("number"), m_bNumber, FALSE)
