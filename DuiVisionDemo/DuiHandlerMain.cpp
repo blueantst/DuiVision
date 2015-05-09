@@ -61,7 +61,7 @@ void CDuiHandlerMain::OnInit()
 	if(pNativeWnd)
 	{
 		CEdit* pEdit = new CEdit;
-		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_AUTOVSCROLL;
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_WANTRETURN | ES_AUTOVSCROLL;
 		pEdit->Create(dwStyle, CRect(0,0,0,0), pNativeWnd->GetPaintWnd(), 1111);
 		pNativeWnd->SetNativeWnd(pEdit);
 
