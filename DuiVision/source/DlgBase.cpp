@@ -2277,6 +2277,7 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 		SetFocusControl(NULL);
 	}
 
+	BOOL bHandled = FALSE;
 	if (m_pControl)
 	{
 		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
@@ -2287,7 +2288,7 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 				m_bIsLButtonDown = TRUE;
 
 				m_pFocusControl = m_pControl;
-				m_pControl->OnLButtonDown(nFlags, point);						
+				bHandled = m_pControl->OnLButtonDown(nFlags, point);						
 			}
 		}
 	}
@@ -2301,8 +2302,11 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 
-	// 窗口拖动消息
-	PostMessage(WM_NCLBUTTONDOWN,HTCAPTION,MAKELPARAM(point.x, point.y));
+	if(!bHandled)
+	{
+		// 窗口拖动消息
+		PostMessage(WM_NCLBUTTONDOWN,HTCAPTION,MAKELPARAM(point.x, point.y));
+	}
 
 	CDialog::OnLButtonDown(nFlags, point);
 }
