@@ -146,7 +146,7 @@ width-lt,height-lt,width-rb,height-rb" />
 			
 			<edit name="edit3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
 					pos="50,130" width="200" height="30" title="" tip="请输入用户名"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					multiline="0" wantreturn="1" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtip="128,128,128,128" />
 			
 			<edit name="edit4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
