@@ -80,6 +80,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ![浏览器主界面](http://www.blueantstudio.net/duivision/suolue/duivisionexplorer.jpg)
 ![浏览器设置窗口](http://www.blueantstudio.net/duivision/suolue/explorer_option.jpg)
 
+## IM演示程序截图
+![IM主界面](http://www.blueantstudio.net/duivision/suolue/duivision-im.jpg)
+
 ## VC工程向导截图
 ![选择工程模板](http://www.blueantstudio.net/duivision/suolue/wizard.jpg)
 ![向导第1步](http://www.blueantstudio.net/duivision/suolue/wizard_step1.jpg)
