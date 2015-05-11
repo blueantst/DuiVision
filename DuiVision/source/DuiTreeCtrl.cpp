@@ -1905,7 +1905,7 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					{
 						if((itemInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 						{
-							nImgY = (m_nRowHeight - rowInfo.sizeImage.cy) / 2 + 1;
+							nImgY = (m_nRowHeight - itemInfo.sizeImage.cy) / 2 + 1;
 						}
 						// 使用单元格指定的图片
 						graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
