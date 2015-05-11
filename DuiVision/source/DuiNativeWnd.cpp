@@ -199,6 +199,21 @@ void CDuiNativeWnd::ReleaseControl()
 	}
 }
 
+// 键盘事件处理
+BOOL CDuiNativeWnd::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 如果是回车键或ESC键,则转换为字符事件传递给原生控件
+	if(((nChar == VK_RETURN) || (nChar == VK_ESCAPE)) && m_hwndHost && ::IsWindow(m_hwndHost))
+	{
+		if(::SendMessage(m_hwndHost, WM_CHAR, nChar, nFlags))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 // 控件画图函数
 void CDuiNativeWnd::DrawControl(CDC &dc, CRect rcUpdate)
 {

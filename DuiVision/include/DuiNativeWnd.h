@@ -38,6 +38,7 @@ public:
 protected:
     void ReleaseControl();
 
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 protected:
