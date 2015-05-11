@@ -692,7 +692,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(MSG_BUTTON_UP, m_nHoverRow, rowInfo.nCheck);
+				SendMessage(MSG_BUTTON_CHECK, m_nHoverRow, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;
@@ -708,7 +708,7 @@ BOOL CDuiListCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(MSG_BUTTON_UP, m_nDownRow, rowInfo.nCheck);
+				SendMessage(MSG_BUTTON_CHECK, m_nDownRow, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;

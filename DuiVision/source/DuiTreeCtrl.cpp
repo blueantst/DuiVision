@@ -1586,7 +1586,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(MSG_BUTTON_UP, rowInfo.hNode, rowInfo.nCheck);
+				SendMessage(MSG_BUTTON_CHECK, rowInfo.hNode, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;
@@ -1609,7 +1609,7 @@ BOOL CDuiTreeCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
 				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(MSG_BUTTON_UP, rowInfo.hNode, rowInfo.nCheck);
+				SendMessage(MSG_BUTTON_CHECK, rowInfo.hNode, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
 				return true;
