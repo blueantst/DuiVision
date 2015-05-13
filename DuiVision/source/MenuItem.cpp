@@ -581,11 +581,6 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 	if(!m_bUpdate)
 	{
 		int nImageCount = m_bSelect ? 6 : 4;
-		if(m_nImagePicCount != 4)
-		{
-			// 如果修改过img-count属性,则用此属性设置的图片个数
-			nImageCount = m_nImagePicCount;
-		}
 		if(m_bIsSeparator)
 		{
 			nImageCount = 1;
@@ -597,10 +592,22 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 		{
 			if(m_bIsPopup && (m_pImagePopupArrow == NULL))
 			{
+				// 弹出菜单的箭头,固定是两个小图片
 				m_sizeImage.SetSize(m_pImage->GetWidth() / 2, m_pImage->GetHeight());
 			}else
+			if(m_bIsSeparator)
 			{
-				m_sizeImage.SetSize(m_pImage->GetWidth() / nImageCount, m_pImage->GetHeight());
+				// 分隔线,只有一个图片
+				m_sizeImage.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
+			}else
+			if(m_bSelect)
+			{
+				// checkbox或radiobutton,固定为6个小图片
+				m_sizeImage.SetSize(m_pImage->GetWidth() / 6, m_pImage->GetHeight());
+			}else
+			{
+				// 按照设置的小图片个数计算
+				m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
 			}
 		}
 
@@ -625,7 +632,6 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 					SolidBrush brush(m_clrHover);//Color(254, 71, 156, 235));
 					graphics.FillRectangle(&brush, i * nWidth+m_nFrameWidth, 0, nWidth-m_nFrameWidth*2, nHeight);
 				}
-				
 			}
 
 			// 画菜单项图片
@@ -643,10 +649,16 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 					graphics.DrawImage(m_pImage, Rect(rcTemp.right - m_sizeImage.cx - 6, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
 						(i % 2) * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}else
+				if(m_bSelect)
 				{
-					// 普通菜单项的图片
+					// checkbox或radiobutton
 					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImage.cx) / 2, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
 						i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
+				}else
+				{
+					// 普通菜单项的图片,如果小图片个数不足,则使用第一个小图片
+					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImage.cx) / 2, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
+						((m_nImagePicCount-1 < i) ? 0 : i) * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}
 			}
 
