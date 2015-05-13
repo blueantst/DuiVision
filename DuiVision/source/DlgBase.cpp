@@ -36,6 +36,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_bTracking = false;
 	m_bIsSetCapture = false;
 	m_clrBK = RGB(186, 226, 239);
+	m_crlBackTransParent = RGB(255, 255, 255);
 	m_bDrawImage = FALSE;
 	m_bImageUseECM = false;
 
@@ -1461,7 +1462,7 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 			m_nFrameLeftRightSpace = m_nFrameTopBottomSpace = 3;	// 设置可以鼠标拖动改变窗口大小的区域宽度
 		}
 
-		// 设置窗口背景透明度
+		// 设置窗口背景透明度或透明颜色
 		SetupBackTranslucent();
 
 		// 主窗口的透明渐变层蒙板在九宫格模式或非最大化情况下才会可见
@@ -1527,16 +1528,22 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 	InvalidateRect(NULL);
 }
 
-// 设置窗口背景透明度
+// 设置窗口背景透明度或背景透明颜色
 void CDlgBase::SetupBackTranslucent()
 {
-	// 设置背景透明度
 	if(m_nBackTranslucent != 255)
 	{
+		// 设置背景透明度
  		HWND hWnd = GetSafeHwnd();
  		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
 		SetLayeredWindowAttributes(0, m_nBackTranslucent, LWA_ALPHA);
- 		//SetLayeredWindowAttributes(RGB(255, 0, 255), 0, LWA_COLORKEY );
+	}else
+	if(m_crlBackTransParent != RGB(255,255,255))
+	{
+		// 设置背景透明的颜色
+		HWND hWnd = GetSafeHwnd();
+ 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
+ 		SetLayeredWindowAttributes(m_crlBackTransParent, 255, LWA_COLORKEY );
 	}
 }
 

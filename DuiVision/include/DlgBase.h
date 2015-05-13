@@ -70,6 +70,7 @@ protected:
 
 	CString			m_strBkImg;					// ±³¾°Í¼Æ¬
 	COLORREF		m_crlBack;					// ±³¾°ÑÕÉ«
+	COLORREF		m_crlBackTransParent;		// ±³¾°Í¸Ã÷ÑÕÉ«
 	int				m_nBackTranslucent;			// ±³¾°Í¸Ã÷¶È
 
 	int				m_nFrameTopBottomSpace;
@@ -304,6 +305,7 @@ public:
 		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("bkimg"), m_strBkImg, FALSE)
 		DUI_RGBCOLOR_ATTRIBUTE(_T("crbk"), m_crlBack, FALSE)
+		DUI_RGBCOLOR_ATTRIBUTE(_T("crtransparent"), m_crlBackTransParent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE(_T("translucent"), m_nBackTranslucent, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-shadow"), OnAttributeImageShadow)
