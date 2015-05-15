@@ -204,6 +204,13 @@ BOOL CCheckButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 // 键盘事件处理
 BOOL CCheckButton::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	// 处理快捷键
+	if((m_nShortcutKey != 0) && (nChar == m_nShortcutKey) && (nFlags == m_nShortcutFlag))
+	{
+		SetCheck(!GetCheck());
+		return true;
+	}
+
 	// 如果当前处于焦点状态,用空格键可以切换check
 	if(m_bIsFocus && (nChar == VK_SPACE) && (nFlags == 0))
 	{
