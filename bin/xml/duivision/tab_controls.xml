@@ -75,22 +75,22 @@
 				pos="350,65,450,90" show="1" title="文字按钮" />
 			
 			<chkbtn name="checkbutton1" skin="IDB_CHECK_BOX"
-				pos="50,100,150,125" show="1" title="检查框1" check="true" />
+				pos="50,100,245,125" show="1" title="检查框1(快捷键：Ctrl+2)" check="true" shortcut="CTRL+2" />
 			
 			<chkbtn name="checkbutton2" skin="IDB_CHECK_BOX"
-				pos="200,100,300,125" show="1" title="检查框2" check="false" />
+				pos="250,100,450,125" show="1" title="检查框2(快捷键：Ctrl+3)" check="false" shortcut="CTRL+3" />
 			
-			<radiobtn name="radio_button_1" skin="IDB_RADIO_BUTTON" title="RadioButton演示1"
-				pos="50,140,300,165" check="true" group="radio_group_1" show="1" />
+			<radiobtn name="radio_button_1" skin="IDB_RADIO_BUTTON" title="RadioButton演示1(快捷键：ALT+2)"
+				pos="50,140,300,165" check="true" group="radio_group_1" show="1" shortcut="ALT+2" />
 			
-			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2"
-				pos="50,175,300,200" check="false" group="radio_group_1" show="1" />
+			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2(快捷键：ALT+3)"
+				pos="50,175,300,200" check="false" group="radio_group_1" show="1" shortcut="ALT+3" />
 
 			<button pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png" cursor="hand"
 				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4" />
 			
 			<button pos="200,220,300,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\IM.png" cursor="wait"
-				title="图片按钮2" tip="图片按钮2" animate="0" maxindex="4" action="dlg:dlg_login" />
+				title="图片按钮2" tip="图片按钮2(快捷键：Ctrl+5)" animate="0" maxindex="4" action="dlg:dlg_login" shortcut="CTRL+5" />
 			
 			<button pos="350,220,450,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\SMBPrefs.png" cursor="cross"
 				title="图片按钮3" tip="图片按钮3，不显示焦点框" animate="0" maxindex="4" showfocus="0" action="dlg:dlg_option" />
