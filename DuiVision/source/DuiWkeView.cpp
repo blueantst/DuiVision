@@ -300,7 +300,8 @@ BOOL CDuiWkeView::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 如果当前处于焦点状态,则处理回车键和ESC键
 	if(IsFocusControl() && ((nChar == VK_RETURN) || (nChar == VK_ESCAPE)) && (nFlags == 0) && m_pWebView)
 	{
-		m_pWebView->keyDown(nChar, nFlags, false);
+		//m_pWebView->keyDown(nChar, nFlags, false);
+		m_pWebView->keyPress(nChar, nFlags, false);
 		m_render.render(m_pWebView);
 		return true;
 	}
@@ -361,9 +362,9 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 	// 对于键盘消息,如果此控件不是焦点控件,则退出
 	if( message >= WM_KEYFIRST && message <= WM_KEYLAST )
 	{
-        if( !IsFocusControl() ) return 0;
+        //if( !IsFocusControl() ) return 0;
     }
-	
+
     bool handled = true;
 	switch (message)
 	{
@@ -414,7 +415,8 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 
             //flags = HIWORD(lParam);
 
-			handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
+			//handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
+			handled = m_pWebView->keyPress(virtualKeyCode, flags, false);
 			m_render.render(m_pWebView);
 
 			/*// 下面的转换不起作用
