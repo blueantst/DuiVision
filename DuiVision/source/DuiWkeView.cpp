@@ -129,12 +129,11 @@ void CDuiWkeView::SetControlRect(CRect rc)
 // 设置当前焦点控件
 void CDuiWkeView::SetCurrentFocusControl(BOOL bFocus) 
 {
-	// 暂时不能设置,否则会导致tab切换到edit控件时候异常
-	/*CDlgBase* pDlg = GetParentDialog(FALSE);
+	CDlgBase* pDlg = GetParentDialog(FALSE);
 	if(pDlg)
 	{
 		pDlg->SetFocusControl(bFocus ? this : NULL);
-	}*/
+	}
 }
 
 // 从XML设置DelayCreate属性
@@ -309,6 +308,125 @@ BOOL CDuiWkeView::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	return false;
 }
 
+// 处理WM_KEYDOWN消息
+LRESULT CDuiWkeView::OnWmKeyDown(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	bool handled = true;
+	unsigned int virtualKeyCode = wParam;
+    unsigned int flags = 0;
+	bool bShiftState = false;
+    if (HIWORD(lParam) & KF_REPEAT)
+        flags |= WKE_REPEAT;
+    if (HIWORD(lParam) & KF_EXTENDED)
+        flags |= WKE_EXTENDED;
+	if(VK_SHIFT == wParam)
+		bShiftState = true;
+	HKL hKL = GetKeyboardLayout(0);
+	int i = LOWORD(hKL);
+	WCHAR buffer[255];   
+	memset(buffer,0,255 * sizeof(WCHAR));  
+	if( (i == 0x0804) && (ImmIsIME(hKL)) )
+	{
+		ImmGetDescription(hKL,buffer,255);
+		if(buffer[0] != NULL)
+		{
+			if(( wParam & 0x80 )  |  (wParam >= 0x70  && wParam <= 0x7F  ))
+			{
+				if( !IsFocusControl() ) return 0;
+			}	
+		}
+	}	
+	if(wParam >= 0x70  && wParam <= 0x7F  )
+	{
+		handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
+		m_render.render(m_pWebView);
+		if( wParam == 0x74 )
+		{
+			MSG msg;
+			msg.hwnd = hWnd;
+			msg.message = WM_CHAR;
+			msg.wParam = virtualKeyCode;
+			msg.lParam = lParam;
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);			 
+		}
+		if( !IsFocusControl() ) return 0;
+	}
+
+    handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
+	m_render.render(m_pWebView);
+	
+	if(!bShiftState)
+	{
+		if( !GetKeyState(VK_CAPITAL)  )
+		{
+			if((wParam >= 'A') && (wParam <= 'Z'))
+				virtualKeyCode = tolower(wParam);
+		}
+		if(wParam != VK_SHIFT)
+		{
+			if( wParam > 0x80 )
+				return 0;
+		}
+	}else
+	{	
+		if(wParam != VK_SHIFT)
+		{
+			//wParam = wParam & 0x7F;//`~
+			//virtualKeyCode = wParam;
+			if(wParam == '1' || wParam == '3' || wParam == '4' || wParam == '5' )
+				virtualKeyCode = wParam - 0x10;
+			else if(wParam == '2')
+				virtualKeyCode = '@';
+			else if(wParam == '6')
+				virtualKeyCode = '^';
+			else if(wParam == '7')
+				virtualKeyCode = '&';
+			else if( wParam == '8')
+				virtualKeyCode = '*' ;
+			else if( wParam == '9')
+				virtualKeyCode = '(';
+			else if(wParam == '0')
+				virtualKeyCode = ')';
+			/*
+			else if(wParam == 45)
+				virtualKeyCode = '_';
+			else if(wParam == '=')
+				virtualKeyCode = '+';
+			else if(wParam == '[')
+				virtualKeyCode = '{';
+			else if(wParam == ']')
+				virtualKeyCode = '}';
+			else if(wParam == ';')
+				virtualKeyCode = ':';
+			else if(wParam == '\'')
+				virtualKeyCode = '"';
+			else if(wParam == '\\')
+				virtualKeyCode = '|';
+			else if(wParam == ',')
+				virtualKeyCode = '<';
+			else if(wParam == '.')
+				virtualKeyCode = '>';
+			else if(wParam == '/')
+				virtualKeyCode = '?';
+			else if(wParam == '`')
+				virtualKeyCode = '~';
+				*/
+			else if(wParam > 0x80)
+				return 0;
+		}
+	}	
+	MSG msg;
+	msg.hwnd = hWnd;
+	msg.message = WM_CHAR;
+	msg.wParam = virtualKeyCode;
+	msg.lParam = lParam;
+	::TranslateMessage(&msg);
+	::DispatchMessage(&msg);
+
+	return 0;
+}
+
 void CDuiWkeView::onBufUpdated( const HDC hdc,int x, int y, int cx, int cy )
 {
 	RECT rcClient;
@@ -406,30 +524,7 @@ LRESULT CDuiWkeView::WebViewWindowProc(HWND hWnd, UINT message, WPARAM wParam, L
 
     case WM_KEYDOWN:
         {
-            unsigned int virtualKeyCode = wParam;
-            unsigned int flags = 0;
-            if (HIWORD(lParam) & KF_REPEAT)
-                flags |= WKE_REPEAT;
-            if (HIWORD(lParam) & KF_EXTENDED)
-                flags |= WKE_EXTENDED;
-
-            //flags = HIWORD(lParam);
-
-			//handled = m_pWebView->keyDown(virtualKeyCode, flags, false);
-			handled = m_pWebView->keyPress(virtualKeyCode, flags, false);
-			m_render.render(m_pWebView);
-
-			/*// 下面的转换不起作用
-			MSG msg;
-			msg.hwnd = hWnd;
-			msg.message = message;
-			msg.wParam = wParam;
-			msg.lParam = lParam;
-			::TranslateMessage(&msg);
-			if((msg.message == WM_CHAR) || (msg.message == WM_IME_CHAR))
-			{
-				::DispatchMessage(&msg);
-			}*/
+			OnWmKeyDown(hWnd, message, wParam, lParam);
         }
         break;
 

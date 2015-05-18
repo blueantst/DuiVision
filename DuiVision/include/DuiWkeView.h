@@ -158,6 +158,8 @@ protected:
 	virtual	BOOL OnControlTimer();
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
+	LRESULT OnWmKeyDown(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
 	virtual void onBufUpdated (const HDC hdc,int x, int y, int cx, int cy);
 
 	static LRESULT CALLBACK __WebViewWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
