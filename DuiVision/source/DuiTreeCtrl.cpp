@@ -776,7 +776,9 @@ BOOL CDuiTreeCtrl::DeleteNode(HTREEITEM hNode)
 		nIndex++;
 	}
 
-	UpdateControl(true);
+	// 重新计算所有行的位置
+	RefreshNodeRows();
+
 	return true;
 }
 
