@@ -691,6 +691,7 @@ void CDuiGridCtrl::CalcRowsPos()
 	int nXPos = 0;//m_rc.left;
 	int nYPos = 0;//m_rc.top;
 
+	// 计算每一行的位置
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
 		GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
@@ -698,6 +699,15 @@ void CDuiGridCtrl::CalcRowsPos()
 		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
 
 		rowInfoTemp.rcCheck.SetRect(0,0,0,0);
+
+		// 计算单元格位置
+		for(size_t j = 0; j < rowInfoTemp.vecItemInfo.size(); j++)
+		{
+			GridItemInfo &itemInfo = rowInfoTemp.vecItemInfo.at(j);
+			GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
+			itemInfo.rcItem.SetRect(columnInfo.rcHeader.left, rowInfoTemp.rcRow.top,
+					columnInfo.rcHeader.right, rowInfoTemp.rcRow.bottom);
+		}
 
 		nYPos += m_nRowHeight;
 	}
@@ -858,20 +868,7 @@ void CDuiGridCtrl::SetControlRect(CRect rc)
 	}
 
 	// 重新计算所有行的位置
-	int nXPos = 0;
-	int nYPos = 0;
-	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
-	{
-		GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
-		int nItemWidth = m_rc.Width() - m_nScrollWidth;
-		rowInfoTemp.rcRow.SetRect(nXPos, nYPos, nXPos + nItemWidth, nYPos + m_nRowHeight);
-
-		nYPos += m_nRowHeight;
-	}
-
-	// 需要的总高度大于显示区高度才会显示滚动条
-	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > (m_rc.Height() - m_nHeaderHeight));
-	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+	CalcRowsPos();
 
 	// 总的列宽大于控件宽度,则显示水平滚动条
 	m_pControScrollH->SetVisible(nTotalColumnWidth > m_rc.Width());
