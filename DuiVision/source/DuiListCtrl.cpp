@@ -322,6 +322,33 @@ void CDuiListCtrl::CalcItemsPos()
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
 }
 
+// 将指定的行滚动到可见范围
+BOOL CDuiListCtrl::EnsureVisible(int nRow, BOOL bPartialOK)
+{
+	// 如果指定的行已经处于可见范围则直接返回
+	if((nRow >= m_nFirstViewRow) && (nRow <= m_nLastViewRow))
+	{
+		return TRUE;
+	}
+
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	if(nRow < m_nFirstViewRow)
+	{
+		pScrollV->SetScrollCurrentPos(nRow * m_nRowHeight);
+	}else
+	{
+		int nFirstRow = nRow - (m_rc.Height() / m_nRowHeight) + 2;
+		if(nFirstRow < 0)
+		{
+			nFirstRow = 0;
+		}
+		pScrollV->SetScrollCurrentPos(nFirstRow * m_nRowHeight);
+	}
+
+	UpdateControl(true);
+	return TRUE;
+}
+
 // 获取某一个列表项
 ListRowInfo* CDuiListCtrl::GetItemInfo(int nRow)
 {

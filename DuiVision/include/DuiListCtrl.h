@@ -56,6 +56,7 @@ public:
 	int InsertItem(int nItem, ListRowInfo &rowInfo);
 	BOOL DeleteItem(int nItem);
 	void CalcItemsPos();
+	BOOL EnsureVisible(int nRow, BOOL bPartialOK);
 	int  GetItemCount() { return m_vecRowInfo.size(); }
 	ListRowInfo* GetItemInfo(int nRow);
 	void SetRowColor(int nRow, Color clrText);

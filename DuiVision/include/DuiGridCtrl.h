@@ -80,6 +80,7 @@ public:
 	BOOL DeleteSubItemControl(CString strControlName, UINT uControlID = ID_NULL);
 	BOOL DeleteRow(int nRow);
 	void CalcRowsPos();
+	BOOL EnsureVisible(int nRow, BOOL bPartialOK);
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);
 	GridItemInfo* GetItemInfo(int nRow, int nItem);
