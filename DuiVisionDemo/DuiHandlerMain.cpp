@@ -79,6 +79,13 @@ void CDuiHandlerMain::OnInit()
 		pNativeWnd->SetNativeWnd(pWndList);*/
 	}
 
+	// 演示列表控件通过API设置指定的行处于可见范围
+	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_1"));
+	if(pListCtrl)
+	{
+		pListCtrl->EnsureVisible(10, TRUE);
+	}
+
 	// 演示表格控件通过API增加子控件
 	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
 	if(pGridCtrl)
