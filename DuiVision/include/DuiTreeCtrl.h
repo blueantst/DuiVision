@@ -89,22 +89,25 @@ public:
 	int  GetNodeRow(HTREEITEM hNode);
 	int	 GetNodeLastChildRow(HTREEITEM hNode);
 	BOOL HaveChildNode(HTREEITEM hNode);
+	HTREEITEM GetParentNode(HTREEITEM hNode);
 	HTREEITEM GetChildNode(HTREEITEM hNode);
 	HTREEITEM GetNextSiblingNode(HTREEITEM hNode);
 	HTREEITEM GetPrevSiblingNode(HTREEITEM hNode);
 	int  GetChildNodeCount(HTREEITEM hNode);
 	int  GetNodeLevel(HTREEITEM hNode);
-	HTREEITEM GetNodeWithId(CString strId);
+	HTREEITEM GetNodeById(CString strId);
 	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);
 	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
 	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
 	void SetNodeColor(HTREEITEM hNode, Color clrText);
 	void ToggleNode(HTREEITEM hNode);
+	void ExpandNode(HTREEITEM hNode, BOOL bExpand);
 	void SetNodeCheck(HTREEITEM hNode, int nCheck);
 	int  GetNodeCheck(HTREEITEM hNode);
 	void ClearNodes();
 	void HideChildNodes(HTREEITEM hItem);
 	void RefreshNodeRows();
+	BOOL EnsureVisible(HTREEITEM hNode, BOOL bPartialOK);
 
 	BOOL PtInRow(CPoint point, TreeNodeInfo& rowInfo);
 	BOOL PtInRowCheck(CPoint point, TreeNodeInfo& rowInfo);

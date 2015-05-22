@@ -839,6 +839,18 @@ BOOL CDuiTreeCtrl::HaveChildNode(HTREEITEM hNode)
 	return FALSE;
 }
 
+// 获取父节点句柄
+HTREEITEM CDuiTreeCtrl::GetParentNode(HTREEITEM hNode)
+{
+	TreeNodeInfo* pNodeInfo = GetNodeInfo(hNode);
+	if(pNodeInfo)
+	{
+		return pNodeInfo->hParentNode;
+	}
+
+	return NULL;
+}
+
 // 获取第一个子节点句柄
 HTREEITEM CDuiTreeCtrl::GetChildNode(HTREEITEM hNode)
 {
@@ -933,7 +945,7 @@ int CDuiTreeCtrl::GetNodeLevel(HTREEITEM hNode)
 }
 
 // 根据节点ID获取节点的句柄
-HTREEITEM CDuiTreeCtrl::GetNodeWithId(CString strId)
+HTREEITEM CDuiTreeCtrl::GetNodeById(CString strId)
 {
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
@@ -1066,6 +1078,35 @@ void CDuiTreeCtrl::ToggleNode(HTREEITEM hNode)
 			RefreshNodeRows();
 		}
 	}
+}
+
+// 切换节点的缩放状态
+void CDuiTreeCtrl::ExpandNode(HTREEITEM hNode, BOOL bExpand)
+{
+	// 展开父节点
+	HTREEITEM hParentNode = NULL;
+	HTREEITEM hTempNode = hNode;
+	while((hParentNode = GetParentNode(hTempNode)) != NULL)
+	{
+		TreeNodeInfo* pParentNodeInfo = GetNodeInfo(hParentNode);
+		if(pParentNodeInfo && pParentNodeInfo->bCollapse && bExpand)
+		{
+			pParentNodeInfo->bCollapse = FALSE;
+		}
+		hTempNode = hParentNode;
+	}
+
+	// 展开或收缩子节点
+	if(HaveChildNode(hNode))
+	{
+		TreeNodeInfo* pNodeInfo = GetNodeInfo(hNode);
+		if(pNodeInfo != NULL)
+		{
+			pNodeInfo->bCollapse = bExpand ? FALSE : TRUE;
+		}
+	}
+
+	RefreshNodeRows();
 }
 
 // 设置某一个节点的检查框状态
@@ -1226,6 +1267,46 @@ void CDuiTreeCtrl::RefreshNodeRows()
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(nVisibleRows * m_nRowHeight);
 
 	UpdateControl(true);
+}
+
+// 将指定的节点滚动到可见范围
+BOOL CDuiTreeCtrl::EnsureVisible(HTREEITEM hNode, BOOL bPartialOK)
+{
+	// 如果节点未展开,则首先展开节点
+	ExpandNode(hNode, TRUE);
+
+	// 计算节点对应的行号
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return FALSE;
+	}
+
+	int nViewRowCount = m_rc.Height() / m_nRowHeight;
+
+	// 如果指定的行已经处于可见范围则直接返回
+	if((nRow >= m_nFirstViewRow) && (nRow < (m_nFirstViewRow + nViewRowCount)))
+	{
+		return TRUE;
+	}
+
+	// 滚动到可见范围
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	if(nRow < m_nFirstViewRow)
+	{
+		pScrollV->SetScrollCurrentPos(nRow * m_nRowHeight);
+	}else
+	{
+		int nFirstRow = nRow - nViewRowCount + 2;
+		if(nFirstRow < 0)
+		{
+			nFirstRow = 0;
+		}
+		pScrollV->SetScrollCurrentPos(nFirstRow * m_nRowHeight);
+	}
+
+	UpdateControl(true);
+	return TRUE;
 }
 
 // 从XML设置Font-title属性
