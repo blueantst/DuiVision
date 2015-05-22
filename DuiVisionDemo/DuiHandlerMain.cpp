@@ -131,7 +131,7 @@ void CDuiHandlerMain::OnInit()
 	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
 	if(pTreeCtrl)
 	{
-		HTREEITEM hNode = pTreeCtrl->GetNodeWithId(L"1-0");
+		HTREEITEM hNode = pTreeCtrl->GetNodeById(L"1-0");
 		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
 		if(pControl)
 		{
@@ -141,6 +141,14 @@ void CDuiHandlerMain::OnInit()
 			pControl->SetLink(L"http://www.blueantstudio.net");
 			pTreeCtrl->AddSubItemControl(hNode, 2, pControl);
 		}
+	}
+
+	// 演示树控件指定某个节点在可见范围内
+	pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
+	if(pTreeCtrl)
+	{
+		HTREEITEM hNode = pTreeCtrl->GetNodeById(L"2-7-1-1-1");
+		pTreeCtrl->EnsureVisible(hNode, TRUE);
 	}
 
 	// 演示在div中动态添加子控件(添加到基础控件的编辑框页面)
