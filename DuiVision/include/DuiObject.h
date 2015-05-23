@@ -368,7 +368,7 @@ public:
 	static void ParseDuiString(CString& strString);
 	static ULONG HexStringToULong(LPCTSTR lpszValue, int nSize = -1);
     static Color HexStringToColor(LPCTSTR lpszValue);
-	static Color StringToColor(LPCTSTR lpszValue, Color clrDefault = Color(0, 0, 0));
+	static Color StringToColor(LPCTSTR lpszValue, Color clrDefault = Color(0, 0, 0, 0));
 	static COLORREF HexStringToRGBColor(LPCTSTR lpszValue);
 	static void ParseKeyCode(LPCTSTR lpszValue, UINT& nChar, UINT& nFlag);
 

@@ -94,7 +94,11 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		CString strAlign = pColumnElem.attribute(_T("align")).value();
 		CString strVAlign = pColumnElem.attribute(_T("valign")).value();
 		DuiSystem::Instance()->ParseDuiString(strTitle);
-		Color clrText = CDuiObject::StringToColor(strClrText);
+		Color clrText = Color(0, 0, 0, 0);
+		if(!strClrText.IsEmpty())
+		{
+			clrText = CDuiObject::StringToColor(strClrText);
+		}
 		int nWidth = -1;
 		if(!strWidth.IsEmpty())
 		{
@@ -210,7 +214,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			DuiSystem::Instance()->ParseDuiString(strContent);
 			DuiSystem::Instance()->ParseDuiString(strLink);
 			DuiSystem::Instance()->ParseDuiString(strLinkAction);
-			Color clrText = clrText = CDuiObject::StringToColor(strClrText);
+			Color clrText = CDuiObject::StringToColor(strClrText);
 
 			// 图片,通过Skin读取
 			CString strSkin = _T("");
@@ -1536,7 +1540,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					{
 						solidBrushItem.SetColor(itemInfo.clrText);
 					}else
-					if(rowInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue())	// 设置了行颜色,则使用
+					if(rowInfo.bRowColor)	// 设置了行颜色,则使用
 					{
 						solidBrushItem.SetColor(rowInfo.clrText);
 					}
