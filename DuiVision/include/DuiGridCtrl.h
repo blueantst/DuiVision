@@ -80,6 +80,7 @@ public:
 	BOOL DeleteSubItemControl(CString strControlName, UINT uControlID = ID_NULL);
 	BOOL DeleteRow(int nRow);
 	void CalcRowsPos();
+	void CalcColumnsPos();
 	BOOL EnsureVisible(int nRow, BOOL bPartialOK);
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);
@@ -139,6 +140,7 @@ public:
 	int					m_nFirstViewRow;	// 当前显示区的第一行的序号
 	int					m_nLastViewRow;		// 当前显示区的最后一行的序号
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
+	int					m_nVirtualLeft;		// 当前滚动条位置对应的虚拟的left位置
 
 	BOOL				m_bGridTooltip;		// 是否显示单元格的Tooltip
 	int					m_nTipRow;			// 当前tip行
