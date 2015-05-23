@@ -26,6 +26,7 @@ struct TabItemInfo
 	BOOL			bOutLink;	// 是否外部链接页面
 	CRect			rcButton;	// tab页签的按钮区域
 	enumButtonState	buttonState;// Tab页签按钮的状态
+	BOOL			bNeedTextTip;// 是否需要显示文字的tip(文字实际宽度大于显示宽度)
 	CControlBase*	pControl;	// Tab页对应的子页面容器控件
 };
 
@@ -65,6 +66,9 @@ public:
 	BOOL PtInTabButton(CPoint point, TabItemInfo& itemInfo);
 
 	HRESULT OnAttributeTabBtnPosChange(const CString& strValue, BOOL bLoading);
+
+	void SetTabTooltip(int nItem, CString strTooltip);
+	void ClearTabTooltip();
 	
 protected:
 	// 根据控件名创建控件实例
@@ -114,6 +118,9 @@ public:
 	int						m_nWRB;					// 右下角宽度(Tab页签图片的九宫格模式)
 	int						m_nHRB;					// 右下角高度(Tab页签图片的九宫格模式)
 
+	BOOL					m_bTabTooltip;			// 是否显示Tab页签的Tooltip
+	int						m_nTipItem;				// 当前tip页面索引
+
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(TabBtn);				// 定义tab页签按钮图片
@@ -141,5 +148,6 @@ public:
             DUI_ENUM_VALUE(_T("extrude"), enTIMExtrude)
 			DUI_ENUM_VALUE(_T("mid"), enTIMMID)
         DUI_ENUM_END(m_enTabImageMode)
+		DUI_INT_ATTRIBUTE(_T("tab-tip"), m_bTabTooltip, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

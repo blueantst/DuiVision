@@ -31,6 +31,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nHLT = 0;
 	m_nWRB = 0;
 	m_nHRB = 0;
+	m_bTabTooltip = TRUE;
+	m_nTipItem = -1;
 	m_bInit = FALSE;
 }
 
@@ -65,6 +67,8 @@ CDuiTabCtrl::CDuiTabCtrl(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRe
 	m_nHLT = 0;
 	m_nWRB = 0;
 	m_nHRB = 0;
+	m_bTabTooltip = TRUE;
+	m_nTipItem = -1;
 	m_bInit = FALSE;
 }
 
@@ -372,6 +376,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, UINT nItemID, CString strName, CString s
 	itemInfo.nItemID = nItemID;
 	itemInfo.strName = strName;
 	itemInfo.strText = strItemText;
+	itemInfo.bNeedTextTip = FALSE;
 	itemInfo.strAction = strAction;
 	itemInfo.bOutLink = bOutLink;
 	itemInfo.sizeImage.SetSize(0, 0);
@@ -402,6 +407,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, UINT nItemID, CString strName, CString s
 	itemInfo.nItemID = nItemID;
 	itemInfo.strName = strName;
 	itemInfo.strText = strItemText;
+	itemInfo.bNeedTextTip = FALSE;
 	itemInfo.strAction = strAction;
 	itemInfo.bOutLink = bOutLink;
 	itemInfo.sizeImage.SetSize(0, 0);
@@ -446,6 +452,7 @@ BOOL CDuiTabCtrl::InsertItem(int nItem, UINT nItemID, CString strName, CString s
 	itemInfo.nItemID = nItemID;
 	itemInfo.strName = strName;
 	itemInfo.strText = strItemText;
+	itemInfo.bNeedTextTip = FALSE;
 	itemInfo.strAction = strAction;
 	itemInfo.bOutLink = bOutLink;
 	itemInfo.pImage = NULL;
@@ -988,6 +995,37 @@ HRESULT CDuiTabCtrl::OnAttributeTabBtnPosChange(const CString& strValue, BOOL bL
     return bLoading?S_FALSE:S_OK;
 }
 
+// 设置Tab页签的Tooltip
+void CDuiTabCtrl::SetTabTooltip(int nItem, CString strTooltip)
+{
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg && (m_nTipItem != nItem))
+	{
+		TabItemInfo* pTabInfo = GetItemInfo(nItem);
+		if(pTabInfo && pTabInfo->bNeedTextTip)
+		{
+			CRect rc = pTabInfo->rc;
+			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
+		}else
+		{
+			pDlg->ClearTooltip();
+		}
+
+		m_nTipItem = nItem;
+	}
+}
+
+// 清除Tooltip
+void CDuiTabCtrl::ClearTabTooltip()
+{
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClearTooltip();
+		m_nTipItem = -1;
+	}
+}
+
 // 判断鼠标是否在控件可响应的区域
 BOOL CDuiTabCtrl::OnCheckMouseResponse(UINT nFlags, CPoint point)
 {
@@ -1025,6 +1063,16 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
 			if(itemInfo.rc.PtInRect(point))
 			{
+				if(m_bTabTooltip)	// 设置Tab页Tooltip
+				{
+					if(itemInfo.bNeedTextTip)	
+					{
+						SetTabTooltip(m_nHoverItem, itemInfo.strText);
+					}else
+					{
+						ClearTabTooltip();
+					}
+				}
 				return false;
 			}
 			m_nHoverItem = -1;		
@@ -1038,6 +1086,16 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			{
 				bMousenDown = true;
 				m_nHoverItem = -1;
+				if(m_bTabTooltip)	// 设置Tab页Tooltip
+				{
+					if(itemInfo.bNeedTextTip)
+					{
+						SetTabTooltip(m_nDownItem, itemInfo.strText);
+					}else
+					{
+						ClearTabTooltip();
+					}
+				}
 			}		
 		}
 
@@ -1057,6 +1115,7 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 	else
 	{
 		m_nHoverItem = -1;
+		m_nTipItem = -1;
 	}
 
 	// 计算Tab页签的按钮图片状态
@@ -1326,6 +1385,10 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						rectText.Y = (Gdiplus::REAL)nYPos;
 						rectText.Height = (Gdiplus::REAL)m_nTabCtrlHeight;
 					}
+
+					// 计算是否需要显示tip
+					itemInfo.bNeedTextTip = rectText.Width < GetTextBounds(font, itemInfo.strText).Width;
+
 					BSTR bsText = itemInfo.strText.AllocSysString();
 					graphics.DrawString(bsText, (INT)wcslen(bsText), &font, rectText, &strFormat, &solidBrushItem);
 					::SysFreeString(bsText);
