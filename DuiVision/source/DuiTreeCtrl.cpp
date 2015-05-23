@@ -2123,6 +2123,47 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					graphics.FillRectangle(&solidBrushS, 0, (nVI+1)*m_nRowHeight, nWidth-2, 1);
 				}*/
 			}
+
+			// 把不在显示范围内的单元格的控件都设置为不可见
+			nRowIndex = 0;
+			nFirstRowCount = 0;
+			for(int i = 0; i < (int)m_vecRowInfo.size(); i++)
+			{
+				TreeNodeInfo &rowInfo = m_vecRowInfo.at(i);
+				if(rowInfo.bHide)
+				{
+					continue;
+				}
+				BOOL bHideControl = TRUE;
+				if(nFirstRowCount < m_nFirstViewRow)
+				{
+					nFirstRowCount++;
+				}else
+				{
+					nRowIndex++;
+					if(nRowIndex < nViewRowCount)
+					{
+						bHideControl = FALSE;
+					}
+				}
+
+				// 显示区域之外的行的控件都隐藏
+				if(bHideControl)
+				{
+					for(size_t j = 0; j < rowInfo.vecItemInfo.size(); j++)
+					{
+						TreeItemInfo &itemInfo = rowInfo.vecItemInfo.at(j);
+						for(size_t k = 0; k < itemInfo.vecControl.size(); k++)
+						{
+							CControlBase* pControl = itemInfo.vecControl.at(k);
+							if(pControl)
+							{
+								pControl->SetVisible(FALSE);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
