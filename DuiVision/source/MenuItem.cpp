@@ -7,7 +7,7 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject)
 	m_enButtonState = enBSNormal;
 	m_bDown = false;
 	m_bMouseDown = false;
-	m_uVAlignment = DT_VCENTER;
+	m_uVAlignment = VAlign_Middle;
 	m_bSelect = FALSE;
 	m_bIsSeparator = FALSE;
 	m_bIsPopup = FALSE;
@@ -31,7 +31,7 @@ CMenuItem::CMenuItem(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect r
 	m_enButtonState = enBSNormal;
 	m_bDown = false;
 	m_bMouseDown = false;
-	m_uVAlignment = DT_VCENTER;
+	m_uVAlignment = VAlign_Middle;
 	m_bSelect = bSelect;
 	m_bIsPopup = FALSE;
 	m_pPopupMenu = NULL;
@@ -689,7 +689,8 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetAlignment(StringAlignmentNear);
 			strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 			Size size = GetTextBounds(font, strFormat, m_strTitle);
-			CPoint point = GetOriginPoint(nWidth - m_nLeft, nHeight, size.Width, size.Height, m_uAlignment, m_uVAlignment);
+			CPoint point = GetOriginPoint(nWidth - m_nLeft, nHeight, size.Width, size.Height,
+							GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 
 			for(int i = 0; i < nImageCount; i++)
 			{

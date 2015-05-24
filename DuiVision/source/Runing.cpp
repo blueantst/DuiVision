@@ -114,7 +114,8 @@ void CDuiAnimateImage::DrawControl(CDC &dc, CRect rcUpdate)
 		Graphics graphics(m_memDC);
 		
 
-		CPoint point = GetOriginPoint(nWidth, nHeight, m_sizeImage.cx, m_sizeImage.cy, m_uAlignment, m_uVAlignment);
+		CPoint point = GetOriginPoint(nWidth, nHeight, m_sizeImage.cx, m_sizeImage.cy,
+						GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 
 		for(int i = 0; i < m_nMaxIndex; i++)
 		{

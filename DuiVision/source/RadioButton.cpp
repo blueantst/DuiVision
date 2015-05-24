@@ -11,7 +11,7 @@ CDuiRadioButton::CDuiRadioButton(HWND hWnd, CDuiObject* pDuiObject)
 	m_pImage = NULL;
 	m_bDown = false;
 	m_bMouseDown = false;
-	m_uVAlignment = DT_VCENTER;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(254, 0, 0, 0);
 	m_strGroupName = _T("");
 	m_strValue = _T("");
@@ -29,7 +29,7 @@ CDuiRadioButton::CDuiRadioButton(HWND hWnd, CDuiObject* pDuiObject, UINT uContro
 	m_pImage = NULL;
 	m_bDown = false;
 	m_bMouseDown = false;
-	m_uVAlignment = DT_VCENTER;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(254, 0, 0, 0);
 	m_strGroupName = _T("");
 	m_strValue = _T("");
@@ -401,7 +401,8 @@ void CDuiRadioButton::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetAlignment(StringAlignmentNear);
 			strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 			Size size = GetTextBounds(font, strFormat, m_strTitle);
-			CPoint point = GetOriginPoint(nWidth - m_sizeImage.cx - 3, nHeight, size.Width, size.Height, m_uAlignment, m_uVAlignment);
+			CPoint point = GetOriginPoint(nWidth - m_sizeImage.cx - 3, nHeight, size.Width, size.Height,
+							GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 
 			for(int i = 0; i < 6; i++)
 			{

@@ -1361,7 +1361,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						m_sizeHover.cx * (i-1), 0, m_sizeHover.cx, m_sizeHover.cy, UnitPixel);
 				}
 
-				// 图tab页签文字
+				// 画tab页签文字
 				if(!itemInfo.strText.IsEmpty())
 				{
 					// 设置页签文字颜色
