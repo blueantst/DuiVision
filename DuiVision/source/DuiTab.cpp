@@ -1002,7 +1002,8 @@ void CDuiTabCtrl::SetTabTooltip(int nItem, CString strTooltip)
 	if(pDlg && (m_nTipItem != nItem))
 	{
 		TabItemInfo* pTabInfo = GetItemInfo(nItem);
-		if(pTabInfo && pTabInfo->bNeedTextTip)
+		BOOL bHaveDivTip = ((pTabInfo->pControl != NULL) && !pTabInfo->pControl->GetTooltip().IsEmpty());
+		if(pTabInfo && (pTabInfo->bNeedTextTip || bHaveDivTip))
 		{
 			CRect rc = pTabInfo->rc;
 			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
@@ -1069,6 +1070,10 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 					{
 						SetTabTooltip(m_nHoverItem, itemInfo.strText);
 					}else
+					if((itemInfo.pControl != NULL) && (!itemInfo.pControl->GetTooltip().IsEmpty()))
+					{
+						SetTabTooltip(m_nHoverItem, itemInfo.pControl->GetTooltip());
+					}else
 					{
 						ClearTabTooltip();
 					}
@@ -1091,6 +1096,10 @@ BOOL CDuiTabCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 					if(itemInfo.bNeedTextTip)
 					{
 						SetTabTooltip(m_nDownItem, itemInfo.strText);
+					}else
+					if((itemInfo.pControl != NULL) && (!itemInfo.pControl->GetTooltip().IsEmpty()))
+					{
+						SetTabTooltip(m_nDownItem, itemInfo.pControl->GetTooltip());
 					}else
 					{
 						ClearTabTooltip();
@@ -1321,6 +1330,15 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					continue;
 				}
 
+				// 图片位置(根据对齐方式进行计算)
+				CPoint point = GetOriginPoint(m_nTabItemWidth, m_nTabCtrlHeight, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy,
+						GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
+				// 如果有图片和文字,则图片的垂直对齐按照上对齐方式
+				if(!itemInfo.strText.IsEmpty())
+				{
+					point.y = 0;
+				}
+
 				// 画tab页签底图
 				if(itemInfo.pImage != NULL)	// 如果页签设置了图片,则使用tab页签指定的图片
 				{
@@ -1329,16 +1347,14 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					{
 						nImageIndex = 0;
 					}
-					int nX = (itemInfo.rc.Width() - itemInfo.sizeImage.cx) / 2;
-					graphics.DrawImage(itemInfo.pImage, Rect(nXPos + nX, nYPos,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+					graphics.DrawImage(itemInfo.pImage, Rect(nXPos + point.x, nYPos + point.y,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
 						itemInfo.sizeImage.cx * nImageIndex, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
 				}else
 				if((m_pImage != NULL) && (itemInfo.nImageIndex != -1))	// 如果设置了页签图片索引,使用tabctrl图片的索引图片
 				{
 					if(m_enTabImageMode == enTIMNormal)	// 普通模式
 					{
-						int nX = (itemInfo.rc.Width() - itemInfo.sizeImage.cx) / 2;
-						graphics.DrawImage(m_pImage, Rect(nXPos + nX, nYPos,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+						graphics.DrawImage(m_pImage, Rect(nXPos + point.x, nYPos + point.y,  itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
 							itemInfo.sizeImage.cx * itemInfo.nImageIndex, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
 					}else
 					if(m_enTabImageMode == enTIMMID)	// 九宫格模式
