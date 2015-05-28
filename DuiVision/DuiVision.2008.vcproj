@@ -213,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiSlider.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiSystem.cpp"
 				>
 			</File>
@@ -412,6 +416,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DUISingleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiSlider.h"
 				>
 			</File>
 			<File

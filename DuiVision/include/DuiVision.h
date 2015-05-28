@@ -66,6 +66,7 @@ using namespace Gdiplus;
 #include "Runing.h"
 #include "Scroll.h"
 #include "SelectBox.h"
+#include "DuiSlider.h"
 
 //////////////////////////////////////////////////////////
 //Picture
