@@ -332,37 +332,8 @@ BOOL CDlgBase::OnInitDialog()
 		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
 	}
 
-	//加载背景图
-	if(!m_strBkImg.IsEmpty())	// 如果窗口设置了背景图片属性，就用此背景图片
-	{
-		// 通过Skin读取
-		CString strBkSkin = _T("");
-		if(m_strBkImg.Find(_T("skin:")) == 0)
-		{
-			strBkSkin = DuiSystem::Instance()->GetSkin(m_strBkImg);
-		}else
-		{
-			strBkSkin = m_strBkImg;
-		}
-
-		if(strBkSkin.Find(_T(".")) != -1)	// 加载图片文件
-		{
-			CString strImgFile = strBkSkin;
-			LoadBackgroundImage(strImgFile);
-		}else	// 加载图片资源
-		{
-			UINT nResourceID = _wtoi(strBkSkin);
-			LoadBackgroundImage(nResourceID, TEXT("PNG"));
-		}
-	}else
-	if(m_crlBack != RGB(0,0,0))	// 如果窗口设置了背景颜色属性，就用此背景颜色
-	{
-		DrawBackground(m_crlBack);
-	}else
-	{
-		// 调用DuiSystem获取背景信息并更新
-		InitWindowBkSkin();
-	}
+	// 加载背景皮肤
+	InitWindowBkSkin();
 
 	CenterWindow();
 	ShowWindow(SW_SHOW);
@@ -953,18 +924,43 @@ HRESULT CDlgBase::OnAttributeResize(const CString& strValue, BOOL bLoading)
 // 初始化窗口背景皮肤
 void CDlgBase::InitWindowBkSkin()
 {
-	// 如果窗口设置了特殊的背景,则不用全局的背景
-	if(!m_strBkImg.IsEmpty() || (m_crlBack != RGB(0,0,0)))
-	{
-		return;
-	}
-
-	// 调用DuiSystem获取背景信息
 	int nType = 0;
 	int nIDResource = 0;
 	COLORREF clr = RGB(0,0,0);
 	CString strImgFile = _T("");
-	BOOL bRet = DuiSystem::Instance()->GetWindowBkInfo(nType, nIDResource, clr, strImgFile);
+
+	BOOL bRet = TRUE;
+	if(!m_strBkImg.IsEmpty())	// 如果窗口设置了背景图片属性，就用此背景图片
+	{
+		// 通过Skin读取
+		if(m_strBkImg.Find(_T("skin:")) == 0)
+		{
+			strImgFile = DuiSystem::Instance()->GetSkin(m_strBkImg);
+		}else
+		{
+			strImgFile = m_strBkImg;
+		}
+
+		if(strImgFile.Find(_T(".")) != -1)	// 加载图片文件
+		{
+			nType = BKTYPE_IMAGE_FILE;
+		}else	// 加载图片资源
+		{
+			nIDResource = _wtoi(strImgFile);
+			nType = BKTYPE_IMAGE_RESOURCE;
+		}
+	}else
+	if(m_crlBack != RGB(0,0,0))	// 如果窗口设置了背景颜色属性，就用此背景颜色
+	{
+		nType = BKTYPE_COLOR;
+		clr = m_crlBack;
+	}else
+	{
+		// 调用DuiSystem从应用程序获取背景信息
+		bRet = DuiSystem::Instance()->GetWindowBkInfo(nType, nIDResource, clr, strImgFile);
+	}
+
+	// 设置窗口背景皮肤
 	if(bRet && !((nType == BKTYPE_IMAGE_RESOURCE) && (nIDResource == 0)))
 	{
 		if(nType == BKTYPE_IMAGE_RESOURCE)	// 图片资源
@@ -982,7 +978,7 @@ void CDlgBase::InitWindowBkSkin()
 	}else
 	{
 		// 默认加载第一张背景图片
-		CString strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
+		strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
 		LoadBackgroundImage(strImgFile);
 	}
 }
