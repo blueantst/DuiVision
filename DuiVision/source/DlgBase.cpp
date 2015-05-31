@@ -304,7 +304,7 @@ BOOL CDlgBase::OnInitDialog()
 		::SetWindowPos(m_hWnd, NULL, 0, 0, m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
 	}
 	
-	CRect	rc;
+	CRect rc;
 	GetClientRect(rc);
 
 	// 使用XML节点初始化窗口基础控件和普通控件
@@ -331,6 +331,10 @@ BOOL CDlgBase::OnInitDialog()
 		// 不是主窗口(在任务栏不会显示出此窗口),则设置TOOLWINDOWS属性
 		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
 	}
+
+	// 设置窗口背景透明属性
+	//HWND hWnd = GetSafeHwnd();
+	//SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_TRANSPARENT);
 
 	// 加载背景皮肤
 	InitWindowBkSkin();
@@ -921,7 +925,7 @@ HRESULT CDlgBase::OnAttributeResize(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-// 初始化窗口背景皮肤
+// 初始化窗口背景皮肤(加载到背景内存dc)
 void CDlgBase::InitWindowBkSkin()
 {
 	int nType = 0;
@@ -1086,7 +1090,9 @@ void CDlgBase::DrawBackground(CBitmap &bitBackground)
 		CBitmap* pOldBitmap = TempDC.SelectObject(&bitBackground);
 
 		// 画出平均图片
-		m_MemBKDC.FillSolidRect(0, 0, nWidth, nHeight, m_clrBK); 		
+		m_MemBKDC.FillSolidRect(0, 0, nWidth, nHeight, m_clrBK);
+		// 设置文字的背景透明
+		//m_MemBKDC.SetBkMode(TRANSPARENT);
 
 		if(m_nOverRegioX > 0 && m_nOverRegioY > 0)
 		{
@@ -1138,7 +1144,7 @@ void CDlgBase::DrawBackground(CBitmap &bitBackground)
 	}
 }
 
-// 画背景图片
+// 画背景颜色
 void CDlgBase::DrawBackground(COLORREF clr)
 {
 	m_clrBK = clr;
@@ -1182,17 +1188,21 @@ void CDlgBase::OnPaint()
  		CRect rcUpdate;
 		GetUpdateRect(&rcUpdate);
 
-		CRect	rcClient;
+		CRect rcClient;
  		GetClientRect(&rcClient);
 
 		CPaintDC dc(this);
+		// 创建内存dc
 		CDC MemDC;
 		MemDC.CreateCompatibleDC(&dc);
 		CBitmap memBmp;
 		memBmp.CreateCompatibleBitmap(&dc, rcClient.Width(), rcClient.Height());
 		CBitmap *pOldmap =  MemDC.SelectObject(&memBmp);
 
-		DrawImageStyle(MemDC, rcClient, rcUpdate);
+		// 画背景和控件到内存dc
+		DrawBackgroundAndControls(MemDC, rcClient, rcUpdate);
+
+		// 内存dc输出到窗口dc
 		dc.BitBlt(rcUpdate.left, rcUpdate.top, rcUpdate.Width(), rcUpdate.Height(), &MemDC, rcUpdate.left, rcUpdate.top, SRCCOPY);
 
 		MemDC.SelectObject(pOldmap);
@@ -1201,14 +1211,15 @@ void CDlgBase::OnPaint()
 	}
 }
 
-// 画背景和控件
-void CDlgBase::DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpdate)
+// 画窗口背景和控件
+void CDlgBase::DrawBackgroundAndControls(CDC &dc, const CRect &rcClient, const CRect &rcUpdate)
 {
+	// 没有指定背景,则填充背景颜色为背景图片的平均色,当背景图片不够大时起到渐变色的效果
 	dc.FillSolidRect(rcUpdate.left, rcUpdate.top, rcUpdate.Width(), rcUpdate.Height(), m_clrBK);
 
+	// 如果指定了背景,已经生成了背景的内存dc,则画背景,从背景内存dc输出到当前dc(背景dc的大小可能小于当前dc)
 	if(m_bDrawImage)
 	{
-		// 背景
 		CRect rcBk(1, 1, 1 + m_sizeBKImage.cx, 1 + m_sizeBKImage.cy);
 		rcBk = rcBk & rcUpdate;
 		if(!rcBk.IsRectEmpty())
@@ -1217,7 +1228,7 @@ void CDlgBase::DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpd
 		}	
 	}
 
-	// 控件
+	// 画控件
 	DrawControl(dc, rcUpdate);
 }
 
@@ -1264,7 +1275,7 @@ void CDlgBase::ResetControl()
 }
 
 // 移动控件
-CControlBase * CDlgBase::SetControlRect(UINT uControlID, CRect rc)
+CControlBase* CDlgBase::SetControlRect(UINT uControlID, CRect rc)
 {
 	CControlBase *pControlBase = GetControl(uControlID);
 	if(pControlBase)
@@ -1276,7 +1287,7 @@ CControlBase * CDlgBase::SetControlRect(UINT uControlID, CRect rc)
 }
 
 // 移动控件
-CControlBase * CDlgBase::SetControlRect(CControlBase *pControlBase, CRect rc)
+CControlBase* CDlgBase::SetControlRect(CControlBase *pControlBase, CRect rc)
 {
 	if(pControlBase)
 	{
@@ -1287,7 +1298,7 @@ CControlBase * CDlgBase::SetControlRect(CControlBase *pControlBase, CRect rc)
 }
 
 // 显示控件
-CControlBase * CDlgBase::SetControlVisible(UINT uControlID, BOOL bVisible)
+CControlBase* CDlgBase::SetControlVisible(UINT uControlID, BOOL bVisible)
 {
 	CControlBase *pControlBase = GetControl(uControlID);
 	if(pControlBase)
@@ -1299,7 +1310,7 @@ CControlBase * CDlgBase::SetControlVisible(UINT uControlID, BOOL bVisible)
 }
 
 // 显示控件
-CControlBase * CDlgBase::SetControlVisible(CControlBase *pControlBase, BOOL bVisible)
+CControlBase* CDlgBase::SetControlVisible(CControlBase *pControlBase, BOOL bVisible)
 {
 	if(pControlBase)
 	{
@@ -1310,7 +1321,7 @@ CControlBase * CDlgBase::SetControlVisible(CControlBase *pControlBase, BOOL bVis
 }
 
 // 禁用控件
-CControlBase * CDlgBase::SetControlDisable(UINT uControlID, BOOL bDisable)
+CControlBase* CDlgBase::SetControlDisable(UINT uControlID, BOOL bDisable)
 {
 	CControlBase *pControlBase = GetControl(uControlID);
 	if(pControlBase)
@@ -1322,7 +1333,7 @@ CControlBase * CDlgBase::SetControlDisable(UINT uControlID, BOOL bDisable)
 }
 
 // 禁用控件
-CControlBase * CDlgBase::SetControlDisable(CControlBase *pControlBase, BOOL bDisable)
+CControlBase* CDlgBase::SetControlDisable(CControlBase *pControlBase, BOOL bDisable)
 {
 	if(pControlBase)
 	{
@@ -1332,7 +1343,7 @@ CControlBase * CDlgBase::SetControlDisable(CControlBase *pControlBase, BOOL bDis
 	return pControlBase;
 }
 
-// 更新选中
+// 更新鼠标所在区域
 void CDlgBase::UpdateHover()
 {
 	CPoint point;
@@ -1340,11 +1351,12 @@ void CDlgBase::UpdateHover()
 	OnMouseMove(0, point);
 }
 
+// 画控件
 void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 {
 	for (size_t i = 0; i < m_vecArea.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecArea.at(i);
+		CControlBase* pControlBase = m_vecArea.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);
@@ -1353,7 +1365,7 @@ void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 
 	for (size_t i = 0; i < m_vecBaseArea.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecBaseArea.at(i);
+		CControlBase* pControlBase = m_vecBaseArea.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);
@@ -1362,7 +1374,7 @@ void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecControl.at(i);
+		CControlBase* pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);			
@@ -1371,7 +1383,7 @@ void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 
 	for (size_t i = 0; i < m_vecBaseControl.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecBaseControl.at(i);
+		CControlBase* pControlBase = m_vecBaseControl.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);			

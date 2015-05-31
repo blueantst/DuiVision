@@ -1,7 +1,7 @@
 
 
-#ifndef __DLG_MY_BASE_X_H__
-#define __DLG_MY_BASE_X_H__
+#ifndef __DLG_BASE_H__
+#define __DLG_BASE_H__
 #include <vector>
 #include "DuiVision.h"
 #include "WndShadow.h"
@@ -45,7 +45,6 @@ protected:
 	BOOL			m_bChangeSize;				// 改变窗口大小
 	CSize			m_MinSize;					// 窗口限定最小大小
 	CRgn			m_Rgn;						// 不规则窗口区域
-	COLORREF		m_clrBK;					// 自定义前景颜色
 	BOOL			m_bTopMost;					// 窗口总在最前面
 
 	CString			m_strTitle;					// 窗口标题
@@ -55,10 +54,11 @@ protected:
 
 	CDlgPopup		*m_pWndPopup;				// 保存的弹出框指针
 
-	CBitmap			m_BKImage;					// 框架背景图片
-	CSize			m_sizeBKImage;
+	COLORREF		m_clrBK;					// 背景颜色,由背景图片计算出的平均色,当背景图片不够大时可以达到渐变色效果
+	CBitmap			m_BKImage;					// 框架背景图片对象
+	CSize			m_sizeBKImage;				// 背景图片大小
 	CString			m_strFramePicture;			// 背景图片
-	CDC				m_MemBKDC;					// 背景dc
+	CDC				m_MemBKDC;					// 背景dc(由背景图片或背景颜色生成)
 	CBitmap			*m_pOldMemBK;
 	CBitmap			m_MemBK;
 	BOOL			m_bDrawImage;				// 图片或纯色背景
@@ -73,11 +73,11 @@ protected:
 	COLORREF		m_crlBackTransParent;		// 背景透明颜色
 	int				m_nBackTranslucent;			// 背景透明度
 
-	int				m_nFrameTopBottomSpace;
-	int				m_nFrameLeftRightSpace;
+	int				m_nFrameTopBottomSpace;		// 鼠标拖动改变窗口大小的区域宽度
+	int				m_nFrameLeftRightSpace;		// 鼠标拖动改变窗口大小的区域高度
 
-	int				m_nOverRegioX;				//过度的大小
-	int				m_nOverRegioY;				//过度的大小
+	int				m_nOverRegioX;				// 过度的大小
+	int				m_nOverRegioY;				// 过度的大小
 	BOOL			m_bNCActive;
 
 	BOOL			m_bTracking;
@@ -97,10 +97,10 @@ protected:
 	CDuiHandler*	m_pTrayHandler;				// 托盘图标和菜单的事件处理对象
 	CString			m_strTrayMenuXml;			// 托盘菜单的XML定义文件
 
-	vector<CControlBase *>	m_vecControl;		// 用户添加的窗口控件
-	vector<CControlBase *>	m_vecArea;			// 用户添加的区域(不影响鼠标事件)
-	CControlBase	*m_pControl;				// 当前活动控件对象
-	CControlBase	*m_pFocusControl;			// 当前焦点的控件对象
+	vector<CControlBase*>	m_vecControl;		// 用户添加的窗口控件
+	vector<CControlBase*>	m_vecArea;			// 用户添加的区域(不影响鼠标事件)
+	CControlBase*	m_pControl;				// 当前活动控件对象
+	CControlBase*	m_pFocusControl;			// 当前焦点的控件对象
 
 	vector<CONTROL_VALUE>	m_vecControlValue;	// 控件预设置信息
 
@@ -113,13 +113,14 @@ protected:
 	int				m_nShadowSize;				// 阴影宽度(算法阴影)
 
 private:
-	vector<CControlBase *>	m_vecBaseControl;	// 窗口自身用到的一些默认控件
-	vector<CControlBase *>	m_vecBaseArea;		// 窗口默认区域
+	vector<CControlBase*>	m_vecBaseControl;	// 窗口自身用到的一些默认控件
+	vector<CControlBase*>	m_vecBaseArea;		// 窗口默认区域
 
 public:
 	CDlgBase(UINT nIDTemplate, CWnd* pParent = NULL);
 	virtual ~CDlgBase();
 
+	// 获取窗口模板ID
 	UINT GetIDTemplate() { return m_nIDTemplate; }
 
 	void SetMinSize(int iWidth, int iHeight);	// 设置最小窗口大小
@@ -130,21 +131,27 @@ public:
 
 	void TestMainThread();	// 测试是否在主线程
 
+	// 是否使用用户自定义ECM
 	BOOL UseImageECM() { return m_bImageUseECM; }
 
+	// 设置窗口的xml文件
 	void SetXmlFile(CString strXmlFile) {m_strXmlFile = strXmlFile;}
+	// 设置窗口的xml内容
 	void SetXmlContent(CString strXmlContent) {m_strXmlContent = strXmlContent;}
 
+	// 设置托盘菜单的事件处理对象
 	void SetTrayHandler(CDuiHandler* pDuiHandler) { m_pTrayHandler = pDuiHandler; }
+	// 设置托盘菜单xml定义文件
 	void SetTrayMenuXml(CString strMenuXml) { m_strTrayMenuXml = strMenuXml; }
 
-	CControlBase *GetControl(UINT uControlID);
-	CControlBase *GetControl(CString strControlName);
-	CControlBase *GetBaseControl(UINT uControlID);
-	CControlBase *GetBaseControl(CString strControlName);
-
+	// 获取控件
+	CControlBase* GetControl(UINT uControlID);
+	CControlBase* GetControl(CString strControlName);
+	CControlBase* GetBaseControl(UINT uControlID);
+	CControlBase* GetBaseControl(CString strControlName);
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 
+	// 焦点控件相关函数
 	void SetFocusControl(CControlBase* pFocusControl);
 	void SetFocusControlPtr(CControlBase* pFocusControl) { m_pFocusControl = pFocusControl; }	// 设置焦点控件指针
 	CControlBase* GetFocusControl();
@@ -159,17 +166,14 @@ public:
 	void DoNo() { PostMessage(WM_USER_CLOSEWND, IDNO, 0); }
 
 	// 移动控件
-	virtual CControlBase * SetControlRect(UINT uControlID, CRect rc);
-	// 移动控件
-	virtual CControlBase * SetControlRect(CControlBase *pControlBase, CRect rc);
+	virtual CControlBase* SetControlRect(UINT uControlID, CRect rc);
+	virtual CControlBase* SetControlRect(CControlBase *pControlBase, CRect rc);
 	// 显示控件
-	virtual CControlBase * SetControlVisible(UINT uControlID, BOOL bVisible);
-	// 显示控件
-	virtual CControlBase * SetControlVisible(CControlBase *pControlBase, BOOL bVisible);
+	virtual CControlBase* SetControlVisible(UINT uControlID, BOOL bVisible);
+	virtual CControlBase* SetControlVisible(CControlBase *pControlBase, BOOL bVisible);
 	// 禁用控件
-	virtual CControlBase * SetControlDisable(UINT uControlID, BOOL bDisable);
-	// 禁用控件
-	virtual CControlBase * SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
+	virtual CControlBase* SetControlDisable(UINT uControlID, BOOL bDisable);
+	virtual CControlBase* SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
 
 	// 设置resize属性
 	HRESULT OnAttributeResize(const CString& strValue, BOOL bLoading);
@@ -184,9 +188,10 @@ public:
 
 	// 设置不规则窗体区域
 	void SetupRegion(int border_offset[], int nSize);
-	void DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpdate);
+	// 画窗口背景和控件
+	void DrawBackgroundAndControls(CDC &dc, const CRect &rcClient, const CRect &rcUpdate);
 	
-	// 初始化窗口背景皮肤
+	// 初始化窗口背景皮肤(加载到背景内存dc)
 	void InitWindowBkSkin();
 	// 加载窗口背景图片
 	void LoadBackgroundImage(UINT nIDResource, CString strType = TEXT("PNG"));
@@ -199,13 +204,13 @@ public:
 	void SetupRegion(int nSize);
 	// 画背景图片
 	void DrawBackground(CBitmap &bitBackground);
-	// 画背景图片
+	// 画背景颜色
 	void DrawBackground(COLORREF clr);
-	// 前景图片
+	// 画控件
 	virtual void DrawControl(CDC &dc, const CRect &rcClient);	
 	// 重置控件
 	virtual void ResetControl();
-	// 更新选中
+	// 更新鼠标所在区域
 	void UpdateHover();
 
 	// 设置Tooltip
@@ -221,10 +226,12 @@ public:
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 	virtual void OnSize(CRect rcClient);
 
+	// 设置控件的预制值
 	void SetControlValue(CString strName, CString strType, CString strValue);
 	void InitDialogValue();
 	void InitControlValue();
 
+	// 设置窗口的自动关闭定时器
 	void SetAutoCloseTimer(UINT uDelayTime, BOOL bHideWnd = FALSE);
 
 	// 定时器消息
@@ -318,5 +325,5 @@ public:
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
-#endif __DLG_MY_BASE_X_H__
+#endif __DLG_BASE_H__
 
