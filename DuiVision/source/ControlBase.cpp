@@ -55,6 +55,9 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_hCursor = NULL;
 	m_bDuiMsgMouseMove = FALSE;
+	m_bDuiMsgMouseLDown = FALSE;
+	m_bDuiMsgMouseLUp = FALSE;
+	m_bDuiMsgMouseLDblClk = FALSE;
 	m_bDuiMsgKeyDown = FALSE;
 	m_bMouseLeave = TRUE;
 }
@@ -100,6 +103,9 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 
 	m_hCursor = NULL;
 	m_bDuiMsgMouseMove = FALSE;
+	m_bDuiMsgMouseLDown = FALSE;
+	m_bDuiMsgMouseLUp = FALSE;
+	m_bDuiMsgMouseLDblClk = FALSE;
 	m_bDuiMsgKeyDown = TRUE;
 	m_bMouseLeave = TRUE;
 }
@@ -587,6 +593,12 @@ BOOL CControlBase::OnLButtonDown(UINT nFlags, CPoint point)
 			pDlg->SetFocusControl(this);
 		}
 
+		// 发送鼠标左键按下DUI消息
+		if(m_bDuiMsgMouseLDown && m_rc.PtInRect(point))
+		{
+			SendMessage(MSG_MOUSE_LDOWN, (WPARAM)nFlags, (LPARAM)(&point));
+		}
+
 		return OnControlLButtonDown(nFlags, point);
 	}
 
@@ -618,6 +630,12 @@ BOOL CControlBase::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 	else
 	{
+		// 发送鼠标左键放开DUI消息
+		if(m_bDuiMsgMouseLUp && m_rc.PtInRect(point))
+		{
+			SendMessage(MSG_MOUSE_LUP, (WPARAM)nFlags, (LPARAM)(&point));
+		}
+
 		return OnControlLButtonUp(nFlags, point);
 	}
 
@@ -659,6 +677,13 @@ BOOL CControlBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 			// 如果控件不允许双击,则调用单击处理函数
 			return OnControlLButtonDown(nFlags, point);
 		}
+
+		// 发送鼠标左键双击DUI消息
+		if(m_bDuiMsgMouseLDblClk && m_rc.PtInRect(point))
+		{
+			SendMessage(MSG_BUTTON_DBLCLK, (WPARAM)nFlags, (LPARAM)(&point));
+		}
+
 		return OnControlLButtonDblClk(nFlags, point);
 	}
 
@@ -778,6 +803,21 @@ BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
 	if(strDuiMsg == _T("mousemove"))	// 发送鼠标移动的DUI消息
 	{
 		m_bDuiMsgMouseMove = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("mouseldown"))	// 发送鼠标左键按下的DUI消息
+	{
+		m_bDuiMsgMouseLDown = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("mouselup"))	// 发送鼠标左键放开的DUI消息
+	{
+		m_bDuiMsgMouseLUp = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("mouseldblclk"))	// 发送鼠标左键双击的DUI消息
+	{
+		m_bDuiMsgMouseLDblClk = TRUE;
 		return TRUE;
 	}else
 	if(strDuiMsg == _T("keydown"))		// 发送键盘按下DUI消息

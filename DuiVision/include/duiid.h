@@ -58,16 +58,20 @@
 #define					MSG_TRAY_LBUTTONDOWN				2						// 托盘左键单击消息
 
 // 控件消息定义
-#define					MSG_BUTTON_DOWN						1						// 鼠标在控件按下
-#define					MSG_BUTTON_UP						2						// 鼠标在控件放开
+#define					MSG_BUTTON_DOWN						1						// 鼠标或键盘在控件按下
+#define					MSG_BUTTON_UP						2						// 鼠标或键盘在控件放开
 #define					MSG_BUTTON_DBLCLK					3						// 鼠标在控件双击
 #define					MSG_BUTTON_CHECK					4						// 检查框消息
 #define					MSG_SCROLL_CHANGE					5						// 滚动条位置变更事件
 #define					MSG_CONTROL_BUTTON					6						// 控件内的按钮点击事件
 #define					MSG_MOUSE_MOVE						7						// 鼠标移动事件
 #define					MSG_MOUSE_LEAVE						8						// 鼠标离开事件
-#define					MSG_KEY_DOWN						9						// 键盘按下事件
-#define					MSG_CONTROL_EVENT					10						// 控件的自定义事件
+#define					MSG_MOUSE_LDOWN						9						// 鼠标左键按下事件
+#define					MSG_MOUSE_LUP						10						// 鼠标左键放开事件
+#define					MSG_MOUSE_RDOWN						11						// 鼠标右键按下事件
+#define					MSG_MOUSE_RUP						12						// 鼠标右键放开事件
+#define					MSG_KEY_DOWN						13						// 键盘按下事件
+#define					MSG_CONTROL_EVENT					14						// 控件的自定义事件
 
 
 // 进程间消息内容的结构定义
