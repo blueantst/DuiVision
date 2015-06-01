@@ -52,13 +52,19 @@ public:
 	LRESULT OnDuiMsgBtnShowFlash3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgBtnShowFlash4(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgTabCtrlClose(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgImageNormalMouseLDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgImageNormalMouseLUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgImageNormalMouseMove(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	
 	//virtual LRESULT OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	virtual void OnTimer(UINT uTimerID, CString strTimerName);
 
-	CDlgBase* m_pDlg;
-	UINT m_uTimerAni;	// 动画定时器
-	int m_nAniIndex;	// 动画索引
+	CDlgBase*		m_pDlg;
+	UINT			m_uTimerAni;	// 动画定时器
+	int				m_nAniIndex;	// 动画索引
+
+	BOOL			m_bMouseDownImageNormal;// image-normal控件是否鼠标按下
+	CPoint			m_ptControlImageNormal;	// image-normal控件上一次的位置
 
 	// 消息处理定义
 	DUI_DECLARE_MESSAGE_BEGIN(CDuiHandlerMain)
@@ -96,5 +102,8 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"textbtn_showflash_3", MSG_BUTTON_UP, OnDuiMsgBtnShowFlash3)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"textbtn_showflash_4", MSG_BUTTON_UP, OnDuiMsgBtnShowFlash4)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"tabctrl.controls", MSG_CONTROL_BUTTON, OnDuiMsgTabCtrlClose)
+		DUI_CONTROL_NAMEMSG_MESSAGE(L"image-normal", MSG_MOUSE_LDOWN, OnDuiMsgImageNormalMouseLDown)
+		DUI_CONTROL_NAMEMSG_MESSAGE(L"image-normal", MSG_MOUSE_LUP, OnDuiMsgImageNormalMouseLUp)
+		DUI_CONTROL_NAMEMSG_MESSAGE(L"image-normal", MSG_MOUSE_MOVE, OnDuiMsgImageNormalMouseMove)
 	DUI_DECLARE_MESSAGE_END()
 };

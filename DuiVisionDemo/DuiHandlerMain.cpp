@@ -35,6 +35,7 @@ CDuiHandlerMain::CDuiHandlerMain(void) : CDuiHandler()
 	m_pDlg = NULL;
 	m_uTimerAni = 0;
 	m_nAniIndex = 0;
+	m_bMouseDownImageNormal = FALSE;
 }
 
 CDuiHandlerMain::~CDuiHandlerMain(void)
@@ -661,11 +662,81 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash4(UINT uID, CString strName, UINT M
 	return TRUE;
 }
 
-// 进程间消息处理
+// Tab页签关闭按钮消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgTabCtrlClose(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	return TRUE;
 }
+
+// image-normal控件的鼠标左键按下消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseLDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiPicture* pImgCtrl = (CDuiPicture*)GetControl(_T("image-normal"));
+	if(pImgCtrl == NULL)
+	{
+		return FALSE;
+	}
+
+	m_bMouseDownImageNormal = TRUE;
+	m_ptControlImageNormal = *((CPoint*)lParam);
+
+	return TRUE;
+}
+
+// image-normal控件的鼠标左键放开消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseLUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiPicture* pImgCtrl = (CDuiPicture*)GetControl(_T("image-normal"));
+	if(pImgCtrl == NULL)
+	{
+		return FALSE;
+	}
+
+	m_bMouseDownImageNormal = FALSE;
+
+	return TRUE;
+}
+
+// image-normal控件的鼠标移动消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseMove(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiPicture* pImgCtrl = (CDuiPicture*)GetControl(_T("image-normal"));
+	if(pImgCtrl == NULL)
+	{
+		return FALSE;
+	}
+
+	// 鼠标拖动控件
+	if(m_bMouseDownImageNormal)
+	{
+		CPoint ptNew = *((CPoint*)lParam);	// 当前鼠标位置
+		CControlBase* pParentCtrl = (CControlBase*)(pImgCtrl->GetParent());
+		if(pParentCtrl)
+		{
+			CRect rcParent = pParentCtrl->GetRect();
+			if(!rcParent.PtInRect(ptNew))
+			{
+				// 如果鼠标位置已经不在父控件范围内则退出
+				return FALSE;
+			}
+		}
+
+		// 获取控件的当前位置和鼠标当前位置与上一次位置的差值,将控件当前位置加上鼠标位置的差值
+		CRect rc = pImgCtrl->GetRect();
+		CSize offset = ptNew - m_ptControlImageNormal;
+		rc.OffsetRect(offset);
+		pImgCtrl->SetRect(rc);
+
+		// 刷新鼠标上一次位置的变量
+		m_ptControlImageNormal = *((CPoint*)lParam);
+
+		// 刷新控件
+		pImgCtrl->UpdateControl(true);
+	}
+
+	return TRUE;
+}
+
 /*
 // DUI事件处理
 LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
