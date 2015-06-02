@@ -631,7 +631,7 @@ BOOL CControlBase::OnLButtonUp(UINT nFlags, CPoint point)
 	else
 	{
 		// 发送鼠标左键放开DUI消息
-		if(m_bDuiMsgMouseLUp && m_rc.PtInRect(point))
+		if(m_bDuiMsgMouseLUp)
 		{
 			SendMessage(MSG_MOUSE_LUP, (WPARAM)nFlags, (LPARAM)(&point));
 		}
