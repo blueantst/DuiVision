@@ -124,6 +124,7 @@ public:
 	HRESULT GoForward();
 	HRESULT Refresh();
 	HRESULT Stop();
+	HRESULT GetBusy(BOOL& bBusy);
 
 protected:
 	HRESULT InitEvents();

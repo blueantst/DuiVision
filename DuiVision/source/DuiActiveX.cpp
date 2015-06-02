@@ -2017,6 +2017,24 @@ HRESULT CDuiWebBrowserCtrl::Stop()
 	return hr;
 }
 
+// 获取页面是否正在加载
+HRESULT CDuiWebBrowserCtrl::GetBusy(BOOL& bBusy)
+{
+	HRESULT hr = -1;
+	IWebBrowser2* pWebBrowser = NULL;
+	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
+	VARIANT_BOOL pBusy = VARIANT_FALSE;
+	if( pWebBrowser != NULL )
+	{
+		hr = pWebBrowser->get_Busy(&pBusy);
+		pWebBrowser->Release();
+	}
+
+	bBusy = (pBusy == VARIANT_TRUE);
+
+	return hr;
+}
+
 // 初始化浏览器控件的事件处理
 HRESULT CDuiWebBrowserCtrl::InitEvents()
 {
