@@ -20,6 +20,7 @@
 #define					FRAME_MAINWND						903	// 主窗口的透明度渐变层蒙板图片
 #define					BT_SKIN								904	// 换肤按钮
 #define					WND_SKIN							905	// 皮肤窗口
+#define					AREA_CAPTION						906	// 窗口标题区域
 #define					BT_OK								910	// 确定按钮
 #define					BT_CANCEL							911	// 取消按钮
 #define					BT_YES								912	// 是按钮
@@ -33,6 +34,7 @@
 #define					NAME_BT_CLOSE						_T("button.close")		// 关闭按钮
 #define					NAME_BT_SKIN						_T("button.skin")		// 换肤按钮
 #define					NAME_BT_SETUP						_T("button.setup")		// 设置按钮
+#define					NAME_AREA_CAPTION					_T("win.caption")		// 窗口标题区域
 #define					NAME_FRAME_MAINWND					_T("frame.mainwnd")		// 主窗口的透明度渐变层蒙板图片
 
 #define					NAME_BT_OK							_T("button.ok")			// 确定按钮

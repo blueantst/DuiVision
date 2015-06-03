@@ -2383,6 +2383,22 @@ void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 		}
 	}
 
+	// 判断是否存在窗口标题区域控件
+	CControlBase* pCaptionControl = GetBaseControl(NAME_AREA_CAPTION);
+	if(pCaptionControl == NULL)
+	{
+		pCaptionControl = GetBaseControl(AREA_CAPTION);
+	}
+	if(pCaptionControl)
+	{
+		// 如果找到窗口标题区域控件,并且鼠标在此控件范围内,则发送非客户区双击事件,触发窗口的最大化和恢复
+		CRect rcCaption = pCaptionControl->GetRect();
+		if(rcCaption.PtInRect(point))
+		{
+			PostMessage(WM_NCLBUTTONDBLCLK,HTCAPTION,MAKELPARAM(point.x, point.y));
+		}
+	}
+
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
 
