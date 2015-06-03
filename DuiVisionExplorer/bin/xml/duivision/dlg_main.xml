@@ -5,6 +5,7 @@
 	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
 
   <base>
+	<div name="win.caption" pos="0,0,-0,21" response="0" />
 	<img pos="5,5" width="40" height="40" image="skins\icon\Synchstep.png" mode="extrude" framesize="1" response="0" />
 	
 	<text name="title" crtext="E0E0E0" crmark="800000" crshadow="202020" font="default"
