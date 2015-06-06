@@ -37,7 +37,6 @@ public:
 	LRESULT OnDuiMsgLoadWebTabButton(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgMenuButton1(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgMenuButton2(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
-	LRESULT OnDuiMsgMenuButton3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgListCtrl2DblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -87,7 +86,6 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"button_load_tab_web", MSG_BUTTON_UP, OnDuiMsgLoadWebTabButton)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"menu_1", MSG_BUTTON_UP, OnDuiMsgMenuButton1)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"menu_2", MSG_BUTTON_UP, OnDuiMsgMenuButton2)
-		DUI_CONTROL_NAMEMSG_MESSAGE(L"menu_3", MSG_BUTTON_UP, OnDuiMsgMenuButton3)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"listctrl_1", MSG_BUTTON_DOWN, OnDuiMsgListCtrl1Click)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"listctrl_2", MSG_BUTTON_DOWN, OnDuiMsgListCtrl2Click)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"listctrl_2", MSG_BUTTON_DBLCLK, OnDuiMsgListCtrl2DblClick)

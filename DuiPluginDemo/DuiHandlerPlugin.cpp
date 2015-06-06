@@ -217,26 +217,6 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT M
 	return TRUE;
 }
 
-// 菜单3消息处理
-LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_3"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
-	pDuiMenu->SetParent(pButton);
-	CPoint point;
-	CRect rc = pButton->GetRect();
-	point.SetPoint(rc.left, rc.bottom);
-	if(m_pPanel)
-	{
-		::ClientToScreen(m_pPanel->GetHWND(), &point);
-	}
-	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), NULL, point, WM_DUI_MENU))
-	{
-		pDuiMenu->ShowWindow(SW_SHOW);
-	}
-	return TRUE;
-}
-
 // 列表控件点击消息处理
 LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
