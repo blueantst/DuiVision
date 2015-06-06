@@ -1552,9 +1552,29 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		CString strXmlFile = m_strAction;
 		strXmlFile.Delete(0, 5);
-		pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU);
-		pDuiMenu->ShowWindow(SW_SHOW);
-		pDuiMenu->SetAutoClose(TRUE);
+		if(pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU))
+		{
+			if(m_posMenu.nCount >= 4)
+			{
+				// 如果菜单pos有4个值,第三个值为负数表示菜单向左侧显示,第四个值为负数表示菜单向上显示
+				CRect rcMenu;
+				pDuiMenu->GetWindowRect(&rcMenu);
+				int nOffsetX = 0;
+				int nOffsetY = 0;
+				if(m_posMenu.Right.bMinus)
+				{
+					nOffsetX = -rcMenu.Width();
+				}
+				if(m_posMenu.Bottom.bMinus)
+				{
+					nOffsetY = -rcMenu.Height();
+				}
+				rcMenu.OffsetRect(nOffsetX, nOffsetY);
+				pDuiMenu->MoveWindow(rcMenu);
+			}
+			pDuiMenu->ShowWindow(SW_SHOW);
+			pDuiMenu->SetAutoClose(TRUE);
+		}
 	}else
 	if(m_strAction.Find(_T("link:")) == 0)	// 动作:打开一个页面链接
 	{
