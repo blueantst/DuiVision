@@ -317,7 +317,8 @@ width-lt,height-lt,width-rb,height-rb" />
 				pos="200,100,300,128" tip="普通菜单，背景1" />
 			
 			<button name="menu_3" skin="IDB_BT_DEFAULT" title="菜单3"
-				pos="350,100,450,128" tip="普通菜单，背景2" />
+				pos="350,100,450,128" tip="普通菜单，背景2，向上显示"
+				action="menu:duivision\menu_3.xml" menupos="0,0,0,-0" />
 			
 			<text pos="70,180,320,200" crtext="808080" title="带边框的矩形" />
 			<frame pos="50,150,350,350" crframe="800000" frame-width="2" dashstyle="dot" color="80,80,128" />
