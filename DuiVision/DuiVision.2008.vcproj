@@ -213,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiRichEdit.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiSlider.cpp"
 				>
 			</File>
@@ -412,6 +416,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiRichEdit.h"
 				>
 			</File>
 			<File
