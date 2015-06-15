@@ -2076,7 +2076,6 @@ BOOL CDuiRichEdit::OnInit()
 	{
         m_pTxtWinHost->SetClientRect(&m_rcText);
 	}
-	//UpdateControl(true);
 	return TRUE;
 }
 
