@@ -135,7 +135,7 @@ width-lt,height-lt,width-rb,height-rb" />
 		
 		<tab name="tab.control.4" image="skin:IDB_TAB_ITEM" title="编辑框" pos="0,30,-0,-0">
 
-			<edit name="edit1" img-count="2" image="skins\default\edit_border.png" small-image="skin:IDB_KEY_BOARD"
+			<edit name="edit1" img-count="2" image="skins\default\edit_border2.png" small-image="skin:IDB_KEY_BOARD"
 					pos="50,20" width="200" height="26" title="test"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" />
@@ -153,6 +153,12 @@ width-lt,height-lt,width-rb,height-rb" />
 			<edit name="edit4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
 					pos="50,170" width="200" height="30" title="" tip="请输入密码"
 					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					font="default" crtip="128,128,128,128" />
+			
+			<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
+					pos="50,270" width="200" height="60"
+					title="测试richedit" tip="richedit"
+					multiline="1" wantreturn="1" autohscroll="1" autovscroll="1" readonly="0" maxchar="150"
 					font="default" crtip="128,128,128,128" />
 
 			<combobox name="combobox1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
