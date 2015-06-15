@@ -87,7 +87,16 @@ BOOL CDuiObject::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		SetAttribute(_T("pos"), strPosValue, TRUE);
 	}
 
+	// 初始化
+	OnInit();
+
     return TRUE;
+}
+
+// 初始化,由Load函数加载完属性之后调用
+BOOL CDuiObject::OnInit()
+{
+	return TRUE;
 }
 
 // 解析字符串，替换其中的替换内容

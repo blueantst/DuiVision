@@ -361,6 +361,7 @@ public:
 	
 	virtual HRESULT SetAttribute(CString strAttribName, CString strValue, BOOL bLoading);
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL OnInit();
 
 	virtual void SetRect(CRect rc) { m_rc = rc;};
 	virtual CRect GetRect() { return m_rc;};
