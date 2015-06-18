@@ -2569,6 +2569,7 @@ void DuiSystem::InitLog()
 void DuiSystem::DoneLog()
 {
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"------------------DuiVision End-------------------");
+	DeleteCriticalSection(&m_WriteLogMutex);
 }
 
 // ¼ÇÂ¼ÈÕÖ¾
