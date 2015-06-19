@@ -218,8 +218,6 @@ public:
 	void DoneLog();
 	static void	LogEvent(int nLevel, LPCWSTR lpFormat, ...);
 
-	//HRESULT CreateTextServices(IUnknown *punkOuter, ITextHost *pITextHost, IUnknown **ppUnk);
-
 protected:
     void createSingletons();
     void destroySingletons();
@@ -253,7 +251,4 @@ protected:
 	CDlgBase*				m_pNotifyMsgBox;						// 动态提示信息框
 
 	NOTIFYICONDATA			m_NotifyIconData;						// 托盘数据
-
-	//HINSTANCE	m_rich20;	//richedit module
-	//PCreateTextServices	m_funCreateTextServices;
 };

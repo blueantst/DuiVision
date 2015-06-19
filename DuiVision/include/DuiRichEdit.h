@@ -10,6 +10,9 @@ public:
     CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject);
     ~CDuiRichEdit();
 
+	static BOOL InitTextService();
+	static void ReleaseTextService();
+
 	// 设置左侧小图片
 	bool SetLeftBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	bool SetLeftBitmap(CString strImage);
@@ -156,7 +159,7 @@ protected:
 	enumButtonState m_EditState;
 	CRect			m_rcText;			// 文字部分位置
 
-    CTxtWinHost*	m_pTxtWinHost;				// richedit控件
+    CTxtWinHost*	m_pTxtWinHost;		// richedit控件
     bool			m_bVScrollBarFixing;
 	BOOL			m_bPassWord;		// 密码输入
 	BOOL			m_bMultiLine;		// 多行
@@ -175,7 +178,7 @@ protected:
     int				m_iLimitText;		// 最大字符数
     LONG			m_lTwhStyle;		// richedit控件的窗口风格
 	bool			m_bInited;			// richedit控件是否已经初始化
-	bool			m_fAccumulateDBC ; // TRUE - need to cumulate ytes from 2 WM_CHAR msgs
+	bool			m_fAccumulateDBC;	// TRUE - need to cumulate ytes from 2 WM_CHAR msgs
 	// we are in this mode when we receive VK_PROCESSKEY
 	UINT			m_chLeadByte; // use when we are in _fAccumulateDBC mode
 

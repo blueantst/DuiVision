@@ -35,6 +35,11 @@ EXTERN_C const IID IID_ITextHost = { /* c5bdd8d0-d26e-11ce-a89e-00aa006cadc5 */
 
 #include <textserv.h>
 
+HRESULT FnCreateTextServices(
+						IUnknown *punkOuter,
+						ITextHost *pITextHost,
+						IUnknown **ppUnk);
+
 class CTxtWinHost : public ITextHost
 {
 public:
@@ -305,20 +310,11 @@ BOOL CTxtWinHost::Init(CDuiRichEdit *re, const CREATESTRUCT *pcs)
 
     fInplaceActive = TRUE;
 
-    // Create Text Services component
-    //if(FAILED(CreateTextServices(NULL, this, &pUnk)))
-    //    goto err;
-
-	PCreateTextServices TextServicesProc;
-	HMODULE hmod = LoadLibrary(_T("riched20.dll"));
-	if (hmod)
+	CDuiRichEdit::InitTextService();
+	hr = FnCreateTextServices(NULL, this, &pUnk);
+	if(hr == S_FALSE)
 	{
-		TextServicesProc = (PCreateTextServices)GetProcAddress(hmod,"CreateTextServices");
-	}
-
-	if (TextServicesProc)
-	{
-		HRESULT hr = TextServicesProc(NULL, this, &pUnk);
+		goto err;
 	}
 
     hr = pUnk->QueryInterface(IID_ITextServices,(void **)&pserv);
@@ -1041,6 +1037,8 @@ void CTxtWinHost::SetParaFormat(PARAFORMAT2 &p)
 
 /////////////////////////////////////////////////////////////////////////////////////
 // CDuiRichEdit
+static HINSTANCE	g_hrichedit = NULL;
+static PCreateTextServices	g_funCreateTextServices = NULL;
 
 CDuiRichEdit::CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject)
 	: CDuiPanel(hWnd, pDuiObject)
@@ -1107,6 +1105,50 @@ CDuiRichEdit::~CDuiRichEdit()
 		delete m_pSmallImage;
 		m_pSmallImage = NULL;
 	}
+}
+
+// 初始化richedit库
+BOOL CDuiRichEdit::InitTextService()
+{
+	if(g_funCreateTextServices != NULL)
+	{
+		return TRUE;
+	}
+
+	// 加载richedit动态库
+	g_hrichedit = LoadLibrary(_T("msftedit.dll"));	// msftedit.dll是richedit的4.0版本
+	if(g_hrichedit == NULL)
+	{
+		g_hrichedit = LoadLibrary(_T("riched20.dll"));
+	}
+	if (g_hrichedit)
+	{
+		g_funCreateTextServices = (PCreateTextServices)GetProcAddress(g_hrichedit, "CreateTextServices");
+	}
+
+	return (g_funCreateTextServices != NULL);
+}
+
+// 释放richedit库
+void CDuiRichEdit::ReleaseTextService()
+{
+	if(g_hrichedit != NULL)
+	{
+		FreeLibrary(g_hrichedit);
+		g_hrichedit = NULL;
+	}
+	g_funCreateTextServices = NULL;
+}
+
+// 创建richedit文字服务
+HRESULT FnCreateTextServices(IUnknown *punkOuter, ITextHost *pITextHost, IUnknown **ppUnk)
+{
+	if(g_funCreateTextServices)
+	{
+		return g_funCreateTextServices(punkOuter, pITextHost, ppUnk);
+	}
+
+	return S_FALSE;
 }
 
 bool CDuiRichEdit::SetLeftBitmap(UINT nResourceID, CString strType)

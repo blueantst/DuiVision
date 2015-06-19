@@ -12,7 +12,6 @@ static GdiplusStartupInput gdiplusStartupInput;
 
 DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CString strStyle)
     :m_hInst(hInst), m_uAppID(uAppID)
-	//,m_funCreateTextServices(NULL)
 {
 	g_pIns = this;
 	m_dwLangID = dwLangID;
@@ -47,9 +46,6 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	{
 		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CoInitialize failed"));
 	}
-
-	//m_rich20=LoadLibrary(_T("riched20.dll"));
-	//if(m_rich20) m_funCreateTextServices= (PCreateTextServices)GetProcAddress(m_rich20,"CreateTextServices");
 }
 
 DuiSystem::~DuiSystem(void)
@@ -96,6 +92,8 @@ DuiSystem::~DuiSystem(void)
 
 	//if(m_rich20) FreeLibrary(m_rich20);
 	//m_funCreateTextServices=NULL;
+	// ÊÍ·Årichedit¿â
+	CDuiRichEdit::ReleaseTextService();
 
 	// ÊÍ·ÅCOM¿â
 	CoUninitialize();
@@ -2676,12 +2674,3 @@ void DuiSystem::LogEvent(int nLevel, LPCWSTR lpFormat, ...)
 
 	LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
 }
-
-
-/*
-HRESULT DuiSystem::CreateTextServices( IUnknown *punkOuter, ITextHost *pITextHost, IUnknown **ppUnk )
-{
-	if(!m_funCreateTextServices) return E_NOTIMPL;
-	return m_funCreateTextServices(punkOuter,pITextHost,ppUnk);
-}
-*/
