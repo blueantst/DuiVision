@@ -195,6 +195,9 @@
     <ClInclude Include="include\DuiSlider.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\DuiRichEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -336,6 +339,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiSlider.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiRichEdit.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
