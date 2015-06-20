@@ -1286,16 +1286,21 @@ BOOL CDuiTabCtrl::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	return false;
 }
 
+// 画控件
 void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
 	//int nHeight = m_rc.Height();	// 纵向内存DC的高度是整个tabctrl的高度,不只是页签部分高度
-	int nTabHeight = m_nTabCtrlHeight;
+	int nTabHeight = m_nTabCtrlHeight;	// 纵向内存DC高度改为tabctrl部分高度
 
 	if(!m_bUpdate)
 	{
-		// 创建内存DC,纵向分为三层,分别是tab页签图片、鼠标热点图片、鼠标按下图片三层
-		UpdateMemDC(dc, nWidth, nTabHeight * 3);
+		// 创建内存DC,纵向分为6层:
+		// 1.tab页签图片-原图
+		// 2.tab页签图片-鼠标热点
+		// 3.tab页签图片-鼠标按下
+		// 4,5,6层是上面3层的备份
+		UpdateMemDC(dc, nWidth, nTabHeight * 3 * 2);
 
 		Graphics graphics(m_memDC);
 
@@ -1316,7 +1321,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		for(int i = 0; i < 3; i++)
 		{
 			// 将背景内容拷贝到内存DC
-			m_memDC.BitBlt(0, i * nTabHeight, nWidth, nTabHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
+			m_memDC.BitBlt(0, i * nTabHeight, nWidth, nTabHeight, &dc, m_rc.left, m_rc.top, SRCCOPY);
 
 			// 画tab页签
 			int nXPos = m_nTabLeftPading;
@@ -1424,11 +1429,17 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				}
 			}
 		}
+
+		// 内存dc复制一份进行备份
+		m_memDC.BitBlt(0, nTabHeight * 3, nWidth, nTabHeight * 3, &m_memDC, 0, 0, SRCCOPY);
 	}
 
-	// 画Tab页签按钮
+	// 画Tab页签按钮到内存dc
 	if(m_pImageTabBtn != NULL)
 	{
+		// 现将备份的内存dc整体进行恢复,避免页签按钮叠加之后的影响
+		m_memDC.BitBlt(0, 0, nWidth, nTabHeight * 3, &m_memDC, 0, nTabHeight * 3, SRCCOPY);
+
 		Graphics graphics(m_memDC);
 		for(int i = 0; i < 3; i++)
 		{
@@ -1445,10 +1456,11 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		}
 	}
 
-	// 画原图
+	// 内存dc输出到dc
+	// 1.画原图
 	dc.BitBlt(m_rc.left,m_rc.top, nWidth, nTabHeight, &m_memDC, 0, 0, SRCCOPY);
 
-	// 画鼠标热点的Tab页签
+	// 2.画鼠标热点的Tab页签
 	if((m_nHoverItem != -1) && (m_nHoverItem < (int)m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
@@ -1457,7 +1469,7 @@ void CDuiTabCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			itemInfo.rc.left - m_rc.left, itemInfo.rc.top - m_rc.top + nTabHeight, SRCCOPY);
 	}
 
-	// 画鼠标按下的Tab页签
+	// 3.画鼠标按下的Tab页签
 	if((m_nDownItem != -1) && (m_nDownItem < (int)m_vecItemInfo.size()))
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nDownItem);
