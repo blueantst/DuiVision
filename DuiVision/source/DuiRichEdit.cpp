@@ -1071,6 +1071,8 @@ CDuiRichEdit::CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_bNumber = false;
 	m_bWordWrap = false;
     m_iLimitText = cInitTextMax;
+	m_nStartChar = -1;
+	m_nEndChar = -1;
 	m_lTwhStyle = ES_MULTILINE;
 	m_hFont = NULL;
 	m_bInited = false;
@@ -1080,8 +1082,6 @@ CDuiRichEdit::CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject)
 #else
 	m_fAccumulateDBC= false;
 #endif
-
-	//SetRect(CRect(0,0,0,0));
 }
 
 CDuiRichEdit::~CDuiRichEdit()
@@ -1091,7 +1091,6 @@ CDuiRichEdit::~CDuiRichEdit()
 		m_pTxtWinHost->GetTextServices()->OnTxInPlaceDeactivate();
         m_pTxtWinHost->Release();
 		m_pTxtWinHost = NULL;
-        //m_pManager->RemoveMessageFilter(this);
     }
 
 	if(m_pLeftImage != NULL)
@@ -1919,7 +1918,7 @@ void CDuiRichEdit::DoInit()
 	{
 		m_lTwhStyle |= ES_AUTOHSCROLL;
 	}
-	if(m_bMultiLine)
+	if(!m_bMultiLine)
 	{
 		m_lTwhStyle &= ~ES_MULTILINE;
 	}
@@ -1966,8 +1965,11 @@ void CDuiRichEdit::DoInit()
         m_pTxtWinHost->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, dw, &lResult);
         m_pTxtWinHost->OnTxInPlaceActivate(NULL);
 		m_pTxtWinHost->SetRichTextFlag(m_bRich);
+		m_pTxtWinHost->SetWordWrap(m_bWordWrap);
 		m_pTxtWinHost->SetColor(m_clrText.ToCOLORREF());
+		SetLimitText(m_iLimitText);
 		SetFont();
+		SetSel(m_nStartChar, m_nEndChar);
 
 		m_bInited= true;
     }
@@ -1983,6 +1985,7 @@ HRESULT CDuiRichEdit::TxSendMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRES
 			{
                 return S_OK;
             }
+			return m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_CHAR, wparam, lparam, plresult);
         }
         return m_pTxtWinHost->GetTextServices()->TxSendMessage(msg, wparam, lparam, plresult);
     }
@@ -2491,13 +2494,9 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 */
 	bool handled = true;
 	unsigned int virtualKeyCode = nChar;
-    unsigned int flags = 0;
+    unsigned int flags = nFlags;
 	bool bShiftState = false;
-    if (HIWORD(nFlags) & KF_REPEAT)
-        flags |= WKE_REPEAT;
-    if (HIWORD(nFlags) & KF_EXTENDED)
-        flags |= WKE_EXTENDED;
-	if(VK_SHIFT == nChar)
+	if((GetKeyState(VK_SHIFT) & 0x8000) || (VK_SHIFT == nChar))
 		bShiftState = true;
 	HKL hKL = GetKeyboardLayout(0);
 	int i = LOWORD(hKL);
@@ -2511,13 +2510,14 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			if(( nChar & 0x80 )  |  (nChar >= 0x70  && nChar <= 0x7F  ))
 			{
 				//if( !IsFocusControl() ) return 0;
+				return false;
 			}	
 		}
 	}	
 	if(nChar >= 0x70  && nChar <= 0x7F  )
 	{
 		LRESULT lResult = true;
-		m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
+		TxSendMessage(WM_KEYDOWN, virtualKeyCode, flags, &lResult);
 		handled = true;
 		if( nChar == 0x74 )
 		{
@@ -2530,11 +2530,12 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			::DispatchMessage(&msg);			 
 		}
 		//if( !IsFocusControl() ) return 0;
+		return false;
 	}
 
 	LRESULT lResult = true;
-    //m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
-	//handled = true;
+    TxSendMessage(WM_KEYDOWN, virtualKeyCode, flags, &lResult);
+	handled = true;
 	
 	if(!bShiftState)
 	{
@@ -2568,7 +2569,6 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				virtualKeyCode = '(';
 			else if(nChar == '0')
 				virtualKeyCode = ')';
-			/*
 			else if(nChar == 45)
 				virtualKeyCode = '_';
 			else if(nChar == '=')
@@ -2591,11 +2591,15 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				virtualKeyCode = '?';
 			else if(nChar == '`')
 				virtualKeyCode = '~';
-				*/
 			else if(nChar > 0x80)
 				return 0;
 		}
-	}	
+	}
+
+	if((nChar < '0') && (nChar != ' '))
+	{
+		return handled;
+	}
 	/*MSG msg;
 	msg.hwnd = m_hWnd;
 	msg.message = WM_CHAR;
@@ -2604,7 +2608,7 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	::TranslateMessage(&msg);
 	::DispatchMessage(&msg);*/
 
-	m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
+	TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
 	handled = true;
 
 	return handled;

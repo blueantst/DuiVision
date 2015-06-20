@@ -163,8 +163,8 @@ protected:
     bool			m_bVScrollBarFixing;
 	BOOL			m_bPassWord;		// 密码输入
 	BOOL			m_bMultiLine;		// 多行
-    BOOL			m_bWantReturn;
-	BOOL			m_bWantCtrlReturn;
+    BOOL			m_bWantReturn;		// 是否允许回车键换行
+	BOOL			m_bWantCtrlReturn;	// 是否允许Ctrl+回车
 	BOOL			m_bHScrollBar;		// 水平滚动条
 	BOOL			m_bVScrollBar;		// 垂直滚动条
 	BOOL			m_bAutoHScroll;		// 自动显示水平滚动条
@@ -172,10 +172,12 @@ protected:
 	BOOL			m_bReadOnly;		// 只读
 	BOOL			m_bNumber;			// 只能输入数字
     BOOL			m_bRich;
-    BOOL			m_bWordWrap;
+    BOOL			m_bWordWrap;		// 是否单词自动换行
 	Color			m_clrText;			// 文字颜色
 	HFONT			m_hFont;			// 字体句柄
     int				m_iLimitText;		// 最大字符数
+	int				m_nStartChar;		// 选择块的开始位置
+	int				m_nEndChar;			// 选择块的结束位置
     LONG			m_lTwhStyle;		// richedit控件的窗口风格
 	bool			m_bInited;			// richedit控件是否已经初始化
 	bool			m_fAccumulateDBC;	// TRUE - need to cumulate ytes from 2 WM_CHAR msgs
@@ -196,6 +198,8 @@ protected:
 		DUI_BOOL_ATTRIBUTE(_T("rich"), m_bRich, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("wordwrap"), m_bWordWrap, FALSE)
 		DUI_INT_ATTRIBUTE(_T("maxchar"), m_iLimitText, FALSE)
+		DUI_INT_ATTRIBUTE(_T("startchar"), m_nStartChar, FALSE)
+		DUI_INT_ATTRIBUTE(_T("endchar"), m_nEndChar, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("left-image"), OnAttributeLeftImage)
 		DUI_CUSTOM_ATTRIBUTE(_T("small-image"), OnAttributeSmallImage)
