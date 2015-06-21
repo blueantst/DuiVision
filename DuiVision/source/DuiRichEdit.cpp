@@ -1070,6 +1070,7 @@ CDuiRichEdit::CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_bReadOnly = false;
 	m_bNumber = false;
 	m_bWordWrap = false;
+	m_strFile = L"";
     m_iLimitText = cInitTextMax;
 	m_nStartChar = -1;
 	m_nEndChar = -1;
@@ -1447,7 +1448,8 @@ int CDuiRichEdit::GetLimitText()
 void CDuiRichEdit::SetLimitText(int iChars)
 {
     m_iLimitText = iChars;
-    if( m_pTxtWinHost ) {
+    if( m_pTxtWinHost )
+	{
         m_pTxtWinHost->LimitText(m_iLimitText);
     }
 }
@@ -1497,6 +1499,27 @@ void CDuiRichEdit::SetText(LPCTSTR pstrText)
     if( !m_pTxtWinHost ) return;
     SetSel(0, -1);
     ReplaceSel(pstrText, FALSE);
+}
+
+// 从文件中读取rtf内容
+bool CDuiRichEdit::SetFile(LPCTSTR pstrFile)
+{
+    m_strFile = pstrFile;
+    if( !m_pTxtWinHost ) return false;
+
+	SetSel(-1, -1);
+    ReplaceSel(L"", FALSE);
+
+	BYTE* pData = NULL;
+	if(DuiSystem::Instance()->LoadFileToBuffer(pstrFile, pData))
+	{
+		SetSel(0, -1);
+		ReplaceSel((LPCTSTR)pData, FALSE);
+		delete pData;
+		return true;
+	}
+	
+	return false;
 }
 
 bool CDuiRichEdit::GetModify() const
@@ -1969,6 +1992,23 @@ void CDuiRichEdit::DoInit()
 		m_pTxtWinHost->SetColor(m_clrText.ToCOLORREF());
 		SetLimitText(m_iLimitText);
 		SetFont();
+		// 加载rtf文件
+		if(!m_strFile.IsEmpty())
+		{
+			CString strFile = L"";
+			if(GetFileAttributes(DuiSystem::GetSkinPath() + strFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+			{
+				strFile = DuiSystem::GetSkinPath() + m_strFile;
+			}else
+			if(GetFileAttributes(strFile) != 0xFFFFFFFF)	// 绝对路径查找
+			{
+				strFile = m_strFile;
+			}
+			if(!strFile.IsEmpty())
+			{
+				SetFile(strFile);
+			}
+		}
 		SetSel(m_nStartChar, m_nEndChar);
 
 		m_bInited= true;
@@ -2600,13 +2640,6 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 		return handled;
 	}
-	/*MSG msg;
-	msg.hwnd = m_hWnd;
-	msg.message = WM_CHAR;
-	msg.wParam = virtualKeyCode;
-	msg.lParam = nFlags;
-	::TranslateMessage(&msg);
-	::DispatchMessage(&msg);*/
 
 	TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
 	handled = true;

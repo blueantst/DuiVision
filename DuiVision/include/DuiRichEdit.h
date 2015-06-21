@@ -45,6 +45,7 @@ public:
     long GetTextLength(DWORD dwFlags = GTL_DEFAULT) const;
     CString GetText() const;
     void SetText(LPCTSTR pstrText);
+	bool SetFile(LPCTSTR pstrFile);
     bool GetModify() const;
     void SetModify(bool bModified = true) const;
     void GetSel(CHARRANGE &cr) const;
@@ -122,9 +123,6 @@ public:
     void EndRight();
 
     //SIZE EstimateSize(SIZE szAvailable);
-    //void SetPos(RECT rc);
-    //void DoEvent(TEventUI& event);
-    //void DoPaint(HDC hDC, const RECT& rcPaint);
 
     LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
 
@@ -158,6 +156,7 @@ protected:
 	enumButtonState m_buttonState;
 	enumButtonState m_EditState;
 	CRect			m_rcText;			// 文字部分位置
+	CString			m_strFile;			// 加载的文件名
 
     CTxtWinHost*	m_pTxtWinHost;		// richedit控件
     bool			m_bVScrollBarFixing;
@@ -171,7 +170,7 @@ protected:
 	BOOL			m_bAutoVScroll;		// 自动显示垂直滚动条
 	BOOL			m_bReadOnly;		// 只读
 	BOOL			m_bNumber;			// 只能输入数字
-    BOOL			m_bRich;
+    BOOL			m_bRich;			// 是否支持rtf格式字符串
     BOOL			m_bWordWrap;		// 是否单词自动换行
 	Color			m_clrText;			// 文字颜色
 	HFONT			m_hFont;			// 字体句柄
@@ -197,6 +196,7 @@ protected:
 		DUI_BOOL_ATTRIBUTE(_T("number"), m_bNumber, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("rich"), m_bRich, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("wordwrap"), m_bWordWrap, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("file"), m_strFile, FALSE)
 		DUI_INT_ATTRIBUTE(_T("maxchar"), m_iLimitText, FALSE)
 		DUI_INT_ATTRIBUTE(_T("startchar"), m_nStartChar, FALSE)
 		DUI_INT_ATTRIBUTE(_T("endchar"), m_nEndChar, FALSE)
