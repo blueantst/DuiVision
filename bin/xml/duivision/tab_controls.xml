@@ -156,10 +156,12 @@ width-lt,height-lt,width-rb,height-rb" />
 					font="default" crtip="128,128,128,128" />
 			
 			<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
-					pos="50,270" width="200" height="60"
+					pos="50,270" width="200" height="80"
 					title="测试richedit" tip="richedit"
-					multiline="1" wantreturn="1" autohscroll="1" autovscroll="1" readonly="0" maxchar="150"
-					font="default" crtip="128,128,128,128" />
+					multiline="1" wantreturn="1" rich="1" file="rtf\rtftest.rtf"
+					hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+					readonly="0" maxchar="128000" wordwrap="1" number="0"
+					font="default" crtext="0,0,0" crtip="128,128,128,128" />
 
 			<combobox name="combobox1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
 					value="local" tip="选择MAC地址" font="bold"
