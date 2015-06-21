@@ -95,6 +95,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DuiMenu.h
 [duivision]include\DuiNativeWnd.h
 [duivision]include\DuiObject.h
+[duivision]include\DuiRichEdit.h
 [duivision]include\DUISingleton.h
 [duivision]include\DuiSlider.h
 [duivision]include\DuiSystem.h
@@ -141,6 +142,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DuiMenu.cpp
 [duivision]source\DuiNativeWnd.cpp
 [duivision]source\DuiObject.cpp
+[duivision]source\DuiRichEdit.cpp
 [duivision]source\DuiSlider.cpp
 [duivision]source\DuiSystem.cpp
 [duivision]source\DuiTab.cpp
