@@ -319,7 +319,7 @@ LRESULT CDuiWkeView::OnWmKeyDown(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         flags |= WKE_REPEAT;
     if (HIWORD(lParam) & KF_EXTENDED)
         flags |= WKE_EXTENDED;
-	if(VK_SHIFT == wParam)
+	if((GetKeyState(VK_SHIFT) & 0x8000) || (VK_SHIFT == wParam))
 		bShiftState = true;
 	HKL hKL = GetKeyboardLayout(0);
 	int i = LOWORD(hKL);
@@ -388,7 +388,6 @@ LRESULT CDuiWkeView::OnWmKeyDown(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				virtualKeyCode = '(';
 			else if(wParam == '0')
 				virtualKeyCode = ')';
-			/*
 			else if(wParam == 45)
 				virtualKeyCode = '_';
 			else if(wParam == '=')
@@ -411,7 +410,6 @@ LRESULT CDuiWkeView::OnWmKeyDown(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				virtualKeyCode = '?';
 			else if(wParam == '`')
 				virtualKeyCode = '~';
-				*/
 			else if(wParam > 0x80)
 				return 0;
 		}
