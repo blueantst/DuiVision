@@ -891,6 +891,88 @@ BOOL DuiSystem::LoadIconFile(CString strFileName, HICON& hIcon)
 	return bRet;
 }
 
+// 加载通用文件到内存,支持从zip文件中加载
+BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
+{
+	BOOL bRet = FALSE;
+	BYTE* pByte = NULL;
+	CString _strFileName = L"";
+	if(m_hResourceZip != NULL)	// 存在资源zip文件
+	{
+		// 即使有zip文件的情况下,也优先使用目录中的文件
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			_strFileName = DuiSystem::GetSkinPath() + strFileName;
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			_strFileName = strFileName;
+		}else
+		{
+			DWORD dwSize = 0;
+			pByte = LoadZipFile(strFileName, dwSize);
+			if(pByte == NULL)
+			{
+				pByte = LoadZipFile(_T("skins\\") + strFileName, dwSize);	// 尝试从skins子目录加载
+			}
+			if(pByte == NULL)
+			{
+				return FALSE;
+			}
+		}
+	}else
+	{
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			_strFileName = DuiSystem::GetSkinPath() + strFileName;
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			_strFileName = strFileName;
+		}else
+		{
+			// 文件不存在
+			return FALSE;
+		}
+	}
+
+	// 直接从文件加载
+	if((pByte == NULL) && (!_strFileName.IsEmpty()))
+	{
+		CFile file;
+		// 打开文件
+		if ( !file.Open( _strFileName, CFile::modeRead ) )
+		{
+			return FALSE;
+		}
+		DWORD dwSize = (DWORD)file.GetLength();
+		pByte = new BYTE[dwSize + 1];
+		TRY
+		{
+			file.Read( pByte, dwSize );
+		}
+		CATCH( CFileException, e );                                          
+		{
+			TRACE(_T( "Load (file): An exception occured while reading the file %s\n"), _strFileName);
+			e->Delete();
+			file.Close();
+			delete pByte;
+			return FALSE;
+		}
+		END_CATCH
+
+		file.Close();
+	}
+
+	if(pByte != NULL)
+	{
+		pBuffer = pByte;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 // 加载界面插件动态库
 // 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到exe目录加载
 // 格式2: filename.dll				-- 指定文件名,到exe目录加载

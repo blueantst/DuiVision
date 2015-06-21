@@ -119,6 +119,8 @@ public:
 	BOOL LoadBitmapFile(CString strFileName, CBitmap &bitmap, CSize &size);
 	// 加载图标文件,支持从zip文件中加载
 	BOOL LoadIconFile(CString strFileName, HICON& hIcon);
+	// 加载通用文件到内存,支持从zip文件中加载
+	BOOL LoadFileToBuffer(CString strFileName, BYTE*& pBuffer);
 	// 加载界面插件动态库
 	BOOL LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj);
 	// 获取系统配置信息
