@@ -170,7 +170,7 @@ BOOL CDuiTabCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nId = nIdIndex;
 		if(strId != _T(""))
 		{
-			nId = _wtoi(strId);
+			nId = _ttoi(strId);
 		}
 
 		CString strName = pTabElem.attribute(_T("name")).value();
@@ -197,13 +197,13 @@ BOOL CDuiTabCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nImageIndex = -1;
 		if(!strImageIndex.IsEmpty())
 		{
-			nImageIndex = _wtoi(strImageIndex);
+			nImageIndex = _ttoi(strImageIndex);
 		}
 		CString strImageCount = pTabElem.attribute(_T("img-count")).value();
 		int nImageCount = -1;
 		if(!strImageCount.IsEmpty())
 		{
-			nImageCount = _wtoi(strImageCount);
+			nImageCount = _ttoi(strImageCount);
 		}
 		// visible属性可以用visible或show
 		CString strVisible = pTabElem.attribute(_T("visible")).value();
@@ -258,7 +258,7 @@ BOOL CDuiTabCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		}else
 		if(!strSkin.IsEmpty())	// 图片资源
 		{
-			UINT uResourceID = _wtoi(strSkin);
+			UINT uResourceID = _ttoi(strSkin);
 			InsertItem(-1, nId, strName, strTitle, strAction, uResourceID, pControlPanel, nImageCount, bOutLink);
 		}else
 		if(strSkin.IsEmpty())	// 图片为空

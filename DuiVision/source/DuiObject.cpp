@@ -122,10 +122,12 @@ ULONG CDuiObject::HexStringToULong(LPCTSTR lpszValue, int nSize)
 	return ret;
 	*/
 
-	CStringA strValueA;
-	strValueA = lpszValue;
+	//CStringA strValueA;
+	//strValueA = lpszValue;//CEncodingUtil::AnsiToUnicode(lpszValue);
+	//这里不明白 我改为_T类型统一了
+	CString strValueA = lpszValue;
 
-    LPCSTR pchValue = strValueA.GetBuffer();;
+    LPCTSTR pchValue = strValueA.GetBuffer();;
     ULONG ulValue = 0;
 
     while (*pchValue && nSize != 0)

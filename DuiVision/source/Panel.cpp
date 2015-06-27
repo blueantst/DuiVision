@@ -109,7 +109,7 @@ BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 
 	if(!DuiSystem::Instance()->LoadXmlFile(xmlDoc, strFileName))
 	{
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"CDuiPanel::LoadXmlFile %s failed", strFileName);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CDuiPanel::LoadXmlFile %s failed"), strFileName);
 		return FALSE;
 	}
 
@@ -117,14 +117,14 @@ BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 	pDivElem = xmlDoc.child(_T("div"));
 	if(pDivElem == NULL)
 	{
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"CDuiPanel::LoadXmlFile %s failed, not found div node", strFileName);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CDuiPanel::LoadXmlFile %s failed, not found div node"), strFileName);
 		return FALSE;
 	}
 
 	// 加载div节点属性
 	if(!Load(pDivElem))
 	{
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"CDuiPanel::LoadXmlFile %s failed, load div node fail", strFileName);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CDuiPanel::LoadXmlFile %s failed, load div node fail"), strFileName);
 		return FALSE;
 	}
 
@@ -160,7 +160,7 @@ HRESULT CDuiPanel::OnAttributeImageScrollV(const CString& strValue, BOOL bLoadin
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))
@@ -202,7 +202,7 @@ HRESULT CDuiPanel::OnAttributeImageScrollH(const CString& strValue, BOOL bLoadin
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!m_pControScrollH->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!m_pControScrollH->SetBitmap(nResourceID, TEXT("BMP")))
@@ -245,7 +245,8 @@ HRESULT CDuiPanel::OnAttributePlugin(const CString& strValue, BOOL bLoading)
 	HINSTANCE hPluginHandle = NULL;
 	LPVOID pPluginObj = NULL;
 
-	if(DuiSystem::Instance()->LoadPluginFile(strValue, CEncodingUtil::AnsiToUnicode(IID_IDuiPluginPanel), hPluginHandle, pPluginObj))
+	//if(DuiSystem::Instance()->LoadPluginFile(strValue, CEncodingUtil::AnsiToUnicode(IID_IDuiPluginPanel), hPluginHandle, pPluginObj))
+	if(DuiSystem::Instance()->LoadPluginFile(strValue, IID_IDuiPluginPanel, hPluginHandle, pPluginObj))
 	{
 		m_strPluginFile = strValue;
 		m_hPluginHandle = hPluginHandle;
@@ -259,7 +260,8 @@ HRESULT CDuiPanel::OnAttributePlugin(const CString& strValue, BOOL bLoading)
 			nIDTemplate = pParentDlg->GetIDTemplate();
 			hWnd = pParentDlg->GetSafeHwnd();
 		}
-		m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, CEncodingUtil::UnicodeToAnsi(GetName()), m_rc);
+		//m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, CEncodingUtil::UnicodeToAnsi(GetName()), m_rc);
+		m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, GetName(), m_rc);
 	}
 
 	return bLoading?S_FALSE:S_OK;
@@ -617,7 +619,7 @@ BOOL CDuiPanel::OnControlTimer()
 {
 	if(m_pDuiPluginObject)
 	{
-		return m_pDuiPluginObject->OnTimer(0, "");
+		return m_pDuiPluginObject->OnTimer(0, _T(""));
 	}
 	return __super::OnControlTimer();
 }

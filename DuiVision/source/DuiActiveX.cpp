@@ -1178,7 +1178,11 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 		{
 			if ((pdispparams->cArgs > 0) && (pdispparams->rgvarg[0].vt == VT_BSTR))
 			{
+#ifdef _UNICODE
 				CString strProp = OLE2T(pdispparams->rgvarg[0].bstrVal);
+#else
+				CString strProp = COLE2T(pdispparams->rgvarg[0].bstrVal);
+#endif
 			}
 			return S_OK;
 		}
@@ -1233,7 +1237,11 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 			{
 				CComVariant varURL(*pdispparams->rgvarg[5].pvarVal);
 				varURL.ChangeType(VT_BSTR);
+#ifdef _UNICODE
 				CString strUrl = OLE2T(varURL.bstrVal);
+#else
+				CString strUrl = COLE2T(varURL.bstrVal);
+#endif
 				//DuiSystem::DuiMessageBox(NULL, strUrl);
 			}
 			return S_OK;
@@ -1249,7 +1257,11 @@ STDMETHODIMP CWebBrowserCtrl::Invoke(DISPID dispidMember,REFIID riid,LCID lcid,W
 			{
 				CComVariant varURL(*pdispparams->rgvarg[0].pvarVal);
 				varURL.ChangeType(VT_BSTR);
+#ifdef _UNICODE
 				CString strUrl = OLE2T(varURL.bstrVal);
+#else
+				CString strUrl = COLE2T(varURL.bstrVal);
+#endif
 			}
 			return S_OK;
 		}
@@ -1617,7 +1629,7 @@ bool CDuiActiveX::CreateControl(LPCTSTR pstrCLSID)
     CLSID clsid = { 0 };
     OLECHAR szCLSID[100] = { 0 };
 #ifndef _UNICODE
-    ::MultiByteToWideChar(::GetACP(), 0, pstrCLSID, -1, szCLSID, lengthof(szCLSID) - 1);
+    ::MultiByteToWideChar(::GetACP(), 0, pstrCLSID, -1, szCLSID, sizeof(szCLSID) - 1);
 #else
     _tcsncpy(szCLSID, pstrCLSID, 99);
 #endif
@@ -1877,7 +1889,7 @@ CDuiWebBrowserCtrl::~CDuiWebBrowserCtrl()
 // ActiveX控件初始化
 void CDuiWebBrowserCtrl::OnAxInit()
 {
-	::CLSIDFromString(_T("{8856F961-340A-11D0-A96B-00C04FD705A2}"), &m_clsid);	// IE浏览器控件ID
+	::CLSIDFromString(L"{8856F961-340A-11D0-A96B-00C04FD705A2}", &m_clsid);	// IE浏览器控件ID
 }
 
 // ActiveX控件激活
@@ -1934,10 +1946,16 @@ CString CDuiWebBrowserCtrl::getURL()
 		HRESULT hr = pIWebBrowser->get_LocationURL(&bstrURL);
 		if(SUCCEEDED(hr))
 		{
+#ifdef _UNICODE
 			return bstrURL;
+#else
+			_bstr_t tout(bstrURL, FALSE);
+			CString out = tout;
+			return out;
+#endif
 		}
 	}
-	return L"";
+	return _T("");
 }
 
 // 导航到指定的URL
@@ -2109,7 +2127,7 @@ void CDuiFlashCtrl::OnAxActivate(IUnknown *pUnknwn)
 	}
 
 	flash_->DisableLocalSecurity();
-	flash_->put_AllowScriptAccess(L"always"); 
+	flash_->put_AllowScriptAccess(bstr_t(_T("always"))); 
 }
 
 // ActiveX控件初始化完成

@@ -14,7 +14,7 @@ public:
 	static LPCTSTR GetClassName() { return _T("dlg");}
 	virtual BOOL IsClass(LPCTSTR lpszName)
 	{
-		if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;
+		if(_tcscmp(GetClassName(), lpszName)  == 0) return TRUE;
 		return __super::IsClass(lpszName);
 	}
 

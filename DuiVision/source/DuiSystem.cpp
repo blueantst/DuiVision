@@ -1,5 +1,7 @@
 #include "StdAfx.h"
 #include "DuiSystem.h"
+#include <sys/stat.h>
+#include <tchar.h>
 
 template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
@@ -230,7 +232,7 @@ CString DuiSystem::GetExePath()
 	TCHAR szdrive[_MAX_DRIVE];
 	TCHAR szdir[_MAX_DIR];
 	::GetModuleFileName(NULL, szFullPath, MAX_PATH);
-	_wsplitpath(szFullPath, szdrive, szdir, NULL, NULL);
+	_tsplitpath(szFullPath, szdrive, szdir, NULL, NULL);
 
 	CString szPath;
 	szPath.Format(_T("%s%s"), szdrive, szdir);
@@ -330,12 +332,12 @@ BOOL DuiSystem::LoadResource()
 	{
 		strResFile = m_strResourceFile;
 		strResFile.Delete(0, 4);
-		UINT nID = _wtoi(strResFile);	// res:后面的表示资源ID
+		UINT nID = _ttoi(strResFile);	// res:后面的表示资源ID
 		if(nID != 0)
 		{
 			// 读取资源
 			HINSTANCE hInst = AfxGetResourceHandle();  
-			HRSRC hRsrc = ::FindResource (hInst,MAKEINTRESOURCE(nID), L"UI");
+			HRSRC hRsrc = ::FindResource (hInst,MAKEINTRESOURCE(nID), _T("UI"));
 			if(hRsrc != NULL)
 			{
 				DWORD dwResFileSize = SizeofResource(hInst, hRsrc);  
@@ -501,28 +503,28 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 					CString strLang = pResElem.attribute(_T("lang")).value();
 					CString strName = pResElem.attribute(_T("name")).value();
 					CString strFont = pResElem.attribute(_T("font")).value();
-					int nFontWidth = _wtoi(pResElem.attribute(_T("size")).value());
+					int nFontWidth = _ttoi(pResElem.attribute(_T("size")).value());
 					CString strOS = pResElem.attribute(_T("os")).value();
 					CString strBold = pResElem.attribute(_T("bold")).value();
 					BOOL bBold = FALSE;
 					if(pResElem.attribute(_T("bold")).value())
 					{
-						bBold = (wcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
+						bBold = (_tcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
 					}
 					BOOL bItalic = FALSE;
 					if(pResElem.attribute(_T("italic")).value())
 					{
-						bItalic = (wcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
+						bItalic = (_tcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
 					}
 					BOOL bUnderline = FALSE;
 					if(pResElem.attribute(_T("underline")).value())
 					{
-						bUnderline = (wcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
+						bUnderline = (_tcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
 					}
 					BOOL bStrikeout = FALSE;
 					if(pResElem.attribute(_T("strikeout")).value())
 					{
-						bStrikeout = (wcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
+						bStrikeout = (_tcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
 					}
 					FontStyle fontStyle = FontStyleRegular;
 					if(bBold)
@@ -715,7 +717,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 				//delete[] pByte;
 			}else
 			{
-				DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"DuiSystem::LoadXmlFile %s failed, not found xml in zip file", strXmlFile);
+				DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("DuiSystem::LoadXmlFile %s failed, not found xml in zip file"), strXmlFile);
 				return FALSE;
 			}
 		}
@@ -735,7 +737,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 		}else
 		{
 			// 文件不存在
-			DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"DuiSystem::LoadXmlFile %s failed, not found xml file", strXmlFile);
+			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("DuiSystem::LoadXmlFile %s failed, not found xml file"), strXmlFile);
 			return FALSE;
 		}
 	}
@@ -896,7 +898,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
 {
 	BOOL bRet = FALSE;
 	BYTE* pByte = NULL;
-	CString _strFileName = L"";
+	CString _strFileName = _T("");
 	if(m_hResourceZip != NULL)	// 存在资源zip文件
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
@@ -977,7 +979,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
 // 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到exe目录加载
 // 格式2: filename.dll				-- 指定文件名,到exe目录加载
 // 格式3: c:\filename.dll			-- 指定了dll的全路径
-typedef LPVOID (*TYPEOF_CreateObject)(LPCSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData);
+typedef LPVOID (*TYPEOF_CreateObject)(LPCTSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData);
 BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj)
 {
 	hPluginHandle = NULL;
@@ -1011,7 +1013,7 @@ BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANC
 	{
 		// 加载失败
 		DWORD dwError = ::GetLastError();
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Load UI plugin %s failed, errorcode is %u", strPluginFile, dwError);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load UI plugin %s failed, errorcode is %u"), strPluginFile, dwError);
 		return FALSE;
 	}
 
@@ -1021,22 +1023,23 @@ BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANC
 	if(fnCreateObject == NULL)
 	{
 		FreeLibrary(hPluginHandle);
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Load UI plugin %s failed, not found CreateObject function", strPluginFile);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load UI plugin %s failed, not found CreateObject function"), strPluginFile);
 		return FALSE;
 	}
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Load UI plugin %s succ", strPluginFile);
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Load UI plugin %s succ"), strPluginFile);
 
 	LPVOID pIVciControl = NULL;
-	pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(strObjType), &pIVciControl, NULL);
+	//pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(strObjType), &pIVciControl, NULL);
+	pPluginObj = fnCreateObject(strObjType, &pIVciControl, NULL);
 	if(pPluginObj == NULL)
 	{
 		FreeLibrary(hPluginHandle);
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Create UI plugin %s - %s object failed", strPluginFile, strObjType);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Create UI plugin %s - %s object failed"), strPluginFile, strObjType);
 		return FALSE;
 	}
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Create UI plugin %s - %s object succ", strPluginFile, strObjType);
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Create UI plugin %s - %s object succ"), strPluginFile, strObjType);
 
 	return TRUE;
 }
@@ -1130,7 +1133,7 @@ CString DuiSystem::GetOSName()
 		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
 		if (! GetVersionEx( (OSVERSIONINFO *) &osvi) )
 		{
-			return L"";
+			return _T("");
 		}
 	}
 	
@@ -1213,34 +1216,34 @@ CString DuiSystem::GetOSName()
 	switch( nOSType )
 	{
 	case WINDOWS_8:
-		strOSType = L"win8";
+		strOSType = _T("win8");
 		break;
 	case WINDOWS_7:
-		strOSType = L"win7";
+		strOSType = _T("win7");
 		break;
 	case WINDOWS_VISTA:
-		strOSType = L"vista";
+		strOSType = _T("vista");
 		break;
 	case WINDOWS_2003:
-		strOSType = L"win2003";
+		strOSType = _T("win2003");
 		break;
 	case WINDOWS_XP:
-		strOSType = L"winxp";
+		strOSType = _T("winxp");
 		break;
 	case WINDOWS_2K:
-		strOSType = L"win2000";
+		strOSType = _T("win2000");
 		break;
 	case WINDOWS_NT:
-		strOSType = L"winnt";
+		strOSType = _T("winnt");
 		break;
 	case WINDOWS_ME:
-		strOSType = L"winme";
+		strOSType = _T("winme");
 		break;
 	case WINDOWS_98:
-		strOSType = L"win98";
+		strOSType = _T("win98");
 		break;
 	case WINDOWS_95:
-		strOSType = L"win95";
+		strOSType = _T("win95");
 		break;
 	}
 	return strOSType;
@@ -1251,7 +1254,7 @@ BOOL DuiSystem::CheckOSName(CString strOS)
 {
 	CString strCurOSName = GetOSName();
 	int nPos = -1;
-	while((nPos = strOS.Find(L",")) != -1)
+	while((nPos = strOS.Find(_T(","))) != -1)
 	{
 		CString strTemp = strOS.Left(nPos);
 		strOS.Delete(0, nPos+1);
@@ -2023,7 +2026,7 @@ BOOL DuiSystem::ExecuteProcess(CString strProcessName, CString strCmdLine, BOOL 
         sei.hwnd = NULL;
         sei.lpVerb = _T("runas");
         sei.lpFile = strProcessName;
-        sei.lpParameters = (LPWSTR)(LPCWSTR)strCmdLine;
+        sei.lpParameters = (LPCTSTR)strCmdLine;
         sei.nShow = SW_SHOWNORMAL;
 
         bRet = ::ShellExecuteEx(&sei);
@@ -2033,7 +2036,7 @@ BOOL DuiSystem::ExecuteProcess(CString strProcessName, CString strCmdLine, BOOL 
     {
         bRet = ::CreateProcess(
             strProcessName, 
-            (LPWSTR)(LPCWSTR)strCmdLine, 
+            (LPTSTR)(LPCTSTR)strCmdLine, 
             NULL, NULL, FALSE, 0, NULL, NULL, &si, &processInfo
             );
 
@@ -2462,7 +2465,7 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 		DuiSystem::Instance()->LoadIconFile(strTrayIcon, m_NotifyIconData.hIcon);
 	}else	// 加载图标资源
 	{
-		UINT nResourceID = _wtoi(strTrayIcon);
+		UINT nResourceID = _ttoi(strTrayIcon);
 		LoadIconFromIDResource(nResourceID, m_NotifyIconData.hIcon);
 	}
 
@@ -2519,7 +2522,7 @@ BOOL DuiSystem::SetTrayIcon(CString strIcon)
 			DuiSystem::Instance()->LoadIconFile(strIcon, m_NotifyIconData.hIcon);
 		}else	// 加载图标资源
 		{
-			UINT nResourceID = _wtoi(strIcon);
+			UINT nResourceID = _ttoi(strIcon);
 			LoadIconFromIDResource(nResourceID, m_NotifyIconData.hIcon);
 		}
 
@@ -2602,13 +2605,13 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	// 初始化进程间通知消息
 	DUI_INTERPROCESS_MSG interMsg;
 	memset(&interMsg, 0, sizeof(DUI_INTERPROCESS_MSG));
-	wcscpy_s(interMsg.wAppName, strAppName.GetBuffer(0));
+	_tcscpy_s(interMsg.wAppName, strAppName.GetBuffer(0));
 	strAppName.ReleaseBuffer();
 	interMsg.uControlID = APP_IPC;	// 控件ID使用预定义额进程间消息控件ID
 	interMsg.uMsg = uMsg;
 	interMsg.wParam = wParam;
 	interMsg.lParam = lParam;
-	wcscpy_s(interMsg.wInfo, strInfo.GetBuffer(0));
+	_tcscpy_s(interMsg.wInfo, strInfo.GetBuffer(0));
 	strInfo.ReleaseBuffer();
 	memcpy(pViewOfFile, &interMsg, sizeof(DUI_INTERPROCESS_MSG));
 
@@ -2638,22 +2641,22 @@ void DuiSystem::InitLog()
 		return;
 	}
 	m_strLogFile = GetExePath() + strLogFile;
-	m_nLogLevel = _wtoi(GetConfig(_T("loglevel")));
+	m_nLogLevel = _ttoi(GetConfig(_T("loglevel")));
 	m_bLogEnable = TRUE;
 	InitializeCriticalSection(&m_WriteLogMutex);
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"------------------DuiVision Start-------------------");
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision Start-------------------"));
 }
 
 // 结束日志
 void DuiSystem::DoneLog()
 {
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"------------------DuiVision End-------------------");
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision End-------------------"));
 	DeleteCriticalSection(&m_WriteLogMutex);
 }
 
 // 记录日志
-void DuiSystem::LogEvent(int nLevel, LPCWSTR lpFormat, ...)
+void DuiSystem::LogEvent(int nLevel, LPCTSTR lpFormat, ...)
 {
 	if(!DuiSystem::Instance()->IsLogEnable())
 	{
@@ -2668,21 +2671,28 @@ void DuiSystem::LogEvent(int nLevel, LPCWSTR lpFormat, ...)
 	EnterCriticalSection(DuiSystem::Instance()->GetLogMutex());
 
 	const int nBufLen = MAX_PATH * 2;
-	WCHAR szBuf[nBufLen];
+	TCHAR szBuf[nBufLen];
 	va_list ap;
 
 	va_start(ap, lpFormat);
-	_vsnwprintf(szBuf, nBufLen, lpFormat, ap);
-	szBuf[nBufLen - 1] = 0;
+	int nStrLen=_vsntprintf_s(szBuf, nBufLen-1, lpFormat, ap);
+	if(nStrLen>0) szBuf[nStrLen - 1] = 0;
+	//_vsntprintf(szBuf, nBufLen, lpFormat, ap);
+	//szBuf[nBufLen - 1] = 0;
+	va_end(ap);
 
 	FILE* lpFile = _tfopen(DuiSystem::Instance()->GetLogFile(), _T("a+"));
 	if ( lpFile != NULL )
 	{
 		// 获取文件大小
-		struct _stat FileBuff;
 		int nResult = -1;
-
+#ifdef _UNICODE
+		struct _stat FileBuff;
 		nResult = _wstat(DuiSystem::Instance()->GetLogFile(), &FileBuff);
+#else
+		struct _tstat FileBuff;
+		nResult = _tstat(DuiSystem::Instance()->GetLogFile(), &FileBuff);
+#endif
 		if (0 != nResult)
 		{
 			LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
@@ -2697,10 +2707,10 @@ void DuiSystem::LogEvent(int nLevel, LPCWSTR lpFormat, ...)
 			fclose(lpFile);
 
 			// 删除备份文件
-			_unlink(CEncodingUtil::UnicodeToAnsi(DuiSystem::Instance()->GetLogFile() + _T(".bak")));
+			_tunlink(DuiSystem::Instance()->GetLogFile() + _T(".bak"));
 
 			// 重命名文件名为备份文件名
-			rename(CEncodingUtil::UnicodeToAnsi(DuiSystem::Instance()->GetLogFile()), CEncodingUtil::UnicodeToAnsi(DuiSystem::Instance()->GetLogFile() + _T(".bak")));
+			_trename(DuiSystem::Instance()->GetLogFile(), DuiSystem::Instance()->GetLogFile() + _T(".bak"));
 
 			// 打开新文件
 			lpFile = _tfopen(DuiSystem::Instance()->GetLogFile(), _T("w+"));//,ccs=UTF-8"));
@@ -2751,8 +2761,6 @@ void DuiSystem::LogEvent(int nLevel, LPCWSTR lpFormat, ...)
 		_ftprintf(lpFile, lpStr, strLevel, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, dwCurThreadID, szBuf);
 		fclose(lpFile);
 	}
-
-	va_end(ap);
 
 	LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
 }

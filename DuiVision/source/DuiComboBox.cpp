@@ -55,7 +55,7 @@ BOOL CDuiComboBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 
 			if(strImage.Find(_T(".")) == -1)	// 加载图片资源
 			{
-				nResourceID = _wtoi(strImage);
+				nResourceID = _ttoi(strImage);
 				strImage = _T("");
 			}
 		}
@@ -140,7 +140,7 @@ int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, in
 			}*/
 		}else	// 加载图片资源
 		{
-			nResourceID = _wtoi(strImage);
+			nResourceID = _ttoi(strImage);
 			strImage = _T("");
 		}
 	}
@@ -215,7 +215,7 @@ HRESULT CDuiComboBox::OnAttributeHeadImage(const CString& strValue, BOOL bLoadin
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		m_nResourceIDHeadBitmap = nResourceID;
 	}
 
@@ -247,7 +247,7 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CString& strValue, BOOL bLoad
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		m_nResourceIDDeleteBitmap = nResourceID;
 	}
 

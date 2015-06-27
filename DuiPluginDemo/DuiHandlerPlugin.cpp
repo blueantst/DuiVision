@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "DuiHandlerPlugin.h"
 
-#define XML_ABOUT_DLG L"<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+#define XML_ABOUT_DLG _T("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <dlg name=\"dlg_about\" title=\"MsgBox\" width=\"450\" height=\"230\" appwin=\"0\" >\
 	<base>\
 		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\" shortcut=\"ESC\"/>\
@@ -23,7 +23,7 @@
 		<text crtext=\"000080\" pos=\"170,140,-25,160\" title=\"此对话框由定义的XML内容创建\" />\
 		<button name=\"button.ok\" skin=\"IDB_BT_DEFAULT\" title=\"[OK]\" pos=\"-100,-30,-20,-6\" />\
 	</body>\
-</dlg>";
+</dlg>");
 
 //////////////////////////////////////////////////////////////
 // CDuiHandlerPlugin
@@ -42,7 +42,7 @@ CDuiHandlerPlugin::~CDuiHandlerPlugin(void)
 // 初始化
 void CDuiHandlerPlugin::OnInit()
 {
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiHandlerPlugin::OnInit");
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiHandlerPlugin::OnInit"));
 
 	// 启动动画定时器
 	m_uTimerAni = DuiSystem::AddDuiTimer(500);
@@ -186,10 +186,10 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT M
 	}
 	// 演示如何在菜单加载时候更改菜单项的显示标题、可见性、是否禁用、是否选择等属性
 	// 必须在调用LoadXmlFile之前通过菜单项名字来设置相应菜单项的属性
-	pDuiMenu->SetItemTitle(L"item_login", L"认证--修改Title");
-	pDuiMenu->SetItemCheck(L"item_setup", 0);
-	pDuiMenu->SetItemVisible(L"item_help", FALSE);
-	pDuiMenu->SetItemDisable(L"item_about", TRUE);
+	pDuiMenu->SetItemTitle(_T("item_login"), _T("认证--修改Title"));
+	pDuiMenu->SetItemCheck(_T("item_setup"), 0);
+	pDuiMenu->SetItemVisible(_T("item_help"), FALSE);
+	pDuiMenu->SetItemDisable(_T("item_about"), TRUE);
 	if(pDuiMenu->LoadXmlFile(_T("menu_tray"), NULL, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);

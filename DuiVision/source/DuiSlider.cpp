@@ -334,7 +334,7 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 
 				CString strText;
 				// 只有最大值设置为100情况下才会显示百分号
-				strText.Format(L"%s%d%s", m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? L"%" : L"");
+				strText.Format(_T("%s%d%s"), m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? _T("%") : _T(""));
 				BSTR bsTitle = strText.AllocSysString();
 				RectF rect((Gdiplus::REAL)(0), (Gdiplus::REAL)nPosY, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)nHeight);
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);

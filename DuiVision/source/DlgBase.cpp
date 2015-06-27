@@ -87,7 +87,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 			DuiSystem::Instance()->LoadIconFile(strTrayIcon, m_hIcon);
 		}else	// 加载图标资源
 		{
-			UINT nResourceID = _wtoi(strTrayIcon);
+			UINT nResourceID = _ttoi(strTrayIcon);
 			LoadIconFromIDResource(nResourceID, m_hIcon);
 		}
 	}
@@ -289,7 +289,7 @@ BOOL CDlgBase::OnInitDialog()
 	tmpFont.GetLogFont(&font);
 
 	CWindowDC dc(this);
-	wcscpy(font.lfFaceName,DuiSystem::GetDefaultFont());
+	_tcscpy(font.lfFaceName,DuiSystem::GetDefaultFont());
 	font.lfHeight = -10 * GetDeviceCaps(dc.m_hDC, LOGPIXELSY) / 72;
 	font.lfWeight = 600;
 
@@ -480,14 +480,14 @@ void CDlgBase::InitDialogValue()
 		{
 			if(pCtrlValue->strType == _T("width"))
 			{
-				m_MinSize.cx = _wtoi(pCtrlValue->strValue);
+				m_MinSize.cx = _ttoi(pCtrlValue->strValue);
 				// 更新窗口大小
 				SetMinSize(m_MinSize.cx, m_MinSize.cy);
 				SetRect(CRect(0, 0, m_MinSize.cx, m_MinSize.cy));
 			}else
 			if(pCtrlValue->strType == _T("height"))
 			{
-				m_MinSize.cy = _wtoi(pCtrlValue->strValue);
+				m_MinSize.cy = _ttoi(pCtrlValue->strValue);
 				// 更新窗口大小
 				SetMinSize(m_MinSize.cx, m_MinSize.cy);
 				SetRect(CRect(0, 0, m_MinSize.cx, m_MinSize.cy));
@@ -519,11 +519,11 @@ void CDlgBase::InitControlValue()
 		{
 			if(pCtrlValue->strType == _T("visible"))
 			{
-				pControl->SetVisible(_wtoi(pCtrlValue->strValue));
+				pControl->SetVisible(_ttoi(pCtrlValue->strValue));
 			}else
 			if(pCtrlValue->strType == _T("disable"))
 			{
-				pControl->SetDisable(_wtoi(pCtrlValue->strValue));
+				pControl->SetDisable(_ttoi(pCtrlValue->strValue));
 			}else
 			if(pCtrlValue->strType == _T("title"))
 			{
@@ -906,7 +906,7 @@ HRESULT CDlgBase::OnAttributeResize(const CString& strValue, BOOL bLoading)
     if (strValue.IsEmpty()) return E_FAIL;
 
 	// 获取resize属性，并重新设置一下窗口风格
-	m_bChangeSize = _wtoi(strValue);
+	m_bChangeSize = _ttoi(strValue);
 
 	// 设置窗口风格
 	DWORD dwStyle = ::GetWindowLong(m_hWnd, GWL_STYLE)
@@ -950,7 +950,7 @@ void CDlgBase::InitWindowBkSkin()
 			nType = BKTYPE_IMAGE_FILE;
 		}else	// 加载图片资源
 		{
-			nIDResource = _wtoi(strImgFile);
+			nIDResource = _ttoi(strImgFile);
 			nType = BKTYPE_IMAGE_RESOURCE;
 		}
 	}else

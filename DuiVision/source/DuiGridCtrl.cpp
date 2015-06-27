@@ -102,31 +102,31 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nWidth = -1;
 		if(!strWidth.IsEmpty())
 		{
-			nWidth = _wtoi(strWidth);
+			nWidth = _ttoi(strWidth);
 		}
 		UINT uAlignment = 0xFFFFUL;
-		if(strAlign == L"left")
+		if(strAlign == _T("left"))
 		{
 			uAlignment = Align_Left;
 		}else
-		if(strAlign == L"center")
+		if(strAlign ==_T("center"))
 		{
 			uAlignment = Align_Center;
 		}else
-		if(strAlign == L"right")
+		if(strAlign == _T("right"))
 		{
 			uAlignment = Align_Right;
 		}
 		UINT uVAlignment = 0xFFFFUL;
-		if(strVAlign == L"top")
+		if(strVAlign == _T("top"))
 		{
 			uVAlignment = VAlign_Top;
 		}else
-		if(strVAlign == L"middle")
+		if(strVAlign == _T("middle"))
 		{
 			uVAlignment = VAlign_Middle;
 		}else
-		if(strVAlign == L"bottom")
+		if(strVAlign == _T("bottom"))
 		{
 			uVAlignment = VAlign_Bottom;
 		}
@@ -145,7 +145,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nCheck = -1;
 		if(!strCheck.IsEmpty())
 		{
-			nCheck = _wtoi(strCheck);
+			nCheck = _ttoi(strCheck);
 		}
 
 		// ×ó±ßÍ¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
@@ -168,7 +168,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		if(!strSkin.IsEmpty())
 		{
 			// Í¼Æ¬Ë÷Òý
-			nImageIndex = _wtoi(strSkin);
+			nImageIndex = _ttoi(strSkin);
 		}
 
 		// ÓÒ±ßÍ¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
@@ -191,7 +191,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		if(!strRightSkin.IsEmpty())
 		{
 			// Í¼Æ¬Ë÷Òý
-			nRightImageIndex = _wtoi(strRightSkin);
+			nRightImageIndex = _ttoi(strRightSkin);
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
@@ -236,7 +236,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			if(!strSkin.IsEmpty())
 			{
 				// Í¼Æ¬Ë÷Òý
-				nImageIndex = _wtoi(strSkin);
+				nImageIndex = _ttoi(strSkin);
 			}
 
 			BOOL bUseTitleFont = (strFontTitle == _T("1"));
@@ -573,7 +573,7 @@ BOOL CDuiGridCtrl::AddSubItemControl(int nRow, int nItem, CControlBase* pControl
 	GridItemInfo* pItemInfo = GetItemInfo(nRow, nItem);
 	if(pItemInfo == NULL)
 	{
-		SetSubItem(nRow, nItem, L"");
+		SetSubItem(nRow, nItem, _T(""));
 		pItemInfo = GetItemInfo(nRow, nItem);
 	}
 	if(pItemInfo == NULL)

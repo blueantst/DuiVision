@@ -79,12 +79,12 @@
 // 进程间消息内容的结构定义
 struct DUI_INTERPROCESS_MSG
 {
-	WCHAR	wAppName[128];		// 应用名
+	TCHAR	wAppName[128];		// 应用名
 	UINT	uControlID;			// 控件ID
-	WCHAR	wControlName[64];	// 控件名字
+	TCHAR	wControlName[64];	// 控件名字
 	UINT	uMsg;				// 消息
 	WPARAM	wParam;				// 参数1
 	LPARAM	lParam;				// 参数2
-	WCHAR	wInfo[10240];		// 信息字符串
+	TCHAR	wInfo[10240];		// 信息字符串
 	UINT	uDataLen;			// 扩展部分长度
 };

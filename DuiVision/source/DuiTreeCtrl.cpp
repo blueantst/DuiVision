@@ -114,7 +114,7 @@ BOOL CDuiTreeCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nWidth = -1;
 		if(!strWidth.IsEmpty())
 		{
-			nWidth = _wtoi(strWidth);
+			nWidth = _ttoi(strWidth);
 		}
 		InsertColumn(-1, strTitle, nWidth, clrText);
 	}
@@ -144,7 +144,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		int nCheck = -1;
 		if(!strCheck.IsEmpty())
 		{
-			nCheck = _wtoi(strCheck);
+			nCheck = _ttoi(strCheck);
 		}
 
 		BOOL bCollapse = (strCollapse == _T("1"));
@@ -169,7 +169,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		if(!strSkin.IsEmpty())
 		{
 			// Í¼Æ¬Ë÷Òý
-			nImageIndex = _wtoi(strSkin);
+			nImageIndex = _ttoi(strSkin);
 		}
 
 		// ÓÒ±ßÍ¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
@@ -192,7 +192,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		if(!strRightSkin.IsEmpty())
 		{
 			// Í¼Æ¬Ë÷Òý
-			nRightImageIndex = _wtoi(strRightSkin);
+			nRightImageIndex = _ttoi(strRightSkin);
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
@@ -258,9 +258,9 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 			if(!strSkin.IsEmpty())
 			{
 				// Í¼Æ¬Ë÷Òý
-				nImageIndex = _wtoi(strSkin);
+				nImageIndex = _ttoi(strSkin);
 			}
-			int nImageCount = _wtoi(strImageCount);
+			int nImageCount = _ttoi(strImageCount);
 
 			BOOL bUseTitleFont = (strFontTitle == _T("1"));
 
@@ -661,7 +661,7 @@ BOOL CDuiTreeCtrl::AddSubItemControl(HTREEITEM hNode, int nItem, CControlBase* p
 	TreeItemInfo* pItemInfo = GetItemInfo(hNode, nItem);
 	if(pItemInfo == NULL)
 	{
-		SetSubItem(hNode, nItem, L"");
+		SetSubItem(hNode, nItem, _T(""));
 		pItemInfo = GetItemInfo(hNode, nItem);
 	}
 	if(pItemInfo == NULL)

@@ -103,7 +103,7 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nCheck = -1;
 		if(!strCheck.IsEmpty())
 		{
-			nCheck = _wtoi(strCheck);
+			nCheck = _ttoi(strCheck);
 		}
 
 		// ×ó±ßÍ¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
@@ -126,7 +126,7 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		if(!strSkin.IsEmpty())
 		{
 			// Í¼Æ¬Ë÷Òý
-			nImageIndex = _wtoi(strSkin);
+			nImageIndex = _ttoi(strSkin);
 		}
 
 		// ÓÒ±ßÍ¼Æ¬,Í¨¹ýSkin¶ÁÈ¡
@@ -149,7 +149,7 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		if(!strRightSkin.IsEmpty())
 		{
 			// Í¼Æ¬Ë÷Òý
-			nRightImageIndex = _wtoi(strRightSkin);
+			nRightImageIndex = _ttoi(strRightSkin);
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
