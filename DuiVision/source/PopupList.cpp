@@ -91,7 +91,7 @@ BOOL CPopupList::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 						//strImage = DuiSystem::GetExePath() + strImage;
 					}else	// º”‘ÿÕº∆¨◊ ‘¥
 					{
-						nResourceID = _wtoi(strImage);
+						nResourceID = _ttoi(strImage);
 						strImage = _T("");
 					}
 				}

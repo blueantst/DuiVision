@@ -218,7 +218,7 @@ public:
 	CRITICAL_SECTION* GetLogMutex() { return &m_WriteLogMutex; }
 	void InitLog();
 	void DoneLog();
-	static void	LogEvent(int nLevel, LPCWSTR lpFormat, ...);
+	static void	LogEvent(int nLevel, LPCTSTR lpFormat, ...);
 
 protected:
     void createSingletons();

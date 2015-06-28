@@ -53,7 +53,7 @@ HRESULT CDuiScroll::OnAttributeMaxRange(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nMaxRange = _wtoi(strValue);
+	m_nMaxRange = _ttoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
@@ -64,7 +64,7 @@ HRESULT CDuiScroll::OnAttributeCurrentPos(const CString& strValue, BOOL bLoading
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nCurrentPos = _wtoi(strValue);
+	m_nCurrentPos = _ttoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
@@ -75,7 +75,7 @@ HRESULT CDuiScroll::OnAttributePageRange(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nPageRange = _wtoi(strValue);
+	m_nPageRange = _ttoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
@@ -86,7 +86,7 @@ HRESULT CDuiScroll::OnAttributeRowRange(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nRowRange = _wtoi(strValue);
+	m_nRowRange = _ttoi(strValue);
 	SetRange();
 
 	return bLoading?S_FALSE:S_OK;
@@ -358,7 +358,7 @@ HRESULT CDuiScrollVertical::OnAttributeUpImage(const CString& strValue, BOOL bLo
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!((CImageButton*)m_pControlUpImage)->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!((CImageButton*)m_pControlUpImage)->SetBitmap(nResourceID, TEXT("BMP")))
@@ -402,7 +402,7 @@ HRESULT CDuiScrollVertical::OnAttributeDownImage(const CString& strValue, BOOL b
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!((CImageButton*)m_pControlDownImage)->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!((CImageButton*)m_pControlDownImage)->SetBitmap(nResourceID, TEXT("BMP")))
@@ -792,7 +792,7 @@ HRESULT CDuiScrollHorizontal::OnAttributeLeftImage(const CString& strValue, BOOL
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!((CImageButton*)m_pControlLeftImage)->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!((CImageButton*)m_pControlLeftImage)->SetBitmap(nResourceID, TEXT("BMP")))
@@ -836,7 +836,7 @@ HRESULT CDuiScrollHorizontal::OnAttributeRightImage(const CString& strValue, BOO
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!((CImageButton*)m_pControlRightImage)->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!((CImageButton*)m_pControlRightImage)->SetBitmap(nResourceID, TEXT("BMP")))

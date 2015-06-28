@@ -188,7 +188,7 @@ HRESULT CDuiText::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
 		}
 	}else	// ¼ÓÔØÍ¼Æ¬×ÊÔ´
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))

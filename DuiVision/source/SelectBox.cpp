@@ -84,7 +84,7 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 					SetBitmap(strImgFile);
 				}else	// º”‘ÿÕº∆¨◊ ‘¥
 				{
-					UINT nResourceID = _wtoi(strImage);
+					UINT nResourceID = _ttoi(strImage);
 					if(!SetBitmap(nResourceID, -1, TEXT("PNG")))
 					{
 						SetBitmap(nResourceID, -1, TEXT("BMP"));

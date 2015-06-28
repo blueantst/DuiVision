@@ -1070,7 +1070,7 @@ CDuiRichEdit::CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_bReadOnly = false;
 	m_bNumber = false;
 	m_bWordWrap = false;
-	m_strFile = L"";
+	m_strFile = _T("");
     m_iLimitText = cInitTextMax;
 	m_nStartChar = -1;
 	m_nEndChar = -1;
@@ -1220,7 +1220,7 @@ HRESULT CDuiRichEdit::OnAttributeLeftImage(const CString& strValue, BOOL bLoadin
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!SetLeftBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetLeftBitmap(nResourceID, TEXT("BMP")))
@@ -1306,7 +1306,7 @@ HRESULT CDuiRichEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoadi
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!SetSmallBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetSmallBitmap(nResourceID, TEXT("BMP")))
@@ -1508,7 +1508,7 @@ bool CDuiRichEdit::SetFile(LPCTSTR pstrFile)
     if( !m_pTxtWinHost ) return false;
 
 	SetSel(-1, -1);
-    ReplaceSel(L"", FALSE);
+    ReplaceSel(_T(""), FALSE);
 
 	BYTE* pData = NULL;
 	if(DuiSystem::Instance()->LoadFileToBuffer(pstrFile, pData))
@@ -1586,7 +1586,7 @@ void CDuiRichEdit::ReplaceSelW(LPCWSTR lpszNewText, bool bCanUndo)
 
 CString CDuiRichEdit::GetSelText() const
 {
-    if( !m_pTxtWinHost ) return L"";
+    if( !m_pTxtWinHost ) return _T("");
     CHARRANGE cr;
     cr.cpMin = cr.cpMax = 0;
     TxSendMessage(EM_EXGETSEL, 0, (LPARAM)&cr, 0);
@@ -1995,7 +1995,7 @@ void CDuiRichEdit::DoInit()
 		// 加载rtf文件
 		if(!m_strFile.IsEmpty())
 		{
-			CString strFile = L"";
+			CString strFile = _T("");
 			if(GetFileAttributes(DuiSystem::GetSkinPath() + strFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 			{
 				strFile = DuiSystem::GetSkinPath() + m_strFile;
@@ -2540,8 +2540,8 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		bShiftState = true;
 	HKL hKL = GetKeyboardLayout(0);
 	int i = LOWORD(hKL);
-	WCHAR buffer[255];   
-	memset(buffer,0,255 * sizeof(WCHAR));  
+	TCHAR buffer[255];   
+	memset(buffer,0,255 * sizeof(TCHAR));  
 	if( (i == 0x0804) && (ImmIsIME(hKL)) )
 	{
 		ImmGetDescription(hKL,buffer,255);

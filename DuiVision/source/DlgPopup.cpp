@@ -454,7 +454,7 @@ HRESULT CDlgPopup::OnAttributeBkImage(const CString& strValue, BOOL bLoading)
 		SetBackBitmap(strImgFile);
 	}else	// ╪стьм╪ф╛вйт╢
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		SetBackBitmap(nResourceID);
 	}
 

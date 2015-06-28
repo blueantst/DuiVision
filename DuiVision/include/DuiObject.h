@@ -8,7 +8,7 @@
 public:                                                 \
     static CControlBase* CheckAndNew(LPCTSTR lpszName, HWND hWnd, CDuiObject* pDuiObject)       \
     {                                                   \
-        if (wcscmp(GetClassName(), lpszName)  == 0)     \
+        if (_tcscmp(GetClassName(), lpszName)  == 0)     \
 		{\
 			CControlBase* pControl = new theclass(hWnd, pDuiObject);							\
 			return pControl;                        \
@@ -29,7 +29,7 @@ public:                                                 \
                                                         \
     virtual BOOL IsClass(LPCTSTR lpszName)               \
     {                                                   \
-        if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;  \
+        if(_tcscmp(GetClassName(), lpszName)  == 0) return TRUE;  \
 		return __super::IsClass(lpszName);				\
     }                                                   \
 														\
@@ -286,7 +286,7 @@ public:                                                             \
 			}	\
 		}else	\
 		{	\
-			UINT nResourceID = _wtoi(strSkin);	\
+			UINT nResourceID = _ttoi(strSkin);	\
 			if(!Set##imgName##Bitmap(nResourceID, TEXT("PNG")))	\
 			{	\
 				if(!Set##imgName##Bitmap(nResourceID, TEXT("BMP")))	\

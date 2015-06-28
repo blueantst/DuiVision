@@ -1081,7 +1081,7 @@ HRESULT CControlBase::OnAttributeWidth(const CString& strValue, BOOL bLoading)
 {
     if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nWidth = _wtoi(strValue);
+	m_nWidth = _ttoi(strValue);
 	m_rc.right = m_rc.left + m_nWidth;
 	SetRect(m_rc);
 
@@ -1093,7 +1093,7 @@ HRESULT CControlBase::OnAttributeHeight(const CString& strValue, BOOL bLoading)
 {
     if (strValue.IsEmpty()) return E_FAIL;
 
-	m_nHeight = _wtoi(strValue);
+	m_nHeight = _ttoi(strValue);
 	m_rc.bottom = m_rc.top + m_nHeight;
 	SetRect(m_rc);
 
@@ -1181,7 +1181,7 @@ HRESULT CControlBase::OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoadi
 	CStringArray asDuiMsg;
 	CString strDuiMsg = strValue;
 	int nPos = -1;
-	while((nPos = strDuiMsg.Find(L"|")) != -1)
+	while((nPos = strDuiMsg.Find(_T("|"))) != -1)
 	{
 		CString strTemp = strDuiMsg.Left(nPos);
 		strDuiMsg.Delete(0, nPos+1);
@@ -1939,7 +1939,7 @@ BOOL CControlBaseFont::SetImage(CString strImage)
 		}
 	}else	// º”‘ÿÕº∆¨◊ ‘¥
 	{
-		UINT nResourceID = _wtoi(strImage);
+		UINT nResourceID = _ttoi(strImage);
 		if(!SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetBitmap(nResourceID, TEXT("BMP")))

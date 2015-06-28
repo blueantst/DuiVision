@@ -26,8 +26,8 @@ CDuiWkeView::CDuiWkeView(HWND hWnd, CDuiObject* pDuiObject)
 	m_bDelayCreate = false;
 	m_bTransparent = false;
 	m_pWebView = NULL;
-	m_strUrl = L"";
-	m_strHtml = L"";
+	m_strUrl = _T("");
+	m_strHtml = _T("");
 
 	CDuiWkeView::WkeInit();
 	g_duiWkeViews.AddTail(this);
@@ -179,7 +179,7 @@ void CDuiWkeView::SetDelayCreate(bool bDelayCreate)
 	m_bDelayCreate = bDelayCreate;
 }
 
-const LPCWSTR wkeWebViewClassName = L"class::wkeWebView";	// wke窗口类名
+const LPCTSTR wkeWebViewClassName = _T("class::wkeWebView");	// wke窗口类名
 
 // 注册窗口类
 bool CDuiWkeView::RegisterWindowClass()
@@ -323,8 +323,8 @@ LRESULT CDuiWkeView::OnWmKeyDown(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		bShiftState = true;
 	HKL hKL = GetKeyboardLayout(0);
 	int i = LOWORD(hKL);
-	WCHAR buffer[255];   
-	memset(buffer,0,255 * sizeof(WCHAR));  
+	TCHAR buffer[255];   
+	memset(buffer,0,255 * sizeof(TCHAR));  
 	if( (i == 0x0804) && (ImmIsIME(hKL)) )
 	{
 		ImmGetDescription(hKL,buffer,255);
@@ -719,8 +719,15 @@ void CDuiWkeView::onURLChanged(const struct _wkeClientHandler* clientHandler, co
 	CDuiWkeView* pDuiWkeView = CDuiWkeView::GetWkeViewByClientHandler(clientHandler);
 	if(pDuiWkeView)
 	{
+#ifdef _UNICODE
 		pDuiWkeView->setURL(wkeToStringW(URL));
 		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_URLCHANGED, (LPARAM)wkeToStringW(URL));
+#else
+		const wchar_t *pWchar=wkeToStringW(URL);
+		CStringA strA=CEncodingUtil::UnicodeToAnsi(pWchar);
+		pDuiWkeView->setURL(strA);
+		pDuiWkeView->SendMessage(MSG_CONTROL_EVENT, (WPARAM)WKE_EVENT_URLCHANGED, (LPARAM)(LPCTSTR)(strA));
+#endif
 	}
 }
 
@@ -740,10 +747,15 @@ CString CDuiWkeView::getTitle()
 {
 	if(m_pWebView)
 	{
+#ifdef _UNICODE
 		return m_pWebView->titleW();
+#else
+		const wchar_t *pWstr=m_pWebView->titleW();
+		return CEncodingUtil::UnicodeToAnsi(pWstr);
+#endif
 	}
 
-	return L"";
+	return _T("");
 }
 
 // 获取网页URL

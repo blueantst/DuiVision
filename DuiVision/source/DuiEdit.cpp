@@ -187,7 +187,7 @@ HRESULT CDuiEdit::OnAttributeLeftImage(const CString& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!SetLeftBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetLeftBitmap(nResourceID, TEXT("BMP")))
@@ -273,7 +273,7 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!SetSmallBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetSmallBitmap(nResourceID, TEXT("BMP")))

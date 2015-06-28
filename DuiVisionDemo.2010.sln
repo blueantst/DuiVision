@@ -5,24 +5,31 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVision.2010", "DuiVision
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionDemo.2010", "DuiVisionDemo\DuiVisionDemo.2010.vcxproj", "{FC22C86E-283A-4CA4-BBCE-883E5D02058F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiPluginDemo.2008", "DuiPluginDemo\DuiPluginDemo.2010.vcxproj", "{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiPluginDemo.2010", "DuiPluginDemo\DuiPluginDemo.2010.vcxproj", "{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		DebugMulti|Win32 = DebugMulti|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{956C8DD0-B286-44FE-B190-7C3666CB6645}.Debug|Win32.ActiveCfg = Debug|Win32
 		{956C8DD0-B286-44FE-B190-7C3666CB6645}.Debug|Win32.Build.0 = Debug|Win32
+		{956C8DD0-B286-44FE-B190-7C3666CB6645}.DebugMulti|Win32.ActiveCfg = DebugMulti|Win32
+		{956C8DD0-B286-44FE-B190-7C3666CB6645}.DebugMulti|Win32.Build.0 = DebugMulti|Win32
 		{956C8DD0-B286-44FE-B190-7C3666CB6645}.Release|Win32.ActiveCfg = Release|Win32
 		{956C8DD0-B286-44FE-B190-7C3666CB6645}.Release|Win32.Build.0 = Release|Win32
 		{FC22C86E-283A-4CA4-BBCE-883E5D02058F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FC22C86E-283A-4CA4-BBCE-883E5D02058F}.Debug|Win32.Build.0 = Debug|Win32
+		{FC22C86E-283A-4CA4-BBCE-883E5D02058F}.DebugMulti|Win32.ActiveCfg = DebugMulti|Win32
+		{FC22C86E-283A-4CA4-BBCE-883E5D02058F}.DebugMulti|Win32.Build.0 = DebugMulti|Win32
 		{FC22C86E-283A-4CA4-BBCE-883E5D02058F}.Release|Win32.ActiveCfg = Release|Win32
 		{FC22C86E-283A-4CA4-BBCE-883E5D02058F}.Release|Win32.Build.0 = Release|Win32
 		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Debug|Win32.Build.0 = Debug|Win32
+		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.DebugMulti|Win32.ActiveCfg = DebugMulti|Win32
+		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.DebugMulti|Win32.Build.0 = DebugMulti|Win32
 		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Release|Win32.ActiveCfg = Release|Win32
 		{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection

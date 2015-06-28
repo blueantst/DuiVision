@@ -7,7 +7,11 @@
 BOOL LoadBitmapFromFile(const CString strPathFile, CBitmap &bitmap, CSize &size)
 {	
 	HBITMAP hBitmap = NULL;
+#ifdef _UNICODE
 	Bitmap* pBitmap = Bitmap::FromFile(strPathFile);
+#else
+	Bitmap* pBitmap = Bitmap::FromFile(CEncodingUtil::AnsiToUnicode(strPathFile));
+#endif
 	Status status = pBitmap->GetLastStatus();
 	if(Ok == status)
 	{		

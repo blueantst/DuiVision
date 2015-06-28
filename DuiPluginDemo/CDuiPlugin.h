@@ -28,13 +28,13 @@ public:
 //////////////////////////////////////////////////////////////////////////
 public:
 	//{{VCI_IMPLEMENT_DEFINE_BEGIN
-	virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc);
+	virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc);
 	virtual int __stdcall SetRect(CRect rc);
 	virtual int __stdcall SetVisible(BOOL bIsVisible);
 	virtual int __stdcall SetDisable(BOOL bIsDisable);
 	virtual int __stdcall SetFocus(BOOL bFocus);
 	virtual int __stdcall DrawControl(CDC &dc, CRect rcUpdate);
-	virtual int __stdcall OnTimer(UINT uTimerID, LPCSTR lpszTimerName);
+	virtual int __stdcall OnTimer(UINT uTimerID, LPCTSTR lpszTimerName);
 	virtual int __stdcall OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual int __stdcall OnMousePointChange(CPoint& point);
 	virtual int __stdcall OnCheckMouseResponse(UINT nFlags, CPoint point);
@@ -69,13 +69,13 @@ protected:
 		virtual LPVOID __stdcall GetExtraInfo(LPVOID lpRefData);
 		//}} 注意：!!!这里是保留的重要函数，不可删除!!!
 	//{{VCI_INTERFACE_PART_BEGIN
-		virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc);
+		virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc);
 		virtual int __stdcall SetRect(CRect rc);
 		virtual int __stdcall SetVisible(BOOL bIsVisible);
 		virtual int __stdcall SetDisable(BOOL bIsDisable);
 		virtual int __stdcall SetFocus(BOOL bFocus);
 		virtual int __stdcall DrawControl(CDC &dc, CRect rcUpdate);
-		virtual int __stdcall OnTimer(UINT uTimerID, LPCSTR lpszTimerName);
+		virtual int __stdcall OnTimer(UINT uTimerID, LPCTSTR lpszTimerName);
 		virtual int __stdcall OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		virtual int __stdcall OnMousePointChange(CPoint& point);
 		virtual int __stdcall OnCheckMouseResponse(UINT nFlags, CPoint point);
