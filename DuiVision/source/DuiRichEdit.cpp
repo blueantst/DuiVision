@@ -2532,6 +2532,11 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	return true;
 */
+	if(!IsFocusControl())
+	{
+		return false;
+	}
+
 	bool handled = true;
 	unsigned int virtualKeyCode = nChar;
     unsigned int flags = nFlags;
@@ -3095,7 +3100,7 @@ LRESULT CDuiRichEdit::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bo
 					// This is the first WM_CHAR message, 
 					// accumulate it if this is a LeadByte.  Otherwise, fall thru to
 					// regular WM_CHAR processing.
-					if ( IsDBCSLeadByte ( (WORD)wParam ) )
+					if ( IsDBCSLeadByte ( (BYTE)(WORD)wParam ) )
 					{
 						// save the Lead Byte and don't process this message
 						m_chLeadByte = (WORD)wParam << 8 ;
