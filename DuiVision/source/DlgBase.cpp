@@ -1855,6 +1855,7 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 				SetForegroundWindow();
 				ShowWindow(SW_NORMAL);
 				ShowWindow(SW_SHOW);
+				UpdateWindow();
 				BringWindowToTop();
 			}
 		}

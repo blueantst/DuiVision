@@ -2195,6 +2195,7 @@ public:
 							pDlg->SetForegroundWindow();
 							pDlg->ShowWindow(SW_NORMAL);
 							pDlg->ShowWindow(SW_SHOW);
+							pDlg->UpdateWindow();
 							pDlg->BringWindowToTop();
 						}
 					}
