@@ -10,7 +10,9 @@ CDuiComboBox::CDuiComboBox(HWND hWnd, CDuiObject* pDuiObject)
 	m_strImageHeadBitmap = _T("");
 	m_strImageDeleteBitmap = _T("");
 	m_strXmlFile = _T("");
+	m_strImageScroll = _T("");
 	m_pPopupList = NULL;
+	m_nListHeight = 0;
 	m_strComboValue = _T("");
 	m_clrText = Color(255, 0, 20, 35);
 	m_clrDesc = Color(255, 255, 255, 255);
@@ -266,6 +268,8 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		m_pPopupList = pPopupList;
 		pPopupList->SetParent(this);	// 将PopupList的父控件指向combobox
 		pPopupList->SetWidth(rcClient.Width());
+		pPopupList->SetHeight(m_nListHeight);
+		pPopupList->OnAttributeImageScrollV(m_strImageScroll, FALSE);
 		if(m_nResourceIDHeadBitmap != 0)
 		{
 			pPopupList->SetHeadBitmap(m_nResourceIDHeadBitmap);

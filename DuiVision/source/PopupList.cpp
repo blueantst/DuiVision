@@ -1,6 +1,9 @@
 #include "StdAfx.h"
 #include "PopupList.h"
 
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
+
 CPopupList::CPopupList(void)
 {
 	m_nHoverItem = -1;
@@ -9,11 +12,24 @@ CPopupList::CPopupList(void)
 	m_rcClose.SetRectEmpty();
 	m_buttonState = enBSNormal;
 	m_nWidth = 191;
+	m_nHeight = 0;
 	m_strFont = DuiSystem::GetDefaultFont();
 	m_nFontWidth = 12;
 	m_fontStyle = FontStyleRegular;
 	m_clrHover = Color(225, 0, 147, 209);
 	m_bSingleLine = TRUE;
+	m_nScrollWidth = 8;
+
+	// 垂直滚动条
+	CRect rcScroll = CRect(0,0,0,0);
+	rcScroll.left = rcScroll.right - m_nScrollWidth;
+
+ 	m_pControScrollV = new CDuiScrollVertical(NULL, this, SCROLL_V, rcScroll);
+ 	m_vecControl.push_back(m_pControScrollV);
+
+	m_nVirtualHeight = 0;
+	m_nVirtualTop = 0;
+
 }
 
 CPopupList::~CPopupList(void)
@@ -308,11 +324,75 @@ void CPopupList::SetItemPoint()
 			nStratTop += 24;
 		}
 	}
+
+	m_nVirtualHeight = nHeight;
+	BOOL bShowScroll = (m_nHeight != 0) && (m_nVirtualHeight > m_nHeight);
 	
 	if(IsWindow(GetSafeHwnd()))
 	{
-		SetWindowPos(NULL, 0, 0, m_nWidth, nHeight, SWP_NOMOVE);
+		SetWindowPos(NULL, 0, 0, m_nWidth, (m_nHeight != 0) ? m_nHeight : nHeight, SWP_NOMOVE);
 	}
+
+	if(bShowScroll)
+	{
+		// 更新列表项显示的宽度
+		for (int i = 0; i < nItemCount; i++)
+		{
+			EditListItem &editListItem = m_vecItem.at(i);
+			editListItem.rcItem.right = m_nWidth - 2 - m_nScrollWidth;
+		}
+
+		// 更新滚动条控件的位置
+		CRect rcScroll = CRect(0, 1, m_nWidth - 1, m_nHeight - 1);
+		rcScroll.left = rcScroll.right - m_nScrollWidth;
+		m_pControScrollV->SetRect(rcScroll);
+	}
+
+	// 需要的总高度大于显示区高度才会显示垂直滚动条
+	m_pControScrollV->SetVisible(bShowScroll);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(m_nVirtualHeight);
+}
+
+// 从XML设置垂直滚动条图片信息属性
+HRESULT CPopupList::OnAttributeImageScrollV(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	// 通过Skin读取
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
+	{
+		strSkin = DuiSystem::Instance()->GetSkin(strValue);
+		if (strSkin.IsEmpty()) return E_FAIL;
+	}else
+	{
+		strSkin = strValue;
+	}
+
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
+	{
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
+		{
+			strImgFile = strSkin;
+		}
+		if(!m_pControScrollV->SetBitmap(strImgFile))
+		{
+			return E_FAIL;
+		}
+	}else	// 加载图片资源
+	{
+		UINT nResourceID = _ttoi(strSkin);
+		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
+		{
+			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))
+			{
+				return E_FAIL;
+			}
+		}
+	}
+
+	return bLoading?S_FALSE:S_OK;
 }
 
 BOOL CPopupList::OnMouseMove(CPoint point)
@@ -477,6 +557,14 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 	strFormat.SetAlignment(StringAlignmentNear);	// 左对齐
 	strFormat.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
 
+	// 计算显示位置
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	int nMaxRangeV = pScrollV->GetScrollMaxRange();
+	int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
+	int nFirstViewRow = m_nVirtualTop / 24;					// 显示的第一行序号
+
+
 	for(int i = 0; i < nItemCount; i++)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
@@ -501,6 +589,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			SolidBrush solidBrushTitle(editListItem.clrText);
 			SolidBrush solidBrushDesc(editListItem.clrDesc);
 			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)(rcItem.top + 1), (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)(rcItem.Height()/2));
+			rect.Offset(0, -nVirtualTop);
 			BSTR bsTitle = editListItem.strName.AllocSysString();
 			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
 			::SysFreeString(bsTitle);
@@ -521,6 +610,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			// 只显示name
 			SolidBrush solidBrushTitle(editListItem.clrText);
 			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)rcItem.top, (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)rcItem.Height());
+			rect.Offset(0, -nVirtualTop);
 			BSTR bsTitle = editListItem.strName.AllocSysString();
 			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
 			::SysFreeString(bsTitle);
@@ -536,6 +626,13 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 	CSize sizeImage;
 	Graphics graphics(dc);
 
+	// 计算显示位置
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	int nMaxRangeV = pScrollV->GetScrollMaxRange();
+	int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
+	int nFirstViewRow = m_nVirtualTop / 24;					// 显示的第一行序号
+
 	for(int i = 0; i < nItemCount; i++)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
@@ -545,7 +642,9 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 		// 删除按钮
 		if((i == m_nHoverItem) && (m_pImageClose != NULL))
 		{
-			graphics.DrawImage(m_pImageClose, RectF((Gdiplus::REAL)m_rcClose.left, (Gdiplus::REAL)m_rcClose.top, (Gdiplus::REAL)m_rcClose.Width(), (Gdiplus::REAL)m_rcClose.Height()),
+			RectF rect((Gdiplus::REAL)m_rcClose.left, (Gdiplus::REAL)m_rcClose.top, (Gdiplus::REAL)m_rcClose.Width(), (Gdiplus::REAL)m_rcClose.Height());
+			rect.Offset(0, -nVirtualTop);
+			graphics.DrawImage(m_pImageClose, rect,
 				(Gdiplus::REAL)(m_buttonState * m_sizeClose.cx), 0, (Gdiplus::REAL)m_sizeClose.cx, (Gdiplus::REAL)m_sizeClose.cy, UnitPixel); 
 		}
 
@@ -553,7 +652,9 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 		if(editListItem.pImage)
 		{	
 			CRect rcHead(rcItem.left + 1, rcItem.top + 2, rcItem.left + 1 + rcItem.Height() - 4, rcItem.top + 2 + rcItem.Height() - 4);
-			graphics.DrawImage(editListItem.pImage, RectF((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height()),
+			RectF rect((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height());
+			rect.Offset(0, -nVirtualTop);
+			graphics.DrawImage(editListItem.pImage, rect,
 				0, 0, (Gdiplus::REAL)editListItem.sizeImage.cx, (Gdiplus::REAL)editListItem.sizeImage.cy, UnitPixel);
 
 			DrawImageFrame(graphics, m_pImageHead, rcHead, i == m_nHoverItem ? m_sizeHead.cx : 0, 0, m_sizeHead.cx, m_sizeHead.cy, 5);
