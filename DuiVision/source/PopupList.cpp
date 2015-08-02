@@ -589,7 +589,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			SolidBrush solidBrushTitle(editListItem.clrText);
 			SolidBrush solidBrushDesc(editListItem.clrDesc);
 			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)(rcItem.top + 1), (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)(rcItem.Height()/2));
-			rect.Offset(0, -nVirtualTop);
+			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
 			BSTR bsTitle = editListItem.strName.AllocSysString();
 			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
 			::SysFreeString(bsTitle);
@@ -610,7 +610,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			// ÷ªœ‘ æname
 			SolidBrush solidBrushTitle(editListItem.clrText);
 			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)rcItem.top, (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)rcItem.Height());
-			rect.Offset(0, -nVirtualTop);
+			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
 			BSTR bsTitle = editListItem.strName.AllocSysString();
 			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
 			::SysFreeString(bsTitle);
@@ -643,7 +643,7 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 		if((i == m_nHoverItem) && (m_pImageClose != NULL))
 		{
 			RectF rect((Gdiplus::REAL)m_rcClose.left, (Gdiplus::REAL)m_rcClose.top, (Gdiplus::REAL)m_rcClose.Width(), (Gdiplus::REAL)m_rcClose.Height());
-			rect.Offset(0, -nVirtualTop);
+			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
 			graphics.DrawImage(m_pImageClose, rect,
 				(Gdiplus::REAL)(m_buttonState * m_sizeClose.cx), 0, (Gdiplus::REAL)m_sizeClose.cx, (Gdiplus::REAL)m_sizeClose.cy, UnitPixel); 
 		}
@@ -653,7 +653,7 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 		{	
 			CRect rcHead(rcItem.left + 1, rcItem.top + 2, rcItem.left + 1 + rcItem.Height() - 4, rcItem.top + 2 + rcItem.Height() - 4);
 			RectF rect((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height());
-			rect.Offset(0, -nVirtualTop);
+			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
 			graphics.DrawImage(editListItem.pImage, rect,
 				0, 0, (Gdiplus::REAL)editListItem.sizeImage.cx, (Gdiplus::REAL)editListItem.sizeImage.cy, UnitPixel);
 
