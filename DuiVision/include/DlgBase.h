@@ -83,6 +83,7 @@ protected:
 	BOOL			m_bTracking;
 	BOOL			m_bIsLButtonDown;	
 	BOOL			m_bIsLButtonDblClk;
+	BOOL			m_bIsRButtonDown;
 	BOOL			m_bIsSetCapture;
 
 	BOOL			m_bAutoClose;				// 窗口自动关闭标志
@@ -294,6 +295,8 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnDestroy();
 

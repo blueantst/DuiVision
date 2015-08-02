@@ -2403,6 +2403,41 @@ void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
 
+void CDlgBase::OnRButtonDown(UINT nFlags, CPoint point)
+{
+}
+
+void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	if (m_bIsSetCapture)
+	{
+		ReleaseCapture();
+		m_bIsSetCapture = false;
+	}
+
+	m_bIsRButtonDown = FALSE;
+
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnRButtonUp(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}	
+	}
+
+	CDialog::OnRButtonUp(nFlags, point);
+}
+
 // 键盘事件处理(移到PreTranslateMessage中实现子控件的键盘事件调用,因为对话框的OnKeyDown函数有局限性,不能捕获到ALT等组合键)
 void CDlgBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {

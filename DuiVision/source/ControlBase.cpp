@@ -690,6 +690,62 @@ BOOL CControlBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标右键按下事件处理
+BOOL CControlBase::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+
+	// 保存原始的鼠标位置,并进行位置变换
+	CPoint oldPoint = point;
+	OnMousePointChange(point);
+
+	m_bMouseDown = false;
+	if(m_pControl != NULL)
+	{
+		if(m_pControl->OnRButtonDown(nFlags, point))
+		{
+			return true;
+		}		
+	}
+	else
+	{
+		return OnControlRButtonDown(nFlags, point);
+	}
+
+	return false;
+}
+
+// 鼠标右键放开事件处理
+BOOL CControlBase::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+
+	// 保存原始的鼠标位置,并进行位置变换
+	CPoint oldPoint = point;
+	OnMousePointChange(point);
+
+	m_bMouseDown = false;
+	if(m_pControl != NULL)
+	{
+		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
+		UINT uControlID = m_pControl->GetControlID();
+		if(SCROLL_V == uControlID)
+		{
+			point = oldPoint;
+		}
+		if(m_pControl->OnRButtonUp(nFlags, point))
+		{
+			return true;
+		}		
+	}
+	else
+	{
+		return OnControlRButtonUp(nFlags, point);
+	}
+
+	return false;
+}
+
 // 滚动事件处理
 BOOL CControlBase::OnScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {

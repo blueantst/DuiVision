@@ -1257,6 +1257,98 @@ BOOL CDuiGridCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	return true;
 }
 
+// 鼠标右键按下事件处理
+BOOL CDuiGridCtrl::OnControlRButtonDown(UINT nFlags, CPoint point)
+{
+	if(m_vecRowInfo.size() == 0)
+	{
+		return false;
+	}
+
+	// 设置窗口焦点,否则可能无法进行滚动事件的处理
+	SetWindowFocus();
+
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
+	{
+		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
+		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
+		{
+			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
+			if(m_nDownRow != m_nHoverRow)
+			{
+				if(m_bEnableDownRow)
+				{
+					m_nDownRow = m_nHoverRow;
+					m_nHoverRow = -1;
+				}
+
+				SendMessage(MSG_MOUSE_RDOWN, m_bEnableDownRow ? m_nDownRow : m_nHoverRow, rowInfo.nHoverItem);
+
+				UpdateControl(TRUE);
+
+				return true;
+			}
+		}	
+	} else
+	if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
+	{
+		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
+		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
+		if(PtInRow(point, rowInfo)&& !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
+		{
+			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
+			SendMessage(MSG_MOUSE_RDOWN, m_nDownRow, rowInfo.nHoverItem);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+// 鼠标右键放开事件处理
+BOOL CDuiGridCtrl::OnControlRButtonUp(UINT nFlags, CPoint point)
+{
+	if(m_vecRowInfo.size() == 0)
+	{
+		return false;
+	}
+
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
+	{
+		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
+		if(PtInRow(point, rowInfo))
+		{
+			//取反，否则消息不能发送
+			if(!PtInRowCheck(point, rowInfo))	// 检查框状态改变
+			{
+				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
+				SendMessage(MSG_MOUSE_RUP, m_nHoverRow, rowInfo.nCheck);
+				UpdateControl(TRUE);
+
+				return true;
+			}
+		}	
+	}else
+	if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
+	{
+		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
+		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
+		if(PtInRow(point, rowInfo))
+		{
+			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
+			{
+				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
+				SendMessage(MSG_MOUSE_RUP, m_nDownRow, rowInfo.nCheck);
+				UpdateControl(TRUE);
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 // 消息响应
 LRESULT CDuiGridCtrl::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
