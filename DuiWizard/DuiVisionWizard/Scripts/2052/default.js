@@ -188,8 +188,10 @@ function AddConfig(proj, strProjectName)
 		CLTool.SuppressStartupBanner = true;
 		CLTool.WarningLevel = warningLevelOption.warningLevel_3;
 		CLTool.AdditionalIncludeDirectories = '..\\DuiVision\\include;..\\DuiVision\\common;';//%(AdditionalIncludeDirectories)';
+		CLTool.DebugInformationFormat = 3;	// 调试信息格式:0=none, 1=Z7, 2=Zi, 3=ZI
 		CLTool.PreprocessorDefinitions = 'WIN32;_WINDOWS;STRICT;_DEBUG;_CRT_SECURE_NO_WARNINGS;'; //%(PreprocessorDefinitions)';
-		CLTool.RuntimeLibrary = 3; // 0=MT, 1=MTd, 2=MTD (DLL), 3=MTDd
+		CLTool.RuntimeLibrary = 3; // 运行时库:0=MT, 1=MTd, 2=MTD (DLL), 3=MTDd
+		CLTool.Optimization = 0; // 优化:0=disabled, 1=minspace, 2=maxspe
 
 		var LinkTool = config.Tools('VCLinkerTool');
 		// TODO: 添加链接器设置
