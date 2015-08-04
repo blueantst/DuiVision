@@ -329,7 +329,9 @@ BOOL CDlgBase::OnInitDialog()
 	if(!m_bAppWin)
 	{
 		// 不是主窗口(在任务栏不会显示出此窗口),则设置TOOLWINDOWS属性
-		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
+		//::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
+		// 解决NotifyMsg窗口在任务栏显示的问题,需要去掉APPWINDOW属性,再增加TOOLWINDOW属性
+		ModifyStyleEx(WS_EX_APPWINDOW, WS_EX_TOOLWINDOW);
 	}
 
 	// 设置窗口背景透明属性
