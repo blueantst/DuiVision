@@ -121,18 +121,18 @@ int gRegisterPropertyPage(CVciPropertyPageArray& aPropertyPage)
 // 产生对象并返回对象的接口
 //
 extern "C" __declspec(dllexport)
-LPVOID CreateObject(LPCSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData)
+LPVOID CreateObject(LPCTSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData)
 {
-	TRACE("CreateObject(\"%s\")\n", lpcsInterfaceName);
+	TRACE(_T("CreateObject(\"%s\")\n"), lpcsInterfaceName);
 
 	CVisualComponent *pObject;
-	if(strcmp(lpcsInterfaceName, IID_IDuiPluginPanel) == 0)	// 创建Panel插件
+	if(_tcscmp(lpcsInterfaceName, IID_IDuiPluginPanel) == 0)	// 创建Panel插件
 	{
 		pObject = new CDuiPlugin;
 	}
 	else
 	{
-		TRACE("Can't find Object: %s, CreateObject failed!\n", lpcsInterfaceName);
+		TRACE(_T("Can't find Object: %s, CreateObject failed!\n"), lpcsInterfaceName);
 		return NULL;
 	}
 
