@@ -278,6 +278,15 @@ int CDuiPlugin::OnLButtonDblClk(UINT nFlags, CPoint point)
 	}
 	return 0;
 }
+
+int CDuiPlugin::SetUpdate(BOOL bUpdate, COLORREF clr)
+{
+	if(m_pDuiPanel)
+	{
+		m_pDuiPanel->SetUpdate(bUpdate, clr);
+	}
+	return 0;
+}
 //}}VCI_IMPLEMENT_END
 
 //////////////////////////////////////////////////////////////////////////
@@ -390,6 +399,12 @@ int __stdcall CDuiPlugin::XDuiPlugin::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
 	return pObj->OnLButtonDblClk(nFlags, point);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::SetUpdate(BOOL bUpdate, COLORREF clr)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->SetUpdate(bUpdate, clr);
 }
 //}}VCI_INTERFACE_IMPLEMENT_END
 
