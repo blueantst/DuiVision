@@ -69,7 +69,7 @@ public:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate) = 0;
 	virtual BOOL DrawSubControls(CDC &dc, CRect rcUpdate);
 	virtual BOOL IsDraw(CPoint point) { return FALSE; }
-	void SetUpdate(BOOL bUpdate, COLORREF clr = 0);
+	virtual void SetUpdate(BOOL bUpdate, COLORREF clr = 0);
 	BOOL GetUpdate() { return m_bUpdate; };
 	void UpdateMemDC(CDC &dc, int nWidth, int nHeight);
 	void UpdateAnimateDC(CDC &dc, int nWidth, int nHeight);

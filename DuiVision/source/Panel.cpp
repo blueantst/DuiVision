@@ -525,6 +525,17 @@ BOOL CDuiPanel::DrawSubControls(CDC &dc, CRect rcUpdate)
 	return TRUE;
 }
 
+// 设置控件刷新标识
+void CDuiPanel::SetUpdate(BOOL bUpdate, COLORREF clr/* = 0*/)
+{
+	__super::SetUpdate(bUpdate, clr);
+
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->SetUpdate(bUpdate, clr);
+	}
+}
+
 // 鼠标坐标变换
 BOOL CDuiPanel::OnMousePointChange(CPoint& point)
 {

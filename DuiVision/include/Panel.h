@@ -46,6 +46,7 @@ public:
 	virtual void SetControlRect(CRect rc);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 	virtual BOOL DrawSubControls(CDC &dc, CRect rcUpdate);
+	virtual void SetUpdate(BOOL bUpdate, COLORREF clr = 0);
 
 	virtual BOOL OnMousePointChange(CPoint& point);
 	virtual BOOL OnCheckMouseResponse(UINT nFlags, CPoint point);
