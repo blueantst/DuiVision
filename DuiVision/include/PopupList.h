@@ -88,4 +88,11 @@ public:
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScrollV)
 		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
+
+	
+protected:
+	int GetItemsOffset();//列表项相对显示区顶部的偏移量
+	DECLARE_DYNAMIC(CPopupList)
+	DECLARE_MESSAGE_MAP()
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 };

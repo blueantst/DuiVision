@@ -4,6 +4,7 @@
 #define	SCROLL_V	1	// 垂直滚动条控件ID
 #define	SCROLL_H	2	// 水平滚动条控件ID
 
+
 CPopupList::CPopupList(void)
 {
 	m_nHoverItem = -1;
@@ -402,8 +403,10 @@ BOOL CPopupList::OnMouseMove(CPoint point)
 	BOOL bDraw = FALSE;
 	if(rcClient.PtInRect(point))
 	{	
-		int nHoverItem = m_nHoverItem;
-		
+		int nVirtualTop = GetItemsOffset();
+		point.Offset(0, nVirtualTop);
+		int nHoverItem = -1;
+
 		if(m_nHoverItem != -1)
 		{
 			EditListItem &editListItem = m_vecItem.at(m_nHoverItem);
@@ -478,6 +481,8 @@ BOOL CPopupList::OnLButtonDown(CPoint point)
 BOOL CPopupList::OnLButtonUp(CPoint point)
 { 
 	BOOL bDraw = FALSE;
+	int nVirtualTop = GetItemsOffset();
+	point.Offset(0, nVirtualTop);
 	if(m_buttonState == enBSDown)
 	{
 		if((m_pImageClose != NULL) && m_rcClose.PtInRect(point))
@@ -557,13 +562,15 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 	strFormat.SetAlignment(StringAlignmentNear);	// 左对齐
 	strFormat.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
 
-	// 计算显示位置
-	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
-	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
-	int nMaxRangeV = pScrollV->GetScrollMaxRange();
-	int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
-	int nFirstViewRow = m_nVirtualTop / 24;					// 显示的第一行序号
+	//// 计算显示位置
+	//CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	//int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	//int nMaxRangeV = pScrollV->GetScrollMaxRange();
+	////int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
+	//int nVirtualTop = (m_nVirtualHeight - m_rc.Height()) * nCurPosV / nMaxRangeV;	// 当前显示的是虚拟图片中什么位置开始的图片
 
+	//int nFirstViewRow = m_nVirtualTop / 24;					// 显示的第一行序号
+	int nVirtualTop = GetItemsOffset();
 
 	for(int i = 0; i < nItemCount; i++)
 	{
@@ -604,7 +611,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			if(i == m_nHoverItem)
 			{
 				SolidBrush brushHover(m_clrHover);
-				graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top, rcItem.Width(), rcItem.Height());
+				graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top - nVirtualTop, rcItem.Width(), rcItem.Height());
 			}
 
 			// 只显示name
@@ -626,12 +633,14 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 	CSize sizeImage;
 	Graphics graphics(dc);
 
-	// 计算显示位置
-	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
-	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
-	int nMaxRangeV = pScrollV->GetScrollMaxRange();
-	int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
-	int nFirstViewRow = m_nVirtualTop / 24;					// 显示的第一行序号
+	//// 计算显示位置
+	//CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	//int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	//int nMaxRangeV = pScrollV->GetScrollMaxRange();
+	//int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
+	//int nFirstViewRow = m_nVirtualTop / 24;					// 显示的第一行序号
+
+	int nVirtualTop = GetItemsOffset();
 
 	for(int i = 0; i < nItemCount; i++)
 	{
@@ -659,5 +668,50 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 
 			DrawImageFrame(graphics, m_pImageHead, rcHead, i == m_nHoverItem ? m_sizeHead.cx : 0, 0, m_sizeHead.cx, m_sizeHead.cy, 5);
 		}
+	}
+}
+
+int CPopupList::GetItemsOffset()
+{
+	CRect rcClient;
+	GetClientRect(&rcClient);
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	int nMaxRangeV = pScrollV->GetScrollMaxRange();
+	//int nVirtualTop = (nMaxRangeV > 0) ? nCurPosV*(m_nVirtualHeight-m_rc.Height())/nMaxRangeV : 0;	// 当前显示的是虚拟图片中什么位置开始的图片
+	//m_rc有问题,重新获取
+	int nVirtualTop = (m_nVirtualHeight - rcClient.Height()) * nCurPosV / nMaxRangeV;	// 当前显示的是虚拟图片中什么位置开始的图片
+	return nVirtualTop;
+}
+
+IMPLEMENT_DYNAMIC(CPopupList, CDlgPopup)
+
+BEGIN_MESSAGE_MAP(CPopupList, CDlgPopup)
+	ON_WM_MOUSEWHEEL()
+END_MESSAGE_MAP()
+
+BOOL CPopupList::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+	if (pScrollV && pScrollV->GetVisible())
+	{
+		int nCurPosV = pScrollV->GetScrollCurrentPos();
+		int nMaxRangeV = pScrollV->GetScrollMaxRange();
+		int nNewPosV = nCurPosV - zDelta;
+		if (nNewPosV > nMaxRangeV)
+		{
+			nNewPosV = nMaxRangeV;
+		}
+		if (nNewPosV < 0)
+		{
+			nNewPosV = 0;
+		}
+		pScrollV->SetScrollCurrentPos(nNewPosV);
+		pScrollV->UpdateControl(TRUE, TRUE);
+		return TRUE;
+	}
+	else
+	{
+		return CWnd::OnMouseWheel(nFlags, zDelta, pt);
 	}
 }
