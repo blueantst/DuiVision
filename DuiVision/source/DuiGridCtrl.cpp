@@ -1482,7 +1482,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				// ª≠¡–±ÍÃ‚
 				CString strTitle = columnInfo.strTitle;
-				BSTR bsTitle = strTitle.AllocSysString();
+				BSTR bsTitle = m_strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormatHeader, &solidBrushT);
 				::SysFreeString(bsTitle);
 
