@@ -177,7 +177,7 @@ function AddConfig(proj, strProjectName)
 			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
 		}
 	    config.CharacterSet = charSetUNICODE;
-	    config.IntermediateDirectory = '$(ConfigurationName)';
+	    config.IntermediateDirectory = '$(Configuration)\\';
 	    config.OutputDirectory = '$(SolutionDir)bin';
 		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
 		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
@@ -220,7 +220,7 @@ function AddConfig(proj, strProjectName)
 			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
 		}
 		config.CharacterSet = charSetUNICODE;
-		config.IntermediateDirectory = '$(ConfigurationName)';
+		config.IntermediateDirectory = '$(Configuration)\\';
 		config.OutputDirectory = '$(SolutionDir)bin';
 		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
 		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
