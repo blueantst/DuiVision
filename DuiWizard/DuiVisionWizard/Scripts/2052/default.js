@@ -167,6 +167,8 @@ function AddConfig(proj, strProjectName)
 			strProjExeExt = '.dll';
 		}
 		
+		var WizardVersion = wizard.FindSymbol('WIZARD_VERSION');
+		
         // DebugÉèÖÃ
 	    var config = proj.Object.Configurations('Debug');
 		if(strProjPlugin)
@@ -177,7 +179,13 @@ function AddConfig(proj, strProjectName)
 			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
 		}
 	    config.CharacterSet = charSetUNICODE;
-	    config.IntermediateDirectory = '$(Configuration)\\';
+		if(WizardVersion >= 10.0)
+		{
+			config.IntermediateDirectory = '$(Configuration)\\';
+		}else
+		{
+			config.IntermediateDirectory = '$(ConfigurationName)\\';
+		}
 	    config.OutputDirectory = '$(SolutionDir)bin';
 		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
 		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
@@ -220,7 +228,13 @@ function AddConfig(proj, strProjectName)
 			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
 		}
 		config.CharacterSet = charSetUNICODE;
-		config.IntermediateDirectory = '$(Configuration)\\';
+		if(WizardVersion >= 10.0)
+		{
+			config.IntermediateDirectory = '$(Configuration)\\';
+		}else
+		{
+			config.IntermediateDirectory = '$(ConfigurationName)\\';
+		}
 		config.OutputDirectory = '$(SolutionDir)bin';
 		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
 		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
