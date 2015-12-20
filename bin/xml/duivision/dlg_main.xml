@@ -88,7 +88,7 @@ QQ群：325880743
 			<div name="tab_controls" pos="0,0,-0,-0" plugin-debug="DuiPluginDemo_d.dll" plugin="DuiPluginDemo.dll" />
 		</tab>
 		
-		<tab name="tab.activex" title="浏览器" image="skins\icon\ico_navigate.png" img-count="1" div="tab_activex" />
+		<tab name="tab.browser" title="浏览器" image="skins\icon\ico_navigate.png" img-count="1" div="tab_browser" />
 		
 		<tab name="tab.360" title="360演示" image="skins\icon\logo_360.png" img-count="1" outlink="true" action="dlg:dlg_360" />
 		
