@@ -2,6 +2,13 @@
 #pragma once
 #include "ControlBase.h"
 
+// 滚动条模式
+enum TAB_TYPE
+{
+	TAB_TYPE_HORIZONTAL = 0,			// 水平方向
+	TAB_TYPE_VERTICAL,				// 垂直方向
+};
+
 // Tab页签图片显示模式
 enum enumTabImageMode
 {
@@ -47,6 +54,7 @@ public:
 	int  GetItemIndex(CString strTabName);
 	TabItemInfo* GetItemInfo(int nItem);
 	void SetItemWidth(int nTabItemMaxWidth, int nTabItemMinWidth, BOOL bRefresh = TRUE);
+	void SetItemHeight(int nTabItemMaxHeight, int nTabItemMinHeight, BOOL bRefresh = TRUE);
 	void RefreshItems();
 	void DeleteItem(int nItem);
 	void DeleteItem(CString strTabName);
@@ -85,9 +93,13 @@ protected:
 	virtual	BOOL OnControlTimer();
 	virtual BOOL DrawSubControls(CDC &dc, CRect rcUpdate);
 
+	void DrawControlHorizontal(CDC &dc, CRect rcUpdate);
+	void DrawControlVertical(CDC &dc, CRect rcUpdate);
+
 	BOOL InsertItem(int nItem, TabItemInfo &itemInfo);
 	
 public:
+	TAB_TYPE			m_nTabType;			// Tab页类型
 	vector<TabItemInfo>		m_vecItemInfo;			// Tab页信息列表
 	vector<CRect>			m_vecRcSeperator;		// tab位置列表
 
@@ -95,10 +107,17 @@ public:
 	Color					m_clrTextHover;			// 文字颜色(鼠标移动)
 	Color					m_clrTextDown;			// 文字颜色(鼠标按下)
 
+	// 水平类型tab控件属性
 	int						m_nTabItemWidth;		// 每个Tab页的当前宽度
 	int						m_nTabItemMaxWidth;		// 每个Tab页的最大宽度(默认宽度)
 	int						m_nTabItemMinWidth;		// 每个Tab页的最小宽度(如果设置了值,则实际宽度会自动调整)
 	int						m_nTabCtrlHeight;		// TabCtrl部分的高度
+
+	// 垂直类型tab控件属性
+	int						m_nTabItemHeight;		// 每个Tab页的当前高度
+	int						m_nTabItemMaxHeight;		// 每个Tab页的最大高度(默认高度)
+	int						m_nTabItemMinHeight;		// 每个Tab页的最小高度(如果设置了值,则实际高度会自动调整)
+	int						m_nTabCtrlWidth;		// TabCtrl部分的宽度
 
 	BOOL					m_bInit;				// 是否初始化完成
 
@@ -108,8 +127,11 @@ public:
 	int						m_nOldItem;				// 切换前的页面索引
 	int						m_nAnimateCount;		// 切换动画的帧数
 	int						m_nCurXPos;				// 切换过程中当前的横坐标位置
+	int						m_nCurYPos;				// 切换过程中当前的纵坐标位置
 	int						m_nTabLeftPading;		// Tab页签左侧的空白宽度
 	int						m_nTabRightPading;		// Tab页签右侧的空白宽度
+	int						m_nTabTopPading;		// Tab页签上边的空白宽度
+	int						m_nTabBottomPading;		// Tab页签下边的空白宽度
 	DUI_POSITION			m_posTabBtn;			// Tab页签的内部按钮位置信息
 
 	enumTabImageMode		m_enTabImageMode;		// Tab页签图片的显示模式(普通、拉伸、九宫格)
@@ -125,15 +147,24 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(TabBtn);				// 定义tab页签按钮图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_ENUM_ATTRIBUTE(_T("tab-type"), TAB_TYPE, TRUE)
+            DUI_ENUM_VALUE(_T("horizontal"), TAB_TYPE_HORIZONTAL)
+            DUI_ENUM_VALUE(_T("vertical"), TAB_TYPE_VERTICAL)
+        DUI_ENUM_END(m_nTabType)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-tabbtn"), OnAttributeImageTabBtn)
 		DUI_CUSTOM_ATTRIBUTE(_T("tabbtnpos"), OnAttributeTabBtnPosChange)
 		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemMaxWidth, FALSE)
 		DUI_INT_ATTRIBUTE(_T("item-width-min"), m_nTabItemMinWidth, FALSE)
+		DUI_INT_ATTRIBUTE(_T("item-height"), m_nTabItemMaxHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("item-height-min"), m_nTabItemMinHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tab-width"), m_nTabCtrlWidth, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-left-pading"), m_nTabLeftPading, FALSE)
 		DUI_INT_ATTRIBUTE(_T("tab-right-pading"), m_nTabRightPading, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tab-top-pading"), m_nTabTopPading, FALSE)
+		DUI_INT_ATTRIBUTE(_T("tab-bottom-pading"), m_nTabBottomPading, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
