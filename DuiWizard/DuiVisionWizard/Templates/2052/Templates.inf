@@ -56,7 +56,10 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]DuiVision.2008.vcproj
 [duivision]DuiVision.2010.vcxproj
 [duivision]DuiVision.2010.vcxproj.filters
-[duivision]DuiVision.2010.vcxproj.user
+[duivision]DuiVision.2013.vcxproj
+[duivision]DuiVision.2013.vcxproj.filters
+[duivision]DuiVision.2015.vcxproj
+[duivision]DuiVision.2015.vcxproj.filters
 
 [duivision]activex\duicomcli.h
 [duivision]activex\flash10t.tlh

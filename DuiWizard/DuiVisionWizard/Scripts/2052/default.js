@@ -108,6 +108,14 @@ function AddDuiVisionProject(strProjectName, strProjectPath)
 		{
 			strPrjNameDuiVision += 'DuiVision.2010.vcxproj';
 		}else
+		if(dte.Version == '12.0')
+		{
+			strPrjNameDuiVision += 'DuiVision.2013.vcxproj';
+		}else
+		if(dte.Version == '14.0')
+		{
+			strPrjNameDuiVision += 'DuiVision.2015.vcxproj';
+		}else
 		{
 			return;
 		}
@@ -216,6 +224,14 @@ function AddConfig(proj, strProjectName)
 		if(dte.Version == '10.0')
 		{
 			LinkTool.AdditionalDependencies = "DuiVision.2010d.lib wke.lib";	// VC2010ø‚
+		}else
+		if(dte.Version == '12.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2013d.lib wke.lib";	// VC2013ø‚
+		}else
+		if(dte.Version == '14.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2015d.lib wke.lib";	// VC2015ø‚
 		}
 
 		// Release…Ë÷√
@@ -263,6 +279,14 @@ function AddConfig(proj, strProjectName)
 		if(dte.Version == '10.0')
 		{
 			LinkTool.AdditionalDependencies = "DuiVision.2010.lib wke.lib";	// VC2010ø‚
+		}else
+		if(dte.Version == '12.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2013.lib wke.lib";	// VC2013ø‚
+		}else
+		if(dte.Version == '14.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2015.lib wke.lib";	// VC2015ø‚
 		}
 	}
 	catch(e)
