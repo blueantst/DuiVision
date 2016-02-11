@@ -56,13 +56,15 @@
 
 			<button pos="50,20,150,48" skin="IDB_BT_DEFAULT" title="普通按钮" tip="普通按钮" shortcut="ALT+1" />
 			
-			<button pos="200,20,300,48" skin="IDB_BT_GREEN" title="图片按钮"
+			<button pos="170,20,270,48" skin="IDB_BT_DEFAULT" title="禁用按钮" tip="禁用状态的按钮" disable="1" />
+			
+			<button pos="290,20,390,48" skin="IDB_BT_GREEN" title="图片按钮"
 				crtext="FFFFFF" animate="1" maxindex="16" />
 			
-			<button pos="350,20,450,48" skin="IDB_BT_DEFAULT" title="动画按钮"
+			<button pos="410,20,510,48" skin="IDB_BT_DEFAULT" title="动画按钮"
 				animate="1" maxindex="16" />
 			
-			<button pos="500,20,600,48" skin="IDB_BT_DEFAULT" title="菜单按钮" tip="菜单按钮"
+			<button pos="530,20,630,48" skin="IDB_BT_DEFAULT" title="菜单按钮" tip="菜单按钮"
 				action="menu:menu_main" menupos="0,-0" />
 			
 			<hidebtn name="hidebtn" align="left"
