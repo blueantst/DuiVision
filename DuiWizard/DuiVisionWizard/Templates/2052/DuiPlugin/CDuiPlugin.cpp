@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "CDuiPlugin.h"
 #include "DuiHandlerPlugin.h"
+[!if OPTION_CHECK_USEWKE]
+#include "DuiWkeView.h"
+[!endif]
 
 /////////////////////////////////////////////////////////////////////////////
 // 获取平台路径
@@ -114,6 +117,11 @@ int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc)
 	new DuiSystem(NULL, dwLangID, _T(""), 11160, nIDTemplate, _T(""));
 
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiPlugin::OnInit root path is %s"), GetPlugInRootPath());
+
+[!if OPTION_CHECK_USEWKE]
+	// 注册WKE控件
+	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
+[!endif]
 	
 	// 加载xml
 	m_pDuiPanel = (CDuiPanel*)DuiSystem::CreateControlByName(_T("div"), hWnd, NULL);
