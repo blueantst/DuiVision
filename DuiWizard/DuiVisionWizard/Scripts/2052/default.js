@@ -219,19 +219,25 @@ function AddConfig(proj, strProjectName)
 		// 附加依赖项
 		if(dte.Version == '9.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2008d.lib wke.lib";	// VC2008库
+			LinkTool.AdditionalDependencies = "DuiVision.2008d.lib";	// VC2008库
 		}else
 		if(dte.Version == '10.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2010d.lib wke.lib";	// VC2010库
+			LinkTool.AdditionalDependencies = "DuiVision.2010d.lib";	// VC2010库
 		}else
 		if(dte.Version == '12.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2013d.lib wke.lib";	// VC2013库
+			LinkTool.AdditionalDependencies = "DuiVision.2013d.lib";	// VC2013库
 		}else
 		if(dte.Version == '14.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2015d.lib wke.lib";	// VC2015库
+			LinkTool.AdditionalDependencies = "DuiVision.2015d.lib";	// VC2015库
+		}
+		
+		// 如果工程选项选择了支持WKE控件,则增加相应的配置
+		if(wizard.FindSymbol('OPTION_CHECK_USEWKE'))
+		{
+			LinkTool.AdditionalDependencies += " wke.lib";
 		}
 
 		// Release设置
@@ -274,19 +280,25 @@ function AddConfig(proj, strProjectName)
 		// 附加依赖项
 		if(dte.Version == '9.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2008.lib wke.lib";	// VC2008库
+			LinkTool.AdditionalDependencies = "DuiVision.2008.lib";	// VC2008库
 		}else
 		if(dte.Version == '10.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2010.lib wke.lib";	// VC2010库
+			LinkTool.AdditionalDependencies = "DuiVision.2010.lib";	// VC2010库
 		}else
 		if(dte.Version == '12.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2013.lib wke.lib";	// VC2013库
+			LinkTool.AdditionalDependencies = "DuiVision.2013.lib";	// VC2013库
 		}else
 		if(dte.Version == '14.0')
 		{
-			LinkTool.AdditionalDependencies = "DuiVision.2015.lib wke.lib";	// VC2015库
+			LinkTool.AdditionalDependencies = "DuiVision.2015.lib";	// VC2015库
+		}
+		
+		// 如果工程选项选择了支持WKE控件,则增加相应的配置
+		if(wizard.FindSymbol('OPTION_CHECK_USEWKE'))
+		{
+			LinkTool.AdditionalDependencies += " wke.lib";
 		}
 	}
 	catch(e)

@@ -176,7 +176,9 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]third-part\wke\wke.h
 [duivision]third-part\wke\wke.lib
 
+[!if OPTION_CHECK_USEWKE]
 [bin_source]wke.dll
+[!endif]
 
 [bin_source]dui.ico
 
