@@ -3,12 +3,6 @@
 #include "duisingleton.h"
 #include  <afxtempl.h>
 
-#define CREATE_DUICONTROL_BY_CLASS_NAME(classname)   \
-	pControl = classname::CheckAndNew(lpszName, hWnd, pParentObject);	\
-    if (pControl)	\
-        return pControl;	\
-
-
 // 注册DUI控件宏
 #define REGISTER_DUICONTROL(classname, pfShutdown)   \
 	CDuiObjectInfo* pDuiObjectInfo##classname = new CDuiObjectInfo;	\
@@ -167,8 +161,8 @@ public:
 	void ReleaseDuiControls();
 	// 根据控件类名创建控件实例
 	static CControlBase* CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
-	// 根据控件类名创建控件实例(遍历用户扩展控件)
-	CControlBase* CreateUserControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
+	// 获取控件信息列表的指针
+	vector<CDuiObjectInfo*>* GetDuiObjectInfoVect() { return &m_vecDuiObjectInfo; }
 
 	// 获取子控件对象
 	CControlBase* GetControlFromDuiDialog(UINT uControlID);

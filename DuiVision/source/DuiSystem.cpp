@@ -48,6 +48,9 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	{
 		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CoInitialize failed"));
 	}
+
+	// 加载控件库
+	LoadDuiControls();
 }
 
 DuiSystem::~DuiSystem(void)
@@ -1411,6 +1414,50 @@ BOOL DuiSystem::UnRegisterDuiControl(LPCTSTR lpszName)
 // 加载控件库
 void DuiSystem::LoadDuiControls()
 {
+	// 注册DuiVision默认的控件
+	REGISTER_DUICONTROL(CDuiPanel, NULL);
+	REGISTER_DUICONTROL(CDuiNativeWnd, NULL);
+
+	REGISTER_DUICONTROL(CDuiButton, NULL);
+	REGISTER_DUICONTROL(CImageButton, NULL);
+	REGISTER_DUICONTROL(CCheckButton, NULL);
+	REGISTER_DUICONTROL(CDuiRadioButton, NULL);
+	REGISTER_DUICONTROL(CHideButton, NULL);
+	REGISTER_DUICONTROL(CLinkButton, NULL);
+	REGISTER_DUICONTROL(CTextButton, NULL);
+
+	REGISTER_DUICONTROL(CDuiListCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiGridCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiTreeCtrl, NULL);
+
+	REGISTER_DUICONTROL(CArea, NULL);
+	REGISTER_DUICONTROL(CDuiFrame, NULL);
+	REGISTER_DUICONTROL(CImageString, NULL);
+	REGISTER_DUICONTROL(CRectangle, NULL);
+	REGISTER_DUICONTROL(CDuiAnimateImage, NULL);
+	REGISTER_DUICONTROL(CDuiScrollVertical, NULL);
+	REGISTER_DUICONTROL(CDuiScrollHorizontal, NULL);
+	REGISTER_DUICONTROL(CSelectBox, NULL);
+
+	REGISTER_DUICONTROL(CDuiPicture, NULL);
+
+	REGISTER_DUICONTROL(CDuiProgress, NULL);
+	REGISTER_DUICONTROL(CDuiSlider, NULL);
+
+	REGISTER_DUICONTROL(CDuiTabCtrl, NULL);
+
+	REGISTER_DUICONTROL(CDuiText, NULL);
+
+	REGISTER_DUICONTROL(CMenuItem, NULL);
+
+	REGISTER_DUICONTROL(CDuiEdit, NULL);
+	REGISTER_DUICONTROL(CDuiRichEdit, NULL);
+	REGISTER_DUICONTROL(CDuiComboBox, NULL);
+
+	REGISTER_DUICONTROL(CDuiActiveX, NULL);
+	REGISTER_DUICONTROL(CDuiWebBrowserCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiFlashCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiMediaPlayer, NULL);
 }
 
 // 释放控件库
@@ -1437,68 +1484,10 @@ CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiOb
 {
 	CControlBase *pControl = NULL;
 
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiPanel);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiNativeWnd);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CImageButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CCheckButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiRadioButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CHideButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CLinkButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CTextButton);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiListCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiGridCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiTreeCtrl);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CArea);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiFrame);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CImageString);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CRectangle);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiAnimateImage);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiScrollVertical);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiScrollHorizontal);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CSelectBox);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiPicture);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiProgress);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiSlider);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiTabCtrl);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiText);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CMenuItem);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiEdit);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiRichEdit);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiComboBox);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiActiveX);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiWebBrowserCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiFlashCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiMediaPlayer);
-
-	// 查找用户注册的扩展空间,通过扩展控件创建控件实例
-	pControl = DuiSystem::Instance()->CreateUserControlByName(lpszName, hWnd, pParentObject);
-	if(pControl)
+	vector<CDuiObjectInfo*>* pvecDuiObjectInfo = DuiSystem::Instance()->GetDuiObjectInfoVect();
+	for (size_t i = 0; i < pvecDuiObjectInfo->size(); i++)
 	{
-		return pControl;
-	}
-
-	return NULL;
-}
-
-// 查找用户注册的扩展空间,通过扩展控件创建控件实例
-CControlBase* DuiSystem::CreateUserControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject)
-{
-	CControlBase *pControl = NULL;
-
-	for (size_t i = 0; i < m_vecDuiObjectInfo.size(); i++)
-	{
-		CDuiObjectInfo* pDuiObjectInfo = m_vecDuiObjectInfo.at(i);
+		CDuiObjectInfo* pDuiObjectInfo = pvecDuiObjectInfo->at(i);
 		if (pDuiObjectInfo && pDuiObjectInfo->m_pfCheckAndNew)
 		{
 			pControl = (CControlBase*)pDuiObjectInfo->m_pfCheckAndNew(lpszName, hWnd, pParentObject);
