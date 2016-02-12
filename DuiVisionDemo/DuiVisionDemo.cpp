@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "DuiVisionDemo.h"
 #include "DuiHandlerMain.h"
+#include "DuiWkeView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -72,6 +73,9 @@ BOOL CDuiVisionDemoApp::InitInstance()
 			return FALSE; // Here we quit this application
 		}
 	}
+
+	// 注册WKE控件
+	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
 
 	// 创建主窗口
 	CDlgBase* pMainDlg = DuiSystem::CreateDuiDialog(_T("dlg_main"), NULL, _T(""), TRUE);
