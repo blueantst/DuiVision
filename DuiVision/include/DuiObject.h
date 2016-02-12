@@ -379,3 +379,18 @@ protected:
 	CRect	m_rc;					// 区域
 	CDuiHandler* m_pDuiHandler;		// 事件处理对象
 };
+
+///////////////////////////////////////////////////////////////////////////
+// define DUI object static function
+typedef LPCTSTR (*DUIFunc_GetClassName)();
+typedef LPVOID (*DUIFunc_CheckAndNew)(LPCTSTR lpszName, HWND hWnd, CDuiObject* pDuiObject);
+typedef VOID (*DUIFunc_Shutdown)();
+
+// DUI类的信息类
+class CDuiObjectInfo
+{
+public:
+	DUIFunc_GetClassName		m_pfGetClassName;	// 获取控件名的函数指针
+	DUIFunc_CheckAndNew	m_pfCheckAndNew;	// 检查和创建控件对象的函数指针
+	DUIFunc_Shutdown			m_pfShutdown;			// 控件依赖库释放的函数指针
+};

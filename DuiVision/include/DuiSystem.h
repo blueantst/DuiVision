@@ -9,6 +9,15 @@
         return pControl;	\
 
 
+// 注册DUI控件宏
+#define REGISTER_DUICONTROL(classname, pfShutdown)   \
+	CDuiObjectInfo* pDuiObjectInfo##classname = new CDuiObjectInfo;	\
+	pDuiObjectInfo##classname->m_pfGetClassName = classname::GetClassName;		\
+	pDuiObjectInfo##classname->m_pfCheckAndNew = (DUIFunc_CheckAndNew)classname::CheckAndNew;		\
+	pDuiObjectInfo##classname->m_pfShutdown = pfShutdown;		\
+	DuiSystem::Instance()->RegisterDuiControl(pDuiObjectInfo##classname)	\
+
+
 // 多语言ID定义
 #define LANGUAGE_PAGE_ENGLISH		0x0409	// 英文
 #define LANGUAGE_PAGE_CHINESE		0x0804	// 中文简体
@@ -148,8 +157,18 @@ public:
 	// 设置窗口背景信息
 	BOOL SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, CString strImgFile);
 
+	// 注册控件
+	void RegisterDuiControl(CDuiObjectInfo* pDuiObjectInfo);
+	// 卸载控件
+	BOOL UnRegisterDuiControl(LPCTSTR lpszName);
+	// 加载控件库
+	void LoadDuiControls();
+	// 释放控件库
+	void ReleaseDuiControls();
 	// 根据控件类名创建控件实例
 	static CControlBase* CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
+	// 根据控件类名创建控件实例(遍历用户扩展控件)
+	CControlBase* CreateUserControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
 
 	// 获取子控件对象
 	CControlBase* GetControlFromDuiDialog(UINT uControlID);
@@ -247,6 +266,7 @@ protected:
 
 	DuiVision::CTaskMgr		m_TaskMsg;								// 界面消息任务队列
 
+	vector<CDuiObjectInfo*>	m_vecDuiObjectInfo;				// 控件信息对象列表
 	vector<CDlgBase*>		m_vecDuiDialog;							// DUI对话框列表
 	vector<CDuiHandler*>	m_vecDuiHandler;						// 事件处理对象列表
 

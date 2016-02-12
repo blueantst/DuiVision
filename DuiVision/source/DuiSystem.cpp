@@ -100,6 +100,9 @@ DuiSystem::~DuiSystem(void)
 	// 释放COM库
 	CoUninitialize();
 
+	// 释放控件库
+	ReleaseDuiControls();
+
 	// 必须最后调用此函数关闭GDI+，否则会导致关闭GDI+之后还调用GDI+的函数，造成异常
 	destroySingletons();
 }
@@ -141,11 +144,6 @@ void DuiSystem::createSingletons()
 
 void DuiSystem::destroySingletons()
 {
-	#ifdef USE_WKE_CONTROL
-	// wke库释放
-	CDuiWkeView::WkeShutdown();
-	#endif // USE_WKE_CONTROL
-
 	// 停止任务管理器线程
 	m_TaskMsg.Shutdown();
 
@@ -1372,6 +1370,68 @@ BOOL DuiSystem::SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, CStrin
 	return TRUE;
 }
 
+// 注册控件
+void DuiSystem::RegisterDuiControl(CDuiObjectInfo* pDuiObjectInfo)
+{
+	// 判断如果已经添加过，就不用重复添加
+	for (size_t i = 0; i < m_vecDuiObjectInfo.size(); i++)
+	{
+		CDuiObjectInfo* _pDuiObjectInfo = m_vecDuiObjectInfo.at(i);
+		if (_pDuiObjectInfo == pDuiObjectInfo)
+		{
+			return;
+		}		
+	}
+
+	m_vecDuiObjectInfo.push_back(pDuiObjectInfo);
+}
+
+// 卸载控件,传入的参数为控件名
+BOOL DuiSystem::UnRegisterDuiControl(LPCTSTR lpszName)
+{
+	vector<CDuiObjectInfo*>::iterator it;
+	for(it=m_vecDuiObjectInfo.begin();it!=m_vecDuiObjectInfo.end();++it)
+	{
+		CDuiObjectInfo* pDuiObjectInfo = *it;
+		if(pDuiObjectInfo && pDuiObjectInfo->m_pfGetClassName)
+		{
+			CString strClassName = pDuiObjectInfo->m_pfGetClassName();
+			if(strClassName == lpszName)
+			{
+				m_vecDuiObjectInfo.erase(it);
+				delete pDuiObjectInfo;
+				return TRUE;
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+// 加载控件库
+void DuiSystem::LoadDuiControls()
+{
+}
+
+// 释放控件库
+void DuiSystem::ReleaseDuiControls()
+{
+	for (size_t i = 0; i < m_vecDuiObjectInfo.size(); i++)
+	{
+		CDuiObjectInfo* pDuiObjectInfo = m_vecDuiObjectInfo.at(i);
+		if (pDuiObjectInfo)
+		{
+			// 执行控件的依赖库释放函数
+			if(pDuiObjectInfo->m_pfShutdown)
+			{
+				pDuiObjectInfo->m_pfShutdown();
+			}
+
+			delete pDuiObjectInfo;
+		}		
+	}
+}
+
 // 根据控件类名创建控件实例
 CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject)
 {
@@ -1421,9 +1481,33 @@ CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiOb
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiFlashCtrl);
 	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiMediaPlayer);
 
-	#ifdef USE_WKE_CONTROL
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiWkeView);
-	#endif // USE_WKE_CONTROL
+	// 查找用户注册的扩展空间,通过扩展控件创建控件实例
+	pControl = DuiSystem::Instance()->CreateUserControlByName(lpszName, hWnd, pParentObject);
+	if(pControl)
+	{
+		return pControl;
+	}
+
+	return NULL;
+}
+
+// 查找用户注册的扩展空间,通过扩展控件创建控件实例
+CControlBase* DuiSystem::CreateUserControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject)
+{
+	CControlBase *pControl = NULL;
+
+	for (size_t i = 0; i < m_vecDuiObjectInfo.size(); i++)
+	{
+		CDuiObjectInfo* pDuiObjectInfo = m_vecDuiObjectInfo.at(i);
+		if (pDuiObjectInfo && pDuiObjectInfo->m_pfCheckAndNew)
+		{
+			pControl = (CControlBase*)pDuiObjectInfo->m_pfCheckAndNew(lpszName, hWnd, pParentObject);
+			if(pControl)
+			{
+				return pControl;
+			}
+		}
+	}
 
 	return NULL;
 }
