@@ -74,6 +74,7 @@ public:
     DuiSystem(HINSTANCE hInst, DWORD dwLangID = 0, CString strResourceFile = _T(""), UINT uAppID = 0, UINT nIDTemplate = 0, CString strStyle = _T(""));
     ~DuiSystem(void);
 
+	static BOOL HaveInstance();
 	static DuiSystem* Instance();
 	static void Release();
 

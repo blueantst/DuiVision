@@ -110,6 +110,12 @@ DuiSystem::~DuiSystem(void)
 	destroySingletons();
 }
 
+// 判断单例是否已经创建
+BOOL DuiSystem::HaveInstance()
+{
+	return (g_pIns != NULL);
+}
+
 // 创建单例
 DuiSystem* DuiSystem::Instance()
 {
