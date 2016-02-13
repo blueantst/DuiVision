@@ -184,7 +184,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug_Ansi|Win32"
+			Name="Debug_Multi|Win32"
 			OutputDirectory="$(SolutionDir)bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
@@ -266,12 +266,12 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release_Ansi|Win32"
-			OutputDirectory="$(SolutionDir)Lib"
+			Name="Release_Multi|Win32"
+			OutputDirectory="$(SolutionDir)bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -387,7 +387,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug_Ansi|Win32"
+					Name="Debug_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -395,7 +395,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release_Ansi|Win32"
+					Name="Release_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

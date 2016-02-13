@@ -161,7 +161,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug_Ansi|Win32"
+			Name="Debug_Multi|Win32"
 			OutputDirectory="$(SolutionDir)bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
@@ -234,13 +234,13 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release_Ansi|Win32"
+			Name="Release_Multi|Win32"
 			OutputDirectory="$(SolutionDir)Bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			UseOfATL="0"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -350,7 +350,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug_Ansi|Win32"
+					Name="Debug_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -358,7 +358,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release_Ansi|Win32"
+					Name="Release_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
