@@ -111,6 +111,71 @@ int CDuiPlugin::ProcessMessage(CVciMessage* pIn, CVciMessage* ppOut)
 	return 0;
 }
 
+// 加载xml文件
+BOOL CDuiPlugin::LoadXmlFile(CString strXmlFile)
+{
+	if(m_pDuiPanel == NULL)
+	{
+		return FALSE;
+	}
+
+	DuiXmlDocument xmlDoc;
+	DuiXmlNode pDlgElem;
+	DuiXmlNode pDlgBodyElem;
+	DuiXmlNode pDlgBaseElem;
+	DuiXmlNode pPopupElem;
+	DuiXmlNode pMenuElem;
+
+	if(!DuiSystem::Instance()->LoadXmlFile(xmlDoc, strXmlFile))
+	{
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CDuiPlugin::LoadXmlFile %s failed"), strXmlFile);
+		return FALSE;
+	}
+
+	BOOL bRet = FALSE;
+	// 尝试作为对话框进行加载
+	pDlgElem = xmlDoc.child(_T("dlg"));//RootElement();
+	if(pDlgElem)
+	{
+		pDlgBaseElem = pDlgElem.child(_T("base"));
+		if(pDlgBaseElem)
+		{
+			pDlgBaseElem.set_name(_T("div"));
+			bRet = m_pDuiPanel->Load(pDlgBaseElem);
+		}
+
+		pDlgBodyElem = pDlgElem.child(_T("body"));
+		if(pDlgBodyElem)
+		{
+			pDlgBodyElem.set_name(_T("div"));
+			bRet = m_pDuiPanel->Load(pDlgBodyElem);
+		}
+	}
+
+	// 尝试作为popup进行加载
+	if(!bRet)
+	{
+		pPopupElem = xmlDoc.child(_T("popup"));
+		if(pPopupElem)
+		{
+			pPopupElem.set_name(_T("div"));
+			bRet = m_pDuiPanel->Load(pPopupElem);
+		}
+	}
+
+	// 尝试作为menu进行加载
+	if(!bRet)
+	{
+		pMenuElem = xmlDoc.child(_T("menu"));
+		if(pMenuElem)
+		{
+			pMenuElem.set_name(_T("div"));
+			bRet = m_pDuiPanel->Load(pMenuElem);
+		}
+	}
+
+	return bRet;
+}
 
 //{{VCI_IMPLEMENT_BEGIN
 int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc)
@@ -146,6 +211,11 @@ int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc)
 			DuiSystem::RegisterHandler(m_pDuiPanel, pHandler);
 			// 加载插件界面文件
 			BOOL bRet = m_pDuiPanel->LoadXmlFile(lpszName);
+			if(!bRet)
+			{
+				// 如果作为div加载失败(xml文件的子节点不是div节点),则分析xml文件是否可以作为对话框加载
+				bRet = LoadXmlFile(lpszName);
+			}
 			DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiPlugin::OnInit load %s %s"), lpszName, bRet ? _T("succ") : _T("fail"));
 		}
 	}

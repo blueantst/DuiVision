@@ -52,6 +52,8 @@ public:
 	virtual int __stdcall UninstallHandler(DWORD nEventID, LPVOID lpHandler);
 	virtual int __stdcall ProcessMessage(CVciMessage* pIn, CVciMessage* ppOut);
 
+	BOOL LoadXmlFile(CString strXmlFile);
+
 public:
 	CDuiPanel*			m_pDuiPanel;	// panel∂‘œÛ
 
