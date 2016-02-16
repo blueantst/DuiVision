@@ -45,6 +45,8 @@ public:
 	virtual int __stdcall OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual int __stdcall OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual int __stdcall SetUpdate(BOOL bUpdate, COLORREF clr);
+	virtual int __stdcall OnRButtonDown(UINT nFlags, CPoint point);
+	virtual int __stdcall OnRButtonUp(UINT nFlags, CPoint point);
 	//}}VCI_IMPLEMENT_DEFINE_END
 
 	virtual int __stdcall InstallHandler(DWORD nEventID, LPVOID lpHandler, DWORD dwRefData);
@@ -87,6 +89,8 @@ protected:
 		virtual int __stdcall OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 		virtual int __stdcall OnLButtonDblClk(UINT nFlags, CPoint point);
 		virtual int __stdcall SetUpdate(BOOL bUpdate, COLORREF clr);
+		virtual int __stdcall OnRButtonDown(UINT nFlags, CPoint point);
+		virtual int __stdcall OnRButtonUp(UINT nFlags, CPoint point);
 	//}}VCI_INTERFACE_PART_END
 	END_INTERFACE_PART(DuiPlugin)
 	EXPORT_INTERFACE_PART(DuiPlugin)

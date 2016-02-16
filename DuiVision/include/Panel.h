@@ -54,6 +54,8 @@ public:
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDblClk(UINT nFlags, CPoint point);
+	virtual BOOL OnControlRButtonDown(UINT nFlags, CPoint point);
+	virtual BOOL OnControlRButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual	BOOL OnControlTimer();

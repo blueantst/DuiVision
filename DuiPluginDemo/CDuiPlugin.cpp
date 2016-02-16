@@ -291,6 +291,24 @@ int CDuiPlugin::SetUpdate(BOOL bUpdate, COLORREF clr)
 	}
 	return 0;
 }
+
+int CDuiPlugin::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPanel)
+	{
+		return m_pDuiPanel->OnRButtonDown(nFlags, point);
+	}
+	return 0;
+}
+
+int CDuiPlugin::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPanel)
+	{
+		return m_pDuiPanel->OnRButtonUp(nFlags, point);
+	}
+	return 0;
+}
 //}}VCI_IMPLEMENT_END
 
 //////////////////////////////////////////////////////////////////////////
@@ -409,6 +427,18 @@ int __stdcall CDuiPlugin::XDuiPlugin::SetUpdate(BOOL bUpdate, COLORREF clr)
 {
 	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
 	return pObj->SetUpdate(bUpdate, clr);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->OnRButtonDown(nFlags, point);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->OnRButtonUp(nFlags, point);
 }
 //}}VCI_INTERFACE_IMPLEMENT_END
 
