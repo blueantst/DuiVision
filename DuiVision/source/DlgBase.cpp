@@ -42,6 +42,8 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 
 	m_bIsLButtonDown = FALSE;
 	m_bIsLButtonDblClk = FALSE;
+	m_bIsRButtonDown = FALSE;
+	m_bIsRButtonDblClk = FALSE;
 	m_pOldMemBK = NULL;
 	m_pControl = NULL;
 	m_pFocusControl = NULL;
@@ -2407,6 +2409,7 @@ void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void CDlgBase::OnRButtonDown(UINT nFlags, CPoint point)
 {
+	m_bIsRButtonDblClk = FALSE;
 }
 
 void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
@@ -2437,7 +2440,35 @@ void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
 		}	
 	}
 
+	m_bIsRButtonDblClk = FALSE;
+
 	CDialog::OnRButtonUp(nFlags, point);
+}
+
+// 鼠标右键双击
+void CDlgBase::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_bIsRButtonDblClk = TRUE;
+
+	if(m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnRButtonDblClk(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	CDialog::OnRButtonDblClk(nFlags, point);
 }
 
 // 键盘事件处理(移到PreTranslateMessage中实现子控件的键盘事件调用,因为对话框的OnKeyDown函数有局限性,不能捕获到ALT等组合键)

@@ -746,6 +746,48 @@ BOOL CControlBase::OnRButtonUp(UINT nFlags, CPoint point)
 	return false;
 }
 
+// 鼠标右键双击事件处理
+BOOL CControlBase::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+
+	// 保存原始的鼠标位置,并进行位置变换
+	CPoint oldPoint = point;
+	OnMousePointChange(point);
+
+	m_bMouseDown = false;
+	if(m_pControl != NULL)
+	{
+		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
+		UINT uControlID = m_pControl->GetControlID();
+		if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
+		{
+			point = oldPoint;
+		}
+		if(m_pControl->OnRButtonDblClk(nFlags, point))
+		{
+			return true;
+		}else
+		if(!m_pControl->GetDblClk())
+		{
+			// 如果控件不允许双击,则调用单击处理函数
+			return m_pControl->OnRButtonDown(nFlags, point);
+		}
+	}
+	else
+	{
+		if(!GetDblClk())
+		{
+			// 如果控件不允许双击,则调用单击处理函数
+			return OnControlRButtonDown(nFlags, point);
+		}
+
+		return OnControlRButtonDblClk(nFlags, point);
+	}
+
+	return false;
+}
+
 // 滚动事件处理
 BOOL CControlBase::OnScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {

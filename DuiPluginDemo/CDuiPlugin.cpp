@@ -309,6 +309,15 @@ int CDuiPlugin::OnRButtonUp(UINT nFlags, CPoint point)
 	}
 	return 0;
 }
+
+int CDuiPlugin::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPanel)
+	{
+		return m_pDuiPanel->OnRButtonDblClk(nFlags, point);
+	}
+	return 0;
+}
 //}}VCI_IMPLEMENT_END
 
 //////////////////////////////////////////////////////////////////////////
@@ -439,6 +448,12 @@ int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
 	return pObj->OnRButtonUp(nFlags, point);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->OnRButtonDblClk(nFlags, point);
 }
 //}}VCI_INTERFACE_IMPLEMENT_END
 

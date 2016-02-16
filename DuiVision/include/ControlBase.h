@@ -140,6 +140,7 @@ public:
 	BOOL OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	BOOL OnRButtonDown(UINT nFlags, CPoint point);
 	BOOL OnRButtonUp(UINT nFlags, CPoint point);
+	BOOL OnRButtonDblClk(UINT nFlags, CPoint point);
 
 	BOOL OnTimer();
 
@@ -155,6 +156,7 @@ public:
 	virtual BOOL OnControlSetDuiMsg(LPCTSTR lpszDuiMsg);
 	virtual BOOL OnControlRButtonDown(UINT nFlags, CPoint point){ return FALSE; };
 	virtual BOOL OnControlRButtonUp(UINT nFlags, CPoint point){ return FALSE; };
+	virtual BOOL OnControlRButtonDblClk(UINT nFlags, CPoint point){ return FALSE; }
 
 	virtual	BOOL OnControlTimer() { return FALSE; }
 

@@ -635,6 +635,16 @@ BOOL CDuiPanel::OnControlRButtonUp(UINT nFlags, CPoint point)
 	return FALSE;
 }
 
+// 鼠标右键双击事件处理
+BOOL CDuiPanel::OnControlRButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnRButtonDblClk(nFlags, point);
+	}
+	return FALSE;
+}
+
 // 键盘事件处理
 BOOL CDuiPanel::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
