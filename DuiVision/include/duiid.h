@@ -74,6 +74,7 @@
 #define					MSG_MOUSE_RUP						12						// 鼠标右键放开事件
 #define					MSG_KEY_DOWN						13						// 键盘按下事件
 #define					MSG_CONTROL_EVENT					14						// 控件的自定义事件
+#define					MSG_MOUSE_RDBLCLK					15						// 鼠标右键双击
 
 
 // 进程间消息内容的结构定义
