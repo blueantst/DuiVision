@@ -337,7 +337,7 @@ DuiXmlParseResult DuiXmlDocument::load_file(const LPCTSTR path, unsigned int opt
 	std::string strResult;
 	unicodeToMulti(unicodeText,strResult);
 
-	result = m_document.load(strResult.c_str());
+	result = m_document.load(strResult.c_str(), options & ~parse_wconv_attribute);
 	//result = m_document.load_buffer(szBuffer,size+1);
 	
 	return result;
