@@ -514,15 +514,14 @@ void CDuiListCtrl::SetRowTooltip(int nRow, CString strTooltip)
 		return;
 	}
 
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg && ((m_nTipRow != nRow) || (m_nTipVirtualTop != m_nVirtualTop)))
+	if((m_nTipRow != nRow) || (m_nTipVirtualTop != m_nVirtualTop))
 	{
 		ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
 		if(rowInfo.bNeedTitleTip || rowInfo.bNeedContentTip)
 		{
 			CRect rc = rowInfo.rcRow;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
-			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
+			SetTooltip(this, strTooltip, rc, TRUE);
 		}
 		m_nTipRow = nRow;
 		m_nTipVirtualTop = m_nVirtualTop;

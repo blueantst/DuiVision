@@ -1459,18 +1459,17 @@ void CDuiTreeCtrl::SetGridTooltip(HTREEITEM hNode, int nItem, CString strTooltip
 		return;
 	}
 
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg && ((m_nTipNode != hNode) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop)))
+	if((m_nTipNode != hNode) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop))
 	{
 		TreeItemInfo* pGridInfo = GetItemInfo(hNode, nItem);
 		if(pGridInfo && (pGridInfo->bNeedTitleTip || pGridInfo->bNeedContentTip))
 		{
 			CRect rc = pGridInfo->rcItem;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
-			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
+			SetTooltip(this, strTooltip, rc, TRUE);
 		}else
 		{
-			pDlg->ClearTooltip();
+			ClearTooltip();
 		}
 		m_nTipNode = hNode;
 		m_nTipItem = nItem;

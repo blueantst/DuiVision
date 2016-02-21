@@ -431,6 +431,99 @@ CControlBase* CControlBase::GetNextFocusableControl(CControlBase* pFocusControl)
 	return NULL;
 }
 
+// 设置Tooltip
+void CControlBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth, int nTipWidth)
+{
+	// 如果找到了父对话框,则调用对话框的设置Tooltip函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->SetTooltip(pControl, strTooltip, rect, bControlWidth, nTipWidth);
+		return;
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的设置Tooltip函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的设置Tooltip函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		int _nTipWidth = nTipWidth;
+		if(bControlWidth)
+		{
+			_nTipWidth = pControl->GetRect().Width();
+		}
+		pIDuiHostWnd->SetTooltip(pControl->GetID(), strTooltip, rect, _nTipWidth);
+		return;
+	}
+}
+
+// 清除Tooltip
+void CControlBase::ClearTooltip()
+{
+	// 如果找到了父对话框,则调用对话框的清除Tooltip函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClearTooltip();
+		return;
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的清除Tooltip函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的清除Tooltip函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClearTooltip();
+		return;
+	}
+}
+
+// 设置当前Tooltip控件ID
+void CControlBase::SetTooltipCtrlID(int nTooltipCtrlID)
+{
+	// 如果找到了父对话框,则调用对话框的设置Tooltip控件ID函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->SetTooltipCtrlID(nTooltipCtrlID);
+		return;
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的设置Tooltip控件ID函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的设置Tooltip控件ID函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->SetTooltipCtrlID(nTooltipCtrlID);
+		return;
+	}
+}
+
+// 获取当前Tooltip控件ID
+int CControlBase::GetTooltipCtrlID()
+{
+	// 如果找到了父对话框,则调用对话框的获取Tooltip控件ID函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		return pDlg->GetTooltipCtrlID();
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的获取Tooltip控件ID函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的获取Tooltip控件ID函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		return pIDuiHostWnd->GetTooltipCtrlID();
+	}
+
+	return 0;
+}
+
 // 鼠标移动事件处理
 BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -465,12 +558,11 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 
 	if(!m_strTooltip.IsEmpty() && PtInRect(point) && OnCheckMouseResponse(nFlags, point))
 	{
-		// 如果当前控件有Tooltip,则添加一个Tooltip
-		CDlgBase* pDlg = GetParentDialog();
-		if(pDlg && (pDlg->GetTooltipCtrlID() != GetID()))
+		// 如果当前控件有Tooltip,并且当前Tooltip设置的是其他控件,则设置Tooltip
+		if(GetTooltipCtrlID() != GetID())
 		{
-			pDlg->SetTooltip(this, m_strTooltip, m_rc, FALSE, m_nTipWidth);
-			pDlg->SetTooltipCtrlID(GetID());
+			SetTooltip(this, m_strTooltip, m_rc, FALSE, m_nTipWidth);
+			SetTooltipCtrlID(GetID());
 		}
 	}
 
@@ -1614,6 +1706,22 @@ CDlgBase* CControlBase::GetParentDialog(BOOL bEnablePopup)
 	if((pParentObj != NULL) && pParentObj->IsClass(_T("dlg")))
 	{
 		return (CDlgBase*)pParentObj;
+	}
+
+	return NULL;
+}
+
+// 获取父控件的插件宿主窗口功能接口(如果是在插件中)
+IDuiHostWnd* CControlBase::GetParentIDuiHostWnd()
+{
+	CDuiObject* pParentObj = GetParent();
+	while(pParentObj != NULL)
+	{
+		if(pParentObj->IsClass(_T("div")) && (((CDuiPanel*)pParentObj)->GetIDuiHostWnd() != NULL))
+		{
+			return ((CDuiPanel*)pParentObj)->GetIDuiHostWnd();
+		}
+		pParentObj = ((CControlBase*)pParentObj)->GetParent();
 	}
 
 	return NULL;

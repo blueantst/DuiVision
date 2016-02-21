@@ -13,7 +13,7 @@ interface IDuiPluginPanel : public IUnknown
 	//}} 注意：!!!这里是保留的重要函数，不可删除!!!
 
 	//{{VCI_INTERFACE_BEGIN
-	virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc) = 0;
+	virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc, IDuiHostWnd* pIDuiHostWnd) = 0;
 	virtual int __stdcall SetRect(CRect rc) = 0;
 	virtual int __stdcall SetVisible(BOOL bIsVisible) = 0;
 	virtual int __stdcall SetDisable(BOOL bIsDisable) = 0;

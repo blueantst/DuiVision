@@ -7,6 +7,7 @@
 CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBaseFont(hWnd, pDuiObject)
 {
+	m_ulRefCount = 0;
 	m_bEnableScroll = TRUE;
 	m_nScrollWidth = 8;
 
@@ -33,6 +34,7 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	m_hPluginHandle = NULL;
 	m_strPluginFile = _T("");
 	m_pDuiPluginObject = NULL;
+	m_pIDuiHostWnd = NULL;
 
 	m_bDblClk = true;
 
@@ -261,7 +263,7 @@ HRESULT CDuiPanel::OnAttributePlugin(const CString& strValue, BOOL bLoading)
 			hWnd = pParentDlg->GetSafeHwnd();
 		}
 		//m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, CEncodingUtil::UnicodeToAnsi(GetName()), m_rc);
-		m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, GetName(), m_rc);
+		m_pDuiPluginObject->OnInit(nIDTemplate, hWnd, GetName(), m_rc, &m_xDuiPanel);
 	}
 
 	return bLoading?S_FALSE:S_OK;
@@ -782,4 +784,156 @@ LRESULT CDuiPanel::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 	// 如果事件未处理,则调用父类的消息函数,最终会送给各事件处理对象进行处理
 	return __super::OnMessage(uID, Msg, wParam, lParam);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// 插件宿主窗口功能实现
+INTERFACE_IMPLEMENT(DuiPanel)
+
+// 获取应用程序名
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetAppName()
+{
+	return DuiSystem::Instance()->GetString(_T("APP_NAME"));
+}
+
+// 获取平台路径
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetPlatPath()
+{
+	return DuiSystem::GetExePath();
+}
+
+// 获取平台版本
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetPlatVersion()
+{
+	return DuiSystem::Instance()->GetString(_T("APP_VER"));
+}
+
+// 获取当前语言
+STDMETHODIMP_(int)
+CDuiPanel::XDuiPanel::GetCurrentLanguage()
+{
+	return DuiSystem::Instance()->GetCurrentLanguage();
+}
+
+// 获取平台注册表根路径
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetPlatRegistry()
+{
+	return DuiSystem::Instance()->GetConfig(_T("APP_REGISTRY"));
+}
+
+// 获取平台版权字符串
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetPlatCopyRight()
+{
+	return DuiSystem::Instance()->GetString(_T("APP_COPYRIGHT"));
+}
+
+// 获取主页URL
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetPlatHomeURL()
+{
+	return DuiSystem::Instance()->GetString(_T("APP_URL_HOME"));
+}
+
+// 获取下载URL
+STDMETHODIMP_(CString)
+CDuiPanel::XDuiPanel::GetPlatDownloadURL()
+{
+	return DuiSystem::Instance()->GetString(_T("APP_URL_DOWNLOAD"));
+}
+
+// 发送消息
+STDMETHODIMP_(int)
+CDuiPanel::XDuiPanel::SendMessage(CVciMessage* pIn, CVciMessage* ppOut)
+{
+	// 未实现
+	return 0;
+}
+
+// 平台的消息处理
+STDMETHODIMP_(int)
+CDuiPanel::XDuiPanel::ProcessMessage(CVciMessage* pIn, CVciMessage* ppOut)
+{
+	// 未实现
+	return 0;
+}
+
+// 发送平台命令
+STDMETHODIMP_(int)
+CDuiPanel::XDuiPanel::SendCommand(int nCmd, WPARAM wParam, LPARAM lParam)
+{
+	// 未实现
+	return 0;
+}
+
+// 发送平台命令
+STDMETHODIMP_(BOOL)
+CDuiPanel::XDuiPanel::SendCommand(int nCmd, WPARAM wParam, LPARAM lParam, LPVOID lpResult)
+{
+	return FALSE;
+}
+
+// 获取DuiVision应用ID
+STDMETHODIMP_(int)
+CDuiPanel::XDuiPanel::GetAppID()
+{
+	return DuiSystem::Instance()->GetAppID();
+}
+
+// 获取窗口背景信息
+STDMETHODIMP_(BOOL)
+CDuiPanel::XDuiPanel::GetWindowBkInfo(int& nType, int& nIDResource, COLORREF& clr, CString& strImgFile)
+{
+	return DuiSystem::Instance()->GetWindowBkInfo(nType, nIDResource, clr, strImgFile);
+}
+
+// 设置窗口背景信息
+STDMETHODIMP_(BOOL)
+CDuiPanel::XDuiPanel::SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, LPCTSTR lpszImgFile)
+{
+	return DuiSystem::Instance()->SetWindowBkInfo(nType, nIDResource, clr, lpszImgFile);
+}
+
+// 设置Tooltip
+STDMETHODIMP_(void)
+CDuiPanel::XDuiPanel::SetTooltip(int nCtrlID, LPCTSTR lpszTooltip, CRect rect, int nTipWidth)
+{
+	CDuiPanel *pObj = GET_INTERFACE_OBJECT(DuiPanel);
+	pObj->SetTooltip(pObj, lpszTooltip, rect, FALSE, nTipWidth);
+}
+
+// 清除Tooltip
+STDMETHODIMP_(void)
+CDuiPanel::XDuiPanel::ClearTooltip()
+{
+	CDuiPanel *pObj = GET_INTERFACE_OBJECT(DuiPanel);
+	pObj->ClearTooltip();
+}
+
+// 设置当前Tooltip控件ID
+STDMETHODIMP_(void)
+CDuiPanel::XDuiPanel::SetTooltipCtrlID(int nTooltipCtrlID)
+{
+	CDuiPanel *pObj = GET_INTERFACE_OBJECT(DuiPanel);
+	if(pObj)
+	{
+		pObj->SetTooltipCtrlID(nTooltipCtrlID);
+	}
+}
+
+// 获取当前Tooltip控件ID
+STDMETHODIMP_(int)
+CDuiPanel::XDuiPanel::GetTooltipCtrlID()
+{
+	CDuiPanel *pObj = GET_INTERFACE_OBJECT(DuiPanel);
+	if(pObj)
+	{
+		return pObj->GetTooltipCtrlID();
+	}
+
+	return 0;
 }

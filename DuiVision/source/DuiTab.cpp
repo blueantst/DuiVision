@@ -1210,18 +1210,17 @@ HRESULT CDuiTabCtrl::OnAttributeTabBtnPosChange(const CString& strValue, BOOL bL
 // ÉèÖÃTabÒ³Ç©µÄTooltip
 void CDuiTabCtrl::SetTabTooltip(int nItem, CString strTooltip)
 {
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg && (m_nTipItem != nItem))
+	if(m_nTipItem != nItem)
 	{
 		TabItemInfo* pTabInfo = GetItemInfo(nItem);
 		BOOL bHaveDivTip = ((pTabInfo->pControl != NULL) && !pTabInfo->pControl->GetTooltip().IsEmpty());
 		if(pTabInfo && (pTabInfo->bNeedTextTip || bHaveDivTip))
 		{
 			CRect rc = pTabInfo->rc;
-			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
+			SetTooltip(this, strTooltip, rc, TRUE);
 		}else
 		{
-			pDlg->ClearTooltip();
+			ClearTooltip();
 		}
 
 		m_nTipItem = nItem;

@@ -977,18 +977,17 @@ void CDuiGridCtrl::SetGridTooltip(int nRow, int nItem, CString strTooltip)
 		return;
 	}
 
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg && ((m_nTipRow != nRow) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop)))
+	if((m_nTipRow != nRow) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop))
 	{
 		GridItemInfo* pGridInfo = GetItemInfo(nRow, nItem);
 		if(pGridInfo && (pGridInfo->bNeedTitleTip || pGridInfo->bNeedContentTip))
 		{
 			CRect rc = pGridInfo->rcItem;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop+m_nHeaderHeight);
-			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
+			SetTooltip(this, strTooltip, rc, TRUE);
 		}else
 		{
-			pDlg->ClearTooltip();
+			ClearTooltip();
 		}
 		m_nTipRow = nRow;
 		m_nTipItem = nItem;

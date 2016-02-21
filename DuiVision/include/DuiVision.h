@@ -36,6 +36,7 @@ using namespace Gdiplus;
 #include "DuiNativeWnd.h"
 #include "DuiSystem.h"
 #include "IDuiPlugin.h"
+#include "IDuiHostWnd.h"
 
 //////////////////////////////////////////////////////////
 //Timer

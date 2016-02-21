@@ -8,6 +8,7 @@ using namespace  std;
 
 class CDlgBase;
 class CDlgPopup;
+interface IDuiHostWnd;
 
 // 按钮状态
 enum enumButtonState
@@ -131,6 +132,12 @@ public:
 	CControlBase* GetPrevFocusableControl(CControlBase* pFocusControl);
 	CControlBase* GetNextFocusableControl(CControlBase* pFocusControl);
 
+	// Tooltip
+	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth, int nTipWidth = 0);
+	void ClearTooltip();
+	void SetTooltipCtrlID(int nTooltipCtrlID);
+	int GetTooltipCtrlID();
+
 	// 鼠标键盘消息
 	BOOL OnMouseMove(UINT nFlags, CPoint point);
 	BOOL OnLButtonDown(UINT nFlags, CPoint point);
@@ -169,6 +176,7 @@ public:
 	void RemoveControls(CString strClassName);
 	void RemoveControls();
 	CDlgBase* GetParentDialog(BOOL bEnablePopup = TRUE);
+	IDuiHostWnd* GetParentIDuiHostWnd();
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 
 	// 消息处理

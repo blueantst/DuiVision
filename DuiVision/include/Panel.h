@@ -2,6 +2,8 @@
 #pragma once
 
 #include "ControlBase.h"
+#include "vcicomm.h"
+#include "IDuiHostWnd.h"
 
 using namespace  std;
 
@@ -39,6 +41,8 @@ public:
 
 	// 根据控件名创建控件实例
 	CControlBase* _CreateControlByName(LPCTSTR lpszName);
+	void SetIDuiHostWnd(IDuiHostWnd* pIDuiHostWnd) { m_pIDuiHostWnd = pIDuiHostWnd; }
+	IDuiHostWnd* GetIDuiHostWnd() { return m_pIDuiHostWnd; }
 
 	HRESULT OnAttributeImageScrollV(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageScrollH(const CString& strValue, BOOL bLoading);
@@ -63,7 +67,40 @@ public:
 
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 
+protected:
+	// 导出的插件宿主窗口功能接口
+    BEGIN_INTERFACE_PART(DuiPanel, IDuiHostWnd)
+		// 平台操作
+		STDMETHOD_( CString , GetAppName) ();				// 获取应用程序名
+		STDMETHOD_( CString , GetPlatPath) ();				// 获取平台路径
+		STDMETHOD_( CString , GetPlatVersion) ();			// 获取平台版本
+		STDMETHOD_( int , GetCurrentLanguage) ();			// 获取当前语言
+		STDMETHOD_( CString , GetPlatRegistry) ();			// 获取平台注册表根路径
+		STDMETHOD_( CString , GetPlatCopyRight) ();			// 获取平台版权字符串
+		STDMETHOD_( CString , GetPlatHomeURL) ();			// 获取主页URL
+		STDMETHOD_( CString , GetPlatDownloadURL) ();		// 获取下载URL
+		STDMETHOD_( int  , SendMessage) (CVciMessage* pIn, CVciMessage* ppOut);	// 发送消息
+		STDMETHOD_( int  , ProcessMessage) (CVciMessage* pIn, CVciMessage* ppOut);	// 平台的消息处理
+		STDMETHOD_( int  , SendCommand) (int nCmd, WPARAM wParam, LPARAM lParam);	// 发送平台命令
+		STDMETHOD_( BOOL , SendCommand) (int nCmd, WPARAM wParam, LPARAM lParam, LPVOID lpResult);	// 发送平台命令
+
+		// DuiVision系统功能
+		STDMETHOD_( int  , GetAppID) ();	// 获取DuiVision应用ID
+
+		// 窗口操作
+		STDMETHOD_( BOOL , GetWindowBkInfo) (int& nType, int& nIDResource, COLORREF& clr, CString& strImgFile);	// 获取窗口背景信息
+		STDMETHOD_( BOOL , SetWindowBkInfo) (int nType, int nIDResource, COLORREF clr, LPCTSTR lpszImgFile);	// 设置窗口背景信息
+
+		// Tooltip操作
+		STDMETHOD_( void  , SetTooltip) (int nCtrlID, LPCTSTR lpszTooltip, CRect rect, int nTipWidth);	// 设置Tooltip
+		STDMETHOD_( void , ClearTooltip) ();			// 清除Tooltip
+		STDMETHOD_( void , SetTooltipCtrlID) (int nTooltipCtrlID);	// 设置当前Tooltip控件ID
+		STDMETHOD_( int , GetTooltipCtrlID) ();		// 获取当前Tooltip控件ID
+	END_INTERFACE_PART(DuiPanel)
+	EXPORT_INTERFACE_PART(DuiPanel)
+
 public:
+	ULONG			m_ulRefCount;			// 内嵌接口类使用的引用计数,vcicomm使用
 	BOOL				m_bInit;					// 是否初始化完成
 	CString				m_strXmlFile;				// XML文件名
 	int					m_nVirtualHeight;			// Panel整体的高度
@@ -78,6 +115,7 @@ public:
 	HINSTANCE			m_hPluginHandle;			// 保存界面插件动态库的句柄
 	CString				m_strPluginFile;			// 界面插件文件名
 	IDuiPluginPanel*	m_pDuiPluginObject;			// 界面插件对象
+	IDuiHostWnd*	m_pIDuiHostWnd;		// 插件宿主窗口的功能接口
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScrollV)
