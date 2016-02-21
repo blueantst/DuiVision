@@ -26,7 +26,6 @@ DuiVisionApp.rc
 targetver.h
 [!endif]
 [!if APPTYPE_RADIO_DUIPLUGIN]
-DuiPlugin\vcicomm.h
 DuiPlugin\DuiPlugin.def
 DuiPlugin\DuiPlugin.rc
 DuiPlugin\DuiPlugin.cpp
@@ -111,6 +110,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\Frame.h
 [duivision]include\GlobalFunction.h
 [duivision]include\HideButton.h
+[duivision]include\IDuiHostWnd.h
 [duivision]include\IDuiPlugin.h
 [duivision]include\ImageString.h
 [duivision]include\LinkButton.h
@@ -126,6 +126,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\SelectBox.h
 [duivision]include\TextButton.h
 [duivision]include\Timer.h
+[duivision]include\vcicomm.h
 [duivision]include\WndBase.h
 [duivision]include\WndShadow.h
 
