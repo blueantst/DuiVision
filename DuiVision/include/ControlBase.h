@@ -64,6 +64,7 @@ public:
 	void SetParent(CDuiObject* pParent) { m_pParentDuiObject = pParent; }
 	HWND GetHWND() { return m_hWnd; }
 	HWND GetNativeHWnd() { return m_hwndHost; }
+	HWND GetPaintHWnd();
 
 	void TestMainThread();
 	void Draw(CDC &dc, CRect rcUpdate);
@@ -74,6 +75,7 @@ public:
 	BOOL GetUpdate() { return m_bUpdate; };
 	void UpdateMemDC(CDC &dc, int nWidth, int nHeight);
 	void UpdateAnimateDC(CDC &dc, int nWidth, int nHeight);
+	void ClientToScreen(LPPOINT lpPoint);
 
 	// Œª÷√–≈œ¢
 	virtual void SetRect(CRect rc);

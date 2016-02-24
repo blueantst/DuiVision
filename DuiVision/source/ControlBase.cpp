@@ -277,6 +277,46 @@ BOOL CControlBase::PtInRect(CPoint point)
 	return m_rc.PtInRect(point);
 }
 
+// 获取控件的父窗口句柄
+HWND CControlBase::GetPaintHWnd()
+{
+	// 如果找到父对话框,就用父对话框的HWnd
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		return pDlg->GetSafeHwnd();
+	}
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的HWnd
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		return pIDuiHostWnd->GetPaintHWnd();
+	}
+
+    return NULL;
+}
+
+// 坐标转换为屏幕坐标
+void CControlBase::ClientToScreen(LPPOINT lpPoint)
+{
+	// 如果找到父对话框,就用父对话框的转换函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClientToScreen(lpPoint);
+		return;
+	}
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的转换函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClientToScreen(lpPoint);
+		return;
+	}
+}
+
 // 设置焦点
 BOOL CControlBase::SetWindowFocus()
 {
@@ -1721,7 +1761,18 @@ IDuiHostWnd* CControlBase::GetParentIDuiHostWnd()
 		{
 			return ((CDuiPanel*)pParentObj)->GetIDuiHostWnd();
 		}
-		pParentObj = ((CControlBase*)pParentObj)->GetParent();
+
+		if(pParentObj->IsClass(_T("dlg")))
+		{
+			pParentObj = ((CDlgBase*)pParentObj)->GetParent();
+		}else
+		if(pParentObj->IsClass(_T("popup")))
+		{
+			pParentObj = ((CDlgPopup*)pParentObj)->GetParent();
+		}else
+		{
+			pParentObj = ((CControlBase*)pParentObj)->GetParent();
+		}
 	}
 
 	return NULL;
@@ -1790,11 +1841,11 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 			// 如果没有设置位置信息,则默认按照控件底部开始显示,水平方向中间对齐
 			point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
 		}
+
+		// 坐标转换为屏幕坐标
+		ClientToScreen(&point);
+
 		CDlgBase* pParentDlg = GetParentDialog();
-		if(pParentDlg != NULL)
-		{
-			pParentDlg->ClientToScreen(&point);
-		}
 		CString strXmlFile = m_strAction;
 		strXmlFile.Delete(0, 5);
 		if(pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU))

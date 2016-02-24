@@ -17,7 +17,6 @@ public:
     virtual ~CDuiNativeWnd();
 
 	CWnd* GetNativeWnd() const;
-	HWND GetPaintHWnd();
 	CWnd* GetPaintWnd();
 
     bool IsDelayCreate() const;

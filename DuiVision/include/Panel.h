@@ -90,6 +90,8 @@ protected:
 		// 窗口操作
 		STDMETHOD_( BOOL , GetWindowBkInfo) (int& nType, int& nIDResource, COLORREF& clr, CString& strImgFile);	// 获取窗口背景信息
 		STDMETHOD_( BOOL , SetWindowBkInfo) (int nType, int nIDResource, COLORREF clr, LPCTSTR lpszImgFile);	// 设置窗口背景信息
+		STDMETHOD_( void  , ClientToScreen) (LPPOINT lpPoint);	// 坐标转换为屏幕坐标
+		STDMETHOD_( HWND  , GetPaintHWnd) ();	// 获取宿主窗口的句柄
 
 		// Tooltip操作
 		STDMETHOD_( void  , SetTooltip) (int nCtrlID, LPCTSTR lpszTooltip, CRect rect, int nTipWidth);	// 设置Tooltip

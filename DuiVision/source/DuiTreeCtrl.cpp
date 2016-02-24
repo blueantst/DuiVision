@@ -1487,6 +1487,17 @@ void CDuiTreeCtrl::ClearGridTooltip()
 		m_nTipNode = NULL;
 		m_nTipItem = -1;
 		m_nTipVirtualTop = 0;
+		return;
+	}
+
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClearTooltip();
+		m_nTipNode = NULL;
+		m_nTipItem = -1;
+		m_nTipVirtualTop = 0;
+		return;
 	}
 }
 

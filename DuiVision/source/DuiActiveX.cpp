@@ -167,7 +167,7 @@ public:
     STDMETHOD(GetWindow)(HWND* phwnd)
     {
         if( m_pOwner == NULL ) return E_UNEXPECTED;
-        *phwnd = m_pOwner->GetPaintWindow();
+        *phwnd = m_pOwner->GetPaintHWnd();
         return S_OK;
     }
     STDMETHOD(ContextSensitiveHelp)(BOOL /*fEnterMode*/)
@@ -634,7 +634,7 @@ STDMETHODIMP CActiveXCtrl::OnInPlaceActivateEx(BOOL* pfNoRedraw, DWORD dwFlags)
     if( m_pOwner == NULL ) return E_UNEXPECTED;
     if( m_pOwner->m_pUnk == NULL ) return E_UNEXPECTED;
     ::OleLockRunning(m_pOwner->m_pUnk, TRUE, FALSE);
-    HWND hWndFrame = m_pOwner->GetPaintWindow();
+    HWND hWndFrame = m_pOwner->GetPaintHWnd();
     HRESULT Hr = E_FAIL;
     if( (dwFlags & ACTIVATE_WINDOWLESS) != 0 )
 	{
@@ -726,7 +726,7 @@ STDMETHODIMP CActiveXCtrl::GetWindowContext(IOleInPlaceFrame** ppFrame, IOleInPl
     HACCEL hac = ::CreateAcceleratorTable(&ac, 1);
     lpFrameInfo->cb = sizeof(OLEINPLACEFRAMEINFO);
     lpFrameInfo->fMDIApp = FALSE;
-    lpFrameInfo->hwndFrame = m_pOwner->GetPaintWindow();
+    lpFrameInfo->hwndFrame = m_pOwner->GetPaintHWnd();
     lpFrameInfo->haccel = hac;
     lpFrameInfo->cAccelEntries = 1;
     return S_OK;
@@ -1000,7 +1000,7 @@ HRESULT CActiveXCtrl::CreateActiveXWnd()
 	{
 		return E_OUTOFMEMORY;
 	}
-    m_pOwner->m_hwndHost = m_pWindow->Init(this, m_pOwner->GetPaintWindow());
+    m_pOwner->m_hwndHost = m_pWindow->Init(this, m_pOwner->GetPaintHWnd());
     return S_OK;
 }
 
@@ -1427,17 +1427,6 @@ CDuiActiveX::~CDuiActiveX()
     ReleaseControl();
 }
 
-// 获取控件的父窗口句柄
-HWND CDuiActiveX::GetPaintWindow()
-{
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg)
-	{
-		return pDlg->GetSafeHwnd();
-	}
-    return NULL;
-}
-
 static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
 #define HIMETRIC_PER_INCH   2540
@@ -1773,8 +1762,8 @@ bool CDuiActiveX::DoCreateControl()
     //if( m_pManager != NULL ) m_pManager->SendNotify((CControlUI*)this, _T("showactivex"), 0, 0, false);
     if( (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0 )
 	{
-        Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, GetPaintWindow(), &m_rc);
-        //::RedrawWindow(GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
+        Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, GetPaintHWnd(), &m_rc);
+        //::RedrawWindow(GetPaintHWnd(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
     }
     IObjectWithSite* pSite = NULL;
     m_pUnk->QueryInterface(IID_IObjectWithSite, (LPVOID*) &pSite);

@@ -898,6 +898,22 @@ CDuiPanel::XDuiPanel::SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, 
 	return DuiSystem::Instance()->SetWindowBkInfo(nType, nIDResource, clr, lpszImgFile);
 }
 
+// 坐标转换为屏幕坐标
+STDMETHODIMP_(void)
+CDuiPanel::XDuiPanel::ClientToScreen(LPPOINT lpPoint)
+{
+	CDuiPanel *pObj = GET_INTERFACE_OBJECT(DuiPanel);
+	pObj->ClientToScreen(lpPoint);
+}
+
+// 获取宿主窗口的句柄
+STDMETHODIMP_(HWND)
+CDuiPanel::XDuiPanel::GetPaintHWnd()
+{
+	CDuiPanel *pObj = GET_INTERFACE_OBJECT(DuiPanel);
+	return pObj->GetPaintHWnd();
+}
+
 // 设置Tooltip
 STDMETHODIMP_(void)
 CDuiPanel::XDuiPanel::SetTooltip(int nCtrlID, LPCTSTR lpszTooltip, CRect rect, int nTipWidth)

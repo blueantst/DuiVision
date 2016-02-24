@@ -37,6 +37,8 @@ interface IDuiHostWnd : public IUnknown
 	// 窗口操作
 	virtual BOOL __stdcall GetWindowBkInfo(int& nType, int& nIDResource, COLORREF& clr, CString& strImgFile) = 0;	// 获取窗口背景信息
 	virtual BOOL __stdcall SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, LPCTSTR lpszImgFile) = 0;	// 设置窗口背景信息
+	virtual void __stdcall ClientToScreen(LPPOINT lpPoint) = 0;		// 坐标转换为屏幕坐标
+	virtual HWND __stdcall GetPaintHWnd() = 0;		// 获取宿主窗口的句柄
 
 	// Tooltip操作
 	virtual void __stdcall SetTooltip(int nCtrlID, LPCTSTR lpszTooltip, CRect rect, int nTipWidth) = 0;	// 设置Tooltip

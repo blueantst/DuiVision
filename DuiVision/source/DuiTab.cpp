@@ -1235,6 +1235,15 @@ void CDuiTabCtrl::ClearTabTooltip()
 	{
 		pDlg->ClearTooltip();
 		m_nTipItem = -1;
+		return;
+	}
+
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClearTooltip();
+		m_nTipItem = -1;
+		return;
 	}
 }
 
@@ -1427,6 +1436,12 @@ BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 					if(pDlg)
 					{
 						pDlg->ClearTooltip();
+					}
+
+					IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+					if(pIDuiHostWnd)
+					{
+						pIDuiHostWnd->ClearTooltip();
 					}
 
 					// 点击事件消息

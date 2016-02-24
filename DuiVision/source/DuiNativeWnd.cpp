@@ -24,17 +24,6 @@ CWnd* CDuiNativeWnd::GetNativeWnd() const
     return m_pNativeWnd;
 }
 
-// 获取控件的父窗口句柄
-HWND CDuiNativeWnd::GetPaintHWnd()
-{
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg)
-	{
-		return pDlg->GetSafeHwnd();
-	}
-    return NULL;
-}
-
 // 获取控件的父窗口对象
 CWnd* CDuiNativeWnd::GetPaintWnd()
 {

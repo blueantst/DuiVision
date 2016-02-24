@@ -1005,6 +1005,17 @@ void CDuiGridCtrl::ClearGridTooltip()
 		m_nTipRow = -1;
 		m_nTipItem = -1;
 		m_nTipVirtualTop = 0;
+		return;
+	}
+
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClearTooltip();
+		m_nTipRow = -1;
+		m_nTipItem = -1;
+		m_nTipVirtualTop = 0;
+		return;
 	}
 }
 
