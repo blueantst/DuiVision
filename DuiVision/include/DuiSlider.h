@@ -43,7 +43,7 @@ public:
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(BackGround);	// 定义背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ForeGround);	// 定义前景图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Thumb);	// 定义前景图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Thumb);	// 定义滑块图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("value"), m_nProgress, FALSE)
 		DUI_INT_ATTRIBUTE(_T("max-value"), m_nMaxProgress, FALSE)
