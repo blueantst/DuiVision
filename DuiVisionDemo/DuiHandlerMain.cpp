@@ -153,7 +153,7 @@ void CDuiHandlerMain::OnInit()
 	}
 
 	// 演示在div中动态添加子控件(添加到基础控件的编辑框页面)
-	CControlBase* pDiv = (CControlBase*)GetControl(_T("tab.control.4"));
+	CControlBase* pDiv = (CControlBase*)GetControl(_T("layout-1"));
 	if(pDiv)
 	{
 		CDuiEdit* pControlEdit = static_cast<CDuiEdit*>(DuiSystem::CreateControlByName(_T("edit"), m_pDlg->GetSafeHwnd(), pDiv));

@@ -137,97 +137,107 @@ width-lt,height-lt,width-rb,height-rb" />
 		
 		<tab name="tab.control.4" image="skin:IDB_TAB_ITEM" title="编辑框" pos="0,30,-0,-0">
 
-			<edit name="edit1" img-count="2" image="skins\default\edit_border2.png" small-image="skin:IDB_KEY_BOARD"
-					pos="50,20" width="200" height="26" title="test"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
-					font="default" />
-			
-			<edit name="edit2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
-					pos="50,60" width="200" height="50" title="test"
-					multiline="1" autohscroll="0" autovscroll="1" number="0" readonly="0" maxchar="150"
-					font="default"/>
-			
-			<edit name="edit3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
-					pos="50,130" width="200" height="30" title="" tip="请输入用户名"
-					multiline="0" wantreturn="1" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
-					font="default" crtip="128,128,128,128" />
-			
-			<edit name="edit4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
-					pos="50,170" width="200" height="30" title="" tip="请输入密码"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
-					font="default" crtip="128,128,128,128" />
-			
-			<text pos="50,265,250,280" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
-			<rect pos="50,285,250,350" response="0" color="808080" />
-			<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
-				pos="51,286,249,349" tip="原生窗口控件"  />
+			<layout name="split_1" layout-type="vertical" pos="0,0,-0,-0"
+				img-split="skin:IDB_SPLIT_VERT" split-width="2" split-imm="1"
+				img-thumb="skin:IDB_SPLIT_THUMB_VERT" >
+				<layout-div name="layout-1" div-pos="300" min-pos="200" max-pos="500" >
+				
+					<edit name="edit1" img-count="2" image="skins\default\edit_border2.png" small-image="skin:IDB_KEY_BOARD"
+							pos="50,20" width="200" height="26" title="test"
+							multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+							font="default" />
+					
+					<edit name="edit2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
+							pos="50,60,-20,110" title="test"
+							multiline="1" autohscroll="0" autovscroll="1" number="0" readonly="0" maxchar="150"
+							font="default"/>
+					
+					<edit name="edit3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+							pos="50,130,-20,160" title="" tip="请输入用户名"
+							multiline="0" wantreturn="1" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+							font="default" crtip="128,128,128,128" />
+					
+					<edit name="edit4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
+							pos="50,170,-20,200" title="" tip="请输入密码"
+							multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+							font="default" crtip="128,128,128,128" />
+					
+					<text pos="50,265,250,280" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
+					<rect pos="50,285,250,350" response="0" color="808080" />
+					<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
+						pos="51,286,249,349" tip="原生窗口控件"  />
+				
+				</layout-div>
+				<layout-div name="layout-2">
 
-			<combobox name="combobox1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
-					value="local" tip="选择MAC地址" font="bold"
-					pos="300,20" width="350" height="28"
-					list-height="120" img-scroll="skin:IDB_SCROLL_V"
-					title="22-33-44-55-66-77" >
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-			</combobox>
+					<combobox name="combobox1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+							value="local" tip="选择MAC地址" font="bold"
+							pos="20,20,-50,48"
+							list-height="120" img-scroll="skin:IDB_SCROLL_V"
+							title="22-33-44-55-66-77" >
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+					</combobox>
 
-			<combobox name="combobox2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
-				head-image="skin:IDB_COMBO_ITEM" del-image="skin:IDB_COMBO_ITEM_CLOSE"
-				left-image="skin:IDB_COMPUTER" tip="选择文件类型"
-				xml="xml:duivision\combo_filetype.xml--" value="pdf"
-				pos="300,60" width="350" height="28" title="test"
-				crhover="220,128,128,128" >
-				<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
-				<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
-				<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" crtext="800000" crdesc="80,0,80" />
-				<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
-			</combobox>
+					<combobox name="combobox2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+						head-image="skin:IDB_COMBO_ITEM" del-image="skin:IDB_COMBO_ITEM_CLOSE"
+						left-image="skin:IDB_COMPUTER" tip="选择文件类型"
+						xml="xml:duivision\combo_filetype.xml--" value="pdf"
+						pos="20,60,-50,88" title="test"
+						crhover="220,128,128,128" >
+						<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
+						<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
+						<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" crtext="800000" crdesc="80,0,80" />
+						<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
+					</combobox>
 
-			<combobox name="combobox3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
-					left-image="skins\simage\search_normal.png"
-					value="local" tip="查找应用程序" font="bold" readonly="0"
-					pos="300,100" width="350" height="28" title="Script.NET" >
-				<item name="Script.NET" value="1" image="skins\simage\forum.png" />
-				<item name="Notepad++" value="2" image="skins\simage\forum.png" />
-				<item name="为知笔记" value="3" crtext="800000" image="skins\simage\forum.png" />
-			</combobox>
-			
-			<text pos="300,140,650,160" crtext="808080" title="richedit演示：" tip="下面的编辑框内容可以从rtf文件加载" />
-			<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
-					pos="300,160,650,350"
-					title="测试richedit" tip="richedit"
-					multiline="1" wantreturn="1" rich="1" file="rtf\rtftest.rtf"
-					hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
-					readonly="0" maxchar="128000" wordwrap="1" number="0"
-					font="default" crtext="0,0,0" crtip="128,128,128,128" />
+					<combobox name="combobox3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+							left-image="skins\simage\search_normal.png"
+							value="local" tip="查找应用程序" font="bold" readonly="0"
+							pos="20,100,-50,128" title="Script.NET" >
+						<item name="Script.NET" value="1" image="skins\simage\forum.png" />
+						<item name="Notepad++" value="2" image="skins\simage\forum.png" />
+						<item name="为知笔记" value="3" crtext="800000" image="skins\simage\forum.png" />
+					</combobox>
+					
+					<text pos="20,140,-50,160" crtext="808080" title="richedit演示：" tip="下面的编辑框内容可以从rtf文件加载" />
+					<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
+							pos="20,160,-50,350"
+							title="测试richedit" tip="richedit"
+							multiline="1" wantreturn="1" rich="1" file="rtf\rtftest.rtf"
+							hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+							readonly="0" maxchar="128000" wordwrap="1" number="0"
+							font="default" crtext="0,0,0" crtip="128,128,128,128" />
+				</layout-div>
+			</layout>
 
 		</tab>
 		
