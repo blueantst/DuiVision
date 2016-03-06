@@ -193,6 +193,7 @@
     <ClInclude Include="include\DuiGridCtrl.h" />
     <ClInclude Include="include\DuiHandler.h" />
     <ClInclude Include="include\duiid.h" />
+    <ClInclude Include="include\DuiLayout.h" />
     <ClInclude Include="include\DuiListCtrl.h" />
     <ClInclude Include="include\DuiMenu.h" />
     <ClInclude Include="include\DuiNativeWnd.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="source\DuiEdit.cpp" />
     <ClCompile Include="source\DuiGridCtrl.cpp" />
     <ClCompile Include="source\DuiHandler.cpp" />
+    <ClCompile Include="source\DuiLayout.cpp" />
     <ClCompile Include="source\DuiListCtrl.cpp" />
     <ClCompile Include="source\DuiMenu.cpp" />
     <ClCompile Include="source\DuiNativeWnd.cpp" />

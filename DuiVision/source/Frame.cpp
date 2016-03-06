@@ -37,12 +37,26 @@ void CDuiFrame::DrawControl(CDC &dc, CRect rcUpdate)
 
 		Graphics graphics(m_memDC);
 
+		m_memDC.SetBkMode(TRANSPARENT);
+
 		// 画边框
 		Pen pen(m_clrFrame, (Gdiplus::REAL)m_nFrameWidth);
 		pen.SetDashStyle((Gdiplus::DashStyle)m_nDashStyle);
-		RectF rectFrame((Gdiplus::REAL)(rc.left), (Gdiplus::REAL)(rc.top), (Gdiplus::REAL)(rc.Width()), (Gdiplus::REAL)(rc.Height()));
+		RectF rectFrame((Gdiplus::REAL)(0), (Gdiplus::REAL)(0), (Gdiplus::REAL)(rc.Width()), (Gdiplus::REAL)(rc.Height()));
 		graphics.DrawRectangle(&pen, rectFrame);
 
+		// 计算内容部分大小
+		//rc.OffsetRect(m_nFrameWidth, m_nFrameWidth);
+		//rc.DeflateRect(m_nFrameWidth*2, m_nFrameWidth*2);
+
+		//SolidBrush brush(m_clr);
+		//graphics.FillRectangle(&brush, m_nFrameWidth, m_nFrameWidth, rc.Width()-2*m_nFrameWidth, rc.Height()-2*m_nFrameWidth);
+/*
+		m_memDC.BitBlt(0, 0, rc.Width(), rc.Height(), &dc, m_rc.left+m_nFrameWidth, m_rc.top+m_nFrameWidth, WHITENESS);	// 画白色背景
+		DrawVerticalTransition(m_memDC, dc, CRect(m_nFrameWidth, m_nFrameWidth, rc.Width(), rc.Height()),	// 背景透明度
+				m_rc, m_nBeginTransparent, m_nEndTransparent);
+*/
+/*
 		// 计算内容部分大小
 		rc.OffsetRect(m_nFrameWidth, m_nFrameWidth);
 		rc.DeflateRect(m_nFrameWidth*2, m_nFrameWidth*2);
@@ -62,7 +76,7 @@ void CDuiFrame::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		TempDC.SelectObject(pOldmap);
 		memBmpTemp.DeleteObject();
-		TempDC.DeleteDC();
+		TempDC.DeleteDC();*/
 	}
 
 	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);

@@ -320,6 +320,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiLayout.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiListCtrl.cpp"
 				>
 			</File>
@@ -539,6 +543,10 @@
 			</File>
 			<File
 				RelativePath=".\include\duiid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiLayout.h"
 				>
 			</File>
 			<File

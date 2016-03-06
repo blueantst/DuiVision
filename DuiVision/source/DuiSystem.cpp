@@ -1422,6 +1422,7 @@ void DuiSystem::LoadDuiControls()
 {
 	// ×¢²áDuiVisionÄ¬ÈÏµÄ¿Ø¼þ
 	REGISTER_DUICONTROL(CDuiPanel, NULL);
+	REGISTER_DUICONTROL(CDuiLayout, NULL);
 	REGISTER_DUICONTROL(CDuiNativeWnd, NULL);
 
 	REGISTER_DUICONTROL(CDuiButton, NULL);
