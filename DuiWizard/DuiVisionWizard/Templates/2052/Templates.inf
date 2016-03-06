@@ -93,6 +93,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DuiGridCtrl.h
 [duivision]include\DuiHandler.h
 [duivision]include\duiid.h
+[duivision]include\DuiLayout.h
 [duivision]include\DuiListCtrl.h
 [duivision]include\DuiMenu.h
 [duivision]include\DuiNativeWnd.h
@@ -142,6 +143,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DuiEdit.cpp
 [duivision]source\DuiGridCtrl.cpp
 [duivision]source\DuiHandler.cpp
+[duivision]source\DuiLayout.cpp
 [duivision]source\DuiListCtrl.cpp
 [duivision]source\DuiMenu.cpp
 [duivision]source\DuiNativeWnd.cpp
@@ -246,6 +248,10 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [bin_source]skins\default\SCROLL_V.png
 [bin_source]skins\default\SkinBkg.png
 [bin_source]skins\default\SkinPushedBkg.png
+[bin_source]skins\default\split_hori.png
+[bin_source]skins\default\split_thumb_hori.jpg
+[bin_source]skins\default\split_thumb_vert.jpg
+[bin_source]skins\default\split_vert.png
 [bin_source]skins\default\Tab.png
 [bin_source]skins\default\tab_background.png
 [bin_source]skins\default\Tab_seperator.png
