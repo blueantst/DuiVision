@@ -9,7 +9,7 @@ BOOL				CTimer::m_bIsTmierOK = false;			// 是否可以定时
 
 CTimer::CTimer(void)
 {
-	m_bIsTmierOK = false;
+	//m_bIsTmierOK = false;
 }
 
 CTimer::~CTimer(void)
