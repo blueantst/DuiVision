@@ -1891,6 +1891,14 @@ int DuiSystem::ShowDuiDialog(LPCTSTR lpszXmlTemplate, CDuiObject* pParentObject,
 		return 0;
 	}
 
+	// 如果是非模态,则显示窗口之后返回
+	if(!bModule)
+	{
+		pDlg->ShowWindow(SW_SHOW);
+		return 0;
+	}
+
+	// 模态对话框,调用DoModal显示对话框
 	int nResponse = pDlg->DoModal();
 	DuiSystem::Instance()->RemoveDuiDialog(pDlg);
 	return nResponse;
