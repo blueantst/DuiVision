@@ -2577,7 +2577,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 	return CDialog::PreTranslateMessage(pMsg);
 }
 
-// 定时器消息
+// 定时器消息(重载CTimer类的函数)
 void CDlgBase::OnTimer(UINT uTimerID)
 {
 	if(m_uTimerAnimation == uTimerID)	// 动画定时器
@@ -2614,7 +2614,7 @@ void CDlgBase::OnTimer(UINT uTimerID)
 	}
 }
 
-// 定时器消息(带定时器名字的定时函数)
+// 定时器消息(带定时器名字的定时函数,重载CTimer类的函数)
 void CDlgBase::OnTimer(UINT uTimerID, CString strTimerName)
 {
 	// 应用创建的定时器都调用事件处理对象的定时处理函数
