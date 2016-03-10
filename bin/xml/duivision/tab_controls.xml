@@ -10,7 +10,7 @@
 		img-tabbtn-="skins\default\btn_close.png" tabbtnpos="-21,3"
 		font="bold" item-width="90" tab-height="29"
 		crtext="800000" crhover="800000" crpush="800000" animate="1"
-		pos="1,1,-1,-31">
+		pos="1,1,-1,-1">
 		
 		<tab name="tab.control.1" image="skin:IDB_TAB_ITEM" title="文字" active="true" pos="0,30,-0,-0">
 
