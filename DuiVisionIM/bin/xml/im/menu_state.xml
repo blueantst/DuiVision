@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<menu title="Menu" width="140" item-height="25" framesize="30" left="30" frame-width="3" bkimg="skin:IDB_MENU_BACK" >
+
+	
+	<menuitem name="item_online" image="skin:IDB_ONLINE" img-count="1" title="我在线上" />
+	<menuitem name="item_qme" image="skin:IDB_QME" img-count="1" title="会议中" />
+	<menuitem name="item_leave" image="skin:IDB_LEAVE" img-count="1" title="离开" />
+	<menuitem name="item_busy" image="skin:IDB_BUSY" img-count="1" title="忙碌" />
+	<menuitem name="item_invisible" image="skin:IDB_INVISIBLE" img-count="1" title="隐身" />
+	
+  
+</menu>

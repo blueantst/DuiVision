@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<dlg name="dlg_option" title="" width="400" height="200" resize="0"	frame="" bkimg="" crbk="000000"
+	shadow-size="3" >
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" shortcut="ESC" />
+		<text name="title" crtext="FFFFFF" font="big" pos="10,5,200,25" title="设置" response="0" />
+	</base>
+
+	<body>
+		<area name="area-1" pos="0,0,-0,140" begin-transparent="100" end-transparent="40" />
+		<area name="area-2" pos="0,140,-0,-0" begin-transparent="40" end-transparent="40" />
+		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+		
+		<text crtext="202020" pos="20,50,200,70" font="bold" title="IP设置" />
+		
+		<text crtext="202020" pos="20,80,100,100" title="IP地址：" />
+		<edit name="config.server.ip" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+					pos="100,77" width="230" height="28" title="" tip="设置IP地址"
+					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="20"
+					font="default" crtext="0,0,0" crtip="128,128,128,128" />
+		
+		<img pos="20,111,-20,112" skin="IDB_LINE" mode="extrude" framesize="0" />
+				
+		<button name="config.button.ok" skin="IDB_BT_DEFAULT" title="[OK]" pos="-100,-30,-20,-6" shortcut="RETURN" />
+
+	</body>
+  
+</dlg>

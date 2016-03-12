@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dlg name="dlg_main" title="[APP_NAME]" width="290" height="600" translucent="245"
+	frame="" bkimg="" crbk="000000" appwin="1" resize="1"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" topmost="0"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7">
+
+  <base>
+	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="hide-window" show="1"/>
+	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
+	<!--imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" action="menu:menu_main" menupos="-75,-0" /-->
+	<imgbtn name="button.skin" pos="-106,0,-77,29" skin="IDB_BT_SKIN" tip="皮肤" show="1"/>
+	<text name="title" crtext="FFFFFF" crmark="800000" crshadow="808080" font="default"
+			pos="10,4,250,25" title="[APP_NAME]" response="0" show="1" />
+	<!--text name="user.current" crtext="FFFFFF" crmark="800000" align="right"
+			pos="-250,4,-185,25" title="test" tip="登录用户：test" show="1" />
+	<textbtn name="textbtn" skin="" crtext="FFFFFF"
+			pos="-180,4,-141,25" show="1" title="[LOGIN]" action="dlg:dlg_login" /-->
+	
+  </base>
+  
+  <body>
+	<area name="area-1" pos="0,0,-0,136" begin-transparent="100" end-transparent="90" />
+	<!--area name="area-sep1" pos="0,136,-0,136" begin-transparent="70" end-transparent="70" /-->
+	<area name="area-search" pos="0,136,-0,164" begin-transparent="70" end-transparent="70" />
+	<area name="area-2" pos="0,164,-0,-0" begin-transparent="30" end-transparent="30" />
+	<area name="area-3" pos="0,-27,-0,-26" begin-transparent="70" end-transparent="70" />
+	<area name="area-4" pos="0,-26,-0,-0" begin-transparent="88" end-transparent="88" />
+	
+	<text name="text.user.current" crtext="FFFFFF" crmark="800000" align="left" font="bigbig"
+			pos="2,50,80,80" title="兔哥哥" tip="登录用户：test" show="1" />
+	<imgbtn name="button.menu.user" pos="80,60,91,71" img-btn="skins\im\state\status_online.png"
+			tip="菜单" action="menu:menu_state" menupos="0,-0" />
+	<edit name="edit.user.sign" skin="IDB_EDIT-"
+			pos="0,70,-65,100" title="" tip="编辑个性签名" crtip="255,245,245,245"
+			multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+			font="default" />
+	
+	<!--img name="image.user.frame" pos="-60,50" width="46" height="46" image="skins\im\head_bkg.png"
+				mode="extrude" framesize="0" /-->
+	<img name="image.user.frame" pos="-60,52" width="50" height="50" image="skin:IDB_WINDOW_SHADOW"
+				mode="mid" width-lt="5" height-lt="3" width-rb="5" height-rb="7" />
+	<img name="image.user" pos="-55,55" width="40" height="40" image="skins\im\head\181.png"
+				mode="extrude" framesize="1" tip="头像" />
+	
+	<edit name="edit.user.search" skin="IDB_EDIT-" small-image="skins\simage\search_normal.png"
+			pos="0,136,-0,164" title="" tip="搜索：联系人、群组" crtip="255,245,245,245"
+			multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+			font="default" />
+	
+	<tabctrl name="tabctrl.main" image="skins\tab_image.png" img-count="3"
+			img-sep="skin:IDB_TAB_SEPERATOR--" img-hover="skins\im\tab\toolbar_hover.png"
+			font="bold" item-width="50" tab-height="40" tab-left-pading="0" animate="1"
+			pos="1,164,-1,-27">
+		<tab name="tab.last" tip="会话" image="skins\im\tab\account_vip.png" img-count="4" active="true" pos="0,40,-0,-0" show="true" >
+		
+			<img pos="20,50" width="128" height="128" image="skins\dui.png"
+				mode="extrude" framesize="1" tip="DuiVision LOGO" />
+			<img pos="20,200" width="128" height="128" image="skins\scriptnet.jpg"
+				mode="extrude" framesize="1" tip="蓝蚂蚁工作室微信公众号二维码" />
+			
+		</tab>
+		
+		<tab name="tab.contact" tip="联系人" image="skins\im\tab\account_home.png" img-count="4" div="tab_contact" />
+		
+		<tab name="tab.group" tip="群组" image="skins\im\tab\account_cloud.png" img-count="4" div="tab_group" />
+
+		<!--tab name="tab.space" title1="空间" image="skins\im\default_avatar.png" div="tab_treectrl" /-->
+				
+	</tabctrl>
+	
+	<div name="footer" pos="0,-26,-0,-0" >	
+		<imgbtn name="button.menu" pos="1,-23,26,-1" image="skins\button\listview_thumb.png"
+			tip="菜单" showfocus="0" action="menu:menu_main" menupos="0,0,0,-0" />
+	</div>	
+	
+  </body>
+  
+</dlg>
