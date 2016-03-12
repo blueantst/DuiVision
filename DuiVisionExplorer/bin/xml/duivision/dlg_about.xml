@@ -18,12 +18,12 @@
 		<img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="normal" framesize="0" response="0" show="1" />
 		
 		<text crtext="000000" pos="170,45,-25,65" title="[APP_NAME] [APP_VER]" />
-		<text crtext="000000" pos="170,65,-25,85" title="2014-2015" />
+		<text crtext="000000" pos="170,65,-25,85" title="2014-2016" />
 		
 		<linkbtn name="linkbtn1" crtext="800000"
-			pos="170,100,-25,130" show="1" title="http://www.blueantstudio.net" href="http://www.blueantstudio.net" />
+			pos="170,100,-25,120" show="1" title="http://www.blueantstudio.net" href="http://www.blueantstudio.net" />
 		<linkbtn name="linkbtn1" crtext="800000"
-			pos="170,130,-25,150" show="1" title="https://github.com/blueantst/DuiVision" href="https://github.com/blueantst/DuiVision" />
+			pos="170,120,-25,140" show="1" title="https://github.com/blueantst/DuiVision" href="https://github.com/blueantst/DuiVision" />
 	
 		<button name="button.ok" skin="IDB_BT_DEFAULT" title="[OK]"	pos="-100,-30,-20,-6" show="1" />
 
