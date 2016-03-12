@@ -3,6 +3,10 @@
 	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000" appwin="1" resize="1"
 	width-lt="3" height-lt="119" width-rb="3" height-rb="30" topmost="0"
 	img-shadow="skins\360\window_shadow.png" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7">
+<!--dlg name="dlg_main" title="[APP_NAME]-任务栏名字22" width="800" height="550" translucent="255"
+	frame="skins\sy-bj.png" bkimg="" crbk="0,0,0,0" crtransparent1="0,0,0" appwin="1" resize="1"
+	width-lt="50" height-lt="50" width-rb="20" height-rb="20"
+	img-shadow1="skins\360\window_shadow.png" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7"-->
 
   <base>
 	<div name="win.caption" pos="0,0,-0,35" response="0" />
@@ -52,7 +56,7 @@ DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，
 			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,315,-30,-10" bk-transparent="5"
 				title="DuiVision开源下载地址：https://github.com/blueantst/DuiVision
 蓝蚂蚁工作室网站：http://www.blueantstudio.net
-QQ群：325880743
+QQ群：325880743 或搜索 Script.NET&DuiVision社区
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室 或扫描左侧二维码" />
 
 			<!--text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,-30,-10" bk-transparent="5"
@@ -99,7 +103,7 @@ QQ群：325880743
 	</tabctrl>
 	
 	<div name="footer" pos="0,-26,-0,-0" >	
-		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.9.0.0" title="检查更新"
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：[APP_VER]" title="检查更新"
 				action="link:http://www.blueantstudio.net" />
 	</div>	
 	
