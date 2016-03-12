@@ -24,13 +24,15 @@ QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://sh
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
 
-下载DuiVision Demo程序：[20150419版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20150419.zip)
+下载DuiVision Demo程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20160312.zip)
 
-下载DuiVision Demo程序：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20141213.zip)
+下载DuiVision浏览器演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionExplorer-20160312.zip)
+
+下载DuiVision IM演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionIM-20160312.zip)
 
 DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装包进行向导安装，目前推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。注意DuiVision的目录最好不要放在有空格或中文的路径下面，否则向导可能会出现一些异常问题。
 
-下载DuiVision开发手册：[DuiVision开发手册-20150329.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20150329.pdf)
+下载DuiVision开发手册：[DuiVision开发手册-20160309.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20160309.pdf)
 
 ## License
 
