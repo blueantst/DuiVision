@@ -28,11 +28,7 @@ QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://sh
 
 下载DuiVision Demo程序：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20141213.zip)
 
-下载DuiVision VC向导安装包：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionWizardSetup-20141213.exe)
-
-下载DuiVision VC向导压缩包：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionWizard-20141213.zip)
-
-推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。
+DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装包进行向导安装，目前推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。注意DuiVision的目录最好不要放在有空格或中文的路径下面，否则向导可能会出现一些异常问题。
 
 下载DuiVision开发手册：[DuiVision开发手册-20150329.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20150329.pdf)
 
@@ -40,7 +36,7 @@ QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://sh
 
 (The MIT License)
 
-Copyright (c) 2013-2015 blueant studio. and other contributors
+Copyright (c) 2013-2016 blueant studio. and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
