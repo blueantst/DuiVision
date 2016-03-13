@@ -614,6 +614,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	// 调用控件的鼠标移动函数
 	bRresponse = OnControlMouseMove(nFlags, point);
 
+	// 控件拖动的处理
 	if(m_bDragEnable && m_bMouseDown)
 	{
 		CControlBase* pParentCtrl = (CControlBase*)GetParent();
