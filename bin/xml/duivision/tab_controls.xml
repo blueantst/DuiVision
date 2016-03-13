@@ -112,7 +112,7 @@
 			
 			<img name="image-normal" pos="400,20" width="48" height="48" image="skins\icon\Movies.png"
 				mode="normal" framesize="1" tip="普通单张图片显示，可以用鼠标左键拖动"
-				cursor="hand" duimsg="mousemove|mouseldown|mouselup" />
+				cursor="hand" duimsg="mousemove|mouseldown|mouselup" drag="1" />
 			
 			<img pos="50,150,500,-0" image="skins\default\msgdlg_bk.png" mode="mid"
 					width-lt="10" height-lt="60" width-rb="10" height-rb="5" />

@@ -33,11 +33,11 @@
 			<!--animateimg name="animateimg_scan" skin="IDB_SCAN_STATUS_360" show="1"
 				pos="30,50" width="102" height="102" index="0" maxindex="17" timer-count="10" run="true" /-->
 			<img pos="20,50" width="128" height="128" image="skins\dui.png"
-				mode="extrude" framesize="1" tip="DuiVision LOGO" />
+				mode="extrude" framesize="1" tip="DuiVision LOGO" drag="1" />
 			<img pos="20,240" width="128" height="128" image="skins\scriptnet.jpg"
-				mode="extrude" framesize="1" tip="蓝蚂蚁工作室微信公众号二维码" />
+				mode="extrude" framesize="1" tip="蓝蚂蚁工作室微信公众号二维码" drag="1" />
 			
-			<text pos="170,50,600,80" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" />
+			<text pos="170,50,300,80" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" tip="文字可拖动,设置控件的drag属性=1" drag="1" />
 
 			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,-30,160" bk-transparent="5"
 				title="DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine、DuiLib等多个基于DirectUI的界面库开发的。
