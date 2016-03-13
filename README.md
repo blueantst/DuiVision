@@ -26,9 +26,13 @@ QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://sh
 
 下载DuiVision Demo程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20160312.zip)
 
-下载DuiVision浏览器演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionExplorer-20160312.zip)
+下载DuiVision 浏览器演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionExplorer-20160312.zip)
 
 下载DuiVision IM演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionIM-20160312.zip)
+
+下载DuiVision 仿360演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVision360Demo-20160312.zip)
+
+下载DuiVision exe内嵌界面资源演示程序：[20160312版本](http://www.blueantstudio.net/duivision/DuiVisionZipEmbedDemo-20160312.zip)
 
 DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装包进行向导安装，目前推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。注意DuiVision的目录最好不要放在有空格或中文的路径下面，否则向导可能会出现一些异常问题。
 
