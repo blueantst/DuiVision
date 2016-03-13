@@ -39,6 +39,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bIsRun = false;
 	m_bRunTime = false;
 	m_bImageUseECM = false;
+	m_bDragEnable = false;
 
 	m_nShortcutKey = 0;
 	m_nShortcutFlag = 0;
@@ -91,6 +92,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bIsRun = false;
 	m_bRunTime = false;
 	m_bImageUseECM = false;
+	m_bDragEnable = false;
 
 	m_nWidth = 0;
 	m_nHeight = 0;
@@ -612,6 +614,28 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	// 调用控件的鼠标移动函数
 	bRresponse = OnControlMouseMove(nFlags, point);
 
+	if(m_bDragEnable && m_bMouseDown)
+	{
+		CControlBase* pParentCtrl = (CControlBase*)GetParent();
+		if(pParentCtrl)
+		{
+			CRect rcParent = pParentCtrl->GetRect();
+			if(rcParent.PtInRect(point))
+			{
+				// 如果鼠标位置在父控件范围内则可以拖动
+				// 获取控件的当前位置和鼠标当前位置与上一次位置的差值,将控件当前位置加上鼠标位置的差值
+				CRect rc = GetRect();
+				CSize offset = point - m_ptLastMousePosition;
+				rc.OffsetRect(offset);
+				SetRect(rc);
+				// 刷新鼠标上一次位置的变量
+				m_ptLastMousePosition = point;
+				// 刷新控件
+				UpdateControl(true);
+			}
+		}
+	}
+
 	// 发送鼠标移动的DUI消息
 	if(m_bDuiMsgMouseMove)
 	{
@@ -693,6 +717,10 @@ BOOL CControlBase::OnLButtonDown(UINT nFlags, CPoint point)
 	OnMousePointChange(point);
 
 	m_bMouseDown = m_rc.PtInRect(point);
+	if(m_bMouseDown)
+	{
+		m_ptLastMousePosition = point;
+	}
 
 	// 查找鼠标是否在某个内部控件位置,如果是的话就更新当前子控件(按照反向顺序查找,因为定义在后面的控件是优先级更高的)
 	// 找到第一个符合条件的就结束查找

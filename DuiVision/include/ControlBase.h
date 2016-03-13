@@ -118,6 +118,8 @@ public:
 	void SetAction(CString strAction) { m_strAction = strAction; }
 	CString GetAction() { return m_strAction; }
 	BOOL UseImageECM() { return m_bImageUseECM; }
+	void SetDragEnable(BOOL bDragEnable) { m_bDragEnable = bDragEnable; }
+	BOOL GetDragEnable() { return m_bDragEnable; }
 
 	virtual	BOOL PtInRect(CPoint point);	// 判断坐标是否在控件范围内
 	UINT GetControlID() { return m_uID; }	// 控件ID就是DUI对象的ID
@@ -206,6 +208,7 @@ protected:
 	BOOL					m_bIsSelect;		// 是否允许选中
 	BOOL					m_bDblClk;			// 是否可以响应双击事件
 	BOOL					m_bMouseDown;		// 是否鼠标按下
+	BOOL					m_bDragEnable;		// 是否允许鼠标拖动控件
 
 	UINT					m_nShortcutKey;		// 快捷键按键
 	UINT					m_nShortcutFlag;	// 快捷键扫描码
@@ -248,6 +251,8 @@ protected:
 	CDlgPopup*				m_pWndPopup;		// 保存的弹出框指针
 
 	HCURSOR					m_hCursor;			// 控件的鼠标光标
+	
+	CPoint					m_ptLastMousePosition;	// 控件上一次的鼠标移动位置
 
 	BOOL					m_bDuiMsgMouseMove;	// 是否发送鼠标移动DUI消息
 	BOOL					m_bDuiMsgMouseLDown;// 是否发送鼠标左键按下DUI消息
@@ -265,6 +270,7 @@ protected:
 		DUI_CUSTOM_ATTRIBUTE(_T("disable"), OnAttributeDisable)
 		DUI_BOOL_ATTRIBUTE(_T("response"), m_bRresponse, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("tabstop"), m_bTabStop, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("drag"), m_bDragEnable, TRUE)
 		DUI_CUSTOM_ATTRIBUTE(_T("pos"), OnAttributePosChange)
 		DUI_CUSTOM_ATTRIBUTE(_T("width"), OnAttributeWidth)
 		DUI_CUSTOM_ATTRIBUTE(_T("height"), OnAttributeHeight)
