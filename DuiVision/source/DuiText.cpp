@@ -2,7 +2,6 @@
 #include "DuiText.h"
 
 #define	SCROLL_V	1	// 滚动条控件ID
-#define	LISTBK_AREA	2	// 背景Area控件ID
 
 CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
 		: CControlBaseFont(hWnd, pDuiObject)
@@ -18,11 +17,6 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 	m_bScrollV = FALSE;
-
-	CRect rcBk = CRect(0,0,0,0);
-	pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
- 	m_vecControl.push_back(pControlBase);
-	m_pControBkArea = (CControlBase*)pControlBase;
 
 	m_nBkTransparent = 0;
 
@@ -57,11 +51,6 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 	m_bScrollV = FALSE;
-
-	CRect rcBk = CRect(0,0,0,0);
-	pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
- 	m_vecControl.push_back(pControlBase);
-	m_pControBkArea = (CControlBase*)pControlBase;
 
 	m_nBkTransparent = 0;
 
@@ -218,11 +207,6 @@ void CDuiText::SetControlRect(CRect rc)
 			{
 				rcTemp = m_rc;
 				rcTemp.left = rcTemp.right - m_nScrollWidth;
-			}else
-			if(LISTBK_AREA == uControlID)
-			{
-				rcTemp = m_rc;
-				rcTemp.right -= m_nScrollWidth;
 			}else
 			{
 				continue;

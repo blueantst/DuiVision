@@ -3,16 +3,11 @@
 
 #define	SCROLL_V	1	// 垂直滚动条控件ID
 #define	SCROLL_H	2	// 水平滚动条控件ID
-#define	LISTBK_AREA	3	// 背景Area控件ID
+//#define	LISTBK_AREA	3	// 背景Area控件ID
 
 CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 			: CDuiPanel(hWnd, pDuiObject)
 {
-	CRect rcBk = CRect(0,0,0,0);
-	CControlBase* pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
- 	m_vecControl.push_back(pControlBase);
-	m_pControBkArea = (CControlBase*)pControlBase;
-
 	m_strFontTitle = DuiSystem::GetDefaultFont();
 	m_nFontTitleWidth = 12;
 	m_fontTitleStyle = FontStyleRegular;
@@ -909,12 +904,6 @@ void CDuiGridCtrl::SetControlRect(CRect rc)
 				rcTemp = m_rc;
 				rcTemp.top = rcTemp.bottom - m_nScrollWidth;
 				rcTemp.right = rcTemp.right - m_nScrollWidth;
-			}else
-			if(LISTBK_AREA == uControlID)
-			{
-				rcTemp = m_rc;
-				rcTemp.top += m_nHeaderHeight;
-				rcTemp.right -= m_nScrollWidth;
 			}else
 			{
 				continue;

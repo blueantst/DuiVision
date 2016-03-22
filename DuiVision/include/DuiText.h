@@ -39,7 +39,6 @@ protected:
 
 public:
 	CControlBaseFont*	m_pControScrollV;	// 垂直滚动条
-	CControlBase*		m_pControBkArea;	// 背景Area
 	BOOL				m_bScrollV;			// 是否启用垂直滚动条
 	int					m_nScrollWidth;		// 滚动条宽度
 	BOOL				m_bEnableHover;		// 是否允许鼠标移动时候变色
