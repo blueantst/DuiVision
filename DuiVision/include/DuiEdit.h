@@ -49,6 +49,7 @@ protected:
 
 	virtual	void SetControlDisable(BOOL bIsDisable);
 
+	void CreateEditFont();
 	void ShowEdit();
 	void HideEdit();
 	
