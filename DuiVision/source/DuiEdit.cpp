@@ -1,6 +1,58 @@
 #include "StdAfx.h"
 #include "DuiEdit.h"
 
+// 支持修改背景色的编辑控件
+class CBkColorEdit : public CEdit
+{
+private:
+	COLORREF m_clrBack;
+	CBrush m_brBack;
+	
+protected:
+	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
+	DECLARE_MESSAGE_MAP()
+
+public:
+	CBkColorEdit(COLORREF backColor = RGB(255, 255, 255));
+	virtual ~CBkColorEdit();
+	void SetBackColor(COLORREF color);
+	COLORREF GetBackColor();
+};
+
+CBkColorEdit::CBkColorEdit(COLORREF backColor /*= RGB(255, 255, 255)*/)
+{
+	m_clrBack = backColor;
+	m_brBack.CreateSolidBrush(m_clrBack);
+	EnableToolTips(TRUE);
+}
+
+CBkColorEdit::~CBkColorEdit()
+{
+}
+
+BEGIN_MESSAGE_MAP(CBkColorEdit, CEdit)
+	ON_WM_CTLCOLOR_REFLECT()
+END_MESSAGE_MAP()
+
+HBRUSH CBkColorEdit::CtlColor(CDC* pDC, UINT nCtlColor)
+{
+	// 背景颜色不支持设置透明度
+	pDC->SetBkColor(m_clrBack);
+	return m_brBack;
+}
+
+void CBkColorEdit::SetBackColor(COLORREF color)
+{
+	m_clrBack = color;
+	m_brBack.CreateSolidBrush(color);
+}
+
+COLORREF CBkColorEdit::GetBackColor()
+{
+	return m_clrBack;
+}
+
+// CDuiEdit
 CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 		: CControlBaseFont(hWnd, pDuiObject)
 {
@@ -20,11 +72,16 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_sizeLeftImage.SetSize(0,0);
 	m_sizeSmallImage.SetSize(0,0);
 
+	m_bBack = false;
+	m_clrBack = Color(255, 255, 255);
+
 	m_bPassWord = false;
 	m_bMultiLine = false;
 	m_bWantReturn = true;
 	m_bAutoHScroll = false;
 	m_bAutoVScroll = false;
+	m_bShowHScroll = false;
+	m_bShowVScroll = false;
 	m_bNumber = false;
 	m_bReadOnly = false;
 	m_nMaxChar = -1;
@@ -66,12 +123,17 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	m_sizeLeftImage.SetSize(0,0);
 	m_sizeSmallImage.SetSize(0,0);
 
+	m_bBack = false;
+	m_clrBack = Color(255, 255, 255);
+
 	SetRect(rc);
 	SetBitmapCount(4);
 
 	m_bMultiLine = false;
 	m_bAutoHScroll = false;
 	m_bAutoVScroll = false;
+	m_bShowHScroll = false;
+	m_bShowVScroll = false;
 	m_bNumber = false;
 	m_bReadOnly = false;
 	m_nMaxChar = -1;
@@ -282,6 +344,17 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoading)
 			}
 		}
 	}
+
+	return bLoading?S_FALSE:S_OK;
+}
+
+// 从XML设置背景颜色属性
+HRESULT CDuiEdit::OnAttributeBackColor(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	m_clrBack = CDuiObject::StringToColor(strValue);
+	m_bBack = true;
 
 	return bLoading?S_FALSE:S_OK;
 }
@@ -595,6 +668,13 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 
 	DrawImageFrame(graphics, m_pImage, m_rc, m_EditState * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 4);
 
+	// 画背景色
+	if(m_bBack)
+	{
+		SolidBrush brush(m_clrBack);
+		graphics.FillRectangle(&brush, m_rc.left + 2, m_rc.top + 2, m_rc.Width() - 4, m_rc.Height() - 4);
+	}
+
 	if(m_pLeftImage)
 	{
 		CRect  rc;
@@ -723,7 +803,17 @@ void CDuiEdit::ShowEdit()
 		{
 			rc.top += 2;
 		}
-  		m_pEdit = new CEdit;
+
+		if(m_bBack)
+		{
+			// 如果设置了背景色,则创建背景色可以更改的编辑控件
+			m_pEdit = new CBkColorEdit(m_clrBack.ToCOLORREF());
+		}else
+		{
+			// 否则创建普通的编辑控件
+  			m_pEdit = new CEdit;
+		}
+
 		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
 		if(m_bMultiLine)
 		{
@@ -751,7 +841,9 @@ void CDuiEdit::ShowEdit()
 		}
   		m_pEdit->Create(dwStyle, rc, CWnd::FromHandle(m_hWnd), GetID());
   		m_pEdit->SetFont(&m_fontTemp);
-		m_pEdit->SetWindowText(m_strTitle);	
+		m_pEdit->SetWindowText(m_strTitle);
+		m_pEdit->ShowScrollBar(SB_VERT, m_bShowVScroll);
+		m_pEdit->ShowScrollBar(SB_HORZ, m_bShowHScroll);
 		if(m_bPassWord)
 		{
 			m_pEdit->SetPasswordChar('*');

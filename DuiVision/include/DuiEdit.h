@@ -23,6 +23,9 @@ public:
 	bool SetSmallBitmap(CString strImage);
 	HRESULT OnAttributeSmallImage(const CString& strValue, BOOL bLoading);
 
+	void SetBackColor(Color clrBack) { m_clrBack = clrBack; };
+	HRESULT OnAttributeBackColor(const CString& strValue, BOOL bLoading);
+
 	virtual void SetControlRect(CRect rc);
 	virtual BOOL SetControlFocus(BOOL bFocus);
 	virtual BOOL IsDraw(CPoint point) ;
@@ -62,8 +65,10 @@ public:
 	BOOL			m_bPassWord;		// 密码输入
 	BOOL			m_bMultiLine;		// 多行
 	BOOL			m_bWantReturn;		// 是否允许回车换行
-	BOOL			m_bAutoHScroll;		// 水平滚动
-	BOOL			m_bAutoVScroll;		// 垂直滚动
+	BOOL			m_bAutoHScroll;		// 允许水平滚动
+	BOOL			m_bAutoVScroll;		// 允许垂直滚动
+	BOOL			m_bShowHScroll;		// 显示水平滚动条
+	BOOL			m_bShowVScroll;		// 显示垂直滚动条
 	BOOL			m_bNumber;			// 只能输入数字
 	BOOL			m_bReadOnly;		// 只读
 	int				m_nMaxChar;			// 最大字符数
@@ -74,6 +79,8 @@ public:
 	enumButtonState m_EditState;
 	CRect			m_rcText;			// 文字部分位置
 
+	bool				m_bBack;			// 是否填充背景
+	Color			m_clrBack;			// 背景色
 	Color			m_clrText;			// 文字颜色
 	Color			m_clrTooltip;		// 提示信息颜色
 	CFont			m_fontTemp;			// 输入框的字体
@@ -85,12 +92,15 @@ public:
 		DUI_BOOL_ATTRIBUTE(_T("wantreturn"), m_bWantReturn, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("autohscroll"), m_bAutoHScroll, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("autovscroll"), m_bAutoVScroll, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("hscroll"), m_bShowHScroll, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("vscroll"), m_bShowVScroll, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("number"), m_bNumber, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("readonly"), m_bReadOnly, FALSE)
 		DUI_INT_ATTRIBUTE(_T("maxchar"), m_nMaxChar, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("left-image"), OnAttributeLeftImage)
 		DUI_CUSTOM_ATTRIBUTE(_T("small-image"), OnAttributeSmallImage)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("crback"), OnAttributeBackColor)
 		DUI_COLOR_ATTRIBUTE(_T("crtip"), m_clrTooltip, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
