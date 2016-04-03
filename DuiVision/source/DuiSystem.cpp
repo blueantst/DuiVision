@@ -12,7 +12,7 @@ static CString g_strRootPath = _T("");
 static ULONG_PTR gdiplusToken;
 static GdiplusStartupInput gdiplusStartupInput;
 
-DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CString strStyle)
+DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CString strStyle, CString strLogFile)
     :m_hInst(hInst), m_uAppID(uAppID)
 {
 	g_pIns = this;
@@ -39,6 +39,12 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	*/
 
 	ZeroMemory(&m_NotifyIconData, sizeof m_NotifyIconData);
+
+	/*
+	如果指定了LogFile则忽略资源文件中的logfile项
+	先赋值m_strLogFile
+	*/
+	m_strLogFile = strLogFile;
 
     createSingletons();
 
@@ -456,7 +462,14 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 				{
 					CString strName = pResElem.attribute(_T("name")).value();
 					CString strValue = pResElem.attribute(_T("value")).value();
-					m_mapCfgPool.SetAt(strName, strValue);
+					//m_strLogFile不为空时忽略logfile项
+					if (strName==_T("logfile") && !m_strLogFile.IsEmpty())
+					{
+						m_mapCfgPool.SetAt(strName, m_strLogFile);
+					}else
+					{
+						m_mapCfgPool.SetAt(strName, strValue);
+					}
 					// 如果DuiSystem未设置当前风格参数,则可以通过defaultStyle配置来决定当前风格
 					if(m_strCurStyle.IsEmpty() && (strName == _T("defaultStyle")))
 					{
