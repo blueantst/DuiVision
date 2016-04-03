@@ -128,7 +128,7 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 CDuiEdit::~CDuiEdit(void)
 {
 	// 删除Windows控件
-	HideEdit();
+	DeleteEdit();
 
 	if (m_fontTemp.m_hObject)
 	{
@@ -387,7 +387,7 @@ void CDuiEdit::SetControlDisable(BOOL bIsDisable)
 		{
 			m_EditState = enBSDisable;
 			m_buttonState = enBSDisable;
-			HideEdit();
+			DeleteEdit();
 		}
 		else
 		{
@@ -789,6 +789,8 @@ void CDuiEdit::HideEdit()
 			// 获取编辑框的内容保存在控件的变量中
 			m_pEdit->GetWindowText(m_strTitle);
 		}
+
+		// 隐藏输入控件
 		m_pEdit->ShowWindow(SW_HIDE);
 	}
 }

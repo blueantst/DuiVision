@@ -104,6 +104,8 @@ public:
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
 	BOOL GetVisible() { return IsControlVisible(); }
 	virtual BOOL IsControlVisible();
+	void SetHide(BOOL bIsHide);
+	virtual void SetControlHide(BOOL bIsHide) { m_bIsHide = bIsHide; }
 	virtual void SetControlWndVisible(BOOL bIsVisible) { };	// 设置控件中的Windows原生控件是否可见的状态
 	void SetDisable(BOOL bIsDisable);
 	virtual	void SetControlDisable(BOOL bIsDisable) { m_bIsDisable = bIsDisable; }
@@ -130,7 +132,7 @@ public:
 	// 焦点
 	virtual	BOOL SetWindowFocus();				// 设置窗口焦点
 	BOOL OnFocus(BOOL bFocus);
-	virtual	BOOL SetControlFocus(BOOL bFocus) { return FALSE; }		// 设置控件的焦点
+	virtual	BOOL SetControlFocus(BOOL bFocus);		// 设置控件的焦点
 	BOOL IsFocusControl();
 	CControlBase* GetFocusControl(CControlBase* pFocusControl);
 	CControlBase* GetPrevFocusableControl(CControlBase* pFocusControl);
@@ -202,7 +204,7 @@ protected:
 	
 	CString					m_strPos;			// 位置(XML定义中的字符串)
 	BOOL					m_bIsVisible;		// 是否可见
-	BOOL					m_bAutoHide;		// 是否处于隐藏状态(系统自动设置的状态,例如tab页切换时候的隐藏子控件)
+	BOOL					m_bIsHide;			// 是否处于隐藏状态(tab页切换时候会自动隐藏子控件)
 	BOOL					m_bIsDisable;		// 是否可用
 	BOOL					m_bRresponse;		// 是否可以响应鼠标事件
 	BOOL					m_bTabStop;			// 是否可以响应Tab键

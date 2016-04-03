@@ -31,8 +31,9 @@ public:
 	BOOL GetEnableScroll() { return m_bEnableScroll; }
 
 	virtual void SetControlVisible(BOOL bIsVisible);
-	virtual	void SetControlDisable(BOOL bIsDisable);
-	virtual	BOOL SetControlFocus(BOOL bFocus);
+	virtual void SetControlHide(BOOL bIsHide);
+	virtual void SetControlDisable(BOOL bIsDisable);
+	virtual BOOL SetControlFocus(BOOL bFocus);
 
 	// œ˚œ¢œÏ”¶
 	virtual LRESULT OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);

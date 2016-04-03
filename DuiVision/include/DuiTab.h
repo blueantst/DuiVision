@@ -67,6 +67,7 @@ public:
 
 	virtual void SetControlRect(CRect rc);
 	virtual void SetControlVisible(BOOL bIsVisible);
+	virtual void SetControlHide(BOOL bIsHide);
 
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	BOOL LoadTabXml(CString strFileName);

@@ -23,7 +23,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_rc = CRect(0,0,0,0);
 	m_strPos = "";
 	m_bIsVisible = TRUE;
-	m_bAutoHide = FALSE;
+	m_bIsHide = FALSE;
 	m_bIsDisable = FALSE;
 	m_bRresponse = TRUE;
 	m_bTabStop = FALSE;
@@ -77,7 +77,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_rc = rc;
 	m_strPos = "";
 	m_bIsVisible = bIsVisible;
-	m_bAutoHide = FALSE;
+	m_bIsHide = FALSE;
 	m_bIsDisable = bIsDisable;
 	m_bRresponse = bRresponse;
 	m_bTabStop = FALSE;
@@ -338,6 +338,25 @@ BOOL CControlBase::SetWindowFocus()
 BOOL CControlBase::OnFocus(BOOL bFocus)
 {
 	return SetControlFocus(bFocus);
+}
+
+// 设置控件焦点
+BOOL CControlBase::SetControlFocus(BOOL bFocus)
+{
+	// 如果焦点取消,则设置每个子控件的焦点状态,解决插件中的控件焦点无法取消的问题
+	if(!bFocus)
+	{
+		for (size_t i = 0; i < m_vecControl.size(); i++)
+		{
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase)
+			{
+				pControlBase->SetControlFocus(bFocus);
+			}
+		}
+	}
+
+	return FALSE;
 }
 
 // 判断当前控件是否焦点控件
@@ -1500,6 +1519,7 @@ HRESULT CControlBase::OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoadi
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置控件是否可见
 void CControlBase::SetVisible(BOOL bIsVisible)
 {
 	SetControlVisible(bIsVisible);
@@ -1509,7 +1529,7 @@ void CControlBase::SetVisible(BOOL bIsVisible)
 // 获取控件的可见性(遍历父控件,如果父控件不可见,则返回不可见)
 BOOL CControlBase::IsControlVisible()
 {
-	if(!m_bIsVisible || m_bAutoHide)
+	if(!m_bIsVisible || m_bIsHide)
 	{
 		return FALSE;
 	}
@@ -1528,6 +1548,14 @@ BOOL CControlBase::IsControlVisible()
 	return ((CControlBase*)pParentObj)->IsControlVisible();
 }
 
+// 设置控件是否隐藏
+void CControlBase::SetHide(BOOL bIsHide)
+{
+	SetControlHide(bIsHide);
+	UpdateControl(true, true);
+}
+
+// 设置控件是否禁用
 void  CControlBase::SetDisable(BOOL bIsDisable)
 {
 	if(m_bIsDisable != bIsDisable)
@@ -1537,6 +1565,7 @@ void  CControlBase::SetDisable(BOOL bIsDisable)
 	}
 }
 
+// 刷新控件的显示内容
 void CControlBase::UpdateControl(BOOL bUpdate, BOOL bVisible)
 {
 	if((m_bIsVisible || bVisible) && (m_pParentDuiObject != NULL))
@@ -1553,6 +1582,7 @@ void CControlBase::UpdateControl(CRect rc, BOOL bVisible, BOOL bUpdate)
 	}
 }
 
+// 控件局部刷新
 void CControlBase::InvalidateRect(LPCRECT lpRect, BOOL bErase)
 {
 	if(m_hWnd != NULL)
