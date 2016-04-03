@@ -397,7 +397,13 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 			}else
 			{
 				// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
-				pControlBase->SetControlWndVisible(pControlBase->GetVisible());
+				// 如果是edit控件,暂时不显示原生控件,否则tab页切换时候会有问题
+				BOOL bVisible = pControlBase->GetVisible();
+				if(pControlBase->IsClass(CDuiEdit::GetClassName()))
+				{
+					bVisible = FALSE;
+				}
+				pControlBase->SetControlWndVisible(bVisible);
 			}
 		}
 	}
