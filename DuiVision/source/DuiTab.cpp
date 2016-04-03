@@ -1973,7 +1973,7 @@ BOOL CDuiTabCtrl::DrawSubControls(CDC &dc, CRect rcUpdate)
 
 	// 画旧tab页
 	// 设置旧tab页为可见
-	pOldTabInfo->pControl->SetVisible(TRUE);	// 此处旧页面可见会导致原生控件也被显示出来，最后没有被清掉？
+	pOldTabInfo->pControl->SetVisible(TRUE);
 	pNewTabInfo->pControl->SetVisible(FALSE);
 	// 画旧tab页到动画dc
 	pOldTabInfo->pControl->Draw(animateDCOld, rcUpdate);

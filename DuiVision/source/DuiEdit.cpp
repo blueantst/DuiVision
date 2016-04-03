@@ -335,6 +335,8 @@ void  CDuiEdit::SetControlRect(CRect rc)
 	m_rcText.left += (6 + m_sizeLeftImage.cx);
 	m_rcText.bottom -= 4;
 	m_rcText.right -= (3 + m_sizeSmallImage.cx);
+	// 删除编辑控件,这样当编辑控件重新创建时候就可以调整大小
+	DeleteEdit();
 }
 
 BOOL CDuiEdit::IsDraw(CPoint point)
@@ -368,7 +370,7 @@ void CDuiEdit::SetControlWndVisible(BOOL bIsVisible)
 {
 	if(bIsVisible)
 	{
-		//ShowEdit();
+		ShowEdit();
 	}else
 	{
 		HideEdit();
@@ -751,9 +753,6 @@ void CDuiEdit::ShowEdit()
 		CreateEditFont();
   		m_pEdit->SetFont(&m_fontTemp);
 		m_pEdit->SetWindowText(m_strTitle);
-		// 设置滚动条是否显示
-		m_pEdit->ShowScrollBar(SB_VERT, m_bShowVScroll);
-		m_pEdit->ShowScrollBar(SB_HORZ, m_bShowHScroll);
 		if(m_bPassWord)
 		{
 			m_pEdit->SetPasswordChar('*');
@@ -763,12 +762,39 @@ void CDuiEdit::ShowEdit()
 			m_pEdit->LimitText(m_nMaxChar);
 		}
 		m_pEdit->SetSel(m_strTitle.GetLength(), -1);
-		m_pEdit->SetFocus();
- 	}
+ 	}else
+	{
+		// 如果原生控件已创建,则显示出来
+		m_pEdit->ShowWindow(SW_NORMAL);
+	}
+
+	// 设置滚动条是否显示,只读和禁用属性等
+	m_pEdit->ShowScrollBar(SB_VERT, m_bShowVScroll);
+	m_pEdit->ShowScrollBar(SB_HORZ, m_bShowHScroll);
+	m_pEdit->EnableWindow(!m_bIsDisable);
+	m_pEdit->SetReadOnly(m_bReadOnly);
+	m_pEdit->SetFocus();
 }
 
 // 隐藏编辑控件
 void CDuiEdit::HideEdit()
+{
+	if(m_pEdit)
+	{
+		TestMainThread();	// 测试是否在主线程
+
+		// 调用Edit的Windows控件必须先判断窗口是否有效
+		if(::IsWindow(m_pEdit->GetSafeHwnd()))
+		{
+			// 获取编辑框的内容保存在控件的变量中
+			m_pEdit->GetWindowText(m_strTitle);
+		}
+		m_pEdit->ShowWindow(SW_HIDE);
+	}
+}
+
+// 删除编辑控件
+void CDuiEdit::DeleteEdit()
 {
 	if(m_pEdit)
 	{

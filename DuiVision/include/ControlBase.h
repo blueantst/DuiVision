@@ -102,7 +102,7 @@ public:
 	// 属性
 	void SetVisible(BOOL bIsVisible);
 	virtual void SetControlVisible(BOOL bIsVisible) { m_bIsVisible = bIsVisible; }
-	BOOL GetVisible() { return m_bIsVisible; }
+	BOOL GetVisible() { return IsControlVisible(); }
 	virtual BOOL IsControlVisible();
 	virtual void SetControlWndVisible(BOOL bIsVisible) { };	// 设置控件中的Windows原生控件是否可见的状态
 	void SetDisable(BOOL bIsDisable);
@@ -202,6 +202,7 @@ protected:
 	
 	CString					m_strPos;			// 位置(XML定义中的字符串)
 	BOOL					m_bIsVisible;		// 是否可见
+	BOOL					m_bAutoHide;		// 是否处于隐藏状态(系统自动设置的状态,例如tab页切换时候的隐藏子控件)
 	BOOL					m_bIsDisable;		// 是否可用
 	BOOL					m_bRresponse;		// 是否可以响应鼠标事件
 	BOOL					m_bTabStop;			// 是否可以响应Tab键

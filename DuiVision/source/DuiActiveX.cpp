@@ -1825,7 +1825,10 @@ void CDuiActiveX::SetModuleName(LPCTSTR pstrText)
 // ¿Ø¼þ»­Í¼º¯Êý
 void CDuiActiveX::DrawControl(CDC &dc, CRect rcUpdate)
 {
-	if( !::IntersectRect(&rcUpdate, &rcUpdate, &m_rc) ) return;
+	if( !::IntersectRect(&rcUpdate, &rcUpdate, &m_rc) )
+	{
+		return;
+	}
 
 	if( m_pControl != NULL && m_pControl->m_bWindowless && m_pControl->m_pViewObject != NULL )
     {

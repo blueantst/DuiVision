@@ -390,17 +390,14 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
-			// 如果子控件是容器类型控件,则调用子控件的设置可见性函数
 			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")) || pControlBase->IsClass(_T("layout")))
 			{
+				// 如果子控件是容器类型控件,则调用子控件的设置可见性函数
 				pControlBase->SetControlVisible(bIsVisible);
 			}else
 			{
-				// Panel可见性变化时候,只会隐藏原生控件,不主动显示原生控件
-				//if(!bIsVisible)
-				{
-					pControlBase->SetControlWndVisible(bIsVisible);
-				}
+				// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
+				pControlBase->SetControlWndVisible(pControlBase->GetVisible());
 			}
 		}
 	}

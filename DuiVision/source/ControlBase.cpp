@@ -23,6 +23,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_rc = CRect(0,0,0,0);
 	m_strPos = "";
 	m_bIsVisible = TRUE;
+	m_bAutoHide = FALSE;
 	m_bIsDisable = FALSE;
 	m_bRresponse = TRUE;
 	m_bTabStop = FALSE;
@@ -76,6 +77,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_rc = rc;
 	m_strPos = "";
 	m_bIsVisible = bIsVisible;
+	m_bAutoHide = FALSE;
 	m_bIsDisable = bIsDisable;
 	m_bRresponse = bRresponse;
 	m_bTabStop = FALSE;
@@ -1507,7 +1509,7 @@ void CControlBase::SetVisible(BOOL bIsVisible)
 // 获取控件的可见性(遍历父控件,如果父控件不可见,则返回不可见)
 BOOL CControlBase::IsControlVisible()
 {
-	if(!GetVisible())
+	if(!m_bIsVisible || m_bAutoHide)
 	{
 		return FALSE;
 	}
@@ -1515,12 +1517,12 @@ BOOL CControlBase::IsControlVisible()
 	CDuiObject* pParentObj = GetParent();
 	if(pParentObj == NULL)
 	{
-		return GetVisible();
+		return TRUE;
 	}
 
 	if(pParentObj->IsClass(_T("dlg")) || pParentObj->IsClass(_T("popup")))
 	{
-		return GetVisible();
+		return TRUE;
 	}
 
 	return ((CControlBase*)pParentObj)->IsControlVisible();

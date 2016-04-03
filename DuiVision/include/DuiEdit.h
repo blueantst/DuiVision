@@ -52,6 +52,7 @@ protected:
 	void CreateEditFont();
 	void ShowEdit();
 	void HideEdit();
+	void DeleteEdit();
 	
 public:
 	Image*			m_pLeftImage;		// ×ó²àÐ¡Í¼Æ¬
