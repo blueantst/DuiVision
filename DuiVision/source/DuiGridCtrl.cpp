@@ -1721,11 +1721,11 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 								// 最后一列需要减去滚动条宽度
 								rcParent.right -= m_nScrollWidth;
 							}
-							rcParent.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top - (nYViewPos + m_nHeaderHeight));
+							rcParent.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top - nYViewPos);
 							pControl->SetPositionWithParent(rcParent);
 							CRect rcControl = pControl->GetRect();
 							// 只有当前在显示范围内的控件设置为可见
-							if( (rcControl.top < m_rc.top) || (rcControl.bottom > m_rc.bottom) ||
+							if( (rcControl.top < (m_rc.top+m_nHeaderHeight)) || (rcControl.bottom > m_rc.bottom) ||
 								(rcControl.left < m_rc.left) || (rcControl.right > m_rc.right) )
 							{
 								pControl->SetVisible(FALSE);
