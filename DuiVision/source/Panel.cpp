@@ -390,7 +390,8 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
-			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")))
+			// 如果子控件是容器类型控件,则调用子控件的设置可见性函数
+			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")) || pControlBase->IsClass(_T("layout")))
 			{
 				pControlBase->SetControlVisible(bIsVisible);
 			}else
@@ -404,6 +405,7 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 		}
 	}
 
+	// 如果有插件,则设置插件的可见性
 	if(m_pDuiPluginObject)
 	{
 		m_pDuiPluginObject->SetVisible(bIsVisible);
