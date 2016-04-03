@@ -255,7 +255,9 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [bin_source]skins\default\Tab.png
 [bin_source]skins\default\tab_background.png
 [bin_source]skins\default\Tab_seperator.png
+[bin_source]skins\default\toolbar_bg.png
 [bin_source]skins\default\toolbar_hover.png
+[bin_source]skins\default\toolbar_hover_v.png
 [bin_source]skins\default\tree_checkbox.png
 [bin_source]skins\default\tree_collapse.png
 [bin_source]skins\default\tree_icon.png
