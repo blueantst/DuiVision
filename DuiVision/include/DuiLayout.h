@@ -40,6 +40,8 @@ public:
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	virtual void SetControlRect(CRect rc);
 
+	virtual void SetControlVisible(BOOL bIsVisible);
+
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);

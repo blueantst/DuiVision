@@ -269,6 +269,30 @@ void CDuiLayout::SetControlRect(CRect rc)
 	}
 }
 
+// 重载设置控件可见性的函数，需要调用子控件的函数
+void CDuiLayout::SetControlVisible(BOOL bIsVisible)
+{
+	__super::SetControlVisible(bIsVisible);
+
+	// 设置每个子控件的原生Windows控件的可见性
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")) || pControlBase->IsClass(_T("layout")))
+			{
+				// 如果子控件是容器类型控件,则调用子控件的设置可见性函数
+				pControlBase->SetControlVisible(bIsVisible);
+			}else
+			{
+				// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
+				pControlBase->SetControlWndVisible(pControlBase->GetVisible());
+			}
+		}
+	}
+}
+
 // 移动分隔线位置
 int CDuiLayout::MoveSplitPos(int nSplitItem, CPoint point)
 {
