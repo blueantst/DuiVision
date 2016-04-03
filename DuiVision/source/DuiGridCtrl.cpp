@@ -1500,8 +1500,6 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				DrawImageFrame(graphics, m_pImageHeader, rcHeader, 0, 0, m_sizeHeader.cx, m_sizeHeader.cy, 0);
 			}
 
-			// 画标题行分隔线
-
 			// 画单元格内容
 			int nPosItemX = 0;
 			for(size_t j = 0; j < m_vecColumnInfo.size(); j++)
