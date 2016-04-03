@@ -93,7 +93,7 @@ public:                                                             \
 #define DUI_BOOL_ATTRIBUTE(attribname, varname, allredraw)         \
         if (attribname == strAttribName)                            \
         {                                                           \
-		    varname = ::StrToInt(strValue) > 0 ? true : false;     \
+		    varname = ((::StrToInt(strValue) > 0) || (strValue == _T("true"))) ? true : false;     \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
