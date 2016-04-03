@@ -236,7 +236,7 @@ width-lt,height-lt,width-rb,height-rb" />
 					
 					<text pos="20,140,-50,160" crtext="808080" title="richedit演示：" tip="下面的编辑框内容可以从rtf文件加载" />
 					<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
-							pos="20,160,-50,350"
+							pos="20,160,-50,-10"
 							title="测试richedit" tip="richedit"
 							multiline="1" wantreturn="1" rich="1" file="rtf\rtftest.rtf"
 							hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
