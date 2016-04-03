@@ -7,9 +7,9 @@
 	
 	<gridctrl name="gridctrl_1" pos="20,30,-20,-5" show="1"
 		img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" img-sep="skin:IDB_LINE_RP"
-		img-check="skin:IDB_CHECK_BOX" img-colsep=""
+		img-check="skin:IDB_CHECK_BOX" img-header="skin:IDB_TOOLBAR_BG" img-colsep="skin:IDB_TAB_SEPERATOR"
 		img-count="12" image="skin:IDB_LIST_IMG"
-		left-pos="70" row-height="50" header-height="0" bk-transparent="10"
+		left-pos="70" row-height="50" header-height="30" bk-transparent="10"
 		font-title="big" font="default"
 		valign="middle" down-row="0"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
