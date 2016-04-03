@@ -22,6 +22,10 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nHeaderHeight = 0;
 	m_nLeftPos = 0;
 
+	m_pImageHeader = NULL;
+	m_sizeHeader = CSize(0, 0);
+	m_pImageColumnSeperator = NULL;
+	m_sizeColumnSeperator = CSize(0, 0);
 	m_pImageSeperator = NULL;
 	m_sizeSeperator = CSize(0, 0);
 	m_pImageCheckBox = NULL;
@@ -50,6 +54,16 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 
 CDuiGridCtrl::~CDuiGridCtrl(void)
 {
+	if(m_pImageHeader != NULL)
+	{
+		delete m_pImageHeader;
+		m_pImageHeader = NULL;
+	}
+	if(m_pImageColumnSeperator != NULL)
+	{
+		delete m_pImageColumnSeperator;
+		m_pImageColumnSeperator = NULL;
+	}
 	if(m_pImageSeperator != NULL)
 	{
 		delete m_pImageSeperator;
@@ -63,6 +77,8 @@ CDuiGridCtrl::~CDuiGridCtrl(void)
 }
 
 // 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, Header, 1)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, ColumnSeperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, Seperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, CheckBox, 6)
 
@@ -1477,6 +1493,15 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		// 画标题行
 		if((m_nHeaderHeight > 0) && (m_vecColumnInfo.size() > 0))
 		{
+			// 画标题行背景
+			if(m_pImageHeader != NULL)
+			{
+				CRect  rcHeader(0, 0, nViewWidth, m_nHeaderHeight);
+				DrawImageFrame(graphics, m_pImageHeader, rcHeader, 0, 0, m_sizeHeader.cx, m_sizeHeader.cy, 0);
+			}
+
+			// 画标题行分隔线
+
 			// 画单元格内容
 			int nPosItemX = 0;
 			for(size_t j = 0; j < m_vecColumnInfo.size(); j++)
@@ -1487,12 +1512,19 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					nWidth += m_nLeftPos;
 				}
-				RectF rect((Gdiplus::REAL)nPosItemX, 0, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)(m_nHeaderHeight-1));
+
+				// 画标题行列分割线
+				if((m_pImageColumnSeperator != NULL) && (j < (m_vecColumnInfo.size()-1)))
+				{
+					RectF rectSep((Gdiplus::REAL)(nPosItemX+nWidth), 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)(m_nHeaderHeight-1));
+					graphics.DrawImage(m_pImageColumnSeperator, rectSep, 0, 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)m_sizeColumnSeperator.cy, UnitPixel);
+				}
 
 				// 画列标题
+				RectF rect((Gdiplus::REAL)nPosItemX, 0, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)(m_nHeaderHeight-1));
 				CString strTitle = columnInfo.strTitle;
 				BSTR bsTitle = strTitle.AllocSysString();
-				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormatHeader, &solidBrushT);
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormatHeader, &solidBrushT);
 				::SysFreeString(bsTitle);
 
 				nPosItemX += nWidth;

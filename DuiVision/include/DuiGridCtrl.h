@@ -148,9 +148,13 @@ public:
 	int					m_nTipItem;			// 当前tip列
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);	// 定义标题行背景图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(ColumnSeperator);	// 定义列分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_CUSTOM_ATTRIBUTE(_T("img-header"), OnAttributeImageHeader)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-colsep"), OnAttributeImageColumnSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)
 		DUI_CUSTOM_ATTRIBUTE(_T("font-title"), OnAttributeFontTitle)
