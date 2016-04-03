@@ -700,6 +700,13 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 	if(m_nDownItem != nItem && nItem >= 0 && nItem < (int)m_vecItemInfo.size())
 	{
 		TabItemInfo &itemInfo = m_vecItemInfo.at(nItem);
+
+		if(!itemInfo.strAction.IsEmpty())
+		{
+			// 如果action非空,则执行动作
+			DuiSystem::AddDuiActionTask(GetID(), MSG_BUTTON_UP, nItem, 0, GetName(), itemInfo.strAction, GetParent());
+		}
+
 		if(itemInfo.bOutLink)	// 外部链接
 		{
 			m_nHoverItem = -1;
@@ -710,6 +717,20 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 			m_nDownItem = nItem;					
 			m_nHoverItem = -1;
 
+			// 删除旧的Tooltip
+			CDlgBase* pDlg = GetParentDialog();
+			if(pDlg)
+			{
+				pDlg->ClearTooltip();
+			}
+
+			IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+			if(pIDuiHostWnd)
+			{
+				pIDuiHostWnd->ClearTooltip();
+			}
+
+			// 点击事件消息
 			SendMessage(MSG_BUTTON_DOWN, m_nDownItem, 0);
 
 			// 只显示当前活动的tab页对应的Panel对象，其他页面的Panel对象都隐藏
@@ -1412,70 +1433,8 @@ BOOL CDuiTabCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nHoverItem);
 		if(itemInfo.rc.PtInRect(point))
 		{
-			if(m_nDownItem != m_nHoverItem)
-			{
-				int nDownItem = m_nHoverItem;
-				if(!itemInfo.strAction.IsEmpty())
-				{
-					// 如果action非空,则执行动作
-					DuiSystem::AddDuiActionTask(GetID(), MSG_BUTTON_UP, nDownItem, 0, GetName(), itemInfo.strAction, GetParent());
-				}
-
-				if(itemInfo.bOutLink)	// 外部链接
-				{
-					m_nHoverItem = -1;
-					SendMessage(MSG_BUTTON_DOWN, nDownItem, 0);
-				}else
-				{
-					m_nOldItem = m_nDownItem;	// 保存切换前的页面索引,用于切换动画
-					m_nDownItem = m_nHoverItem;					
-					m_nHoverItem = -1;
-
-					// 删除旧的Tooltip
-					CDlgBase* pDlg = GetParentDialog();
-					if(pDlg)
-					{
-						pDlg->ClearTooltip();
-					}
-
-					IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
-					if(pIDuiHostWnd)
-					{
-						pIDuiHostWnd->ClearTooltip();
-					}
-
-					// 点击事件消息
-					SendMessage(MSG_BUTTON_DOWN, m_nDownItem, 0);
-
-					// 只显示当前活动的tab页对应的Panel对象，其他页面的Panel对象都隐藏
-					for(size_t i = 0; i < m_vecItemInfo.size(); i++)
-					{
-						TabItemInfo &itemInfo = m_vecItemInfo.at(i);
-						if(itemInfo.pControl != NULL)
-						{
-							if(i == m_nDownItem)
-							{
-								itemInfo.pControl->SetVisible(TRUE);
-								SetWindowFocus();
-							}else
-							{
-								itemInfo.pControl->SetVisible(FALSE);
-							}
-						}
-						// 如果启用了动画,则启动切换动画定时器
-						if(m_bAnimateChangeTab)
-						{
-							m_nCurXPos = 0;
-							m_nCurYPos = 0;
-							m_bRunTime = true;
-						}
-					}
-				}
-
-				UpdateControl();
-
-				return true;
-			}
+			// 切换到鼠标当前的tab页
+			SetSelectItem(m_nHoverItem);
 		}		
 	}
 	
