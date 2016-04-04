@@ -12,6 +12,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nFontTitleWidth = 12;
 	m_fontTitleStyle = FontStyleRegular;
 
+	m_clrHeader = Color(255, 32, 32, 32);
 	m_clrText = Color(225, 64, 64, 64);
 	m_clrTextHover = Color(128, 0, 0);
 	m_clrTextDown = Color(0, 112, 235);
@@ -1464,6 +1465,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		::SysFreeString(bsFont);
 
 		SolidBrush solidBrush(m_clrText);			// 正常文字画刷
+		SolidBrush solidBrushHT(m_clrHeader);			// 标题行文字画刷
 		SolidBrush solidBrushH(m_clrTextHover);		// 热点文字画刷
 		SolidBrush solidBrushD(m_clrTextDown);		// 当前行画刷
 		SolidBrush solidBrushT(m_clrTitle);			// 标题文字画刷
@@ -1522,7 +1524,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				RectF rect((Gdiplus::REAL)nPosItemX, 0, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)(m_nHeaderHeight-1));
 				CString strTitle = columnInfo.strTitle;
 				BSTR bsTitle = strTitle.AllocSysString();
-				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormatHeader, &solidBrushT);
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormatHeader, &solidBrushHT);
 				::SysFreeString(bsTitle);
 
 				nPosItemX += nWidth;

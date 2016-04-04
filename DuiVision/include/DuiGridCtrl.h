@@ -121,6 +121,7 @@ public:
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle			m_fontTitleStyle;	// 标题字体Style
+	Color				m_clrHeader;			// 标题行文字颜色
 	Color				m_clrText;			// 文字颜色
 	Color				m_clrTextHover;		// 文字颜色(鼠标移动)
 	Color				m_clrTextDown;		// 文字颜色(鼠标按下)
@@ -158,6 +159,7 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)
 		DUI_CUSTOM_ATTRIBUTE(_T("font-title"), OnAttributeFontTitle)
+		DUI_COLOR_ATTRIBUTE(_T("crheader"), m_clrHeader, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
