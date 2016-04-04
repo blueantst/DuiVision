@@ -332,6 +332,35 @@ public:                                                             \
 	}	\
 
 
+// 对齐方式设置宏,支持设置format变量名,水平对齐方式变量名,垂直对齐方式变量名
+#define DUI_STRING_ALIGN_DEFINENAME(formatName, formatVarNameH, formatVarNameV)	\
+	StringFormat strFormat##formatName;	\
+	if(formatVarNameH == Align_Left)	\
+	{	\
+		strFormat##formatName.SetAlignment(StringAlignmentNear);	\
+	}else	\
+	if(formatVarNameH == Align_Center)	\
+	{	\
+		strFormat##formatName.SetAlignment(StringAlignmentCenter);	\
+	}else	\
+	if(formatVarNameH == Align_Right)	\
+	{	\
+		strFormat##formatName.SetAlignment(StringAlignmentFar);	\
+	}	\
+	\
+	if(formatVarNameV == VAlign_Top)	\
+	{	\
+		strFormat##formatName.SetLineAlignment(StringAlignmentNear);	\
+	}else	\
+	if(formatVarNameV == VAlign_Middle)	\
+	{	\
+		strFormat##formatName.SetLineAlignment(StringAlignmentCenter);	\
+	}else	\
+	if(formatVarNameV == VAlign_Bottom)	\
+	{	\
+		strFormat##formatName.SetLineAlignment(StringAlignmentFar);	\
+	}	\
+
 
 class CControlBase;
 class CDuiHandler;

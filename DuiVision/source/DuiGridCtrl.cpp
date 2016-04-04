@@ -11,6 +11,8 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_strFontTitle = DuiSystem::GetDefaultFont();
 	m_nFontTitleWidth = 12;
 	m_fontTitleStyle = FontStyleRegular;
+	m_uAlignmentHeader = Align_Center;
+	m_uVAlignmentHeader = VAlign_Middle;
 
 	m_clrHeader = Color(255, 32, 32, 32);
 	m_clrText = Color(225, 64, 64, 64);
@@ -1475,7 +1477,6 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 		// 设置普通文字的水平和垂直对齐方式
 		DUI_STRING_ALIGN_DEFINE();
-
 		strFormat.SetTrimming(StringTrimmingEllipsisWord);	// 以单词为单位去尾,略去部分使用省略号
 		//strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 		if(!m_bTextWrap)
@@ -1483,10 +1484,8 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行
 		}
 
-		// 标题字段采用中间对齐
-		StringFormat strFormatHeader;
-		strFormatHeader.SetAlignment(StringAlignmentCenter);	// 中间对齐
-		strFormatHeader.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
+		// 设置标题行文字的水平和垂直对齐方式
+		DUI_STRING_ALIGN_DEFINENAME(Header, m_uAlignmentHeader, m_uVAlignmentHeader);
 		if(!m_bTextWrap)
 		{
 			strFormatHeader.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行

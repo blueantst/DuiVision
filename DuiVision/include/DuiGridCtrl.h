@@ -121,6 +121,8 @@ public:
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle			m_fontTitleStyle;	// 标题字体Style
+	UINT					m_uAlignmentHeader;		// 标题文字水平对齐方式
+	UINT					m_uVAlignmentHeader;		// 标题文字垂直对齐方式
 	Color				m_clrHeader;			// 标题行文字颜色
 	Color				m_clrText;			// 文字颜色
 	Color				m_clrTextHover;		// 文字颜色(鼠标移动)
@@ -154,6 +156,16 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_ENUM_ATTRIBUTE(_T("valign-header"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("top"), VAlign_Top)
+            DUI_ENUM_VALUE(_T("middle"), VAlign_Middle)
+            DUI_ENUM_VALUE(_T("bottom"), VAlign_Bottom)
+        DUI_ENUM_END(m_uVAlignmentHeader)
+        DUI_ENUM_ATTRIBUTE(_T("align-header"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("left"), Align_Left)
+            DUI_ENUM_VALUE(_T("center"), Align_Center)
+            DUI_ENUM_VALUE(_T("right"), Align_Right)
+        DUI_ENUM_END(m_uAlignmentHeader)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-header"), OnAttributeImageHeader)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-colsep"), OnAttributeImageColumnSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
