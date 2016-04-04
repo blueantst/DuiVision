@@ -10,11 +10,11 @@
 		img-check="skin:IDB_CHECK_BOX" img-header="skin:IDB_TOOLBAR_BG" img-colsep="skin:IDB_TAB_SEPERATOR"
 		img-count="12" image="skin:IDB_LIST_IMG"
 		left-pos="70" row-height="50" header-height="30" bk-transparent="10"
-		font-title="big" font="default"
-		valign="middle" down-row="0"
-		crheader="128,32,32"
+		font-title="big" align-header="center" align-header="middle" crheader="128,32,32"
+		font="default" align="left" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
-		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128"
+		down-row="0" >
 		<column title="列1" width="400" />
 		<column title="列2" width="120" />
 		<column title="列3" width="80" align="center" />
