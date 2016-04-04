@@ -136,6 +136,7 @@ public:
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
+	BOOL			m_bShowColumnSeperator;	// 是否显示内容部分的列分隔线
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
@@ -181,9 +182,10 @@ public:
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("header-height"), m_nHeaderHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)
-		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
-		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
-		DUI_INT_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("column-sep"), m_bShowColumnSeperator, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

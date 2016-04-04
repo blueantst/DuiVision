@@ -43,6 +43,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bEnableDownRow = FALSE;
 	m_bSingleLine = TRUE;
 	m_bTextWrap = FALSE;
+	m_bShowColumnSeperator = FALSE;
 
 	m_bGridTooltip = TRUE;
 	m_nTipRow = -1;
@@ -1800,6 +1801,30 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					// 未指定图片,并且分隔线显色不是全0,则画矩形
 					graphics.FillRectangle(&solidBrushS, 0, m_nHeaderHeight + (nVI+1)*m_nRowHeight, nContentWidth-2, 1);
+				}
+			}
+
+			// 画内容部分的列分隔线
+			if(m_bShowColumnSeperator && (m_pImageColumnSeperator != NULL))
+			{
+				int nPosItemX = 0;
+				for(size_t j = 0; j < m_vecColumnInfo.size(); j++)
+				{
+					GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
+					int nWidth = columnInfo.nWidth;
+					if(nWidth== -1)
+					{
+						nWidth = m_rc.Width() - nPosItemX;
+					}
+
+					if(j < (m_vecColumnInfo.size()-1))
+					{
+						RectF rectSep((Gdiplus::REAL)(nPosItemX+nWidth), (Gdiplus::REAL)m_nHeaderHeight,
+							(Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)(nHeightView - m_nHeaderHeight));
+						graphics.DrawImage(m_pImageColumnSeperator, rectSep, 0, 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)m_sizeColumnSeperator.cy, UnitPixel);
+					}
+
+					nPosItemX += nWidth;
 				}
 			}
 
