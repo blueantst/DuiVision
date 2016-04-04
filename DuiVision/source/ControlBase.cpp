@@ -2117,8 +2117,8 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject)
 	m_strFont = DuiSystem::GetDefaultFont();
 	m_nFontWidth = 12;
 	m_fontStyle = FontStyleRegular;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_pImage = NULL;
 	m_nImagePicCount = 4;
@@ -2132,8 +2132,8 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject, UINT uCont
 	m_strFont = DuiSystem::GetDefaultFont(strFont);
 	m_nFontWidth = nFontWidth;
 	m_fontStyle = fontStyle;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_pImage = NULL;
 	m_nImagePicCount = 4;

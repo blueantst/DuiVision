@@ -70,20 +70,20 @@ void CImageString::DrawControl(CDC &dc, CRect rcUpdate)
 
 		int nXPos = 0;
 		int nYPos = 0;
-		if(m_uAlignment == DT_CENTER)
+		if(m_uAlignment == Align_Center)
 		{
 			nXPos = (nWidth - nLen * m_sizeImage.cx) / 2;
 		}
-		else if(m_uAlignment == DT_RIGHT)
+		else if(m_uAlignment == Align_Right)
 		{
 			nXPos = nWidth - nLen * m_sizeImage.cx;
 		}
 
-		if(m_uVAlignment == DT_VCENTER)
+		if(m_uVAlignment == VAlign_Middle)
 		{
 			nYPos = (nHeight - m_sizeImage.cy) / 2;
 		}
-		else if(m_uVAlignment == DT_BOTTOM)
+		else if(m_uVAlignment == VAlign_Bottom)
 		{
 			nYPos = nHeight - m_sizeImage.cy;
 		}
