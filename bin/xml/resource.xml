@@ -22,6 +22,7 @@
 <res type="xml" name="tab_controls" file="xml\duivision\tab_controls.xml" />
 <res type="xml" name="tab_listctrl" file="xml\duivision\tab_listctrl.xml" />
 <res type="xml" name="tab_gridctrl" file="xml\duivision\tab_gridctrl.xml" />
+<res type="xml" name="tab_gridctrl_header" file="xml\duivision\tab_gridctrl_header.xml" />
 <res type="xml" name="tab_treectrl" file="xml\duivision\tab_treectrl.xml" />
 <res type="xml" name="tab_browser" file="xml\duivision\tab_browser.xml" />
 <res type="xml" name="tab_ext" file="xml\duivision\tab_ext.xml"  />

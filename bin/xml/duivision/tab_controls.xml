@@ -345,6 +345,8 @@ width-lt,height-lt,width-rb,height-rb" />
 		</tab>
 		
 		<tab name="tab.listctrl" image="skin:IDB_TAB_ITEM" title="列表控件" div="tab_listctrl" />
+		
+		<tab name="tab.gridctrl_header" image="skin:IDB_TAB_ITEM" title="表格控件" div="tab_gridctrl_header" />
 
 		<tab name="tab.control.7" image="skin:IDB_TAB_ITEM" title="其他" pos="0,30,-0,-0">
 
