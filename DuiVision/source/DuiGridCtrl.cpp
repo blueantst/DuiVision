@@ -1507,9 +1507,9 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
 				int nWidth = columnInfo.nWidth;
-				if(j == 0)
+				if(nWidth== -1)
 				{
-					nWidth += m_nLeftPos;
+					nWidth = m_rc.Width() - nPosItemX;
 				}
 
 				// 画标题行列分割线
