@@ -330,8 +330,8 @@ int CDuiText::GetVirtualHeight()
 	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 	::SysFreeString(bsFont);
 
-	StringFormat strFormat;
-	strFormat.SetAlignment(StringAlignmentNear);
+	// 设置水平和垂直对齐方式
+	DUI_STRING_ALIGN_DEFINE();
 	strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 
 	int nWidth = m_rc.Width();
@@ -346,6 +346,10 @@ int CDuiText::GetVirtualHeight()
 	m_pControScrollV->SetVisible(size.Height > m_rc.Height());
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(size.Height);
 
+	if(size.Height < m_rc.Height())
+	{
+		return m_rc.Height();
+	}
 	return size.Height;
 }
 
@@ -411,8 +415,6 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			nXPos += m_sizeImage.cx + 5;
 		}
 		
-		Size size = GetTextBounds(font, strFormat, nWidth, m_strTitle);
-		
 		int nStart = m_strTitle.Find(m_strMark, m_nStart);
 		if(m_strMark.IsEmpty() || (nStart == -1))
 		{
@@ -425,7 +427,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			// 先画阴影
 			if(m_bEnableShadow)
 			{
-				RectF rectShadow((Gdiplus::REAL)(nXPos  + 1), (Gdiplus::REAL)1, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)max(size.Height, nHeight));
+				RectF rectShadow((Gdiplus::REAL)(nXPos  + 1), (Gdiplus::REAL)1, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)nHeight);
 				SolidBrush solidBrushS(m_clrTextShadow);
 				BSTR bsTitle = m_strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rectShadow, &strFormat, &solidBrushS);
@@ -433,7 +435,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			}
 
 			// 再画正常的文字
-			RectF rect((Gdiplus::REAL)(nXPos), (Gdiplus::REAL)0, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)(max(size.Height, nHeight)));
+			RectF rect((Gdiplus::REAL)(nXPos), (Gdiplus::REAL)0, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)nHeight);
 			if((m_enButtonState == enBSHover) && m_bEnableHover)
 			{
 				SolidBrush solidBrushH(m_clrTextHover);
