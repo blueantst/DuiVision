@@ -685,18 +685,15 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 			graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 			::SysFreeString(bsFont);
 
-			StringFormat strFormat;
-			strFormat.SetAlignment(StringAlignmentNear);
+			// 设置菜单文字的水平和垂直对齐方式,默认是水平方向左对齐,垂直方向中间对齐
+			DUI_STRING_ALIGN_DEFINE();
 			strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
-			Size size = GetTextBounds(font, strFormat, m_strTitle);
-			CPoint point = GetOriginPoint(nWidth - m_nLeft, nHeight, size.Width, size.Height,
-							GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 
 			for(int i = 0; i < nImageCount; i++)
 			{
 				SolidBrush solidBrush(enBSDisable == i ? Color(254, 128, 128, 128) : (enBSHover == i || (enBSDown == i && !m_bSelect) || enBSHoverDown == i ? Color(254, 255, 255, 255) : Color(254, 56, 56, 56)));
 
-				RectF rect((Gdiplus::REAL)(m_nLeft + point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - (m_nLeft + point.x)), (Gdiplus::REAL)size.Height);
+				RectF rect((Gdiplus::REAL)(m_nLeft + i * nWidth), (Gdiplus::REAL)0, (Gdiplus::REAL)(nWidth - m_nLeft), (Gdiplus::REAL)nHeight);
 				BSTR bsTitle = m_strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
 				::SysFreeString(bsTitle);

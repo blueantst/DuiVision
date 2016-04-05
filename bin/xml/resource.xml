@@ -22,6 +22,7 @@
 <res type="xml" name="tab_controls" file="xml\duivision\tab_controls.xml" />
 <res type="xml" name="tab_listctrl" file="xml\duivision\tab_listctrl.xml" />
 <res type="xml" name="tab_gridctrl" file="xml\duivision\tab_gridctrl.xml" />
+<res type="xml" name="tab_gridctrl_header" file="xml\duivision\tab_gridctrl_header.xml" />
 <res type="xml" name="tab_treectrl" file="xml\duivision\tab_treectrl.xml" />
 <res type="xml" name="tab_browser" file="xml\duivision\tab_browser.xml" />
 <res type="xml" name="tab_ext" file="xml\duivision\tab_ext.xml"  />
@@ -108,6 +109,7 @@
 <res type="img" name="IDB_SPLIT_VERT" file="skins\default\split_vert.png" />
 <res type="img" name="IDB_SPLIT_THUMB_HORI" file="skins\default\split_thumb_hori.jpg" />
 <res type="img" name="IDB_SPLIT_THUMB_VERT" file="skins\default\split_thumb_vert.jpg" />
+<res type="img" name="IDB_TOOLBAR_BG" file="skins\default\toolbar_bg.png" />
 
 <res type="img" name="IDB_MENU_BACK" file="skins\menu\menu_bkg.png" />
 <res type="img" name="IDB_MENU_SEP" file="skins\menu\menu_sep.png" />

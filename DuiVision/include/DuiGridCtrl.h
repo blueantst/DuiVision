@@ -121,6 +121,9 @@ public:
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle			m_fontTitleStyle;	// 标题字体Style
+	UINT					m_uAlignmentHeader;		// 标题文字水平对齐方式
+	UINT					m_uVAlignmentHeader;		// 标题文字垂直对齐方式
+	Color				m_clrHeader;			// 标题行文字颜色
 	Color				m_clrText;			// 文字颜色
 	Color				m_clrTextHover;		// 文字颜色(鼠标移动)
 	Color				m_clrTextDown;		// 文字颜色(鼠标按下)
@@ -133,6 +136,7 @@ public:
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
+	BOOL			m_bShowColumnSeperator;	// 是否显示内容部分的列分隔线
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
@@ -148,12 +152,27 @@ public:
 	int					m_nTipItem;			// 当前tip列
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);	// 定义标题行背景图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(ColumnSeperator);	// 定义列分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
+		DUI_ENUM_ATTRIBUTE(_T("valign-header"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("top"), VAlign_Top)
+            DUI_ENUM_VALUE(_T("middle"), VAlign_Middle)
+            DUI_ENUM_VALUE(_T("bottom"), VAlign_Bottom)
+        DUI_ENUM_END(m_uVAlignmentHeader)
+        DUI_ENUM_ATTRIBUTE(_T("align-header"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("left"), Align_Left)
+            DUI_ENUM_VALUE(_T("center"), Align_Center)
+            DUI_ENUM_VALUE(_T("right"), Align_Right)
+        DUI_ENUM_END(m_uAlignmentHeader)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-header"), OnAttributeImageHeader)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-colsep"), OnAttributeImageColumnSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)
 		DUI_CUSTOM_ATTRIBUTE(_T("font-title"), OnAttributeFontTitle)
+		DUI_COLOR_ATTRIBUTE(_T("crheader"), m_clrHeader, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrTextHover, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
@@ -163,9 +182,10 @@ public:
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("header-height"), m_nHeaderHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)
-		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
-		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
-		DUI_INT_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("column-sep"), m_bShowColumnSeperator, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

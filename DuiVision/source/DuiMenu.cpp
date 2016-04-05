@@ -7,8 +7,8 @@ CDuiMenu::CDuiMenu(CString strFont/* = TEXT("ËÎÌו")*/, int nFontWidth/* = 12*/, 
 	m_strFont = strFont;
 	m_nFontWidth = nFontWidth;
 	m_fontStyle = fontStyle;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_nLeft = 30;
 	m_nHeight = 30;
