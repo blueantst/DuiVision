@@ -393,10 +393,9 @@ int CDuiGridCtrl::SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn)
 // 移动列分隔线位置
 void CDuiGridCtrl::MoveColumnSplit(int nColumn, int nPos)
 {
-	if((size_t)nColumn < (m_vecColumnInfo.size()-1))
+	if((size_t)nColumn < m_vecColumnInfo.size())
 	{
 		GridColumnInfo &columnInfo1 = m_vecColumnInfo.at(nColumn);
-		GridColumnInfo &columnInfo2 = m_vecColumnInfo.at(nColumn+1);
 		int nWidth1 = columnInfo1.nWidth;
 		if(nWidth1 == -1)	// -1表示最后一列为自适应宽度
 		{
@@ -407,20 +406,20 @@ void CDuiGridCtrl::MoveColumnSplit(int nColumn, int nPos)
 			}
 		}
 		nWidth1 += (nPos - columnInfo1.rcHeader.right);
-		int nWidth2 = columnInfo2.nWidth;
-		if((size_t)nColumn == (m_vecColumnInfo.size()-2))
+
+		int nWidth2 = -1;
+		if((size_t)(nColumn+1) < m_vecColumnInfo.size())
 		{
-			nWidth2 = -1;
-		}else
-		{
-			nWidth2 -= (nPos - columnInfo1.rcHeader.right);
+			GridColumnInfo &columnInfo2 = m_vecColumnInfo.at(nColumn+1);
+			nWidth2 = columnInfo2.nWidth;
 		}
 
-		if( (nWidth1 < 0) || (nWidth1 > (columnInfo2.rcHeader.right - columnInfo1.rcHeader.left)) || (nWidth2 < 0) )
+		if(nWidth1 < 0)
 		{
 			return;
 		}
 
+		// 调整列宽,仅调整前面的列宽度,后面的不变
 		SetColumnWidth(nColumn, nWidth1, nWidth2);
 	}
 }
@@ -843,6 +842,8 @@ void CDuiGridCtrl::CalcColumnsPos()
 		rcTemp.top = rcTemp.bottom - m_nScrollWidth;
 		rcTemp.right = rcTemp.right - m_nScrollWidth;
 		m_pControScrollH->SetRect(rcTemp);
+		// 水平滚动条当前位置保持不变
+		//((CDuiScrollHorizontal*)m_pControScrollH)->SetScrollCurrentPos();
 	}
 }
 
@@ -1230,12 +1231,12 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 			BOOL bMouseHover = FALSE;
 			if(!m_bMouseDown)
 			{
-				for(size_t i = 0; i < (m_vecColumnInfo.size()-1); i++)
+				for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
 				{
 					GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
-					CRect rcSplit(columnInfo.rcHeader.right-1, columnInfo.rcHeader.top,
-						columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+1, columnInfo.rcHeader.bottom);
-					rcSplit.OffsetRect(m_rc.left, m_rc.top);
+					CRect rcSplit(columnInfo.rcHeader.right-2, columnInfo.rcHeader.top,
+						columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+2, columnInfo.rcHeader.bottom);
+					rcSplit.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
 					if(rcSplit.PtInRect(point))
 					{
 						m_bHoverSplitColumn = true;
@@ -1259,7 +1260,8 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		else
 		{
 			// 鼠标按着分隔线或滚动块,拖动的情况下,则移动分割线范围(立即刷新模式)
-			MoveColumnSplit(m_nHoverSplitColumn, point.x-m_rc.left);
+			MoveColumnSplit(m_nHoverSplitColumn, point.x-m_rc.left+m_nVirtualLeft);
+			return true;
 		}
 	}
 
@@ -1282,12 +1284,12 @@ BOOL CDuiGridCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable && m_bEnableModifyColumn)
 	{
-		for(size_t i = 0; i < (m_vecColumnInfo.size()-1); i++)
+		for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
 		{
 			GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
-			CRect rcSplit(columnInfo.rcHeader.right-1, columnInfo.rcHeader.top,
-				columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+1, columnInfo.rcHeader.bottom);
-			rcSplit.OffsetRect(m_rc.left, m_rc.top);
+			CRect rcSplit(columnInfo.rcHeader.right-2, columnInfo.rcHeader.top,
+				columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+2, columnInfo.rcHeader.bottom);
+			rcSplit.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
 			if(rcSplit.PtInRect(point))
 			{
 				// 如果在分隔线内,则记录鼠标位置
@@ -1296,6 +1298,12 @@ BOOL CDuiGridCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 		}
+	}
+
+	if(buttonState != m_enButtonState)
+	{
+		UpdateControl();
+		return true;
 	}
 
 	// 行事件处理
@@ -1349,12 +1357,12 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 	if (!m_bIsDisable && m_bEnableModifyColumn)
 	{
 		m_enButtonState = enBSNormal;
-		for(size_t i = 0; i < (m_vecColumnInfo.size()-1); i++)
+		for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
 		{
 			GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
-			CRect rcSplit(columnInfo.rcHeader.right-1, columnInfo.rcHeader.top,
-				columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+1, columnInfo.rcHeader.bottom);
-			rcSplit.OffsetRect(m_rc.left, m_rc.top);
+			CRect rcSplit(columnInfo.rcHeader.right-2, columnInfo.rcHeader.top,
+				columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+2, columnInfo.rcHeader.bottom);
+			rcSplit.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
 			if(rcSplit.PtInRect(point))
 			{
 				m_enButtonState = enBSHover;
@@ -1365,7 +1373,7 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		// 鼠标放开分隔线或滚动块,则移动分割线范围
 		if(m_nHoverSplitColumn != -1)
 		{
-			MoveColumnSplit(m_nHoverSplitColumn, point.x-m_rc.left);
+			MoveColumnSplit(m_nHoverSplitColumn, point.x-m_rc.left+m_nVirtualLeft);
 		}
 	}
 
