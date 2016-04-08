@@ -50,6 +50,11 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nTipItem = -1;
 	m_nTipVirtualTop = 0;
 
+	m_bEnableModifyColumn = FALSE;
+	m_bHoverSplitColumn = false;
+	m_nHoverSplitColumn = -1;
+	m_enButtonState = enBSNormal;
+
 	m_nFirstViewRow = 0;
 	m_nLastViewRow = 0;
 	m_nVirtualTop = 0;
@@ -338,6 +343,85 @@ BOOL CDuiGridCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 
 	UpdateControl(true);
 	return true;
+}
+
+// 设置列宽度
+int CDuiGridCtrl::SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn)
+{
+	int nXPos = 0;
+	int nYPos = 0;
+
+	int nWidthResult = 0;
+	for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+	{
+		GridColumnInfo &columnInfoTemp = m_vecColumnInfo.at(i);
+		if(i == nColumn)
+		{
+			columnInfoTemp.nWidth = nWidth;
+		}else
+		if((i == (nColumn+1)) && (nWidthNextColumn != -1))
+		{
+			columnInfoTemp.nWidth = nWidthNextColumn;
+		}
+		int _nWidth = columnInfoTemp.nWidth;
+		if(_nWidth == -1)	// -1表示最后一列为自适应宽度
+		{
+			_nWidth = m_rc.Width() - nXPos;
+			if(_nWidth < 0)
+			{
+				_nWidth = 100;	// 如果宽度不够,设置一个最小值
+			}
+		}
+		if(i == nColumn)
+		{
+			nWidthResult = _nWidth;
+		}
+		columnInfoTemp.rcHeader.SetRect(nXPos, nYPos, nXPos + _nWidth, nYPos + m_nRowHeight);
+		nXPos += columnInfoTemp.nWidth;
+	}
+
+	// 计算横向滚动条
+	CalcColumnsPos();
+	// 重新计算所有行的位置
+	CalcRowsPos();
+
+	UpdateControl(true);
+
+	return nWidthResult;
+}
+
+// 移动列分隔线位置
+void CDuiGridCtrl::MoveColumnSplit(int nColumn, int nPos)
+{
+	if((size_t)nColumn < m_vecColumnInfo.size())
+	{
+		GridColumnInfo &columnInfo1 = m_vecColumnInfo.at(nColumn);
+		int nWidth1 = columnInfo1.nWidth;
+		if(nWidth1 == -1)	// -1表示最后一列为自适应宽度
+		{
+			nWidth1 = m_rc.Width() - columnInfo1.rcHeader.right;
+			if(nWidth1 < 0)
+			{
+				nWidth1 = 100;	// 如果宽度不够,设置一个最小值
+			}
+		}
+		nWidth1 += (nPos - columnInfo1.rcHeader.right);
+
+		int nWidth2 = -1;
+		if((size_t)(nColumn+1) < m_vecColumnInfo.size())
+		{
+			GridColumnInfo &columnInfo2 = m_vecColumnInfo.at(nColumn+1);
+			nWidth2 = columnInfo2.nWidth;
+		}
+
+		if(nWidth1 < 0)
+		{
+			return;
+		}
+
+		// 调整列宽,仅调整前面的列宽度,后面的不变
+		SetColumnWidth(nColumn, nWidth1, nWidth2);
+	}
 }
 
 // 获取总的列宽
@@ -758,6 +842,8 @@ void CDuiGridCtrl::CalcColumnsPos()
 		rcTemp.top = rcTemp.bottom - m_nScrollWidth;
 		rcTemp.right = rcTemp.right - m_nScrollWidth;
 		m_pControScrollH->SetRect(rcTemp);
+		// 水平滚动条当前位置保持不变
+		//((CDuiScrollHorizontal*)m_pControScrollH)->SetScrollCurrentPos();
 	}
 }
 
@@ -1036,6 +1122,7 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		return false;
 	}
 
+	// 行和单元格的事件处理
 	int nOldHoverRow = m_nHoverRow;
 	BOOL bHoverItemChange = FALSE;
 	int nOldHoverItem = -1;
@@ -1133,7 +1220,52 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		m_nHoverRow = -1;
 	}
 
-	if((nOldHoverRow != m_nHoverRow) || bHoverItemChange)
+	// 拖动列分隔线相关变量
+	enumButtonState buttonState = m_enButtonState;
+	BOOL bHoverSplitColumn = m_bHoverSplitColumn;
+
+	if(m_bEnableModifyColumn && m_rc.PtInRect(point))
+	{
+		if(m_enButtonState != enBSDown)
+		{
+			BOOL bMouseHover = FALSE;
+			if(!m_bMouseDown)
+			{
+				for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+				{
+					GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+					CRect rcSplit(columnInfo.rcHeader.right-2, columnInfo.rcHeader.top,
+						columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+2, columnInfo.rcHeader.bottom);
+					rcSplit.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
+					if(rcSplit.PtInRect(point))
+					{
+						m_bHoverSplitColumn = true;
+						bMouseHover = TRUE;
+						m_enButtonState = enBSNormal;
+						// 设置鼠标形状
+						m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_SIZEWE));	// 双箭头指向南北
+						break;
+					}
+				}
+
+				if(!bMouseHover)
+				{
+					m_bHoverSplitColumn = false;
+					m_enButtonState = enBSNormal;
+					// 还原鼠标形状
+					m_hCursor = ::LoadCursor(NULL,MAKEINTRESOURCE(IDC_ARROW));	// 箭头
+				}
+			}
+		}
+		else
+		{
+			// 鼠标按着分隔线或滚动块,拖动的情况下,则移动分割线范围(立即刷新模式)
+			MoveColumnSplit(m_nHoverSplitColumn, point.x-m_rc.left+m_nVirtualLeft);
+			return true;
+		}
+	}
+
+	if((nOldHoverRow != m_nHoverRow) || bHoverItemChange || (buttonState != m_enButtonState) || (bHoverSplitColumn != m_bHoverSplitColumn))
 	{
 		UpdateControl(TRUE);
 		return true;
@@ -1145,13 +1277,40 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 // 鼠标左键按下事件处理
 BOOL CDuiGridCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
+	// 设置窗口焦点,否则可能无法进行滚动事件的处理
+	SetWindowFocus();
+
+	// 表头的列移动事件处理
+	enumButtonState buttonState = m_enButtonState;
+	if (!m_bIsDisable && m_bEnableModifyColumn)
+	{
+		for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+		{
+			GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+			CRect rcSplit(columnInfo.rcHeader.right-2, columnInfo.rcHeader.top,
+				columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+2, columnInfo.rcHeader.bottom);
+			rcSplit.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
+			if(rcSplit.PtInRect(point))
+			{
+				// 如果在分隔线内,则记录鼠标位置
+				m_enButtonState = enBSDown;
+				m_nHoverSplitColumn = i;
+				break;
+			}
+		}
+	}
+
+	if(buttonState != m_enButtonState)
+	{
+		UpdateControl();
+		return true;
+	}
+
+	// 行事件处理
 	if(m_vecRowInfo.size() == 0)
 	{
 		return false;
 	}
-
-	// 设置窗口焦点,否则可能无法进行滚动事件的处理
-	SetWindowFocus();
 
 	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
@@ -1193,6 +1352,34 @@ BOOL CDuiGridCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 // 鼠标左键放开事件处理
 BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
+	// 表头的列移动事件处理
+	enumButtonState buttonState = m_enButtonState;
+	if (!m_bIsDisable && m_bEnableModifyColumn)
+	{
+		m_enButtonState = enBSNormal;
+		for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+		{
+			GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+			CRect rcSplit(columnInfo.rcHeader.right-2, columnInfo.rcHeader.top,
+				columnInfo.rcHeader.right+m_sizeColumnSeperator.cx+2, columnInfo.rcHeader.bottom);
+			rcSplit.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
+			if(rcSplit.PtInRect(point))
+			{
+				m_enButtonState = enBSHover;
+				break;
+			}
+		}
+
+		// 鼠标放开分隔线或滚动块,则移动分割线范围
+		if(m_nHoverSplitColumn != -1)
+		{
+			MoveColumnSplit(m_nHoverSplitColumn, point.x-m_rc.left+m_nVirtualLeft);
+		}
+	}
+
+	m_nHoverSplitColumn = -1;
+
+	// 行事件处理
 	if(m_vecRowInfo.size() == 0)
 	{
 		return false;

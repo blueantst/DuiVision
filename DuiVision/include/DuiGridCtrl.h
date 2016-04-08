@@ -65,6 +65,8 @@ public:
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0),
 		UINT uAlignment = 0xFFFFUL, UINT uVAlignment = 0xFFFFUL);
+	int SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn = -1);
+	void MoveColumnSplit(int nColumn, int nPos);
 	int GetTotalColumnWidth();
 	int InsertRow(int nRow, CString strId,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
@@ -152,6 +154,11 @@ public:
 	int					m_nTipItem;			// 当前tip列
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
+	BOOL			m_bEnableModifyColumn;	// 是否允许修改列宽度
+	enumButtonState m_enButtonState;	// 鼠标状态
+	BOOL			m_bHoverSplitColumn;	// 是否鼠标热点状态(列分隔线)
+	int					m_nHoverSplitColumn;	// 鼠标拖动的列分隔线索引
+
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);	// 定义标题行背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ColumnSeperator);	// 定义列分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
@@ -187,5 +194,6 @@ public:
 		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("column-sep"), m_bShowColumnSeperator, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("modify-column-width"), m_bEnableModifyColumn, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
