@@ -132,7 +132,7 @@ int CLogMgr::LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp)
 	TCHAR szBuf[nBufLen];
 
 	int nStrLen=_vsntprintf_s(szBuf, nBufLen-1, lpFormat, argp);
-	if(nStrLen>0) szBuf[nStrLen - 1] = 0;
+	if(nStrLen>0) szBuf[nStrLen] = 0;
 
 	FILE* lpFile = _tfopen(m_strLogFile, _T("a+"));
 	if ( lpFile != NULL )
