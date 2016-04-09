@@ -9,6 +9,27 @@
 #include <string>
 #include <sstream>
 
+#ifdef _UNICODE
+	#define T_STRNCPY	wcsncpy
+	#define T_STRCPY	wcscpy
+	#define T_STRLEN	wcslen
+	#define T_STRBYTE		2*wcslen
+	#define T_STRCAT	wcscat
+	#define T_SNPRINTF	_snwprintf
+	#define T_STAT	_wstat
+	#define T_ACCESS	_waccess
+#else
+	#define T_STRNCPY	strncpy
+	#define T_STRCPY	strcpy
+	#define T_STRLEN	strlen
+	#define T_STRBYTE		strlen
+	#define T_STRCAT	strcat
+	#define T_SNPRINTF	_snprintf
+	#define T_STAT	_tstat
+	#define T_ACCESS	_access
+#endif
+
+
 //////////////////////////////////////////////////////////////////////////
 static CLogMgr* g_pInsLogMgr = NULL;
 
@@ -118,13 +139,8 @@ int CLogMgr::LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp)
 	{
 		// 获取文件大小
 		int nResult = -1;
-#ifdef _UNICODE
 		struct _stat FileBuff;
-		nResult = _wstat(m_strLogFile, &FileBuff);
-#else
-		struct _tstat FileBuff;
-		nResult = _tstat(m_strLogFile, &FileBuff);
-#endif
+		nResult = T_STAT(m_strLogFile, &FileBuff);
 		if (0 != nResult)
 		{
 			return -1;	// 获取文件大小失败
@@ -204,7 +220,7 @@ int CLogMgr::LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp)
 void CLogMgr::sort()
 {
 	time_t tem;
-	char temfilename[_MAX_FILE_PATH];
+	TCHAR temfilename[_MAX_FILE_PATH];
 	memset(temfilename, 0x00, _MAX_FILE_PATH);
 
 	for(int i = 0; i < m_nSaveIndex - 1; i++)
@@ -215,40 +231,38 @@ void CLogMgr::sort()
 				tem = m_szFileCreateTime[j];
 				m_szFileCreateTime[j] = m_szFileCreateTime[i];
 				m_szFileCreateTime[i] = tem;
-				strncpy(temfilename, m_szFileName[j], _MAX_FILE_PATH);
-				strncpy(m_szFileName[j],m_szFileName[i], _MAX_FILE_PATH);
-				strncpy(m_szFileName[i], temfilename, _MAX_FILE_PATH);
+				T_STRNCPY(temfilename, m_szFileName[j], _MAX_FILE_PATH);
+				T_STRNCPY(m_szFileName[j],m_szFileName[i], _MAX_FILE_PATH);
+				T_STRNCPY(m_szFileName[i], temfilename, _MAX_FILE_PATH);
 			}
 		}
 }
 
 // 设置遍历路径, 检查路径合法性
-bool CLogMgr::SetInitDir(const char *dir)
+bool CLogMgr::SetInitDir(const TCHAR *dir)
 {
 	int nLen = 0;
 
 	//判断目录是否存在
-	if (_access(dir,0) != 0)
+	if (T_ACCESS(dir,0) != 0)
 	{
 		return false;
 	}
-	
-	// 保存目录路径
-	memset(m_szInitDir, 0x00, _MAX_FILE_PATH);
-	memcpy(m_szInitDir, dir, strlen(dir));
+	// 保存目录路径,如果目录的最后一个字母不是'\',则在最后加上一个'\'
+	memset(m_szInitDir, 0x00, _MAX_FILE_PATH*sizeof(TCHAR));
+	memcpy(m_szInitDir, dir, T_STRBYTE(dir));
+	nLen=T_STRLEN(m_szInitDir);
 
-	//如果目录的最后一个字母不是'\',则在最后加上一个'\'
-	nLen=strlen(m_szInitDir);
-	if (m_szInitDir[nLen - 1] != '\\')
+	if (m_szInitDir[nLen - 1] != _T('\\'))
 	{
-		strcat(m_szInitDir,"\\");
+		T_STRCAT(m_szInitDir,_T("\\"));
 	}
 
 	return true;
 }
 
 // 将遍历到的文件保存
-bool CLogMgr::ProcessFile(const char *filename,time_t createtime)
+bool CLogMgr::ProcessFile(const TCHAR *filename,time_t createtime)
 {
 	// 把文件名保存到数组中，判断如果文件个数多于须保存个数，
 	// 安照文件生成的时间对文件进行排序，删除最早生成的文件
@@ -260,7 +274,7 @@ bool CLogMgr::ProcessFile(const char *filename,time_t createtime)
 	// 小于保存数目时不删除
 	if (m_nSaveIndex < MAX_MAINTENANCE_LOG_NUM)
 	{
-		_snprintf(m_szFileName[m_nSaveIndex],(MAX_MAINTENANCE_LOG_NUM - 1), "%s", filename);
+		T_SNPRINTF(m_szFileName[m_nSaveIndex],(MAX_MAINTENANCE_LOG_NUM - 1), _T("%s"), filename);
 		m_szFileCreateTime[m_nSaveIndex] = filecreatetime;
 		m_nSaveIndex++;
 	}
@@ -269,8 +283,8 @@ bool CLogMgr::ProcessFile(const char *filename,time_t createtime)
 		// 排序
 		sort();
 		// 删除文件
-		_unlink(m_szFileName[0]);
-		_snprintf(m_szFileName[0], (MAX_MAINTENANCE_LOG_NUM - 1), "%s", filename);
+		_tunlink(m_szFileName[0]);
+		T_SNPRINTF(m_szFileName[0], (MAX_MAINTENANCE_LOG_NUM - 1), _T("%s"), filename);
 		m_szFileCreateTime[0] = filecreatetime;
 	}
 
@@ -278,27 +292,27 @@ bool CLogMgr::ProcessFile(const char *filename,time_t createtime)
 }
 
 // 遍历文件以及子文件夹，这里不处理子文件夹
-bool CLogMgr::BrowseDir(const char *dir,const char *filespec)
+bool CLogMgr::BrowseDir(const TCHAR *dir,const TCHAR *filespec)
 {
 	// 遍历文件
 	CFileFind logFind;
-	ostringstream ostrDir;
-	ostrDir<<dir<<"\\"<<filespec;
+	CString strDir = dir;
+	strDir.Format(_T("%s\\%s"), dir, filespec);
 
 	try
 	{
 		// 查找第一个文件
-		BOOL IsFinded=(BOOL)logFind.FindFile(ostrDir.str().c_str()); 
+		BOOL IsFinded=(BOOL)logFind.FindFile(strDir); 
 		while(IsFinded) 
 		{  
 			IsFinded=(BOOL)logFind.FindNextFile();
 			if(!logFind.IsDots()) 
 			{ 
-				char foundFileName[_MAX_FILE_PATH]; 
+				TCHAR foundFileName[_MAX_FILE_PATH]; 
 				memset(foundFileName, 0, _MAX_FILE_PATH);
 
 				CString strFileName = logFind.GetFileName();
-				strncpy(foundFileName, strFileName.GetBuffer(_MAX_FILE_PATH), (_MAX_FILE_PATH - 1)); 
+				T_STRNCPY(foundFileName, strFileName.GetBuffer(_MAX_FILE_PATH), (_MAX_FILE_PATH - 1));
 				strFileName.ReleaseBuffer();
 
 				if(logFind.IsDirectory()) // 如果是目录不处理
@@ -307,10 +321,10 @@ bool CLogMgr::BrowseDir(const char *dir,const char *filespec)
 				} 
 				else // 查找到文件
 				{ 
-					char filename[_MAX_FILE_PATH];
-					memset(filename, 0x00, _MAX_FILE_PATH);
-					strcpy(filename,dir);
-					strcat(filename,foundFileName);
+					TCHAR filename[_MAX_FILE_PATH];
+					memset(filename, 0x00, _MAX_FILE_PATH*sizeof(TCHAR));
+					T_STRCPY(filename,dir);
+					T_STRCAT(filename,foundFileName);
 
 					CTime lastWriteTime;
 					logFind.GetLastWriteTime(lastWriteTime);
@@ -333,7 +347,7 @@ bool CLogMgr::BrowseDir(const char *dir,const char *filespec)
 // const char *dir;      // 转储文件目录
 // const char *filespec; // 转储文件规则
 // const int nSaveNum;   // 保存文件数目
-bool CLogMgr::FileConveySave(const char *dir,const char *filespec,const int nSaveNum)
+bool CLogMgr::FileConveySave(const TCHAR *dir,const TCHAR *filespec,const int nSaveNum)
 {
 	// 初始化
 	memset(m_szFileName, 0x00, sizeof(m_szFileName));
@@ -366,7 +380,7 @@ bool CLogMgr::FileConveySave(const char *dir,const char *filespec,const int nSav
 		// 循环删除多余旧文件
 		for(int i = 0; i < m_nSaveIndex - nSaveNum; i++)
 		{
-			_unlink(m_szFileName[i]);
+			_tunlink(m_szFileName[i]);
 		}
 	}
 
@@ -376,13 +390,13 @@ bool CLogMgr::FileConveySave(const char *dir,const char *filespec,const int nSav
 // 文件重命名
 // const char *pszSrcFileName; // 源文件绝对路径
 // const char* pszDesFileName; // 目标文件名
-bool CLogMgr::FileReName(const char *pszSrcFileName, const char* pszDesFileName)
+bool CLogMgr::FileReName(const TCHAR *pszSrcFileName, const TCHAR* pszDesFileName)
 {
 	int  nLen = 0;
-	char szPath[_MAX_FILE_PATH];
-	char szDir[_MAX_FILE_PATH];
-	char szDrive[_MAX_FILE_PATH];
-	char szDesPath[_MAX_FILE_PATH];
+	TCHAR szPath[_MAX_FILE_PATH];
+	TCHAR szDir[_MAX_FILE_PATH];
+	TCHAR szDrive[_MAX_FILE_PATH];
+	TCHAR szDesPath[_MAX_FILE_PATH];
 
 	memset(szPath, 0x00, _MAX_FILE_PATH);
 	memset(szDir, 0x00, _MAX_FILE_PATH);
@@ -390,30 +404,30 @@ bool CLogMgr::FileReName(const char *pszSrcFileName, const char* pszDesFileName)
 	memset(szDesPath, 0x00, _MAX_FILE_PATH);
 
 	// 分离文件路径
-	_splitpath(pszSrcFileName, szDrive, szDir, NULL, NULL);
+	_tsplitpath(pszSrcFileName, szDrive, szDir, NULL, NULL);
 
 	// 获得目标文件路径
-	_snprintf(szPath, (_MAX_FILE_PATH - 1), "%s%s",szDrive,szDir);
+	T_SNPRINTF(szPath, (_MAX_FILE_PATH - 1), _T("%s%s"),szDrive,szDir);
 
 	//如果目录的最后一个字母不是'\',则在最后加上一个'\'
-	nLen=strlen(szPath);
-	if (szPath[nLen - 1] != '\\')
+	nLen=T_STRLEN(szPath);
+	if (szPath[nLen - 1] != _T('\\'))
 	{
-		strcat(szPath,"\\");
+		T_STRCAT(szPath,_T("\\"));
 	}
 
 	// 获取当前系统时间
 	SYSTEMTIME oCurrTime;
 	GetLocalTime(&oCurrTime);
-	char szCurrTime[32];
+	TCHAR szCurrTime[32];
 	memset(szCurrTime, 0x00, 32);
-	_snprintf(szCurrTime, 31, "%02d-%02d-%02d-%02d-%02d-%02d", oCurrTime.wYear, oCurrTime.wMonth,
+	T_SNPRINTF(szCurrTime, 31, _T("%02d-%02d-%02d-%02d-%02d-%02d"), oCurrTime.wYear, oCurrTime.wMonth,
 		oCurrTime.wDay, oCurrTime.wHour, oCurrTime.wMinute, oCurrTime.wSecond);
 
-	_snprintf(szDesPath, 1023, "%s%s.%s.log", szPath, pszDesFileName, szCurrTime);
+	T_SNPRINTF(szDesPath, 1023, _T("%s%s.%s.log"), szPath, pszDesFileName, szCurrTime);
 
 	// 重命名文件名
-	rename(pszSrcFileName, szDesPath);
+	_trename(pszSrcFileName, szDesPath);
 
 	return true; 
 }

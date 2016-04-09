@@ -55,11 +55,11 @@ public:
 
 protected:
 	void sort();
-	bool SetInitDir(const char *dir);
-	bool ProcessFile(const char *filename,time_t createtime);
-	bool BrowseDir(const char *dir,const char *filespec);
-	bool FileConveySave(const char *dir,const char *filespec,const int nSaveNum);
-	bool FileReName(const char *pszSrcFileName, const char* pszDesFileName);
+	bool SetInitDir(const TCHAR *dir);
+	bool ProcessFile(const TCHAR *filename,time_t createtime);
+	bool BrowseDir(const TCHAR *dir,const TCHAR *filespec);
+	bool FileConveySave(const TCHAR *dir,const TCHAR *filespec,const int nSaveNum);
+	bool FileReName(const TCHAR *pszSrcFileName, const TCHAR* pszDesFileName);
 
 private:
 	CRITICAL_SECTION		m_WriteLogMutex;		// 日志同步锁
@@ -71,8 +71,8 @@ private:
 	int						m_nMaxLogFileSize;		// 日志文件长度的最大值
 	int						m_nMaxLogFileNumber;	// 最大保存日志文件数
 
-	char					m_szInitDir[_MAX_FILE_PATH];	// 日志路径名
-	char					m_szFileName[MAX_MAINTENANCE_LOG_NUM][_MAX_FILE_PATH];	// 存放文件名数组
+	TCHAR				m_szInitDir[_MAX_FILE_PATH];	// 日志路径名
+	TCHAR				m_szFileName[MAX_MAINTENANCE_LOG_NUM][_MAX_FILE_PATH];	// 存放文件名数组
 	time_t				m_szFileCreateTime[MAX_MAINTENANCE_LOG_NUM];	// 文件创建时间,与文件名一一对应
 	int						m_nSaveIndex;		// 保存索引号
 };
