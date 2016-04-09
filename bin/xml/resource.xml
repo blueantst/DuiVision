@@ -5,6 +5,8 @@
 <res type="cfg" name="defaultStyle" value="" />
 <res type="cfg" name="logfile" value="demoui.log" />
 <res type="cfg" name="loglevel" value="1" />
+<res type="cfg" name="logFileSize" value="1024" />
+<res type="cfg" name="logFileNumber" value="5" />
 <res type="cfg" name="appMutex" value="MUTEX_DUIVISION_DEMO" />
 <res type="cfg" name="enableDragFile" value="1" />
 <res type="cfg" name="trayDbClickMsg" value="0" />
