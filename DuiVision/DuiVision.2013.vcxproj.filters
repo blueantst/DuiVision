@@ -201,6 +201,9 @@
     <ClInclude Include="include\DuiLayout.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="common\LogMgr.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -349,6 +352,9 @@
     </ClCompile>
     <ClCompile Include="source\DuiLayout.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\LogMgr.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

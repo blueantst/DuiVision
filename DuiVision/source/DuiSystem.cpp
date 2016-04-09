@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "DuiSystem.h"
-#include <sys/stat.h>
 #include <tchar.h>
 
 template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
@@ -21,7 +20,6 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	{
 		g_nIDTemplate = nIDTemplate;
 	}
-	m_bLogEnable = FALSE;
 	m_pNotifyMsgBox = NULL;
 	m_strCurStyle = strStyle;
 	if(strResourceFile.IsEmpty())
@@ -2729,10 +2727,11 @@ void DuiSystem::InitLog()
 	{
 		return;
 	}
-	m_strLogFile = GetExePath() + strLogFile;
-	m_nLogLevel = _ttoi(GetConfig(_T("loglevel")));
-	m_bLogEnable = TRUE;
-	InitializeCriticalSection(&m_WriteLogMutex);
+	strLogFile = GetExePath() + strLogFile;
+	int nLogLevel = _ttoi(GetConfig(_T("loglevel")));
+
+	CLogMgr::Instance()->SetLogFile(strLogFile);
+	CLogMgr::Instance()->SetLogLevel(nLogLevel);
 
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision Start-------------------"));
 }
@@ -2741,115 +2740,28 @@ void DuiSystem::InitLog()
 void DuiSystem::DoneLog()
 {
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision End-------------------"));
-	DeleteCriticalSection(&m_WriteLogMutex);
+	CLogMgr::Release();
 }
 
 // 记录日志
 void DuiSystem::LogEvent(int nLevel, LPCTSTR lpFormat, ...)
 {
-	if(!DuiSystem::Instance()->IsLogEnable())
+	if(!CLogMgr::Instance()->IsLogEnable())
 	{
 		return;
 	}
 
-	if(nLevel < DuiSystem::Instance()->GetLogLevel())
+	if(nLevel < CLogMgr::Instance()->GetLogLevel())
 	{
 		return;
 	}
 
-	EnterCriticalSection(DuiSystem::Instance()->GetLogMutex());
+	EnterCriticalSection(CLogMgr::Instance()->GetLogMutex());
 
-	const int nBufLen = MAX_PATH * 2;
-	TCHAR szBuf[nBufLen];
 	va_list ap;
-
 	va_start(ap, lpFormat);
-	int nStrLen=_vsntprintf_s(szBuf, nBufLen-1, lpFormat, ap);
-	if(nStrLen>0) szBuf[nStrLen - 1] = 0;
-	//_vsntprintf(szBuf, nBufLen, lpFormat, ap);
-	//szBuf[nBufLen - 1] = 0;
+	CLogMgr::Instance()->LogEventArgs(nLevel, lpFormat, ap);
 	va_end(ap);
-
-	FILE* lpFile = _tfopen(DuiSystem::Instance()->GetLogFile(), _T("a+"));
-	if ( lpFile != NULL )
-	{
-		// 获取文件大小
-		int nResult = -1;
-#ifdef _UNICODE
-		struct _stat FileBuff;
-		nResult = _wstat(DuiSystem::Instance()->GetLogFile(), &FileBuff);
-#else
-		struct _tstat FileBuff;
-		nResult = _tstat(DuiSystem::Instance()->GetLogFile(), &FileBuff);
-#endif
-		if (0 != nResult)
-		{
-			LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
-			return;
-		}
-
-		long lSize = FileBuff.st_size;
-
-		// 文件大于设定大小需要进行转储，默认最大1MB
-		if (lSize > MAXLOGFILESIZE)
-		{
-			fclose(lpFile);
-
-			// 删除备份文件
-			_tunlink(DuiSystem::Instance()->GetLogFile() + _T(".bak"));
-
-			// 重命名文件名为备份文件名
-			_trename(DuiSystem::Instance()->GetLogFile(), DuiSystem::Instance()->GetLogFile() + _T(".bak"));
-
-			// 打开新文件
-			lpFile = _tfopen(DuiSystem::Instance()->GetLogFile(), _T("w+"));//,ccs=UTF-8"));
-			if (lpFile == NULL)
-			{
-				LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
-				return;
-			}
-		}
-
-		SYSTEMTIME st;
-		GetLocalTime(&st);
-
-		CString strLevel;
-		if (nLevel == LOG_LEVEL_DEBUG)
-		{
-			strLevel = __DEBUG;
-		}
-		else if (nLevel == LOG_LEVEL_INFO)
-		{
-			strLevel = __INFO;
-		}
-		else if (nLevel == LOG_LEVEL_ERROR)
-		{
-			strLevel = __ERROR;
-		}
-		else if (nLevel == LOG_LEVEL_CRITICAL)
-		{
-			strLevel = __CRITICAL;
-		}
-		else
-		{
-			strLevel = __DEBUG;
-		}
-
-		LPCTSTR lpStr = _tcschr(lpFormat, _T('\n'));
-		if ( lpStr != NULL )
-		{
-			lpStr = _T("%s %02d-%02d-%02d %02d:%02d:%02d[%u] : %s");
-		}
-		else
-		{
-			lpStr = _T("%s %02d-%02d-%02d %02d:%02d:%02d[%u] : %s\n");
-		}
-
-		DWORD dwCurThreadID = GetCurrentThreadId();
-
-		_ftprintf(lpFile, lpStr, strLevel, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, dwCurThreadID, szBuf);
-		fclose(lpFile);
-	}
-
-	LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
+	
+	LeaveCriticalSection(CLogMgr::Instance()->GetLogMutex());
 }

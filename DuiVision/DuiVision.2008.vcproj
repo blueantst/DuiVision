@@ -720,6 +720,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\common\LogMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\common\LogMgr.h"
+				>
+			</File>
+			<File
 				RelativePath=".\common\registry.h"
 				>
 			</File>

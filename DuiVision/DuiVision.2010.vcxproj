@@ -176,6 +176,7 @@
     <ClInclude Include="activex\duicomcli.h" />
     <ClInclude Include="common\BaseTask.h" />
     <ClInclude Include="common\encoding.h" />
+    <ClInclude Include="common\LogMgr.h" />
     <ClInclude Include="common\registry.h" />
     <ClInclude Include="common\TaskMgr.h" />
     <ClInclude Include="common\XUnZip.h" />
@@ -234,6 +235,7 @@
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="common\LogMgr.cpp" />
     <ClCompile Include="common\TaskMgr.cpp" />
     <ClCompile Include="common\XUnzip.cpp" />
     <ClCompile Include="DuiVision.cpp" />

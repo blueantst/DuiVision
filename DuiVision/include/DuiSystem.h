@@ -226,10 +226,6 @@ public:
 	BOOL SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strAppName, CString strInfo);
 
 	// 日志函数
-	CString GetLogFile() { return m_strLogFile; }
-	int GetLogLevel() { return m_nLogLevel; }
-	BOOL IsLogEnable() { return m_bLogEnable; }
-	CRITICAL_SECTION* GetLogMutex() { return &m_WriteLogMutex; }
 	void InitLog();
 	void DoneLog();
 	static void	LogEvent(int nLevel, LPCTSTR lpFormat, ...);
@@ -253,11 +249,6 @@ protected:
 
 	DWORD					m_dwLangID;								// 当前语言ID
 	CString					m_strCurStyle;							// 当前风格名
-
-	CString					m_strLogFile;							// 日志文件名
-	int						m_nLogLevel;							// 日志级别
-	BOOL					m_bLogEnable;							// 是否启用日志功能
-	CRITICAL_SECTION		m_WriteLogMutex;						// 日志同步锁
 
 	DuiVision::CTaskMgr		m_TaskMsg;								// 界面消息任务队列
 
