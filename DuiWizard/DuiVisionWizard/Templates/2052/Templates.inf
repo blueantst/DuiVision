@@ -68,6 +68,8 @@ DuiPlugin\DuiHandlerPlugin.cpp
 
 [duivision]common\BaseTask.h
 [duivision]common\encoding.h
+[duivision]common\LogMgr.cpp
+[duivision]common\LogMgr.h
 [duivision]common\registry.h
 [duivision]common\TaskMgr.cpp
 [duivision]common\TaskMgr.h
