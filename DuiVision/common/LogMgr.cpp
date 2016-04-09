@@ -18,8 +18,9 @@ CLogMgr::CLogMgr()
 	m_bLogEnable = FALSE;
 	m_strLogPath = _T("");
 	m_strLogFile = _T("");
+	m_strLogFileName = _T("");
 	m_nLogLevel = LOG_LEVEL_ERROR;
-	m_nMaxSaveNum = LOG_MAX_SAVE_NUM;
+	m_nMaxLogFileNumber = LOG_MAX_SAVE_NUM;
 	m_nMaxLogFileSize = MAXLOGFILESIZE;
 	InitializeCriticalSection(&m_WriteLogMutex);
 }
@@ -63,6 +64,14 @@ void CLogMgr::SetLogFile(CString strLogFile)
 		if(nPos >= 0)
 		{
 			m_strLogPath = szPath.Left(nPos+1);
+			// 获取日志文件名的名字部分(不包含后缀)
+			m_strLogFileName = m_strLogFile;
+			m_strLogFileName.Delete(0, nPos+1);
+			int nPosDot = m_strLogFileName.ReverseFind('.');
+			if(nPosDot > 0)
+			{
+				m_strLogFileName = m_strLogFileName.Left(nPosDot);
+			}
 		}
 	}
 
@@ -129,16 +138,15 @@ int CLogMgr::LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp)
 			fclose(lpFile);
 
 			// 进行日志文件转储，转储时保证只保存指定个数的备份文件
-			//FileReName(m_strLogFile, LOG_CONVEY_FILE_NAME);
+			FileReName(m_strLogFile, m_strLogFileName + _T(".") + LOG_CONVEY_FILE_NAME);
 
-			// 删除多余文件
-			//FileConveySave(m_strLogPath, LOG_CONVEY_RULE, m_nMaxSaveNum);
+			// 删除多余文件(规矩通配符规则和时间顺序删除,保留最新的若干文件)
+			FileConveySave(m_strLogPath, m_strLogFileName + _T(".") + LOG_CONVEY_RULE, m_nMaxLogFileNumber);
 
 			// 删除备份文件
-			_tunlink(m_strLogFile + _T(".bak"));
-
+			//_tunlink(m_strLogFile + _T(".bak"));
 			// 重命名文件名为备份文件名
-			_trename(m_strLogFile, m_strLogFile + _T(".bak"));
+			//_trename(m_strLogFile, m_strLogFile + _T(".bak"));
 
 			// 打开新文件
 			lpFile = _tfopen(m_strLogFile, _T("w+"));//,ccs=UTF-8"));
@@ -402,7 +410,7 @@ bool CLogMgr::FileReName(const char *pszSrcFileName, const char* pszDesFileName)
 	_snprintf(szCurrTime, 31, "%02d-%02d-%02d-%02d-%02d-%02d", oCurrTime.wYear, oCurrTime.wMonth,
 		oCurrTime.wDay, oCurrTime.wHour, oCurrTime.wMinute, oCurrTime.wSecond);
 
-	_snprintf(szDesPath, 1023, "%s%s.%s.txt", szPath, pszDesFileName,szCurrTime);
+	_snprintf(szDesPath, 1023, "%s%s.%s.log", szPath, pszDesFileName, szCurrTime);
 
 	// 重命名文件名
 	rename(pszSrcFileName, szDesPath);

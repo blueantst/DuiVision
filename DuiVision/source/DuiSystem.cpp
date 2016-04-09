@@ -2729,9 +2729,13 @@ void DuiSystem::InitLog()
 	}
 	strLogFile = GetExePath() + strLogFile;
 	int nLogLevel = _ttoi(GetConfig(_T("loglevel")));
+	int nLogFileSize = _ttoi(GetConfig(_T("logFileSize"))) * 1024;	// µ¥Î»ÊÇK
+	int nLogFileNumber = _ttoi(GetConfig(_T("logFileNumber")));
 
 	CLogMgr::Instance()->SetLogFile(strLogFile);
 	CLogMgr::Instance()->SetLogLevel(nLogLevel);
+	CLogMgr::Instance()->SetLogFileSize(nLogFileSize);
+	CLogMgr::Instance()->SetLogFileNumber(nLogFileNumber);
 
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision Start-------------------"));
 }

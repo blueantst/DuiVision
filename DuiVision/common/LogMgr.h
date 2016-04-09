@@ -20,8 +20,8 @@
 #define	__CRITICAL	_T("CRITICAL")
 
 // 日志转储文件
-#define	LOG_CONVEY_FILE_NAME	"LogBak"
-#define	LOG_CONVEY_RULE				"LogBak.*"
+#define	LOG_CONVEY_FILE_NAME	"logbak"
+#define	LOG_CONVEY_RULE				"logbak.*"
 #define	LOG_MAX_SAVE_NUM			5
 
 //
@@ -42,8 +42,10 @@ public:
 	CString GetLogFile() { return m_strLogFile; }
 	void SetLogLevel(int nLogLevel) { m_nLogLevel = nLogLevel; }
 	int GetLogLevel() { return m_nLogLevel; }
-	void SetMaxSaveNumber(int nMaxSaveNumber) { m_nMaxSaveNum = nMaxSaveNumber; }
-	int GetMaxSaveNumber() { return m_nMaxSaveNum; }
+	void SetLogFileSize(int nLogFileSize) { m_nMaxLogFileSize = nLogFileSize; }
+	int GetLogFileSize() { return m_nMaxLogFileSize; }
+	void SetLogFileNumber(int nLogFileNumber) { m_nMaxLogFileNumber = nLogFileNumber; }
+	int GetLogFileNumber() { return m_nMaxLogFileNumber; }
 	BOOL IsLogEnable() { return m_bLogEnable; }
 	CRITICAL_SECTION* GetLogMutex() { return &m_WriteLogMutex; }
 	
@@ -63,10 +65,11 @@ private:
 	CRITICAL_SECTION		m_WriteLogMutex;		// 日志同步锁
 	CString					m_strLogPath;			// 日志文件路径
 	CString					m_strLogFile;			// 日志文件名
+	CString					m_strLogFileName;			// 日志文件名前缀
 	int						m_nLogLevel;			// 日志级别
 	BOOL					m_bLogEnable;			// 是否启用日志功能
 	int						m_nMaxLogFileSize;		// 日志文件长度的最大值
-	int						m_nMaxSaveNum;	// 最大保存日志文件数
+	int						m_nMaxLogFileNumber;	// 最大保存日志文件数
 
 	char					m_szInitDir[_MAX_FILE_PATH];	// 日志路径名
 	char					m_szFileName[MAX_MAINTENANCE_LOG_NUM][_MAX_FILE_PATH];	// 存放文件名数组
