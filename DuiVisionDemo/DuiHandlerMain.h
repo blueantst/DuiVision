@@ -54,6 +54,7 @@ public:
 	LRESULT OnDuiMsgImageNormalMouseLDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgImageNormalMouseLUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgImageNormalMouseMove(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgGridCtrlHeaderRButtonUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	
 	//virtual LRESULT OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	virtual void OnTimer(UINT uTimerID, CString strTimerName);
@@ -103,5 +104,6 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("image-normal"), MSG_MOUSE_LDOWN, OnDuiMsgImageNormalMouseLDown)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("image-normal"), MSG_MOUSE_LUP, OnDuiMsgImageNormalMouseLUp)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("image-normal"), MSG_MOUSE_MOVE, OnDuiMsgImageNormalMouseMove)
+		DUI_CONTROL_NAMEMSG_MESSAGE(_T("gridctrl_header"), MSG_MOUSE_RUP, OnDuiMsgGridCtrlHeaderRButtonUp)
 	DUI_DECLARE_MESSAGE_END()
 };

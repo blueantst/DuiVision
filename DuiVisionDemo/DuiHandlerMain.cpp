@@ -716,6 +716,42 @@ LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseMove(UINT uID, CString strName,
 	return TRUE;
 }
 
+// 带表头的表格控件右键放开消息处理,演示表格的右键菜单
+LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlHeaderRButtonUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 表格控件某一行,传入参数中wParam表示表格行号,lParam表示列号
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_header"));
+	GridItemInfo* pItemInfo = pGridCtrl->GetItemInfo(wParam, lParam);
+	if(pItemInfo)
+	{
+		// 显示右键菜单
+		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		pDuiMenu->SetAutoClose(FALSE);
+		pDuiMenu->SetParent(pGridCtrl);
+		CPoint point;
+		CRect rc = pItemInfo->rcItem;
+		// 计算菜单的显示位置
+		point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
+
+		CDlgBase* pParentDlg = GetControlDialog(uID);
+
+		// 坐标转换为屏幕坐标
+		pParentDlg->ClientToScreen(&point);
+
+		CString strXmlFile = _T("duivision\\menu_tray.xml");
+		if(pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU))
+		{
+			CRect rcMenu;
+			pDuiMenu->GetWindowRect(&rcMenu);
+			pDuiMenu->MoveWindow(rcMenu);
+
+			pDuiMenu->ShowWindow(SW_SHOW);
+			pDuiMenu->SetAutoClose(TRUE);
+		}
+	}
+	return TRUE;
+}
+
 /*
 // DUI事件处理
 LRESULT CDuiHandlerMain::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
