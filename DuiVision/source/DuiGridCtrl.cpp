@@ -1522,13 +1522,13 @@ BOOL CDuiGridCtrl::OnControlRButtonUp(UINT nFlags, CPoint point)
 	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
-		if(PtInRow(point, rowInfo))
+		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))
 		{
 			//取反，否则消息不能发送
 			if(!PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
-				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(MSG_MOUSE_RUP, m_nHoverRow, rowInfo.nCheck);
+				rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
+				SendMessage(MSG_MOUSE_RUP, m_nHoverRow, rowInfo.nHoverItem);
 				UpdateControl(TRUE);
 
 				return true;
@@ -1539,16 +1539,12 @@ BOOL CDuiGridCtrl::OnControlRButtonUp(UINT nFlags, CPoint point)
 	{
 		// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
 		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
-		if(PtInRow(point, rowInfo))
+		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo))
 		{
-			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
-			{
-				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
-				SendMessage(MSG_MOUSE_RUP, m_nDownRow, rowInfo.nCheck);
-				UpdateControl(TRUE);
-
-				return true;
-			}
+			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
+			SendMessage(MSG_MOUSE_RUP, m_nDownRow, rowInfo.nHoverItem);
+			UpdateControl(TRUE);
+			return true;
 		}
 	}
 

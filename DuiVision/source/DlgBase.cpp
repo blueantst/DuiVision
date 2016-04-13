@@ -188,6 +188,9 @@ BEGIN_MESSAGE_MAP(CDlgBase, CDialog)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	ON_WM_RBUTTONDBLCLK()
 	ON_WM_DROPFILES()
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_USER_CLOSEWND, OnUserCloseWindow)
@@ -2407,19 +2410,40 @@ void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
 
+// 鼠标右键按下
 void CDlgBase::OnRButtonDown(UINT nFlags, CPoint point)
 {
+	BOOL bIsSelect = false;
 	m_bIsRButtonDblClk = FALSE;
-}
 
-void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
-{
-	if (m_bIsSetCapture)
+	// 如果鼠标点击的不是原来的焦点控件,则清除原来的焦点控件
+	if((m_pFocusControl != m_pControl) && (m_pFocusControl != NULL))
 	{
-		ReleaseCapture();
-		m_bIsSetCapture = false;
+		SetFocusControl(NULL);
 	}
 
+	BOOL bHandled = FALSE;
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			if (m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
+			{
+				bIsSelect = TRUE;
+				m_bIsRButtonDown = TRUE;
+
+				m_pFocusControl = m_pControl;
+				bHandled = m_pControl->OnRButtonDown(nFlags, point);						
+			}
+		}
+	}
+
+	CDialog::OnRButtonDown(nFlags, point);
+}
+
+// 鼠标右键放开
+void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
+{
 	m_bIsRButtonDown = FALSE;
 
 	if (m_pControl)
