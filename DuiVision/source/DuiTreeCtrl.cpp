@@ -872,7 +872,7 @@ HTREEITEM CDuiTreeCtrl::GetNextSiblingNode(HTREEITEM hNode)
 		{
 			hParentNode = rowInfoTemp.hParentNode;
 			bFind = TRUE;
-		}
+		}else
 		if(bFind && (rowInfoTemp.hParentNode == hParentNode))
 		{
 			return rowInfoTemp.hNode;
@@ -894,7 +894,7 @@ HTREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HTREEITEM hNode)
 		{
 			hParentNode = rowInfoTemp.hParentNode;
 			bFind = TRUE;
-		}
+		}else
 		if(bFind && (rowInfoTemp.hParentNode == hParentNode))
 		{
 			return rowInfoTemp.hNode;
