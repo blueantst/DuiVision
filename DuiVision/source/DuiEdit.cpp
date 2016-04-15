@@ -626,7 +626,8 @@ BOOL CDuiEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if((nChar == VK_RETURN) && m_pEdit && ::IsWindow(m_pEdit->GetSafeHwnd()))
 	{
 		m_pEdit->SendMessage(WM_CHAR, VK_RETURN, nFlags);
-		return true;
+		// 返回值为是否允许回车换行,如果不允许,则即使焦点在此输入控件,也可以按回车键关闭窗口
+		return m_bWantReturn;
 	}
 
 	return false;
