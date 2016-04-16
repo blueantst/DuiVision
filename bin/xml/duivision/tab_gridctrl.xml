@@ -38,7 +38,7 @@
 			<item title="16.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_option"/>
 		</row>
-		<row image="skins\icon\PDFViewer.png" check="1">
+		<row image="skins\icon\PDFViewer.png" check="1" crback="50,128,128,0" >
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
 			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />

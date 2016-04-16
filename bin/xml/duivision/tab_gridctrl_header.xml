@@ -18,7 +18,7 @@
 		<column title="列1" width="400" />
 		<column title="列2" width="120" />
 		<column title="列3" width="80" align="center" />
-		<column title="列4" />
+		<column title="列4" width="280"/>
 		<row image="skins\icon\scriptnet.png" check="1">
 			<item title="Script.NET" content="蓝蚂蚁工作室开发的脚本语言集成开发环境，支持Tcl、Python、Perl、Ruby、Lua、NSIS等脚本语言开发调试" font-title="1" >
 				<img pos="100,0" width="136" height="28" image="skins\script_logo.png" mode="normal" tip="支持Tcl、Python、Perl、Ruby、Lua脚本" />
@@ -39,7 +39,7 @@
 			<item title="16.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_option"/>
 		</row>
-		<row image="skins\icon\PDFViewer.png" check="1">
+		<row image="skins\icon\PDFViewer.png" check="1" crback="50,128,128,0" >
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
 			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />
@@ -47,7 +47,7 @@
 				<button name="grid_btn_delete" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="删除" tip="删除下一行" />
 			</item>
 		</row>
-		<row image="skins\icon\Movies.png" check="1">
+		<row image="skins\icon\Movies.png" check="1" >
 			<item title="迅雷看看" crtext="128,128,0" content="1.修复部分Bug" font-title="1" />
 			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
