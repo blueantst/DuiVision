@@ -86,6 +86,7 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		CString strImage = pRowElem.attribute(_T("image")).value();
 		CString strRightImage = pRowElem.attribute(_T("right-img")).value();
 		CString strClrText = pRowElem.attribute(_T("crtext")).value();
+		CString strClrBack = pRowElem.attribute(_T("crback")).value();
 		CString strLink1 = pRowElem.attribute(_T("link1")).value();
 		CString strLinkAction1 = pRowElem.attribute(_T("linkaction1")).value();
 		CString strLink2 = pRowElem.attribute(_T("link2")).value();
@@ -147,9 +148,10 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
+		Color clrBack = CDuiObject::StringToColor(strClrBack);
 
 		InsertItem(-1, strId, strTitle, strContent, strTime, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage,
-			strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck);
+			strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck, clrBack);
 	}
 
 	// 计算每一行的位置和滚动条
@@ -162,7 +164,7 @@ BOOL CDuiListCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString strContent, CString strTime,
 							  int nImageIndex, Color clrText, CString strImage, int nRightImageIndex, CString strRightImage,
 							  CString strLink1, CString strLinkAction1, CString strLink2, CString strLinkAction2,
-							  int nCheck)
+							  int nCheck, Color clrBack)
 {
 	if(!strContent.IsEmpty())
 	{
@@ -181,6 +183,8 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 	rowInfo.sizeRightImage.SetSize(0, 0);
 	rowInfo.bRowColor = FALSE;
 	rowInfo.clrText = clrText;
+	rowInfo.bRowBackColor = FALSE;
+	rowInfo.clrBack = clrBack;
 	rowInfo.strLink1 = strLink1;
 	rowInfo.strLinkAction1 = strLinkAction1;
 	rowInfo.strLink2 = strLink2;
@@ -191,6 +195,10 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 	if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
 	{
 		rowInfo.bRowColor = TRUE;
+	}
+	if(clrBack.GetValue() != Color(0, 0, 0, 0).GetValue())
+	{
+		rowInfo.bRowBackColor = TRUE;
 	}
 
 	// 左边图片
@@ -235,9 +243,9 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 }
 
 // 添加列表行
-int CDuiListCtrl::InsertItem(int nItem, CString strTitle, int nCheck, Color clrText, int nImageIndex, CString strLink1, CString strLinkAction1, CString strLink2, CString strLinkAction2)
+int CDuiListCtrl::InsertItem(int nItem, CString strTitle, int nCheck, Color clrText, int nImageIndex, CString strLink1, CString strLinkAction1, CString strLink2, CString strLinkAction2, Color clrBack)
 {
-	return InsertItem(nItem, _T(""), strTitle, _T(""), _T(""), nImageIndex, clrText, _T(""), -1, _T(""), strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck);
+	return InsertItem(nItem, _T(""), strTitle, _T(""), _T(""), nImageIndex, clrText, _T(""), -1, _T(""), strLink1, strLinkAction1, strLink2, strLinkAction2, nCheck, clrBack);
 }
 
 int CDuiListCtrl::InsertItem(int nItem, ListRowInfo &rowInfo)
@@ -355,7 +363,7 @@ ListRowInfo* CDuiListCtrl::GetItemInfo(int nRow)
 	return &rowInfo;
 }
 
-// 设置某一个行的颜色
+// 设置某一个行的文字颜色
 void CDuiListCtrl::SetRowColor(int nRow, Color clrText)
 {
 	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
@@ -366,6 +374,19 @@ void CDuiListCtrl::SetRowColor(int nRow, Color clrText)
 	ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
 	rowInfo.bRowColor = TRUE;
 	rowInfo.clrText = clrText;
+}
+
+// 设置某一个行的背景颜色
+void CDuiListCtrl::SetRowBackColor(int nRow, Color clrBack)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.bRowBackColor = TRUE;
+	rowInfo.clrBack = clrBack;
 }
 
 // 设置某一个行的检查框状态
@@ -925,6 +946,11 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
+					graphics.FillRectangle(&brush, 0, nVI*m_nRowHeight, nWidth, m_nRowHeight);
+				}else
+				if(rowInfo.bRowBackColor)	// 如果设置了行的背景颜色,则填充颜色
+				{
+					SolidBrush brush(rowInfo.clrBack);
 					graphics.FillRectangle(&brush, 0, nVI*m_nRowHeight, nWidth, m_nRowHeight);
 				}
 

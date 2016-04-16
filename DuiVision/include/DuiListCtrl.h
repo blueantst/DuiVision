@@ -21,8 +21,10 @@ struct ListRowInfo
 	int		nRightImageIndex;// 右边图片索引
 	Image * pRightImage;	// 右边图片对象
 	CSize	sizeRightImage;	// 右边图片大小
-	BOOL	bRowColor;		// 使用行定义的颜色
+	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
+	BOOL	bRowBackColor;		// 使用行定义的背景颜色
+	Color	clrBack;		// 行背景颜色
 	CString strLink1;		// 链接1的文字
 	CString strLinkAction1;	// 链接1的动作
 	CRect	rcLink1;		// 链接1位置信息
@@ -49,10 +51,10 @@ public:
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		CString strLink1 = _T(""), CString strLinkAction1 = _T(""),
 		CString strLink2 = _T(""), CString strLinkAction2 = _T(""),
-		int nCheck = -1);
+		int nCheck = -1, Color clrBack = Color(0, 0, 0, 0));
 	int InsertItem(int nItem, CString strTitle, int nCheck = -1, Color clrText = Color(0, 0, 0, 0), int nImageIndex = -1,
 		CString strLink1 = _T(""), CString strLinkAction1 = _T(""),
-		CString strLink2 = _T(""), CString strLinkAction2 = _T(""));
+		CString strLink2 = _T(""), CString strLinkAction2 = _T(""), Color clrBack = Color(0, 0, 0, 0));
 	int InsertItem(int nItem, ListRowInfo &rowInfo);
 	BOOL DeleteItem(int nItem);
 	void CalcItemsPos();
@@ -60,6 +62,7 @@ public:
 	int  GetItemCount() { return m_vecRowInfo.size(); }
 	ListRowInfo* GetItemInfo(int nRow);
 	void SetRowColor(int nRow, Color clrText);
+	void SetRowBackColor(int nRow, Color clrBack);
 	void SetRowCheck(int nRow, int nCheck);
 	int  GetRowCheck(int nRow);
 	void ClearItems();

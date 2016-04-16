@@ -51,8 +51,10 @@ struct TreeNodeInfo
 	int		nRightImageIndex;// 右边图片索引
 	Image * pRightImage;	// 右边图片对象
 	CSize	sizeRightImage;	// 右边图片大小
-	BOOL	bRowColor;		// 使用行定义的颜色
+	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
+	BOOL	bRowBackColor;		// 使用行定义的背景颜色
+	Color	clrBack;		// 行背景颜色
 	int		nHoverItem;		// 当前热点列
 	BOOL	bCollapse;		// 是否折叠
 	BOOL	bHide;			// 是否隐藏
@@ -74,7 +76,7 @@ public:
 	HTREEITEM InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
-		int nCheck = -1);
+		int nCheck = -1, Color clrBack = Color(0, 0, 0, 0));
 	HTREEITEM InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo);
 	BOOL SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
@@ -100,6 +102,7 @@ public:
 	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
 	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
 	void SetNodeColor(HTREEITEM hNode, Color clrText);
+	void SetNodeBackColor(HTREEITEM hNode, Color clrBack);
 	void ToggleNode(HTREEITEM hNode);
 	void ExpandNode(HTREEITEM hNode, BOOL bExpand);
 	void SetNodeCheck(HTREEITEM hNode, int nCheck);

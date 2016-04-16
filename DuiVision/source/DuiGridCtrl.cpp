@@ -161,6 +161,7 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		CString strImage = pRowElem.attribute(_T("image")).value();
 		CString strRightImage = pRowElem.attribute(_T("right-img")).value();
 		CString strClrText = pRowElem.attribute(_T("crtext")).value();
+		CString strClrBack = pRowElem.attribute(_T("crback")).value();
 
 		int nCheck = -1;
 		if(!strCheck.IsEmpty())
@@ -215,8 +216,9 @@ BOOL CDuiGridCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
+		Color clrBack = CDuiObject::StringToColor(strClrBack);
 
-		InsertRow(-1, strId, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage, nCheck);
+		InsertRow(-1, strId, nImageIndex, clrText, strImage, nRightImageIndex, strRightImage, nCheck, clrBack);
 
 		int nRowIndex = m_vecRowInfo.size()-1;
 		int nItemIndex = 0;
@@ -449,7 +451,7 @@ int CDuiGridCtrl::GetTotalColumnWidth()
 
 // 添加行
 int CDuiGridCtrl::InsertRow(int nRow, CString strId, int nImageIndex, Color clrText, CString strImage,
-							 int nRightImageIndex, CString strRightImage, int nCheck)
+							 int nRightImageIndex, CString strRightImage, int nCheck, Color clrBack)
 {
 	GridRowInfo rowInfo;
 	rowInfo.strId = strId;
@@ -460,10 +462,16 @@ int CDuiGridCtrl::InsertRow(int nRow, CString strId, int nImageIndex, Color clrT
 	rowInfo.sizeRightImage.SetSize(0, 0);
 	rowInfo.bRowColor = FALSE;
 	rowInfo.clrText = clrText;
+	rowInfo.bRowBackColor = FALSE;
+	rowInfo.clrBack = clrBack;
 	rowInfo.nHoverItem = -1;
 	if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
 	{
 		rowInfo.bRowColor = TRUE;
+	}
+	if(clrBack.GetValue() != Color(0, 0, 0, 0).GetValue())
+	{
+		rowInfo.bRowBackColor = TRUE;
 	}
 
 	// 左边图片
@@ -910,7 +918,7 @@ GridItemInfo* CDuiGridCtrl::GetItemInfo(int nRow, int nItem)
 	return &itemInfo;
 }
 
-// 设置某一个行的颜色
+// 设置某一个行的文字颜色
 void CDuiGridCtrl::SetRowColor(int nRow, Color clrText)
 {
 	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
@@ -921,6 +929,19 @@ void CDuiGridCtrl::SetRowColor(int nRow, Color clrText)
 	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
 	rowInfo.bRowColor = TRUE;
 	rowInfo.clrText = clrText;
+}
+
+// 设置某一个行的背景颜色
+void CDuiGridCtrl::SetRowBackColor(int nRow, Color clrBack)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.bRowBackColor = TRUE;
+	rowInfo.clrBack = clrBack;
 }
 
 // 设置某一个行的检查框状态
@@ -1728,6 +1749,11 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
+					graphics.FillRectangle(&brush, 0, m_nHeaderHeight + nVI*m_nRowHeight, nContentWidth, m_nRowHeight);
+				}else
+				if(rowInfo.bRowBackColor)	// 如果设置了行的背景颜色,则填充颜色
+				{
+					SolidBrush brush(rowInfo.clrBack);
 					graphics.FillRectangle(&brush, 0, m_nHeaderHeight + nVI*m_nRowHeight, nContentWidth, m_nRowHeight);
 				}
 

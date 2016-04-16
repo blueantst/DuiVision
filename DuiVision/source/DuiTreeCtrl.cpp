@@ -133,6 +133,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		CString strImage = pNodeElem.attribute(_T("image")).value();
 		CString strRightImage = pNodeElem.attribute(_T("right-img")).value();
 		CString strClrText = pNodeElem.attribute(_T("crtext")).value();
+		CString strClrBack = pNodeElem.attribute(_T("crback")).value();
 		CString strCollapse = pNodeElem.attribute(_T("collapse")).value();
 
 		int nCheck = -1;
@@ -190,6 +191,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
+		Color clrBack = CDuiObject::StringToColor(strClrBack);
 
 		TreeNodeInfo nodeInfo;
 		nodeInfo.hParentNode = hParentNode;
@@ -203,9 +205,19 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		nodeInfo.sizeRightImage.SetSize(0, 0);
 		nodeInfo.bRowColor = FALSE;
 		nodeInfo.clrText = clrText;
+		nodeInfo.bRowBackColor = FALSE;
+		nodeInfo.clrBack = clrBack;
 		nodeInfo.nHoverItem = -1;
 		nodeInfo.bCollapse = bCollapse;
 		nodeInfo.bHide = FALSE;
+		if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
+		{
+			nodeInfo.bRowColor = TRUE;
+		}
+		if(clrBack.GetValue() != Color(0, 0, 0, 0).GetValue())
+		{
+			nodeInfo.bRowBackColor = TRUE;
+		}
 		HTREEITEM hNode = InsertNode(hParentNode, nodeInfo);
 		if(hNode == NULL)
 		{
@@ -341,7 +353,7 @@ BOOL CDuiTreeCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 // 添加树节点
 HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse,
 							int nImageIndex, Color clrText, CString strImage,
-							int nRightImageIndex, CString strRightImage, int nCheck)
+							int nRightImageIndex, CString strRightImage, int nCheck, Color clrBack)
 {
 	TreeNodeInfo nodeInfo;
 	nodeInfo.hParentNode = hParentNode;
@@ -353,12 +365,18 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 	nodeInfo.sizeRightImage.SetSize(0, 0);
 	nodeInfo.bRowColor = FALSE;
 	nodeInfo.clrText = clrText;
+	nodeInfo.bRowBackColor = FALSE;
+	nodeInfo.clrBack = clrBack;
 	nodeInfo.nHoverItem = -1;
 	nodeInfo.bCollapse = bCollapse;
 	nodeInfo.bHide = FALSE;
 	if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
 	{
 		nodeInfo.bRowColor = TRUE;
+	}
+	if(clrBack.GetValue() != Color(0, 0, 0, 0).GetValue())
+	{
+		nodeInfo.bRowBackColor = TRUE;
 	}
 
 	// 左边图片
@@ -1046,7 +1064,7 @@ void CDuiTreeCtrl::SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemIn
 			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 }
 
-// 设置某一个行的颜色
+// 设置某一个行的文字颜色
 void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 {
 	int nRow = GetNodeRow(hNode);
@@ -1058,6 +1076,20 @@ void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
 	rowInfo.bRowColor = TRUE;
 	rowInfo.clrText = clrText;
+}
+
+// 设置某一个行的背景颜色
+void CDuiTreeCtrl::SetNodeBackColor(HTREEITEM hNode, Color clrBack)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.bRowBackColor = TRUE;
+	rowInfo.clrBack = clrBack;
 }
 
 // 切换节点的缩放状态
@@ -1896,6 +1928,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
+					graphics.FillRectangle(&brush, nXPos, nVI*m_nRowHeight, nWidth-nXPos, m_nRowHeight);
+				}else
+				if(rowInfo.bRowBackColor)	// 如果设置了行的背景颜色,则填充颜色
+				{
+					SolidBrush brush(rowInfo.clrBack);
 					graphics.FillRectangle(&brush, nXPos, nVI*m_nRowHeight, nWidth-nXPos, m_nRowHeight);
 				}
 
