@@ -32,7 +32,7 @@ BOOL CDuiComboBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 	{
 		return FALSE;
 	}
-	
+
 	// 加载下层的item节点信息
 	for (DuiXmlNode pItemElem = pXmlElem.child(_T("item")); pItemElem; pItemElem=pItemElem.next_sibling(_T("item")))
 	{
@@ -287,7 +287,7 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		{
 			pPopupList->SetCloseBitmap(m_strImageDeleteBitmap);
 		}
-		
+
 		CDlgBase* pDlg = GetParentDialog();
 		if(pDlg)
 		{
@@ -355,8 +355,9 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 // 键盘事件处理
 BOOL CDuiComboBox::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	// 这里原来的m_bDown判断有问题，反正去掉判断不影响。
 	// 如果当前处于焦点状态,用下箭头可以下拉列表
-	if(m_bDown && (nChar == VK_DOWN) && (nFlags == 0) && IsFocusControl())
+	if((nChar == VK_DOWN) && (nFlags == 0) && IsFocusControl())
 	{
 		// 模拟鼠标点击
 		SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_DOWN);
