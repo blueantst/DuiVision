@@ -2089,6 +2089,21 @@ Cleanup:
 
 /////////////////////////////////////////////////////////////////////////////////////
 // CDuiFlashCtrl
+// 重载new操作符，判定如果flash没有安装，返回null
+void* CDuiFlashCtrl::operator new(size_t sz)
+{
+	static bool bIsExistFlashActiveX = false;
+	static bool bCheckedFlashActivex = false;
+	if (!bCheckedFlashActivex)
+	{
+		bIsExistFlashActiveX = isExistFlashActiveX();
+		bCheckedFlashActivex = true;
+	}
+
+	if (!bIsExistFlashActiveX)
+		return NULL;
+	return ::operator new(sz);
+}
 
 CDuiFlashCtrl::CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	: CDuiActiveX(hWnd, pDuiObject)
@@ -2142,6 +2157,38 @@ HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
 	}
 
 	return hr;
+}
+
+// 检测是否安装flash
+bool CDuiFlashCtrl::isExistFlashActiveX()
+{
+	HKEY hKey = NULL;
+
+	// 如果注册表中没有FlashPlayerX，则返回false
+	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,TEXT("SOFTWARE\\Macromedia\\FlashPlayerActiveX"),0,KEY_READ,&hKey)!=ERROR_SUCCESS)
+		return false;
+
+	std::wstring strValueName;
+	std::wstring strDataBuffer;
+	strValueName.resize(1024);
+	strDataBuffer.resize(1024);
+	DWORD nValueNameBufferLength=1024, nValueType, nDataBudderSize=1024;
+
+	int i=0;  
+	while(RegEnumValue(hKey,i++, (LPWSTR)strValueName.c_str(), &nValueNameBufferLength, NULL, &nValueType, (BYTE*)strDataBuffer.c_str(), &nDataBudderSize) != ERROR_NO_MORE_ITEMS)  
+	{  
+		std::wstring strName(strValueName.c_str());
+		if (strName.compare(_T("PlayerPath")) == 0)
+		{
+
+			if( (_waccess(std::wstring(strDataBuffer.c_str()).c_str(), 0 )) == -1 )
+				return false;
+		}
+
+		nDataBudderSize=1024;  
+		nValueNameBufferLength=1024;  
+	}
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

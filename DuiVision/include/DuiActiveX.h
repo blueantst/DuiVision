@@ -142,6 +142,9 @@ class CDuiFlashCtrl : public CDuiActiveX
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiFlashCtrl, _T("flash"))
 
 public:
+	// 重载new操作符，判定如果flash没有安装，返回null
+	void * operator new(size_t sz);
+
     CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiFlashCtrl();
 
@@ -150,6 +153,8 @@ public:
 	virtual void OnAxInitFinish();
 	virtual HRESULT Navigate(CString strUrl);
 
+	// 检测是否安装flash
+	static bool isExistFlashActiveX();
 protected:
     CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash_;
 	bool		m_bTransparent;	// 是否创建背景透明的flash
