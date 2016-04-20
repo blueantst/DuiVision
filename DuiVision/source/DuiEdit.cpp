@@ -749,6 +749,23 @@ void CDuiEdit::ShowEdit()
 		{
 			dwStyle |= ES_READONLY;
 		}
+
+		// 计算父窗口的偏移量
+		CPoint pt(rc.left, rc.top);
+		if (m_pParentDuiObject)
+		{
+			CControlBase* pParentDuiObject = dynamic_cast<CControlBase*>(m_pParentDuiObject);
+			if (pParentDuiObject && pParentDuiObject->OnMousePointChange(pt))
+			{
+				int xOffset = pt.x - rc.left;
+				int yOffset = pt.y - rc.top;
+				rc.left = rc.left - xOffset;
+				rc.right = rc.right - xOffset;
+				rc.top = rc.top - yOffset;
+				rc.bottom = rc.bottom - yOffset;
+			}			
+		}	
+
   		m_pEdit->Create(dwStyle, rc, CWnd::FromHandle(m_hWnd), GetID());
 		// 创建并设置字体对象
 		CreateEditFont();
