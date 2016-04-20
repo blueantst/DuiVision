@@ -2,8 +2,6 @@
 #include "DuiWkeView.h"
 #include <Imm.h>
 
-#ifdef USE_WKE_CONTROL
-
 #pragma comment(lib, "imm32.lib")		// ×Ô¶¯Á´½Óimm¿â
 #pragma message("Automatically linking with imm32.lib")
 
@@ -849,5 +847,3 @@ bool CDuiWkeView::goForward()
 	}
 	return false;
 }
-
-#endif // USE_WKE_CONTROL

@@ -7,8 +7,8 @@ CDuiMenu::CDuiMenu(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, 
 	m_strFont = strFont;
 	m_nFontWidth = nFontWidth;
 	m_fontStyle = fontStyle;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_nLeft = 30;
 	m_nHeight = 30;
@@ -481,6 +481,7 @@ void CDuiMenu::SetMenuPoint()
 				// 普通菜单项
 				rc.SetRect(nXPos, nYPos, m_nWidth - 2, nYPos + m_nHeight);
 				nYPos += m_nHeight;
+				pMenuItem->m_nLeft = m_nLeft;	// 设置菜单项对象的文字左边距
 				// 设置菜单项的鼠标移动时候的背景
 				if(m_pImageRowHover != NULL)
 				{

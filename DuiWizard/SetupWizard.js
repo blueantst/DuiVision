@@ -72,7 +72,7 @@ function main()
     var strRegKey_32 = "HKLM\\Software\\";
     var strRegKey_64 = "HKLM\\Software\\Wow6432Node\\";
 
-    var nVersions = 12;
+    var nVersions = 14;
 
     var astrRegKeyVer = new Array();
     astrRegKeyVer[0] = "Microsoft\\VisualStudio\\7.0\\Setup\\VC\\ProductDir";
@@ -82,11 +82,13 @@ function main()
     astrRegKeyVer[4] = "Microsoft\\VisualStudio\\10.0\\Setup\\VC\\ProductDir";
     astrRegKeyVer[5] = "Microsoft\\VisualStudio\\11.0\\Setup\\VC\\ProductDir";
     astrRegKeyVer[6] = "Microsoft\\VisualStudio\\12.0\\Setup\\VC\\ProductDir";
-    astrRegKeyVer[7] = "Microsoft\\VCExpress\\8.0\\Setup\\VC\\ProductDir";
-    astrRegKeyVer[8] = "Microsoft\\VCExpress\\9.0\\Setup\\VC\\ProductDir";
-    astrRegKeyVer[9] = "Microsoft\\VCExpress\\10.0\\Setup\\VC\\ProductDir";
-    astrRegKeyVer[10] = "Microsoft\\VCExpress\\11.0\\Setup\\VC\\ProductDir";
-    astrRegKeyVer[11] = "Microsoft\\VCExpress\\12.0\\Setup\\VC\\ProductDir";
+	astrRegKeyVer[7] = "Microsoft\\VisualStudio\\14.0\\Setup\\VC\\ProductDir";
+    astrRegKeyVer[8] = "Microsoft\\VCExpress\\8.0\\Setup\\VC\\ProductDir";
+    astrRegKeyVer[9] = "Microsoft\\VCExpress\\9.0\\Setup\\VC\\ProductDir";
+    astrRegKeyVer[10] = "Microsoft\\VCExpress\\10.0\\Setup\\VC\\ProductDir";
+    astrRegKeyVer[11] = "Microsoft\\VCExpress\\11.0\\Setup\\VC\\ProductDir";
+    astrRegKeyVer[12] = "Microsoft\\VCExpress\\12.0\\Setup\\VC\\ProductDir";
+	astrRegKeyVer[13] = "Microsoft\\VCExpress\\14.0\\Setup\\VC\\ProductDir";
 
     var astrFolder = new Array();
     astrFolder[0] = "vcprojects";
@@ -96,11 +98,13 @@ function main()
     astrFolder[4] = "vcprojects";
     astrFolder[5] = "vcprojects";
     astrFolder[6] = "vcprojects";
-    astrFolder[7] = "Express\\vcprojects";
+	astrFolder[7] = "vcprojects";
     astrFolder[8] = "Express\\vcprojects";
     astrFolder[9] = "Express\\vcprojects";
-    astrFolder[10] = "vcprojects_WDExpress";
+    astrFolder[10] = "Express\\vcprojects";
     astrFolder[11] = "vcprojects_WDExpress";
+    astrFolder[12] = "vcprojects_WDExpress";
+	astrFolder[13] = "vcprojects_WDExpress";
 
     var astrVersions = new Array();
     astrVersions[0] = "Visual Studio 2002 (7.0)";
@@ -110,11 +114,13 @@ function main()
     astrVersions[4] = "Visual Studio 2010 (10.0)";
     astrVersions[5] = "Visual Studio 2012 (11.0)";
     astrVersions[6] = "Visual Studio 2013 (12.0)";
-    astrVersions[7] = "Visual Studio 2005 Express (8.0)";
-    astrVersions[8] = "Visual Studio 2008 Express (9.0)";
-    astrVersions[9] = "Visual Studio 2010 Express (10.0)";
-    astrVersions[10] = "Visual Studio 2012 Express (11.0)";
-    astrVersions[11] = "Visual Studio 2013 Express (12.0)";
+	astrVersions[7] = "Visual Studio 2015 (14.0)";
+    astrVersions[8] = "Visual Studio 2005 Express (8.0)";
+    astrVersions[9] = "Visual Studio 2008 Express (9.0)";
+    astrVersions[10] = "Visual Studio 2010 Express (10.0)";
+    astrVersions[11] = "Visual Studio 2012 Express (11.0)";
+    astrVersions[12] = "Visual Studio 2013 Express (12.0)";
+	astrVersions[13] = "Visual Studio 2015 Express (14.0)";
 
     var abExpress = new Array();
     abExpress[0] = false;
@@ -124,11 +130,13 @@ function main()
     abExpress[4] = false;
     abExpress[5] = false;
     abExpress[6] = false;
-    abExpress[7] = true;
+	abExpress[7] = false;
     abExpress[8] = true;
     abExpress[9] = true;
     abExpress[10] = true;
     abExpress[11] = true;
+	abExpress[12] = true;
+	abExpress[13] = true;
 
     var astrWizVer = new Array();
     astrWizVer[0] = "7.0";
@@ -138,11 +146,13 @@ function main()
     astrWizVer[4] = "10.0";
     astrWizVer[5] = "11.0";
     astrWizVer[6] = "12.0";
-    astrWizVer[7] = "8.0";
-    astrWizVer[8] = "9.0";
-    astrWizVer[9] = "10.0";
-    astrWizVer[10] = "11.0";
-    astrWizVer[11] = "12.0";
+	astrWizVer[7] = "14.0";
+    astrWizVer[8] = "8.0";
+    astrWizVer[9] = "9.0";
+    astrWizVer[10] = "10.0";
+    astrWizVer[11] = "11.0";
+    astrWizVer[12] = "12.0";
+	astrWizVer[13] = "14.0";
 
     var nSpecial = 4;
 

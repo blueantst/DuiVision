@@ -23,6 +23,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_rc = CRect(0,0,0,0);
 	m_strPos = "";
 	m_bIsVisible = TRUE;
+	m_bIsHide = FALSE;
 	m_bIsDisable = FALSE;
 	m_bRresponse = TRUE;
 	m_bTabStop = FALSE;
@@ -39,6 +40,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bIsRun = false;
 	m_bRunTime = false;
 	m_bImageUseECM = false;
+	m_bDragEnable = false;
 
 	m_nShortcutKey = 0;
 	m_nShortcutFlag = 0;
@@ -58,6 +60,9 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bDuiMsgMouseLDown = FALSE;
 	m_bDuiMsgMouseLUp = FALSE;
 	m_bDuiMsgMouseLDblClk = FALSE;
+	m_bDuiMsgMouseRDown = FALSE;
+	m_bDuiMsgMouseRUp = FALSE;
+	m_bDuiMsgMouseRDblClk = FALSE;
 	m_bDuiMsgKeyDown = FALSE;
 	m_bMouseLeave = TRUE;
 }
@@ -72,6 +77,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_rc = rc;
 	m_strPos = "";
 	m_bIsVisible = bIsVisible;
+	m_bIsHide = FALSE;
 	m_bIsDisable = bIsDisable;
 	m_bRresponse = bRresponse;
 	m_bTabStop = FALSE;
@@ -88,6 +94,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bIsRun = false;
 	m_bRunTime = false;
 	m_bImageUseECM = false;
+	m_bDragEnable = false;
 
 	m_nWidth = 0;
 	m_nHeight = 0;
@@ -106,6 +113,9 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bDuiMsgMouseLDown = FALSE;
 	m_bDuiMsgMouseLUp = FALSE;
 	m_bDuiMsgMouseLDblClk = FALSE;
+	m_bDuiMsgMouseRDown = FALSE;
+	m_bDuiMsgMouseRUp = FALSE;
+	m_bDuiMsgMouseRDblClk = FALSE;
 	m_bDuiMsgKeyDown = TRUE;
 	m_bMouseLeave = TRUE;
 }
@@ -271,6 +281,46 @@ BOOL CControlBase::PtInRect(CPoint point)
 	return m_rc.PtInRect(point);
 }
 
+// 获取控件的父窗口句柄
+HWND CControlBase::GetPaintHWnd()
+{
+	// 如果找到父对话框,就用父对话框的HWnd
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		return pDlg->GetSafeHwnd();
+	}
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的HWnd
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		return pIDuiHostWnd->GetPaintHWnd();
+	}
+
+    return NULL;
+}
+
+// 坐标转换为屏幕坐标
+void CControlBase::ClientToScreen(LPPOINT lpPoint)
+{
+	// 如果找到父对话框,就用父对话框的转换函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClientToScreen(lpPoint);
+		return;
+	}
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的转换函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClientToScreen(lpPoint);
+		return;
+	}
+}
+
 // 设置焦点
 BOOL CControlBase::SetWindowFocus()
 {
@@ -288,6 +338,25 @@ BOOL CControlBase::SetWindowFocus()
 BOOL CControlBase::OnFocus(BOOL bFocus)
 {
 	return SetControlFocus(bFocus);
+}
+
+// 设置控件焦点
+BOOL CControlBase::SetControlFocus(BOOL bFocus)
+{
+	// 如果焦点取消,则设置每个子控件的焦点状态,解决插件中的控件焦点无法取消的问题
+	if(!bFocus)
+	{
+		for (size_t i = 0; i < m_vecControl.size(); i++)
+		{
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase)
+			{
+				pControlBase->SetControlFocus(bFocus);
+			}
+		}
+	}
+
+	return FALSE;
 }
 
 // 判断当前控件是否焦点控件
@@ -425,6 +494,99 @@ CControlBase* CControlBase::GetNextFocusableControl(CControlBase* pFocusControl)
 	return NULL;
 }
 
+// 设置Tooltip
+void CControlBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth, int nTipWidth)
+{
+	// 如果找到了父对话框,则调用对话框的设置Tooltip函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->SetTooltip(pControl, strTooltip, rect, bControlWidth, nTipWidth);
+		return;
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的设置Tooltip函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的设置Tooltip函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		int _nTipWidth = nTipWidth;
+		if(bControlWidth)
+		{
+			_nTipWidth = pControl->GetRect().Width();
+		}
+		pIDuiHostWnd->SetTooltip(pControl->GetID(), strTooltip, rect, _nTipWidth);
+		return;
+	}
+}
+
+// 清除Tooltip
+void CControlBase::ClearTooltip()
+{
+	// 如果找到了父对话框,则调用对话框的清除Tooltip函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->ClearTooltip();
+		return;
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的清除Tooltip函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的清除Tooltip函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClearTooltip();
+		return;
+	}
+}
+
+// 设置当前Tooltip控件ID
+void CControlBase::SetTooltipCtrlID(int nTooltipCtrlID)
+{
+	// 如果找到了父对话框,则调用对话框的设置Tooltip控件ID函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		pDlg->SetTooltipCtrlID(nTooltipCtrlID);
+		return;
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的设置Tooltip控件ID函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的设置Tooltip控件ID函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->SetTooltipCtrlID(nTooltipCtrlID);
+		return;
+	}
+}
+
+// 获取当前Tooltip控件ID
+int CControlBase::GetTooltipCtrlID()
+{
+	// 如果找到了父对话框,则调用对话框的获取Tooltip控件ID函数
+	CDlgBase* pDlg = GetParentDialog();
+	if(pDlg)
+	{
+		return pDlg->GetTooltipCtrlID();
+	}
+
+	// 如果找到父Popup窗口,则调用Popup窗口的获取Tooltip控件ID函数
+
+	// 如果找到插件HostWnd,则调用插件HostWnd接口的获取Tooltip控件ID函数
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		return pIDuiHostWnd->GetTooltipCtrlID();
+	}
+
+	return 0;
+}
+
 // 鼠标移动事件处理
 BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -459,12 +621,11 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 
 	if(!m_strTooltip.IsEmpty() && PtInRect(point) && OnCheckMouseResponse(nFlags, point))
 	{
-		// 如果当前控件有Tooltip,则添加一个Tooltip
-		CDlgBase* pDlg = GetParentDialog();
-		if(pDlg && (pDlg->GetTooltipCtrlID() != GetID()))
+		// 如果当前控件有Tooltip,并且当前Tooltip设置的是其他控件,则设置Tooltip
+		if(GetTooltipCtrlID() != GetID())
 		{
-			pDlg->SetTooltip(this, m_strTooltip, m_rc, FALSE, m_nTipWidth);
-			pDlg->SetTooltipCtrlID(GetID());
+			SetTooltip(this, m_strTooltip, m_rc, FALSE, m_nTipWidth);
+			SetTooltipCtrlID(GetID());
 		}
 	}
 
@@ -473,6 +634,29 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 
 	// 调用控件的鼠标移动函数
 	bRresponse = OnControlMouseMove(nFlags, point);
+
+	// 控件拖动的处理
+	if(m_bDragEnable && m_bMouseDown)
+	{
+		CControlBase* pParentCtrl = (CControlBase*)GetParent();
+		if(pParentCtrl)
+		{
+			CRect rcParent = pParentCtrl->GetRect();
+			if(rcParent.PtInRect(point))
+			{
+				// 如果鼠标位置在父控件范围内则可以拖动
+				// 获取控件的当前位置和鼠标当前位置与上一次位置的差值,将控件当前位置加上鼠标位置的差值
+				CRect rc = GetRect();
+				CSize offset = point - m_ptLastMousePosition;
+				rc.OffsetRect(offset);
+				SetRect(rc);
+				// 刷新鼠标上一次位置的变量
+				m_ptLastMousePosition = point;
+				// 刷新控件
+				UpdateControl(true);
+			}
+		}
+	}
 
 	// 发送鼠标移动的DUI消息
 	if(m_bDuiMsgMouseMove)
@@ -555,6 +739,10 @@ BOOL CControlBase::OnLButtonDown(UINT nFlags, CPoint point)
 	OnMousePointChange(point);
 
 	m_bMouseDown = m_rc.PtInRect(point);
+	if(m_bMouseDown)
+	{
+		m_ptLastMousePosition = point;
+	}
 
 	// 查找鼠标是否在某个内部控件位置,如果是的话就更新当前子控件(按照反向顺序查找,因为定义在后面的控件是优先级更高的)
 	// 找到第一个符合条件的就结束查找
@@ -709,6 +897,12 @@ BOOL CControlBase::OnRButtonDown(UINT nFlags, CPoint point)
 	}
 	else
 	{
+		// 发送鼠标右键按下DUI消息
+		if(m_bDuiMsgMouseRDown && m_rc.PtInRect(point))
+		{
+			SendMessage(MSG_MOUSE_RDOWN, (WPARAM)nFlags, (LPARAM)(&point));
+		}
+
 		return OnControlRButtonDown(nFlags, point);
 	}
 
@@ -740,7 +934,61 @@ BOOL CControlBase::OnRButtonUp(UINT nFlags, CPoint point)
 	}
 	else
 	{
+		// 发送鼠标右键放开DUI消息
+		if(m_bDuiMsgMouseRUp)
+		{
+			SendMessage(MSG_MOUSE_RUP, (WPARAM)nFlags, (LPARAM)(&point));
+		}
+
 		return OnControlRButtonUp(nFlags, point);
+	}
+
+	return false;
+}
+
+// 鼠标右键双击事件处理
+BOOL CControlBase::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+
+	// 保存原始的鼠标位置,并进行位置变换
+	CPoint oldPoint = point;
+	OnMousePointChange(point);
+
+	m_bMouseDown = false;
+	if(m_pControl != NULL)
+	{
+		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
+		UINT uControlID = m_pControl->GetControlID();
+		if((SCROLL_V == uControlID) || (SCROLL_H == uControlID))
+		{
+			point = oldPoint;
+		}
+		if(m_pControl->OnRButtonDblClk(nFlags, point))
+		{
+			return true;
+		}else
+		if(!m_pControl->GetDblClk())
+		{
+			// 如果控件不允许双击,则调用单击处理函数
+			return m_pControl->OnRButtonDown(nFlags, point);
+		}
+	}
+	else
+	{
+		if(!GetDblClk())
+		{
+			// 如果控件不允许双击,则调用单击处理函数
+			return OnControlRButtonDown(nFlags, point);
+		}
+
+		// 发送鼠标右键双击DUI消息
+		if(m_bDuiMsgMouseRDblClk && m_rc.PtInRect(point))
+		{
+			SendMessage(MSG_MOUSE_RDBLCLK, (WPARAM)nFlags, (LPARAM)(&point));
+		}
+
+		return OnControlRButtonDblClk(nFlags, point);
 	}
 
 	return false;
@@ -874,6 +1122,21 @@ BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
 	if(strDuiMsg == _T("mouseldblclk"))	// 发送鼠标左键双击的DUI消息
 	{
 		m_bDuiMsgMouseLDblClk = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("mouserdown"))	// 发送鼠标右键按下的DUI消息
+	{
+		m_bDuiMsgMouseRDown = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("mouserup"))	// 发送鼠标右键放开的DUI消息
+	{
+		m_bDuiMsgMouseRUp = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("mouserdblclk"))	// 发送鼠标右键双击的DUI消息
+	{
+		m_bDuiMsgMouseRDblClk = TRUE;
 		return TRUE;
 	}else
 	if(strDuiMsg == _T("keydown"))		// 发送键盘按下DUI消息
@@ -1256,6 +1519,7 @@ HRESULT CControlBase::OnAttributeSendDuiMsg(const CString& strValue, BOOL bLoadi
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置控件是否可见
 void CControlBase::SetVisible(BOOL bIsVisible)
 {
 	SetControlVisible(bIsVisible);
@@ -1265,7 +1529,7 @@ void CControlBase::SetVisible(BOOL bIsVisible)
 // 获取控件的可见性(遍历父控件,如果父控件不可见,则返回不可见)
 BOOL CControlBase::IsControlVisible()
 {
-	if(!GetVisible())
+	if(!m_bIsVisible || m_bIsHide)
 	{
 		return FALSE;
 	}
@@ -1273,17 +1537,25 @@ BOOL CControlBase::IsControlVisible()
 	CDuiObject* pParentObj = GetParent();
 	if(pParentObj == NULL)
 	{
-		return GetVisible();
+		return TRUE;
 	}
 
 	if(pParentObj->IsClass(_T("dlg")) || pParentObj->IsClass(_T("popup")))
 	{
-		return GetVisible();
+		return TRUE;
 	}
 
 	return ((CControlBase*)pParentObj)->IsControlVisible();
 }
 
+// 设置控件是否隐藏
+void CControlBase::SetHide(BOOL bIsHide)
+{
+	SetControlHide(bIsHide);
+	UpdateControl(true, true);
+}
+
+// 设置控件是否禁用
 void  CControlBase::SetDisable(BOOL bIsDisable)
 {
 	if(m_bIsDisable != bIsDisable)
@@ -1293,6 +1565,7 @@ void  CControlBase::SetDisable(BOOL bIsDisable)
 	}
 }
 
+// 刷新控件的显示内容
 void CControlBase::UpdateControl(BOOL bUpdate, BOOL bVisible)
 {
 	if((m_bIsVisible || bVisible) && (m_pParentDuiObject != NULL))
@@ -1309,6 +1582,7 @@ void CControlBase::UpdateControl(CRect rc, BOOL bVisible, BOOL bUpdate)
 	}
 }
 
+// 控件局部刷新
 void CControlBase::InvalidateRect(LPCRECT lpRect, BOOL bErase)
 {
 	if(m_hWnd != NULL)
@@ -1538,6 +1812,33 @@ CDlgBase* CControlBase::GetParentDialog(BOOL bEnablePopup)
 	return NULL;
 }
 
+// 获取父控件的插件宿主窗口功能接口(如果是在插件中)
+IDuiHostWnd* CControlBase::GetParentIDuiHostWnd()
+{
+	CDuiObject* pParentObj = GetParent();
+	while(pParentObj != NULL)
+	{
+		if(pParentObj->IsClass(_T("div")) && (((CDuiPanel*)pParentObj)->GetIDuiHostWnd() != NULL))
+		{
+			return ((CDuiPanel*)pParentObj)->GetIDuiHostWnd();
+		}
+
+		if(pParentObj->IsClass(_T("dlg")))
+		{
+			pParentObj = ((CDlgBase*)pParentObj)->GetParent();
+		}else
+		if(pParentObj->IsClass(_T("popup")))
+		{
+			pParentObj = ((CDlgPopup*)pParentObj)->GetParent();
+		}else
+		{
+			pParentObj = ((CControlBase*)pParentObj)->GetParent();
+		}
+	}
+
+	return NULL;
+}
+
 // 消息处理
 LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1601,11 +1902,11 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 			// 如果没有设置位置信息,则默认按照控件底部开始显示,水平方向中间对齐
 			point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
 		}
+
+		// 坐标转换为屏幕坐标
+		ClientToScreen(&point);
+
 		CDlgBase* pParentDlg = GetParentDialog();
-		if(pParentDlg != NULL)
-		{
-			pParentDlg->ClientToScreen(&point);
-		}
 		CString strXmlFile = m_strAction;
 		strXmlFile.Delete(0, 5);
 		if(pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU))
@@ -1816,8 +2117,8 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject)
 	m_strFont = DuiSystem::GetDefaultFont();
 	m_nFontWidth = 12;
 	m_fontStyle = FontStyleRegular;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_pImage = NULL;
 	m_nImagePicCount = 4;
@@ -1831,8 +2132,8 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject, UINT uCont
 	m_strFont = DuiSystem::GetDefaultFont(strFont);
 	m_nFontWidth = nFontWidth;
 	m_fontStyle = fontStyle;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_pImage = NULL;
 	m_nImagePicCount = 4;

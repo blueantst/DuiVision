@@ -19,11 +19,11 @@ public:
 	int			m_nEndTransparent;		// 填充部分终止透明度
 	int			m_nFrameWidth;			// 边框宽度
 	int			m_nDashStyle;			// 边框类型
-	COLORREF	m_clr;					// 填充颜色
+	Color		m_clr;					// 填充颜色
 	Color		m_clrFrame;				// 边框颜色
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_RGBCOLOR_ATTRIBUTE("color", m_clr, FALSE)
+		DUI_COLOR_ATTRIBUTE("color", m_clr, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crframe"), m_clrFrame, FALSE)
 		DUI_ENUM_ATTRIBUTE(_T("dashstyle"), UINT, TRUE)
             DUI_ENUM_VALUE(_T("solid"), DashStyleSolid)

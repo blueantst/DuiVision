@@ -19,9 +19,9 @@
 		<row image="4" crtext="80,80,0" time="星期一" title="默认浏览器加速" content="整理浏览器文件碎片，加快打开速度" />
 		<row image="5" crtext="80,0,80" time="02-01" title="整理影响开机速度的碎片" content="整理影响开机速度的碎片" />
 		<row image="6" crtext="80,0,80" time="2014-01-20" title="硬盘智能加速" content="通过优化硬盘传输效率，整理磁盘碎片等方法，让电脑快如闪电" />
-		<row image="7" crtext="80,80,80" time="2014-01-18" title="优化桌面图标缓存" content="优化后可减小开机过程中的I/O量" />
+		<row image="7" crtext="80,80,80" crback="50,128,128,0" time="2014-01-18" title="优化桌面图标缓存" content="优化后可减小开机过程中的I/O量" />
 		<row image="8" time="2014-01-15" title="固态硬盘(SSD)优化" content="优化固态硬盘相关设置" />
-		<row image="9" time="2014-01-10" title="优化Windows索引服务" content="优化后可减小开机过程的I/O量" />
+		<row image="9" crback="50,0,128,128" time="2014-01-10" title="优化Windows索引服务" content="优化后可减小开机过程的I/O量" />
 		<row image="10" time="2014-01-01" title="默认浏览器加速" content="整理浏览器文件碎片，加快打开速度" />
 		<row image="2" time="今天" title="固态硬盘(SSD)优化" content="优化固态硬盘相关设置" />
 		<row image="3" time="昨天" title="优化Windows索引服务" content="优化后可减小开机过程的I/O量" />

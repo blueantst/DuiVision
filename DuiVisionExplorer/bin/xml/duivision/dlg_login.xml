@@ -17,7 +17,7 @@
 		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
 		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
 
-		<img name="image" pos="16,109" width="87" height="87" skin="IDB_LOGIN_USER" mode="normal" framesize="1" show="1" />
+		<img name="image" pos="24,109" width="80" height="80" image="skins\icon\Synchstep.png" mode="extrude" framesize="1" show="1" />
 		
 		<edit name="username" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
 					pos="120,110" width="220" height="32" title="" tip="请输入用户名"

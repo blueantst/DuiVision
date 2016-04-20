@@ -26,7 +26,6 @@ DuiVisionApp.rc
 targetver.h
 [!endif]
 [!if APPTYPE_RADIO_DUIPLUGIN]
-DuiPlugin\vcicomm.h
 DuiPlugin\DuiPlugin.def
 DuiPlugin\DuiPlugin.rc
 DuiPlugin\DuiPlugin.cpp
@@ -56,7 +55,10 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]DuiVision.2008.vcproj
 [duivision]DuiVision.2010.vcxproj
 [duivision]DuiVision.2010.vcxproj.filters
-[duivision]DuiVision.2010.vcxproj.user
+[duivision]DuiVision.2013.vcxproj
+[duivision]DuiVision.2013.vcxproj.filters
+[duivision]DuiVision.2015.vcxproj
+[duivision]DuiVision.2015.vcxproj.filters
 
 [duivision]activex\duicomcli.h
 [duivision]activex\flash10t.tlh
@@ -66,6 +68,8 @@ DuiPlugin\DuiHandlerPlugin.cpp
 
 [duivision]common\BaseTask.h
 [duivision]common\encoding.h
+[duivision]common\LogMgr.cpp
+[duivision]common\LogMgr.h
 [duivision]common\registry.h
 [duivision]common\TaskMgr.cpp
 [duivision]common\TaskMgr.h
@@ -91,6 +95,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DuiGridCtrl.h
 [duivision]include\DuiHandler.h
 [duivision]include\duiid.h
+[duivision]include\DuiLayout.h
 [duivision]include\DuiListCtrl.h
 [duivision]include\DuiMenu.h
 [duivision]include\DuiNativeWnd.h
@@ -108,6 +113,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\Frame.h
 [duivision]include\GlobalFunction.h
 [duivision]include\HideButton.h
+[duivision]include\IDuiHostWnd.h
 [duivision]include\IDuiPlugin.h
 [duivision]include\ImageString.h
 [duivision]include\LinkButton.h
@@ -123,6 +129,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\SelectBox.h
 [duivision]include\TextButton.h
 [duivision]include\Timer.h
+[duivision]include\vcicomm.h
 [duivision]include\WndBase.h
 [duivision]include\WndShadow.h
 
@@ -138,6 +145,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DuiEdit.cpp
 [duivision]source\DuiGridCtrl.cpp
 [duivision]source\DuiHandler.cpp
+[duivision]source\DuiLayout.cpp
 [duivision]source\DuiListCtrl.cpp
 [duivision]source\DuiMenu.cpp
 [duivision]source\DuiNativeWnd.cpp
@@ -173,7 +181,9 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]third-part\wke\wke.h
 [duivision]third-part\wke\wke.lib
 
+[!if OPTION_CHECK_USEWKE]
 [bin_source]wke.dll
+[!endif]
 
 [bin_source]dui.ico
 
@@ -240,10 +250,16 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [bin_source]skins\default\SCROLL_V.png
 [bin_source]skins\default\SkinBkg.png
 [bin_source]skins\default\SkinPushedBkg.png
+[bin_source]skins\default\split_hori.png
+[bin_source]skins\default\split_thumb_hori.jpg
+[bin_source]skins\default\split_thumb_vert.jpg
+[bin_source]skins\default\split_vert.png
 [bin_source]skins\default\Tab.png
 [bin_source]skins\default\tab_background.png
 [bin_source]skins\default\Tab_seperator.png
+[bin_source]skins\default\toolbar_bg.png
 [bin_source]skins\default\toolbar_hover.png
+[bin_source]skins\default\toolbar_hover_v.png
 [bin_source]skins\default\tree_checkbox.png
 [bin_source]skins\default\tree_collapse.png
 [bin_source]skins\default\tree_icon.png

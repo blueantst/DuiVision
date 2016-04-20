@@ -5,6 +5,8 @@
 <res type="cfg" name="defaultStyle" value="" />
 <res type="cfg" name="logfile" value="demoui.log" />
 <res type="cfg" name="loglevel" value="1" />
+<res type="cfg" name="logFileSize" value="1024" />
+<res type="cfg" name="logFileNumber" value="5" />
 <res type="cfg" name="appMutex" value="MUTEX_DUIVISION_DEMO" />
 <res type="cfg" name="enableDragFile" value="1" />
 <res type="cfg" name="trayDbClickMsg" value="0" />
@@ -22,8 +24,9 @@
 <res type="xml" name="tab_controls" file="xml\duivision\tab_controls.xml" />
 <res type="xml" name="tab_listctrl" file="xml\duivision\tab_listctrl.xml" />
 <res type="xml" name="tab_gridctrl" file="xml\duivision\tab_gridctrl.xml" />
+<res type="xml" name="tab_gridctrl_header" file="xml\duivision\tab_gridctrl_header.xml" />
 <res type="xml" name="tab_treectrl" file="xml\duivision\tab_treectrl.xml" />
-<res type="xml" name="tab_activex" file="xml\duivision\tab_activex.xml" />
+<res type="xml" name="tab_browser" file="xml\duivision\tab_browser.xml" />
 <res type="xml" name="tab_ext" file="xml\duivision\tab_ext.xml"  />
 <res type="xml" name="dlg_about" file="xml\duivision\dlg_about.xml"  />
 <res type="xml" name="dlg_login" file="xml\duivision\dlg_login.xml"  />
@@ -82,9 +85,11 @@
 <res type="img" name="IDB_BT_SCROLL_UP" file="skins\default\BT_SCROLL_UP.png" />
 <res type="img" name="IDB_BT_SCROLL_DOWN" file="skins\default\BT_SCROLL_DOWN.png" />
 <res type="img" name="IDB_TAB_SEPERATOR" file="skins\default\Tab_seperator.png" />
+<res type="img" name="IDB_TAB_SEPERATOR_V" file="skins\default\Tab_seperator_v.png" />
 <res type="img" name="IDB_TAB_ITEM" file="skins\default\tab.png" />
 <res type="img" name="IDB_TAB_BACK" file="skins\default\tab_background.png" />
 <res type="img" name="IDB_TAB_HOVER" file="skins\default\toolbar_hover.png" />
+<res type="img" name="IDB_TAB_HOVER_V" file="skins\default\toolbar_hover_v.png" />
 <res type="img" name="IDB_LIST_IMG" file="skins\default\list_img.png" />
 <res type="img" name="IDB_MSGDLG_BK" file="skins\default\msgdlg_bk.png" />
 <res type="img" name="IDB_TREE_COLLAPSE" file="skins\default\tree_collapse.png" />
@@ -102,6 +107,11 @@
 <res type="img" name="IDB_COMPUTER" file="skins\simage\computer.png" />
 <res type="img" name="IDB_EDIT_PWD" file="skins\simage\password.png" />
 <res type="img" name="IDB_LINE_RP" file="skins\default\rp_line.png" />
+<res type="img" name="IDB_SPLIT_HORI" file="skins\default\split_hori.png" />
+<res type="img" name="IDB_SPLIT_VERT" file="skins\default\split_vert.png" />
+<res type="img" name="IDB_SPLIT_THUMB_HORI" file="skins\default\split_thumb_hori.jpg" />
+<res type="img" name="IDB_SPLIT_THUMB_VERT" file="skins\default\split_thumb_vert.jpg" />
+<res type="img" name="IDB_TOOLBAR_BG" file="skins\default\toolbar_bg.png" />
 
 <res type="img" name="IDB_MENU_BACK" file="skins\menu\menu_bkg.png" />
 <res type="img" name="IDB_MENU_SEP" file="skins\menu\menu_sep.png" />
@@ -144,8 +154,8 @@
 
 
 <!--字符串资源-->
-<res type="str" lang="zh-cn" name="APP_NAME" value="DUI界面演示程序" />
-<res type="str" lang="zh-cn" name="APP_VER" value="1.0.0.1" />
+<res type="str" lang="zh-cn" name="APP_NAME" value="DuiVision界面演示程序" />
+<res type="str" lang="zh-cn" name="APP_VER" value="2.6.0.1" />
 <res type="str" lang="zh-cn" name="OK" value="确定" />
 <res type="str" lang="zh-cn" name="CANCEL" value="放弃" />
 <res type="str" lang="zh-cn" name="YES" value="是" />

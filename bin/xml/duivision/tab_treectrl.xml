@@ -91,7 +91,7 @@
 				<item title="迅雷看看" />
 				<item title="一键安装" />
 			</node>
-			<node id="2-7" image="skin:IDB_ICON_ERROR" check="1" collapse="1" >
+			<node id="2-7" image="skin:IDB_ICON_ERROR" check="1" collapse="1" crback="50,128,128,0" >
 				<item title="迅雷看看2" font-title="1" image="3" />
 				<item link="一键安装" linkaction="dlg:dlg_login"/>
 				<item collapse="1" image="skin:IDB_TREE_TOGGLE" />

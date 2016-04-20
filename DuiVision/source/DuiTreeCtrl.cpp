@@ -3,16 +3,10 @@
 
 #define	SCROLL_V	1	// 垂直滚动条控件ID
 #define	SCROLL_H	2	// 水平滚动条控件ID
-#define	LISTBK_AREA	3	// 背景Area控件ID
 
 CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 			: CDuiPanel(hWnd, pDuiObject)
 {
-	CRect rcBk = CRect(0,0,0,0);
-	CControlBase* pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
- 	m_vecControl.push_back(pControlBase);
-	m_pControBkArea = (CControlBase*)pControlBase;
-
 	m_strFontTitle = DuiSystem::GetDefaultFont();
 	m_nFontTitleWidth = 12;
 	m_fontTitleStyle = FontStyleRegular;
@@ -139,6 +133,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		CString strImage = pNodeElem.attribute(_T("image")).value();
 		CString strRightImage = pNodeElem.attribute(_T("right-img")).value();
 		CString strClrText = pNodeElem.attribute(_T("crtext")).value();
+		CString strClrBack = pNodeElem.attribute(_T("crback")).value();
 		CString strCollapse = pNodeElem.attribute(_T("collapse")).value();
 
 		int nCheck = -1;
@@ -196,6 +191,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		}
 
 		Color clrText = CDuiObject::StringToColor(strClrText);
+		Color clrBack = CDuiObject::StringToColor(strClrBack);
 
 		TreeNodeInfo nodeInfo;
 		nodeInfo.hParentNode = hParentNode;
@@ -209,9 +205,19 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		nodeInfo.sizeRightImage.SetSize(0, 0);
 		nodeInfo.bRowColor = FALSE;
 		nodeInfo.clrText = clrText;
+		nodeInfo.bRowBackColor = FALSE;
+		nodeInfo.clrBack = clrBack;
 		nodeInfo.nHoverItem = -1;
 		nodeInfo.bCollapse = bCollapse;
 		nodeInfo.bHide = FALSE;
+		if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
+		{
+			nodeInfo.bRowColor = TRUE;
+		}
+		if(clrBack.GetValue() != Color(0, 0, 0, 0).GetValue())
+		{
+			nodeInfo.bRowBackColor = TRUE;
+		}
 		HTREEITEM hNode = InsertNode(hParentNode, nodeInfo);
 		if(hNode == NULL)
 		{
@@ -347,7 +353,7 @@ BOOL CDuiTreeCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 // 添加树节点
 HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse,
 							int nImageIndex, Color clrText, CString strImage,
-							int nRightImageIndex, CString strRightImage, int nCheck)
+							int nRightImageIndex, CString strRightImage, int nCheck, Color clrBack)
 {
 	TreeNodeInfo nodeInfo;
 	nodeInfo.hParentNode = hParentNode;
@@ -359,12 +365,18 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 	nodeInfo.sizeRightImage.SetSize(0, 0);
 	nodeInfo.bRowColor = FALSE;
 	nodeInfo.clrText = clrText;
+	nodeInfo.bRowBackColor = FALSE;
+	nodeInfo.clrBack = clrBack;
 	nodeInfo.nHoverItem = -1;
 	nodeInfo.bCollapse = bCollapse;
 	nodeInfo.bHide = FALSE;
 	if(clrText.GetValue() != Color(0, 0, 0, 0).GetValue())
 	{
 		nodeInfo.bRowColor = TRUE;
+	}
+	if(clrBack.GetValue() != Color(0, 0, 0, 0).GetValue())
+	{
+		nodeInfo.bRowBackColor = TRUE;
 	}
 
 	// 左边图片
@@ -878,7 +890,7 @@ HTREEITEM CDuiTreeCtrl::GetNextSiblingNode(HTREEITEM hNode)
 		{
 			hParentNode = rowInfoTemp.hParentNode;
 			bFind = TRUE;
-		}
+		}else
 		if(bFind && (rowInfoTemp.hParentNode == hParentNode))
 		{
 			return rowInfoTemp.hNode;
@@ -900,7 +912,7 @@ HTREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HTREEITEM hNode)
 		{
 			hParentNode = rowInfoTemp.hParentNode;
 			bFind = TRUE;
-		}
+		}else
 		if(bFind && (rowInfoTemp.hParentNode == hParentNode))
 		{
 			return rowInfoTemp.hNode;
@@ -1052,7 +1064,7 @@ void CDuiTreeCtrl::SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemIn
 			columnInfo.rcHeader.right, rowInfo.rcRow.bottom);
 }
 
-// 设置某一个行的颜色
+// 设置某一个行的文字颜色
 void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 {
 	int nRow = GetNodeRow(hNode);
@@ -1064,6 +1076,20 @@ void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
 	rowInfo.bRowColor = TRUE;
 	rowInfo.clrText = clrText;
+}
+
+// 设置某一个行的背景颜色
+void CDuiTreeCtrl::SetNodeBackColor(HTREEITEM hNode, Color clrBack)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.bRowBackColor = TRUE;
+	rowInfo.clrBack = clrBack;
 }
 
 // 切换节点的缩放状态
@@ -1340,11 +1366,6 @@ void CDuiTreeCtrl::SetControlRect(CRect rc)
 				rcTemp = m_rc;
 				rcTemp.left = rcTemp.right - m_nScrollWidth;
 			}else
-			if(LISTBK_AREA == uControlID)
-			{
-				rcTemp = m_rc;
-				rcTemp.right -= m_nScrollWidth;
-			}else
 			{
 				continue;
 			}
@@ -1459,18 +1480,17 @@ void CDuiTreeCtrl::SetGridTooltip(HTREEITEM hNode, int nItem, CString strTooltip
 		return;
 	}
 
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg && ((m_nTipNode != hNode) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop)))
+	if((m_nTipNode != hNode) || (m_nTipItem != nItem) || (m_nTipVirtualTop != m_nVirtualTop))
 	{
 		TreeItemInfo* pGridInfo = GetItemInfo(hNode, nItem);
 		if(pGridInfo && (pGridInfo->bNeedTitleTip || pGridInfo->bNeedContentTip))
 		{
 			CRect rc = pGridInfo->rcItem;
 			rc.OffsetRect(m_rc.left, m_rc.top-m_nVirtualTop);
-			pDlg->SetTooltip(this, strTooltip, rc, TRUE);
+			SetTooltip(this, strTooltip, rc, TRUE);
 		}else
 		{
-			pDlg->ClearTooltip();
+			ClearTooltip();
 		}
 		m_nTipNode = hNode;
 		m_nTipItem = nItem;
@@ -1488,6 +1508,17 @@ void CDuiTreeCtrl::ClearGridTooltip()
 		m_nTipNode = NULL;
 		m_nTipItem = -1;
 		m_nTipVirtualTop = 0;
+		return;
+	}
+
+	IDuiHostWnd* pIDuiHostWnd = GetParentIDuiHostWnd();
+	if(pIDuiHostWnd)
+	{
+		pIDuiHostWnd->ClearTooltip();
+		m_nTipNode = NULL;
+		m_nTipItem = -1;
+		m_nTipVirtualTop = 0;
+		return;
 	}
 }
 
@@ -1897,6 +1928,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
+					graphics.FillRectangle(&brush, nXPos, nVI*m_nRowHeight, nWidth-nXPos, m_nRowHeight);
+				}else
+				if(rowInfo.bRowBackColor)	// 如果设置了行的背景颜色,则填充颜色
+				{
+					SolidBrush brush(rowInfo.clrBack);
 					graphics.FillRectangle(&brush, nXPos, nVI*m_nRowHeight, nWidth-nXPos, m_nRowHeight);
 				}
 

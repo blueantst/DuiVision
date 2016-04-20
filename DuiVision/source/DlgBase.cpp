@@ -42,6 +42,8 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 
 	m_bIsLButtonDown = FALSE;
 	m_bIsLButtonDblClk = FALSE;
+	m_bIsRButtonDown = FALSE;
+	m_bIsRButtonDblClk = FALSE;
 	m_pOldMemBK = NULL;
 	m_pControl = NULL;
 	m_pFocusControl = NULL;
@@ -186,6 +188,9 @@ BEGIN_MESSAGE_MAP(CDlgBase, CDialog)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	ON_WM_RBUTTONDBLCLK()
 	ON_WM_DROPFILES()
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_USER_CLOSEWND, OnUserCloseWindow)
@@ -2405,18 +2410,40 @@ void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
 
+// 鼠标右键按下
 void CDlgBase::OnRButtonDown(UINT nFlags, CPoint point)
 {
-}
+	BOOL bIsSelect = false;
+	m_bIsRButtonDblClk = FALSE;
 
-void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
-{
-	if (m_bIsSetCapture)
+	// 如果鼠标点击的不是原来的焦点控件,则清除原来的焦点控件
+	if((m_pFocusControl != m_pControl) && (m_pFocusControl != NULL))
 	{
-		ReleaseCapture();
-		m_bIsSetCapture = false;
+		SetFocusControl(NULL);
 	}
 
+	BOOL bHandled = FALSE;
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			if (m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
+			{
+				bIsSelect = TRUE;
+				m_bIsRButtonDown = TRUE;
+
+				m_pFocusControl = m_pControl;
+				bHandled = m_pControl->OnRButtonDown(nFlags, point);						
+			}
+		}
+	}
+
+	CDialog::OnRButtonDown(nFlags, point);
+}
+
+// 鼠标右键放开
+void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
+{
 	m_bIsRButtonDown = FALSE;
 
 	if (m_pControl)
@@ -2437,7 +2464,35 @@ void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
 		}	
 	}
 
+	m_bIsRButtonDblClk = FALSE;
+
 	CDialog::OnRButtonUp(nFlags, point);
+}
+
+// 鼠标右键双击
+void CDlgBase::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_bIsRButtonDblClk = TRUE;
+
+	if(m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnRButtonDblClk(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	CDialog::OnRButtonDblClk(nFlags, point);
 }
 
 // 键盘事件处理(移到PreTranslateMessage中实现子控件的键盘事件调用,因为对话框的OnKeyDown函数有局限性,不能捕获到ALT等组合键)
@@ -2546,7 +2601,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 	return CDialog::PreTranslateMessage(pMsg);
 }
 
-// 定时器消息
+// 定时器消息(重载CTimer类的函数)
 void CDlgBase::OnTimer(UINT uTimerID)
 {
 	if(m_uTimerAnimation == uTimerID)	// 动画定时器
@@ -2583,7 +2638,7 @@ void CDlgBase::OnTimer(UINT uTimerID)
 	}
 }
 
-// 定时器消息(带定时器名字的定时函数)
+// 定时器消息(带定时器名字的定时函数,重载CTimer类的函数)
 void CDlgBase::OnTimer(UINT uTimerID, CString strTimerName)
 {
 	// 应用创建的定时器都调用事件处理对象的定时处理函数

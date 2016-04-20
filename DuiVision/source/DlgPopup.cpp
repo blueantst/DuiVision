@@ -16,7 +16,10 @@ CDlgPopup::CDlgPopup() : CDuiObject()
 	m_bInit = false;
 	m_pImage = NULL;
 	m_bTracking = false;
-	m_bIsLButtonDown = false;
+	m_bIsLButtonDown = FALSE;
+	m_bIsLButtonDblClk = FALSE;
+	m_bIsRButtonDown = FALSE;
+	m_bIsRButtonDblClk = FALSE;
 	m_bIsSetCapture = false;
 	m_uMessageID = 0;
 	m_enBackMode = enBMFrame;
@@ -87,6 +90,9 @@ BEGIN_MESSAGE_MAP(CDlgPopup, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	ON_WM_RBUTTONDBLCLK()
 	ON_WM_CLOSE()
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
@@ -832,6 +838,118 @@ void CDlgPopup::OnLButtonDblClk(UINT nFlags, CPoint point)
 	ResetControl();
 
 	CWnd::OnLButtonDblClk(nFlags, point);
+}
+
+// 鼠标右键按下事件处理
+void CDlgPopup::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	BOOL bIsSelect = false;
+	m_bIsRButtonDblClk = FALSE;
+
+	if(m_pFocusControl != m_pControl && m_pFocusControl != NULL)
+	{
+		m_pFocusControl->OnFocus(false);
+		m_pFocusControl = NULL;
+	}
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible())
+		{
+			if (m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
+			{
+				bIsSelect = TRUE;
+				m_bIsRButtonDown = TRUE;
+
+				m_pFocusControl = m_pControl;
+				m_pControl->OnRButtonDown(nFlags, point);	
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	// 调用自身的函数
+	if(OnRButtonDown(point))
+	{
+		DrawWindow();	
+		return;
+	}
+
+	ResetControl();
+	//CWnd::OnRButtonDown(nFlags, point);
+}
+
+// 鼠标右键放开事件处理
+void CDlgPopup::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	m_bIsRButtonDown = FALSE;
+
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible())
+		{
+			CRect rc = m_pControl->GetRect();
+			
+			m_pControl->OnRButtonUp(nFlags, point);
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}	
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	m_bIsRButtonDblClk = FALSE;
+
+	// 调用自身的函数
+	if(OnRButtonUp(point))
+	{
+		DrawWindow();
+	}
+
+	ResetControl();
+
+	CWnd::OnRButtonUp(nFlags, point);
+}
+
+// 鼠标右键双击事件处理
+void CDlgPopup::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_bIsRButtonDblClk = TRUE;
+
+	if(m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnRButtonDblClk(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	// 调用自身的函数
+	if(OnRButtonDblClk(point))
+	{
+		DrawWindow();
+	}
+
+	ResetControl();
+
+	CWnd::OnRButtonDblClk(nFlags, point);
 }
 
 // 键盘事件处理

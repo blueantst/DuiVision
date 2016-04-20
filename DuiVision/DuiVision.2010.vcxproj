@@ -176,6 +176,7 @@
     <ClInclude Include="activex\duicomcli.h" />
     <ClInclude Include="common\BaseTask.h" />
     <ClInclude Include="common\encoding.h" />
+    <ClInclude Include="common\LogMgr.h" />
     <ClInclude Include="common\registry.h" />
     <ClInclude Include="common\TaskMgr.h" />
     <ClInclude Include="common\XUnZip.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="include\DuiGridCtrl.h" />
     <ClInclude Include="include\DuiHandler.h" />
     <ClInclude Include="include\duiid.h" />
+    <ClInclude Include="include\DuiLayout.h" />
     <ClInclude Include="include\DuiListCtrl.h" />
     <ClInclude Include="include\DuiMenu.h" />
     <ClInclude Include="include\DuiNativeWnd.h" />
@@ -233,6 +235,7 @@
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="common\LogMgr.cpp" />
     <ClCompile Include="common\TaskMgr.cpp" />
     <ClCompile Include="common\XUnzip.cpp" />
     <ClCompile Include="DuiVision.cpp" />
@@ -254,6 +257,7 @@
     <ClCompile Include="source\DuiEdit.cpp" />
     <ClCompile Include="source\DuiGridCtrl.cpp" />
     <ClCompile Include="source\DuiHandler.cpp" />
+    <ClCompile Include="source\DuiLayout.cpp" />
     <ClCompile Include="source\DuiListCtrl.cpp" />
     <ClCompile Include="source\DuiMenu.cpp" />
     <ClCompile Include="source\DuiNativeWnd.cpp" />

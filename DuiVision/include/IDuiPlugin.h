@@ -13,7 +13,7 @@ interface IDuiPluginPanel : public IUnknown
 	//}} 注意：!!!这里是保留的重要函数，不可删除!!!
 
 	//{{VCI_INTERFACE_BEGIN
-	virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc) = 0;
+	virtual int __stdcall OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc, IDuiHostWnd* pIDuiHostWnd) = 0;
 	virtual int __stdcall SetRect(CRect rc) = 0;
 	virtual int __stdcall SetVisible(BOOL bIsVisible) = 0;
 	virtual int __stdcall SetDisable(BOOL bIsDisable) = 0;
@@ -30,6 +30,9 @@ interface IDuiPluginPanel : public IUnknown
 	virtual int __stdcall OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) = 0;
 	virtual int __stdcall OnLButtonDblClk(UINT nFlags, CPoint point) = 0;
 	virtual int __stdcall SetUpdate(BOOL bUpdate, COLORREF clr) = 0;
+	virtual int __stdcall OnRButtonDown(UINT nFlags, CPoint point) = 0;
+	virtual int __stdcall OnRButtonUp(UINT nFlags, CPoint point) = 0;
+	virtual int __stdcall OnRButtonDblClk(UINT nFlags, CPoint point) = 0;
 	//}}VCI_INTERFACE_END
 };
 

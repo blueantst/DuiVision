@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "DuiVisionExplorer.h"
 #include "DuiHandlerMain.h"
+#include "DuiWkeView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -46,7 +47,7 @@ BOOL CDuiVisionExplorerApp::InitInstance()
 	// 初始化DuiVision界面库,可以指定语言,dwLangID为0表示自动判断当前语言
 	// 11160是应用程序ID,每个DUI应用程序应该使用不同的ID,ID主要用于进程间通信传递命令行时候区分应用
 	DWORD dwLangID = 0;
-	new DuiSystem(m_hInstance, dwLangID, _T("DuiVisionExplorer.ui"), 11160, IDD_DUIVISIONAPP_DIALOG, _T(""));
+	new DuiSystem(m_hInstance, dwLangID, _T("DuiVisionExplorer.ui"), 11161, IDD_DUIVISIONAPP_DIALOG, _T(""));
 
 	// 检查是否已经有进程在运行
 	CString strAppMutex = DuiSystem::Instance()->GetConfig(_T("appMutex"));	// 从配置文件中获取互斥量名字
@@ -70,6 +71,9 @@ BOOL CDuiVisionExplorerApp::InitInstance()
 			return FALSE; // Here we quit this application
 		}
 	}
+
+	// 注册WKE控件
+	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
 
 	// 创建主窗口
 	CDlgBase* pMainDlg = DuiSystem::CreateDuiDialog(_T("dlg_main"), NULL, _T(""), TRUE);

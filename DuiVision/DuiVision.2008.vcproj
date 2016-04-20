@@ -140,7 +140,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug_Ansi|Win32"
+			Name="Debug_Multi|Win32"
 			OutputDirectory="$(SolutionDir)Lib"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
@@ -202,12 +202,12 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release_Ansi|Win32"
+			Name="Release_Multi|Win32"
 			OutputDirectory="$(SolutionDir)Lib"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfMFC="2"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -317,6 +317,10 @@
 			</File>
 			<File
 				RelativePath=".\source\DuiHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiLayout.cpp"
 				>
 			</File>
 			<File
@@ -447,7 +451,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug_Ansi|Win32"
+					Name="Debug_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -455,7 +459,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release_Ansi|Win32"
+					Name="Release_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -539,6 +543,10 @@
 			</File>
 			<File
 				RelativePath=".\include\duiid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiLayout.h"
 				>
 			</File>
 			<File
@@ -712,6 +720,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\common\LogMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\common\LogMgr.h"
+				>
+			</File>
+			<File
 				RelativePath=".\common\registry.h"
 				>
 			</File>
@@ -787,7 +803,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug_Ansi|Win32"
+					Name="Debug_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -795,7 +811,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release_Ansi|Win32"
+					Name="Release_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
