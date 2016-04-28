@@ -1715,7 +1715,21 @@ bool CDuiActiveX::DoCreateControl()
         Hr = ::CoCreateInstance(m_clsid, NULL, CLSCTX_ALL, IID_IOleControl, (LPVOID*)&pOleControl);
 		if( FAILED(Hr) )
 		{
-			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CoCreateInstance %s failed"), m_clsid);
+			LPOLESTR lpwClsid = NULL;
+			Hr = StringFromCLSID(m_clsid, &lpwClsid);
+			if (SUCCEEDED(Hr))
+			{
+				USES_CONVERSION;
+				LPCTSTR lpszClsid = OLE2T(lpwClsid);
+				DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CoCreateInstance %s failed"), lpszClsid);
+				IMalloc * pMalloc = NULL;
+				Hr = ::CoGetMalloc(1, &pMalloc);	// 取得 IMalloc
+				if (SUCCEEDED(Hr))
+				{
+					pMalloc->Free(lpwClsid);		// 释放ProgID内存
+					pMalloc->Release();				// 释放IMalloc
+				}
+			}
 		}
 		// 控件激活
 		OnAxActivate(pOleControl);
