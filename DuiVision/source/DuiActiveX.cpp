@@ -2165,7 +2165,7 @@ bool CDuiFlashCtrl::isExistFlashActiveX()
 	HKEY hKey = NULL;
 
 	// 如果注册表中没有FlashPlayerX，则返回false
-	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,TEXT("SOFTWARE\\Macromedia\\FlashPlayerActiveX"),0,KEY_READ,&hKey)!=ERROR_SUCCESS)
+	if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\Macromedia\\FlashPlayerActiveX"),0,KEY_READ,&hKey)!=ERROR_SUCCESS)
 		return false;
 
 	std::wstring strValueName;
@@ -2175,10 +2175,10 @@ bool CDuiFlashCtrl::isExistFlashActiveX()
 	DWORD nValueNameBufferLength=1024, nValueType, nDataBudderSize=1024;
 
 	int i=0;  
-	while(RegEnumValue(hKey,i++, (LPWSTR)strValueName.c_str(), &nValueNameBufferLength, NULL, &nValueType, (BYTE*)strDataBuffer.c_str(), &nDataBudderSize) != ERROR_NO_MORE_ITEMS)  
+	while(RegEnumValueW(hKey,i++, (LPWSTR)strValueName.c_str(), &nValueNameBufferLength, NULL, &nValueType, (BYTE*)strDataBuffer.c_str(), &nDataBudderSize) != ERROR_NO_MORE_ITEMS)  
 	{  
 		std::wstring strName(strValueName.c_str());
-		if (strName.compare(_T("PlayerPath")) == 0)
+		if (strName.compare(L"PlayerPath") == 0)
 		{
 
 			if( (_waccess(std::wstring(strDataBuffer.c_str()).c_str(), 0 )) == -1 )
