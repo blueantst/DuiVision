@@ -23,7 +23,7 @@ public:
 	bool SetSmallBitmap(CString strImage);
 	HRESULT OnAttributeSmallImage(const CString& strValue, BOOL bLoading);
 
-	void SetBackColor(Color clrBack) { m_clrBack = clrBack; };
+	void SetBackColor(Color clrBack);
 	HRESULT OnAttributeBackColor(const CString& strValue, BOOL bLoading);
 
 	virtual void SetControlRect(CRect rc);

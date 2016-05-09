@@ -316,6 +316,22 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置背景色
+void CDuiEdit::SetBackColor(Color clrBack)
+{
+	m_clrBack = clrBack;
+	if(!m_bBack)
+	{
+		// 如果没有设置过背景色,则删除已创建的edit控件,等下一次显示时候自动刷新edit控件的颜色
+		DeleteEdit();
+	}else
+	{
+		// 如果设置过背景色,则只要调用CBkColorEdit的设置背景色的函数刷新edit控件的背景色
+		static_cast<CBkColorEdit*>(m_pEdit)->SetBackColor(m_clrBack.ToCOLORREF());
+	}
+	m_bBack = true;
+}
+
 // 从XML设置背景颜色属性
 HRESULT CDuiEdit::OnAttributeBackColor(const CString& strValue, BOOL bLoading)
 {
