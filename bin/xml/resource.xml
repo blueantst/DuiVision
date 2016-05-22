@@ -33,6 +33,8 @@
 <res type="xml" name="dlg_flashlogin" file="xml\duivision\dlg_flashlogin.xml"  />
 <res type="xml" name="dlg_option" file="xml\duivision\dlg_option.xml"  />
 <res type="xml" name="dlg_notice" file="xml\duivision\dlg_notice.xml"  />
+<res type="xml" name="dlg_ie" file="xml\duivision\dlg_ie.xml"  />
+<res type="xml" name="dlg_wke" file="xml\duivision\dlg_wke.xml"  />
 <res type="xml" name="dlg_skin" file="xml\dlg_skin.xml"  />
 <res type="xml" name="dlg_notifymsg" file="xml\dlg_notifymsg.xml"  />
 <res type="xml" name="dlg_msgbox" file="xml\dlg_msgbox.xml"  />
