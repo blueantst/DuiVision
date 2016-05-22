@@ -150,10 +150,7 @@ HRESULT CDuiWkeView::OnAttributeUrl(const CString& strValue, BOOL bLoading)
 	if (strValue.IsEmpty()) return E_FAIL;
 
 	m_strUrl = strValue;
-	if(m_pWebView != NULL)
-	{
-		m_pWebView->loadURL(m_strUrl);
-	}
+	Navigate(m_strUrl);
 
 	return bLoading?S_FALSE:S_OK;
 }
@@ -218,7 +215,7 @@ bool CDuiWkeView::CreateControl()
 	m_pWebView->setTransparent(m_bTransparent);
 	m_pWebView->setClientHandler(&m_wkeHander);
 	m_pWebView->setBufHandler(this);
-	m_pWebView->loadURL(m_strUrl);
+	Navigate(m_strUrl);
 
 	// ×¢²á´°¿ÚÀà
 	RegisterWindowClass();
@@ -773,7 +770,19 @@ void CDuiWkeView::Navigate(CString strUrl)
 {
 	if(m_pWebView)
 	{
-		m_pWebView->loadURL(strUrl);
+		if(strUrl.Find(_T("file://")) == 0)
+		{
+			CString strFile = strUrl;
+			strFile.Delete(0, 7);
+			if(strFile.Find(_T(":")) == -1)
+			{
+				strFile = DuiSystem::GetSkinPath() + strFile;
+			}
+			m_pWebView->loadFile(strFile);
+		}else
+		{
+			m_pWebView->loadURL(strUrl);
+		}
 		m_render.render(m_pWebView);
 	}
 }
