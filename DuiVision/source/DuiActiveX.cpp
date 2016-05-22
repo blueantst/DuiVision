@@ -2117,6 +2117,14 @@ HRESULT CDuiWebBrowserCtrl::Navigate(CString strUrl)
 	GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
 	if( pWebBrowser != NULL )
 	{
+		if(strUrl.Find(_T("file://")) == 0)
+		{
+			strUrl.Delete(0, 7);
+			if(strUrl.Find(_T(":")) == -1)
+			{
+				strUrl = DuiSystem::GetSkinPath() + strUrl;
+			}
+		}
 		BSTR bsUrl = strUrl.AllocSysString();
 		hr = pWebBrowser->Navigate(bsUrl,NULL,NULL,NULL,NULL);
 		pWebBrowser->Release();
