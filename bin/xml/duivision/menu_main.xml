@@ -4,8 +4,6 @@
 
 	<menuitem name="item_login" skin="IDB_MENU_AUTH" img-count="3" title="认证" action="dlg:dlg_login" />
 	<menuitem name="item_setup" skin="IDB_MENU_SETUP" img-count="3" title="系统设置" taskmsg="1" />
-	<menuitem name="item_jscall_ie" title="IE对话框" action="dlg:dlg_ie" />
-	<menuitem name="item_jscall_wke" title="Wke对话框" action="dlg:dlg_wke" />
 	<menuitem name="item_update" image="skin:IDB_MENU_UPDATE" title="检查更新" action="link:http://www.blueantstudio.net" />
 	<menuitem separator="1" skin="IDB_MENU_SEP" />
 	<menuitem name="item_about" skin="" image="" title="关于" action="dlg:dlg_about" />

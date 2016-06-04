@@ -336,10 +336,13 @@ width-lt,height-lt,width-rb,height-rb" />
 			<button name="frame_dlg_button" skin="IDB_BT_DEFAULT" title="半透明对话框"
 				pos="350,100,450,128" show="1" tip="显示背景半透明效果对话框" action="dlg:duivision\dlg_translucent.xml" />
 
-			<!--button name="wke_dlg_button" skin="IDB_BT_DEFAULT" title="Web对话框"
-				pos="50,140,150,168" show="1" tip="显示webkit内核的web对话框" action="dlg:duivision\dlg_wke.xml"  />
+			<button name="ie_dlg_button" skin="IDB_BT_DEFAULT" title="IE对话框"
+				pos="50,140,150,168" show="1" tip="显示IE内核的web对话框" action="dlg:dlg_ie" />
+			
+			<button name="wke_dlg_button" skin="IDB_BT_DEFAULT" title="Wke对话框"
+				pos="200,140,300,168" show="1" tip="显示webkit内核的web对话框" action="dlg:dlg_wke" />
 
-			<button name="wke_flash_dlg_button" skin="IDB_BT_DEFAULT" title="Wke Flash"
+			<!--button name="wke_flash_dlg_button" skin="IDB_BT_DEFAULT" title="Wke Flash"
 				pos="200,140,300,168" show="1" tip="显示webkit内核的Flash窗口" action="dlg:duivision\dlg_wke_flash.xml" /-->
 
 		</tab>

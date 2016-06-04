@@ -25,7 +25,7 @@
 			<wkeview name="webkit_ctrl" show="1"
 				delaycreate="true"
 				transparent="0"
-				url="http://www.blueantstudio.net/duivision/duivision.html"
+				url="http://www.blueantstudio.net/duivision.html"
 				pos="1,1,-1,-1"
 				show-contextmenu="0" >
 			</wkeview>
