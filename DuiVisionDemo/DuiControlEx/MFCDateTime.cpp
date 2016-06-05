@@ -133,8 +133,6 @@ void CMFCDateTime::ShowCMonthCalCtrl()
 	if (m_bReadOnly || m_bIsDisable)
 		return;
 
-	ShowEdit();
-
 	if (m_pMouthCalCtrl == NULL)
 	{
 		TestMainThread();
@@ -170,7 +168,6 @@ void CMFCDateTime::HideCMonthCalCtrl()
 		m_pMouthCalCtrl->ShowWindow(SW_HIDE);
 		m_IsShowMouthCalCtrl = false;
 	}
-	HideEdit();
 }
 
 void CMFCDateTime::DeleteCMonthCalCtrl()
@@ -213,6 +210,7 @@ void CMFCDateTime::SetControlRect(CRect rc)
 
 void CMFCDateTime::SetControlWndVisible(BOOL bIsVisible)
 {
+	__super::SetControlWndVisible(bIsVisible);
 	if (bIsVisible)
 	{
 		//ShowCMonthCalCtrl();
@@ -234,7 +232,7 @@ BOOL CMFCDateTime::SetControlFocus(BOOL bFocus)
 {
 	bool isShow = !m_IsShowMouthCalCtrl || (m_IsShowMouthCalCtrl && m_isVailidRect);
 
-	__super::SetControlFocus(isShow);
+	__super::SetControlFocus(bFocus);
 
 	if (isShow)
 	{
@@ -286,11 +284,6 @@ BOOL CMFCDateTime::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	m_isVailidRect = m_rcMounth.PtInRect(point);
 	return __super::OnControlLButtonDown(nFlags, point);
-}
-
-BOOL CMFCDateTime::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-	return __super::OnLButtonDblClk(nFlags, point);
 }
 
 HRESULT CMFCDateTime::OnAttributeDateTimeValue(const CString& strValue, BOOL bLoading)

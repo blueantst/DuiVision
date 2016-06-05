@@ -62,7 +62,7 @@ protected:
 	void DeleteCMonthCalCtrl();
 
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
-	BOOL OnLButtonDblClk(UINT nFlags, CPoint point);	
+
 protected:
 	SYSTEMTIME m_sysTime;
 	int        m_nDTUpdateFlag;
