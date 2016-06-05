@@ -5,6 +5,7 @@
 #include "DuiVisionDemo.h"
 #include "DuiHandlerMain.h"
 #include "DuiWkeView.h"
+#include "DuiControlEx\MFCDateTime.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -76,6 +77,8 @@ BOOL CDuiVisionDemoApp::InitInstance()
 
 	// 注册WKE控件
 	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
+	// 注册MFCDateTime控件
+	REGISTER_DUICONTROL(CMFCDateTime, NULL);
 
 	// 创建主窗口
 	CDlgBase* pMainDlg = DuiSystem::CreateDuiDialog(_T("dlg_main"), NULL, _T(""), TRUE);

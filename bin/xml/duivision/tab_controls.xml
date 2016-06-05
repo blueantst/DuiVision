@@ -168,10 +168,17 @@ width-lt,height-lt,width-rb,height-rb" />
 							password="1" number="0" readonly="0" maxchar="50"
 							font="default" crtip="128,128,128,128" />
 					
-					<text pos="50,265,250,280" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
-					<rect pos="50,285,250,350" response="0" color="808080" />
+					<text pos="50,255,119,275" crtext="808080" title="时间控件：" />
+					<mfcdatetime name="mfcdatetime1" pos="120,255,230,275" small-image="skin:IDB_KEY_BOARD"
+							title="2016-06-04" 
+							multiline="0" wantreturn="1" autohscroll="1" autovscroll="0"
+							number="0" readonly="0" maxchar="50"/>
+							
+					<text pos="50,280,250,295" crtext="808080" title="原生控件（编辑框）："
+							tip="下面的编辑框是通过原生控件创建的" />
+					<rect pos="50,300,250,350" response="0" color="808080" />
 					<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
-						pos="51,286,249,349" tip="原生窗口控件"  />
+						pos="51,301,249,349" tip="原生窗口控件"  />
 				
 				</layout-div>
 				<layout-div name="layout-2">

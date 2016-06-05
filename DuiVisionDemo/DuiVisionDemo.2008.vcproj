@@ -448,6 +448,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="DuiControlEx"
+			>
+			<File
+				RelativePath=".\DuiControlEx\MFCDateTime.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DuiControlEx\MFCDateTime.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

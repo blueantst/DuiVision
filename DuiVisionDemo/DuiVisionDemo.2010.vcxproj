@@ -221,6 +221,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DuiControlEx\MFCDateTime.cpp" />
     <ClCompile Include="DuiHandlerMain.cpp" />
     <ClCompile Include="DuiVisionDemo.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -231,6 +232,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DuiControlEx\MFCDateTime.h" />
     <ClInclude Include="DuiHandlerMain.h" />
     <ClInclude Include="DuiVisionDemo.h" />
     <ClInclude Include="Resource.h" />
