@@ -214,9 +214,13 @@ void CMFCDateTime::SetControlRect(CRect rc)
 void CMFCDateTime::SetControlWndVisible(BOOL bIsVisible)
 {
 	if (bIsVisible)
-		ShowCMonthCalCtrl();
+	{
+		//ShowCMonthCalCtrl();
+	}
 	else
+	{
 		HideCMonthCalCtrl();
+	}
 }
 
 void CMFCDateTime::SetControlTitle(CString strTitle)
@@ -233,9 +237,13 @@ BOOL CMFCDateTime::SetControlFocus(BOOL bFocus)
 	__super::SetControlFocus(isShow);
 
 	if (isShow)
-		ShowCMonthCalCtrl();	
+	{
+		//ShowCMonthCalCtrl();	
+	}
 	else
+	{
 		HideCMonthCalCtrl();
+	}
 
 	return isShow;
 }
@@ -244,8 +252,14 @@ BOOL CMFCDateTime::SetControlFocus(BOOL bFocus)
 LRESULT CMFCDateTime::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT res = __super::OnMessage(uID, uMsg, wParam, lParam);
-	if((uID == GetID()) && (uMsg == MSG_CONTROL_BUTTON))
+	if((uID == GetID()) && (uMsg == MSG_CONTROL_BUTTON) && ((wParam == CONTROL_BUTTON) || (wParam == CONTROL_EDIT)))
 	{
+		// wParam为CONTROL_BUTTON或CONTROL_EDIT表示在编辑框的按钮或输入区域点击
+		ShowCMonthCalCtrl();
+	}else
+	if((uID == GetID()) && (uMsg == MSG_CONTROL_BUTTON) && (wParam == GetID()))
+	{
+		// 只有MSG_CONTROL_BUTTON消息,并且wParam为控件ID才是时间控件的消息
 		OnMonthCalCtrlSelect(0, *(CPoint*)lParam);
 	}
 
