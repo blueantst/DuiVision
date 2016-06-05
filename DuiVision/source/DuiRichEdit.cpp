@@ -2384,7 +2384,7 @@ BOOL CDuiRichEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 					{				
 						m_buttonState = enBSHover;
 					}				
-					SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_DOWN);
+					SendMessage(MSG_CONTROL_BUTTON, CONTROL_BUTTON, MSG_BUTTON_DOWN);
 				}
 			}
 			else
@@ -2395,7 +2395,7 @@ BOOL CDuiRichEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 					m_buttonState = enBSHover;
 				}
 				
-				SendMessage(m_uID, CONTROL_EDIT, MSG_BUTTON_DOWN);
+				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_DOWN);
 			}		
 		}
 		else
@@ -2441,7 +2441,7 @@ BOOL CDuiRichEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 					{
 						m_buttonState = enBSHover;
 					}	
-					SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_UP);
+					SendMessage(MSG_CONTROL_BUTTON, CONTROL_BUTTON, MSG_BUTTON_UP);
 				}
 			}
 			else
@@ -2454,7 +2454,7 @@ BOOL CDuiRichEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 				{
 					m_buttonState = enBSNormal;
 				}	
-				SendMessage(m_uID, CONTROL_EDIT, MSG_BUTTON_UP);
+				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_UP);
 			}			
 		}
 		else

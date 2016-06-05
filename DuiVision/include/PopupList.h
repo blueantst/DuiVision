@@ -4,10 +4,6 @@
 #include <vector>
 using namespace std;
 
-// 消息
-#define				SELECT_ITEM					11
-#define				DELETE_ITEM					12
-
 // 列表项定义
 struct EditListItem
 {

@@ -489,8 +489,7 @@ BOOL CPopupList::OnLButtonUp(CPoint point)
 		{
 			if(m_nHoverItem != -1)
 			{
-				//SendMessage(m_uMessageID, DELETE_ITEM, m_nHoverItem);
-				SendMessageToParent(m_uMessageID, DELETE_ITEM, m_nHoverItem);
+				SendMessageToParent(MSG_CONTROL_DELETE, m_uMessageID, m_nHoverItem);
 				bDraw = TRUE;
 			}
 		}	
@@ -505,8 +504,7 @@ BOOL CPopupList::OnLButtonUp(CPoint point)
 		EditListItem &editListItem = m_vecItem.at(m_nHoverItem);
 		if(editListItem.rcItem.PtInRect(point))
 		{
-			//SendMessage(m_uMessageID, SELECT_ITEM, m_nHoverItem);
-			SendMessageToParent(m_uMessageID, SELECT_ITEM, m_nHoverItem);
+			SendMessageToParent(MSG_CONTROL_SELECT, m_uMessageID, m_nHoverItem);
 		}
 	}
 	
@@ -539,7 +537,7 @@ BOOL CPopupList::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}else
 	if(nChar == VK_RETURN)	// 回车键选择列表项
 	{
-		SendMessageToParent(m_uMessageID, SELECT_ITEM, m_nHoverItem);
+		SendMessageToParent(MSG_CONTROL_SELECT, m_uMessageID, m_nHoverItem);
 		return true;
 	}
 

@@ -259,7 +259,7 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CString& strValue, BOOL bLoad
 // 消息处理
 LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if((CONTROL_BUTTON == wParam) && (MSG_BUTTON_DOWN == lParam) && (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮
+	if((MSG_CONTROL_BUTTON == uMsg) && (CONTROL_BUTTON == wParam) && (MSG_BUTTON_DOWN == lParam) && (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮
 	{
 		CRect rcClient = GetRect();
 		rcClient.top = rcClient.bottom;
@@ -321,7 +321,7 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		// 显示下拉列表窗口
 		pPopupList->ShowWindow(SW_SHOW);
 	}else
-	if((SELECT_ITEM == wParam) && m_pPopupList)	// 下拉框选择
+	if((MSG_CONTROL_SELECT == uMsg) && m_pPopupList)	// 下拉框选择
 	{
 		CString strName;
 		m_pPopupList->GetItemName(lParam, strName);
@@ -340,7 +340,7 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		m_pPopupList = NULL;
 	}else
-	if((DELETE_ITEM == wParam) && m_pPopupList)	// 删除下拉框列表项
+	if((MSG_CONTROL_DELETE == uMsg) && m_pPopupList)	// 删除下拉框列表项
 	{
 		// 如果设置了删除按钮图片，才可以进行删除
 		if(!m_strImageDeleteBitmap.IsEmpty() || (m_nResourceIDDeleteBitmap != 0))
@@ -359,7 +359,7 @@ BOOL CDuiComboBox::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if(m_bDown && (nChar == VK_DOWN) && (nFlags == 0) && IsFocusControl())
 	{
 		// 模拟鼠标点击
-		SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_DOWN);
+		SendMessage(MSG_CONTROL_BUTTON, CONTROL_BUTTON, MSG_BUTTON_DOWN);
 		return true;
 	}
 
