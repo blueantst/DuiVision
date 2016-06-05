@@ -542,11 +542,6 @@ LRESULT CDuiHandlerMain::OnDuiMsgComboUrlKeyDown(UINT uID, CString strName, UINT
 // URL输入框的事件处理(目前仅处理URL输入框的下拉列表选择事件)
 LRESULT CDuiHandlerMain::OnDuiMsgComboUrl(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if(wParam != SELECT_ITEM)
-	{
-		return FALSE;
-	}
-
 	CString strUrl = L"";
 	CDuiComboBox* pUrlCtrl = (CDuiComboBox*)GetControl(_T("combo.url"));
 	if(pUrlCtrl != NULL)

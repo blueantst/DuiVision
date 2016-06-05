@@ -64,7 +64,7 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"button.reflush", MSG_BUTTON_UP, OnDuiMsgButtonRefresh)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"button.home", MSG_BUTTON_UP, OnDuiMsgButtonHome)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"combo.url", MSG_KEY_DOWN, OnDuiMsgComboUrlKeyDown)
-		DUI_CONTROL_NAME_MESSAGE(L"combo.url", OnDuiMsgComboUrl)
+		DUI_CONTROL_NAMEMSG_MESSAGE(L"combo.url", MSG_CONTROL_SELECT, OnDuiMsgComboUrl)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"edit.search", MSG_KEY_DOWN, OnDuiMsgEditSearchKeyDown)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"button.new", MSG_BUTTON_UP, OnDuiMsgButtonNewTab)
 		DUI_CONTROL_NAMEMSG_MESSAGE(L"tabctrl.main", MSG_BUTTON_DOWN, OnDuiMsgTabCtrlSwitch)
