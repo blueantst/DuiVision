@@ -74,7 +74,7 @@ public:
 	DuiXmlAttribute attribute( LPCTSTR name) const;
 };
 
-class DuiXmlDocument : public DuiXmlNode
+class DuiXmlDocument : public xml_document
 {
 protected:
 	xml_document m_document;
