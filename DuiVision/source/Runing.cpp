@@ -47,7 +47,7 @@ HRESULT CDuiAnimateImage::OnAttributeRun(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
-	BOOL bRun = (strValue == _T("true"));
+	BOOL bRun = (strValue == _T("1") ? TRUE : FALSE);
 	SetRun(bRun);
 
 	return bLoading?S_FALSE:S_OK;

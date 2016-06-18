@@ -259,13 +259,13 @@ width-lt,height-lt,width-rb,height-rb" />
 			<text pos="50,20,250,40" crtext="808080" title="动画图片：" />
 			
 			<animateimg name="animateimg_scan_1" skin="IDB_SCAN_STATUS_360" show="1"
-				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="20" run="true" />
+				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="20" run="1" />
 			
 			<animateimg name="animateimg_repair_1" skin="IDB_REPAIR_STATUS_360" show="1"
-				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="40" run="true" />
+				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="40" run="1" />
 			
 			<animateimg name="animateimg_scan_2" skin="IDB_SCAN_ANIMATE" show="1"
-				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="30" run="true" />
+				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="30" run="1" />
 
 			<text pos="50,180,250,200" crtext="808080" title="进度条：" />
 			
