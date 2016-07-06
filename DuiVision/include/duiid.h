@@ -77,6 +77,7 @@
 #define					MSG_MOUSE_RDBLCLK					15						// 鼠标右键双击
 #define					MSG_CONTROL_SELECT					16						// 控件内的选择事件
 #define					MSG_CONTROL_DELETE					17						// 控件内的删除事件
+#define					MSG_DROP_FILE							18						// 拖拽文件事件
 
 
 // 进程间消息内容的结构定义

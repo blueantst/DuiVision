@@ -122,6 +122,8 @@ public:
 	BOOL UseImageECM() { return m_bImageUseECM; }
 	void SetDragEnable(BOOL bDragEnable) { m_bDragEnable = bDragEnable; }
 	BOOL GetDragEnable() { return m_bDragEnable; }
+	void SetDropFileEnable(BOOL bDropFileEnable) { m_bDropFileEnable = bDropFileEnable; }
+	BOOL GetDropFileEnable() { return m_bDropFileEnable; }
 
 	virtual	BOOL PtInRect(CPoint point);	// 判断坐标是否在控件范围内
 	UINT GetControlID() { return m_uID; }	// 控件ID就是DUI对象的ID
@@ -170,6 +172,7 @@ public:
 	virtual BOOL OnControlRButtonDown(UINT nFlags, CPoint point){ return FALSE; };
 	virtual BOOL OnControlRButtonUp(UINT nFlags, CPoint point){ return FALSE; };
 	virtual BOOL OnControlRButtonDblClk(UINT nFlags, CPoint point){ return FALSE; }
+	virtual BOOL OnControlDropFile(CPoint point, CString strFileName);
 
 	virtual	BOOL OnControlTimer() { return FALSE; }
 
@@ -212,6 +215,7 @@ protected:
 	BOOL					m_bDblClk;			// 是否可以响应双击事件
 	BOOL					m_bMouseDown;		// 是否鼠标按下
 	BOOL					m_bDragEnable;		// 是否允许鼠标拖动控件
+	BOOL					m_bDropFileEnable;	// 是否允许鼠标拖拽文件到此控件
 
 	UINT					m_nShortcutKey;		// 快捷键按键
 	UINT					m_nShortcutFlag;	// 快捷键扫描码
@@ -274,6 +278,7 @@ protected:
 		DUI_BOOL_ATTRIBUTE(_T("response"), m_bRresponse, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("tabstop"), m_bTabStop, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("drag"), m_bDragEnable, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("dropfile"), m_bDropFileEnable, TRUE)
 		DUI_CUSTOM_ATTRIBUTE(_T("pos"), OnAttributePosChange)
 		DUI_CUSTOM_ATTRIBUTE(_T("width"), OnAttributeWidth)
 		DUI_CUSTOM_ATTRIBUTE(_T("height"), OnAttributeHeight)

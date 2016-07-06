@@ -41,6 +41,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bRunTime = false;
 	m_bImageUseECM = false;
 	m_bDragEnable = false;
+	m_bDropFileEnable = false;
 
 	m_nShortcutKey = 0;
 	m_nShortcutFlag = 0;
@@ -95,6 +96,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bRunTime = false;
 	m_bImageUseECM = false;
 	m_bDragEnable = false;
+	m_bDropFileEnable = false;
 
 	m_nWidth = 0;
 	m_nHeight = 0;
@@ -1146,6 +1148,31 @@ BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
 	}
 
 	return FALSE;
+}
+
+// 鼠标拖拽文件事件处理
+BOOL CControlBase::OnControlDropFile(CPoint point, CString strFileName)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+	
+	BOOL bRresponse = false;
+	if(m_pControl)
+	{
+		// 判断当前活动控件
+		if(m_pControl->PtInRect(point))
+		{
+			return m_pControl->OnControlDropFile(point, strFileName);
+		}
+	}
+
+	if(PtInRect(point) && GetDropFileEnable())
+	{
+		// 在此控件范围内,并且控件设置了允许拖拽文件的标识,则发送消息
+		SendMessage(MSG_DROP_FILE, (WPARAM)(&point), (LPARAM)(&strFileName));
+		return true;
+	}
+
+	return false;
 }
 
 BOOL CControlBase::OnTimer()

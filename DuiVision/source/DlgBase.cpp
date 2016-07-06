@@ -997,6 +997,9 @@ void CDlgBase::InitWindowBkSkin()
 // 拖拽图片更新窗口背景图片
 void CDlgBase::OnDropFiles(HDROP hDropInfo)
 {
+	CPoint ptDrop;
+	BOOL bQueryPoint = (DragQueryPoint(hDropInfo, &ptDrop) && m_pControl);
+
 	TCHAR szFileName[MAX_PATH + 1] = {0};
 	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, NULL, 0);
 	for(UINT i = 0; i < nFiles; i++)
@@ -1007,6 +1010,14 @@ void CDlgBase::OnDropFiles(HDROP hDropInfo)
 			continue;
 		}	
 		CString strFileName = szFileName;
+
+		// 如果当前控件可以处理拖拽文件的事件,则不需要其他的处理
+		if(bQueryPoint && m_pControl->OnControlDropFile(ptDrop, strFileName))
+		{
+			continue;
+		}
+
+		// 当前控件未处理此事件,则获取文件后缀,如果文件后缀是图片则更改背景
 		strFileName = strFileName.Right(3);
 		if (0 == strFileName.CompareNoCase(TEXT("bmp")) || 0 == strFileName.CompareNoCase(TEXT("jpg")) || 0 == strFileName.CompareNoCase(TEXT("png")))
 		{
