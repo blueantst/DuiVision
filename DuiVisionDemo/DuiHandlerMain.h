@@ -42,6 +42,7 @@ public:
 	LRESULT OnDuiMsgListCtrl2DblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgGridCtrlDblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgGridCtrlDelBtnClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDuiMsgGridCtrlDropFile(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgTreeCtrlClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgTreeCtrlDblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnDuiMsgMenuOption(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -91,6 +92,7 @@ public:
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("listctrl_2"), MSG_BUTTON_DOWN, OnDuiMsgListCtrl2Click)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("listctrl_2"), MSG_BUTTON_DBLCLK, OnDuiMsgListCtrl2DblClick)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("gridctrl_1"), MSG_BUTTON_DBLCLK, OnDuiMsgGridCtrlDblClick)
+		DUI_CONTROL_NAMEMSG_MESSAGE(_T("gridctrl_1"), MSG_DROP_FILE, OnDuiMsgGridCtrlDropFile)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("grid_btn_delete"), MSG_BUTTON_DOWN, OnDuiMsgGridCtrlDelBtnClick)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("treectrl_1"), MSG_BUTTON_DOWN, OnDuiMsgTreeCtrlClick)
 		DUI_CONTROL_NAMEMSG_MESSAGE(_T("treectrl_1"), MSG_BUTTON_DBLCLK, OnDuiMsgTreeCtrlDblClick)

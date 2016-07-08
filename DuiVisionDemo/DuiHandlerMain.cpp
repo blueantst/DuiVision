@@ -519,6 +519,36 @@ LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDelBtnClick(UINT uID, CString strName, 
 	return TRUE;
 }
 
+// 拖拽文件到表格控件消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDropFile(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 拖拽消息的wParam表格鼠标位置，lParam表示当前拖拽的文件全路径名
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
+	CPoint* pptDropFile = (CPoint*)wParam;
+	CString* pstrDropFile = (CString*)lParam;
+	// 截取文件名
+	CString strFileName = *pstrDropFile;
+	int nPos = strFileName.ReverseFind(_T('\\'));
+	strFileName.Delete(0, nPos+1);
+	// 在表格中插入一行文件信息
+	if(pGridCtrl)
+	{
+		CString strId = *pstrDropFile;
+		int nRow = pGridCtrl->InsertRow(-1,	// 插入的行序号,-1表示添加到最后
+			strId,							// 行id字符串
+			-1,								// 行左侧图片(索引图片方式,无索引图片填-1)
+			Color(0, 0, 0, 0),				// 行文字颜色,全0表示默认(不使用行文字颜色,使用表格全局颜色)
+			_T("skins\\icon\\NewIcons005.png"),	// 行左侧的图片文件
+			-1,								// 行右侧图片(索引图片方式,无索引图片填-1)
+			_T(""),							// 行右侧的图片文件
+			0);
+		pGridCtrl->SetSubItem(nRow, 0, strFileName, *pstrDropFile, TRUE);
+		pGridCtrl->SetSubItem(nRow, 1, _T("文件"));
+	}
+
+	return TRUE;
+}
+
 // 树控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {

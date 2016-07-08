@@ -3,7 +3,7 @@
 <div pos="0,75,-0,-0" >
 
 	<text crtext="800000" crmark="800000" align="center"
-		pos="0,5,-0,25" title="表格控件" font="big" show="1" />
+		pos="0,5,-0,25" title="表格控件(支持拖拽文件到表格中)" font="big" show="1" />
 	
 	<gridctrl name="gridctrl_1" pos="20,30,-20,-5" show="1"
 		img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" img-sep="skin:IDB_LINE_RP"
@@ -13,7 +13,7 @@
 		font="default" align="left" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
 		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128"
-		down-row="0" >
+		down-row="0" dropfile="1" >
 		<column title="列1" width="400" />
 		<column title="列2" width="120" />
 		<column title="列3" width="80" align="center" />
