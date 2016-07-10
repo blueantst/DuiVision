@@ -1003,30 +1003,38 @@ void CDlgBase::OnDropFiles(HDROP hDropInfo)
 	TCHAR szFileName[MAX_PATH + 1] = {0};
 	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, NULL, 0);
 	for(UINT i = 0; i < nFiles; i++)
-	{		
+	{
 		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
 		if(PathIsDirectory(szFileName))
 		{
 			continue;
-		}	
+		}
 		CString strFileName = szFileName;
 
-		// 如果当前控件可以处理拖拽文件的事件,则不需要其他的处理
-		if(bQueryPoint && m_pControl->OnControlDropFile(ptDrop, strFileName))
+		CString strEnableDragFile = DuiSystem::Instance()->GetConfig(_T("enableDragFile"));
+		//strEnableDragFile不可能=0
+		if(strEnableDragFile != _T("2"))	//只允许背景
 		{
-			continue;
+			// 如果当前控件可以处理拖拽文件的事件,则不需要其他的处理
+			if(bQueryPoint && m_pControl->OnControlDropFile(ptDrop, strFileName))
+			{
+				continue;
+			}
 		}
 
-		// 当前控件未处理此事件,则获取文件后缀,如果文件后缀是图片则更改背景
-		strFileName = strFileName.Right(3);
-		if (0 == strFileName.CompareNoCase(TEXT("bmp")) || 0 == strFileName.CompareNoCase(TEXT("jpg")) || 0 == strFileName.CompareNoCase(TEXT("png")))
+		if(strEnableDragFile != _T("1"))
 		{
-			LoadBackgroundImage(szFileName);
-			// 保存背景信息
-			DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), szFileName);
-			// 刷新所有窗口的背景皮肤
-			DuiSystem::Instance()->ResetAllWindowsBkSkin();
-			break;
+			// 当前控件未处理此事件,则获取文件后缀,如果文件后缀是图片则更改背景
+			strFileName = strFileName.Right(3);
+			if (0 == strFileName.CompareNoCase(TEXT("bmp")) || 0 == strFileName.CompareNoCase(TEXT("jpg")) || 0 == strFileName.CompareNoCase(TEXT("png")))
+			{
+				LoadBackgroundImage(szFileName);
+				// 保存背景信息
+				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), szFileName);
+				// 刷新所有窗口的背景皮肤
+				DuiSystem::Instance()->ResetAllWindowsBkSkin();
+				break;
+			}
 		}
 	}
 	// CDialog::OnDropFiles(hDropInfo);
@@ -2095,7 +2103,7 @@ void CDlgBase::PreSubclassWindow()
 {
 	// 判断是否允许拖拽图片文件作为窗口背景
 	CString strEnableDragFile = DuiSystem::Instance()->GetConfig(_T("enableDragFile"));
-	if(strEnableDragFile == _T("1"))
+	if(strEnableDragFile != _T("0"))
 	{
 		DragAcceptFiles(TRUE);
 	}
