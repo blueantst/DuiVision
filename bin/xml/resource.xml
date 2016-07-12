@@ -8,7 +8,7 @@
 <res type="cfg" name="logFileSize" value="1024" />
 <res type="cfg" name="logFileNumber" value="5" />
 <res type="cfg" name="appMutex" value="MUTEX_DUIVISION_DEMO" />
-<res type="cfg" name="enableDragFile" value="1" />
+<res type="cfg" name="enableDragFile" value="3" />
 <res type="cfg" name="trayDbClickMsg" value="0" />
 
 <!--风格设置-->
