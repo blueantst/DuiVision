@@ -157,7 +157,7 @@
 
 <!--字符串资源-->
 <res type="str" lang="zh-cn" name="APP_NAME" value="DuiVision界面演示程序" />
-<res type="str" lang="zh-cn" name="APP_VER" value="2.6.0.1" />
+<res type="str" lang="zh-cn" name="APP_VER" value="2.7.0.1" />
 <res type="str" lang="zh-cn" name="OK" value="确定" />
 <res type="str" lang="zh-cn" name="CANCEL" value="放弃" />
 <res type="str" lang="zh-cn" name="YES" value="是" />
