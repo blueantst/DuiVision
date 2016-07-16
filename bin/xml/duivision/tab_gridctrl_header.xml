@@ -10,7 +10,7 @@
 		img-check="skin:IDB_CHECK_BOX" img-header="skin:IDB_TOOLBAR_BG" img-colsep="skin:IDB_TAB_SEPERATOR"
 		img-count="12" image="skin:IDB_LIST_IMG"
 		left-pos="70" row-height="50" header-height="30" bk-transparent="10"
-		font-title="big" align-header="center" align-header="middle" crheader="128,32,32"
+		font-title="big" align-header="center" valign-header="middle" crheader="128,32,32"
 		font="default" align="left" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
 		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128"
