@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+html,body{
+    margin:0; 
+    background:#fff;
+    height:100%; 
+}
+
+*{
+    -webkit-user-select: none;
+}
+
+/*标题栏*/
+#header{
+    position:absolute;
+    top:0px;
+    left:0px;
+    height:28px;
+    width:100%;
+    background:rgb(52,152,220);
+    cursor:default;
+}
+
+/*中间内容栏*/
+#container{
+    box-sizing:border-box;/*使高度包含padding*/
+    height:100%;
+    width:100%; 
+    padding-top:28px;
+    padding-bottom:35px;
+    margin:0 auto; 
+    overflow:auto;   
+}
+
+/*底栏*/
+#footer {
+    height:35px;
+    width:100%;
+    position: absolute;
+    bottom:0;
+    left:0;
+    z-index:100;
+    background:rgb(239,237,238); 
+    text-align:right;
+    padding:3px 5px;
+    box-sizing:border-box;
+}
+
+/*中间内容栏 左侧列*/
+#container .lside{
+    height:100%;
+    width:150px; 
+    float:left; 
+    background:rgb(110,179,210);
+}
+
+/*中间内容栏 右侧列*/
+#container .rside{
+    height:100%;
+    margin-left:150px; 
+    background:#FFF;
+}
+
+#footer button{
+    padding:4px 13px;
+    font-size:12px; 
+    background:rgb(27,174,93);
+    color:white; 
+    border:0;
+}
+
+#footer button:hover { 
+    background:rgb(33,127,188);
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    cursor:pointer;
+} 
+
+#footer button:active { 
+    background:rgb(20,110,170);
+    cursor:pointer;
+} 
+
+#header .title-bar{
+    margin-right:75px;
+    padding-left:10px;
+    height:28px;
+    line-height: 28px;
+    font-size:9pt;
+    color:#eee; 
+} 
+
+#header .ctrls{  
+    width:75px;
+    height:28px; 
+    float:right;
+}
+
+#header .ctrls a{ 
+    display:block; 
+    float:left;
+    height:14px;
+    font-family:"Marlett";
+    font-size:14px;
+    padding:4px;
+    color:#fff;
+    cursor:default;
+}
+
+#header .ctrls a[id]:hover{ 
+    background:#6ebccf; 
+}
+
+#header .ctrls a[id]:active{ 
+    background:#FF0000; 
+} 
+</style>
+
+<script language="JScript">
+function MyFunc()
+{
+    external.HelloWorld();
+}
+function MyFunc2()
+{
+    var a = external.par1;
+	alert(a);
+}
+function MyFunc3()
+{
+    external.par1 = "123456";
+}
+function MyFuncMethod()
+{
+    var str = external.LangString("par1", "english", "hello");
+	alert(str);
+}
+</script>
+
+<body>
+    <div id="header">
+        <div class="ctrls"> 
+            <a id="window-min" onclick="windowCommand('min')">0</a>
+            <a id="window-max" onclick="this.innerText = windowCommand('max')?'2':'1';">1</a>
+            <a id="window-close" onclick="windowCommand('close')">r</a>
+        </div>
+        <div class="title-bar" onmousedown="windowCommand('drag')"> <span class=title> 浏览器对话框演示 </span></div>
+    </div> 
+    
+    <div id="container"> 
+    <div class="lside"> </div> 
+    <div class="rside"> 这是一个通过内嵌浏览器页面实现的对话框！</div> 
+    </div>
+    
+    <div id="footer">
+        <button onclick="alert('hello')">点击这里</button>
+    </div>
+</body>
+</html>

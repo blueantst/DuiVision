@@ -34,6 +34,14 @@
 
 #include <atlbase.h>
 
+[!if APPTYPE_RADIO_DUIPLUGIN]
+HINSTANCE GetDllInstance();
+
+// 资源切换函数
+void get_dll_resource(void);
+void reset_dll_resource(void);
+[!endif]
+
 #include "DuiVision.h"
 
 [!if APPTYPE_RADIO_DUIAPP]
@@ -44,3 +52,11 @@
 #define REG_CONFIG_BKPIC_FILE	_T("BkPicFile")	// 背景图片文件名
 #define REG_CONFIG_BKCOLOR		_T("BkColor")	// 背景颜色
 [!endif]
+
+#if defined _M_IX86
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_X64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#else
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#endif

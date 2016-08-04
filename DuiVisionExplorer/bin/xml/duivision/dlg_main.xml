@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<dlg name="dlg_main" title="[APP_NAME]" width="960" height="640" translucent="252"
+	frame="" bkimg="" crbk="000000" appwin="1" resize="1"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
+
+  <base>
+	<div name="win.caption" pos="0,0,-0,21" response="0" />
+	<img pos="5,5" width="40" height="40" image="skins\icon\Synchstep.png" mode="extrude" framesize="1" response="0" />
+	
+	<text name="title" crtext="E0E0E0" crmark="800000" crshadow="202020" font="default"
+			pos="60,4,250,19" title="[APP_NAME][APP_VER]" response="0" show="1" />
+	
+    <imgbtn name="button.goback" pos="60,20,91,51" skin="IDB_BT_PREVIEW" tip="上一页" tabstop="0" showfocus="0" shortcut="LEFT" />
+    <imgbtn name="button.goforward" pos="92,20,123,51" skin="IDB_BT_NEXTVIEW" tip="下一页" tabstop="0" showfocus="0" shortcut="RIGHT" />
+    <imgbtn name="button.reflush" pos="124,20,155,51" skin="IDB_BT_REFLUSH" tip="刷新" tabstop="0" showfocus="0" shortcut="F5" />
+    <imgbtn name="button.home" pos="156,20,187,51" skin="IDB_BT_HOME" tip="主页" tabstop="0" showfocus="0" />
+	
+	<imgbtn name="button.close" pos="-40,0,-0,19"  image="skins\default\close.png" tip="关闭" tabstop="0" showfocus="0" action="close-window" show="1" />    
+    <imgbtn name="button.max"   pos="-67,0,-40,19"  image="skins\default\restore.png" tip="最大化" tabstop="0" showfocus="0" />    
+    <imgbtn name="button.min"   pos="-94,0,-67,19" image="skins\default\min.png" tip="最小化" tabstop="0" showfocus="0" />
+	
+	<imgbtn name="button.menu" pos="-130,0,-97,29" skin="IDB_BT_MENU" tip="菜单" tabstop="0" showfocus="0" action="menu:menu_main" menupos="-75,-0" />
+	<imgbtn name="button.skin" pos="-160,0,-131,29" skin="IDB_BT_SKIN" tip="皮肤" tabstop="0" showfocus="0" show="1"/>
+
+  </base>
+  
+  <body>
+	<area name="area-1" pos="0,0,-0,50" begin-transparent="100" end-transparent="30" />
+	<area name="area-2" pos="0,50,-0,-0" begin-transparent="30" end-transparent="30" />
+	<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+	<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />  
+	
+	<combobox name="combo.url" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+			left-image="skins\simage\home.png"
+			value="local" font="default" readonly="0" duimsg="keydown"
+			pos="188,22,-250,49"
+			title="http://www.blueantstudio.net" tip="" >
+		<item name="http://www.blueantstudio.net" value="http://www.blueantstudio.net" image="skins\simage\home.png" />
+		<item name="https://github.com/blueantst/DuiVision" value="https://github.com/blueantst/DuiVision" image="skins\simage\home.png" />
+		<item name="http://www.haosou.com" value="http://www.haosou.com" image="skins\simage\home.png" />
+		<item name="http://www.baidu.com" value="http://www.baidu.com" image="skins\simage\home.png" />
+	</combobox>
+	
+	<edit name="edit.search" skin="IDB_EDIT" left-image="skins\simage\search_normal.png"
+					pos="-245,22,-10,49" tip="搜索" duimsg="keydown"
+					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="100"
+					font="default" />
+
+	<tabctrl name="tabctrl.main" img-count="3" image="skin:IDB_TAB_ITEM_QQ" 
+			tabimg-mode="mid" width-lt="2" height-lt="2" width-rb="2" height-rb="2"
+			img-tabbtn="skins\default\tab_close_btn.png" tabbtnpos="-14,5"
+			crtext="808080" font="default" align="center" valign="middle"
+			item-width="154" item-width-min="30" tab-right-pading="30" tab-height="25" animate="0"
+			pos="1,53,-1,-30" tab-tip="1" >
+		<!--tab name="tab.Home" title="首页" pos="0,27,-0,-0" img-index="0" active="true" >
+			<webbrowser name="ie_ctrl_home" show="1"
+				delaycreate="true"
+				url="http://www.blueantstudio.net"
+				pos="0,0,-1,-1"
+				show-contextmenu="0"
+				show-scroll="1"		>
+			</webbrowser>
+		</tab-->
+	</tabctrl>
+	
+	<imgbtn name="button.new" pos="-23,55,-3,75" skin="IDB_BT_ADD" tip="新页面" />
+
+	<div name="duivision_desc" pos="20,100,800,500">
+
+		<img pos="20,0" width="128" height="128" image="skins\dui.png"
+			mode="extrude" framesize="1" tip="DuiVision LOGO" response="0" />
+		<img pos="20,190" width="128" height="128" image="skins\scriptnet.jpg"
+			mode="extrude" framesize="1" tip="蓝蚂蚁工作室微信公众号二维码" response="0" />
+		
+		<text pos="170,0,600,30" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" response="0" />
+
+		<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,40,-30,110" bk-transparent="5" response="0"
+			title="DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine、DuiLib等多个基于DirectUI的界面库开发的。
+DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用Windows控件，所以这些控件都是无句柄的。" />
+
+		<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,113,-30,260" bk-transparent="5" response="0"
+			title="DirectUI技术需要解决的主要问题如下：
+1、窗口的子类化，截获窗口的消息；
+2、封装自己的控件，并将自己的控件绘制到该窗口上；
+3、封装窗口的消息，并分发到自己的控件上，让自己的控件根据消息进行响应和绘制；
+4、根据不同的行为发送自定义消息给窗口，以便程序进行调用；
+5、一般窗口上控件的组织使用XML来描述。
+通常DirectUI的界面库都采用XML配置文件+图片+控制脚本（Lua、Javascript等）的开发方式，非常类似于Web程序的开发方式，当然这里面控制脚本也可以直接使用C++代码来实现。这种开发方式可以大大提高开发效率，将程序员从繁琐的界面工作中解脱出来，并且通过美工的设计，可以使界面更美观。
+" />
+
+		<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,265,-30,-10" bk-transparent="5" response="0"
+			title="DuiVision开源下载地址：https://github.com/blueantst/DuiVision
+蓝蚂蚁工作室网站：http://www.blueantstudio.net
+QQ群：325880743
+微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室 或扫描左侧二维码" />
+
+	</div>
+	
+	<div name="footer" pos="0,-26,-0,-0" >	
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：[APP_VER]" title="检查更新" action="link:http://www.blueantstudio.net" />
+		
+		<progress name="progress.webload" skin="IDB_PROGRESS" show-text="0" crtext="808080" title=""
+				pos="-400,3,-140,20" value="0" run="false" show="0"
+				tip="页面加载进度" />
+
+		<imgbtn name="button.download" pos="-130,4,-116,18" img-btn="skins\simage\download.png" img-count="1" tip="下载" tabstop="0" showfocus="0" />
+		<textbtn name="button.download.text" crtext="808080" pos="-115,3,-80,20" show="1" title="下载" />
+		
+		<imgbtn name="button.size" pos="-80,0,-58,22" img-btn="skins\simage\search_normal.png" img-count="1" tip="缩放页面比例" tabstop="0" showfocus="0" />
+		<textbtn name="button.size.text" crtext="808080" pos="-57,3,-14,20" show="1" title="100%" tip="缩放页面比例" />
+	</div>	
+	
+  </body>
+  
+</dlg>

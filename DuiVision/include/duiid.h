@@ -20,6 +20,7 @@
 #define					FRAME_MAINWND						903	// 主窗口的透明度渐变层蒙板图片
 #define					BT_SKIN								904	// 换肤按钮
 #define					WND_SKIN							905	// 皮肤窗口
+#define					AREA_CAPTION						906	// 窗口标题区域
 #define					BT_OK								910	// 确定按钮
 #define					BT_CANCEL							911	// 取消按钮
 #define					BT_YES								912	// 是按钮
@@ -33,6 +34,7 @@
 #define					NAME_BT_CLOSE						_T("button.close")		// 关闭按钮
 #define					NAME_BT_SKIN						_T("button.skin")		// 换肤按钮
 #define					NAME_BT_SETUP						_T("button.setup")		// 设置按钮
+#define					NAME_AREA_CAPTION					_T("win.caption")		// 窗口标题区域
 #define					NAME_FRAME_MAINWND					_T("frame.mainwnd")		// 主窗口的透明度渐变层蒙板图片
 
 #define					NAME_BT_OK							_T("button.ok")			// 确定按钮
@@ -58,22 +60,35 @@
 #define					MSG_TRAY_LBUTTONDOWN				2						// 托盘左键单击消息
 
 // 控件消息定义
-#define					MSG_BUTTON_DOWN						1						// 鼠标在控件按下
-#define					MSG_BUTTON_UP						2						// 鼠标在控件放开
+#define					MSG_BUTTON_DOWN						1						// 鼠标或键盘在控件按下
+#define					MSG_BUTTON_UP						2						// 鼠标或键盘在控件放开
 #define					MSG_BUTTON_DBLCLK					3						// 鼠标在控件双击
 #define					MSG_BUTTON_CHECK					4						// 检查框消息
 #define					MSG_SCROLL_CHANGE					5						// 滚动条位置变更事件
+#define					MSG_CONTROL_BUTTON					6						// 控件内的按钮点击事件
+#define					MSG_MOUSE_MOVE						7						// 鼠标移动事件
+#define					MSG_MOUSE_LEAVE						8						// 鼠标离开事件
+#define					MSG_MOUSE_LDOWN						9						// 鼠标左键按下事件
+#define					MSG_MOUSE_LUP						10						// 鼠标左键放开事件
+#define					MSG_MOUSE_RDOWN						11						// 鼠标右键按下事件
+#define					MSG_MOUSE_RUP						12						// 鼠标右键放开事件
+#define					MSG_KEY_DOWN						13						// 键盘按下事件
+#define					MSG_CONTROL_EVENT					14						// 控件的自定义事件
+#define					MSG_MOUSE_RDBLCLK					15						// 鼠标右键双击
+#define					MSG_CONTROL_SELECT					16						// 控件内的选择事件
+#define					MSG_CONTROL_DELETE					17						// 控件内的删除事件
+#define					MSG_DROP_FILE							18						// 拖拽文件事件
 
 
 // 进程间消息内容的结构定义
 struct DUI_INTERPROCESS_MSG
 {
-	WCHAR	wAppName[128];		// 应用名
+	TCHAR	wAppName[128];		// 应用名
 	UINT	uControlID;			// 控件ID
-	WCHAR	wControlName[64];	// 控件名字
+	TCHAR	wControlName[64];	// 控件名字
 	UINT	uMsg;				// 消息
 	WPARAM	wParam;				// 参数1
 	LPARAM	lParam;				// 参数2
-	WCHAR	wInfo[10240];		// 信息字符串
+	TCHAR	wInfo[10240];		// 信息字符串
 	UINT	uDataLen;			// 扩展部分长度
 };

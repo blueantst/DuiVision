@@ -87,7 +87,16 @@ BOOL CDuiObject::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		SetAttribute(_T("pos"), strPosValue, TRUE);
 	}
 
+	// 初始化
+	OnInit();
+
     return TRUE;
+}
+
+// 初始化,由Load函数加载完属性之后调用
+BOOL CDuiObject::OnInit()
+{
+	return TRUE;
 }
 
 // 解析字符串，替换其中的替换内容
@@ -113,10 +122,12 @@ ULONG CDuiObject::HexStringToULong(LPCTSTR lpszValue, int nSize)
 	return ret;
 	*/
 
-	CStringA strValueA;
-	strValueA = lpszValue;
+	//CStringA strValueA;
+	//strValueA = lpszValue;//CEncodingUtil::AnsiToUnicode(lpszValue);
+	//这里不明白 我改为_T类型统一了
+	CString strValueA = lpszValue;
 
-    LPCSTR pchValue = strValueA.GetBuffer();;
+    LPCTSTR pchValue = strValueA.GetBuffer();;
     ULONG ulValue = 0;
 
     while (*pchValue && nSize != 0)

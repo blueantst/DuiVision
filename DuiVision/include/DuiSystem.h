@@ -3,10 +3,13 @@
 #include "duisingleton.h"
 #include  <afxtempl.h>
 
-#define CREATE_DUICONTROL_BY_CLASS_NAME(classname)   \
-	pControl = classname::CheckAndNew(lpszName, hWnd, pParentObject);	\
-    if (pControl)	\
-        return pControl;	\
+// 注册DUI控件宏
+#define REGISTER_DUICONTROL(classname, pfShutdown)   \
+	CDuiObjectInfo* pDuiObjectInfo##classname = new CDuiObjectInfo;	\
+	pDuiObjectInfo##classname->m_pfGetClassName = classname::GetClassName;		\
+	pDuiObjectInfo##classname->m_pfCheckAndNew = (DUIFunc_CheckAndNew)classname::CheckAndNew;		\
+	pDuiObjectInfo##classname->m_pfShutdown = pfShutdown;		\
+	DuiSystem::Instance()->RegisterDuiControl(pDuiObjectInfo##classname)	\
 
 
 // 多语言ID定义
@@ -15,12 +18,6 @@
 #define LANGUAGE_PAGE_CHINESE_TW	0x0404	// 台湾繁体
 #define LANGUAGE_PAGE_CHINESE_HK	0x0C04	// 香港、马来繁体
 #define LANGUAGE_PAGE_CHINESE_SGP	0x1004	// 新加坡繁体
-
-//日志信息等级
-#define LOG_LEVEL_DEBUG 0x0001      //调试信息
-#define LOG_LEVEL_INFO	0x0002      //一般信息
-#define LOG_LEVEL_ERROR 0x0004      //错误信息
-#define LOG_LEVEL_CRITICAL 0x0008	//致命信息
 
 // 操作系统类型定义
 enum OSType
@@ -71,6 +68,7 @@ public:
     DuiSystem(HINSTANCE hInst, DWORD dwLangID = 0, CString strResourceFile = _T(""), UINT uAppID = 0, UINT nIDTemplate = 0, CString strStyle = _T(""));
     ~DuiSystem(void);
 
+	static BOOL HaveInstance();
 	static DuiSystem* Instance();
 	static void Release();
 
@@ -119,6 +117,8 @@ public:
 	BOOL LoadBitmapFile(CString strFileName, CBitmap &bitmap, CSize &size);
 	// 加载图标文件,支持从zip文件中加载
 	BOOL LoadIconFile(CString strFileName, HICON& hIcon);
+	// 加载通用文件到内存,支持从zip文件中加载
+	BOOL LoadFileToBuffer(CString strFileName, BYTE*& pBuffer);
 	// 加载界面插件动态库
 	BOOL LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj);
 	// 获取系统配置信息
@@ -146,8 +146,18 @@ public:
 	// 设置窗口背景信息
 	BOOL SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, CString strImgFile);
 
+	// 注册控件
+	void RegisterDuiControl(CDuiObjectInfo* pDuiObjectInfo);
+	// 卸载控件
+	BOOL UnRegisterDuiControl(LPCTSTR lpszName);
+	// 加载控件库
+	void LoadDuiControls();
+	// 释放控件库
+	void ReleaseDuiControls();
 	// 根据控件类名创建控件实例
 	static CControlBase* CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject);
+	// 获取控件信息列表的指针
+	vector<CDuiObjectInfo*>* GetDuiObjectInfoVect() { return &m_vecDuiObjectInfo; }
 
 	// 获取子控件对象
 	CControlBase* GetControlFromDuiDialog(UINT uControlID);
@@ -210,15 +220,9 @@ public:
 	BOOL SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strAppName, CString strInfo);
 
 	// 日志函数
-	CString GetLogFile() { return m_strLogFile; }
-	int GetLogLevel() { return m_nLogLevel; }
-	BOOL IsLogEnable() { return m_bLogEnable; }
-	CRITICAL_SECTION* GetLogMutex() { return &m_WriteLogMutex; }
 	void InitLog();
 	void DoneLog();
-	static void	LogEvent(int nLevel, LPCWSTR lpFormat, ...);
-
-	//HRESULT CreateTextServices(IUnknown *punkOuter, ITextHost *pITextHost, IUnknown **ppUnk);
+	static void	LogEvent(int nLevel, LPCTSTR lpFormat, ...);
 
 protected:
     void createSingletons();
@@ -240,20 +244,13 @@ protected:
 	DWORD					m_dwLangID;								// 当前语言ID
 	CString					m_strCurStyle;							// 当前风格名
 
-	CString					m_strLogFile;							// 日志文件名
-	int						m_nLogLevel;							// 日志级别
-	BOOL					m_bLogEnable;							// 是否启用日志功能
-	CRITICAL_SECTION		m_WriteLogMutex;						// 日志同步锁
-
 	DuiVision::CTaskMgr		m_TaskMsg;								// 界面消息任务队列
 
+	vector<CDuiObjectInfo*>	m_vecDuiObjectInfo;				// 控件信息对象列表
 	vector<CDlgBase*>		m_vecDuiDialog;							// DUI对话框列表
 	vector<CDuiHandler*>	m_vecDuiHandler;						// 事件处理对象列表
 
 	CDlgBase*				m_pNotifyMsgBox;						// 动态提示信息框
 
 	NOTIFYICONDATA			m_NotifyIconData;						// 托盘数据
-
-	//HINSTANCE	m_rich20;	//richedit module
-	//PCreateTextServices	m_funCreateTextServices;
 };

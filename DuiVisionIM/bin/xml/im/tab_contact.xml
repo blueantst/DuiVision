@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<div pos="0,40,-0,-0" >
+
+	<!--text crtext="800000" crmark="800000" align="center"
+		pos="0,5,-0,25" title="表格控件" font="big" show="1" /-->
+	
+	<gridctrl name="gridctrl_1" pos="0,0,-0,-5" show="1"
+		img-scroll="skin:IDB_SCROLL_V" img-sep="skin:IDB_LINE_RP"
+		img-check="skin:IDB_CHECK_BOX" img-colsep=""
+		img-count="12" image="skin:IDB_LIST_IMG"
+		left-pos="60" row-height="50" header-height="0" bk-transparent="10"
+		font-title="default" font="default"
+		valign="middle" down-row="0"
+		crtext="255,128,128,128" crhover="128,0,0" crpush="0,112,235"
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
+		<column title="列1" width="285" />
+		<column title="列3" width="80" align="center" />
+		<column title="列4" />
+		<row image="skins\icon\scriptnet.png">
+			<item title="Script.NET&DuiVision社区" crtext="128,128,0" content="DuiVision 2.3版本发布:1、完善浏览器demo程序，支持启动时打开上一次的页面、加载的进度显示、页面切换时候的url显示切换、搜索框关联搜索引擎等功能；" font-title="1" />
+			<item title="已装：2.2.1.0" content="最新：4.0开源版" />
+			<item title="125.5M" />
+			<item link="点击下载" linkaction="link:http://www.blueantstudio.net/scriptnet/download/download.htm"/>
+		</row>
+		<row image="skins\icon\softmgr.png">
+			<item title="腾讯软件管理" crtext="128,128,0" content="1.新的界面，丰富的内容；2.海量软件搜索；3.功能分类清晰呈现，更易选择" font-title="1" />
+			<item title="已装：8.7.0.1" content="最新：10.0.0.1" />
+			<item title="16.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_option"/>
+		</row>
+		<row image="skins\im\head\114.png">
+			<item title="Notepad++"  crtext="128,128,0" content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
+			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
+			<item title="7.5M" />
+			<item>
+				<button name="grid_btn_delete" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="删除" tip="删除下一行" />
+			</item>
+		</row>
+		<row image="skins\im\head\115.png">
+			<item title="迅雷看看" crtext="128,128,0" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
+			<item title="43.5M" />
+			<item>
+				<button name="grid_btn1" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="一键安装" tip="普通按钮" />
+			</item>
+		</row>
+		<row image="skins\im\head\175.png">
+			<item title="Axialis IconWorkshop" crtext="640064" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\im\head\176.png" crtext="128,128,0">
+			<item title="为知笔记" crtext="128,128,0" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
+			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
+			<item title="29.5M" crtext="0,0,128" />
+			<item>
+				<button name="grid_btn_resume" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
+				<button name="grid_btn_cancel" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+			</item>
+		</row>
+		<row image="skins\im\head\178.png">
+			<item title="TortoiseGit 64位" crtext="128,128,0" content="暂无版本更新说明" font-title="1" />
+			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
+			<item title="7.5M" />
+			<item>
+				<progress name="grid_progress_install" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
+		</row>
+		<row image="skins\im\head\179.png">
+			<item title="Notepad++" crtext="128,128,0" content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
+			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
+			<item title="7.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\im\head\181.png">
+			<item title="迅雷看看" crtext="128,128,0" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
+			<item title="43.5M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\im\head\183.png">
+			<item title="Axialis IconWorkshop" crtext="128,128,0" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item link="一键安装" linkaction="dlg:dlg_login"/>
+		</row>
+		<row image="skins\im\head\210.png">
+			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
+			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
+			<item title="29.5M" crtext="0,0,128" />
+			<item link="一键安装" />
+		</row>
+		<row image="skins\icon\ico_business.png">
+			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
+			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
+			<item title="7.5M" />
+			<item link="一键安装" />
+		</row>
+		<row image="skins\icon\softmgr.png">
+			<item title="迅雷看看" />
+			<item title="4.9.14.2版本" image="1" />
+			<item title="43.5M" />
+			<item>
+				<button name="grid_btn_resume2" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
+				<button name="grid_btn_cancel2" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+			</item>
+		</row>
+		<row image="skin:IDB_ICON_CHECK">
+			<item title="Axialis IconWorkshop" />
+			<item title="6.8.1.2版本" />
+			<item title="39M" />
+			<item title="一键安装" />
+		</row>
+	</gridctrl>
+
+</div>

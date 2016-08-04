@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<dlg name="dlg_option" title="" width="450" height="400" resize="0"
+	translucent="245" frame="" bkimg="skin:SKIN_PIC_4" crbk="000000"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" shortcut="ESC" />
+		<text name="title" crtext="FFFFFF" font="big" pos="10,5,200,25" title="设置" response="0" />
+	</base>
+
+	<body>
+		<area name="area-1" pos="0,0,-0,60" begin-transparent="100" end-transparent="40" />
+		<area name="area-2" pos="0,60,-0,-0" begin-transparent="40" end-transparent="40" />
+		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+		
+		<tabctrl name="tabctrl.option" img-sep="skin:IDB_TAB_SEPERATOR"
+			img-count="3" image="skin:IDB_TAB_ITEM_QQ" 
+			tabimg-mode="mid" width-lt="2" height-lt="2" width-rb="2" height-rb="2"
+			font="bold" item-width="90" tab-height="30" crtext="800000" animate="1"
+			pos="1,30,-1,-31">
+		
+			<tab name="tab.option.1" title="基本设置" img-index="0" active="true" pos="0,30,-0,-0">
+				<text crtext="202020" pos="20,20,200,40" font="bold" title="浏览器内核选择：" />
+
+				<radiobtn name="option.webtype.ie" skin="IDB_RADIO_BUTTON" title="使用IE浏览器内核"
+					pos="50,45,300,65" check="true" group="option.group.webtype" value="ie" show="1" />
+				<radiobtn name="option.webtype.wke" skin="IDB_RADIO_BUTTON" title="使用wke(webkit)浏览器内核"
+					pos="50,65,300,85" check="false" group="option.group.webtype" value="wke" show="1" />
+				
+				<img pos="20,91,-20,92" skin="IDB_LINE_RP" mode="extrude" framesize="0" />
+				
+				<text crtext="202020" pos="20,100,200,120" font="bold" title="启动时打开：" />
+
+				<radiobtn name="option.startopen.last" skin="IDB_RADIO_BUTTON" title="上次退出时未关闭的页面"
+					pos="50,125,300,145" check="false" group="option.group.startopen" value="last" show="1" />
+				<!--radiobtn name="option.startopen.home" skin="IDB_RADIO_BUTTON" title="主页 http://www.blueantstudio.net"
+					pos="50,145,300,165" check="false" group="option.group.startopen" value="home" show="1" /-->
+				<radiobtn name="option.startopen.none" skin="IDB_RADIO_BUTTON" title="不打开任何页面"
+					pos="50,145,300,165" check="true" group="option.group.startopen" value="none" show="1" />
+
+				<img pos="20,171,-20,172" skin="IDB_LINE_RP" mode="extrude" framesize="0" />
+				
+				<text crtext="202020" pos="20,180,200,200" font="bold" title="搜索引擎：" />
+
+				<chkbtn name="option.check.urlsearch" skin="IDB_CHECK_BOX" show="1"
+					pos="50,205,300,225" title="启用地址栏搜索" check="false" disable="1" />
+
+				<combobox name="option.search.engine" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+						left-image="skins\simage\search_normal.png"
+						value="haosou" tip="选择默认搜索引擎" font="bold" readonly="1"
+						pos="50,225,300,253" title="好搜" >
+					<item name="好搜" value="haosou" crtext="800000" image="skins\simage\search_normal.png" />
+					<item name="百度" value="baidu" image="skins\simage\search_normal.png" />
+					<item name="Google" value="google" image="skins\simage\search_normal.png" />
+				</combobox>					
+
+			</tab>
+			<tab name="tab.option.2" title="界面设置" img-index="0" pos="0,30,-0,-0">
+				<text crtext="202020" pos="20,20,200,40" font="bold" title="界面设置：" />
+
+			</tab>
+			<tab name="tab.option.3" title="快捷键" img-index="0" pos="0,30,-0,-0">
+				<text crtext="202020" pos="20,20,200,40" font="bold" title="快捷键：" />
+
+			</tab>
+			<tab name="tab.option.4" title="高级设置" img-index="0" pos="0,30,-0,-0">
+				<text crtext="202020" pos="20,20,200,40" font="bold" title="高级设置：" />
+
+			</tab>
+		
+		</tabctrl>
+				
+		<button name="config.button.ok" skin="IDB_BT_DEFAULT" title="[OK]" pos="-100,-30,-20,-6" shortcut="RETURN" />
+
+	</body>
+  
+</dlg>

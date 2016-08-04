@@ -139,6 +139,129 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Debug_Multi|Win32"
+			OutputDirectory="$(SolutionDir)Lib"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			UseOfMFC="2"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)d.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release_Multi|Win32"
+			OutputDirectory="$(SolutionDir)Lib"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			UseOfMFC="2"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="2"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -197,6 +320,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiLayout.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiListCtrl.cpp"
 				>
 			</File>
@@ -213,6 +340,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiRichEdit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiSlider.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiSystem.cpp"
 				>
 			</File>
@@ -226,6 +361,10 @@
 			</File>
 			<File
 				RelativePath=".\source\DuiTreeCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\DuiWkeView.cpp"
 				>
 			</File>
 			<File
@@ -311,6 +450,22 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Multi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Multi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\source\TextButton.cpp"
@@ -322,6 +477,10 @@
 			</File>
 			<File
 				RelativePath=".\source\WndBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\WndShadow.cpp"
 				>
 			</File>
 		</Filter>
@@ -387,6 +546,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiLayout.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DuiListCtrl.h"
 				>
 			</File>
@@ -403,7 +566,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiRichEdit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DUISingleton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiSlider.h"
 				>
 			</File>
 			<File
@@ -424,6 +595,10 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiVision.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\DuiWkeView.h"
 				>
 			</File>
 			<File
@@ -514,6 +689,10 @@
 				RelativePath=".\include\WndBase.h"
 				>
 			</File>
+			<File
+				RelativePath=".\include\WndShadow.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"
@@ -538,6 +717,14 @@
 			</File>
 			<File
 				RelativePath=".\common\encoding.h"
+				>
+			</File>
+			<File
+				RelativePath=".\common\LogMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\common\LogMgr.h"
 				>
 			</File>
 			<File
@@ -609,6 +796,22 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Multi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Multi|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

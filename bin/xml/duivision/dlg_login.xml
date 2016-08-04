@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <dlg name="dlg_login" title="" width="420" height="270" appwin="0" resize="0"
-	frame="" bkimg="" crbk="000000" >
+	frame="" bkimg="" crbk="000000"
+	img-shadow="skins\360\window_shadow.png" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
 	
 	<base>
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1" shortcut="ESC" />
@@ -20,7 +21,7 @@
 		
 		<edit name="username" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
 					pos="120,110" width="220" height="32" title="" tip="请输入用户名"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					multiline="0" wantreturn="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtext="0,0,0" crtip="128,128,128,128" />
 		
 		<linkbtn name="linkbtn" crtext="800000"
@@ -28,7 +29,7 @@
 		
 		<edit name="pwd" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
 					pos="120,149" width="220" height="32" title="" password="1" tip="请输入密码"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					multiline="0" wantreturn="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 					font="default" crtext="0,0,0" crtip="128,128,128,128" />
 		
 		<linkbtn name="linkbtn" crtext="800000"

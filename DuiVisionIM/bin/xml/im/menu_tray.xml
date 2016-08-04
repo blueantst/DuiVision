@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu title="TrayMenu" width="250" item-height="25" left="30"
+	frame-width="0" top-height="72" bottom-height="30"
+	bkmode="mid" width-lt="5" height-lt="70" width-rb="5" height-rb="30"
+	img-rowhover="skins\menu\360TrayMenu_278.png"
+	bkimg="skins\menu\360TrayMenu_218.png" >
+
+	<text pos="10,5,-10,25" crtext="FFFFFF" font="bold" title="[APP_NAME]" />
+	<img pos="-60,5" width="48" height="48" image="skins\icon\duivision.png"
+		mode="normal" framesize="1" tip="[APP_NAME]" />
+	<text pos="10,-25,-10,-5" crtext="808080" font="bold" title="蓝蚂蚁工作室" />
+	
+	<menuitem name="mainmenu.restore" skin="" image="" title="恢复窗口" font="bold" action="show-window:dlg_main" />
+	<menuitem separator="1" skin="IDB_MENU_SEP" />
+	<menuitem name="menu_state" menu="menu_state" />
+	<menuitem separator="1" skin="IDB_MENU_SEP" />
+	<menuitem name="mainmenu.help" skin="IDB_MENU_HELP" img-count="3" title="帮助" action="link:http://url" />
+	<menuitem separator="1" skin="IDB_MENU_SEP" />
+	<menuitem name="mainmenu.exit" skin="" image="" title="退出" action="close-window:dlg_main" />
+  
+</menu>

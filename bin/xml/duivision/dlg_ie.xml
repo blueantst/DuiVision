@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dlg name="dlg_ie" title="" width="600" height="400" appwin="1" resize="1"
+	translucent="245" frame="" crbk="000000"
+	img-shadow="skins\default\winback_shadow.png" shadow-wlt="36" shadow-hlt="34" shadow-wrb="36" shadow-hrb="35">
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1" shortcut="ESC"/>
+		<text name="title" crtext="FFFFFF" crmark="800000" font="big"
+				pos="10,5,200,25" title="内嵌IE控件的网页窗口" response="0" show="1" />
+	</base>
+
+	<body>
+		<webbrowser name="ie_ctrl_dlg" show="1"
+			delaycreate="true"
+			url="file://html/jscall.html"
+			pos="0,0,-0,-0"
+			show-contextmenu="0"
+			show-scroll="0">
+		</webbrowser>
+	</body>
+  
+</dlg>

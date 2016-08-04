@@ -3,7 +3,7 @@
 #include "registry.h"
 
 
-#define XML_ABOUT_DLG L"<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+#define XML_ABOUT_DLG _T("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <dlg name=\"dlg_about\" title=\"MsgBox\" width=\"450\" height=\"230\" appwin=\"0\" >\
 	<base>\
 		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\" shortcut=\"ESC\"/>\
@@ -25,7 +25,7 @@
 		<text crtext=\"000080\" pos=\"170,140,-25,160\" title=\"此对话框由定义的XML内容创建\" />\
 		<button name=\"button.ok\" skin=\"IDB_BT_DEFAULT\" title=\"[OK]\" pos=\"-100,-30,-20,-6\" />\
 	</body>\
-</dlg>";
+</dlg>");
 
 //////////////////////////////////////////////////////////////
 // CDuiHandlerMain
@@ -35,6 +35,7 @@ CDuiHandlerMain::CDuiHandlerMain(void) : CDuiHandler()
 	m_pDlg = NULL;
 	m_uTimerAni = 0;
 	m_nAniIndex = 0;
+	m_bMouseDownImageNormal = FALSE;
 }
 
 CDuiHandlerMain::~CDuiHandlerMain(void)
@@ -61,7 +62,7 @@ void CDuiHandlerMain::OnInit()
 	if(pNativeWnd)
 	{
 		CEdit* pEdit = new CEdit;
-		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_AUTOVSCROLL;
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_WANTRETURN | ES_AUTOVSCROLL;
 		pEdit->Create(dwStyle, CRect(0,0,0,0), pNativeWnd->GetPaintWnd(), 1111);
 		pNativeWnd->SetNativeWnd(pEdit);
 
@@ -79,18 +80,51 @@ void CDuiHandlerMain::OnInit()
 		pNativeWnd->SetNativeWnd(pWndList);*/
 	}
 
+	// 演示列表控件通过API设置指定的行处于可见范围
+	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_1"));
+	if(pListCtrl)
+	{
+		pListCtrl->EnsureVisible(10, TRUE);
+	}
+
 	// 演示表格控件通过API增加子控件
 	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
 	if(pGridCtrl)
 	{
-		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
+		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(_T("linkbtn"), NULL, NULL);
 		if(pControl)
 		{
-			pControl->SetName(L"grid1_updateinfo_link");
-			pControl->SetPosStr(L"100, 3, -10, 25");
-			pControl->SetTitle(L"更新内容");
-			pControl->SetLink(L"http://www.blueantstudio.net");
+			pControl->SetName(_T("grid1_updateinfo_link"));
+			pControl->SetPosStr(_T("100, 3, -10, 25"));
+			pControl->SetTitle(_T("更新内容"));
+			pControl->SetLink(_T("http://www.blueantstudio.net"));
 			pGridCtrl->AddSubItemControl(1, 0, pControl);
+		}
+	}
+
+	// 演示通过API添加gridctrl行
+	if(pGridCtrl)
+	{
+		for(int i=0; i<10; i++)
+		{
+			CString strId;
+			strId.Format(_T("id_%d"), i);
+			int nRow = pGridCtrl->InsertRow(-1,	// 插入的行序号,-1表示添加到最后
+				strId,							// 行id字符串
+				-1,								// 行左侧图片(索引图片方式,无索引图片填-1)
+				Color(0, 0, 0, 0),				// 行文字颜色,全0表示默认(不使用行文字颜色,使用表格全局颜色)
+				_T("skins\\icon\\scriptnet.png"),	// 行左侧的图片文件
+				-1,								// 行右侧图片(索引图片方式,无索引图片填-1)
+				_T(""),							// 行右侧的图片文件
+				(i % 2));						// 行左侧的检查框状态(-1表示不显示检查框)
+			CString strText;
+			strText.Format(_T("程序名%d"), i);
+			CString strContent;
+			strContent.Format(_T("程序说明%d"), i);
+			pGridCtrl->SetSubItem(nRow, 0, strText, strContent, TRUE);
+			pGridCtrl->SetSubItem(nRow, 1, _T("已装：1.0.0.1"), _T("最新：2.3.0.1"));
+			pGridCtrl->SetSubItem(nRow, 2, _T("11M"));
+			pGridCtrl->SetSubItem(nRow, 3, _T("安装"));
 		}
 	}
 
@@ -98,15 +132,40 @@ void CDuiHandlerMain::OnInit()
 	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
 	if(pTreeCtrl)
 	{
-		HTREEITEM hNode = pTreeCtrl->GetNodeWithId(L"1-0");
-		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(L"linkbtn", NULL, NULL);
+		HTREEITEM hNode = pTreeCtrl->GetNodeById(_T("1-0"));
+		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(_T("linkbtn"), NULL, NULL);
 		if(pControl)
 		{
-			pControl->SetName(L"tree1_updateinfo_link");
-			pControl->SetPosStr(L"10, 5, -10, 25");
-			pControl->SetTitle(L"更新内容");
-			pControl->SetLink(L"http://www.blueantstudio.net");
+			pControl->SetName(_T("tree1_updateinfo_link"));
+			pControl->SetPosStr(_T("10, 5, -10, 25"));
+			pControl->SetTitle(_T("更新内容"));
+			pControl->SetLink(_T("http://www.blueantstudio.net"));
 			pTreeCtrl->AddSubItemControl(hNode, 2, pControl);
+		}
+	}
+
+	// 演示树控件指定某个节点在可见范围内
+	pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
+	if(pTreeCtrl)
+	{
+		HTREEITEM hNode = pTreeCtrl->GetNodeById(_T("2-7-1-1-1"));
+		pTreeCtrl->EnsureVisible(hNode, TRUE);
+	}
+
+	// 演示在div中动态添加子控件(添加到基础控件的编辑框页面)
+	CControlBase* pDiv = (CControlBase*)GetControl(_T("layout-1"));
+	if(pDiv)
+	{
+		CDuiEdit* pControlEdit = static_cast<CDuiEdit*>(DuiSystem::CreateControlByName(_T("edit"), m_pDlg->GetSafeHwnd(), pDiv));
+		if(pControlEdit)
+		{
+			pDiv->AddControl(pControlEdit);
+			pControlEdit->SetName(_T("btnName"));
+			pControlEdit->SetTitle(_T("动态添加的编辑框控件"));
+			pControlEdit->SetPosStr(_T("50,220,250,250"));
+			pControlEdit->OnAttributeSkin(_T("skin:IDB_EDIT"), FALSE);
+			pControlEdit->OnAttributeLeftImage(_T("skin:IDB_COMPUTER"), FALSE);
+			pControlEdit->OnPositionChange();
 		}
 	}
 }
@@ -297,7 +356,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgDelWebTabButton(UINT uID, CString strName, UINT
 	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)(pDlg->GetControl(_T("tabctrl.main")));
 	if(pTabCtrl)
 	{
-		pTabCtrl->DeleteItem(L"tab.activex");
+		pTabCtrl->DeleteItem(_T("tab.activex"));
 	}
 	return TRUE;
 }
@@ -309,7 +368,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgLoadWebTabButton(UINT uID, CString strName, UIN
 	CDuiTabCtrl* pTabCtrl = (CDuiTabCtrl*)(pDlg->GetControl(_T("tabctrl.main")));
 	if(pTabCtrl)
 	{
-		pTabCtrl->LoadTabXml(L"duivision\\tab_ext_web.xml");
+		pTabCtrl->LoadTabXml(_T("duivision\\tab_ext_web.xml"));
 	}
 	return TRUE;
 }
@@ -330,10 +389,10 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT Msg
 	}
 	// 演示如何在菜单加载时候更改菜单项的显示标题、可见性、是否禁用、是否选择等属性
 	// 必须在调用LoadXmlFile之前通过菜单项名字来设置相应菜单项的属性
-	pDuiMenu->SetItemTitle(L"item_login", L"认证--修改Title");
-	pDuiMenu->SetItemCheck(L"item_setup", 0);
-	pDuiMenu->SetItemVisible(L"item_help", FALSE);
-	pDuiMenu->SetItemDisable(L"item_about", TRUE);
+	pDuiMenu->SetItemTitle(_T("item_login"), _T("认证--修改Title"));
+	pDuiMenu->SetItemCheck(_T("item_setup"), 0);
+	pDuiMenu->SetItemVisible(_T("item_help"), FALSE);
+	pDuiMenu->SetItemDisable(_T("item_about"), TRUE);
 	if(pDuiMenu->LoadXmlFile(_T("menu_tray"), pDlg, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);
@@ -362,27 +421,6 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT Msg
 	return TRUE;
 }
 
-// 菜单3消息处理
-LRESULT CDuiHandlerMain::OnDuiMsgMenuButton3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-	CDlgBase* pDlg = GetControlDialog(uID);
-	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_3"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
-	pDuiMenu->SetParent(pButton);
-	CPoint point;
-	CRect rc = pButton->GetRect();
-	point.SetPoint(rc.left, rc.bottom);
-	if(pDlg != NULL)
-	{
-		pDlg->ClientToScreen(&point);
-	}
-	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), pDlg, point, WM_DUI_MENU))
-	{
-		pDuiMenu->ShowWindow(SW_SHOW);
-	}
-	return TRUE;
-}
-
 // 列表控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -394,7 +432,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UINT 
 	{
 		CDlgPopup* pDlgPopup = new CDlgPopup;
 		CRect rc = pListCtrl->GetRect();
-		rc.OffsetRect(50, 30);
+		rc.OffsetRect(50, 20);
 		pDlgPopup->LoadXmlFile(_T("xml:dlg_notice"));
 		CControlBaseFont* pControlTitle = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.title")));
 		if(pControlTitle)
@@ -481,6 +519,36 @@ LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDelBtnClick(UINT uID, CString strName, 
 	return TRUE;
 }
 
+// 拖拽文件到表格控件消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDropFile(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 拖拽消息的wParam表格鼠标位置，lParam表示当前拖拽的文件全路径名
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
+	CPoint* pptDropFile = (CPoint*)wParam;
+	CString* pstrDropFile = (CString*)lParam;
+	// 截取文件名
+	CString strFileName = *pstrDropFile;
+	int nPos = strFileName.ReverseFind(_T('\\'));
+	strFileName.Delete(0, nPos+1);
+	// 在表格中插入一行文件信息
+	if(pGridCtrl)
+	{
+		CString strId = *pstrDropFile;
+		int nRow = pGridCtrl->InsertRow(-1,	// 插入的行序号,-1表示添加到最后
+			strId,							// 行id字符串
+			-1,								// 行左侧图片(索引图片方式,无索引图片填-1)
+			Color(0, 0, 0, 0),				// 行文字颜色,全0表示默认(不使用行文字颜色,使用表格全局颜色)
+			_T("skins\\icon\\NewIcons005.png"),	// 行左侧的图片文件
+			-1,								// 行右侧图片(索引图片方式,无索引图片填-1)
+			_T(""),							// 行右侧的图片文件
+			0);
+		pGridCtrl->SetSubItem(nRow, 0, strFileName, *pstrDropFile, TRUE);
+		pGridCtrl->SetSubItem(nRow, 1, _T("文件"));
+	}
+
+	return TRUE;
+}
+
 // 树控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -522,7 +590,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuOption(UINT uID, CString strName, UINT Msg,
 	}
 
 	// IP地址
-	pDlg->SetControlValue(L"config.server.ip", L"title", L"192.168.1.1");
+	pDlg->SetControlValue(_T("config.server.ip"), _T("title"), _T("192.168.1.1"));
 
 	int nResponse = pDlg->DoModal();
 	DuiSystem::Instance()->RemoveDuiDialog(pDlg);
@@ -539,12 +607,12 @@ LRESULT CDuiHandlerMain::OnDuiMsgOptionDlgOK(UINT uID, CString strName, UINT Msg
 	}
 
 	// IP地址
-	CString strServerAddr = L"";
-	CDuiEdit* pControlIp = static_cast<CDuiEdit*>(pDlg->GetControl(L"config.server.ip"));
+	CString strServerAddr = _T("");
+	CDuiEdit* pControlIp = static_cast<CDuiEdit*>(pDlg->GetControl(_T("config.server.ip")));
 	if(pControlIp)
 	{
 		strServerAddr = pControlIp->GetEditText();
-		if(strServerAddr == L"")
+		if(strServerAddr == _T(""))
 		{
 			// 地址不能为空提示
 			return TRUE;
@@ -562,7 +630,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash1(UINT uID, CString strName, UINT M
 	CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 	if(pFlashCtrl)
 	{
-		pFlashCtrl->Navigate(L"flash/afternoon.swf");
+		pFlashCtrl->Navigate(_T("flash/afternoon.swf"));
 	}
 	return TRUE;
 }
@@ -574,7 +642,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash2(UINT uID, CString strName, UINT M
 	CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 	if(pFlashCtrl)
 	{
-		pFlashCtrl->Navigate(L"flash/morning.swf");
+		pFlashCtrl->Navigate(_T("flash/morning.swf"));
 	}
 	return TRUE;
 }
@@ -586,7 +654,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash3(UINT uID, CString strName, UINT M
 	CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 	if(pFlashCtrl)
 	{
-		pFlashCtrl->Navigate(L"flash/night.swf");
+		pFlashCtrl->Navigate(_T("flash/night.swf"));
 	}
 	return TRUE;
 }
@@ -598,7 +666,118 @@ LRESULT CDuiHandlerMain::OnDuiMsgBtnShowFlash4(UINT uID, CString strName, UINT M
 	CDuiFlashCtrl* pFlashCtrl = (CDuiFlashCtrl*)(pDlg->GetControl(_T("flash_ctrl_1")));
 	if(pFlashCtrl)
 	{
-		pFlashCtrl->Navigate(L"flash/noon.swf");
+		pFlashCtrl->Navigate(_T("flash/noon.swf"));
+	}
+	return TRUE;
+}
+
+// Tab页签关闭按钮消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgTabCtrlClose(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+// image-normal控件的鼠标左键按下消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseLDown(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiPicture* pImgCtrl = (CDuiPicture*)GetControl(_T("image-normal"));
+	if(pImgCtrl == NULL)
+	{
+		return FALSE;
+	}
+
+	m_bMouseDownImageNormal = TRUE;
+	m_ptControlImageNormal = *((CPoint*)lParam);
+
+	return TRUE;
+}
+
+// image-normal控件的鼠标左键放开消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseLUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiPicture* pImgCtrl = (CDuiPicture*)GetControl(_T("image-normal"));
+	if(pImgCtrl == NULL)
+	{
+		return FALSE;
+	}
+
+	m_bMouseDownImageNormal = FALSE;
+
+	return TRUE;
+}
+
+// image-normal控件的鼠标移动消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgImageNormalMouseMove(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	CDuiPicture* pImgCtrl = (CDuiPicture*)GetControl(_T("image-normal"));
+	if(pImgCtrl == NULL)
+	{
+		return FALSE;
+	}
+
+	// 鼠标拖动控件
+	if(m_bMouseDownImageNormal)
+	{
+		CPoint ptNew = *((CPoint*)lParam);	// 当前鼠标位置
+		CControlBase* pParentCtrl = (CControlBase*)(pImgCtrl->GetParent());
+		if(pParentCtrl)
+		{
+			CRect rcParent = pParentCtrl->GetRect();
+			if(!rcParent.PtInRect(ptNew))
+			{
+				// 如果鼠标位置已经不在父控件范围内则退出
+				return FALSE;
+			}
+		}
+
+		// 获取控件的当前位置和鼠标当前位置与上一次位置的差值,将控件当前位置加上鼠标位置的差值
+		CRect rc = pImgCtrl->GetRect();
+		CSize offset = ptNew - m_ptControlImageNormal;
+		rc.OffsetRect(offset);
+		pImgCtrl->SetRect(rc);
+
+		// 刷新鼠标上一次位置的变量
+		m_ptControlImageNormal = *((CPoint*)lParam);
+
+		// 刷新控件
+		pImgCtrl->UpdateControl(true);
+	}
+
+	return TRUE;
+}
+
+// 带表头的表格控件右键放开消息处理,演示表格的右键菜单
+LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlHeaderRButtonUp(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 表格控件某一行,传入参数中wParam表示表格行号,lParam表示列号
+	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_header"));
+	GridItemInfo* pItemInfo = pGridCtrl->GetItemInfo(wParam, lParam);
+	if(pItemInfo)
+	{
+		// 显示右键菜单
+		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		pDuiMenu->SetAutoClose(FALSE);
+		pDuiMenu->SetParent(pGridCtrl);
+		CPoint point;
+		CRect rc = pItemInfo->rcItem;
+		// 计算菜单的显示位置
+		point.SetPoint(rc.left + rc.Width() / 2, rc.bottom);
+
+		CDlgBase* pParentDlg = GetControlDialog(uID);
+
+		// 坐标转换为屏幕坐标
+		pParentDlg->ClientToScreen(&point);
+
+		CString strXmlFile = _T("duivision\\menu_tray.xml");
+		if(pDuiMenu->LoadXmlFile(strXmlFile, pParentDlg, point, WM_DUI_MENU))
+		{
+			CRect rcMenu;
+			pDuiMenu->GetWindowRect(&rcMenu);
+			pDuiMenu->MoveWindow(rcMenu);
+
+			pDuiMenu->ShowWindow(SW_SHOW);
+			pDuiMenu->SetAutoClose(TRUE);
+		}
 	}
 	return TRUE;
 }
@@ -645,10 +824,10 @@ LRESULT CDuiHandlerMain::OnDuiMsgInterprocess(UINT uID, CString strName, UINT Ms
 	CString strCmd = pInterMsg->wInfo;
 	if(!strCmd.IsEmpty())
 	{
-		DuiSystem::DuiMessageBox(NULL, L"执行了命令行参数:" + strCmd);
+		DuiSystem::DuiMessageBox(NULL, _T("执行了命令行参数:") + strCmd);
 	}else
 	{
-		CDlgBase* pDlg = DuiSystem::Instance()->GetDuiDialog(L"dlg_main");
+		CDlgBase* pDlg = DuiSystem::Instance()->GetDuiDialog(_T("dlg_main"));
 		if(pDlg)
 		{
 			pDlg->SetForegroundWindow();

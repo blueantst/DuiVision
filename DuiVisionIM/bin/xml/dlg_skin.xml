@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- skin dailog -->
+<popup bkmode="image" framesize="4" bkimg="skin:IDB_SKIN_BKG" >
+	<imgbtn name="skin.button.customize" pos="193,10" width="24" height="24" skin="IDB_BT_SKIN_CUSTOMIZE" />
+	<img name="skin.pic.select" pos="4,8" width="40" height="30" skin="IDB_SKIN_PUSHED_BKG" />
+	<imgbtn name="skin.button.image" pos="3,7" width="40" height="30" skin="IDB_BT_SKIN_IMAGE" />
+	<imgbtn name="skin.button.color" pos="43,7" width="40" height="30" skin="IDB_BT_SKIN_COLOR" />
+	
+	<selectbox name="skin.box.color" pos="9,45" width="205" height="127" image="0" col="12" row="7" show="0">
+		<item color="254, 126, 0, 0" />
+		<item color="254, 132, 74, 0" />
+		<item color="254, 116, 103, 0" />
+		<item color="254, 72, 106, 0" />
+		<item color="254, 0, 92, 86" />
+		<item color="254, 11, 75, 108" />
+		<item color="254, 0, 49, 88" />
+		<item color="254, 1, 0, 76" />
+		<item color="254, 47, 0, 74" />
+		<item color="254, 80, 0, 64" />
+		<item color="254, 112, 1, 53" />
+		<item color="254, 32, 32, 32" />
+		
+		<item color="254, 150, 0, 0" />
+		<item color="254, 150, 84, 0" />
+		<item color="254, 150, 137, 0" />
+		<item color="254, 77, 118, 0" />
+		<item color="254, 0, 104, 97" />
+		<item color="254, 0, 85, 130" />
+		<item color="254, 0, 60, 116" />
+		<item color="254, 0, 46, 116" />
+		<item color="254, 68, 0, 65" />
+		<item color="254, 102, 1, 63" />
+		<item color="254, 164, 0, 46" />
+		<item color="254, 53, 53, 53" />
+		
+		<item color="254, 178, 0, 0" />
+		<item color="254, 172, 105, 0" />
+		<item color="254, 194, 182, 1" />
+		<item color="254, 106, 148, 15" />
+		<item color="254, 0, 130, 122" />
+		<item color="254, 0, 116, 170" />
+		<item color="254, 0, 75, 134" />
+		<item color="254, 0, 52, 132" />
+		<item color="254, 83, 0, 122" />
+		<item color="254, 136, 0, 86" />
+		<item color="254, 190, 0, 53" />
+		<item color="254, 79, 79, 79" />
+		
+		<item color="254, 230, 0, 5" />
+		<item color="254, 232, 145, 7" />
+		<item color="254, 220, 207, 0" />
+		<item color="254, 124, 173, 20" />
+		<item color="254, 0, 156, 143" />
+		<item color="254, 0, 134, 184" />
+		<item color="254, 51, 103, 190" />
+		<item color="254, 0, 70, 158" />
+		<item color="254, 91, 0, 134" />
+		<item color="254, 169, 30, 99" />
+		<item color="254, 230, 0, 70" />
+		<item color="254, 110, 110, 110" />
+		
+		<item color="254, 216, 68, 43" />
+		<item color="254, 244, 149, 0" />
+		<item color="254, 240, 225, 0" />
+		<item color="254, 142, 194, 31" />
+		<item color="254, 0, 172, 157" />
+		<item color="254, 1, 156, 228" />
+		<item color="254, 68, 137, 201" />
+		<item color="254, 74, 106, 197" />
+		<item color="254, 123, 49, 166" />
+		<item color="254, 215, 12, 113" />
+		<item color="254, 235, 102, 115" />
+		<item color="254, 143, 143, 143" />
+		
+		<item color="254, 236, 105, 65" />
+		<item color="254, 255, 175, 49" />
+		<item color="254, 255, 240, 83" />
+		<item color="254, 179, 202, 101" />
+		<item color="254, 7, 194, 183" />
+		<item color="254, 1, 184, 244" />
+		<item color="254, 101, 150, 232" />
+		<item color="254, 107, 128, 196" />
+		<item color="254, 137, 87, 160" />
+		<item color="254, 232, 95, 150" />
+		<item color="254, 245, 128, 136" />
+		<item color="254, 172, 172, 172" />
+		
+		<item color="254, 242, 155, 117" />
+		<item color="254, 249, 198, 138" />
+		<item color="254, 255, 245, 143" />
+		<item color="254, 202, 225, 152" />
+		<item color="254, 133, 204, 200" />
+		<item color="254, 125, 203, 244" />
+		<item color="254, 137, 171, 218" />
+		<item color="254, 141, 151, 202" />
+		<item color="254, 169, 137, 188" />
+		<item color="254, 241, 158, 187" />
+		<item color="254, 241, 156, 156" />
+		<item color="254, 198, 198, 198" />
+	</selectbox>
+	
+	<selectbox name="skin.box.image" pos="9,45" width="205" height="127" image="1" col="3" row="3"
+		crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
+		<item image="bkimg\SKIN_PIC_0.png" />
+		<item image="bkimg\SKIN_PIC_1.png" />
+		<item image="bkimg\SKIN_PIC_2.png" />
+		<item image="bkimg\SKIN_PIC_3.png" />
+		<item image="bkimg\SKIN_PIC_4.png" />
+		<item image="bkimg\SKIN_PIC_5.png" />
+		<item image="bkimg\SKIN_PIC_6.png" />
+		<item image="bkimg\SKIN_PIC_7.png" />
+		<item image="bkimg\SKIN_PIC_8.png" />
+	</selectbox>
+</popup>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<dlg name="dlg_about" title="MsgBox" width="450" height="230" appwin="1" resize="1"
+	translucent="245" frame="" bkimg="skin:SKIN_PIC_4" crbk="000000"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1"/>
+		<text name="title" crtext="FFFFFF" crmark="800000" font="big"
+				pos="10,5,200,25" title="关于[APP_NAME]" mask="[APP_NAME]" response="0" show="1" />
+	</base>
+
+	<body>
+		<area name="area-1" pos="0,0,-0,40" begin-transparent="100" end-transparent="30" />
+		<area name="area-2" pos="0,40,-0,-0" begin-transparent="30" end-transparent="30" />
+		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+		
+		<img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="normal" framesize="0" response="0" show="1" />
+		
+		<text crtext="000000" pos="170,45,-25,65" title="[APP_NAME] [APP_VER]" />
+		<text crtext="000000" pos="170,65,-25,85" title="2014-2016" />
+		
+		<linkbtn name="linkbtn1" crtext="800000"
+			pos="170,100,-25,120" show="1" title="http://www.blueantstudio.net" href="http://www.blueantstudio.net" />
+		<linkbtn name="linkbtn1" crtext="800000"
+			pos="170,120,-25,140" show="1" title="https://github.com/blueantst/DuiVision" href="https://github.com/blueantst/DuiVision" />
+	
+		<button name="button.ok" skin="IDB_BT_DEFAULT" title="[OK]"	pos="-100,-30,-20,-6" show="1" />
+
+	</body>
+  
+</dlg>

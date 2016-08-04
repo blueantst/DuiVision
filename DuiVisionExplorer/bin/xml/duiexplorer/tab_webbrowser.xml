@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabctrl>
+	<tab pos="0,25,-0,-0" >
+		<webbrowser show="1"
+			delaycreate="true"
+			url=""
+			pos="1,1,-1,-1"
+			show-contextmenu="1"
+			duimsg="invoke" >
+		</webbrowser>
+	</tab>
+</tabctrl>

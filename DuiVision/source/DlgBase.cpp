@@ -36,10 +36,14 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_bTracking = false;
 	m_bIsSetCapture = false;
 	m_clrBK = RGB(186, 226, 239);
+	m_crlBackTransParent = RGB(255, 255, 255);
 	m_bDrawImage = FALSE;
+	m_bImageUseECM = false;
 
 	m_bIsLButtonDown = FALSE;
 	m_bIsLButtonDblClk = FALSE;
+	m_bIsRButtonDown = FALSE;
+	m_bIsRButtonDblClk = FALSE;
 	m_pOldMemBK = NULL;
 	m_pControl = NULL;
 	m_pFocusControl = NULL;
@@ -52,6 +56,13 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_nFrameWRB = 0;
 	m_nFrameHRB = 0;
 
+	m_pImageShadow = NULL;
+	m_nShadowWLT = 0;
+	m_nShadowHLT = 0;
+	m_nShadowWRB = 0;
+	m_nShadowHRB = 0;
+	m_nShadowSize = 0;
+
 	m_uTimerAnimation = 0;
 	m_uTimerAutoClose = 0;
 
@@ -62,6 +73,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 	m_strBkImg = _T("");
 	m_crlBack = RGB(0,0,0);
 	m_nBackTranslucent = 255;	// 背景透明度,255表示不透明,1表示全透明
+	m_bTopMost = false;
 
 	m_nTooltipCtrlID = 0;
 
@@ -77,7 +89,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 			DuiSystem::Instance()->LoadIconFile(strTrayIcon, m_hIcon);
 		}else	// 加载图标资源
 		{
-			UINT nResourceID = _wtoi(strTrayIcon);
+			UINT nResourceID = _ttoi(strTrayIcon);
 			LoadIconFromIDResource(nResourceID, m_hIcon);
 		}
 	}
@@ -142,7 +154,16 @@ CDlgBase::~CDlgBase()
 			delete pControlBase;
 		}		
 	}
+
+	if(m_pImageShadow != NULL)
+	{
+		delete m_pImageShadow;
+		m_pImageShadow = NULL;
+	}
 }
+
+// 图片属性的实现
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDlgBase, Shadow, 1)
 
 BEGIN_MESSAGE_MAP(CDlgBase, CDialog)
 	ON_WM_PAINT()
@@ -167,6 +188,9 @@ BEGIN_MESSAGE_MAP(CDlgBase, CDialog)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	ON_WM_RBUTTONDBLCLK()
 	ON_WM_DROPFILES()
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_USER_CLOSEWND, OnUserCloseWindow)
@@ -270,15 +294,22 @@ BOOL CDlgBase::OnInitDialog()
 	tmpFont.GetLogFont(&font);
 
 	CWindowDC dc(this);
-	wcscpy(font.lfFaceName,DuiSystem::GetDefaultFont());
+	_tcscpy(font.lfFaceName,DuiSystem::GetDefaultFont());
 	font.lfHeight = -10 * GetDeviceCaps(dc.m_hDC, LOGPIXELSY) / 72;
 	font.lfWeight = 600;
 
 	m_TitleFont.CreateFontIndirect(&font);
 
-	::SetWindowPos(m_hWnd, NULL, 0, 0, m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
+	if(m_bTopMost)
+	{
+		// 窗口显示在桌面的最前面
+		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0,0,m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
+	}else
+	{
+		::SetWindowPos(m_hWnd, NULL, 0, 0, m_MinSize.cx, m_MinSize.cy, SWP_HIDEWINDOW | SWP_NOMOVE);
+	}
 	
-	CRect	rc;
+	CRect rc;
 	GetClientRect(rc);
 
 	// 使用XML节点初始化窗口基础控件和普通控件
@@ -303,43 +334,36 @@ BOOL CDlgBase::OnInitDialog()
 	if(!m_bAppWin)
 	{
 		// 不是主窗口(在任务栏不会显示出此窗口),则设置TOOLWINDOWS属性
-		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
+		//::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
+		// 解决NotifyMsg窗口在任务栏显示的问题,需要去掉APPWINDOW属性,再增加TOOLWINDOW属性
+		ModifyStyleEx(WS_EX_APPWINDOW, WS_EX_TOOLWINDOW);
 	}
 
-	//加载背景图
-	if(!m_strBkImg.IsEmpty())	// 如果窗口设置了背景图片属性，就用此背景图片
-	{
-		// 通过Skin读取
-		CString strBkSkin = _T("");
-		if(m_strBkImg.Find(_T("skin:")) == 0)
-		{
-			strBkSkin = DuiSystem::Instance()->GetSkin(m_strBkImg);
-		}else
-		{
-			strBkSkin = m_strBkImg;
-		}
+	// 设置窗口背景透明属性
+	//HWND hWnd = GetSafeHwnd();
+	//SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_TRANSPARENT);
 
-		if(strBkSkin.Find(_T(".")) != -1)	// 加载图片文件
-		{
-			CString strImgFile = strBkSkin;
-			LoadBackgroundImage(strImgFile);
-		}else	// 加载图片资源
-		{
-			UINT nResourceID = _wtoi(strBkSkin);
-			LoadBackgroundImage(nResourceID, TEXT("PNG"));
-		}
-	}else
-	if(m_crlBack != RGB(0,0,0))	// 如果窗口设置了背景颜色属性，就用此背景颜色
-	{
-		DrawBackground(m_crlBack);
-	}else
-	{
-		// 调用DuiSystem获取背景信息并更新
-		InitWindowBkSkin();
-	}
+	// 加载背景皮肤
+	InitWindowBkSkin();
 
 	CenterWindow();
 	ShowWindow(SW_SHOW);
+
+	// 显示窗口阴影
+	if(m_pImageShadow != NULL)	// 九宫格方式的图片阴影
+	{
+		CWndShadow::Initialize(AfxGetInstanceHandle()); 
+		m_Shadow.Create(GetSafeHwnd());
+		m_Shadow.SetShadowImage(m_pImageShadow, m_nShadowWLT, m_nShadowHLT, m_nShadowWRB, m_nShadowHRB);
+		m_Shadow.SetPosition(0, 0);
+	}else
+	if(m_nShadowSize > 0)	// 算法阴影
+	{
+		CWndShadow::Initialize(AfxGetInstanceHandle()); 
+		m_Shadow.Create(GetSafeHwnd());
+		m_Shadow.SetSize(m_nShadowSize);
+		m_Shadow.SetPosition(0, 0);
+	}
 
 	//启动定时器
 	m_uTimerAnimation = CTimer::SetTimer(30);
@@ -372,7 +396,7 @@ void CDlgBase::InitBaseUI(CRect rcClient, DuiXmlNode pNode)
 				if(pControl)
 				{
 					pControl->Load(pControlElem);
-					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CFrame::GetClassName()))
+					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CDuiFrame::GetClassName()))
 					{
 						// Area和Frame不能响应鼠标,必须加到Area列表中
 						m_vecBaseArea.push_back(pControl);
@@ -424,7 +448,7 @@ void CDlgBase::InitUI(CRect rcClient, DuiXmlNode pNode)
 				if(pControl)
 				{
 					pControl->Load(pControlElem);
-					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CFrame::GetClassName()))
+					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CDuiFrame::GetClassName()))
 					{
 						// Area和Frame不能响应鼠标,必须加到Area列表中
 						m_vecArea.push_back(pControl);
@@ -463,14 +487,14 @@ void CDlgBase::InitDialogValue()
 		{
 			if(pCtrlValue->strType == _T("width"))
 			{
-				m_MinSize.cx = _wtoi(pCtrlValue->strValue);
+				m_MinSize.cx = _ttoi(pCtrlValue->strValue);
 				// 更新窗口大小
 				SetMinSize(m_MinSize.cx, m_MinSize.cy);
 				SetRect(CRect(0, 0, m_MinSize.cx, m_MinSize.cy));
 			}else
 			if(pCtrlValue->strType == _T("height"))
 			{
-				m_MinSize.cy = _wtoi(pCtrlValue->strValue);
+				m_MinSize.cy = _ttoi(pCtrlValue->strValue);
 				// 更新窗口大小
 				SetMinSize(m_MinSize.cx, m_MinSize.cy);
 				SetRect(CRect(0, 0, m_MinSize.cx, m_MinSize.cy));
@@ -502,11 +526,11 @@ void CDlgBase::InitControlValue()
 		{
 			if(pCtrlValue->strType == _T("visible"))
 			{
-				pControl->SetVisible(_wtoi(pCtrlValue->strValue));
+				pControl->SetVisible(_ttoi(pCtrlValue->strValue));
 			}else
 			if(pCtrlValue->strType == _T("disable"))
 			{
-				pControl->SetDisable(_wtoi(pCtrlValue->strValue));
+				pControl->SetDisable(_ttoi(pCtrlValue->strValue));
 			}else
 			if(pCtrlValue->strType == _T("title"))
 			{
@@ -518,7 +542,21 @@ void CDlgBase::InitControlValue()
 			}else
 			if(pCtrlValue->strType == _T("check"))
 			{
-				((CCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+				if(pControl->IsClass(CCheckButton::GetClassName()))
+				{
+					((CCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+				}else
+				if(pControl->IsClass(CDuiRadioButton::GetClassName()))
+				{
+					((CDuiRadioButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+				}
+			}else
+			if(pCtrlValue->strType == _T("value"))
+			{
+				if(pControl->IsClass(CDuiComboBox::GetClassName()))
+				{
+					((CDuiComboBox*)pControl)->SetComboValue(pCtrlValue->strValue);
+				}
 			}
 		}
 	}
@@ -730,7 +768,7 @@ void CDlgBase::SetFocusControl(CControlBase* pFocusControl)
 // 获取当前焦点控件
 CControlBase* CDlgBase::GetFocusControl()
 {
-	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	/*for (int i = m_vecControl.size()-1; i >= 0; i--)
 	{
 		CControlBase* pControlBase = m_vecControl.at(i);
 		if (pControlBase && pControlBase->GetVisible() && !pControlBase->GetDisable() && (pControlBase == m_pFocusControl) && pControlBase->IsTabStop())
@@ -748,7 +786,8 @@ CControlBase* CDlgBase::GetFocusControl()
 		}
 	}
 
-	return NULL;
+	return NULL;*/
+	return m_pFocusControl;
 }
 
 // 获取上一个可以获取焦点的子控件
@@ -874,7 +913,7 @@ HRESULT CDlgBase::OnAttributeResize(const CString& strValue, BOOL bLoading)
     if (strValue.IsEmpty()) return E_FAIL;
 
 	// 获取resize属性，并重新设置一下窗口风格
-	m_bChangeSize = _wtoi(strValue);
+	m_bChangeSize = _ttoi(strValue);
 
 	// 设置窗口风格
 	DWORD dwStyle = ::GetWindowLong(m_hWnd, GWL_STYLE)
@@ -893,21 +932,46 @@ HRESULT CDlgBase::OnAttributeResize(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-// 初始化窗口背景皮肤
+// 初始化窗口背景皮肤(加载到背景内存dc)
 void CDlgBase::InitWindowBkSkin()
 {
-	// 如果窗口设置了特殊的背景,则不用全局的背景
-	if(!m_strBkImg.IsEmpty() || (m_crlBack != RGB(0,0,0)))
-	{
-		return;
-	}
-
-	// 调用DuiSystem获取背景信息
 	int nType = 0;
 	int nIDResource = 0;
 	COLORREF clr = RGB(0,0,0);
 	CString strImgFile = _T("");
-	BOOL bRet = DuiSystem::Instance()->GetWindowBkInfo(nType, nIDResource, clr, strImgFile);
+
+	BOOL bRet = TRUE;
+	if(!m_strBkImg.IsEmpty())	// 如果窗口设置了背景图片属性，就用此背景图片
+	{
+		// 通过Skin读取
+		if(m_strBkImg.Find(_T("skin:")) == 0)
+		{
+			strImgFile = DuiSystem::Instance()->GetSkin(m_strBkImg);
+		}else
+		{
+			strImgFile = m_strBkImg;
+		}
+
+		if(strImgFile.Find(_T(".")) != -1)	// 加载图片文件
+		{
+			nType = BKTYPE_IMAGE_FILE;
+		}else	// 加载图片资源
+		{
+			nIDResource = _ttoi(strImgFile);
+			nType = BKTYPE_IMAGE_RESOURCE;
+		}
+	}else
+	if(m_crlBack != RGB(0,0,0))	// 如果窗口设置了背景颜色属性，就用此背景颜色
+	{
+		nType = BKTYPE_COLOR;
+		clr = m_crlBack;
+	}else
+	{
+		// 调用DuiSystem从应用程序获取背景信息
+		bRet = DuiSystem::Instance()->GetWindowBkInfo(nType, nIDResource, clr, strImgFile);
+	}
+
+	// 设置窗口背景皮肤
 	if(bRet && !((nType == BKTYPE_IMAGE_RESOURCE) && (nIDResource == 0)))
 	{
 		if(nType == BKTYPE_IMAGE_RESOURCE)	// 图片资源
@@ -925,7 +989,7 @@ void CDlgBase::InitWindowBkSkin()
 	}else
 	{
 		// 默认加载第一张背景图片
-		CString strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
+		strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
 		LoadBackgroundImage(strImgFile);
 	}
 }
@@ -933,25 +997,44 @@ void CDlgBase::InitWindowBkSkin()
 // 拖拽图片更新窗口背景图片
 void CDlgBase::OnDropFiles(HDROP hDropInfo)
 {
+	CPoint ptDrop;
+	BOOL bQueryPoint = (DragQueryPoint(hDropInfo, &ptDrop) && m_pControl);
+
 	TCHAR szFileName[MAX_PATH + 1] = {0};
 	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, NULL, 0);
 	for(UINT i = 0; i < nFiles; i++)
-	{		
+	{
 		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
 		if(PathIsDirectory(szFileName))
 		{
 			continue;
-		}	
+		}
 		CString strFileName = szFileName;
-		strFileName = strFileName.Right(3);
-		if (0 == strFileName.CompareNoCase(TEXT("bmp")) || 0 == strFileName.CompareNoCase(TEXT("jpg")) || 0 == strFileName.CompareNoCase(TEXT("png")))
+
+		CString strEnableDragFile = DuiSystem::Instance()->GetConfig(_T("enableDragFile"));
+		//strEnableDragFile不可能=0
+		if(strEnableDragFile != _T("2"))	//只允许背景
 		{
-			LoadBackgroundImage(szFileName);
-			// 保存背景信息
-			DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), szFileName);
-			// 刷新所有窗口的背景皮肤
-			DuiSystem::Instance()->ResetAllWindowsBkSkin();
-			break;
+			// 如果当前控件可以处理拖拽文件的事件,则不需要其他的处理
+			if(bQueryPoint && m_pControl->OnControlDropFile(ptDrop, strFileName))
+			{
+				continue;
+			}
+		}
+
+		if(strEnableDragFile != _T("1"))
+		{
+			// 当前控件未处理此事件,则获取文件后缀,如果文件后缀是图片则更改背景
+			strFileName = strFileName.Right(3);
+			if (0 == strFileName.CompareNoCase(TEXT("bmp")) || 0 == strFileName.CompareNoCase(TEXT("jpg")) || 0 == strFileName.CompareNoCase(TEXT("png")))
+			{
+				LoadBackgroundImage(szFileName);
+				// 保存背景信息
+				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), szFileName);
+				// 刷新所有窗口的背景皮肤
+				DuiSystem::Instance()->ResetAllWindowsBkSkin();
+				break;
+			}
 		}
 	}
 	// CDialog::OnDropFiles(hDropInfo);
@@ -1033,7 +1116,9 @@ void CDlgBase::DrawBackground(CBitmap &bitBackground)
 		CBitmap* pOldBitmap = TempDC.SelectObject(&bitBackground);
 
 		// 画出平均图片
-		m_MemBKDC.FillSolidRect(0, 0, nWidth, nHeight, m_clrBK); 		
+		m_MemBKDC.FillSolidRect(0, 0, nWidth, nHeight, m_clrBK);
+		// 设置文字的背景透明
+		//m_MemBKDC.SetBkMode(TRANSPARENT);
 
 		if(m_nOverRegioX > 0 && m_nOverRegioY > 0)
 		{
@@ -1085,7 +1170,7 @@ void CDlgBase::DrawBackground(CBitmap &bitBackground)
 	}
 }
 
-// 画背景图片
+// 画背景颜色
 void CDlgBase::DrawBackground(COLORREF clr)
 {
 	m_clrBK = clr;
@@ -1129,17 +1214,21 @@ void CDlgBase::OnPaint()
  		CRect rcUpdate;
 		GetUpdateRect(&rcUpdate);
 
-		CRect	rcClient;
+		CRect rcClient;
  		GetClientRect(&rcClient);
 
 		CPaintDC dc(this);
+		// 创建内存dc
 		CDC MemDC;
 		MemDC.CreateCompatibleDC(&dc);
 		CBitmap memBmp;
 		memBmp.CreateCompatibleBitmap(&dc, rcClient.Width(), rcClient.Height());
 		CBitmap *pOldmap =  MemDC.SelectObject(&memBmp);
 
-		DrawImageStyle(MemDC, rcClient, rcUpdate);
+		// 画背景和控件到内存dc
+		DrawBackgroundAndControls(MemDC, rcClient, rcUpdate);
+
+		// 内存dc输出到窗口dc
 		dc.BitBlt(rcUpdate.left, rcUpdate.top, rcUpdate.Width(), rcUpdate.Height(), &MemDC, rcUpdate.left, rcUpdate.top, SRCCOPY);
 
 		MemDC.SelectObject(pOldmap);
@@ -1148,14 +1237,15 @@ void CDlgBase::OnPaint()
 	}
 }
 
-// 画背景和控件
-void CDlgBase::DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpdate)
+// 画窗口背景和控件
+void CDlgBase::DrawBackgroundAndControls(CDC &dc, const CRect &rcClient, const CRect &rcUpdate)
 {
+	// 没有指定背景,则填充背景颜色为背景图片的平均色,当背景图片不够大时起到渐变色的效果
 	dc.FillSolidRect(rcUpdate.left, rcUpdate.top, rcUpdate.Width(), rcUpdate.Height(), m_clrBK);
 
+	// 如果指定了背景,已经生成了背景的内存dc,则画背景,从背景内存dc输出到当前dc(背景dc的大小可能小于当前dc)
 	if(m_bDrawImage)
 	{
-		// 背景
 		CRect rcBk(1, 1, 1 + m_sizeBKImage.cx, 1 + m_sizeBKImage.cy);
 		rcBk = rcBk & rcUpdate;
 		if(!rcBk.IsRectEmpty())
@@ -1164,7 +1254,7 @@ void CDlgBase::DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpd
 		}	
 	}
 
-	// 控件
+	// 画控件
 	DrawControl(dc, rcUpdate);
 }
 
@@ -1211,7 +1301,7 @@ void CDlgBase::ResetControl()
 }
 
 // 移动控件
-CControlBase * CDlgBase::SetControlRect(UINT uControlID, CRect rc)
+CControlBase* CDlgBase::SetControlRect(UINT uControlID, CRect rc)
 {
 	CControlBase *pControlBase = GetControl(uControlID);
 	if(pControlBase)
@@ -1223,7 +1313,7 @@ CControlBase * CDlgBase::SetControlRect(UINT uControlID, CRect rc)
 }
 
 // 移动控件
-CControlBase * CDlgBase::SetControlRect(CControlBase *pControlBase, CRect rc)
+CControlBase* CDlgBase::SetControlRect(CControlBase *pControlBase, CRect rc)
 {
 	if(pControlBase)
 	{
@@ -1234,7 +1324,7 @@ CControlBase * CDlgBase::SetControlRect(CControlBase *pControlBase, CRect rc)
 }
 
 // 显示控件
-CControlBase * CDlgBase::SetControlVisible(UINT uControlID, BOOL bVisible)
+CControlBase* CDlgBase::SetControlVisible(UINT uControlID, BOOL bVisible)
 {
 	CControlBase *pControlBase = GetControl(uControlID);
 	if(pControlBase)
@@ -1246,7 +1336,7 @@ CControlBase * CDlgBase::SetControlVisible(UINT uControlID, BOOL bVisible)
 }
 
 // 显示控件
-CControlBase * CDlgBase::SetControlVisible(CControlBase *pControlBase, BOOL bVisible)
+CControlBase* CDlgBase::SetControlVisible(CControlBase *pControlBase, BOOL bVisible)
 {
 	if(pControlBase)
 	{
@@ -1257,7 +1347,7 @@ CControlBase * CDlgBase::SetControlVisible(CControlBase *pControlBase, BOOL bVis
 }
 
 // 禁用控件
-CControlBase * CDlgBase::SetControlDisable(UINT uControlID, BOOL bDisable)
+CControlBase* CDlgBase::SetControlDisable(UINT uControlID, BOOL bDisable)
 {
 	CControlBase *pControlBase = GetControl(uControlID);
 	if(pControlBase)
@@ -1269,7 +1359,7 @@ CControlBase * CDlgBase::SetControlDisable(UINT uControlID, BOOL bDisable)
 }
 
 // 禁用控件
-CControlBase * CDlgBase::SetControlDisable(CControlBase *pControlBase, BOOL bDisable)
+CControlBase* CDlgBase::SetControlDisable(CControlBase *pControlBase, BOOL bDisable)
 {
 	if(pControlBase)
 	{
@@ -1279,7 +1369,7 @@ CControlBase * CDlgBase::SetControlDisable(CControlBase *pControlBase, BOOL bDis
 	return pControlBase;
 }
 
-// 更新选中
+// 更新鼠标所在区域
 void CDlgBase::UpdateHover()
 {
 	CPoint point;
@@ -1287,11 +1377,12 @@ void CDlgBase::UpdateHover()
 	OnMouseMove(0, point);
 }
 
+// 画控件
 void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 {
 	for (size_t i = 0; i < m_vecArea.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecArea.at(i);
+		CControlBase* pControlBase = m_vecArea.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);
@@ -1300,7 +1391,7 @@ void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 
 	for (size_t i = 0; i < m_vecBaseArea.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecBaseArea.at(i);
+		CControlBase* pControlBase = m_vecBaseArea.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);
@@ -1309,7 +1400,7 @@ void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecControl.at(i);
+		CControlBase* pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);			
@@ -1318,7 +1409,7 @@ void CDlgBase::DrawControl(CDC &dc, const CRect &rcUpdate)
 
 	for (size_t i = 0; i < m_vecBaseControl.size(); i++)
 	{
-		CControlBase * pControlBase = m_vecBaseControl.at(i);
+		CControlBase* pControlBase = m_vecBaseControl.at(i);
 		if (pControlBase)
 		{
 			pControlBase->Draw(dc, rcUpdate);			
@@ -1392,7 +1483,8 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 	if (!IsIconic())	// 非最小化状态
 	{
 		BOOL bIsMaximize = IsZoomed();
-		int border_offset[] = {/*3, 2, */1};
+		// 设置圆角矩形和鼠标拖动区域宽度
+		int border_offset[] = {3, 2, 1};
 		if (bIsMaximize)
 		{				
 			SetupRegion(border_offset, 0);
@@ -1400,9 +1492,12 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 		}
 		else
 		{
-			SetupRegion(border_offset, 1/*3*/);
+			SetupRegion(border_offset, 0);	// 暂不设置圆角矩形
 			m_nFrameLeftRightSpace = m_nFrameTopBottomSpace = 3;	// 设置可以鼠标拖动改变窗口大小的区域宽度
-		}	
+		}
+
+		// 设置窗口背景透明度或透明颜色
+		SetupBackTranslucent();
 
 		// 主窗口的透明渐变层蒙板在九宫格模式或非最大化情况下才会可见
 		CControlBase *pControlBase = GetBaseControl(FRAME_MAINWND);
@@ -1419,49 +1514,71 @@ void CDlgBase::OnSize(UINT nType, int cx, int cy)
 	OnSize(rc);
 
 	// 调整各个控件的位置
-	// 基础AREA的大小设置
-	for (size_t i = 0; i < m_vecBaseArea.size(); i++)
+	if (!IsIconic())	// 非最小化状态
 	{
-		CControlBase * pControlBase = m_vecBaseArea.at(i);
-		if (pControlBase)
+		// 基础AREA的大小设置
+		for (size_t i = 0; i < m_vecBaseArea.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecBaseArea.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
-	}
-	// 基础控件的大小设置
-	for (size_t i = 0; i < m_vecBaseControl.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecBaseControl.at(i);
-		if (pControlBase)
+		// 基础控件的大小设置
+		for (size_t i = 0; i < m_vecBaseControl.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecBaseControl.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
-	}
 
-	// 用户AREA的大小设置
-	for (size_t i = 0; i < m_vecArea.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecArea.at(i);
-		if (pControlBase)
+		// 用户AREA的大小设置
+		for (size_t i = 0; i < m_vecArea.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecArea.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
-	}
-	// 用户控件的大小设置
-	for (size_t i = 0; i < m_vecControl.size(); i++)
-	{
-		CControlBase * pControlBase = m_vecControl.at(i);
-		if (pControlBase)
+		// 用户控件的大小设置
+		for (size_t i = 0; i < m_vecControl.size(); i++)
 		{
-			pControlBase->OnPositionChange();
-			UpdateHover();
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase)
+			{
+				pControlBase->OnPositionChange();
+				UpdateHover();
+			}
 		}
 	}
 
 	InvalidateRect(NULL);
+}
+
+// 设置窗口背景透明度或背景透明颜色
+void CDlgBase::SetupBackTranslucent()
+{
+	if(m_nBackTranslucent != 255)
+	{
+		// 设置背景透明度
+ 		HWND hWnd = GetSafeHwnd();
+ 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
+		SetLayeredWindowAttributes(0, m_nBackTranslucent, LWA_ALPHA);
+	}else
+	if(m_crlBackTransParent != RGB(255,255,255))
+	{
+		// 设置背景透明的颜色
+		HWND hWnd = GetSafeHwnd();
+ 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
+ 		SetLayeredWindowAttributes(m_crlBackTransParent, 255, LWA_COLORKEY );
+	}
 }
 
 // 设置窗口区域
@@ -1473,6 +1590,7 @@ void CDlgBase::SetupRegion(int border_offset[], int nSize)
 	GetWindowRect(rc);
 	rc.OffsetRect(-rc.left, -rc.top);
 
+	// 通过区域裁剪的方式画窗口的圆角矩形,nSize表示圆角矩形的半径
 	CRgn	rgn;
 	rgn.CreateRectRgn(0, 0, rc.Width(), rc.Height());
 	CRgn	rgn_xor;
@@ -1508,15 +1626,6 @@ void CDlgBase::SetupRegion(int border_offset[], int nSize)
 		rgn_xor.CreateRectRgn(rc.right - border_offset[y], rc.bottom - y - 1, rc.right,rc.bottom -  y);
 		rgn.CombineRgn(&rgn, &rgn_xor, RGN_XOR);
 		rgn_xor.DeleteObject();
-	}
-
-	// 设置背景透明度
-	if(m_nBackTranslucent != 255)
-	{
- 		HWND hWnd = GetSafeHwnd();
- 		SetWindowLong(hWnd,GWL_EXSTYLE,GetWindowLong(hWnd,GWL_EXSTYLE) | WS_EX_LAYERED);
-		SetLayeredWindowAttributes(0, m_nBackTranslucent, LWA_ALPHA);
- 		//SetLayeredWindowAttributes(RGB(255, 0, 255), 0, LWA_COLORKEY );
 	}
 
 	SetWindowRgn((HRGN)rgn, TRUE);
@@ -1674,8 +1783,8 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 {
 	if(MSG_CLOSE == wParam)
 	{
-	}
-	else if(MSG_SKIN == wParam)
+	}else
+	if(MSG_SKIN == wParam)
 	{
 		// 选择了背景皮肤
 		SelectInfo *pSelectInfo = (SelectInfo *)lParam;
@@ -1690,11 +1799,13 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_COLOR, 0, crlBack, _T(""));
 				// 刷新所有窗口的背景皮肤
 				DuiSystem::Instance()->ResetAllWindowsBkSkin();
-			}
-			else if(pSelectInfo->nType == BKTYPE_IMAGE_RESOURCE)
+			}else
+			if(pSelectInfo->nType == BKTYPE_IMAGE_RESOURCE)
 			{
-				CString strImgFile;
-				strImgFile.Format(_T("%s\\SKIN_PIC_%d.png"), _T("bkimg"), pSelectInfo->uIndex);
+				// 获取背景图片文件名,并加载
+				CString strBkSkin;
+				strBkSkin.Format(_T("SKIN_PIC_%d"), pSelectInfo->uIndex);
+				CString strImgFile = DuiSystem::Instance()->GetSkin(strBkSkin);
 				LoadBackgroundImage(strImgFile);
 				// 保存背景信息
 				DuiSystem::Instance()->SetWindowBkInfo(BKTYPE_IMAGE_FILE, 0, RGB(0,0,0), strImgFile);
@@ -1702,8 +1813,8 @@ LRESULT CDlgBase::OnMessageSkin(WPARAM wParam, LPARAM lParam)
 				DuiSystem::Instance()->ResetAllWindowsBkSkin();
 			}
 		}
-	}
-	else if(MSG_SELECT_SKIN == wParam)
+	}else
+	if(MSG_SELECT_SKIN == wParam)
 	{
 		// 选择皮肤文件
  		CFileDialog DlgFile(TRUE,NULL,NULL, OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY ,
@@ -1770,6 +1881,7 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 				SetForegroundWindow();
 				ShowWindow(SW_NORMAL);
 				ShowWindow(SW_SHOW);
+				UpdateWindow();
 				BringWindowToTop();
 			}
 		}
@@ -1807,12 +1919,20 @@ LRESULT CDlgBase::OnSystemTrayIcon(WPARAM wParam, LPARAM lParam)
 					// 计算菜单的位置并显示
 					CRect rc;
 					pDuiMenu->GetWindowRect(&rc);
+					int nMenuWidth = rc.Width();
 					rc.OffsetRect(0, -rc.Height());
 					// 如果超出屏幕右侧范围,则菜单窗口往左移动一些
-					int nScreenWidth= GetSystemMetrics(SM_CXFULLSCREEN);
+					// 注:SM_CXSCREEN表示整个屏幕的宽度,SM_CXFULLSCREEN表示显示屏幕的宽度,不包括任务栏部分
+					int nScreenWidth= GetSystemMetrics(SM_CXSCREEN);
 					if(rc.right > nScreenWidth)
 					{
-						rc.OffsetRect(nScreenWidth - rc.right -10, 0);
+						rc.OffsetRect(-nMenuWidth, 0);	// 移动到当前菜单左侧
+					}
+					// 如果菜单顶部小于屏幕顶部,则菜单顶部改为屏幕顶部位置
+					//int nScreenHeight= GetSystemMetrics(SM_CYSCREEN);
+					if(rc.top < 0)
+					{
+						rc.OffsetRect(0, 10 - rc.top);
 					}
 					pDuiMenu->MoveWindow(rc);
 					pDuiMenu->ShowWindow(SW_SHOW);
@@ -1983,7 +2103,7 @@ void CDlgBase::PreSubclassWindow()
 {
 	// 判断是否允许拖拽图片文件作为窗口背景
 	CString strEnableDragFile = DuiSystem::Instance()->GetConfig(_T("enableDragFile"));
-	if(strEnableDragFile == _T("1"))
+	if(strEnableDragFile != _T("0"))
 	{
 		DragAcceptFiles(TRUE);
 	}
@@ -1992,7 +2112,7 @@ void CDlgBase::PreSubclassWindow()
 }
 
 // 设置当前的Tooltip
-void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth)
+void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth, int nTipWidth)
 {
 	m_wndToolTip.DelTool(this, 1);
 	m_wndToolTip.Activate(FALSE);
@@ -2002,6 +2122,11 @@ void CDlgBase::SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect
 		if(bControlWidth)
 		{
 			m_wndToolTip.SetMaxTipWidth(pControl->GetRect().Width());
+		}else
+		if(nTipWidth > 0)
+		{
+			// 指定tooltip的宽度
+			m_wndToolTip.SetMaxTipWidth(nTipWidth);
 		}
 		m_wndToolTip.AddTool(this, strTooltip, rect, 1);//Tooltip默认都用1作为ID, pControl->GetID());
 		m_wndToolTip.Activate(TRUE);
@@ -2188,26 +2313,13 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 	BOOL bIsSelect = false;
 	m_bIsLButtonDblClk = FALSE;
 
-	if(m_pFocusControl != m_pControl && m_pFocusControl != NULL)
+	// 如果鼠标点击的不是原来的焦点控件,则清除原来的焦点控件
+	if((m_pFocusControl != m_pControl) && (m_pFocusControl != NULL))
 	{
-		m_pFocusControl->OnFocus(false);
-		m_pFocusControl = NULL;
+		SetFocusControl(NULL);
 	}
-	/*// 切换焦点控件
-	CControlBase* pFocusControl = GetFocusControl();
-	if(pFocusControl != m_pFocusControl)
-	{
-		if(m_pFocusControl != NULL)
-		{
-			m_pFocusControl->OnFocus(FALSE);
-		}
-		if(pFocusControl != NULL)
-		{
-			pFocusControl->OnFocus(TRUE);
-		}
-		m_pFocusControl = pFocusControl;
-	}*/
 
+	BOOL bHandled = FALSE;
 	if (m_pControl)
 	{
 		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
@@ -2218,7 +2330,7 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 				m_bIsLButtonDown = TRUE;
 
 				m_pFocusControl = m_pControl;
-				m_pControl->OnLButtonDown(nFlags, point);						
+				bHandled = m_pControl->OnLButtonDown(nFlags, point);						
 			}
 		}
 	}
@@ -2232,8 +2344,11 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 
-	// 窗口拖动消息
-	PostMessage(WM_NCLBUTTONDOWN,HTCAPTION,MAKELPARAM(point.x, point.y));
+	if(!bHandled)
+	{
+		// 窗口拖动消息
+		PostMessage(WM_NCLBUTTONDOWN,HTCAPTION,MAKELPARAM(point.x, point.y));
+	}
 
 	CDialog::OnLButtonDown(nFlags, point);
 }
@@ -2295,7 +2410,108 @@ void CDlgBase::OnLButtonDblClk(UINT nFlags, CPoint point)
 		}
 	}
 
+	// 判断是否存在窗口标题区域控件
+	CControlBase* pCaptionControl = GetBaseControl(NAME_AREA_CAPTION);
+	if(pCaptionControl == NULL)
+	{
+		pCaptionControl = GetBaseControl(AREA_CAPTION);
+	}
+	if(pCaptionControl)
+	{
+		// 如果找到窗口标题区域控件,并且鼠标在此控件范围内,则发送非客户区双击事件,触发窗口的最大化和恢复
+		CRect rcCaption = pCaptionControl->GetRect();
+		if(rcCaption.PtInRect(point))
+		{
+			PostMessage(WM_NCLBUTTONDBLCLK,HTCAPTION,MAKELPARAM(point.x, point.y));
+		}
+	}
+
 	CDialog::OnLButtonDblClk(nFlags, point);
+}
+
+// 鼠标右键按下
+void CDlgBase::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	BOOL bIsSelect = false;
+	m_bIsRButtonDblClk = FALSE;
+
+	// 如果鼠标点击的不是原来的焦点控件,则清除原来的焦点控件
+	if((m_pFocusControl != m_pControl) && (m_pFocusControl != NULL))
+	{
+		SetFocusControl(NULL);
+	}
+
+	BOOL bHandled = FALSE;
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			if (m_pControl->PtInRect(point) && m_pControl->OnCheckMouseResponse(nFlags, point))
+			{
+				bIsSelect = TRUE;
+				m_bIsRButtonDown = TRUE;
+
+				m_pFocusControl = m_pControl;
+				bHandled = m_pControl->OnRButtonDown(nFlags, point);						
+			}
+		}
+	}
+
+	CDialog::OnRButtonDown(nFlags, point);
+}
+
+// 鼠标右键放开
+void CDlgBase::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	m_bIsRButtonDown = FALSE;
+
+	if (m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnRButtonUp(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}	
+	}
+
+	m_bIsRButtonDblClk = FALSE;
+
+	CDialog::OnRButtonUp(nFlags, point);
+}
+
+// 鼠标右键双击
+void CDlgBase::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_bIsRButtonDblClk = TRUE;
+
+	if(m_pControl)
+	{
+		if(m_pControl->GetVisible() && m_pControl->GetRresponse())
+		{
+			CRect rc = m_pControl->GetRect();
+			m_pControl->OnRButtonDblClk(nFlags, point);				
+
+			if (!rc.PtInRect(point))
+			{
+				m_pControl = NULL;
+			}
+		}
+		else
+		{
+			m_pControl = NULL;
+		}
+	}
+
+	CDialog::OnRButtonDblClk(nFlags, point);
 }
 
 // 键盘事件处理(移到PreTranslateMessage中实现子控件的键盘事件调用,因为对话框的OnKeyDown函数有局限性,不能捕获到ALT等组合键)
@@ -2325,15 +2541,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 			CControlBase* pNextControl = GetNextFocusableControl();
 			if(pNextControl != pFocusControl)
 			{
-				if(pFocusControl != NULL)
-				{
-					pFocusControl->OnFocus(FALSE);
-				}
-				if(pNextControl != NULL)
-				{
-					pNextControl->OnFocus(TRUE);
-				}
-				m_pFocusControl = pNextControl;
+				SetFocusControl(pNextControl);
 				return TRUE;
 			}
 		}else
@@ -2343,15 +2551,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 			CControlBase* pPrevControl = GetPrevFocusableControl();
 			if(pPrevControl != pFocusControl)
 			{
-				if(pFocusControl != NULL)
-				{
-					pFocusControl->OnFocus(FALSE);
-				}
-				if(pPrevControl != NULL)
-				{
-					pPrevControl->OnFocus(TRUE);
-				}
-				m_pFocusControl = pPrevControl;
+				SetFocusControl(pPrevControl);
 				return TRUE;
 			}
 		}
@@ -2392,6 +2592,24 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 			return TRUE;
 		}
 	}else
+	/*if ( pMsg->message == WM_CHAR)
+	{
+		//DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"WM_CHAR:%d,%d", pMsg->wParam, pMsg->lParam);
+		//CControlBase* pFocusControl = GetFocusControl();
+		//if(pFocusControl && (pFocusControl->GetNativeHWnd() != NULL))
+		//{
+		//	::SendMessage(pFocusControl->GetNativeHWnd(), WM_CHAR, pMsg->wParam, pMsg->lParam);
+		//}
+		// 用户控件
+		for (size_t i = 0; i < m_vecControl.size(); i++)
+		{
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase && (pControlBase->GetNativeHWnd() != NULL))
+			{
+				::SendMessage(pControlBase->GetNativeHWnd(), WM_CHAR, pMsg->wParam, pMsg->lParam);
+			}	
+		}
+	}else*/
 	if ( pMsg->message == WM_MOUSEMOVE ||
 		 pMsg->message == WM_LBUTTONDOWN ||
 		 pMsg->message == WM_LBUTTONUP )
@@ -2402,7 +2620,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 	return CDialog::PreTranslateMessage(pMsg);
 }
 
-// 定时器消息
+// 定时器消息(重载CTimer类的函数)
 void CDlgBase::OnTimer(UINT uTimerID)
 {
 	if(m_uTimerAnimation == uTimerID)	// 动画定时器
@@ -2439,7 +2657,7 @@ void CDlgBase::OnTimer(UINT uTimerID)
 	}
 }
 
-// 定时器消息(带定时器名字的定时函数)
+// 定时器消息(带定时器名字的定时函数,重载CTimer类的函数)
 void CDlgBase::OnTimer(UINT uTimerID, CString strTimerName)
 {
 	// 应用创建的定时器都调用事件处理对象的定时处理函数
@@ -2623,14 +2841,17 @@ LRESULT CDlgBase::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 }
 
 // 打开弹出对话框
-void CDlgBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID)
+void CDlgBase::OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID, BOOL bShow)
 {
 	ASSERT(pWndPopup);
 	CloseDlgPopup();
 	ClientToScreen(&rc);
 	m_pWndPopup = pWndPopup;
 	m_pWndPopup->Create(this, rc, uMessageID);
-	m_pWndPopup->ShowWindow(SW_SHOW);
+	if(bShow)
+	{
+		m_pWndPopup->ShowWindow(SW_SHOW);
+	}
 }
 
 // 关闭弹出对话框
@@ -2638,10 +2859,9 @@ void CDlgBase::CloseDlgPopup()
 {
 	if(m_pWndPopup)
 	{
- 		if(m_pFocusControl && m_pControl != m_pFocusControl)
+ 		if(m_pFocusControl && (m_pControl != m_pFocusControl))
  		{
- 			m_pFocusControl->OnFocus(false);
- 			m_pFocusControl = NULL;
+ 			SetFocusControl(NULL);
  		}
 		if(IsWindow(m_pWndPopup->GetSafeHwnd()))
 		{

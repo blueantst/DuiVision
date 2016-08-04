@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "DuiSystem.h"
+#include <tchar.h>
 
 template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
@@ -12,7 +13,6 @@ static GdiplusStartupInput gdiplusStartupInput;
 
 DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CString strStyle)
     :m_hInst(hInst), m_uAppID(uAppID)
-	//,m_funCreateTextServices(NULL)
 {
 	g_pIns = this;
 	m_dwLangID = dwLangID;
@@ -20,7 +20,6 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 	{
 		g_nIDTemplate = nIDTemplate;
 	}
-	m_bLogEnable = FALSE;
 	m_pNotifyMsgBox = NULL;
 	m_strCurStyle = strStyle;
 	if(strResourceFile.IsEmpty())
@@ -48,8 +47,8 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("CoInitialize failed"));
 	}
 
-	//m_rich20=LoadLibrary(_T("riched20.dll"));
-	//if(m_rich20) m_funCreateTextServices= (PCreateTextServices)GetProcAddress(m_rich20,"CreateTextServices");
+	// 加载控件库
+	LoadDuiControls();
 }
 
 DuiSystem::~DuiSystem(void)
@@ -96,12 +95,23 @@ DuiSystem::~DuiSystem(void)
 
 	//if(m_rich20) FreeLibrary(m_rich20);
 	//m_funCreateTextServices=NULL;
+	// 释放richedit库
+	CDuiRichEdit::ReleaseTextService();
 
 	// 释放COM库
 	CoUninitialize();
 
+	// 释放控件库
+	ReleaseDuiControls();
+
 	// 必须最后调用此函数关闭GDI+，否则会导致关闭GDI+之后还调用GDI+的函数，造成异常
 	destroySingletons();
+}
+
+// 判断单例是否已经创建
+BOOL DuiSystem::HaveInstance()
+{
+	return (g_pIns != NULL);
 }
 
 // 创建单例
@@ -227,7 +237,7 @@ CString DuiSystem::GetExePath()
 	TCHAR szdrive[_MAX_DRIVE];
 	TCHAR szdir[_MAX_DIR];
 	::GetModuleFileName(NULL, szFullPath, MAX_PATH);
-	_wsplitpath(szFullPath, szdrive, szdir, NULL, NULL);
+	_tsplitpath(szFullPath, szdrive, szdir, NULL, NULL);
 
 	CString szPath;
 	szPath.Format(_T("%s%s"), szdrive, szdir);
@@ -327,12 +337,12 @@ BOOL DuiSystem::LoadResource()
 	{
 		strResFile = m_strResourceFile;
 		strResFile.Delete(0, 4);
-		UINT nID = _wtoi(strResFile);	// res:后面的表示资源ID
+		UINT nID = _ttoi(strResFile);	// res:后面的表示资源ID
 		if(nID != 0)
 		{
 			// 读取资源
 			HINSTANCE hInst = AfxGetResourceHandle();  
-			HRSRC hRsrc = ::FindResource (hInst,MAKEINTRESOURCE(nID), L"UI");
+			HRSRC hRsrc = ::FindResource (hInst,MAKEINTRESOURCE(nID), _T("UI"));
 			if(hRsrc != NULL)
 			{
 				DWORD dwResFileSize = SizeofResource(hInst, hRsrc);  
@@ -361,6 +371,9 @@ BOOL DuiSystem::LoadResource()
 			m_strResourceFile = _T("xml\\resource.xml");
 			strResFile = m_strResourceFile;
 		}
+	}else
+	{
+		strResFile = m_strResourceFile;
 	}
 	
 	return LoadResourceXml(strResFile, m_strCurStyle);
@@ -495,28 +508,28 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 					CString strLang = pResElem.attribute(_T("lang")).value();
 					CString strName = pResElem.attribute(_T("name")).value();
 					CString strFont = pResElem.attribute(_T("font")).value();
-					int nFontWidth = _wtoi(pResElem.attribute(_T("size")).value());
+					int nFontWidth = _ttoi(pResElem.attribute(_T("size")).value());
 					CString strOS = pResElem.attribute(_T("os")).value();
 					CString strBold = pResElem.attribute(_T("bold")).value();
 					BOOL bBold = FALSE;
 					if(pResElem.attribute(_T("bold")).value())
 					{
-						bBold = (wcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
+						bBold = (_tcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
 					}
 					BOOL bItalic = FALSE;
 					if(pResElem.attribute(_T("italic")).value())
 					{
-						bItalic = (wcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
+						bItalic = (_tcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
 					}
 					BOOL bUnderline = FALSE;
 					if(pResElem.attribute(_T("underline")).value())
 					{
-						bUnderline = (wcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
+						bUnderline = (_tcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
 					}
 					BOOL bStrikeout = FALSE;
 					if(pResElem.attribute(_T("strikeout")).value())
 					{
-						bStrikeout = (wcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
+						bStrikeout = (_tcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
 					}
 					FontStyle fontStyle = FontStyleRegular;
 					if(bBold)
@@ -709,7 +722,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 				//delete[] pByte;
 			}else
 			{
-				DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"DuiSystem::LoadXmlFile %s failed, not found xml in zip file", strXmlFile);
+				DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("DuiSystem::LoadXmlFile %s failed, not found xml in zip file"), strXmlFile);
 				return FALSE;
 			}
 		}
@@ -729,7 +742,7 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 		}else
 		{
 			// 文件不存在
-			DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"DuiSystem::LoadXmlFile %s failed, not found xml file", strXmlFile);
+			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("DuiSystem::LoadXmlFile %s failed, not found xml file"), strXmlFile);
 			return FALSE;
 		}
 	}
@@ -885,11 +898,93 @@ BOOL DuiSystem::LoadIconFile(CString strFileName, HICON& hIcon)
 	return bRet;
 }
 
+// 加载通用文件到内存,支持从zip文件中加载
+BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
+{
+	BOOL bRet = FALSE;
+	BYTE* pByte = NULL;
+	CString _strFileName = _T("");
+	if(m_hResourceZip != NULL)	// 存在资源zip文件
+	{
+		// 即使有zip文件的情况下,也优先使用目录中的文件
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			_strFileName = DuiSystem::GetSkinPath() + strFileName;
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			_strFileName = strFileName;
+		}else
+		{
+			DWORD dwSize = 0;
+			pByte = LoadZipFile(strFileName, dwSize);
+			if(pByte == NULL)
+			{
+				pByte = LoadZipFile(_T("skins\\") + strFileName, dwSize);	// 尝试从skins子目录加载
+			}
+			if(pByte == NULL)
+			{
+				return FALSE;
+			}
+		}
+	}else
+	{
+		if(GetFileAttributes(DuiSystem::GetSkinPath() + strFileName) != 0xFFFFFFFF)	// 从exe路径开始查找
+		{
+			_strFileName = DuiSystem::GetSkinPath() + strFileName;
+		}else
+		if(GetFileAttributes(strFileName) != 0xFFFFFFFF)	// 绝对路径查找
+		{
+			_strFileName = strFileName;
+		}else
+		{
+			// 文件不存在
+			return FALSE;
+		}
+	}
+
+	// 直接从文件加载
+	if((pByte == NULL) && (!_strFileName.IsEmpty()))
+	{
+		CFile file;
+		// 打开文件
+		if ( !file.Open( _strFileName, CFile::modeRead ) )
+		{
+			return FALSE;
+		}
+		DWORD dwSize = (DWORD)file.GetLength();
+		pByte = new BYTE[dwSize + 1];
+		TRY
+		{
+			file.Read( pByte, dwSize );
+		}
+		CATCH( CFileException, e );                                          
+		{
+			TRACE(_T( "Load (file): An exception occured while reading the file %s\n"), _strFileName);
+			e->Delete();
+			file.Close();
+			delete pByte;
+			return FALSE;
+		}
+		END_CATCH
+
+		file.Close();
+	}
+
+	if(pByte != NULL)
+	{
+		pBuffer = pByte;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 // 加载界面插件动态库
 // 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到exe目录加载
 // 格式2: filename.dll				-- 指定文件名,到exe目录加载
 // 格式3: c:\filename.dll			-- 指定了dll的全路径
-typedef LPVOID (*TYPEOF_CreateObject)(LPCSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData);
+typedef LPVOID (*TYPEOF_CreateObject)(LPCTSTR lpcsInterfaceName, LPVOID* lppVciControl, LPVOID lpInitData);
 BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj)
 {
 	hPluginHandle = NULL;
@@ -923,7 +1018,7 @@ BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANC
 	{
 		// 加载失败
 		DWORD dwError = ::GetLastError();
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Load UI plugin %s failed, errorcode is %u", strPluginFile, dwError);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load UI plugin %s failed, errorcode is %u"), strPluginFile, dwError);
 		return FALSE;
 	}
 
@@ -933,22 +1028,23 @@ BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANC
 	if(fnCreateObject == NULL)
 	{
 		FreeLibrary(hPluginHandle);
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Load UI plugin %s failed, not found CreateObject function", strPluginFile);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load UI plugin %s failed, not found CreateObject function"), strPluginFile);
 		return FALSE;
 	}
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Load UI plugin %s succ", strPluginFile);
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Load UI plugin %s succ"), strPluginFile);
 
 	LPVOID pIVciControl = NULL;
-	pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(strObjType), &pIVciControl, NULL);
+	//pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(strObjType), &pIVciControl, NULL);
+	pPluginObj = fnCreateObject(strObjType, &pIVciControl, NULL);
 	if(pPluginObj == NULL)
 	{
 		FreeLibrary(hPluginHandle);
-		DuiSystem::LogEvent(LOG_LEVEL_ERROR, L"Create UI plugin %s - %s object failed", strPluginFile, strObjType);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Create UI plugin %s - %s object failed"), strPluginFile, strObjType);
 		return FALSE;
 	}
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Create UI plugin %s - %s object succ", strPluginFile, strObjType);
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Create UI plugin %s - %s object succ"), strPluginFile, strObjType);
 
 	return TRUE;
 }
@@ -1042,7 +1138,7 @@ CString DuiSystem::GetOSName()
 		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
 		if (! GetVersionEx( (OSVERSIONINFO *) &osvi) )
 		{
-			return L"";
+			return _T("");
 		}
 	}
 	
@@ -1125,34 +1221,34 @@ CString DuiSystem::GetOSName()
 	switch( nOSType )
 	{
 	case WINDOWS_8:
-		strOSType = L"win8";
+		strOSType = _T("win8");
 		break;
 	case WINDOWS_7:
-		strOSType = L"win7";
+		strOSType = _T("win7");
 		break;
 	case WINDOWS_VISTA:
-		strOSType = L"vista";
+		strOSType = _T("vista");
 		break;
 	case WINDOWS_2003:
-		strOSType = L"win2003";
+		strOSType = _T("win2003");
 		break;
 	case WINDOWS_XP:
-		strOSType = L"winxp";
+		strOSType = _T("winxp");
 		break;
 	case WINDOWS_2K:
-		strOSType = L"win2000";
+		strOSType = _T("win2000");
 		break;
 	case WINDOWS_NT:
-		strOSType = L"winnt";
+		strOSType = _T("winnt");
 		break;
 	case WINDOWS_ME:
-		strOSType = L"winme";
+		strOSType = _T("winme");
 		break;
 	case WINDOWS_98:
-		strOSType = L"win98";
+		strOSType = _T("win98");
 		break;
 	case WINDOWS_95:
-		strOSType = L"win95";
+		strOSType = _T("win95");
 		break;
 	}
 	return strOSType;
@@ -1163,7 +1259,7 @@ BOOL DuiSystem::CheckOSName(CString strOS)
 {
 	CString strCurOSName = GetOSName();
 	int nPos = -1;
-	while((nPos = strOS.Find(L",")) != -1)
+	while((nPos = strOS.Find(_T(","))) != -1)
 	{
 		CString strTemp = strOS.Left(nPos);
 		strOS.Delete(0, nPos+1);
@@ -1281,51 +1377,131 @@ BOOL DuiSystem::SetWindowBkInfo(int nType, int nIDResource, COLORREF clr, CStrin
 	return TRUE;
 }
 
+// 注册控件
+void DuiSystem::RegisterDuiControl(CDuiObjectInfo* pDuiObjectInfo)
+{
+	// 判断如果已经添加过，就不用重复添加
+	for (size_t i = 0; i < m_vecDuiObjectInfo.size(); i++)
+	{
+		CDuiObjectInfo* _pDuiObjectInfo = m_vecDuiObjectInfo.at(i);
+		if (_pDuiObjectInfo == pDuiObjectInfo)
+		{
+			return;
+		}		
+	}
+
+	m_vecDuiObjectInfo.push_back(pDuiObjectInfo);
+}
+
+// 卸载控件,传入的参数为控件名
+BOOL DuiSystem::UnRegisterDuiControl(LPCTSTR lpszName)
+{
+	vector<CDuiObjectInfo*>::iterator it;
+	for(it=m_vecDuiObjectInfo.begin();it!=m_vecDuiObjectInfo.end();++it)
+	{
+		CDuiObjectInfo* pDuiObjectInfo = *it;
+		if(pDuiObjectInfo && pDuiObjectInfo->m_pfGetClassName)
+		{
+			CString strClassName = pDuiObjectInfo->m_pfGetClassName();
+			if(strClassName == lpszName)
+			{
+				m_vecDuiObjectInfo.erase(it);
+				delete pDuiObjectInfo;
+				return TRUE;
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+// 加载控件库
+void DuiSystem::LoadDuiControls()
+{
+	// 注册DuiVision默认的控件
+	REGISTER_DUICONTROL(CDuiPanel, NULL);
+	REGISTER_DUICONTROL(CDuiLayout, NULL);
+	REGISTER_DUICONTROL(CDuiNativeWnd, NULL);
+
+	REGISTER_DUICONTROL(CDuiButton, NULL);
+	REGISTER_DUICONTROL(CImageButton, NULL);
+	REGISTER_DUICONTROL(CCheckButton, NULL);
+	REGISTER_DUICONTROL(CDuiRadioButton, NULL);
+	REGISTER_DUICONTROL(CHideButton, NULL);
+	REGISTER_DUICONTROL(CLinkButton, NULL);
+	REGISTER_DUICONTROL(CTextButton, NULL);
+
+	REGISTER_DUICONTROL(CDuiListCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiGridCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiTreeCtrl, NULL);
+
+	REGISTER_DUICONTROL(CArea, NULL);
+	REGISTER_DUICONTROL(CDuiFrame, NULL);
+	REGISTER_DUICONTROL(CImageString, NULL);
+	REGISTER_DUICONTROL(CRectangle, NULL);
+	REGISTER_DUICONTROL(CDuiAnimateImage, NULL);
+	REGISTER_DUICONTROL(CDuiScrollVertical, NULL);
+	REGISTER_DUICONTROL(CDuiScrollHorizontal, NULL);
+	REGISTER_DUICONTROL(CSelectBox, NULL);
+
+	REGISTER_DUICONTROL(CDuiPicture, NULL);
+
+	REGISTER_DUICONTROL(CDuiProgress, NULL);
+	REGISTER_DUICONTROL(CDuiSlider, NULL);
+
+	REGISTER_DUICONTROL(CDuiTabCtrl, NULL);
+
+	REGISTER_DUICONTROL(CDuiText, NULL);
+
+	REGISTER_DUICONTROL(CMenuItem, NULL);
+
+	REGISTER_DUICONTROL(CDuiEdit, NULL);
+	REGISTER_DUICONTROL(CDuiRichEdit, NULL);
+	REGISTER_DUICONTROL(CDuiComboBox, NULL);
+
+	REGISTER_DUICONTROL(CDuiActiveX, NULL);
+	REGISTER_DUICONTROL(CDuiWebBrowserCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiFlashCtrl, NULL);
+	REGISTER_DUICONTROL(CDuiMediaPlayer, NULL);
+}
+
+// 释放控件库
+void DuiSystem::ReleaseDuiControls()
+{
+	for (size_t i = 0; i < m_vecDuiObjectInfo.size(); i++)
+	{
+		CDuiObjectInfo* pDuiObjectInfo = m_vecDuiObjectInfo.at(i);
+		if (pDuiObjectInfo)
+		{
+			// 执行控件的依赖库释放函数
+			if(pDuiObjectInfo->m_pfShutdown)
+			{
+				pDuiObjectInfo->m_pfShutdown();
+			}
+
+			delete pDuiObjectInfo;
+		}		
+	}
+}
+
 // 根据控件类名创建控件实例
 CControlBase* DuiSystem::CreateControlByName(LPCTSTR lpszName, HWND hWnd, CDuiObject* pParentObject)
 {
 	CControlBase *pControl = NULL;
 
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiPanel);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiNativeWnd);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CImageButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CCheckButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiRadioButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CHideButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CLinkButton);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CTextButton);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiListCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiGridCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiTreeCtrl);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CArea);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CFrame);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CImageString);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CRectangle);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiAnimateImage);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CScrollV);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CSelectBox);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiPicture);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiProgress);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiTabCtrl);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiText);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CMenuItem);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiEdit);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiComboBox);
-
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiActiveX);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiWebBrowserCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiFlashCtrl);
-	CREATE_DUICONTROL_BY_CLASS_NAME(CDuiMediaPlayer);
+	vector<CDuiObjectInfo*>* pvecDuiObjectInfo = DuiSystem::Instance()->GetDuiObjectInfoVect();
+	for (size_t i = 0; i < pvecDuiObjectInfo->size(); i++)
+	{
+		CDuiObjectInfo* pDuiObjectInfo = pvecDuiObjectInfo->at(i);
+		if (pDuiObjectInfo && pDuiObjectInfo->m_pfCheckAndNew)
+		{
+			pControl = (CControlBase*)pDuiObjectInfo->m_pfCheckAndNew(lpszName, hWnd, pParentObject);
+			if(pControl)
+			{
+				return pControl;
+			}
+		}
+	}
 
 	return NULL;
 }
@@ -1713,6 +1889,14 @@ int DuiSystem::ShowDuiDialog(LPCTSTR lpszXmlTemplate, CDuiObject* pParentObject,
 		return 0;
 	}
 
+	// 如果是非模态,则显示窗口之后返回
+	if(!bModule)
+	{
+		pDlg->ShowWindow(SW_SHOW);
+		return 0;
+	}
+
+	// 模态对话框,调用DoModal显示对话框
 	int nResponse = pDlg->DoModal();
 	DuiSystem::Instance()->RemoveDuiDialog(pDlg);
 	return nResponse;
@@ -1928,7 +2112,7 @@ BOOL DuiSystem::ExecuteProcess(CString strProcessName, CString strCmdLine, BOOL 
         sei.hwnd = NULL;
         sei.lpVerb = _T("runas");
         sei.lpFile = strProcessName;
-        sei.lpParameters = (LPWSTR)(LPCWSTR)strCmdLine;
+        sei.lpParameters = (LPCTSTR)strCmdLine;
         sei.nShow = SW_SHOWNORMAL;
 
         bRet = ::ShellExecuteEx(&sei);
@@ -1938,7 +2122,7 @@ BOOL DuiSystem::ExecuteProcess(CString strProcessName, CString strCmdLine, BOOL 
     {
         bRet = ::CreateProcess(
             strProcessName, 
-            (LPWSTR)(LPCWSTR)strCmdLine, 
+            (LPTSTR)(LPCTSTR)strCmdLine, 
             NULL, NULL, FALSE, 0, NULL, NULL, &si, &processInfo
             );
 
@@ -2097,6 +2281,7 @@ public:
 							pDlg->SetForegroundWindow();
 							pDlg->ShowWindow(SW_NORMAL);
 							pDlg->ShowWindow(SW_SHOW);
+							pDlg->UpdateWindow();
 							pDlg->BringWindowToTop();
 						}
 					}
@@ -2340,7 +2525,7 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 	}
 
 	pDlg->SetTrayHandler(pDuiHandler);
-	pDlg->SetTratMenuXml(strMenuXml);
+	pDlg->SetTrayMenuXml(strMenuXml);
 
 	m_NotifyIconData.cbSize = NOTIFYICONDATAA_V1_SIZE;
 	m_NotifyIconData.hWnd = pDlg->m_hWnd;
@@ -2367,7 +2552,7 @@ BOOL DuiSystem::InitTray(CDuiHandler* pDuiHandler, CString strIcon, CString strT
 		DuiSystem::Instance()->LoadIconFile(strTrayIcon, m_NotifyIconData.hIcon);
 	}else	// 加载图标资源
 	{
-		UINT nResourceID = _wtoi(strTrayIcon);
+		UINT nResourceID = _ttoi(strTrayIcon);
 		LoadIconFromIDResource(nResourceID, m_NotifyIconData.hIcon);
 	}
 
@@ -2424,7 +2609,7 @@ BOOL DuiSystem::SetTrayIcon(CString strIcon)
 			DuiSystem::Instance()->LoadIconFile(strIcon, m_NotifyIconData.hIcon);
 		}else	// 加载图标资源
 		{
-			UINT nResourceID = _wtoi(strIcon);
+			UINT nResourceID = _ttoi(strIcon);
 			LoadIconFromIDResource(nResourceID, m_NotifyIconData.hIcon);
 		}
 
@@ -2507,13 +2692,13 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	// 初始化进程间通知消息
 	DUI_INTERPROCESS_MSG interMsg;
 	memset(&interMsg, 0, sizeof(DUI_INTERPROCESS_MSG));
-	wcscpy_s(interMsg.wAppName, strAppName.GetBuffer(0));
+	_tcscpy_s(interMsg.wAppName, strAppName.GetBuffer(0));
 	strAppName.ReleaseBuffer();
 	interMsg.uControlID = APP_IPC;	// 控件ID使用预定义额进程间消息控件ID
 	interMsg.uMsg = uMsg;
 	interMsg.wParam = wParam;
 	interMsg.lParam = lParam;
-	wcscpy_s(interMsg.wInfo, strInfo.GetBuffer(0));
+	_tcscpy_s(interMsg.wInfo, strInfo.GetBuffer(0));
 	strInfo.ReleaseBuffer();
 	memcpy(pViewOfFile, &interMsg, sizeof(DUI_INTERPROCESS_MSG));
 
@@ -2542,130 +2727,45 @@ void DuiSystem::InitLog()
 	{
 		return;
 	}
-	m_strLogFile = GetExePath() + strLogFile;
-	m_nLogLevel = _wtoi(GetConfig(_T("loglevel")));
-	m_bLogEnable = TRUE;
-	InitializeCriticalSection(&m_WriteLogMutex);
+	strLogFile = GetExePath() + strLogFile;
+	int nLogLevel = _ttoi(GetConfig(_T("loglevel")));
+	int nLogFileSize = _ttoi(GetConfig(_T("logFileSize"))) * 1024;	// 单位是K
+	int nLogFileNumber = _ttoi(GetConfig(_T("logFileNumber")));
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"------------------DuiVision Start-------------------");
+	CLogMgr::Instance()->SetLogFile(strLogFile);
+	CLogMgr::Instance()->SetLogLevel(nLogLevel);
+	CLogMgr::Instance()->SetLogFileSize(nLogFileSize);
+	CLogMgr::Instance()->SetLogFileNumber(nLogFileNumber);
+
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision Start-------------------"));
 }
 
 // 结束日志
 void DuiSystem::DoneLog()
 {
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"------------------DuiVision End-------------------");
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision End-------------------"));
+	CLogMgr::Release();
 }
 
 // 记录日志
-void DuiSystem::LogEvent(int nLevel, LPCWSTR lpFormat, ...)
+void DuiSystem::LogEvent(int nLevel, LPCTSTR lpFormat, ...)
 {
-	if(!DuiSystem::Instance()->IsLogEnable())
+	if(!CLogMgr::Instance()->IsLogEnable())
 	{
 		return;
 	}
 
-	if(nLevel < DuiSystem::Instance()->GetLogLevel())
+	if(nLevel < CLogMgr::Instance()->GetLogLevel())
 	{
 		return;
 	}
 
-	EnterCriticalSection(DuiSystem::Instance()->GetLogMutex());
+	EnterCriticalSection(CLogMgr::Instance()->GetLogMutex());
 
-	const int nBufLen = MAX_PATH * 2;
-	WCHAR szBuf[nBufLen];
 	va_list ap;
-
 	va_start(ap, lpFormat);
-	_vsnwprintf(szBuf, nBufLen, lpFormat, ap);
-	szBuf[nBufLen - 1] = 0;
-
-	FILE* lpFile = _tfopen(DuiSystem::Instance()->GetLogFile(), _T("a+"));
-	if ( lpFile != NULL )
-	{
-		// 获取文件大小
-		struct _stat FileBuff;
-		int nResult = -1;
-
-		nResult = _wstat(DuiSystem::Instance()->GetLogFile(), &FileBuff);
-		if (0 != nResult)
-		{
-			LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
-			return;
-		}
-
-		long lSize = FileBuff.st_size;
-
-		// 文件大于设定大小需要进行转储，默认最大1MB
-		if (lSize > MAXLOGFILESIZE)
-		{
-			fclose(lpFile);
-
-			// 删除备份文件
-			_unlink(CEncodingUtil::UnicodeToAnsi(DuiSystem::Instance()->GetLogFile() + _T(".bak")));
-
-			// 重命名文件名为备份文件名
-			rename(CEncodingUtil::UnicodeToAnsi(DuiSystem::Instance()->GetLogFile()), CEncodingUtil::UnicodeToAnsi(DuiSystem::Instance()->GetLogFile() + _T(".bak")));
-
-			// 打开新文件
-			lpFile = _tfopen(DuiSystem::Instance()->GetLogFile(), _T("w+"));//,ccs=UTF-8"));
-			if (lpFile == NULL)
-			{
-				LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
-				return;
-			}
-		}
-
-		SYSTEMTIME st;
-		GetLocalTime(&st);
-
-		CString strLevel;
-		if (nLevel == LOG_LEVEL_DEBUG)
-		{
-			strLevel = __DEBUG;
-		}
-		else if (nLevel == LOG_LEVEL_INFO)
-		{
-			strLevel = __INFO;
-		}
-		else if (nLevel == LOG_LEVEL_ERROR)
-		{
-			strLevel = __ERROR;
-		}
-		else if (nLevel == LOG_LEVEL_CRITICAL)
-		{
-			strLevel = __CRITICAL;
-		}
-		else
-		{
-			strLevel = __DEBUG;
-		}
-
-		LPCTSTR lpStr = _tcschr(lpFormat, _T('\n'));
-		if ( lpStr != NULL )
-		{
-			lpStr = _T("%s %02d-%02d-%02d %02d:%02d:%02d[%u] : %s");
-		}
-		else
-		{
-			lpStr = _T("%s %02d-%02d-%02d %02d:%02d:%02d[%u] : %s\n");
-		}
-
-		DWORD dwCurThreadID = GetCurrentThreadId();
-
-		_ftprintf(lpFile, lpStr, strLevel, st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, dwCurThreadID, szBuf);
-		fclose(lpFile);
-	}
-
+	CLogMgr::Instance()->LogEventArgs(nLevel, lpFormat, ap);
 	va_end(ap);
-
-	LeaveCriticalSection(DuiSystem::Instance()->GetLogMutex());
+	
+	LeaveCriticalSection(CLogMgr::Instance()->GetLogMutex());
 }
-
-
-/*
-HRESULT DuiSystem::CreateTextServices( IUnknown *punkOuter, ITextHost *pITextHost, IUnknown **ppUnk )
-{
-	if(!m_funCreateTextServices) return E_NOTIMPL;
-	return m_funCreateTextServices(punkOuter,pITextHost,ppUnk);
-}
-*/

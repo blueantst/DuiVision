@@ -100,7 +100,7 @@ int CDuiPlugin::ProcessMessage(CVciMessage* pIn, CVciMessage* ppOut)
 
 
 //{{VCI_IMPLEMENT_BEGIN
-int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc)
+int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc, IDuiHostWnd* pIDuiHostWnd)
 {
 	// 调用DuiSystem创建一个Panel控件对象,并加载xml文件
 	TRACE("CDuiPlugin::OnInit, name=%s, rc=%d,%d,%d,%d\n", lpszName, rc.left, rc.top, rc.right, rc.bottom);
@@ -111,23 +111,34 @@ int CDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc)
 
 	// 初始化DUI库
 	DWORD dwLangID = 0;
-	new DuiSystem(NULL, dwLangID, _T(""), 1116, nIDTemplate, _T(""));
+	UINT uAppID = 1116;
+	if(pIDuiHostWnd)
+	{
+		dwLangID = (DWORD)pIDuiHostWnd->GetCurrentLanguage();
+		uAppID = (UINT)pIDuiHostWnd->GetAppID();
+	}
+	new DuiSystem(NULL, dwLangID, _T(""), uAppID, nIDTemplate, _T(""));
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiPlugin::OnInit root path is %s", GetPlugInRootPath());
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiPlugin::OnInit root path is %s"), GetPlugInRootPath());
 
 	// 加载xml
-	m_pDuiPanel = (CDuiPanel*)DuiSystem::CreateControlByName(L"div", hWnd, NULL);
+	m_pDuiPanel = (CDuiPanel*)DuiSystem::CreateControlByName(_T("div"), hWnd, NULL);
 	if(m_pDuiPanel)
 	{
+		// 设置panel控件的宿主窗口功能接口指针
+		m_pDuiPanel->SetIDuiHostWnd(pIDuiHostWnd);
+
 		// 给插件的panel对象注册事件处理对象
 		CDuiHandlerPlugin* pHandler = new CDuiHandlerPlugin();
 		pHandler->SetDuiPanel(m_pDuiPanel);
 		DuiSystem::RegisterHandler(m_pDuiPanel, pHandler);
 		// 加载插件界面文件
-		BOOL bRet = m_pDuiPanel->LoadXmlFile(A2W(lpszName));
+		//BOOL bRet = m_pDuiPanel->LoadXmlFile(A2W(lpszName));
+		BOOL bRet = m_pDuiPanel->LoadXmlFile(lpszName);
 		// 事件处理对象初始化
 		pHandler->OnInit();
-		DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiPlugin::OnInit load %s %s", A2W(lpszName), bRet ? L"succ" : L"fail");
+		//DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiPlugin::OnInit load %s %s"), A2W(lpszName), bRet ? _T("succ") : _T("fail"));
+		DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiPlugin::OnInit load %s %s"), lpszName, bRet ? _T("succ") : _T("fail"));
 	}
 
 	return 0;
@@ -139,7 +150,7 @@ int CDuiPlugin::SetRect(CRect rc)
 	if(m_pDuiPanel)
 	{
 		CString strPos;
-		strPos.Format(L"%d,%d,%d,%d", rc.left, rc.top,rc.right, rc.bottom);
+		strPos.Format(_T("%d,%d,%d,%d"), rc.left, rc.top,rc.right, rc.bottom);
 		m_pDuiPanel->SetPosStr(strPos);
 		m_pDuiPanel->OnPositionChange();
 	}
@@ -191,7 +202,7 @@ int CDuiPlugin::DrawControl(CDC &dc, CRect rcUpdate)
 	return 0;
 }
 
-int CDuiPlugin::OnTimer(UINT uTimerID, LPCSTR lpszTimerName)
+int CDuiPlugin::OnTimer(UINT uTimerID, LPCTSTR lpszTimerName)
 {
 	if(m_pDuiPanel)
 	{
@@ -280,6 +291,42 @@ int CDuiPlugin::OnLButtonDblClk(UINT nFlags, CPoint point)
 	}
 	return 0;
 }
+
+int CDuiPlugin::SetUpdate(BOOL bUpdate, COLORREF clr)
+{
+	if(m_pDuiPanel)
+	{
+		m_pDuiPanel->SetUpdate(bUpdate, clr);
+	}
+	return 0;
+}
+
+int CDuiPlugin::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPanel)
+	{
+		return m_pDuiPanel->OnRButtonDown(nFlags, point);
+	}
+	return 0;
+}
+
+int CDuiPlugin::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPanel)
+	{
+		return m_pDuiPanel->OnRButtonUp(nFlags, point);
+	}
+	return 0;
+}
+
+int CDuiPlugin::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	if(m_pDuiPanel)
+	{
+		return m_pDuiPanel->OnRButtonDblClk(nFlags, point);
+	}
+	return 0;
+}
 //}}VCI_IMPLEMENT_END
 
 //////////////////////////////////////////////////////////////////////////
@@ -298,10 +345,10 @@ LPVOID __stdcall CDuiPlugin::XDuiPlugin::GetExtraInfo(LPVOID lpRefData)
 //}} 注意：!!!这里是保留的重要函数，不可删除!!!
 
 //{{VCI_INTERFACE_IMPLEMENT_BEGIN
-int __stdcall CDuiPlugin::XDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCSTR lpszName, CRect rc)
+int __stdcall CDuiPlugin::XDuiPlugin::OnInit(UINT nIDTemplate, HWND hWnd, LPCTSTR lpszName, CRect rc, IDuiHostWnd* pIDuiHostWnd)
 {
 	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
-	return pObj->OnInit(nIDTemplate, hWnd, lpszName, rc);
+	return pObj->OnInit(nIDTemplate, hWnd, lpszName, rc, pIDuiHostWnd);
 }
 
 int __stdcall CDuiPlugin::XDuiPlugin::SetRect(CRect rc)
@@ -334,7 +381,7 @@ int __stdcall CDuiPlugin::XDuiPlugin::DrawControl(CDC &dc, CRect rcUpdate)
 	return pObj->DrawControl(dc, rcUpdate);
 }
 
-int __stdcall CDuiPlugin::XDuiPlugin::OnTimer(UINT uTimerID, LPCSTR lpszTimerName)
+int __stdcall CDuiPlugin::XDuiPlugin::OnTimer(UINT uTimerID, LPCTSTR lpszTimerName)
 {
 	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
 	return pObj->OnTimer(uTimerID, lpszTimerName);
@@ -392,6 +439,30 @@ int __stdcall CDuiPlugin::XDuiPlugin::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
 	return pObj->OnLButtonDblClk(nFlags, point);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::SetUpdate(BOOL bUpdate, COLORREF clr)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->SetUpdate(bUpdate, clr);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->OnRButtonDown(nFlags, point);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->OnRButtonUp(nFlags, point);
+}
+
+int __stdcall CDuiPlugin::XDuiPlugin::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	CDuiPlugin *pObj = GET_INTERFACE_OBJECT(DuiPlugin);
+	return pObj->OnRButtonDblClk(nFlags, point);
 }
 //}}VCI_INTERFACE_IMPLEMENT_END
 

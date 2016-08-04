@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<div pos="0,75,-0,-0" >
+
+	<tabctrl name="tabctrl.browser" tab-type="vertical" img-sep="skin:IDB_TAB_SEPERATOR--" 
+			img-hover="skin:IDB_TAB_HOVER_V"
+			font="bold" item-height="80" tab-width="105" animate="1"
+			pos="1,1,-1,-1">
+	<!--tabctrl name="tabctrl.browser" tab-type="vertical" img-sep="skin:IDB_TAB_SEPERATOR_V"
+		font="bold" tab-width="0" item-height="0"
+		crtext="800000" crhover="800000" crpush="800000" animate="1"
+		pos="1,1,-1,-1"-->
+		<tab name="tab1" title="IE" image1="skin:IDB_TAB_ITEM" image="skins\icon\browser_ie.png" img-count="1" active="true" pos="105,0,-0,-0">
+			<webbrowser name="ie_ctrl" show="1"
+				delaycreate="true"
+				url="http://www.blueantstudio.net"
+				pos="1,1,-1,-1"
+				show-contextmenu="0"
+				show-scroll="1"
+				duimsg="invoke" >
+			</webbrowser>
+		</tab>
+		
+		<tab name="tab2" title="Wke" image1="skin:IDB_TAB_ITEM" image="skins\icon\browser_wke.png" img-count="1" pos="105,0,-0,-0">
+			<wkeview name="webkit_ctrl" show="1"
+				delaycreate="true"
+				transparent="0"
+				url="http://www.blueantstudio.net/duivision.html"
+				pos="1,1,-1,-1"
+				show-contextmenu="0" >
+			</wkeview>
+		</tab>
+	</tabctrl>
+	
+	<!--flash name="flash_ctrl" show="1"
+		url="skins\flash\noon.swf"
+		pos="1,1,-1,-1" >
+	</flash-->
+
+	<!--tabctrl name="tabctrl.activex" img-sep="skin:IDB_TAB_SEPERATOR"
+		font="bold" item-width="90" tab-height="29" crtext="800000" animate="1"
+		pos="1,1,-1,-31">
+
+	<tab name="tab.activex.web" image="skin:IDB_TAB_ITEM" title="浏览器" active="true" pos="0,30,-0,-0">
+		<activex name="ie_ctrl" show="1"
+			clsid="{8856F961-340A-11D0-A96B-00C04FD705A2}" delaycreate="false"
+			url="http://www.blueantstudio.net"
+			pos="1,1,-1,-1" >
+		</activex>
+	</tab>
+
+	<tab name="tab.activex.flash" image="skin:IDB_TAB_ITEM" title="Flash" pos="0,30,-0,-0">
+		<flash name="flash_ctrl" show="1"
+			url="skins\flash\noon.swf"
+			pos="1,1,-1,-1" >
+		</flash>
+	</tab>
+	
+	<tab name="tab.activex.mediaplayer" image="skin:IDB_TAB_ITEM" title="播放器" pos="0,30,-0,-0">
+		<mediaplayer name="mediaplayer_ctrl" show="1"
+			url="skins\flash\noon.swf"
+			pos="1,1,-1,-1" >
+		</mediaplayer>
+	</tab>
+	
+	</tabctrl-->
+
+</div>

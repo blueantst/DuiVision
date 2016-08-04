@@ -5,8 +5,10 @@
 <res type="cfg" name="defaultStyle" value="" />
 <res type="cfg" name="logfile" value="demoui.log" />
 <res type="cfg" name="loglevel" value="1" />
+<res type="cfg" name="logFileSize" value="1024" />
+<res type="cfg" name="logFileNumber" value="5" />
 <res type="cfg" name="appMutex" value="MUTEX_DUIVISION_DEMO" />
-<res type="cfg" name="enableDragFile" value="1" />
+<res type="cfg" name="enableDragFile" value="3" />
 <res type="cfg" name="trayDbClickMsg" value="0" />
 
 <!--风格设置-->
@@ -22,14 +24,17 @@
 <res type="xml" name="tab_controls" file="xml\duivision\tab_controls.xml" />
 <res type="xml" name="tab_listctrl" file="xml\duivision\tab_listctrl.xml" />
 <res type="xml" name="tab_gridctrl" file="xml\duivision\tab_gridctrl.xml" />
+<res type="xml" name="tab_gridctrl_header" file="xml\duivision\tab_gridctrl_header.xml" />
 <res type="xml" name="tab_treectrl" file="xml\duivision\tab_treectrl.xml" />
-<res type="xml" name="tab_activex" file="xml\duivision\tab_activex.xml" />
+<res type="xml" name="tab_browser" file="xml\duivision\tab_browser.xml" />
 <res type="xml" name="tab_ext" file="xml\duivision\tab_ext.xml"  />
 <res type="xml" name="dlg_about" file="xml\duivision\dlg_about.xml"  />
 <res type="xml" name="dlg_login" file="xml\duivision\dlg_login.xml"  />
 <res type="xml" name="dlg_flashlogin" file="xml\duivision\dlg_flashlogin.xml"  />
 <res type="xml" name="dlg_option" file="xml\duivision\dlg_option.xml"  />
 <res type="xml" name="dlg_notice" file="xml\duivision\dlg_notice.xml"  />
+<res type="xml" name="dlg_ie" file="xml\duivision\dlg_ie.xml"  />
+<res type="xml" name="dlg_wke" file="xml\duivision\dlg_wke.xml"  />
 <res type="xml" name="dlg_skin" file="xml\dlg_skin.xml"  />
 <res type="xml" name="dlg_notifymsg" file="xml\dlg_notifymsg.xml"  />
 <res type="xml" name="dlg_msgbox" file="xml\dlg_msgbox.xml"  />
@@ -50,6 +55,12 @@
 <res type="font" lang="zh-cn" name="big" font="Tahoma" size="12" bold="true" italic="false" underline="false" strikeout="false" os="winxp" />
 <res type="font" lang="zh-cn" name="bigbig" font="微软雅黑" size="18" />
 <res type="font" lang="zh-cn" name="bigbig" font="Tahoma" size="17" os="winxp" />
+<res type="font" lang="zh-cn" name="italic" font="微软雅黑" size="12" bold="false" italic="true" />
+<res type="font" lang="zh-cn" name="italic" font="Tahoma" size="11" bold="false" italic="true" os="winxp" />
+<res type="font" lang="zh-cn" name="underline" font="微软雅黑" size="12" bold="false" underline="true" />
+<res type="font" lang="zh-cn" name="underline" font="Tahoma" size="11" bold="false" underline="true" os="winxp" />
+<res type="font" lang="zh-cn" name="strikeout" font="微软雅黑" size="12" bold="false" strikeout="true" />
+<res type="font" lang="zh-cn" name="strikeout" font="Tahoma" size="11" bold="false" strikeout="true" os="winxp" />
 
 <!--图片资源-默认风格-->
 <res type="img" name="IDB_TRAY_ICON" file="dui.ico" />
@@ -72,12 +83,15 @@
 <res type="img" name="IDB_PROGRESS_GREEN_BACK" file="skins\default\progress_background_icon.png" />
 <res type="img" name="IDB_PROGRESS_GREEN_FORE" file="skins\default\progress_foreground_icon.png" />
 <res type="img" name="IDB_SCROLL_V" file="skins\default\SCROLL_V.png" />
+<res type="img" name="IDB_SCROLL_H" file="skins\default\SCROLL_H.png" />
 <res type="img" name="IDB_BT_SCROLL_UP" file="skins\default\BT_SCROLL_UP.png" />
 <res type="img" name="IDB_BT_SCROLL_DOWN" file="skins\default\BT_SCROLL_DOWN.png" />
 <res type="img" name="IDB_TAB_SEPERATOR" file="skins\default\Tab_seperator.png" />
+<res type="img" name="IDB_TAB_SEPERATOR_V" file="skins\default\Tab_seperator_v.png" />
 <res type="img" name="IDB_TAB_ITEM" file="skins\default\tab.png" />
 <res type="img" name="IDB_TAB_BACK" file="skins\default\tab_background.png" />
 <res type="img" name="IDB_TAB_HOVER" file="skins\default\toolbar_hover.png" />
+<res type="img" name="IDB_TAB_HOVER_V" file="skins\default\toolbar_hover_v.png" />
 <res type="img" name="IDB_LIST_IMG" file="skins\default\list_img.png" />
 <res type="img" name="IDB_MSGDLG_BK" file="skins\default\msgdlg_bk.png" />
 <res type="img" name="IDB_TREE_COLLAPSE" file="skins\default\tree_collapse.png" />
@@ -95,6 +109,11 @@
 <res type="img" name="IDB_COMPUTER" file="skins\simage\computer.png" />
 <res type="img" name="IDB_EDIT_PWD" file="skins\simage\password.png" />
 <res type="img" name="IDB_LINE_RP" file="skins\default\rp_line.png" />
+<res type="img" name="IDB_SPLIT_HORI" file="skins\default\split_hori.png" />
+<res type="img" name="IDB_SPLIT_VERT" file="skins\default\split_vert.png" />
+<res type="img" name="IDB_SPLIT_THUMB_HORI" file="skins\default\split_thumb_hori.jpg" />
+<res type="img" name="IDB_SPLIT_THUMB_VERT" file="skins\default\split_thumb_vert.jpg" />
+<res type="img" name="IDB_TOOLBAR_BG" file="skins\default\toolbar_bg.png" />
 
 <res type="img" name="IDB_MENU_BACK" file="skins\menu\menu_bkg.png" />
 <res type="img" name="IDB_MENU_SEP" file="skins\menu\menu_sep.png" />
@@ -137,8 +156,8 @@
 
 
 <!--字符串资源-->
-<res type="str" lang="zh-cn" name="APP_NAME" value="DUI界面演示程序" />
-<res type="str" lang="zh-cn" name="APP_VER" value="1.0.0.1" />
+<res type="str" lang="zh-cn" name="APP_NAME" value="DuiVision界面演示程序" />
+<res type="str" lang="zh-cn" name="APP_VER" value="2.7.0.1" />
 <res type="str" lang="zh-cn" name="OK" value="确定" />
 <res type="str" lang="zh-cn" name="CANCEL" value="放弃" />
 <res type="str" lang="zh-cn" name="YES" value="是" />

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<dlg name="dlg_login" title="" width="380" height="290" appwin="0" resize="0"
+	frame="" bkimg="" crbk="000000" >
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1" shortcut="ESC" />
+		<imgbtn name="button.setup" pos="-74,0,-46,20" skin="IDB_BT_SETUP" show="1"/>
+		<text name="title" crtext="FFFFFF" crmark="800000" font="big"
+				pos="10,5,200,25" title="Flash背景的登录窗口" mask="" response="0" show="1" />
+	</base>
+
+	<body>
+		
+		<area name="area-1" pos="0,0,-0,140" begin-transparent="100" end-transparent="40" />
+		<area name="area-2" pos="0,140,-0,-0" begin-transparent="40" end-transparent="40" />
+		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+
+		<flash name="flash_ctrl_login" show="1" response="0"
+			transparent="1"
+			url="flash\noon.swf"
+			pos="1,1,-1,-1" >
+		</flash>
+		
+		<img name="image" pos="16,119" width="87" height="87" skin="IDB_LOGIN_USER" mode="normal" framesize="1" show="1" />
+		
+		<edit name="username" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+					pos="120,120" width="170" height="32" title="" tip="请输入用户名"
+					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					font="default" crtext="0,0,0" crtip="128,128,128,128" />
+		
+		<linkbtn name="linkbtn_1" crtext="800000"
+				pos="300,126,-10,145" show="1" title="注册帐号" href="http://www.blueantstudio.net" />
+		
+		<edit name="pwd" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
+					pos="120,159" width="170" height="32" title="" password="1" tip="请输入密码"
+					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					font="default" crtext="0,0,0" crtip="128,128,128,128" />
+		
+		<linkbtn name="linkbtn_2" crtext="800000"
+				pos="300,165,-10,200" show="1" title="找回密码" href="http://www.blueantstudio.net" />
+		
+		<chkbtn name="checkbutton" skin="IDB_CHECK_BOX"
+				pos="120,200" width="100" height="22" show="1" title="记住密码" check="true" />
+		
+		<chkbtn name="checkbutton" skin="IDB_CHECK_BOX"
+				pos="210,200" width="100" height="22" show="1" title="自动登录" check="false" />
+		
+		<!--button name="button.ok" skin="IDB_BT_DEFAULT" title="[LOGIN]"
+				pos="|-130,-45,|130,-10" show="1" shortcut="RETURN" /-->
+		
+		<img pos="0,-49,-0,-0" image="skins\qq\login_foot_bk.png"
+				mode="tile" framesize="0" response="0" />
+		
+		<button name="button.ok" skin="IDB_BT_DEFAULT" title="[LOGIN]"
+				pos="|-100,-45,|100,-10" show="1" shortcut="RETURN" />
+		
+		<button  pos="20,-39" width="24" height="24" img-count="3" image="skins\qq\login_button2.png" />
+		<button  pos="-50,-45" width="38" height="38" img-count="3" image="skins\qq\login_2code_button.png" />
+
+	</body>
+  
+</dlg>

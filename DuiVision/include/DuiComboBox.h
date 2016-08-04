@@ -42,6 +42,8 @@ public:
 	UINT					m_nResourceIDDeleteBitmap;
 	CString					m_strImageHeadBitmap;
 	CString					m_strImageDeleteBitmap;
+	int						m_nListHeight;	// 列表高度
+	CString					m_strImageScroll;	// 定义下拉列表的滚动条图片文件
 	CString					m_strXmlFile;	// 定义下拉列表项的XML文件(可以不需要)
 	CPopupList*				m_pPopupList;	// 保存下拉列表框对象指针
 	vector<ComboListItem>	m_vecItem;		// 下拉列表项列表
@@ -53,8 +55,10 @@ public:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("head-image"), OnAttributeHeadImage)
 		DUI_CUSTOM_ATTRIBUTE(_T("del-image"), OnAttributeDeleteImage)
+		DUI_TSTRING_ATTRIBUTE(_T("img-scroll"), m_strImageScroll, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strComboValue, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("xml"), m_strXmlFile, FALSE)
+		DUI_INT_ATTRIBUTE(_T("list-height"), m_nListHeight, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crdesc"), m_clrDesc, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrHover, FALSE)

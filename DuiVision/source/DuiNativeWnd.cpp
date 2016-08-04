@@ -9,7 +9,6 @@
 CDuiNativeWnd::CDuiNativeWnd(HWND hWnd, CDuiObject* pDuiObject)
 	: CControlBase(hWnd, pDuiObject)
 {
-	m_hNativeWnd = NULL;
 	m_pNativeWnd = NULL;
 	m_bCreated = false;
 	m_bDelayCreate = false;
@@ -20,25 +19,9 @@ CDuiNativeWnd::~CDuiNativeWnd()
     ReleaseControl();
 }
 
-HWND CDuiNativeWnd::GetNativeHWnd() const
-{
-    return m_hNativeWnd;
-}
-
 CWnd* CDuiNativeWnd::GetNativeWnd() const
 {
     return m_pNativeWnd;
-}
-
-// 获取控件的父窗口句柄
-HWND CDuiNativeWnd::GetPaintHWnd()
-{
-	CDlgBase* pDlg = GetParentDialog();
-	if(pDlg)
-	{
-		return pDlg->GetSafeHwnd();
-	}
-    return NULL;
 }
 
 // 获取控件的父窗口对象
@@ -52,30 +35,16 @@ CWnd* CDuiNativeWnd::GetPaintWnd()
     return NULL;
 }
 
-static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
-{
-#define HIMETRIC_PER_INCH   2540
-#define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
-#define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
-    int nPixelsPerInchX;    // Pixels per logical inch along width
-    int nPixelsPerInchY;    // Pixels per logical inch along height
-    HDC hDCScreen = ::GetDC(NULL);
-    nPixelsPerInchX = ::GetDeviceCaps(hDCScreen, LOGPIXELSX);
-    nPixelsPerInchY = ::GetDeviceCaps(hDCScreen, LOGPIXELSY);
-    ::ReleaseDC(NULL, hDCScreen);
-    lpSizeInHiMetric->cx = MAP_PIX_TO_LOGHIM(lpSizeInPix->cx, nPixelsPerInchX);
-    lpSizeInHiMetric->cy = MAP_PIX_TO_LOGHIM(lpSizeInPix->cy, nPixelsPerInchY);
-}
-
 // 设置控件中的Windows原生控件是否可见的状态
 void CDuiNativeWnd::SetControlWndVisible(BOOL bIsVisible)
 {
-	if( m_hNativeWnd != NULL )
+	if( m_hwndHost != NULL )
 	{
-		::ShowWindow(m_hNativeWnd, bIsVisible ? SW_SHOW : SW_HIDE);
+		::ShowWindow(m_hwndHost, bIsVisible ? SW_SHOW : SW_HIDE);
 	}
 }
 
+// 设置控件的位置信息
 void CDuiNativeWnd::SetControlRect(CRect rc) 
 {
 	m_rc = rc;
@@ -85,15 +54,9 @@ void CDuiNativeWnd::SetControlRect(CRect rc)
 		CreateControl();
 	}
 
-    SIZEL hmSize = { 0 };
-    SIZEL pxSize = { 0 };
-    pxSize.cx = m_rc.right - m_rc.left;
-    pxSize.cy = m_rc.bottom - m_rc.top;
-    PixelToHiMetric(&pxSize, &hmSize);
-
-    if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+    if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
-		::MoveWindow(m_hNativeWnd, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
+		::MoveWindow(m_hwndHost, m_rc.left, m_rc.top, m_rc.right - m_rc.left, m_rc.bottom - m_rc.top, TRUE);
     }
 }
 
@@ -109,7 +72,7 @@ HRESULT CDuiNativeWnd::OnAttributeDelayCreate(const CString& strValue, BOOL bLoa
 
 LRESULT CDuiNativeWnd::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
 {
-    if((m_hNativeWnd == NULL) || !::IsWindow(m_hNativeWnd))
+    if((m_hwndHost == NULL) || !::IsWindow(m_hwndHost))
 	{
 		return 0;
 	}
@@ -169,9 +132,9 @@ bool CDuiNativeWnd::SetNativeHWnd(HWND hWnd)
 	}
 
 	ReleaseControl();
-	m_hNativeWnd = hWnd;
+	m_hwndHost = hWnd;
 	bool bRet = false;
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
 		SetControlWndVisible(FALSE);
 		OnAttributePosChange(GetPosStr(), FALSE);
@@ -212,11 +175,11 @@ bool CDuiNativeWnd::CreateControl()
 // 释放原生控件
 void CDuiNativeWnd::ReleaseControl()
 {
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
 	{
-		DestroyWindow(m_hNativeWnd);
+		DestroyWindow(m_hwndHost);
 	}
-    m_hNativeWnd = NULL;
+    m_hwndHost = NULL;
 
 	if(m_pNativeWnd != NULL)
 	{
@@ -225,12 +188,27 @@ void CDuiNativeWnd::ReleaseControl()
 	}
 }
 
+// 键盘事件处理
+BOOL CDuiNativeWnd::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 如果是回车键或ESC键,则转换为字符事件传递给原生控件
+	if(((nChar == VK_RETURN) || (nChar == VK_ESCAPE)) && m_hwndHost && ::IsWindow(m_hwndHost))
+	{
+		if(::SendMessage(m_hwndHost, WM_CHAR, nChar, nFlags))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 // 控件画图函数
 void CDuiNativeWnd::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	if( !::IntersectRect(&rcUpdate, &rcUpdate, &m_rc) ) return;
 
-	if(m_hNativeWnd && ::IsWindow(m_hNativeWnd))
+	if(m_hwndHost && ::IsWindow(m_hwndHost))
     {
 		// 调用原生控件的画图(发送WM_PAINT消息给控件)
 		//m_pWindowWnd->DrawControl(dc, rcUpdate);

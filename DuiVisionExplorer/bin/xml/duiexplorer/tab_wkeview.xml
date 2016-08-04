@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabctrl>
+	<tab pos="0,25,-0,-0" >
+		<wkeview show="1"
+			delaycreate="true"
+			transparent="0"
+			url=""
+			pos="1,1,-1,-1"
+			show-contextmenu="0" >
+		</wkeview>
+	</tab>
+</tabctrl>

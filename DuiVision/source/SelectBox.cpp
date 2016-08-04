@@ -75,6 +75,7 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 			{
 				if(strImage.Find(_T("skin:")) == 0)
 				{
+					strImage = DuiSystem::Instance()->GetSkin(strImage);
 				}
 
 				if(strImage.Find(_T(".")) != -1)	// 加载图片文件
@@ -83,7 +84,7 @@ BOOL CSelectBox::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 					SetBitmap(strImgFile);
 				}else	// 加载图片资源
 				{
-					UINT nResourceID = _wtoi(strImage);
+					UINT nResourceID = _ttoi(strImage);
 					if(!SetBitmap(nResourceID, -1, TEXT("PNG")))
 					{
 						SetBitmap(nResourceID, -1, TEXT("BMP"));

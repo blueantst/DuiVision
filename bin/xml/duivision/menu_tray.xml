@@ -18,7 +18,7 @@
 		check="true" group="menu_radio_group_1"  />
 	<menuitem name="menuitem_radio_2" skin="IDB_RADIO_BUTTON" select="1" title="RadioButton演示2"
 		check="false" group="menu_radio_group_1" />
-	<menuitem name="menuitem.sub" title="子菜单1" width="150" skin="IDB_MENU_AUTH" img-count="3"
+	<menuitem name="menuitem.sub" title="子菜单1" width="150" font="bold" align="center" skin="IDB_MENU_AUTH" img-count="3"
 		bkmode="frame" bkimg="skin:IDB_MENU_BACK" frame-width="3" top-height="0" bottom-height="0" >
 		<menuitem name="360safe" title="360安全卫士" action="dlg:dlg_login" />
 		<menuitem name="360sd" title="360杀毒" action="dlg:dlg_login" />

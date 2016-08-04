@@ -1,4 +1,4 @@
-// Panel控件，此控件是一个控件容器
+// 树控件
 #pragma once
 
 #include "Panel.h"
@@ -51,8 +51,10 @@ struct TreeNodeInfo
 	int		nRightImageIndex;// 右边图片索引
 	Image * pRightImage;	// 右边图片对象
 	CSize	sizeRightImage;	// 右边图片大小
-	BOOL	bRowColor;		// 使用行定义的颜色
+	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
+	BOOL	bRowBackColor;		// 使用行定义的背景颜色
+	Color	clrBack;		// 行背景颜色
 	int		nHoverItem;		// 当前热点列
 	BOOL	bCollapse;		// 是否折叠
 	BOOL	bHide;			// 是否隐藏
@@ -74,7 +76,7 @@ public:
 	HTREEITEM InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
-		int nCheck = -1);
+		int nCheck = -1, Color clrBack = Color(0, 0, 0, 0));
 	HTREEITEM InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo);
 	BOOL SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
@@ -89,21 +91,26 @@ public:
 	int  GetNodeRow(HTREEITEM hNode);
 	int	 GetNodeLastChildRow(HTREEITEM hNode);
 	BOOL HaveChildNode(HTREEITEM hNode);
+	HTREEITEM GetParentNode(HTREEITEM hNode);
 	HTREEITEM GetChildNode(HTREEITEM hNode);
 	HTREEITEM GetNextSiblingNode(HTREEITEM hNode);
 	HTREEITEM GetPrevSiblingNode(HTREEITEM hNode);
+	int  GetChildNodeCount(HTREEITEM hNode);
 	int  GetNodeLevel(HTREEITEM hNode);
-	HTREEITEM GetNodeWithId(CString strId);
+	HTREEITEM GetNodeById(CString strId);
 	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);
 	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
 	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
 	void SetNodeColor(HTREEITEM hNode, Color clrText);
+	void SetNodeBackColor(HTREEITEM hNode, Color clrBack);
 	void ToggleNode(HTREEITEM hNode);
+	void ExpandNode(HTREEITEM hNode, BOOL bExpand);
 	void SetNodeCheck(HTREEITEM hNode, int nCheck);
 	int  GetNodeCheck(HTREEITEM hNode);
 	void ClearNodes();
 	void HideChildNodes(HTREEITEM hItem);
 	void RefreshNodeRows();
+	BOOL EnsureVisible(HTREEITEM hNode, BOOL bPartialOK);
 
 	BOOL PtInRow(CPoint point, TreeNodeInfo& rowInfo);
 	BOOL PtInRowCheck(CPoint point, TreeNodeInfo& rowInfo);
@@ -132,15 +139,15 @@ protected:
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 public:
-	CControlBase*		m_pControBkArea;	// 背景Area
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle			m_fontTitleStyle;	// 标题字体Style
 	Color				m_clrText;			// 文字颜色
-	Color				m_clrTextHover;		// 文字颜色
-	Color				m_clrTextDown;		// 文字颜色
+	Color				m_clrTextHover;		// 文字颜色(鼠标移动)
+	Color				m_clrTextDown;		// 文字颜色(鼠标按下)
 	Color				m_clrTitle;			// 标题颜色
 	Color				m_clrSeperator;		// 分割线颜色
+	Color				m_clrRowHover;		// 行背景颜色(鼠标移动到行)
 	int					m_nLeftPos;			// 左侧起始位置
 	int					m_nRowHeight;		// 行高度
 	int					m_nBkTransparent;	// 背景透明度
@@ -177,6 +184,7 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crpush"), m_clrTextDown, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtitle"), m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crsep"), m_clrSeperator, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)
 		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)

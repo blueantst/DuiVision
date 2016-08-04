@@ -126,13 +126,11 @@ void CTextButton::DrawControl(CDC &dc, CRect rcUpdate)
 		DUI_STRING_ALIGN_DEFINE();
 
 		strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
-		Size size = GetTextBounds(font, strFormat, m_strTitle);
-		CPoint point = GetOriginPoint(nWidth, nHeight, size.Width, size.Height, m_uAlignment, m_uVAlignment);
 
 		for(int i = 0; i < 4; i++)
 		{
 			SolidBrush solidBrush(clrText[i]);		
-			RectF rect((Gdiplus::REAL)(point.x + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - point.x), (Gdiplus::REAL)size.Height);
+			RectF rect((Gdiplus::REAL)(i * nWidth), (Gdiplus::REAL)0, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)nHeight);
 			BSTR bsTitle = m_strTitle.AllocSysString();
 			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
 			::SysFreeString(bsTitle);
