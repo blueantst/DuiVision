@@ -319,6 +319,7 @@ BOOL CDuiRadioButton::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if((m_nShortcutKey != 0) && (nChar == m_nShortcutKey) && (nFlags == m_nShortcutFlag))
 	{
 		SetCheck(TRUE);
+		SendMessage(MSG_BUTTON_CHECK, 0, GetCheck());
 		return true;
 	}
 
@@ -326,6 +327,7 @@ BOOL CDuiRadioButton::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if(m_bIsFocus && (nChar == VK_SPACE) && (nFlags == 0))
 	{
 		SetCheck(TRUE);
+		SendMessage(MSG_BUTTON_CHECK, 0, GetCheck());
 		return true;
 	}
 

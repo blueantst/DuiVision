@@ -1,5 +1,6 @@
 #pragma once
 
+#include  <afxtempl.h>
 #include "DuiXml.h"
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -362,6 +363,24 @@ public:                                                             \
 	}	\
 
 
+// 属性类型
+enum enumAttrType
+{
+	enAttrInt = 0,				// int
+	enAttrBool,				// bool
+	enAttrUInt					// uint
+};
+
+// DUI对象的属性信息结构
+struct DuiObjectAttributeInfo
+{
+	CString strName;	// 属性名
+	enumAttrType attrType;		// 属性类型
+	LPVOID	lpVar;	// 属性关联的变量
+	LPVOID	lpVarSetFunc;	// 属性关联的变量的设置函数
+	LPVOID	lpVarGetFunc;// 属性关联的变量的获取函数
+};
+
 class CControlBase;
 class CDuiHandler;
 
@@ -389,6 +408,7 @@ public:
 	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL) { return 0L; };
 	
 	virtual HRESULT SetAttribute(CString strAttribName, CString strValue, BOOL bLoading);
+	virtual BOOL LoadAttributesInfo();
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
 	virtual BOOL OnInit();
 
@@ -406,6 +426,7 @@ protected:
 	UINT	m_uID;					// DUI对象ID
 	CString	m_strName;				// DUI对象名字
 	CRect	m_rc;					// 区域
+	CMap<CString,LPCTSTR,DuiObjectAttributeInfo,DuiObjectAttributeInfo&> m_mapDuiAttrInfo;	// 属性信息列表
 	CDuiHandler* m_pDuiHandler;		// 事件处理对象
 };
 
