@@ -2326,6 +2326,21 @@ HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
 	return hr;
 }
 
+// 设置Flash参数
+HRESULT CDuiFlashCtrl::PutFlashVars(CString strVars)
+{
+	HRESULT hr = S_OK;
+	if(flash_)
+	{
+		if(!strVars.IsEmpty())
+		{
+			flash_->PutFlashVars(bstr_t(strVars));
+		}
+	}
+
+	return hr;
+}
+
 // 检测是否安装flash
 bool CDuiFlashCtrl::isExistFlashActiveX()
 {

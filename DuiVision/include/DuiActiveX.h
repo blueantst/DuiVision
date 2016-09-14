@@ -151,7 +151,9 @@ public:
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxInitFinish();
+
 	virtual HRESULT Navigate(CString strUrl);
+	HRESULT PutFlashVars(CString strVars);
 
 	// ¼ì²âÊÇ·ñ°²×°flash
 	static bool isExistFlashActiveX();
