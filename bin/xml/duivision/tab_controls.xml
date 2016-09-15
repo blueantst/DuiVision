@@ -388,8 +388,10 @@ width-lt,height-lt,width-rb,height-rb" />
 				pos="350,100,450,128" tip="普通菜单，背景2，向上显示"
 				action="menu:duivision\menu_3.xml" menupos="0,0,0,-0" />
 			
-			<text pos="70,180,320,200" crtext="808080" title="带边框的矩形" />
-			<frame pos="50,150,350,350" crframe="800000" frame-width="2" dashstyle="dot" color="80,80,128" />
+			<text pos="50,160,320,180" crtext="808080" title="带边框的矩形：" />
+			<rect pos="50,180,300,220" crframe="800000" frame-width="2" dashstyle="solid" color="192,192,64" />
+			<rect pos="50,230,300,270" crframe="000000" frame-width="1" dashstyle="dash" color="64,192,192" />
+			<rect pos="50,280,300,320" crframe="000080" frame-width="1" dashstyle="dot" color="192,64,192" />
 		</tab>
 		
 	</tabctrl>
