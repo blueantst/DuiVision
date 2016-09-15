@@ -5,6 +5,9 @@ CRectangle::CRectangle(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBase(hWnd, pDuiObject)
 {
 	m_clr = Color(254, 255, 255, 255);
+	m_clrFrame = RGB(0, 0, 0);
+	m_nFrameWidth = 1;
+	m_nDashStyle = DashStyleSolid;
 }
 
 CRectangle::CRectangle(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, 
@@ -12,6 +15,9 @@ CRectangle::CRectangle(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 			: CControlBase(hWnd, pDuiObject, uControlID, rc, bIsVisible, FALSE, FALSE)
 {
 	m_clr = clr;
+	m_clrFrame = RGB(0, 0, 0);
+	m_nFrameWidth = 1;
+	m_nDashStyle = DashStyleSolid;
 }
 
 CRectangle::~CRectangle(void)
@@ -30,8 +36,15 @@ void CRectangle::DrawControl(CDC &dc, CRect rcUpdate)
 		m_memDC.BitBlt(0, 0, nWidth, nHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
 		
 		Graphics graphics(m_memDC);
-		SolidBrush brush(m_clr);
-		graphics.FillRectangle(&brush, 0, 0, nWidth, nHeight);
+		// 定义填充颜色
+		graphics.Clear(m_clr);
+
+		// 定义边框画笔
+		Pen pen(m_clrFrame, (Gdiplus::REAL)m_nFrameWidth);
+		pen.SetDashStyle((Gdiplus::DashStyle)m_nDashStyle);
+
+		RectF rect((Gdiplus::REAL)(m_nFrameWidth), (Gdiplus::REAL)(m_nFrameWidth), (Gdiplus::REAL)(nWidth-m_nFrameWidth*2), (Gdiplus::REAL)(nHeight-m_nFrameWidth*2));
+		graphics.DrawRectangle(&pen, rect);
 	}
 
 	dc.BitBlt(m_rc.left, m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
