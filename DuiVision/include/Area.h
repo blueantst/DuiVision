@@ -15,12 +15,17 @@ protected:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 public:
+	int		m_nTransparentType;			// 透明渐变类型
 	int		m_nBeginTransparent;
 	int		m_nEndTransparent;
 	COLORREF m_clr;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_RGBCOLOR_ATTRIBUTE(_T("color"), m_clr, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("transparent-type"), UINT, TRUE)
+            DUI_ENUM_VALUE(_T("horizontal"), TRANSPARENT_HORIZONTAL)
+            DUI_ENUM_VALUE(_T("vertical"), TRANSPARENT_VERTICAL)
+        DUI_ENUM_END(m_nTransparentType)
 		DUI_INT_ATTRIBUTE(_T("begin-transparent"), m_nBeginTransparent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("end-transparent"), m_nEndTransparent, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
