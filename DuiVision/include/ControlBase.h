@@ -49,6 +49,13 @@ struct DUI_POSITION
     };
 };
 
+// 透明渐变类型
+enum TRANSPARENT_TYPE
+{
+	TRANSPARENT_HORIZONTAL = 0,	// 水平方向渐变
+	TRANSPARENT_VERTICAL,				// 垂直方向渐变
+};
+
 // 菜单ID定义
 #define	WM_DUI_MENU		(WM_USER + 20)	
 
