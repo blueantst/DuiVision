@@ -210,12 +210,19 @@ bool CDuiWkeView::CreateControl()
 	m_wkeHander.onTitleChanged = onTitleChanged;
 	m_wkeHander.onURLChanged = onURLChanged;
 
-	// 创建wke视图,并加载url
+	// 创建wke视图,并加载url或html内容
 	m_pWebView = wkeCreateWebView();
 	m_pWebView->setTransparent(m_bTransparent);
 	m_pWebView->setClientHandler(&m_wkeHander);
 	m_pWebView->setBufHandler(this);
-	Navigate(m_strUrl);
+	if(!m_strUrl.IsEmpty())
+	{
+		Navigate(m_strUrl);
+	}else
+	if(!m_strHtml.IsEmpty())
+	{
+		loadHTML(m_strHtml);
+	}
 
 	// 注册窗口类
 	RegisterWindowClass();
