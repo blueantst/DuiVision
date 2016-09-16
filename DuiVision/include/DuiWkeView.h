@@ -180,6 +180,7 @@ protected:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("delaycreate"), OnAttributeDelayCreate)
 		DUI_CUSTOM_ATTRIBUTE(_T("url"), OnAttributeUrl)
+		DUI_TSTRING_ATTRIBUTE(_T("html"), m_strHtml, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("transparent"), m_bTransparent, TRUE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

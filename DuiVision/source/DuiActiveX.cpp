@@ -2276,6 +2276,7 @@ CDuiFlashCtrl::CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	: CDuiActiveX(hWnd, pDuiObject)
 {
 	m_bTransparent = false;
+	m_strVars = _T("");
 }
 
 CDuiFlashCtrl::~CDuiFlashCtrl()
@@ -2319,7 +2320,26 @@ HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
 		{
 			m_strUrl = strUrl;
 			flash_->put_Movie(bstr_t(ParseFilePath(m_strUrl)));
+			if(!m_strVars.IsEmpty())
+			{
+				flash_->PutFlashVars(bstr_t(m_strVars));
+			}
 			flash_->Play();
+		}
+	}
+
+	return hr;
+}
+
+// ÉèÖÃFlash²ÎÊý
+HRESULT CDuiFlashCtrl::PutFlashVars(CString strVars)
+{
+	HRESULT hr = S_OK;
+	if(flash_)
+	{
+		if(!strVars.IsEmpty())
+		{
+			flash_->PutFlashVars(bstr_t(strVars));
 		}
 	}
 

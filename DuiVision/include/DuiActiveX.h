@@ -151,16 +151,22 @@ public:
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxInitFinish();
+
 	virtual HRESULT Navigate(CString strUrl);
+	HRESULT PutFlashVars(CString strVars);
+
+	HRESULT OnAttributeVars(const CString& strValue, BOOL bLoading);
 
 	// 检测是否安装flash
 	static bool isExistFlashActiveX();
 protected:
     CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash_;
 	bool		m_bTransparent;	// 是否创建背景透明的flash
+	CString		m_strVars;			// flash参数
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_BOOL_ATTRIBUTE(_T("transparent"), m_bTransparent, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("vars"), m_strVars, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

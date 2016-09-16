@@ -291,9 +291,9 @@ void CDuiPanel::InitUI(CRect rcClient, DuiXmlNode pNode)
 				if(pControl)
 				{
 					pControl->Load(pControlElem);
-					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CDuiFrame::GetClassName()))
+					if(pControl->IsClass(CArea::GetClassName()))
 					{
-						// Area和Frame不能响应鼠标,必须加到Area列表中
+						// Area不能响应鼠标,必须加到Area列表中
 						m_vecArea.push_back(pControl);
 					}else
 					{

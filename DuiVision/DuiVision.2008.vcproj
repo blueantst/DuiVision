@@ -372,10 +372,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\source\Frame.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\source\GlobalFunction.cpp"
 				>
 			</File>
@@ -603,10 +599,6 @@
 			</File>
 			<File
 				RelativePath=".\include\DuiXml.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\Frame.h"
 				>
 			</File>
 			<File
