@@ -48,9 +48,6 @@
     <ClInclude Include="include\DuiVision.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\Frame.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\GlobalFunction.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -225,9 +222,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DlgPopup.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Frame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\GlobalFunction.cpp">

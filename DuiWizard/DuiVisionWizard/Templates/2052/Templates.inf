@@ -110,7 +110,6 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DuiVision.h
 [duivision]include\DuiWkeView.h
 [duivision]include\DuiXml.h
-[duivision]include\Frame.h
 [duivision]include\GlobalFunction.h
 [duivision]include\HideButton.h
 [duivision]include\IDuiHostWnd.h
@@ -158,7 +157,6 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DuiTreeCtrl.cpp
 [duivision]source\DuiWkeView.cpp
 [duivision]source\DuiXml.cpp
-[duivision]source\Frame.cpp
 [duivision]source\GlobalFunction.cpp
 [duivision]source\HideButton.cpp
 [duivision]source\ImageString.cpp

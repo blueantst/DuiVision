@@ -62,7 +62,6 @@ using namespace Gdiplus;
 //////////////////////////////////////////////////////////
 //Other
 #include "Area.h"
-#include "Frame.h"
 #include "ImageString.h"
 #include "Rectangle.h"
 #include "Runing.h"

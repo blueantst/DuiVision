@@ -213,7 +213,6 @@
     <ClInclude Include="include\DuiVision.h" />
     <ClInclude Include="include\DuiWkeView.h" />
     <ClInclude Include="include\DuiXml.h" />
-    <ClInclude Include="include\Frame.h" />
     <ClInclude Include="include\GlobalFunction.h" />
     <ClInclude Include="include\HideButton.h" />
     <ClInclude Include="include\IDuiPlugin.h" />
@@ -276,7 +275,6 @@
     <ClCompile Include="source\DuiTreeCtrl.cpp" />
     <ClCompile Include="source\DuiWkeView.cpp" />
     <ClCompile Include="source\DuiXml.cpp" />
-    <ClCompile Include="source\Frame.cpp" />
     <ClCompile Include="source\GlobalFunction.cpp" />
     <ClCompile Include="source\HideButton.cpp" />
     <ClCompile Include="source\ImageString.cpp" />
