@@ -131,6 +131,7 @@ public:
 	BOOL GetDragEnable() { return m_bDragEnable; }
 	void SetDropFileEnable(BOOL bDropFileEnable) { m_bDropFileEnable = bDropFileEnable; }
 	BOOL GetDropFileEnable() { return m_bDropFileEnable; }
+	void SetShotcutKey(UINT nShortcutKey, UINT nShortcutFlag);
 
 	virtual	BOOL PtInRect(CPoint point);	// 判断坐标是否在控件范围内
 	UINT GetControlID() { return m_uID; }	// 控件ID就是DUI对象的ID
