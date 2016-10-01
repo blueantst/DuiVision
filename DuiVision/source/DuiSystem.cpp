@@ -2693,7 +2693,7 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	memset(&interMsg, 0, sizeof(DUI_INTERPROCESS_MSG));
 	_tcscpy_s(interMsg.wAppName, strAppName.GetBuffer(0));
 	strAppName.ReleaseBuffer();
-	interMsg.uControlID = APP_IPC;	// 控件ID使用预定义额进程间消息控件ID
+	interMsg.uControlID = APP_IPC;	// 控件ID使用预定义的进程间消息控件ID
 	interMsg.uMsg = uMsg;
 	interMsg.wParam = wParam;
 	interMsg.lParam = lParam;
