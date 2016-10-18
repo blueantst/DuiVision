@@ -58,7 +58,12 @@
 			<item title="Axialis IconWorkshop" crtext="640064" content="1.易用性改进" font-title="1" />
 			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
 			<item title="13M" />
-			<item link="一键安装" linkaction="dlg:dlg_login"/>
+			<item>
+				<edit name="edit_gridctrl_1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+					pos="0,10" width="110" height="30" title="" tip="演示表格中的输入框"
+					multiline="0" wantreturn="1" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					font="default" crtip="128,128,128,128" />
+			</item>
 		</row>
 		<row image="skins\icon\adrule_rename.png" check="0" crtext="128,128,0">
 			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
