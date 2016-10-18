@@ -91,6 +91,7 @@ void CDuiHandlerMain::OnInit()
 	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
 	if(pGridCtrl)
 	{
+		// 添加链接按钮
 		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(_T("linkbtn"), NULL, NULL);
 		if(pControl)
 		{
@@ -99,6 +100,17 @@ void CDuiHandlerMain::OnInit()
 			pControl->SetTitle(_T("更新内容"));
 			pControl->SetLink(_T("http://www.blueantstudio.net"));
 			pGridCtrl->AddSubItemControl(1, 0, pControl);
+		}
+
+		// 添加输入框
+		CDuiEdit* pControlEdit = (CDuiEdit*)DuiSystem::CreateControlByName(_T("edit"), NULL, NULL);
+		if(pControlEdit)
+		{
+			pControlEdit->SetName(_T("edit_gridctrl_btnName"));
+			pControlEdit->SetTitle(_T("100"));
+			pControlEdit->SetPosStr(_T("220, 10, -20, 40"));
+			pControlEdit->OnAttributeSkin(_T("skin:IDB_EDIT"), TRUE);
+			pGridCtrl->AddSubItemControl(4, 0, pControlEdit);
 		}
 	}
 
