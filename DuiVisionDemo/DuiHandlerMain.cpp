@@ -103,7 +103,7 @@ void CDuiHandlerMain::OnInit()
 		}
 
 		// Ìí¼ÓÊäÈë¿ò
-		CDuiEdit* pControlEdit = (CDuiEdit*)DuiSystem::CreateControlByName(_T("edit"), NULL, NULL);
+		CDuiEdit* pControlEdit = (CDuiEdit*)DuiSystem::CreateControlByName(_T("edit"), m_pDlg->GetSafeHwnd(), NULL);
 		if(pControlEdit)
 		{
 			pControlEdit->SetName(_T("edit_gridctrl_btnName"));
