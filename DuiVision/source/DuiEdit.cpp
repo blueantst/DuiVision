@@ -345,14 +345,18 @@ HRESULT CDuiEdit::OnAttributeBackColor(const CString& strValue, BOOL bLoading)
 
 void  CDuiEdit::SetControlRect(CRect rc) 
 {
+	BOOL bRefresh = ((m_rc.top != rc.top) || (m_rc.left != rc.left) || (m_rc.bottom != rc.bottom) || (m_rc.right != rc.right));
 	m_rc = rc;
 	m_rcText = m_rc;
 	m_rcText.top += 4;
 	m_rcText.left += (6 + m_sizeLeftImage.cx);
 	m_rcText.bottom -= 4;
 	m_rcText.right -= (3 + m_sizeSmallImage.cx);
-	// 删除编辑控件,这样当编辑控件重新创建时候就可以调整大小
-	DeleteEdit();
+	// 如果edit位置有变化,删除编辑控件,这样当编辑控件重新创建时候就可以调整大小
+	if(bRefresh)
+	{
+		DeleteEdit();
+	}
 }
 
 BOOL CDuiEdit::IsDraw(CPoint point)
