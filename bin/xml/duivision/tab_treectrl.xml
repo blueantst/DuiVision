@@ -192,6 +192,9 @@
 				<item title="安装" />
 			</node>
 		</node>
+		<node id="5" collapse="1" >
+			<item title="应用软件5" font-title="1" />
+		</node>
 	</treectrl>
 
 </div>
