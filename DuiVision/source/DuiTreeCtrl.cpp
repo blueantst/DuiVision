@@ -1914,7 +1914,8 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					int nNodeLevel = GetNodeLevel(rowInfo.hNode);
 					nXPos += (nNodeLevel * m_sizeToggle.cx);
-					if(HaveChildNode(rowInfo.hNode))
+					// 节点存在子节点，或者是顶层节点的情况下，画缩放图片
+					if(HaveChildNode(rowInfo.hNode) || (GetParentNode(rowInfo.hNode) == NULL))
 					{
 						int nToggleImgY = (m_nRowHeight - m_sizeToggle.cy) / 2;
 						int nToggleIndex = (m_nHoverRow == i) ? 1 : 0;
