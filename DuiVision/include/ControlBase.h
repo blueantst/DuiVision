@@ -277,6 +277,7 @@ protected:
 	BOOL					m_bDuiMsgMouseRUp;	// 是否发送鼠标右键放开DUI消息
 	BOOL					m_bDuiMsgMouseRDblClk;// 是否发送鼠标右键双击DUI消息
 	BOOL					m_bDuiMsgKeyDown;	// 是否发送键盘按下DUI消息
+	BOOL					m_bDuiMsgFocusChange;// 是否发送控件焦点变化的DUI消息
 	BOOL					m_bMouseLeave;		// 鼠标是否已经离开控件
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()

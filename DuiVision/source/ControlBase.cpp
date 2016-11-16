@@ -65,6 +65,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bDuiMsgMouseRUp = FALSE;
 	m_bDuiMsgMouseRDblClk = FALSE;
 	m_bDuiMsgKeyDown = FALSE;
+	m_bDuiMsgFocusChange = FALSE;
 	m_bMouseLeave = TRUE;
 }
 
@@ -118,7 +119,8 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bDuiMsgMouseRDown = FALSE;
 	m_bDuiMsgMouseRUp = FALSE;
 	m_bDuiMsgMouseRDblClk = FALSE;
-	m_bDuiMsgKeyDown = TRUE;
+	m_bDuiMsgKeyDown = FALSE;
+	m_bDuiMsgFocusChange = FALSE;
 	m_bMouseLeave = TRUE;
 }
 
@@ -345,6 +347,13 @@ BOOL CControlBase::OnFocus(BOOL bFocus)
 // 设置控件焦点
 BOOL CControlBase::SetControlFocus(BOOL bFocus)
 {
+	// 发送控件焦点变化的DUI消息
+	if(m_bDuiMsgFocusChange)
+	{
+		// wParam表示控件获取焦点还是取消焦点状态
+		SendMessage(MSG_FOCUS_CHANGE, (WPARAM)bFocus, (LPARAM)0);
+	}
+
 	// 如果焦点取消,则设置每个子控件的焦点状态,解决插件中的控件焦点无法取消的问题
 	if(!bFocus)
 	{
@@ -1144,6 +1153,11 @@ BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
 	if(strDuiMsg == _T("keydown"))		// 发送键盘按下DUI消息
 	{
 		m_bDuiMsgKeyDown = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("focuschange"))		// 发送控件焦点状态变化的DUI消息
+	{
+		m_bDuiMsgFocusChange = TRUE;
 		return TRUE;
 	}
 
