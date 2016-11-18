@@ -29,7 +29,7 @@
 	</div-->
 	
 	<edit name="edit_test" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
-							pos="180,5,350,30" title="" tip="请输入用户名"
+							pos="220,5,400,32" title="" tip="请输入用户名"
 							multiline="0" wantreturn="1" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 							font="default" crtip="128,128,128,128" />
 
