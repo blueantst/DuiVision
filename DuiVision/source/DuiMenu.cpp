@@ -271,6 +271,8 @@ BOOL CDuiMenu::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UIN
 // UI初始化,此函数在窗口的OnCreate函数中调用
 void CDuiMenu::InitUI(CRect rcClient)
 {
+	__super::InitUI(rcClient);
+
 	// 如果有菜单项的预设置值,则设置相应的值到控件
 	if(m_vecMenuItemValue.size() > 0)
 	{

@@ -285,6 +285,23 @@ BOOL CControlBase::PtInRect(CPoint point)
 	return m_rc.PtInRect(point);
 }
 
+// 设置控件的父窗口句柄(包含子控件的句柄)
+void CControlBase::SetHWND(HWND hWnd)
+{
+	// 设置控件的m_hWnd
+	m_hWnd = hWnd;
+
+	// 设置子控件的m_hWnd
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			pControlBase->SetHWND(hWnd);		
+		}
+	}
+}
+
 // 获取控件的父窗口句柄
 HWND CControlBase::GetPaintHWnd()
 {

@@ -288,6 +288,29 @@ BOOL CDlgPopup::LoadXmlContent(CString strXmlContent)
 	return TRUE;
 }
 
+// UI初始化,此函数在窗口的OnCreate函数中调用
+void CDlgPopup::InitUI(CRect rcClient)
+{
+	// 设置所有控件的父窗口句柄,因为DlgPopup在加载控件时候窗口还没有创建,设置的窗口句柄都为空,因此需要在窗口创建之后设置所有控件的窗口句柄
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			pControlBase->SetHWND(m_hWnd);
+		}
+	}
+
+	for (size_t i = 0; i < m_vecArea.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecArea.at(i);
+		if (pControlBase)
+		{
+			pControlBase->SetHWND(m_hWnd);
+		}
+	}
+}
+
 // 初始化窗口控件
 void CDlgPopup::InitUI(CRect rcClient, DuiXmlNode pNode)
 {

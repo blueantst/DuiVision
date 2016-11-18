@@ -224,6 +224,7 @@ bool CPopupList::DeleteItem(UINT nItem)
 
 void CPopupList::InitUI(CRect rcClient)
 {
+	__super::InitUI(rcClient);
 }
 
 // 添加列表项

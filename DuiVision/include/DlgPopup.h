@@ -110,7 +110,7 @@ public:
 	void DrawWindow(CDC *pDC);
 	virtual void DrawWindow(CDC &dc, CRect rcClient){};
 	virtual void DrawWindowEx(CDC &dc, CRect rcClient){};
-	virtual void InitUI(CRect rcClient) {};
+	virtual void InitUI(CRect rcClient);
 	virtual BOOL OnMouseMove(CPoint point){ return false;};
 	virtual BOOL OnLButtonDown(CPoint point){ return false;};
 	virtual BOOL OnLButtonUp(CPoint point){ return false;};
