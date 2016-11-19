@@ -154,6 +154,7 @@ width-lt,height-lt,width-rb,height-rb" />
 					
 					<edit name="edit2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
 							pos="50,60,-20,110" title="test"
+							crtext="255,0,0,255"
 							multiline="1" autohscroll="0" autovscroll="1" vscroll="1"
 							number="0" readonly="0" maxchar="150"
 							font="default"/>
