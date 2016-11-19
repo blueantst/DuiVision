@@ -81,7 +81,7 @@ public:
 	enumButtonState m_EditState;
 	CRect			m_rcText;			// 文字部分位置
 
-	bool				m_bBack;			// 是否填充背景
+	bool			m_bBack;			// 是否填充背景
 	Color			m_clrBack;			// 背景色
 	Color			m_clrText;			// 文字颜色
 	Color			m_clrTooltip;		// 提示信息颜色

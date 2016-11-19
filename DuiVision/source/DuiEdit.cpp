@@ -1,55 +1,84 @@
 #include "StdAfx.h"
 #include "DuiEdit.h"
 
-// 支持修改背景色的编辑控件
-class CBkColorEdit : public CEdit
+// 支持修改背景色和文字颜色的编辑控件
+class CColorEdit : public CEdit
 {
 private:
-	COLORREF m_clrBack;
-	CBrush m_brBack;
+	COLORREF m_clrBack;	// 背景色
+	COLORREF m_clrText;	// 文字颜色
+	CBrush	m_brBack;	// 背景色刷
+	BOOL	m_bTransparent;	// 背景是否透明
 	
 protected:
 	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
 	DECLARE_MESSAGE_MAP()
 
 public:
-	CBkColorEdit(COLORREF backColor = RGB(255, 255, 255));
-	virtual ~CBkColorEdit();
+	CColorEdit(COLORREF backColor = RGB(255, 255, 255), COLORREF textColor = RGB(255, 255, 255), BOOL bTransparent = FALSE);
+	virtual ~CColorEdit();
 	void SetBackColor(COLORREF color);
 	COLORREF GetBackColor();
+	void SetTransparent(BOOL bTransparent);
+	void SetTextColor(COLORREF color);
+	COLORREF GetTextColor();
 };
 
-CBkColorEdit::CBkColorEdit(COLORREF backColor /*= RGB(255, 255, 255)*/)
+CColorEdit::CColorEdit(COLORREF backColor, COLORREF textColor, BOOL bTransparent)
 {
 	m_clrBack = backColor;
 	m_brBack.CreateSolidBrush(m_clrBack);
+	m_clrText = textColor;
+	m_bTransparent = bTransparent;
 	EnableToolTips(TRUE);
 }
 
-CBkColorEdit::~CBkColorEdit()
+CColorEdit::~CColorEdit()
 {
 }
 
-BEGIN_MESSAGE_MAP(CBkColorEdit, CEdit)
+BEGIN_MESSAGE_MAP(CColorEdit, CEdit)
 	ON_WM_CTLCOLOR_REFLECT()
 END_MESSAGE_MAP()
 
-HBRUSH CBkColorEdit::CtlColor(CDC* pDC, UINT nCtlColor)
+HBRUSH CColorEdit::CtlColor(CDC* pDC, UINT nCtlColor)
 {
-	// 背景颜色不支持设置透明度
-	pDC->SetBkColor(m_clrBack);
+	if(m_bTransparent)
+	{
+		pDC-> SetBkMode(TRANSPARENT); //设置字体背景为透明
+	}else
+	{
+		pDC->SetBkColor(m_clrBack);	// 设置背景色,不支持设置透明度
+	}
+	// 设置文字颜色
+	pDC->SetTextColor(m_clrText);
 	return m_brBack;
 }
 
-void CBkColorEdit::SetBackColor(COLORREF color)
+void CColorEdit::SetBackColor(COLORREF color)
 {
 	m_clrBack = color;
 	m_brBack.CreateSolidBrush(color);
 }
 
-COLORREF CBkColorEdit::GetBackColor()
+COLORREF CColorEdit::GetBackColor()
 {
 	return m_clrBack;
+}
+
+void CColorEdit::SetTransparent(BOOL bTransparent)
+{
+	m_bTransparent = bTransparent;
+}
+
+void CColorEdit::SetTextColor(COLORREF color)
+{
+	m_clrText = color;
+}
+
+COLORREF CColorEdit::GetTextColor()
+{
+	return m_clrText;
 }
 
 // CDuiEdit
@@ -74,6 +103,7 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_bBack = false;
 	m_clrBack = Color(255, 255, 255);
+	m_clrText = Color(255, 0, 0, 0);
 
 	m_bPassWord = false;
 	m_bMultiLine = false;
@@ -109,6 +139,7 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 
 	m_bBack = false;
 	m_clrBack = Color(255, 255, 255);
+	m_clrText = Color(255, 0, 0, 0);
 
 	SetRect(rc);
 	SetBitmapCount(4);
@@ -327,7 +358,7 @@ void CDuiEdit::SetBackColor(Color clrBack)
 	}else
 	{
 		// 如果设置过背景色,则只要调用CBkColorEdit的设置背景色的函数刷新edit控件的背景色
-		static_cast<CBkColorEdit*>(m_pEdit)->SetBackColor(m_clrBack.ToCOLORREF());
+		static_cast<CColorEdit*>(m_pEdit)->SetBackColor(m_clrBack.ToCOLORREF());
 	}
 	m_bBack = true;
 }
@@ -734,10 +765,10 @@ void CDuiEdit::ShowEdit()
 			rc.top += 2;
 		}
 
-		if(m_bBack)
+		if(m_bBack || (m_clrText.GetValue() != Color(255,0,0,0).GetValue()))
 		{
-			// 如果设置了背景色,则创建背景色可以更改的编辑控件
-			m_pEdit = new CBkColorEdit(m_clrBack.ToCOLORREF());
+			// 如果设置了背景色或文字色,则创建颜色可以更改的编辑控件
+			m_pEdit = new CColorEdit(m_clrBack.ToCOLORREF(), m_clrText.ToCOLORREF(), (m_clrBack.GetAlpha() == 0));
 		}else
 		{
 			// 否则创建普通的编辑控件
