@@ -59,6 +59,10 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_nLastViewRow = 0;
 	m_nVirtualTop = 0;
 	m_nVirtualLeft = 0;
+
+	m_bSortOnClick = FALSE; // Sort on header row click
+	m_bAscending = TRUE;    // sorting stuff
+    m_nSortColumn = -1;
 }
 
 CDuiGridCtrl::~CDuiGridCtrl(void)
@@ -918,6 +922,18 @@ GridItemInfo* CDuiGridCtrl::GetItemInfo(int nRow, int nItem)
 	return &itemInfo;
 }
 
+// 获取某一个单元格的文字内容
+CString CDuiGridCtrl::GetItemText(int nRow, int nItem)
+{
+	GridItemInfo* pGridInfo = GetItemInfo(nRow, nItem);
+	if(pGridInfo)
+	{
+		return pGridInfo->strTitle;
+	}
+
+	return _T("");
+}
+
 // 设置某一个行的文字颜色
 void CDuiGridCtrl::SetRowColor(int nRow, Color clrText)
 {
@@ -1133,6 +1149,97 @@ void CDuiGridCtrl::ClearGridTooltip()
 		m_nTipVirtualTop = 0;
 		return;
 	}
+}
+
+// 设置排序的列
+void CDuiGridCtrl::SetSortColumn(int nCol)
+{
+    m_nSortColumn = nCol;
+}
+
+// 针对指定的列按照单元格文字进行排序
+BOOL CDuiGridCtrl::SortTextItems(int nCol, BOOL bAscending)
+{
+    SetSortColumn(nCol);
+    SetSortAscending(bAscending);
+    //ResetSelectedRange();
+    //SetFocusCell(-1, - 1);
+
+	// 排序所有行
+    BOOL bSort = SortTextItems(nCol, bAscending, 0, -1);
+
+	// 重新计算所有行的位置
+	CalcRowsPos();
+
+	UpdateControl(TRUE);
+
+	return bSort;
+}
+
+// 单元格文字排序的递归实现
+BOOL CDuiGridCtrl::SortTextItems(int nCol, BOOL bAscending, int low, int high)
+{
+    if (nCol >= GetColumnCount())
+        return FALSE;
+
+    if (high == -1)
+        high = GetRowCount() - 1;
+
+    int lo = low;
+    int hi = high;
+
+    if (hi <= lo)
+        return FALSE;
+    
+    CString midItem = GetItemText((lo + hi)/2, nCol);
+    
+    // loop through the list until indices cross
+    while (lo <= hi)
+    {
+        // Find the first element that is greater than or equal to the partition 
+        // element starting from the left Index.
+        if (bAscending)
+            while (lo < high  && GetItemText(lo, nCol) < midItem)
+                ++lo;
+            else
+                while (lo < high && GetItemText(lo, nCol) > midItem)
+                    ++lo;
+                
+                // Find an element that is smaller than or equal to  the partition 
+                // element starting from the right Index.
+                if (bAscending)
+                    while (hi > low && GetItemText(hi, nCol) > midItem)
+                        --hi;
+                    else
+                        while (hi > low && GetItemText(hi, nCol) < midItem)
+                            --hi;
+                        
+                        // If the indexes have not crossed, swap if the items are not equal
+                        if (lo <= hi)
+                        {
+                            // swap only if the items are not equal
+                            if (GetItemText(lo, nCol) != GetItemText(hi, nCol))
+                            {
+								// 交换行
+								swap(m_vecRowInfo[lo], m_vecRowInfo[hi]);
+                            }
+                            
+                            ++lo;
+                            --hi;
+                        }
+    }
+    
+    // If the right index has not reached the left side of array
+    // must now sort the left partition.
+    if (low < hi)
+        SortTextItems(nCol, bAscending, low, hi);
+    
+    // If the left index has not reached the right side of array
+    // must now sort the right partition.
+    if (lo < high)
+        SortTextItems(nCol, bAscending, lo, high);
+    
+    return TRUE;
 }
 
 // 鼠标移动事件处理
@@ -1399,6 +1506,29 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 	}
 
 	m_nHoverSplitColumn = -1;
+
+	// 表头的排序事件处理
+	if(!m_bIsDisable && GetHeaderSort())
+	{
+		for(size_t i = 0; i < m_vecColumnInfo.size(); i++)
+		{
+			GridColumnInfo &columnInfo = m_vecColumnInfo.at(i);
+			CRect rcColumnSort(columnInfo.rcHeader.left, columnInfo.rcHeader.top,
+				columnInfo.rcHeader.right, columnInfo.rcHeader.bottom);
+			rcColumnSort.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top);
+			if(rcColumnSort.PtInRect(point))
+			{
+				if(i == GetSortColumn())
+				{
+					SortTextItems(i, !GetSortAscending());
+				}else
+				{
+					SortTextItems(i, TRUE);
+				}
+				break;
+			}
+		}
+	}
 
 	// 行事件处理
 	if(m_vecRowInfo.size() == 0)

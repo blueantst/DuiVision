@@ -49,7 +49,7 @@ struct GridRowInfo
 	CSize	sizeRightImage;	// 右边图片大小
 	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
-	BOOL	bRowBackColor;		// 使用行定义的背景颜色
+	BOOL	bRowBackColor;	// 使用行定义的背景颜色
 	Color	clrBack;		// 行背景颜色
 	int		nHoverItem;		// 当前热点列
 	vector<GridItemInfo> vecItemInfo;
@@ -67,6 +67,7 @@ public:
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0),
 		UINT uAlignment = 0xFFFFUL, UINT uVAlignment = 0xFFFFUL);
+	int GetColumnCount() { return (int)m_vecColumnInfo.size(); }
 	int SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn = -1);
 	void MoveColumnSplit(int nColumn, int nPos);
 	int GetTotalColumnWidth();
@@ -89,6 +90,7 @@ public:
 	int  GetRowCount() { return m_vecRowInfo.size(); }
 	GridRowInfo* GetRowInfo(int nRow);
 	GridItemInfo* GetItemInfo(int nRow, int nItem);
+	CString GetItemText(int nRow, int nItem);
 	void SetRowColor(int nRow, Color clrText);
 	void SetRowBackColor(int nRow, Color clrBack);
 	void SetRowCheck(int nRow, int nCheck);
@@ -101,6 +103,19 @@ public:
 
 	void SetGridTooltip(int nRow, int nItem, CString strTooltip);
 	void ClearGridTooltip();
+
+	// 表格排序
+	void SetHeaderSort(BOOL bSortOnClick = TRUE)  { m_bSortOnClick = bSortOnClick;    }
+    BOOL GetHeaderSort() const                    { return m_bSortOnClick;            }
+	void SetSortColumn(int nCol);
+    int  GetSortColumn() const                    { return m_nSortColumn;             }
+    void SetSortAscending(BOOL bAscending)        { m_bAscending = bAscending;        }
+    BOOL GetSortAscending() const                 { return m_bAscending;              }
+
+	BOOL SortTextItems(int nCol, BOOL bAscending);
+	BOOL SortTextItems(int nCol, BOOL bAscending, int low, int high);
+    //BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data = 0);
+	//BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data, int low, int high);
 
 protected:
 	vector<GridColumnInfo> m_vecColumnInfo;
@@ -126,9 +141,9 @@ public:
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle			m_fontTitleStyle;	// 标题字体Style
-	UINT					m_uAlignmentHeader;		// 标题文字水平对齐方式
-	UINT					m_uVAlignmentHeader;		// 标题文字垂直对齐方式
-	Color				m_clrHeader;			// 标题行文字颜色
+	UINT				m_uAlignmentHeader;	// 标题文字水平对齐方式
+	UINT				m_uVAlignmentHeader;// 标题文字垂直对齐方式
+	Color				m_clrHeader;		// 标题行文字颜色
 	Color				m_clrText;			// 文字颜色
 	Color				m_clrTextHover;		// 文字颜色(鼠标移动)
 	Color				m_clrTextDown;		// 文字颜色(鼠标按下)
@@ -141,7 +156,7 @@ public:
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
-	BOOL			m_bShowColumnSeperator;	// 是否显示内容部分的列分隔线
+	BOOL				m_bShowColumnSeperator;	// 是否显示内容部分的列分隔线
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
@@ -157,12 +172,17 @@ public:
 	int					m_nTipItem;			// 当前tip列
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
-	BOOL			m_bEnableModifyColumn;	// 是否允许修改列宽度
-	enumButtonState m_enButtonState;	// 鼠标状态
-	BOOL			m_bHoverSplitColumn;	// 是否鼠标热点状态(列分隔线)
+	BOOL				m_bEnableModifyColumn;	// 是否允许修改列宽度
+	enumButtonState		m_enButtonState;	// 鼠标状态
+	BOOL				m_bHoverSplitColumn;	// 是否鼠标热点状态(列分隔线)
 	int					m_nHoverSplitColumn;	// 鼠标拖动的列分隔线索引
 
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);	// 定义标题行背景图片
+	// sorting
+	BOOL				m_bSortOnClick;		// 点击列标题时,是否进行排序
+    int					m_bAscending;		// 是否升序排序
+    int					m_nSortColumn;		// 排序的列
+
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);		// 定义标题行背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ColumnSeperator);	// 定义列分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
@@ -198,5 +218,6 @@ public:
 		DUI_BOOL_ATTRIBUTE(_T("grid-tip"), m_bGridTooltip, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("column-sep"), m_bShowColumnSeperator, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("modify-column-width"), m_bEnableModifyColumn, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("sort-click"), m_bSortOnClick, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
