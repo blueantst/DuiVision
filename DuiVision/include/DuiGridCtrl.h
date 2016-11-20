@@ -55,6 +55,9 @@ struct GridRowInfo
 	vector<GridItemInfo> vecItemInfo;
 };
 
+// 自定义表格排序函数的定义(比较两个参数的大小,小于0表示参数1小于参数2,大于0表示参数1大于参数2)
+typedef int (CALLBACK *PFN_GRIDCTRL_COMPARE)(GridItemInfo* pItem1, GridItemInfo* pItem2);
+
 class CDuiGridCtrl : public CDuiPanel
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiGridCtrl, _T("gridctrl"))
@@ -114,8 +117,9 @@ public:
 
 	BOOL SortTextItems(int nCol, BOOL bAscending);
 	BOOL SortTextItems(int nCol, BOOL bAscending, int low, int high);
-    //BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data = 0);
-	//BOOL SortItems(PFNLVCOMPARE pfnCompare, int nCol, BOOL bAscending, LPARAM data, int low, int high);
+    BOOL SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAscending);
+	BOOL SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAscending, int low, int high);
+	void SetSortCompareFunction(PFN_GRIDCTRL_COMPARE pfnCompare) { m_pfnCompare = pfnCompare; }
 
 protected:
 	vector<GridColumnInfo> m_vecColumnInfo;
@@ -181,6 +185,7 @@ public:
 	BOOL				m_bSortOnClick;		// 点击列标题时,是否进行排序
     int					m_bAscending;		// 是否升序排序
     int					m_nSortColumn;		// 排序的列
+	PFN_GRIDCTRL_COMPARE m_pfnCompare;		// 自定义表格排序函数
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);		// 定义标题行背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(HeaderSort);		// 定义标题行排序状态图片

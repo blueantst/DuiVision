@@ -65,6 +65,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bSortOnClick = FALSE; // Sort on header row click
 	m_bAscending = TRUE;    // sorting stuff
     m_nSortColumn = -1;
+	m_pfnCompare = NULL;
 }
 
 CDuiGridCtrl::~CDuiGridCtrl(void)
@@ -1250,6 +1251,91 @@ BOOL CDuiGridCtrl::SortTextItems(int nCol, BOOL bAscending, int low, int high)
     return TRUE;
 }
 
+// 针对指定的列按照自定义排序函数进行排序
+BOOL CDuiGridCtrl::SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAscending)
+{
+    SetSortColumn(nCol);
+    SetSortAscending(bAscending);
+    //ResetSelectedRange();
+    //SetFocusCell(-1, - 1);
+
+	// 排序所有行
+    BOOL bSort = SortItems(pfnCompare, nCol, bAscending, 0, -1);
+
+	// 重新计算所有行的位置
+	CalcRowsPos();
+
+	UpdateControl(TRUE);
+
+	return bSort;
+}
+
+// 单元格自定义排序函数排序的递归实现
+BOOL CDuiGridCtrl::SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAscending, int low, int high)
+{
+    if (nCol >= GetColumnCount())
+        return FALSE;
+
+    if (high == -1)
+        high = GetRowCount() - 1;
+
+    int lo = low;
+    int hi = high;
+
+    if (hi <= lo)
+        return FALSE;
+    
+    GridItemInfo* midItem = GetItemInfo((lo + hi)/2, nCol);
+    
+    // loop through the list until indices cross
+    while (lo <= hi)
+    {
+        // Find the first element that is greater than or equal to the partition 
+        // element starting from the left Index.
+        if (bAscending)
+            while (lo < high  && pfnCompare(GetItemInfo(lo, nCol), midItem) < 0)
+                ++lo;
+            else
+                while (lo < high && pfnCompare(GetItemInfo(lo, nCol), midItem) > 0)
+                    ++lo;
+                
+                // Find an element that is smaller than or equal to  the partition 
+                // element starting from the right Index.
+                if (bAscending)
+                    while (hi > low && pfnCompare(GetItemInfo(hi, nCol), midItem) > 0)
+                        --hi;
+                    else
+                        while (hi > low && pfnCompare(GetItemInfo(hi, nCol), midItem) < 0)
+                            --hi;
+                        
+                        // If the indexes have not crossed, swap if the items are not equal
+                        if (lo <= hi)
+                        {
+                            // swap only if the items are not equal
+                            if (pfnCompare(GetItemInfo(lo, nCol), GetItemInfo(hi, nCol)) != 0)
+                            {
+								// 交换行
+								swap(m_vecRowInfo[lo], m_vecRowInfo[hi]);
+                            }
+                            
+                            ++lo;
+                            --hi;
+                        }
+    }
+    
+    // If the right index has not reached the left side of array
+    // must now sort the left partition.
+    if (low < hi)
+        SortItems(pfnCompare, nCol, bAscending, low, hi);
+    
+    // If the left index has not reached the right side of array
+    // must now sort the right partition.
+    if (lo < high)
+        SortItems(pfnCompare, nCol, bAscending, lo, high);
+    
+    return TRUE;
+}
+
 // 鼠标移动事件处理
 BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 {
@@ -1528,10 +1614,24 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 			{
 				if(i == GetSortColumn())
 				{
-					SortTextItems(i, !GetSortAscending());
+					// 如果是当前排序列,则切换排序状态
+					if(m_pfnCompare == NULL)
+					{
+						SortTextItems(i, !GetSortAscending());
+					}else
+					{
+						SortItems(m_pfnCompare, i, !GetSortAscending());
+					}
 				}else
 				{
-					SortTextItems(i, TRUE);
+					// 不是当前排序列,则切换排序列,新列默认设置为升序
+					if(m_pfnCompare == NULL)
+					{
+						SortTextItems(i, TRUE);
+					}else
+					{
+						SortItems(m_pfnCompare, i, TRUE);
+					}
 				}
 				break;
 			}
