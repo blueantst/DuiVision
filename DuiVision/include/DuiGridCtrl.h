@@ -183,6 +183,7 @@ public:
     int					m_nSortColumn;		// 排序的列
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Header);		// 定义标题行背景图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE(HeaderSort);		// 定义标题行排序状态图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ColumnSeperator);	// 定义列分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
@@ -198,6 +199,7 @@ public:
             DUI_ENUM_VALUE(_T("right"), Align_Right)
         DUI_ENUM_END(m_uAlignmentHeader)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-header"), OnAttributeImageHeader)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-header-sort"), OnAttributeImageHeaderSort)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-colsep"), OnAttributeImageColumnSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)

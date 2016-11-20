@@ -27,6 +27,8 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 
 	m_pImageHeader = NULL;
 	m_sizeHeader = CSize(0, 0);
+	m_pImageHeaderSort = NULL;
+	m_sizeHeaderSort = CSize(0, 0);
 	m_pImageColumnSeperator = NULL;
 	m_sizeColumnSeperator = CSize(0, 0);
 	m_pImageSeperator = NULL;
@@ -72,6 +74,11 @@ CDuiGridCtrl::~CDuiGridCtrl(void)
 		delete m_pImageHeader;
 		m_pImageHeader = NULL;
 	}
+	if(m_pImageHeaderSort != NULL)
+	{
+		delete m_pImageHeaderSort;
+		m_pImageHeaderSort = NULL;
+	}
 	if(m_pImageColumnSeperator != NULL)
 	{
 		delete m_pImageColumnSeperator;
@@ -91,6 +98,7 @@ CDuiGridCtrl::~CDuiGridCtrl(void)
 
 // 图片属性的实现
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, Header, 1)
+DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, HeaderSort, 8)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, ColumnSeperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, Seperator, 1)
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiGridCtrl, CheckBox, 6)
@@ -1802,7 +1810,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 		::SysFreeString(bsFont);
 
 		SolidBrush solidBrush(m_clrText);			// 正常文字画刷
-		SolidBrush solidBrushHT(m_clrHeader);			// 标题行文字画刷
+		SolidBrush solidBrushHT(m_clrHeader);		// 标题行文字画刷
 		SolidBrush solidBrushH(m_clrTextHover);		// 热点文字画刷
 		SolidBrush solidBrushD(m_clrTextDown);		// 当前行画刷
 		SolidBrush solidBrushT(m_clrTitle);			// 标题文字画刷
@@ -1860,6 +1868,15 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				BSTR bsTitle = strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormatHeader, &solidBrushHT);
 				::SysFreeString(bsTitle);
+
+				// 画标题行排序图片
+				if((m_pImageHeaderSort != NULL) && (j == m_nSortColumn))
+				{
+					RectF rectSort((Gdiplus::REAL)(nPosItemX+nWidth-m_sizeHeaderSort.cx-5), (Gdiplus::REAL)((m_nHeaderHeight-m_sizeHeaderSort.cy) / 2 + 1),
+								(Gdiplus::REAL)m_sizeHeaderSort.cx, (Gdiplus::REAL)m_sizeHeaderSort.cy);
+					graphics.DrawImage(m_pImageHeaderSort, rectSort, (Gdiplus::REAL)(m_bAscending ? 4 : 0)*m_sizeHeaderSort.cx, 0,
+								(Gdiplus::REAL)m_sizeHeaderSort.cx, (Gdiplus::REAL)m_sizeHeaderSort.cy, UnitPixel);
+				}
 
 				nPosItemX += nWidth;
 			}
