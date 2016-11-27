@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CDlgPopup, CWnd)
 	ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
 	ON_MESSAGE(WM_MOUSEHOVER, OnMouseHover)
 	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
@@ -975,7 +976,7 @@ void CDlgPopup::OnRButtonDblClk(UINT nFlags, CPoint point)
 	CWnd::OnRButtonDblClk(nFlags, point);
 }
 
-// 键盘事件处理
+// 键盘按下事件处理
 void CDlgPopup::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// 当前控件是否能处理
@@ -1000,6 +1001,33 @@ void CDlgPopup::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+// 键盘放开事件处理
+void CDlgPopup::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 当前控件是否能处理
+	if (m_pControl && m_pControl->OnKeyUp(nChar, nRepCnt, nFlags))
+	{
+		return;
+	}
+	
+	// 子控件是否能处理
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase && pControlBase->OnKeyUp(nChar, nRepCnt, nFlags))
+		{
+			return;
+		}	
+	}
+
+	if(OnControlKeyUp(nChar, nRepCnt, nFlags))
+	{
+		return;
+	}
+
+	CWnd::OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void CDlgPopup::PostNcDestroy()

@@ -162,6 +162,7 @@ public:
 	BOOL OnLButtonDblClk(UINT nFlags, CPoint point);
 	BOOL OnScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	BOOL OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	BOOL OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	BOOL OnRButtonDown(UINT nFlags, CPoint point);
 	BOOL OnRButtonUp(UINT nFlags, CPoint point);
 	BOOL OnRButtonDblClk(UINT nFlags, CPoint point);
@@ -177,6 +178,7 @@ public:
 	virtual BOOL OnControlLButtonDblClk(UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point){ return FALSE; }
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual BOOL OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual BOOL OnControlSetDuiMsg(LPCTSTR lpszDuiMsg);
 	virtual BOOL OnControlRButtonDown(UINT nFlags, CPoint point){ return FALSE; };
 	virtual BOOL OnControlRButtonUp(UINT nFlags, CPoint point){ return FALSE; };
@@ -278,6 +280,7 @@ protected:
 	BOOL					m_bDuiMsgMouseRUp;	// 是否发送鼠标右键放开DUI消息
 	BOOL					m_bDuiMsgMouseRDblClk;// 是否发送鼠标右键双击DUI消息
 	BOOL					m_bDuiMsgKeyDown;	// 是否发送键盘按下DUI消息
+	BOOL					m_bDuiMsgKeyUp;		// 是否发送键盘放开DUI消息
 	BOOL					m_bDuiMsgFocusChange;// 是否发送控件焦点变化的DUI消息
 	BOOL					m_bMouseLeave;		// 鼠标是否已经离开控件
 

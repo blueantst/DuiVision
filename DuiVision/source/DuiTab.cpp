@@ -1498,7 +1498,7 @@ BOOL CDuiTabCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	return false;
 }
 
-// 键盘事件处理
+// 键盘按下事件处理
 BOOL CDuiTabCtrl::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if(m_nDownItem != -1)
@@ -1507,6 +1507,21 @@ BOOL CDuiTabCtrl::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		if(itemInfo.pControl != NULL)
 		{
 			return itemInfo.pControl->OnKeyDown(nChar, nRepCnt, nFlags);
+		}
+	}
+
+	return false;
+}
+
+// 键盘放开事件处理
+BOOL CDuiTabCtrl::OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if(m_nDownItem != -1)
+	{
+		TabItemInfo &itemInfo = m_vecItemInfo.at(m_nDownItem);
+		if(itemInfo.pControl != NULL)
+		{
+			return itemInfo.pControl->OnKeyUp(nChar, nRepCnt, nFlags);
 		}
 	}
 

@@ -64,6 +64,7 @@ public:
 	virtual BOOL OnControlRButtonDblClk(UINT nFlags, CPoint point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual BOOL OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual	BOOL OnControlTimer();
 
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);

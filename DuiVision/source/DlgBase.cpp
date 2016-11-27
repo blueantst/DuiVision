@@ -2523,7 +2523,7 @@ void CDlgBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 // 消息预处理
 BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 {
-	if (( pMsg->message == WM_KEYDOWN ) || ( pMsg->message == WM_SYSKEYDOWN ))
+	if (( pMsg->message == WM_KEYDOWN ) || ( pMsg->message == WM_SYSKEYDOWN ))	// 键盘按下消息
 	{
 		// 键盘事件处理
 		UINT nFlags = 0;
@@ -2590,6 +2590,43 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 		if(pMsg->wParam == VK_RETURN)
 		{
 			return TRUE;
+		}
+	}else
+	if (( pMsg->message == WM_KEYUP ) || ( pMsg->message == WM_SYSKEYUP ))	// 键盘放开消息
+	{
+		// 键盘事件处理
+		UINT nFlags = 0;
+		BOOL bCtrl=::GetKeyState(VK_CONTROL)&0x8000;
+		BOOL bShift=::GetKeyState(VK_SHIFT)&0x8000;
+		BOOL bAlt=::GetKeyState(VK_MENU)&0x8000;	// ALT键只有WM_SYSKEYDOWN消息才能捕获到
+		nFlags |= (bCtrl ? VK_CONTROL : 0);
+		nFlags |= (bShift ? VK_SHIFT : 0);
+		nFlags |= (bAlt ? VK_MENU : 0);
+
+		// 当前控件是否能处理
+		if (m_pControl && m_pControl->OnKeyUp(pMsg->wParam, 1, nFlags))
+		{
+			return TRUE;
+		}
+
+		// 窗口自身的基础控件
+		for (size_t i = 0; i < m_vecBaseControl.size(); i++)
+		{
+			CControlBase * pControlBase = m_vecBaseControl.at(i);
+			if (pControlBase && pControlBase->OnKeyUp(pMsg->wParam, 1, nFlags))
+			{
+				return TRUE;
+			}		
+		}
+		
+		// 用户控件
+		for (size_t i = 0; i < m_vecControl.size(); i++)
+		{
+			CControlBase * pControlBase = m_vecControl.at(i);
+			if (pControlBase && pControlBase->OnKeyUp(pMsg->wParam, 1, nFlags))
+			{
+				return TRUE;
+			}	
 		}
 	}else
 	/*if ( pMsg->message == WM_CHAR)

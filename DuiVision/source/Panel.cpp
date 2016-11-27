@@ -682,13 +682,24 @@ BOOL CDuiPanel::OnControlRButtonDblClk(UINT nFlags, CPoint point)
 	return FALSE;
 }
 
-// 键盘事件处理
+// 键盘按下事件处理
 BOOL CDuiPanel::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if(m_pDuiPluginObject)
 	{
 		return m_pDuiPluginObject->OnKeyDown(nChar, nRepCnt, nFlags);
 	}
+	return FALSE;
+}
+
+// 键盘放开事件处理
+BOOL CDuiPanel::OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 为了兼容以前的版本,插件暂不支持此函数
+	/*if(m_pDuiPluginObject)
+	{
+		return m_pDuiPluginObject->OnKeyUp(nChar, nRepCnt, nFlags);
+	}*/
 	return FALSE;
 }
 

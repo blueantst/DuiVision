@@ -89,6 +89,7 @@ protected:
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual BOOL OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 	virtual	BOOL OnControlTimer();

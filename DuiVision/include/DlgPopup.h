@@ -119,6 +119,7 @@ public:
 	virtual BOOL OnRButtonUp(CPoint point){ return false;};
 	virtual BOOL OnRButtonDblClk(CPoint point){ return false;};
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){ return false;};
+	virtual BOOL OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){ return false;};
 
 	HRESULT OnAttributeBkMode(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeBkImage(const CString& strValue, BOOL bLoading);
@@ -183,6 +184,7 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	DECLARE_MESSAGE_MAP()
 	virtual void PostNcDestroy();

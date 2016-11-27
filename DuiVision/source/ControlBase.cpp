@@ -65,6 +65,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject)
 	m_bDuiMsgMouseRUp = FALSE;
 	m_bDuiMsgMouseRDblClk = FALSE;
 	m_bDuiMsgKeyDown = FALSE;
+	m_bDuiMsgKeyUp = FALSE;
 	m_bDuiMsgFocusChange = FALSE;
 	m_bMouseLeave = TRUE;
 }
@@ -120,6 +121,7 @@ CControlBase::CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_bDuiMsgMouseRUp = FALSE;
 	m_bDuiMsgMouseRDblClk = FALSE;
 	m_bDuiMsgKeyDown = FALSE;
+	m_bDuiMsgKeyUp = FALSE;
 	m_bDuiMsgFocusChange = FALSE;
 	m_bMouseLeave = TRUE;
 }
@@ -1067,7 +1069,7 @@ BOOL CControlBase::OnScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	return false;
 }
 
-// 键盘事件处理
+// 键盘按下事件处理
 BOOL CControlBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if(!m_bIsVisible || !m_bRresponse) return false;
@@ -1114,7 +1116,54 @@ BOOL CControlBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	return false;
 }
 
-// 键盘事件处理
+// 键盘放开事件处理
+BOOL CControlBase::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if(!m_bIsVisible || !m_bRresponse) return false;
+	
+	BOOL bRresponse = false;
+	// 判断当前活动控件
+	if(m_pControl && m_pControl->OnKeyUp(nChar, nRepCnt, nFlags))
+	{
+		return true;
+	}
+
+	// 控件自身是否可以处理此事件
+	if(OnControlKeyUp(nChar, nRepCnt, nFlags))
+	{
+		// 发送键盘放开DUI消息
+		if(m_bDuiMsgKeyUp)
+		{
+			SendMessage(MSG_KEY_UP, (WPARAM)nChar, (LPARAM)nFlags);
+		}
+		return true;
+	}
+
+	// 此控件没有处理,则遍历子控件看是否能处理
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase && pControlBase->OnKeyUp(nChar, nRepCnt, nFlags))
+		{
+			// 发送键盘放开DUI消息
+			if(m_bDuiMsgKeyUp)
+			{
+				SendMessage(MSG_KEY_UP, (WPARAM)nChar, (LPARAM)nFlags);
+			}
+			return true;
+		}
+	}
+
+	// 发送键盘放开DUI消息
+	if(m_bDuiMsgKeyUp)
+	{
+		SendMessage(MSG_KEY_UP, (WPARAM)nChar, (LPARAM)nFlags);
+	}
+
+	return false;
+}
+
+// 键盘按下事件处理
 BOOL CControlBase::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// 如果快捷键能够匹配控件的快捷键,则发送一个模拟鼠标点击的消息
@@ -1125,6 +1174,12 @@ BOOL CControlBase::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		return true;
 	}
 
+	return false;
+}
+
+// 键盘放开事件处理
+BOOL CControlBase::OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
 	return false;
 }
 
@@ -1170,6 +1225,11 @@ BOOL CControlBase::OnControlSetDuiMsg(LPCTSTR lpszDuiMsg)
 	if(strDuiMsg == _T("keydown"))		// 发送键盘按下DUI消息
 	{
 		m_bDuiMsgKeyDown = TRUE;
+		return TRUE;
+	}else
+	if(strDuiMsg == _T("keyup"))		// 发送键盘放开DUI消息
+	{
+		m_bDuiMsgKeyUp = TRUE;
 		return TRUE;
 	}else
 	if(strDuiMsg == _T("focuschange"))		// 发送控件焦点状态变化的DUI消息

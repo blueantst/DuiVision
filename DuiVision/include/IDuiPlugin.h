@@ -33,6 +33,7 @@ interface IDuiPluginPanel : public IUnknown
 	virtual int __stdcall OnRButtonDown(UINT nFlags, CPoint point) = 0;
 	virtual int __stdcall OnRButtonUp(UINT nFlags, CPoint point) = 0;
 	virtual int __stdcall OnRButtonDblClk(UINT nFlags, CPoint point) = 0;
+	virtual int __stdcall OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) = 0;
 	//}}VCI_INTERFACE_END
 };
 

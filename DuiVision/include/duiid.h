@@ -79,6 +79,7 @@
 #define					MSG_CONTROL_DELETE					17						// 控件内的删除事件
 #define					MSG_DROP_FILE						18						// 拖拽文件事件
 #define					MSG_FOCUS_CHANGE					19						// 控件的焦点状态变更事件
+#define					MSG_KEY_UP							20						// 键盘放开事件
 
 
 // 进程间消息内容的结构定义
