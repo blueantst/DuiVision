@@ -88,8 +88,9 @@
 			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2(快捷键：ALT+3)"
 				pos="50,175,300,200" check="false" group="radio_group_1" show="1" shortcut="ALT+3" />
 
-			<button pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png" cursor="hand"
-				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4" />
+			<button name="pic_button1" pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png" cursor="hand"
+				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4"
+				duimsg="keydown|keyup" />
 			
 			<button pos="200,220,300,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\IM.png" cursor="wait"
 				title="图片按钮2" tip="图片按钮2(快捷键：Ctrl+5)" animate="0" maxindex="4" action="dlg:dlg_login" shortcut="CTRL+5" />
