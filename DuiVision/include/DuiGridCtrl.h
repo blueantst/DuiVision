@@ -154,6 +154,7 @@ public:
 	Color				m_clrTitle;			// 标题颜色
 	Color				m_clrSeperator;		// 分割线颜色
 	Color				m_clrRowHover;		// 行背景颜色(鼠标移动到行)
+	Color				m_clrRowCurrent;	// 行背景颜色(当前行)
 	int					m_nLeftPos;			// 左侧起始位置
 	int					m_nRowHeight;		// 行高度
 	int					m_nHeaderHeight;	// 标题行高度
@@ -216,6 +217,7 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crtitle"), m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crsep"), m_clrSeperator, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crrowcurrent"), m_clrRowCurrent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("header-height"), m_nHeaderHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)

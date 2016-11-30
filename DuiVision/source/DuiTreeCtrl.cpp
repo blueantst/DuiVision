@@ -17,6 +17,7 @@ CDuiTreeCtrl::CDuiTreeCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrTitle = Color(255, 32, 32, 32);
 	m_clrSeperator = Color(0, 0, 0, 0);
 	m_clrRowHover = Color(0, 128, 128, 128);	// 鼠标移动到行显示的背景色,默认是透明色
+	m_clrRowCurrent = Color(0, 128, 128, 128);	// 当前行显示的背景色,默认是透明色
 	m_nRowHeight = 50;
 	m_nLeftPos = 0;
 
@@ -1929,6 +1930,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if((m_nHoverRow == i) && (m_clrRowHover.GetValue() != Color(0, 0, 0, 0).GetValue()))
 				{
 					SolidBrush brush(m_clrRowHover);
+					graphics.FillRectangle(&brush, nXPos, nVI*m_nRowHeight, nWidth-nXPos, m_nRowHeight);
+				}else
+				if((m_nDownRow == i) && (m_clrRowCurrent.GetValue() != Color(0, 0, 0, 0).GetValue()))	// 如果是当前行,显示当前行的背景色
+				{
+					SolidBrush brush(m_clrRowCurrent);
 					graphics.FillRectangle(&brush, nXPos, nVI*m_nRowHeight, nWidth-nXPos, m_nRowHeight);
 				}else
 				if(rowInfo.bRowBackColor)	// 如果设置了行的背景颜色,则填充颜色

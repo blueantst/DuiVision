@@ -101,6 +101,7 @@ public:
 	Color				m_clrTitle;			// 标题颜色
 	Color				m_clrSeperator;		// 分割线颜色
 	Color				m_clrRowHover;		// 行背景颜色(鼠标移动到行)
+	Color				m_clrRowCurrent;	// 行背景颜色(当前行)
 	int					m_nRowHeight;		// 行高度
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
@@ -130,6 +131,7 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crtitle"), m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crsep"), m_clrSeperator, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crrowcurrent"), m_clrRowCurrent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
