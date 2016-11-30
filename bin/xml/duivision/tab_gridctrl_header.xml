@@ -15,8 +15,8 @@
 		font-title="big" align-header="center" valign-header="middle" crheader="128,32,32"
 		font="default" align="left" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
-		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128"
-		down-row="0" column-sep="1" modify-column-width="1"
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" crrowcurrent="50,128,128,192"
+		down-row="1" column-sep="1" modify-column-width="1"
 		sort-click="1" >
 		<column title="列1" width="400" />
 		<column title="列2" width="120" />
