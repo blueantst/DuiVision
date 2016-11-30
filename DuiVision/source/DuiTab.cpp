@@ -1222,40 +1222,6 @@ void CDuiTabCtrl::SetControlWndVisible(BOOL bIsVisible)
 	}
 }
 
-// 重载设置控件隐藏状态的函数，需要调用子控件的函数
-void CDuiTabCtrl::SetControlHide(BOOL bIsHide)
-{
-	//__super::SetControlHide(bIsHide);
-
-	if(!bIsHide)
-	{
-		// 如果设置为可见状态,则仅可见页的控件设置为可见状态
-		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
-		{
-			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
-			if((itemInfo.pControl != NULL) && (i == m_nDownItem))
-			{
-				itemInfo.pControl->SetControlHide(bIsHide);
-			}else
-			if((itemInfo.pControl != NULL) && (i != m_nDownItem))
-			{
-				itemInfo.pControl->SetControlHide(TRUE);
-			}
-		}
-	}else
-	{
-		// 如果设置为隐藏状态,则所有页面的控件都需要隐藏
-		for(size_t i = 0; i < m_vecItemInfo.size(); i++)
-		{
-			TabItemInfo &itemInfo = m_vecItemInfo.at(i);
-			if(itemInfo.pControl != NULL)
-			{
-				itemInfo.pControl->SetControlHide(TRUE);
-			}
-		}
-	}
-}
-
 // 判断指定的坐标位置是否在某一个Tab页签的按钮上
 BOOL CDuiTabCtrl::PtInTabButton(CPoint point, TabItemInfo& itemInfo)
 {

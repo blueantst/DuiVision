@@ -32,7 +32,6 @@ public:
 
 	virtual void SetControlVisible(BOOL bIsVisible);
 	virtual void SetControlWndVisible(BOOL bIsVisible);
-	virtual void SetControlHide(BOOL bIsHide);
 	virtual void SetControlDisable(BOOL bIsDisable);
 	virtual BOOL SetControlFocus(BOOL bFocus);
 
