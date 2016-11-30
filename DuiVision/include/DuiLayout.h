@@ -41,6 +41,7 @@ public:
 	virtual void SetControlRect(CRect rc);
 
 	virtual void SetControlVisible(BOOL bIsVisible);
+	virtual void SetControlWndVisible(BOOL bIsVisible);
 
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);

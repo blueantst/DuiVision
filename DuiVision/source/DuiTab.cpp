@@ -1204,6 +1204,24 @@ void CDuiTabCtrl::SetControlVisible(BOOL bIsVisible)
 	}
 }
 
+// 重载设置控件中windows原生控件可见性的函数，需要调用子控件的函数
+void CDuiTabCtrl::SetControlWndVisible(BOOL bIsVisible)
+{
+	__super::SetControlWndVisible(bIsVisible);
+
+	// 设置控件和子控件的原生Windows控件的可见性
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
+			BOOL bVisible = pControlBase->GetVisible();
+			pControlBase->SetControlWndVisible(bVisible);
+		}
+	}
+}
+
 // 重载设置控件隐藏状态的函数，需要调用子控件的函数
 void CDuiTabCtrl::SetControlHide(BOOL bIsHide)
 {

@@ -274,21 +274,24 @@ void CDuiLayout::SetControlVisible(BOOL bIsVisible)
 {
 	__super::SetControlVisible(bIsVisible);
 
+	// 设置控件和子控件的原生Windows控件的可见性
+	SetControlWndVisible(bIsVisible);
+}
+
+// 重载设置控件中windows原生控件可见性的函数，需要调用子控件的函数
+void CDuiLayout::SetControlWndVisible(BOOL bIsVisible)
+{
+	__super::SetControlWndVisible(bIsVisible);
+
 	// 设置每个子控件的原生Windows控件的可见性
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
-			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")) || pControlBase->IsClass(_T("layout")))
-			{
-				// 如果子控件是容器类型控件,则调用子控件的设置可见性函数
-				pControlBase->SetControlVisible(bIsVisible);
-			}else
-			{
-				// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
-				pControlBase->SetControlWndVisible(pControlBase->GetVisible());
-			}
+			// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
+			BOOL bVisible = pControlBase->GetVisible();
+			pControlBase->SetControlWndVisible(bVisible);
 		}
 	}
 }

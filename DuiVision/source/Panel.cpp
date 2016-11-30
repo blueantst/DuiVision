@@ -384,34 +384,36 @@ void CDuiPanel::SetControlVisible(BOOL bIsVisible)
 {
 	__super::SetControlVisible(bIsVisible);
 
+	// 设置控件和子控件的原生Windows控件的可见性
+	SetControlWndVisible(bIsVisible);
+
+	// 如果有插件,则设置插件的可见性
+	if(m_pDuiPluginObject)
+	{
+		m_pDuiPluginObject->SetVisible(bIsVisible);
+	}
+}
+
+// 重载设置控件中windows原生控件可见性的函数，需要调用子控件的函数
+void CDuiPanel::SetControlWndVisible(BOOL bIsVisible)
+{
+	__super::SetControlWndVisible(bIsVisible);
+
 	// 设置每个子控件的原生Windows控件的可见性
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
 		CControlBase * pControlBase = m_vecControl.at(i);
 		if (pControlBase)
 		{
-			if(pControlBase->IsClass(_T("div")) || pControlBase->IsClass(_T("tabctrl")) || pControlBase->IsClass(_T("layout")))
+			// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
+			// 如果是edit控件,暂时不显示原生控件,否则tab页切换时候会有问题
+			BOOL bVisible = pControlBase->GetVisible();
+			if(pControlBase->IsClass(CDuiEdit::GetClassName()))
 			{
-				// 如果子控件是容器类型控件,则调用子控件的设置可见性函数
-				pControlBase->SetControlVisible(bIsVisible);
-			}else
-			{
-				// 判断子控件当前是否可见,根据可见性设置子控件的原生控件的可见性
-				// 如果是edit控件,暂时不显示原生控件,否则tab页切换时候会有问题
-				BOOL bVisible = pControlBase->GetVisible();
-				if(pControlBase->IsClass(CDuiEdit::GetClassName()))
-				{
-					bVisible = FALSE;
-				}
-				pControlBase->SetControlWndVisible(bVisible);
+				bVisible = FALSE;
 			}
+			pControlBase->SetControlWndVisible(bVisible);
 		}
-	}
-
-	// 如果有插件,则设置插件的可见性
-	if(m_pDuiPluginObject)
-	{
-		m_pDuiPluginObject->SetVisible(bIsVisible);
 	}
 }
 
