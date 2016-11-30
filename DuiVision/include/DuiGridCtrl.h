@@ -135,6 +135,7 @@ protected:
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	virtual BOOL OnControlRButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlRButtonUp(UINT nFlags, CPoint point);
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
 
