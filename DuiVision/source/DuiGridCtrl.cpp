@@ -2214,7 +2214,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						if(pControl)
 						{
 							CRect rcParent = CRect(nPosItemX, m_nHeaderHeight + nVI*m_nRowHeight + 1,
-								(int)(rect.X+rect.Width), (nVI+1)*m_nRowHeight - 1);
+								(int)(rect.X+rect.Width), m_nHeaderHeight + (nVI+1)*m_nRowHeight - 1);
 							if((int)(rect.GetRight()) > nContentWidth)
 							{
 								// 最后一列需要减去滚动条宽度
