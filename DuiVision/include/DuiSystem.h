@@ -224,6 +224,9 @@ public:
 	void DoneLog();
 	static void	LogEvent(int nLevel, LPCTSTR lpFormat, ...);
 
+	// DPIÐéÄâ»¯
+	void InitDpiAware();
+
 protected:
     void createSingletons();
     void destroySingletons();

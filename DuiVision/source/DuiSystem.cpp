@@ -145,6 +145,9 @@ void DuiSystem::createSingletons()
 	// 初始化日志
 	InitLog();
 
+	// 初始化DPI虚拟化设置
+	InitDpiAware();
+
 	// 启动任务管理器线程
 	m_TaskMsg.Startup();
 }
@@ -2767,4 +2770,16 @@ void DuiSystem::LogEvent(int nLevel, LPCTSTR lpFormat, ...)
 	va_end(ap);
 	
 	LeaveCriticalSection(CLogMgr::Instance()->GetLogMutex());
+}
+
+// 初始化DPI虚拟化设置
+void DuiSystem::InitDpiAware()
+{
+	// 初始化日志文件路径和锁
+	int nDpiAware = _ttoi(GetConfig(_T("dpiAware")));
+	if(nDpiAware == 1)
+	{
+		// 禁用此进程的DPI虚拟化功能(操作系统默认是启用的)
+		CDuiWinDwmWrapper().SetProcessDPIAware();
+	}
 }

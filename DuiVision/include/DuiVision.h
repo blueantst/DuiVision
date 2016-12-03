@@ -20,6 +20,7 @@ using namespace Gdiplus;
 #include "duiid.h"
 
 #include "../common/XUnZip.h"
+#include "../common/WinDwmWrapper.h"
 
 //////////////////////////////////////////////////////////
 // Task

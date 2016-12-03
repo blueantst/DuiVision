@@ -732,6 +732,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\common\WinDwmWrapper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\common\WinDwmWrapper.h"
+				>
+			</File>
+			<File
 				RelativePath=".\common\XUnzip.cpp"
 				>
 			</File>
