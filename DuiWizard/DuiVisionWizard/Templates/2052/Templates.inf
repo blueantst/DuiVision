@@ -73,6 +73,8 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]common\registry.h
 [duivision]common\TaskMgr.cpp
 [duivision]common\TaskMgr.h
+[duivision]common\WinDwmWrapper.cpp
+[duivision]common\WinDwmWrapper.h
 [duivision]common\XUnzip.cpp
 [duivision]common\XUnZip.h
 
