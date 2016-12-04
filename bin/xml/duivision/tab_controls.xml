@@ -171,9 +171,9 @@ width-lt,height-lt,width-rb,height-rb" />
 							password="1" number="0" readonly="0" maxchar="50"
 							font="default" crtip="128,128,128,128" />
 					
-					<text pos="50,255,119,275" crtext="808080" title="时间控件：" />
+					<text pos="50,256,119,275" crtext="808080" title="时间控件：" />
 					<mfcdatetime name="mfcdatetime1" pos="120,255,230,277" small-image="skin:IDB_KEY_BOARD"
-							title="2016-06-04" skin="IDB_EDIT"
+							title="" skin="IDB_EDIT" value="now" datetime="2016-06-04 11:22:33"
 							multiline="0" wantreturn="1" autohscroll="1" autovscroll="0"
 							number="0" readonly="0" maxchar="50"/>
 							

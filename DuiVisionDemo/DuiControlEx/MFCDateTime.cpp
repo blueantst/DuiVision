@@ -98,6 +98,7 @@ CMFCDateTime::CMFCDateTime(HWND hWnd, CDuiObject* pDuiObject)
 	m_MouthCalCtrlWidth = 190;
 	m_IsShowMouthCalCtrl = false;
 	m_bReadOnly = TRUE;	
+	m_DateTime = TIME_NULL;
 	m_isDefaultToday = true;
 }
 
@@ -114,7 +115,8 @@ CMFCDateTime::CMFCDateTime(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_MouthCalCtrlHeight = 170;
 	m_MouthCalCtrlWidth = 190;
 	m_IsShowMouthCalCtrl = false;
-	m_bReadOnly = TRUE;	
+	m_bReadOnly = TRUE;
+	m_DateTime = TIME_NULL;
 	m_isDefaultToday = true;
 }
 
@@ -128,6 +130,7 @@ HFONT CMFCDateTime::GetDateTimeFont()
 	return (HFONT)m_fontTemp.m_hObject;
 }
 
+// 显示日期时间弹出窗口
 void CMFCDateTime::ShowCMonthCalCtrl()
 {
 	if (m_bReadOnly || m_bIsDisable)
@@ -156,6 +159,7 @@ void CMFCDateTime::ShowCMonthCalCtrl()
 	}
 }
 
+// 隐藏日期时间弹出窗口
 void CMFCDateTime::HideCMonthCalCtrl()
 {
 	if (m_pMouthCalCtrl)
@@ -170,6 +174,7 @@ void CMFCDateTime::HideCMonthCalCtrl()
 	}
 }
 
+// 删除日期时间弹出窗口
 void CMFCDateTime::DeleteCMonthCalCtrl()
 {
 	if (m_pMouthCalCtrl)
@@ -185,15 +190,47 @@ void CMFCDateTime::DeleteCMonthCalCtrl()
 	}
 }
 
+// 获取时间
 SYSTEMTIME& CMFCDateTime::GetTime()
 {
 	return m_sysTime;	
 }
 
+// 设置时间
 void CMFCDateTime::SetTime(SYSTEMTIME* pst)
 {
 	m_sysTime = *pst;
-	InvalidateRect(&this->GetRect());
+
+	CString strDate;
+	strDate.Format(_T("%4d-%02d-%02d"), m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
+	SetControlTitle(strDate);
+
+	UpdateControl();
+}
+
+// 控件初始化完属性之后调用
+BOOL CMFCDateTime::OnInit()
+{
+	__super::OnInit();
+
+	CString strDate;
+
+	if(!m_isDefaultToday)
+	{
+		strDate.Format(_T("%4d-%02d-%02d"), m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
+		SetControlTitle(strDate);
+	}else
+	if(m_DateTime != TIME_NULL)
+	{
+		if(m_DateTime == NOW)
+		{
+			::GetLocalTime(&m_sysTime);
+		}
+		strDate.Format(_T("%4d-%02d-%02d"), m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
+		SetControlTitle(strDate);
+	}
+
+	return TRUE;
 }
 
 void CMFCDateTime::SetControlRect(CRect rc)
@@ -208,6 +245,7 @@ void CMFCDateTime::SetControlRect(CRect rc)
 	DeleteCMonthCalCtrl();
 }
 
+// 设置控件原生窗口可见性
 void CMFCDateTime::SetControlWndVisible(BOOL bIsVisible)
 {
 	__super::SetControlWndVisible(bIsVisible);
@@ -228,6 +266,7 @@ void CMFCDateTime::SetControlTitle(CString strTitle)
 		m_pMouthCalCtrl->SetWindowText(m_strTitle);
 }
 
+// 设置控件焦点状态
 BOOL CMFCDateTime::SetControlFocus(BOOL bFocus)
 {
 	bool isShow = !m_IsShowMouthCalCtrl || (m_IsShowMouthCalCtrl && m_isVailidRect);
@@ -264,7 +303,7 @@ LRESULT CMFCDateTime::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	return res;
 }
 
-// 事件控件选择时候,刷新edit显示的文字
+// 时间控件选择时候,刷新edit显示的文字
 BOOL CMFCDateTime::OnMonthCalCtrlSelect(UINT nFlags, CPoint point)
 {
 	BOOL bResult = FALSE;
@@ -275,17 +314,21 @@ BOOL CMFCDateTime::OnMonthCalCtrlSelect(UINT nFlags, CPoint point)
 		strDate.Format(_T("%4d-%02d-%02d"), m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
 		SetControlTitle(strDate);
 		bResult = TRUE;
+		UpdateControl();
 	}	
 	HideCMonthCalCtrl();
 	return bResult;
 }
 
+// 重载鼠标左键点击事件
 BOOL CMFCDateTime::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
+	// 判断是否在日期时间窗口范围内点击的
 	m_isVailidRect = m_rcMounth.PtInRect(point);
 	return __super::OnControlLButtonDown(nFlags, point);
 }
 
+// 设置自定义的当前时间属性(当前时间的格式为YY-MM-DD hh:mm:ss)
 HRESULT CMFCDateTime::OnAttributeDateTimeValue(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty())
@@ -307,6 +350,10 @@ HRESULT CMFCDateTime::OnAttributeDateTimeValue(const CString& strValue, BOOL bLo
 	m_sysTime.wMinute = nMinute;
 
 	m_isDefaultToday = false;
+
+	CString strDate;
+	strDate.Format(_T("%4d-%02d-%02d"), m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
+	SetControlTitle(strDate);
 
 	return bLoading ? S_FALSE : S_OK;
 }
