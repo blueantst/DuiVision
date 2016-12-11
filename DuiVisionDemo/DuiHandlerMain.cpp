@@ -144,7 +144,7 @@ void CDuiHandlerMain::OnInit()
 	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
 	if(pTreeCtrl)
 	{
-		HTREEITEM hNode = pTreeCtrl->GetNodeById(_T("1-0"));
+		HDUITREEITEM hNode = pTreeCtrl->GetNodeById(_T("1-0"));
 		CLinkButton* pControl = (CLinkButton*)DuiSystem::CreateControlByName(_T("linkbtn"), NULL, NULL);
 		if(pControl)
 		{
@@ -160,7 +160,7 @@ void CDuiHandlerMain::OnInit()
 	pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
 	if(pTreeCtrl)
 	{
-		HTREEITEM hNode = pTreeCtrl->GetNodeById(_T("2-7-1-1-1"));
+		HDUITREEITEM hNode = pTreeCtrl->GetNodeById(_T("2-7-1-1-1"));
 		pTreeCtrl->EnsureVisible(hNode, TRUE);
 	}
 
@@ -565,7 +565,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDropFile(UINT uID, CString strName, UIN
 LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
-	HTREEITEM hNode = (HTREEITEM)wParam;	// 树节点句柄	
+	HDUITREEITEM hNode = (HDUITREEITEM)wParam;	// 树节点句柄	
 	int nItem = lParam;	// 点击的树控件的第几列
 	if(nItem == 0)
 	{
@@ -580,7 +580,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgTreeCtrlDblClick(UINT uID, CString strName, UIN
 {
 	// 双击了树控件某一节点,传入参数中wParam表示控件节点索引
 	CDuiTreeCtrl* pTreeCtrl = (CDuiTreeCtrl*)GetControl(_T("treectrl_1"));
-	HTREEITEM hNode = (HTREEITEM)wParam;	// 树节点句柄
+	HDUITREEITEM hNode = (HDUITREEITEM)wParam;	// 树节点句柄
 	int nItem = lParam;	// 点击的树控件的第几列
 	TreeItemInfo* pItemInfo = pTreeCtrl->GetItemInfo(hNode, nItem);
 	if(pItemInfo)

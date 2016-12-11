@@ -124,7 +124,7 @@ BOOL CDuiTreeCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 }
 
 // 加载XML树节点
-BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
+BOOL CDuiTreeCtrl::LoadNode(HDUITREEITEM hParentNode, DuiXmlNode pXmlElem)
 {
 	// 加载下层的Node节点信息
 	for (DuiXmlNode pNodeElem = pXmlElem.child(_T("node")); pNodeElem; pNodeElem=pNodeElem.next_sibling(_T("node")))
@@ -219,7 +219,7 @@ BOOL CDuiTreeCtrl::LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem)
 		{
 			nodeInfo.bRowBackColor = TRUE;
 		}
-		HTREEITEM hNode = InsertNode(hParentNode, nodeInfo);
+		HDUITREEITEM hNode = InsertNode(hParentNode, nodeInfo);
 		if(hNode == NULL)
 		{
 			continue;
@@ -352,7 +352,7 @@ BOOL CDuiTreeCtrl::InsertColumn(int nColumn, CString strTitle, int nWidth, Color
 }
 
 // 添加树节点
-HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse,
+HDUITREEITEM CDuiTreeCtrl::InsertNode(HDUITREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse,
 							int nImageIndex, Color clrText, CString strImage,
 							int nRightImageIndex, CString strRightImage, int nCheck, Color clrBack)
 {
@@ -416,7 +416,7 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 		}
 	}
 
-	HTREEITEM hNode = InsertNode(hParentNode, nodeInfo);
+	HDUITREEITEM hNode = InsertNode(hParentNode, nodeInfo);
 
 	if(!strTitle.IsEmpty() && (hNode != NULL))
 	{
@@ -427,7 +427,7 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, CString strId, CString
 }
 
 // 添加树节点
-HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo)
+HDUITREEITEM CDuiTreeCtrl::InsertNode(HDUITREEITEM hParentNode, TreeNodeInfo &nodeInfo)
 {
 	nodeInfo.hNode = m_nNodeIndex++;
 
@@ -462,7 +462,7 @@ HTREEITEM CDuiTreeCtrl::InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo
 }
 
 // 设置表格项内容(文字表格项)
-BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CString strContent, BOOL bUseTitleFont, int nImageIndex, Color clrText, CString strImage)
+BOOL CDuiTreeCtrl::SetSubItem(HDUITREEITEM hNode, int nItem, CString strTitle, CString strContent, BOOL bUseTitleFont, int nImageIndex, Color clrText, CString strImage)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -530,7 +530,7 @@ BOOL CDuiTreeCtrl::SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CStr
 }
 
 // 设置表格项内容(链接表格项)
-BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, CString strLinkAction, int nImageIndex, Color clrText, CString strImage)
+BOOL CDuiTreeCtrl::SetSubItemLink(HDUITREEITEM hNode, int nItem, CString strLink, CString strLinkAction, int nImageIndex, Color clrText, CString strImage)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -598,7 +598,7 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, C
 }
 
 // 设置表格项为收缩图片显示
-BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strImage, int nImageCount)
+BOOL CDuiTreeCtrl::SetSubItemCollapse(HDUITREEITEM hNode, int nItem, CString strImage, int nImageCount)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -659,7 +659,7 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strIma
 }
 
 // 给树节点单元格添加子控件
-BOOL CDuiTreeCtrl::AddSubItemControl(HTREEITEM hNode, int nItem, CControlBase* pControl)
+BOOL CDuiTreeCtrl::AddSubItemControl(HDUITREEITEM hNode, int nItem, CControlBase* pControl)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -755,7 +755,7 @@ BOOL CDuiTreeCtrl::DeleteSubItemControl(CString strControlName, UINT uControlID)
 }
 
 // 删除节点
-BOOL CDuiTreeCtrl::DeleteNode(HTREEITEM hNode)
+BOOL CDuiTreeCtrl::DeleteNode(HDUITREEITEM hNode)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -796,7 +796,7 @@ BOOL CDuiTreeCtrl::DeleteNode(HTREEITEM hNode)
 }
 
 // 获取节点的行号
-int CDuiTreeCtrl::GetNodeRow(HTREEITEM hNode)
+int CDuiTreeCtrl::GetNodeRow(HDUITREEITEM hNode)
 {
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
@@ -811,10 +811,10 @@ int CDuiTreeCtrl::GetNodeRow(HTREEITEM hNode)
 }
 
 // 获取节点的最后一个子节点行号(遍历到最底层的子节点)
-int CDuiTreeCtrl::GetNodeLastChildRow(HTREEITEM hNode)
+int CDuiTreeCtrl::GetNodeLastChildRow(HDUITREEITEM hNode)
 {
 	int nRow = -1;
-	HTREEITEM hLastChildNode = NULL;
+	HDUITREEITEM hLastChildNode = NULL;
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
 		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
@@ -838,7 +838,7 @@ int CDuiTreeCtrl::GetNodeLastChildRow(HTREEITEM hNode)
 }
 
 // 判断一个节点是否有子节点
-BOOL CDuiTreeCtrl::HaveChildNode(HTREEITEM hNode)
+BOOL CDuiTreeCtrl::HaveChildNode(HDUITREEITEM hNode)
 {
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
@@ -853,7 +853,7 @@ BOOL CDuiTreeCtrl::HaveChildNode(HTREEITEM hNode)
 }
 
 // 获取父节点句柄
-HTREEITEM CDuiTreeCtrl::GetParentNode(HTREEITEM hNode)
+HDUITREEITEM CDuiTreeCtrl::GetParentNode(HDUITREEITEM hNode)
 {
 	TreeNodeInfo* pNodeInfo = GetNodeInfo(hNode);
 	if(pNodeInfo)
@@ -865,7 +865,7 @@ HTREEITEM CDuiTreeCtrl::GetParentNode(HTREEITEM hNode)
 }
 
 // 获取第一个子节点句柄
-HTREEITEM CDuiTreeCtrl::GetChildNode(HTREEITEM hNode)
+HDUITREEITEM CDuiTreeCtrl::GetChildNode(HDUITREEITEM hNode)
 {
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
@@ -880,10 +880,10 @@ HTREEITEM CDuiTreeCtrl::GetChildNode(HTREEITEM hNode)
 }
 
 // 获取下一个子节点句柄
-HTREEITEM CDuiTreeCtrl::GetNextSiblingNode(HTREEITEM hNode)
+HDUITREEITEM CDuiTreeCtrl::GetNextSiblingNode(HDUITREEITEM hNode)
 {
 	BOOL bFind = FALSE;
-	HTREEITEM hParentNode = NULL;
+	HDUITREEITEM hParentNode = NULL;
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
 		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
@@ -902,10 +902,10 @@ HTREEITEM CDuiTreeCtrl::GetNextSiblingNode(HTREEITEM hNode)
 }
 
 // 获取前一个子节点句柄
-HTREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HTREEITEM hNode)
+HDUITREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HDUITREEITEM hNode)
 {
 	BOOL bFind = FALSE;
-	HTREEITEM hParentNode = NULL;
+	HDUITREEITEM hParentNode = NULL;
 	for(size_t i = m_vecRowInfo.size()-1; i >= 0; i--)
 	{
 		TreeNodeInfo &rowInfoTemp = m_vecRowInfo.at(i);
@@ -924,7 +924,7 @@ HTREEITEM CDuiTreeCtrl::GetPrevSiblingNode(HTREEITEM hNode)
 }
 
 // 获取某个节点的子节点个数
-int CDuiTreeCtrl::GetChildNodeCount(HTREEITEM hNode)
+int CDuiTreeCtrl::GetChildNodeCount(HDUITREEITEM hNode)
 {
 	int nCount = 0;
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
@@ -940,7 +940,7 @@ int CDuiTreeCtrl::GetChildNodeCount(HTREEITEM hNode)
 }
 
 // 获取一个节点的层级
-int CDuiTreeCtrl::GetNodeLevel(HTREEITEM hNode)
+int CDuiTreeCtrl::GetNodeLevel(HDUITREEITEM hNode)
 {
 	int nLevel = 0;
 	TreeNodeInfo* pNodeInfo = GetNodeInfo(hNode);
@@ -958,7 +958,7 @@ int CDuiTreeCtrl::GetNodeLevel(HTREEITEM hNode)
 }
 
 // 根据节点ID获取节点的句柄
-HTREEITEM CDuiTreeCtrl::GetNodeById(CString strId)
+HDUITREEITEM CDuiTreeCtrl::GetNodeById(CString strId)
 {
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
@@ -973,7 +973,7 @@ HTREEITEM CDuiTreeCtrl::GetNodeById(CString strId)
 }
 
 // 获取某一个行信息
-TreeNodeInfo* CDuiTreeCtrl::GetNodeInfo(HTREEITEM hNode)
+TreeNodeInfo* CDuiTreeCtrl::GetNodeInfo(HDUITREEITEM hNode)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -986,7 +986,7 @@ TreeNodeInfo* CDuiTreeCtrl::GetNodeInfo(HTREEITEM hNode)
 }
 
 // 获取某一个单元格信息
-TreeItemInfo* CDuiTreeCtrl::GetItemInfo(HTREEITEM hNode, int nItem)
+TreeItemInfo* CDuiTreeCtrl::GetItemInfo(HDUITREEITEM hNode, int nItem)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -1011,7 +1011,7 @@ TreeItemInfo* CDuiTreeCtrl::GetItemInfo(HTREEITEM hNode, int nItem)
 }
 
 // 设置某一个单元格信息
-void CDuiTreeCtrl::SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo)
+void CDuiTreeCtrl::SetItemInfo(HDUITREEITEM hNode, int nItem, TreeItemInfo* pItemInfo)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -1066,7 +1066,7 @@ void CDuiTreeCtrl::SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemIn
 }
 
 // 设置某一个行的文字颜色
-void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
+void CDuiTreeCtrl::SetNodeColor(HDUITREEITEM hNode, Color clrText)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -1080,7 +1080,7 @@ void CDuiTreeCtrl::SetNodeColor(HTREEITEM hNode, Color clrText)
 }
 
 // 设置某一个行的背景颜色
-void CDuiTreeCtrl::SetNodeBackColor(HTREEITEM hNode, Color clrBack)
+void CDuiTreeCtrl::SetNodeBackColor(HDUITREEITEM hNode, Color clrBack)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -1094,7 +1094,7 @@ void CDuiTreeCtrl::SetNodeBackColor(HTREEITEM hNode, Color clrBack)
 }
 
 // 切换节点的缩放状态
-void CDuiTreeCtrl::ToggleNode(HTREEITEM hNode)
+void CDuiTreeCtrl::ToggleNode(HDUITREEITEM hNode)
 {
 	if(HaveChildNode(hNode))
 	{
@@ -1108,11 +1108,11 @@ void CDuiTreeCtrl::ToggleNode(HTREEITEM hNode)
 }
 
 // 切换节点的缩放状态
-void CDuiTreeCtrl::ExpandNode(HTREEITEM hNode, BOOL bExpand)
+void CDuiTreeCtrl::ExpandNode(HDUITREEITEM hNode, BOOL bExpand)
 {
 	// 展开父节点
-	HTREEITEM hParentNode = NULL;
-	HTREEITEM hTempNode = hNode;
+	HDUITREEITEM hParentNode = NULL;
+	HDUITREEITEM hTempNode = hNode;
 	while((hParentNode = GetParentNode(hTempNode)) != NULL)
 	{
 		TreeNodeInfo* pParentNodeInfo = GetNodeInfo(hParentNode);
@@ -1137,7 +1137,7 @@ void CDuiTreeCtrl::ExpandNode(HTREEITEM hNode, BOOL bExpand)
 }
 
 // 设置某一个节点的检查框状态
-void CDuiTreeCtrl::SetNodeCheck(HTREEITEM hNode, int nCheck)
+void CDuiTreeCtrl::SetNodeCheck(HDUITREEITEM hNode, int nCheck)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -1150,7 +1150,7 @@ void CDuiTreeCtrl::SetNodeCheck(HTREEITEM hNode, int nCheck)
 }
 
 // 获取某一个节点的检查框状态
-int CDuiTreeCtrl::GetNodeCheck(HTREEITEM hNode)
+int CDuiTreeCtrl::GetNodeCheck(HDUITREEITEM hNode)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)
@@ -1187,7 +1187,7 @@ void CDuiTreeCtrl::ClearNodes()
 }
 
 // 隐藏子节点
-void CDuiTreeCtrl::HideChildNodes(HTREEITEM hItem)
+void CDuiTreeCtrl::HideChildNodes(HDUITREEITEM hItem)
 {
 	for(size_t i = 0; i < m_vecRowInfo.size(); i++)
 	{
@@ -1297,7 +1297,7 @@ void CDuiTreeCtrl::RefreshNodeRows()
 }
 
 // 将指定的节点滚动到可见范围
-BOOL CDuiTreeCtrl::EnsureVisible(HTREEITEM hNode, BOOL bPartialOK)
+BOOL CDuiTreeCtrl::EnsureVisible(HDUITREEITEM hNode, BOOL bPartialOK)
 {
 	// 如果节点未展开,则首先展开节点
 	ExpandNode(hNode, TRUE);
@@ -1473,7 +1473,7 @@ int CDuiTreeCtrl::PtInRowItem(CPoint point, TreeNodeInfo& rowInfo)
 }
 
 // 设置单元格的Tooltip
-void CDuiTreeCtrl::SetGridTooltip(HTREEITEM hNode, int nItem, CString strTooltip)
+void CDuiTreeCtrl::SetGridTooltip(HDUITREEITEM hNode, int nItem, CString strTooltip)
 {
 	int nRow = GetNodeRow(hNode);
 	if(nRow == -1)

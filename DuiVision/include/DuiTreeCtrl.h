@@ -34,13 +34,13 @@ struct TreeItemInfo
 	vector<CControlBase *>	vecControl;// 控件列表
 };
 
-#define HTREEITEM	int
+#define HDUITREEITEM	int
 
 // 树节点信息
 struct TreeNodeInfo
 {
-	HTREEITEM hParentNode;	// 父节点句柄
-	HTREEITEM hNode;		// 节点句柄
+	HDUITREEITEM hParentNode;	// 父节点句柄
+	HDUITREEITEM hNode;		// 节点句柄
 	CRect	rcRow;			// 行位置信息
 	CString	strId;			// ID
 	int		nCheck;			// 检查框状态(-1表示不显示)
@@ -70,54 +70,54 @@ public:
 	virtual ~CDuiTreeCtrl(void);
 
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
-	BOOL LoadNode(HTREEITEM hParentNode, DuiXmlNode pXmlElem);
+	BOOL LoadNode(HDUITREEITEM hParentNode, DuiXmlNode pXmlElem);
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
-	HTREEITEM InsertNode(HTREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
+	HDUITREEITEM InsertNode(HDUITREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		int nCheck = -1, Color clrBack = Color(0, 0, 0, 0));
-	HTREEITEM InsertNode(HTREEITEM hParentNode, TreeNodeInfo &nodeInfo);
-	BOOL SetSubItem(HTREEITEM hNode, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
+	HDUITREEITEM InsertNode(HDUITREEITEM hParentNode, TreeNodeInfo &nodeInfo);
+	BOOL SetSubItem(HDUITREEITEM hNode, int nItem, CString strTitle, CString strContent = _T(""), BOOL bUseTitleFont = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
-	BOOL SetSubItemLink(HTREEITEM hNode, int nItem, CString strLink, CString strLinkAction = _T(""),
+	BOOL SetSubItemLink(HDUITREEITEM hNode, int nItem, CString strLink, CString strLinkAction = _T(""),
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""));
-	BOOL SetSubItemCollapse(HTREEITEM hNode, int nItem, CString strImage = _T(""), int nImageCount = 0);
-	BOOL AddSubItemControl(HTREEITEM hNode, int nItem, CControlBase* pControl);
+	BOOL SetSubItemCollapse(HDUITREEITEM hNode, int nItem, CString strImage = _T(""), int nImageCount = 0);
+	BOOL AddSubItemControl(HDUITREEITEM hNode, int nItem, CControlBase* pControl);
 	BOOL DeleteSubItemControl(CControlBase* pControl);
 	BOOL DeleteSubItemControl(CString strControlName, UINT uControlID = ID_NULL);
-	BOOL DeleteNode(HTREEITEM hNode);
+	BOOL DeleteNode(HDUITREEITEM hNode);
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
-	int  GetNodeRow(HTREEITEM hNode);
-	int	 GetNodeLastChildRow(HTREEITEM hNode);
-	BOOL HaveChildNode(HTREEITEM hNode);
-	HTREEITEM GetParentNode(HTREEITEM hNode);
-	HTREEITEM GetChildNode(HTREEITEM hNode);
-	HTREEITEM GetNextSiblingNode(HTREEITEM hNode);
-	HTREEITEM GetPrevSiblingNode(HTREEITEM hNode);
-	int  GetChildNodeCount(HTREEITEM hNode);
-	int  GetNodeLevel(HTREEITEM hNode);
-	HTREEITEM GetNodeById(CString strId);
-	TreeNodeInfo* GetNodeInfo(HTREEITEM hNode);
-	TreeItemInfo* GetItemInfo(HTREEITEM hNode, int nItem);
-	void SetItemInfo(HTREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
-	void SetNodeColor(HTREEITEM hNode, Color clrText);
-	void SetNodeBackColor(HTREEITEM hNode, Color clrBack);
-	void ToggleNode(HTREEITEM hNode);
-	void ExpandNode(HTREEITEM hNode, BOOL bExpand);
-	void SetNodeCheck(HTREEITEM hNode, int nCheck);
-	int  GetNodeCheck(HTREEITEM hNode);
+	int  GetNodeRow(HDUITREEITEM hNode);
+	int	 GetNodeLastChildRow(HDUITREEITEM hNode);
+	BOOL HaveChildNode(HDUITREEITEM hNode);
+	HDUITREEITEM GetParentNode(HDUITREEITEM hNode);
+	HDUITREEITEM GetChildNode(HDUITREEITEM hNode);
+	HDUITREEITEM GetNextSiblingNode(HDUITREEITEM hNode);
+	HDUITREEITEM GetPrevSiblingNode(HDUITREEITEM hNode);
+	int  GetChildNodeCount(HDUITREEITEM hNode);
+	int  GetNodeLevel(HDUITREEITEM hNode);
+	HDUITREEITEM GetNodeById(CString strId);
+	TreeNodeInfo* GetNodeInfo(HDUITREEITEM hNode);
+	TreeItemInfo* GetItemInfo(HDUITREEITEM hNode, int nItem);
+	void SetItemInfo(HDUITREEITEM hNode, int nItem, TreeItemInfo* pItemInfo);
+	void SetNodeColor(HDUITREEITEM hNode, Color clrText);
+	void SetNodeBackColor(HDUITREEITEM hNode, Color clrBack);
+	void ToggleNode(HDUITREEITEM hNode);
+	void ExpandNode(HDUITREEITEM hNode, BOOL bExpand);
+	void SetNodeCheck(HDUITREEITEM hNode, int nCheck);
+	int  GetNodeCheck(HDUITREEITEM hNode);
 	void ClearNodes();
-	void HideChildNodes(HTREEITEM hItem);
+	void HideChildNodes(HDUITREEITEM hItem);
 	void RefreshNodeRows();
-	BOOL EnsureVisible(HTREEITEM hNode, BOOL bPartialOK);
+	BOOL EnsureVisible(HDUITREEITEM hNode, BOOL bPartialOK);
 
 	BOOL PtInRow(CPoint point, TreeNodeInfo& rowInfo);
 	BOOL PtInRowCheck(CPoint point, TreeNodeInfo& rowInfo);
 	BOOL PtInRowCollapse(CPoint point, TreeNodeInfo& rowInfo);
 	int  PtInRowItem(CPoint point, TreeNodeInfo& rowInfo);
 
-	void SetGridTooltip(HTREEITEM hNode, int nItem, CString strTooltip);
+	void SetGridTooltip(HDUITREEITEM hNode, int nItem, CString strTooltip);
 	void ClearGridTooltip();
 
 protected:
@@ -169,7 +169,7 @@ public:
 	int					m_nTipItem;			// 当前tip列
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
-	HTREEITEM			m_nNodeIndex;		// 句柄递增变量
+	HDUITREEITEM			m_nNodeIndex;		// 句柄递增变量
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
