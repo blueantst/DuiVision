@@ -64,7 +64,7 @@ BOOL CDuiWinDwmWrapper::IsCompositionEnabled()
 			sData.m_hDwmDll, duiWrapperProcDwmIsCompositionEnabled);
 	}
 
-	PFNDwmIsCompositionEnabled ptr = (PFNDwmIsCompositionEnabled)sData.m_ptrWrappers[duiWrapperDwmIsCompositionEnabled];
+	DUIPFNDwmIsCompositionEnabled ptr = (DUIPFNDwmIsCompositionEnabled)sData.m_ptrWrappers[duiWrapperDwmIsCompositionEnabled];
 	if (ptr)
 	{
 		BOOL bEnabled = FALSE;
@@ -86,7 +86,7 @@ HRESULT CDuiWinDwmWrapper::DefWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 			sData.m_hDwmDll, duiWrapperProcDwmDefWindowProc);
 	}
 
-	PFNDwmDefWindowProc ptr = (PFNDwmDefWindowProc)sData.m_ptrWrappers[duiWrapperDwmDefWindowProc];
+	DUIPFNDwmDefWindowProc ptr = (DUIPFNDwmDefWindowProc)sData.m_ptrWrappers[duiWrapperDwmDefWindowProc];
 	if (ptr)
 	{
 		return (*ptr)(hWnd, msg, wParam, lParam, plResult);
@@ -104,7 +104,7 @@ HRESULT CDuiWinDwmWrapper::ExtendFrameIntoClientArea(HWND hWnd, int cxLeftWidth,
 			sData.m_hDwmDll, duiWrapperProcDwmExtendFrameIntoClientArea);
 	}
 
-	PFNDwmExtendFrameIntoClientArea ptr = (PFNDwmExtendFrameIntoClientArea)sData.m_ptrWrappers[duiWrapperDwmExtendFrameIntoClientArea];
+	DUIPFNDwmExtendFrameIntoClientArea ptr = (DUIPFNDwmExtendFrameIntoClientArea)sData.m_ptrWrappers[duiWrapperDwmExtendFrameIntoClientArea];
 	if (ptr)
 	{
 		DUI_DWM_MARGINS margins;

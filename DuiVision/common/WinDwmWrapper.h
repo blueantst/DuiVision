@@ -15,14 +15,14 @@ struct DUI_DWM_MARGINS
 	int cyBottomHeight;   // height of bottom border that retains its size
 };
 
-#define TYPEDEF_WRAPPER_POINTER(val, type, proc)\
+#define TYPEDEF_DUIWRAPPER_POINTER(val, type, proc)\
 	const int duiWrapper##proc = val;\
 	const LPCSTR duiWrapperProc##proc = #proc;\
-	typedef type (__stdcall* PFN##proc)
+	typedef type (__stdcall* DUIPFN##proc)
 
-TYPEDEF_WRAPPER_POINTER(0, HRESULT, DwmDefWindowProc)(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
-TYPEDEF_WRAPPER_POINTER(1, HRESULT, DwmIsCompositionEnabled)( BOOL*);
-TYPEDEF_WRAPPER_POINTER(2, HRESULT, DwmExtendFrameIntoClientArea)(HWND, const DUI_DWM_MARGINS*);
+TYPEDEF_DUIWRAPPER_POINTER(0, HRESULT, DwmDefWindowProc)(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
+TYPEDEF_DUIWRAPPER_POINTER(1, HRESULT, DwmIsCompositionEnabled)( BOOL*);
+TYPEDEF_DUIWRAPPER_POINTER(2, HRESULT, DwmExtendFrameIntoClientArea)(HWND, const DUI_DWM_MARGINS*);
 
 // The CDuiWinDwmWrapper class wraps the dwp api.
 class CDuiWinDwmWrapper
