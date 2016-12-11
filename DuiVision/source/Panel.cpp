@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Panel.h"
+#include "vcicomm.h"
 
 #define	SCROLL_V	1	// 垂直滚动条控件ID
 #define	SCROLL_H	2	// 水平滚动条控件ID

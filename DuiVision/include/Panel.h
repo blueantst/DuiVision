@@ -2,7 +2,6 @@
 #pragma once
 
 #include "ControlBase.h"
-#include "vcicomm.h"
 #include "IDuiHostWnd.h"
 
 using namespace  std;
@@ -101,7 +100,8 @@ protected:
 		STDMETHOD_( void , SetTooltipCtrlID) (int nTooltipCtrlID);	// 设置当前Tooltip控件ID
 		STDMETHOD_( int , GetTooltipCtrlID) ();		// 获取当前Tooltip控件ID
 	END_INTERFACE_PART(DuiPanel)
-	EXPORT_INTERFACE_PART(DuiPanel)
+	public:
+	virtual LPVOID ExternalQueryInterface()	{ ((IUnknown *)&m_xDuiPanel)->AddRef(); return (LPVOID)&m_xDuiPanel; }
 
 public:
 	ULONG			m_ulRefCount;			// 内嵌接口类使用的引用计数,vcicomm使用

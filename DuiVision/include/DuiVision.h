@@ -19,11 +19,11 @@ using namespace Gdiplus;
 
 #include "duiid.h"
 
+//////////////////////////////////////////////////////////
+//Comm
 #include "../common/XUnZip.h"
 #include "../common/WinDwmWrapper.h"
-
-//////////////////////////////////////////////////////////
-// Task
+#include "../common/LogMgr.h"
 #include "../common/BaseTask.h"
 #include "../common/TaskMgr.h"
 
