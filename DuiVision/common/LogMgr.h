@@ -53,6 +53,9 @@ public:
 	static void LogEvent(int nLevel, LPCTSTR lpFormat, ...);
 	int LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp);
 
+	static void LogEventModule(int nLevel, LPCTSTR lpModule, LPCTSTR lpFormat, ...);
+	int LogEventModuleArgs(int nLevel, LPCTSTR lpModule, LPCTSTR lpFormat, va_list argp);
+
 protected:
 	void sort();
 	bool SetInitDir(const TCHAR *dir);
@@ -65,15 +68,15 @@ private:
 	CRITICAL_SECTION		m_WriteLogMutex;		// 日志同步锁
 	CString					m_strLogPath;			// 日志文件路径
 	CString					m_strLogFile;			// 日志文件名
-	CString					m_strLogFileName;			// 日志文件名前缀
+	CString					m_strLogFileName;		// 日志文件名前缀
 	int						m_nLogLevel;			// 日志级别
 	BOOL					m_bLogEnable;			// 是否启用日志功能
 	int						m_nMaxLogFileSize;		// 日志文件长度的最大值
 	int						m_nMaxLogFileNumber;	// 最大保存日志文件数
 
-	TCHAR				m_szInitDir[_MAX_FILE_PATH];	// 日志路径名
-	TCHAR				m_szFileName[MAX_MAINTENANCE_LOG_NUM][_MAX_FILE_PATH];	// 存放文件名数组
-	time_t				m_szFileCreateTime[MAX_MAINTENANCE_LOG_NUM];	// 文件创建时间,与文件名一一对应
+	TCHAR					m_szInitDir[_MAX_FILE_PATH];	// 日志路径名
+	TCHAR					m_szFileName[MAX_MAINTENANCE_LOG_NUM][_MAX_FILE_PATH];	// 存放文件名数组
+	time_t					m_szFileCreateTime[MAX_MAINTENANCE_LOG_NUM];	// 文件创建时间,与文件名一一对应
 	int						m_nSaveIndex;		// 保存索引号
 };
 

@@ -216,6 +216,123 @@ int CLogMgr::LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp)
 	return 0;
 }
 
+// 记录日志
+void CLogMgr::LogEventModule(int nLevel, LPCTSTR lpModule, LPCTSTR lpFormat, ...)
+{
+	if(!CLogMgr::Instance()->IsLogEnable())
+	{
+		return;
+	}
+
+	if(nLevel < CLogMgr::Instance()->GetLogLevel())
+	{
+		return;
+	}
+	
+	EnterCriticalSection(CLogMgr::Instance()->GetLogMutex());
+	
+	va_list ap;
+	va_start(ap, lpFormat);
+	CLogMgr::Instance()->LogEventModuleArgs(nLevel, lpModule, lpFormat, ap);
+	va_end(ap);
+	
+	LeaveCriticalSection(CLogMgr::Instance()->GetLogMutex());
+}
+
+// 记录日志(增加模块参数)
+int CLogMgr::LogEventModuleArgs(int nLevel, LPCTSTR lpModule, LPCTSTR lpFormat, va_list argp)
+{
+	const int nBufLen = MAX_PATH * 2;
+	TCHAR szBuf[nBufLen];
+
+	int nStrLen=_vsntprintf_s(szBuf, nBufLen-1, lpFormat, argp);
+	if(nStrLen>0) szBuf[nStrLen] = 0;
+
+	FILE* lpFile = _tfopen(m_strLogFile, _T("a+"));
+	if ( lpFile != NULL )
+	{
+		// 获取文件大小
+		int nResult = -1;
+		struct _stat FileBuff;
+		nResult = T_STAT(m_strLogFile, &FileBuff);
+		if (0 != nResult)
+		{
+			return -1;	// 获取文件大小失败
+		}
+
+		long lSize = FileBuff.st_size;
+
+		// 文件大于设定大小需要进行转储，默认最大1MB
+		if (lSize > m_nMaxLogFileSize)
+		{
+			fclose(lpFile);
+
+			// 进行日志文件转储，转储时保证只保存指定个数的备份文件
+			FileReName(m_strLogFile, m_strLogFileName + _T(".") + LOG_CONVEY_FILE_NAME);
+
+			// 删除多余文件(规矩通配符规则和时间顺序删除,保留最新的若干文件)
+			FileConveySave(m_strLogPath, m_strLogFileName + _T(".") + LOG_CONVEY_RULE, m_nMaxLogFileNumber);
+
+			// 删除备份文件
+			//_tunlink(m_strLogFile + _T(".bak"));
+			// 重命名文件名为备份文件名
+			//_trename(m_strLogFile, m_strLogFile + _T(".bak"));
+
+			// 打开新文件
+			lpFile = _tfopen(m_strLogFile, _T("w+"));//,ccs=UTF-8"));
+			if (lpFile == NULL)
+			{
+				return -2;	// 打开可写的新文件失败
+			}
+		}
+
+		SYSTEMTIME st;
+		GetLocalTime(&st);
+
+		CString strLevel;
+		if (nLevel == LOG_LEVEL_DEBUG)
+		{
+			strLevel = __DEBUG;
+		}
+		else if (nLevel == LOG_LEVEL_INFO)
+		{
+			strLevel = __INFO;
+		}
+		else if (nLevel == LOG_LEVEL_ERROR)
+		{
+			strLevel = __ERROR;
+		}
+		else if (nLevel == LOG_LEVEL_CRITICAL)
+		{
+			strLevel = __CRITICAL;
+		}
+		else
+		{
+			strLevel = __DEBUG;
+		}
+
+		LPCTSTR lpStr = _tcschr(lpFormat, _T('\n'));
+		if ( lpStr != NULL )
+		{
+			lpStr = _T("%s %02d-%02d-%02d %02d:%02d:%02d[%u][%s] : %s");
+		}
+		else
+		{
+			lpStr = _T("%s %02d-%02d-%02d %02d:%02d:%02d[%u][%s] : %s\n");
+		}
+
+		DWORD dwCurThreadID = GetCurrentThreadId();
+
+		_ftprintf(lpFile, lpStr, strLevel,
+			st.wYear, st.wMonth, st.wDay,
+			st.wHour, st.wMinute, st.wSecond,
+			dwCurThreadID, lpModule, szBuf);
+		fclose(lpFile);
+	}
+
+	return 0;
+}
+
 // 升序排列，按照文件创建时间进行排序
 void CLogMgr::sort()
 {
