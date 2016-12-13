@@ -2739,13 +2739,15 @@ void DuiSystem::InitLog()
 	CLogMgr::Instance()->SetLogFileSize(nLogFileSize);
 	CLogMgr::Instance()->SetLogFileNumber(nLogFileNumber);
 
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision Start-------------------"));
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG,
+		_T("------------------%s-%s Start-------------------"),
+		GetString(_T("APP_NAME")), GetString(_T("APP_VER")));
 }
 
 // Ω· ¯»’÷æ
 void DuiSystem::DoneLog()
 {
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------DuiVision End-------------------"));
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("------------------End-------------------"));
 	CLogMgr::Release();
 }
 
