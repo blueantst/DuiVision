@@ -902,7 +902,7 @@ BOOL DuiSystem::LoadIconFile(CString strFileName, HICON& hIcon)
 }
 
 // 加载通用文件到内存,支持从zip文件中加载
-BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
+BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer, DWORD& dwSize)
 {
 	BOOL bRet = FALSE;
 	BYTE* pByte = NULL;
@@ -919,7 +919,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
 			_strFileName = strFileName;
 		}else
 		{
-			DWORD dwSize = 0;
+			dwSize = 0;
 			pByte = LoadZipFile(strFileName, dwSize);
 			if(pByte == NULL)
 			{
@@ -955,7 +955,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer)
 		{
 			return FALSE;
 		}
-		DWORD dwSize = (DWORD)file.GetLength();
+		dwSize = (DWORD)file.GetLength();
 		pByte = new BYTE[dwSize + 1];
 		TRY
 		{

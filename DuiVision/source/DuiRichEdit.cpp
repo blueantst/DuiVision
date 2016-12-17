@@ -1511,7 +1511,8 @@ bool CDuiRichEdit::SetFile(LPCTSTR pstrFile)
     ReplaceSel(_T(""), FALSE);
 
 	BYTE* pData = NULL;
-	if(DuiSystem::Instance()->LoadFileToBuffer(pstrFile, pData))
+	DWORD dwSize = 0;
+	if(DuiSystem::Instance()->LoadFileToBuffer(pstrFile, pData, dwSize))
 	{
 		SetSel(0, -1);
 		ReplaceSel((LPCTSTR)pData, FALSE);
