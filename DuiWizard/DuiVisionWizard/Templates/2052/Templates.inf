@@ -90,6 +90,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DlgPopup.h
 [duivision]include\DlgSkin.h
 [duivision]include\DuiActiveX.h
+[duivision]include\DuiAnimateImg.h
 [duivision]include\DuiButton.h
 [duivision]include\DuiComboBox.h
 [duivision]include\DuiDef.h
@@ -125,7 +126,6 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\Progress.h
 [duivision]include\RadioButton.h
 [duivision]include\Rectangle.h
-[duivision]include\Runing.h
 [duivision]include\Scroll.h
 [duivision]include\SelectBox.h
 [duivision]include\TextButton.h
@@ -141,6 +141,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DlgPopup.cpp
 [duivision]source\DlgSkin.cpp
 [duivision]source\DuiActiveX.cpp
+[duivision]source\DuiAnimateImg.cpp
 [duivision]source\DuiButton.cpp
 [duivision]source\DuiComboBox.cpp
 [duivision]source\DuiEdit.cpp
@@ -170,7 +171,6 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\Progress.cpp
 [duivision]source\RadioButton.cpp
 [duivision]source\Rectangle.cpp
-[duivision]source\Runing.cpp
 [duivision]source\Scroll.cpp
 [duivision]source\SelectBox.cpp
 [duivision]source\TextButton.cpp
