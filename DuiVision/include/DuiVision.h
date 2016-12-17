@@ -65,7 +65,6 @@ using namespace Gdiplus;
 #include "Area.h"
 #include "ImageString.h"
 #include "Rectangle.h"
-#include "Runing.h"
 #include "Scroll.h"
 #include "SelectBox.h"
 #include "DuiSlider.h"
@@ -73,6 +72,7 @@ using namespace Gdiplus;
 //////////////////////////////////////////////////////////
 //Picture
 #include "Picture.h"
+#include "DuiAnimateImg.h"
 
 //////////////////////////////////////////////////////////
 //Progress

@@ -416,7 +416,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\source\Runing.cpp"
+				RelativePath=".\source\DuiAnimateImg.cpp"
 				>
 			</File>
 			<File
@@ -654,7 +654,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\Runing.h"
+				RelativePath=".\include\DuiAnimateImg.h"
 				>
 			</File>
 			<File

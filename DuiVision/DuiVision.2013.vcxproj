@@ -226,7 +226,7 @@
     <ClInclude Include="include\Progress.h" />
     <ClInclude Include="include\RadioButton.h" />
     <ClInclude Include="include\Rectangle.h" />
-    <ClInclude Include="include\Runing.h" />
+    <ClInclude Include="include\DuiAnimateImg.h" />
     <ClInclude Include="include\Scroll.h" />
     <ClInclude Include="include\SelectBox.h" />
     <ClInclude Include="include\TextButton.h" />
@@ -287,7 +287,7 @@
     <ClCompile Include="source\Progress.cpp" />
     <ClCompile Include="source\RadioButton.cpp" />
     <ClCompile Include="source\Rectangle.cpp" />
-    <ClCompile Include="source\Runing.cpp" />
+    <ClCompile Include="source\DuiAnimateImg.cpp" />
     <ClCompile Include="source\Scroll.cpp" />
     <ClCompile Include="source\SelectBox.cpp" />
     <ClCompile Include="source\TextButton.cpp" />

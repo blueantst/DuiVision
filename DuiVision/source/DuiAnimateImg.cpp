@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "Runing.h"
+#include "DuiAnimateImg.h"
 
 inline int CDuiAnimateImage::TGIFControlExt::GetPackedValue(enum ControlExtValues Value)
 {

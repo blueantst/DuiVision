@@ -69,7 +69,7 @@
     <ClInclude Include="include\Progress.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\Runing.h">
+    <ClInclude Include="include\DuiAnimateImg.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\Scroll.h">
@@ -248,7 +248,7 @@
     <ClCompile Include="source\Progress.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\Runing.cpp">
+    <ClCompile Include="source\DuiAnimateImg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\Scroll.cpp">
