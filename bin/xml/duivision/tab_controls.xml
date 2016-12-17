@@ -118,6 +118,15 @@
 			<img name="image-icon" pos="500,20" width="48" height="48" image="skins\dui.ico"
 				mode="normal" tip="显示图标文件" />
 			
+			<animateimg name="image-gif1" pos="570,20" width="75" height="41" img-gif="skins\gif\MovingUserData.gif"
+				run="1" tip="显示GIF动画文件" />
+			
+			<!--animateimg name="image-gif-face0" pos="570,100" width="24" height="24" img-gif="skins\gif\face\0.gif" run="1" />
+			<animateimg name="image-gif-face1" pos="600,100" width="24" height="24" img-gif="skins\gif\face\1.gif" run="1" />
+			<animateimg name="image-gif-face2" pos="630,100" width="24" height="24" img-gif="skins\gif\face\2.gif" run="1" />
+			<animateimg name="image-gif-face3" pos="660,100" width="24" height="24" img-gif="skins\gif\face\3.gif" run="1" />
+			<animateimg name="image-gif-face4" pos="690,100" width="24" height="24" img-gif="skins\gif\face\4.gif" run="1" /-->
+			
 			<img pos="50,150,500,-0" image="skins\default\msgdlg_bk.png" mode="mid"
 					width-lt="10" height-lt="60" width-rb="10" height-rb="5" />
 			<text crtext="800000" font="big" pos="60,158,250,178" title="九宫格图片显示" />
