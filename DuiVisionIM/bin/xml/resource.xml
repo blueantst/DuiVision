@@ -32,6 +32,8 @@
 <res type="xml" name="tab_contact" file="xml\im\tab_contact.xml" />
 <res type="xml" name="tab_group" file="xml\im\tab_group.xml" />
 
+<res type="xml" name="dlg_chat" file="xml\im\dlg_chat.xml"  />
+
 <res type="xml" name="menu_main" file="xml\im\menu_main.xml"  />
 <res type="xml" name="menu_state" file="xml\im\menu_state.xml"  />
 <res type="xml" name="menu_tray" file="xml\im\menu_tray.xml"  />
@@ -93,6 +95,11 @@
 <res type="img" name="IDB_LINE_RP" file="skins\default\rp_line.png" />
 <res type="img" name="IDB_WINBACK_SHADOW" file="skins\default\winback_shadow.png" />
 <res type="img" name="IDB_WINDOW_SHADOW" file="skins\default\window_shadow.png" />
+<res type="img" name="IDB_SPLIT_HORI" file="skins\default\split_hori.png" />
+<res type="img" name="IDB_SPLIT_VERT" file="skins\default\split_vert.png" />
+<res type="img" name="IDB_SPLIT_THUMB_HORI" file="skins\default\split_thumb_hori.jpg" />
+<res type="img" name="IDB_SPLIT_THUMB_VERT" file="skins\default\split_thumb_vert.jpg" />
+<res type="img" name="IDB_TOOLBAR_BG" file="skins\default\toolbar_bg.png" />
 
 <res type="img" name="IDB_MENU_BACK" file="skins\menu\menu_bkg.png" />
 <res type="img" name="IDB_MENU_SEP" file="skins\menu\menu_sep.png" />

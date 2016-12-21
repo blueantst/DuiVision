@@ -7,7 +7,7 @@
 		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1" shortcut="ESC" />
 		<imgbtn name="button.setup" pos="-74,0,-46,20" skin="IDB_BT_SETUP" show="1"/>
 		<text name="title" crtext="FFFFFF" crmark="800000" font="big"
-				pos="10,5,200,25" title="Flash背景的登录窗口" mask="" response="0" show="1" />
+				pos="10,5,200,25" title="登录" mask="" response="0" show="1" />
 	</base>
 
 	<body>

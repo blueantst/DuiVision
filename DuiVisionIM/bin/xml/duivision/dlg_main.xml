@@ -32,6 +32,7 @@
 			tip="菜单" action="menu:menu_state" menupos="0,-0" />
 	<edit name="edit.user.sign" skin="IDB_EDIT-"
 			pos="0,70,-65,100" title="" tip="编辑个性签名" crtip="255,245,245,245"
+			crback="0,255,255,255"
 			multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
 			font="default" />
 	
