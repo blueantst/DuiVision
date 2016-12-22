@@ -12,14 +12,14 @@ enum LAYOUT_TYPE
 // Layout信息结构定义
 struct LayoutItemInfo
 {
-	BOOL			bVisible;	// div是否可见
-	DUI_POSITION_ITEM	pos;	// 位置信息
-	int					nMinPos;	// 位置最小值
-	int					nMaxPos;	// 位置最大值
+	BOOL				bVisible;		// div是否可见
+	DUI_POSITION_ITEM	pos;			// 位置信息
+	int					nMinPos;		// 位置最小值
+	int					nMaxPos;		// 位置最大值
 	int					nPos;			// 实际的位置值
-	CDuiPanel*		pControlPanel;	// Layout对应的div容器控件
-	CRect			rcSplit;			// 分割线区域
-	CRect			rcThumb;		// 滑块区域
+	CDuiPanel*			pControlPanel;	// Layout对应的div容器控件
+	CRect				rcSplit;		// 分割线区域
+	CRect				rcThumb;		// 滑块区域
 };
 
 class CDuiLayout : public CControlBaseFont
@@ -50,17 +50,14 @@ public:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 	
 public:
-	LAYOUT_TYPE		m_nLayoutType;			// Layout类型
-	vector<LayoutItemInfo>		m_vecItemInfo;	// Layout信息列表
-	BOOL					m_bInit;				// 是否初始化完成
-	enumButtonState m_enButtonState;	// 鼠标状态
-	BOOL			m_bHover;			// 是否鼠标热点状态
-	int					m_nHoverSplit;	// 鼠标拖动的分隔线索引
-	int				m_nSplitWidth;		// 分隔线宽度
-	BOOL		m_bSplitImm;			// 鼠标移动分割线是否立即生效
-	//int				m_nThumbWidth;		// 滑块宽度
-	//int				m_nThumbHeight;		// 滑块高度
-	//int				m_nThumbPos;		// 滑块顶端位置
+	LAYOUT_TYPE				m_nLayoutType;	// Layout类型
+	vector<LayoutItemInfo>	m_vecItemInfo;	// Layout信息列表
+	BOOL					m_bInit;		// 是否初始化完成
+	enumButtonState			m_enButtonState;// 鼠标状态
+	BOOL					m_bHover;		// 是否鼠标热点状态
+	int						m_nHoverSplit;	// 鼠标拖动的分隔线索引
+	int						m_nSplitWidth;	// 分隔线宽度
+	BOOL					m_bSplitImm;	// 鼠标移动分割线是否立即生效
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Split);	// 定义Split图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Thumb);	// 定义前景图片
@@ -73,8 +70,5 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("img-thumb"), OnAttributeImageThumb)
 		DUI_INT_ATTRIBUTE(_T("split-width"), m_nSplitWidth, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("split-imm"), m_bSplitImm, TRUE)
-		//DUI_INT_ATTRIBUTE(_T("thumb-width"), m_nThumbWidth, FALSE)
-		//DUI_INT_ATTRIBUTE(_T("thumb-height"), m_nThumbHeight, FALSE)
-		//DUI_INT_ATTRIBUTE(_T("thumb-pos"), m_nThumbPos, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

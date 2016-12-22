@@ -20,9 +20,6 @@ CDuiLayout::CDuiLayout(HWND hWnd, CDuiObject* pDuiObject)
 	m_sizeThumb = CSize(0, 0);
 	m_nSplitWidth = 0;
 	m_bSplitImm = TRUE;
-	//m_nThumbWidth = 0;
-	//m_nThumbHeight = 0;
-	//m_nThumbPos = 0;
 }
 
 CDuiLayout::CDuiLayout(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nProgress/* = 0*/, 
@@ -45,9 +42,6 @@ CDuiLayout::CDuiLayout(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 	m_sizeThumb = CSize(0, 0);
 	m_nSplitWidth = 0;
 	m_bSplitImm = TRUE;
-	//m_nThumbWidth = 0;
-	//m_nThumbHeight = 0;
-	//m_nThumbPos = 0;
 }
 
 CDuiLayout::~CDuiLayout(void)
@@ -213,14 +207,6 @@ void CDuiLayout::SetControlRect(CRect rc)
 	{
 		m_nSplitWidth = (m_nLayoutType == LAYOUT_TYPE_HORIZONTAL) ? m_sizeSplit.cy : m_sizeSplit.cx;
 	}
-	/*if(m_nThumbWidth == 0)
-	{
-		m_nThumbWidth = m_sizeThumb.cx;
-	}
-	if(m_nThumbHeight == 0)
-	{
-		m_nThumbHeight = m_sizeThumb.cy;
-	}*/
 
 	// 计算panel、分割线、滑块的位置
 	if(m_nLayoutType == LAYOUT_TYPE_HORIZONTAL)
