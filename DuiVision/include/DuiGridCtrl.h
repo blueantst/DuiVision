@@ -91,6 +91,7 @@ public:
 	void CalcColumnsPos();
 	BOOL EnsureVisible(int nRow, BOOL bPartialOK);
 	int  GetRowCount() { return m_vecRowInfo.size(); }
+	int  GetCurrentRow() { return m_nDownRow; }
 	GridRowInfo* GetRowInfo(int nRow);
 	GridItemInfo* GetItemInfo(int nRow, int nItem);
 	CString GetItemText(int nRow, int nItem);

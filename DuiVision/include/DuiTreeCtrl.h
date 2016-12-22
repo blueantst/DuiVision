@@ -90,6 +90,7 @@ public:
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
 	int  GetNodeRow(HDUITREEITEM hNode);
 	int	 GetNodeLastChildRow(HDUITREEITEM hNode);
+	HDUITREEITEM  GetCurrentNode();
 	BOOL HaveChildNode(HDUITREEITEM hNode);
 	HDUITREEITEM GetParentNode(HDUITREEITEM hNode);
 	HDUITREEITEM GetChildNode(HDUITREEITEM hNode);

@@ -837,6 +837,18 @@ int CDuiTreeCtrl::GetNodeLastChildRow(HDUITREEITEM hNode)
 	return nRow;
 }
 
+// 获取当前点击的节点句柄
+HDUITREEITEM CDuiTreeCtrl::GetCurrentNode()
+{
+	if((m_nDownRow < 0) || ((UINT)m_nDownRow >= m_vecRowInfo.size()))
+	{
+		return NULL;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
+	return rowInfo.hNode;
+}
+
 // 判断一个节点是否有子节点
 BOOL CDuiTreeCtrl::HaveChildNode(HDUITREEITEM hNode)
 {
