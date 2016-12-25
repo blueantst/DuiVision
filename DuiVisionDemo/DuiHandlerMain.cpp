@@ -519,14 +519,47 @@ LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDblClick(UINT uID, CString strName, UIN
 	}
 	return TRUE;
 }
+/*
+//
+// 删除gridctrl行的任务类
+//
+class CDuiDeleteGridRowTask : public DuiVision::IBaseTask
+{
+public:
+	CDuiDeleteGridRowTask(LONG type, CDuiGridCtrl* pGridCtrl, int nRow)
+		: DuiVision::IBaseTask(type), m_pGridCtrl(pGridCtrl), m_nRow(nRow)
+	{
+		SetUITask(TRUE);	// 设置为需要转UI线程处理的任务
+	}
 
+	// 任务处理
+	virtual BOOL TaskProcess(DuiVision::CTaskMgr *pMgr)
+	{
+		if(m_pGridCtrl != NULL)
+		{
+			m_pGridCtrl->DeleteRow(m_nRow);
+		}
+		return TRUE;
+	}
+
+protected:
+	CDuiGridCtrl*	m_pGridCtrl;	// Grid控件对象
+	int				m_nRow;			// 删除的行
+};
+*/
 // 表格控件的删除按钮子控件点击消息处理
 LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlDelBtnClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	// 点击了表格控件的删除行按钮子控件
 	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiGridCtrl* pGridCtrl = (CDuiGridCtrl*)GetControl(_T("gridctrl_1"));
-	pGridCtrl->DeleteRow(3);
+	pGridCtrl->DeleteRow(2);
+	/*DuiVision::CTaskMgr* pTaskMgr = DuiSystem::Instance()->GetTaskMgr();
+	if(pTaskMgr)
+	{
+		pTaskMgr->AddTask(new CDuiDeleteGridRowTask(2, pGridCtrl, 2));
+		pTaskMgr->StartTask();
+	}*/
 	
 	return TRUE;
 }
