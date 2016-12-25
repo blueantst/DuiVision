@@ -625,7 +625,7 @@ BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 	OnMousePointChange(point);
 
 	BOOL bRresponse = false;
-	if(m_pControl)
+	if(m_pControl && IsWindow(m_pControl->GetHWND()))
 	{
 		CPoint pt = point;
 		// 如果是控件内置滚动条子控件,则不进行位置变换,因为滚动条位置是不需要变换的
