@@ -2704,7 +2704,7 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	strInfo.ReleaseBuffer();
 	memcpy(pViewOfFile, &interMsg, sizeof(DUI_INTERPROCESS_MSG));
 
-	DWORD result;
+	ULONG_PTR result;
 	LRESULT ok = SendMessageTimeout(HWND_BROADCAST,	// 发送广播消息
 		WM_CHECK_ITS_ME,
 		wParam,			// wParam参数,表示应用类型
