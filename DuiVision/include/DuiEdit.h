@@ -31,6 +31,7 @@ public:
 	virtual BOOL IsDraw(CPoint point) ;
 	virtual void SetControlWndVisible(BOOL bIsVisible);
 	virtual void SetControlTitle(CString strTitle);
+	virtual void SetFont(CString strFont = _T(""), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
 	BOOL GetLButtonDown();
 	BOOL GetLButtonUp();
 	CString GetEditText();

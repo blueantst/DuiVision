@@ -470,6 +470,20 @@ void CDuiEdit::SetControlTitle(CString strTitle)
 	}
 }
 
+// 设置字体
+void CDuiEdit::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
+{
+	// 删除windows控件和编辑状态使用的字体对象
+	DeleteEdit();
+	if(m_fontTemp.m_hObject)
+	{
+		m_fontTemp.DeleteObject();
+	}
+
+	// 设置新的字体
+	__super::SetFont(strFont, nFontWidth, fontStyle);
+}
+
 // 设置控件的焦点
 BOOL CDuiEdit::SetControlFocus(BOOL bFocus)
 {
