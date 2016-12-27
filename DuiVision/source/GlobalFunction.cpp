@@ -633,7 +633,7 @@ int DrawVerticalTransition(CDC &dcDes, CDC &dcSrc, const CRect &rcDes, const CRe
 // »­Ë®Æ½¹ý¶É
 int DrawHorizontalTransition(CDC &dcDes, CDC &dcSrc, const CRect &rcDes, const CRect &rcSrc, int nBeginTransparent/* = 0*/, int nEndTransparent/* = 100*/)
 {
-	ASSERT(rcDes.Width() == rcSrc.Width() && rcDes.Height() == rcSrc.Height());
+	//ASSERT(rcDes.Width() == rcSrc.Width() && rcDes.Height() == rcSrc.Height());
 
 	BOOL bIsDownTransition = TRUE;
 	if (nEndTransparent <= nBeginTransparent)
