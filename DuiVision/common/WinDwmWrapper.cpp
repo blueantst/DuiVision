@@ -32,6 +32,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 //////////////////////////////////////////////////////////////////////////
+// 设置DPI的初始值
+int CDuiWinDwmWrapper::m_nDpix =96;
+int CDuiWinDwmWrapper::m_nDpiy =96;
 
 CDuiWinDwmWrapper::CSharedData::CSharedData()
 {
@@ -150,3 +153,49 @@ void CDuiWinDwmWrapper::SetProcessDPIAware()
 		pfnSetProcessDPIAware();
 	}
 }
+
+// 根据屏幕DPI设置当前DPI值
+void CDuiWinDwmWrapper::SetDpiAdapter(int nDpix, int nDpiy)
+{
+	HDC hdcScreen;
+	hdcScreen = CreateDC(L"DISPLAY", NULL, NULL, NULL);
+	if (NULL != hdcScreen)
+	{
+		m_nDpix = GetDeviceCaps(hdcScreen, LOGPIXELSX);
+		m_nDpiy = GetDeviceCaps(hdcScreen, LOGPIXELSY);
+		DeleteDC(hdcScreen);
+	}
+
+	// 如果传入了DPI值，则用传入的值作为当前DPI值
+	if(nDpix != 0)
+	{
+		m_nDpix = nDpix;
+	}
+	if(nDpiy != 0)
+	{
+		m_nDpiy = nDpiy;
+	}
+}
+
+// 获取当前DPI值
+void CDuiWinDwmWrapper::GetDpiAdapter(int& nDpix, int& nDpiy)
+{
+	nDpix = m_nDpix;
+	nDpiy = m_nDpiy;
+}
+
+// 根据当前DPI计算x值
+void CDuiWinDwmWrapper::AdapterDpi(int& x)
+{
+	// x*m_nDpix/96
+	x = MulDiv(x, m_nDpix, 96);
+}
+
+// 根据当前DPI计算x,y值
+void CDuiWinDwmWrapper::AdapterDpi(LONG& x,LONG& y)
+{
+	x = MulDiv(x, m_nDpix, 96);
+	y = MulDiv(y, m_nDpiy, 96);
+}
+
+

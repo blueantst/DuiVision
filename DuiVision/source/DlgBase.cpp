@@ -299,6 +299,8 @@ BOOL CDlgBase::OnInitDialog()
 	font.lfWeight = 600;
 
 	m_TitleFont.CreateFontIndirect(&font);
+	
+	CDuiWinDwmWrapper::AdapterDpi(m_MinSize.cx,m_MinSize.cy);
 
 	if(m_bTopMost)
 	{

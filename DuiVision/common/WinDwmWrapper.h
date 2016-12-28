@@ -54,9 +54,15 @@ public:
 public:
 	void LogicalToPhysicalPoint(HWND hWnd, LPPOINT lpPoint);
 	void SetProcessDPIAware();
+	static void SetDpiAdapter(int nDpix = 0, int nDpiy = 0);
+	static void GetDpiAdapter(int& nDpix, int& nDpiy);
+	static void AdapterDpi(int& x);
+	static void AdapterDpi(LONG& x,LONG& y);
 
 private:
 	CSharedData& GetSharedData() const;
+	static int m_nDpix;
+	static int m_nDpiy;
 };
 
 #endif // __DUIWINDWMWRAPPER_H__

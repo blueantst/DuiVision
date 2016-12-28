@@ -225,7 +225,7 @@ public:
 	static void	LogEvent(int nLevel, LPCTSTR lpFormat, ...);
 
 	// DPI虚拟化
-	void InitDpiAware();
+	void InitDpiAware(int nDpix = 0, int nDpiy = 0);
 
 protected:
     void createSingletons();
@@ -246,10 +246,11 @@ protected:
 
 	DWORD					m_dwLangID;								// 当前语言ID
 	CString					m_strCurStyle;							// 当前风格名
+	int						m_nDpiAwareType;						// 当前DPI虚拟化类型
 
 	DuiVision::CTaskMgr		m_TaskMsg;								// 界面消息任务队列
 
-	vector<CDuiObjectInfo*>	m_vecDuiObjectInfo;				// 控件信息对象列表
+	vector<CDuiObjectInfo*>	m_vecDuiObjectInfo;						// 控件信息对象列表
 	vector<CDlgBase*>		m_vecDuiDialog;							// DUI对话框列表
 	vector<CDuiHandler*>	m_vecDuiHandler;						// 事件处理对象列表
 

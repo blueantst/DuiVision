@@ -1316,17 +1316,24 @@ int CControlBase::PositionItem2Value( const DUI_POSITION_ITEM &pos ,int nMin, in
 {
 	int nRet=0;
 	int nWid=nMax-nMin;
-
+	int x= (int)pos.nPos;
 	switch(pos.pit)
 	{
 	case PIT_CENTER: 
 		nRet=(int)pos.nPos * (pos.bMinus?-1:1) + nWid/2 + nMin;
 		break;
 	case PIT_NORMAL: 
+		CDuiWinDwmWrapper::AdapterDpi(x);
 		if(pos.bMinus)
-			nRet=nMax-(int)pos.nPos;
+		{
+			nRet=nMax-x;
+			//nRet=nMax-(int)pos.nPos;
+		}	
 		else
-			nRet=nMin+(int)pos.nPos;
+		{
+			nRet=nMin+x;
+			//nRet=nMin+(int)pos.nPos;
+		}
 		break;
 	case PIT_PERCENT: 
 		nRet=nMin+(int)(pos.nPos*nWid/100);
@@ -1467,11 +1474,13 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 			{
 				rectParent = pParent->GetRect();
 			}
+
 			CRect rect;
 			rect.left = PositionItem2Value(pos.Left, rectParent.left, rectParent.right);
 			rect.top = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
 			rect.right = PositionItem2Value(pos.Right, rectParent.left, rectParent.right);
 			rect.bottom = PositionItem2Value(pos.Bottom, rectParent.top, rectParent.bottom);
+			//CDuiWinDwmWrapper().AdapterDpi(rect);
 			SetRect(rect);
 		}else
 		if(2 == pos.nCount)
@@ -1501,6 +1510,8 @@ HRESULT CControlBase::OnAttributePosChange(const CString& strValue, BOOL bLoadin
 			{
 				rect.bottom = PositionItem2Value(pos.Top, rectParent.top, rectParent.bottom);
 			}
+
+			//CDuiWinDwmWrapper().AdapterDpi(rect);
 			SetRect(rect);
 		}
     }else
@@ -1517,6 +1528,7 @@ HRESULT CControlBase::OnAttributeWidth(const CString& strValue, BOOL bLoading)
     if (strValue.IsEmpty()) return E_FAIL;
 
 	m_nWidth = _ttoi(strValue);
+	CDuiWinDwmWrapper::AdapterDpi(m_nWidth);
 	m_rc.right = m_rc.left + m_nWidth;
 	SetRect(m_rc);
 
@@ -1529,6 +1541,7 @@ HRESULT CControlBase::OnAttributeHeight(const CString& strValue, BOOL bLoading)
     if (strValue.IsEmpty()) return E_FAIL;
 
 	m_nHeight = _ttoi(strValue);
+	CDuiWinDwmWrapper::AdapterDpi(m_nHeight);
 	m_rc.bottom = m_rc.top + m_nHeight;
 	SetRect(m_rc);
 
@@ -2466,7 +2479,6 @@ HRESULT CControlBaseFont::OnAttributeFont(const CString& strValue, BOOL bLoading
 	DuiFontInfo fontInfo;
 	BOOL bFindFont = DuiSystem::Instance()->GetFont(strValue, fontInfo);
 	if (!bFindFont) return E_FAIL;
-
 	m_strFont = fontInfo.strFont;
 	m_nFontWidth = fontInfo.nFontWidth;	
 	m_fontStyle = fontInfo.fontStyle;

@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "DuiSystem.h"
 #include <tchar.h>
-
 template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
 static DuiSystem* g_pIns = NULL;
@@ -16,6 +15,7 @@ DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, U
 {
 	g_pIns = this;
 	m_dwLangID = dwLangID;
+	m_nDpiAwareType = 0;
 	if((g_nIDTemplate == 0) && (nIDTemplate != 0))
 	{
 		g_nIDTemplate = nIDTemplate;
@@ -145,8 +145,12 @@ void DuiSystem::createSingletons()
 	// 初始化日志
 	InitLog();
 
-	// 初始化DPI虚拟化设置
-	InitDpiAware();
+	// 日志打印当前DPI值
+	int nDpix = 96;
+	int nDpiy = 96;
+	CDuiWinDwmWrapper::GetDpiAdapter(nDpix, nDpiy);
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG,
+		_T("DPI: dpiAwareType=%d, dpix=%d, dpiy=%d"), m_nDpiAwareType, nDpix, nDpiy);
 
 	// 启动任务管理器线程
 	m_TaskMsg.Startup();
@@ -434,143 +438,152 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 	}
 	if(xmlResult)
 	{
-			DuiXmlNode pResRoot = xmlDoc.child(_T("root"));
-			for (DuiXmlNode pResElem = pResRoot.child(_T("res")); pResElem; pResElem = pResElem.next_sibling(_T("res")))
+		DuiXmlNode pResRoot = xmlDoc.child(_T("root"));
+		for (DuiXmlNode pResElem = pResRoot.child(_T("res")); pResElem; pResElem = pResElem.next_sibling(_T("res")))
+		{
+			CString strType = pResElem.attribute(_T("type")).value();
+			if(strType == _T("res"))	// 资源文件
 			{
-				CString strType = pResElem.attribute(_T("type")).value();
-				if(strType == _T("res"))	// 资源文件
+				CString strLang = pResElem.attribute(_T("lang")).value();
+				if(strLang.IsEmpty() || (strLang == DuiSystem::GetLanguage()))
 				{
-					CString strLang = pResElem.attribute(_T("lang")).value();
-					if(strLang.IsEmpty() || (strLang == DuiSystem::GetLanguage()))
+					// 加载资源文件
+					CString strFile = pResElem.attribute(_T("file")).value();
+					CString strFileU = GetExePath() + strFile;
+					if(m_hResourceZip != NULL)
 					{
-						// 加载资源文件
-						CString strFile = pResElem.attribute(_T("file")).value();
-						CString strFileU = GetExePath() + strFile;
-						if(m_hResourceZip != NULL)
-						{
-							strFileU = strFile;
-						}
-						LoadResourceXml(strFileU, strStyle);
+						strFileU = strFile;
 					}
-				}else
-				if(strType == "cfg")	// 全局配置
+					LoadResourceXml(strFileU, strStyle);
+				}
+			}else
+			if(strType == "cfg")	// 全局配置
+			{
+				CString strName = pResElem.attribute(_T("name")).value();
+				CString strValue = pResElem.attribute(_T("value")).value();
+				m_mapCfgPool.SetAt(strName, strValue);
+				// 如果DuiSystem未设置当前风格参数,则可以通过defaultStyle配置来决定当前风格
+				if(m_strCurStyle.IsEmpty() && (strName == _T("defaultStyle")))
 				{
-					CString strName = pResElem.attribute(_T("name")).value();
-					CString strValue = pResElem.attribute(_T("value")).value();
-					m_mapCfgPool.SetAt(strName, strValue);
-					// 如果DuiSystem未设置当前风格参数,则可以通过defaultStyle配置来决定当前风格
-					if(m_strCurStyle.IsEmpty() && (strName == _T("defaultStyle")))
-					{
-						strStyle = strValue;
-						m_strCurStyle = strValue;
-					}
-				}else
-				if(strType == _T("style"))	// 风格定义
+					strStyle = strValue;
+					m_strCurStyle = strValue;
+				}
+				// 初始化DPI虚拟化设置
+				if(strName == _T("dpiAware"))
 				{
-					CString strName = pResElem.attribute(_T("name")).value();
-					CString strValue = pResElem.attribute(_T("value")).value();
-					m_mapStylePool.SetAt(strName, strValue);
-				}else
-				if(strType == _T("xml"))	// XML文件定义
+					int nDpix = _ttoi(pResElem.attribute(_T("dpix")).value());
+					int nDpiy = _ttoi(pResElem.attribute(_T("dpiy")).value());
+					InitDpiAware(nDpix, nDpiy);
+				}
+			}else
+			if(strType == _T("style"))	// 风格定义
+			{
+				CString strName = pResElem.attribute(_T("name")).value();
+				CString strValue = pResElem.attribute(_T("value")).value();
+				m_mapStylePool.SetAt(strName, strValue);
+			}else
+			if(strType == _T("xml"))	// XML文件定义
+			{
+				CString strStyle = pResElem.attribute(_T("style")).value();
+				CString strName = pResElem.attribute(_T("name")).value();
+				CString strFile = pResElem.attribute(_T("file")).value();
+				if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
 				{
+					m_mapXmlPool.SetAt(strName, strFile);
+				}
+			}else
+			if(strType == _T("img"))	// 图像
+			{
+				CString strStyle = pResElem.attribute(_T("style")).value();
+				CString strName = pResElem.attribute(_T("name")).value();
+				CString strFile = pResElem.attribute(_T("file")).value();
+				if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
+				{
+					m_mapSkinPool.SetAt(strName, strFile);
+				}
+			}else
+			if(strType == _T("str"))	// 字符串
+			{
+				CString strLang = pResElem.attribute(_T("lang")).value();
+				if(strLang.IsEmpty() || (strLang == DuiSystem::GetLanguage()))
+				{
+					// 如果未指定语言或指定了语言并且和当前语言相同，则加载字符串资源
 					CString strStyle = pResElem.attribute(_T("style")).value();
 					CString strName = pResElem.attribute(_T("name")).value();
-					CString strFile = pResElem.attribute(_T("file")).value();
+					CString strValue = pResElem.attribute(_T("value")).value();
 					if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
 					{
-						m_mapXmlPool.SetAt(strName, strFile);
+						m_mapStringPool.SetAt(strName, strValue);
 					}
-				}else
-				if(strType == _T("img"))	// 图像
+				}
+			}else
+			if(strType == _T("font"))	// 字体
+			{
+				CString strLang = pResElem.attribute(_T("lang")).value();
+				CString strName = pResElem.attribute(_T("name")).value();
+				CString strFont = pResElem.attribute(_T("font")).value();
+				int nFontWidth = _ttoi(pResElem.attribute(_T("size")).value());
+				CString strOS = pResElem.attribute(_T("os")).value();
+				CString strBold = pResElem.attribute(_T("bold")).value();
+				BOOL bBold = FALSE;
+				if(pResElem.attribute(_T("bold")).value())
 				{
-					CString strStyle = pResElem.attribute(_T("style")).value();
-					CString strName = pResElem.attribute(_T("name")).value();
-					CString strFile = pResElem.attribute(_T("file")).value();
-					if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
-					{
-						m_mapSkinPool.SetAt(strName, strFile);
-					}
-				}else
-				if(strType == _T("str"))	// 字符串
+					bBold = (_tcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
+				}
+				BOOL bItalic = FALSE;
+				if(pResElem.attribute(_T("italic")).value())
 				{
-					CString strLang = pResElem.attribute(_T("lang")).value();
-					if(strLang.IsEmpty() || (strLang == DuiSystem::GetLanguage()))
-					{
-						// 如果未指定语言或指定了语言并且和当前语言相同，则加载字符串资源
-						CString strStyle = pResElem.attribute(_T("style")).value();
-						CString strName = pResElem.attribute(_T("name")).value();
-						CString strValue = pResElem.attribute(_T("value")).value();
-						if(strStyle.IsEmpty() || (strStyle == m_strCurStyle))
-						{
-							m_mapStringPool.SetAt(strName, strValue);
-						}
-					}
-				}else
-				if(strType == _T("font"))	// 字体
+					bItalic = (_tcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
+				}
+				BOOL bUnderline = FALSE;
+				if(pResElem.attribute(_T("underline")).value())
 				{
-					CString strLang = pResElem.attribute(_T("lang")).value();
-					CString strName = pResElem.attribute(_T("name")).value();
-					CString strFont = pResElem.attribute(_T("font")).value();
-					int nFontWidth = _ttoi(pResElem.attribute(_T("size")).value());
-					CString strOS = pResElem.attribute(_T("os")).value();
-					CString strBold = pResElem.attribute(_T("bold")).value();
-					BOOL bBold = FALSE;
-					if(pResElem.attribute(_T("bold")).value())
-					{
-						bBold = (_tcscmp(pResElem.attribute(_T("bold")).value(), _T("true")) == 0);
-					}
-					BOOL bItalic = FALSE;
-					if(pResElem.attribute(_T("italic")).value())
-					{
-						bItalic = (_tcscmp(pResElem.attribute(_T("italic")).value(), _T("true")) == 0);
-					}
-					BOOL bUnderline = FALSE;
-					if(pResElem.attribute(_T("underline")).value())
-					{
-						bUnderline = (_tcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
-					}
-					BOOL bStrikeout = FALSE;
-					if(pResElem.attribute(_T("strikeout")).value())
-					{
-						bStrikeout = (_tcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
-					}
-					FontStyle fontStyle = FontStyleRegular;
-					if(bBold)
-					{
-						fontStyle = FontStyle((int)fontStyle + (int)FontStyleBold);
-					}
-					if(bItalic)
-					{
-						fontStyle = FontStyle((int)fontStyle + (int)FontStyleItalic);
-					}
-					if(bUnderline)
-					{
-						fontStyle = FontStyle((int)fontStyle + (int)FontStyleUnderline);
-					}
-					if(bStrikeout)
-					{
-						fontStyle = FontStyle((int)fontStyle + (int)FontStyleStrikeout);
-					}
-					DuiFontInfo fontInfo;
-					fontInfo.strName = strName;
-					// 将字体做一下过滤,对于不支持的字体用缺省字体替换
-					fontInfo.strFont = DuiSystem::GetDefaultFont(strFont);
-					fontInfo.nFontWidth = nFontWidth;
-					fontInfo.fontStyle = fontStyle;
-					fontInfo.strOS = strOS;
-					if(!fontInfo.strOS.IsEmpty())
-					{
-						// 如果OS属性非空,则判断当前操作系统是否符合OS属性
-						if(CheckOSName(fontInfo.strOS))
-						{
-							m_mapFontPool.SetAt(strName, fontInfo);
-						}
-					}else
+					bUnderline = (_tcscmp(pResElem.attribute(_T("underline")).value(), _T("true")) == 0);
+				}
+				BOOL bStrikeout = FALSE;
+				if(pResElem.attribute(_T("strikeout")).value())
+				{
+					bStrikeout = (_tcscmp(pResElem.attribute(_T("strikeout")).value(), _T("true")) == 0);
+				}
+				FontStyle fontStyle = FontStyleRegular;
+				if(bBold)
+				{
+					fontStyle = FontStyle((int)fontStyle + (int)FontStyleBold);
+				}
+				if(bItalic)
+				{
+					fontStyle = FontStyle((int)fontStyle + (int)FontStyleItalic);
+				}
+				if(bUnderline)
+				{
+					fontStyle = FontStyle((int)fontStyle + (int)FontStyleUnderline);
+				}
+				if(bStrikeout)
+				{
+					fontStyle = FontStyle((int)fontStyle + (int)FontStyleStrikeout);
+				}
+				DuiFontInfo fontInfo;
+				fontInfo.strName = strName;
+				// 将字体做一下过滤,对于不支持的字体用缺省字体替换
+				fontInfo.strFont = DuiSystem::GetDefaultFont(strFont);
+				// 按照当前DPI计算字体的显示大小
+				CDuiWinDwmWrapper::AdapterDpi(nFontWidth);
+				fontInfo.nFontWidth = nFontWidth;
+				fontInfo.fontStyle = fontStyle;
+				fontInfo.strOS = strOS;
+				if(!fontInfo.strOS.IsEmpty())
+				{
+					// 如果OS属性非空,则判断当前操作系统是否符合OS属性
+					if(CheckOSName(fontInfo.strOS))
 					{
 						m_mapFontPool.SetAt(strName, fontInfo);
 					}
+				}else
+				{
+					m_mapFontPool.SetAt(strName, fontInfo);
 				}
 			}
+		}
 	}else
 	{
 		return FALSE;
@@ -2775,13 +2788,19 @@ void DuiSystem::LogEvent(int nLevel, LPCTSTR lpFormat, ...)
 }
 
 // 初始化DPI虚拟化设置
-void DuiSystem::InitDpiAware()
+void DuiSystem::InitDpiAware(int nDpix, int nDpiy)
 {
 	// 初始化日志文件路径和锁
-	int nDpiAware = _ttoi(GetConfig(_T("dpiAware")));
-	if(nDpiAware == 1)
+	m_nDpiAwareType = _ttoi(GetConfig(_T("dpiAware")));
+	if(m_nDpiAwareType == 1)
 	{
 		// 禁用此进程的DPI虚拟化功能(操作系统默认是启用的)
 		CDuiWinDwmWrapper().SetProcessDPIAware();
+	}else
+	if(m_nDpiAwareType == 2)
+	{
+		// 禁用此进程的DPI虚拟化功能(操作系统默认是启用的),并程序实现DPI适配
+		CDuiWinDwmWrapper().SetProcessDPIAware();
+		CDuiWinDwmWrapper::SetDpiAdapter(nDpix, nDpiy);
 	}
 }
