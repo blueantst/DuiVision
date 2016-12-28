@@ -161,12 +161,13 @@ BOOL CDlgPopup::Create(CWnd *pParent, CRect rc, UINT uMessageID)
 	if((m_size.cx == 0) || (m_size.cy == 0))
 	{
 		m_size.SetSize(rc.Width(), rc.Height());
-	}else
-	{
-		// 按照m_size大小设置窗口的大小
-		rc.right = rc.left + m_size.cx;
-		rc.bottom = rc.top + m_size.cy;
 	}
+
+	CDuiWinDwmWrapper::AdapterDpi(m_size.cx,m_size.cy);
+
+	// 按照m_size大小设置窗口的大小
+	rc.right = rc.left + m_size.cx;
+	rc.bottom = rc.top + m_size.cy;
 
 	DWORD dwStyle = WS_EX_TOOLWINDOW;
 	if(m_bTopMost)	// 窗口总在最前面
