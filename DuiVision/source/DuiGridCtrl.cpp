@@ -48,6 +48,10 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bTextWrap = FALSE;
 	m_bShowColumnSeperator = FALSE;
 
+	m_bHoverHeaderCheck = false;
+	m_nHeaderCheck = -1;
+	m_rcHeaderCheck.SetRect(0, 0, 0, 0);
+
 	m_bGridTooltip = TRUE;
 	m_nTipRow = -1;
 	m_nTipItem = -1;
@@ -1443,6 +1447,21 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		m_nHoverRow = -1;
 	}
 
+	// 标题行的检查框
+	BOOL bHoverHeaderCheck = m_bHoverHeaderCheck;
+	if((m_nHeaderCheck != -1) && (m_nHeaderHeight > 0) && m_rc.PtInRect(point))
+	{
+		CRect rcHeaderCheck = m_rcHeaderCheck;
+		rcHeaderCheck.OffsetRect(m_rc.left, m_rc.top);
+		if(rcHeaderCheck.PtInRect(point))
+		{
+			m_bHoverHeaderCheck = true;
+		}else
+		{
+			m_bHoverHeaderCheck = false;
+		}
+	}
+
 	// 拖动列分隔线相关变量
 	enumButtonState buttonState = m_enButtonState;
 	BOOL bHoverSplitColumn = m_bHoverSplitColumn;
@@ -1488,7 +1507,10 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		}
 	}
 
-	if((nOldHoverRow != m_nHoverRow) || bHoverItemChange || (buttonState != m_enButtonState) || (bHoverSplitColumn != m_bHoverSplitColumn))
+	if((nOldHoverRow != m_nHoverRow) || bHoverItemChange
+		|| (buttonState != m_enButtonState)
+		|| (bHoverHeaderCheck != m_bHoverHeaderCheck)
+		|| (bHoverSplitColumn != m_bHoverSplitColumn))
 	{
 		UpdateControl(TRUE);
 		return true;
@@ -1535,6 +1557,7 @@ BOOL CDuiGridCtrl::OnControlLButtonDown(UINT nFlags, CPoint point)
 		return false;
 	}
 
+	// 表格行的检查框事件处理
 	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
@@ -1602,6 +1625,32 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 
 	m_nHoverSplitColumn = -1;
 
+	// 标题行的检查框事件处理
+	if((m_nHeaderCheck != -1) && (m_nHeaderHeight > 0) && m_rc.PtInRect(point))
+	{
+		CRect rcHeaderCheck = m_rcHeaderCheck;
+		rcHeaderCheck.OffsetRect(m_rc.left, m_rc.top);
+		if(rcHeaderCheck.PtInRect(point))
+		{
+			m_nHeaderCheck = ((m_nHeaderCheck == 1) ? 0 : 1);
+
+			// 设置所有行的检查框状态(如果某一行的检查框不显示,则不设置)
+			for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+			{
+				GridRowInfo &rowInfo = m_vecRowInfo.at(i);
+				if(rowInfo.nCheck != -1)
+				{
+					rowInfo.nCheck = m_nHeaderCheck;
+				}
+			}
+
+			SendMessage(MSG_BUTTON_CHECK, -1, m_nHeaderCheck);
+			UpdateControl(TRUE);
+
+			return true;
+		}
+	}
+
 	// 表头的排序事件处理
 	if(!m_bIsDisable && GetHeaderSort())
 	{
@@ -1645,6 +1694,7 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		return false;
 	}
 
+	// 表格行的检查框事件处理
 	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
@@ -1734,6 +1784,7 @@ BOOL CDuiGridCtrl::OnControlRButtonDown(UINT nFlags, CPoint point)
 	// 设置窗口焦点,否则可能无法进行滚动事件的处理
 	SetWindowFocus();
 
+	// 表格行的检查框事件处理
 	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
@@ -1779,6 +1830,7 @@ BOOL CDuiGridCtrl::OnControlRButtonUp(UINT nFlags, CPoint point)
 		return false;
 	}
 
+	// 表格行的检查框事件处理
 	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
 	{
 		GridRowInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
@@ -1973,12 +2025,32 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				DrawImageFrame(graphics, m_pImageHeader, rcHeader, 0, 0, m_sizeHeader.cx, m_sizeHeader.cy, 0);
 			}
 
+			// 画检查框
+			int nXPos = 0;
+			int nCheckImgY = 3;
+			if((m_sizeCheckBox.cy*2 > m_nHeaderHeight) || (m_uVAlignment == VAlign_Middle))
+			{
+				nCheckImgY = (m_nHeaderHeight - m_sizeCheckBox.cy) / 2 + 1;
+			}
+			if((m_nHeaderCheck != -1) && (m_pImageCheckBox != NULL))
+			{
+				int nCheckImageIndex = (m_bHoverHeaderCheck ? ((m_nHeaderCheck==1) ? 4 : 1) : ((m_nHeaderCheck==1) ? 2 : 0));
+				graphics.DrawImage(m_pImageCheckBox, Rect(nXPos, nCheckImgY, m_sizeCheckBox.cx, m_sizeCheckBox.cy),
+					nCheckImageIndex * m_sizeCheckBox.cx, 0, m_sizeCheckBox.cx, m_sizeCheckBox.cy, UnitPixel);
+				m_rcHeaderCheck.SetRect(nXPos, nCheckImgY, nXPos + m_sizeCheckBox.cx, nCheckImgY + m_sizeCheckBox.cy);
+				nXPos += (m_sizeCheckBox.cx + 3);
+			}
+
 			// 画单元格内容
-			int nPosItemX = 0;
+			int nPosItemX = nXPos;
 			for(size_t j = 0; j < m_vecColumnInfo.size(); j++)
 			{
 				GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
 				int nWidth = columnInfo.nWidth;
+				if(j == 0)
+				{
+					nWidth = columnInfo.nWidth - nXPos;
+				}
 				if(nWidth== -1)
 				{
 					nWidth = m_rc.Width() - nPosItemX;

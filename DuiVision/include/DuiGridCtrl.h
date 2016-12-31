@@ -165,6 +165,10 @@ public:
 	BOOL				m_bTextWrap;		// 文字是否换行
 	BOOL				m_bShowColumnSeperator;	// 是否显示内容部分的列分隔线
 
+	BOOL				m_bHoverHeaderCheck;	// 是否鼠标热点状态(标题行检查框)
+	int					m_nHeaderCheck;		// 标题行检查框状态(-1表示不显示)
+	CRect				m_rcHeaderCheck;	// 标题行检查框位置信息
+
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
 	BOOL				m_bEnableDownRow;	// 允许显示当前点击行
@@ -222,6 +226,7 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crrowcurrent"), m_clrRowCurrent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("header-height"), m_nHeaderHeight, FALSE)
+		DUI_INT_ATTRIBUTE(_T("header-check"), m_nHeaderCheck, FALSE)
 		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
