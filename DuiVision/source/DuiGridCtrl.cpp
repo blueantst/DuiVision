@@ -1460,6 +1460,9 @@ BOOL CDuiGridCtrl::OnControlMouseMove(UINT nFlags, CPoint point)
 		{
 			m_bHoverHeaderCheck = false;
 		}
+	}else
+	{
+		m_bHoverHeaderCheck = false;
 	}
 
 	// 拖动列分隔线相关变量
