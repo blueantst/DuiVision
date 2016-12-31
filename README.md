@@ -44,7 +44,7 @@ DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装
 
 (The MIT License)
 
-Copyright (c) 2013-2016 blueant studio. and other contributors
+Copyright (c) 2013-2017 blueant studio. and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
