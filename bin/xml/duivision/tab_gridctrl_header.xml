@@ -12,6 +12,7 @@
 		img-colsep="skin:IDB_TAB_SEPERATOR"
 		img-count="12" image="skin:IDB_LIST_IMG"
 		left-pos="70" row-height="50" header-height="30" bk-transparent="10"
+		header-check="0"
 		font-title="big" align-header="center" valign-header="middle" crheader="128,32,32"
 		font="default" align="left" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
@@ -101,7 +102,7 @@
 			<item title="13M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skins\icon\adrule_rename.png" check="0">
+		<row image="skins\icon\adrule_rename.png" check="-1">
 			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
 			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
 			<item title="29.5M" crtext="0,0,128" />
