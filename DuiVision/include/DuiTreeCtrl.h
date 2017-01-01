@@ -73,6 +73,11 @@ public:
 	BOOL LoadNode(HDUITREEITEM hParentNode, DuiXmlNode pXmlElem);
 
 	BOOL InsertColumn(int nColumn, CString strTitle, int nWidth = -1, Color clrText = Color(0, 0, 0, 0));
+	int GetColumnCount() { return (int)m_vecColumnInfo.size(); }
+	int SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn = -1);
+	void MoveColumnSplit(int nColumn, int nPos);
+	int GetTotalColumnWidth();
+	void CalcColumnsPos();
 	HDUITREEITEM InsertNode(HDUITREEITEM hParentNode, CString strId, CString strTitle, BOOL bCollapse = FALSE,
 		int nImageIndex = -1, Color clrText = Color(0, 0, 0, 0), CString strImage = _T(""),
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
@@ -163,6 +168,7 @@ public:
 
 	int					m_nFirstViewRow;	// 当前显示区的第一行的序号
 	int					m_nVirtualTop;		// 当前滚动条位置对应的虚拟的top位置
+	int					m_nVirtualLeft;		// 当前滚动条位置对应的虚拟的left位置
 	int					m_nVisibleRowCount;	// 当前可显示的行数(非折叠行)
 
 	BOOL				m_bGridTooltip;		// 是否显示单元格的Tooltip
