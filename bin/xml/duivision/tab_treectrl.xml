@@ -6,7 +6,7 @@
 		pos="0,5,-0,25" title="树控件" font="big" show="1" />
 
 	<treectrl name="treectrl_1" pos="20,30,-20,-5" show="1"
-		img-scroll="skin:IDB_SCROLL_V" img-sep="skins\rp_line.png--"
+		img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" img-sep="skins\rp_line.png--"
 		img-check="skin:IDB_CHECK_BOX" img-colsep=""
 		img-collapse="skin:IDB_TREE_COLLAPSE"
 		img-toggle="skin:IDB_TREE_TOGGLE"
@@ -18,7 +18,7 @@
 		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
 		<column title="列1" width="400" />
 		<column title="列2" width="100" />
-		<column title="Collapse" />
+		<column title="Collapse" width="400" />
 		<node id="1">
 			<item title="应用软件1" font-title="1" />
 			<item collapse="1" />
