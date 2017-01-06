@@ -13,7 +13,12 @@
 <res type="cfg" name="dpiAware" value="0" dpix="" dpiy="" />
 
 <!--风格设置-->
+<!--每种风格可以定义名字后面增加1x-4x的四种风格,分别表示DPI为原始的125%,150%,175%,200%四种分辨率下的风格,dpiAware设置为3才生效-->
 <res type="style" name="default" value="" />
+<res type="style" name="default1x" value="default1x" />
+<res type="style" name="default2x" value="default2x" />
+<res type="style" name="default3x" value="default3x" />
+<res type="style" name="default4x" value="default4x" />
 <res type="style" name="qq" value="qq" />
 
 <!--XML资源-->
