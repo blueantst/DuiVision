@@ -454,7 +454,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 					{
 						strFileU = strFile;
 					}
-					LoadResourceXml(strFileU, strStyle);
+					LoadResourceXml(strFileU, m_strCurStyle);
 				}
 			}else
 			if(strType == "cfg")	// 全局配置
@@ -2802,5 +2802,36 @@ void DuiSystem::InitDpiAware(int nDpix, int nDpiy)
 		// 禁用此进程的DPI虚拟化功能(操作系统默认是启用的),并程序实现DPI适配
 		CDuiWinDwmWrapper().SetProcessDPIAware();
 		CDuiWinDwmWrapper::SetDpiAdapter(nDpix, nDpiy);
+	}else
+	if(m_nDpiAwareType == 3)
+	{
+		// 禁用此进程的DPI虚拟化功能(操作系统默认是启用的),并程序实现DPI适配
+		// 同时自动修改当前风格,通过风格可以实现不同DPI用不同的图片等资源文件
+		CDuiWinDwmWrapper().SetProcessDPIAware();
+		CDuiWinDwmWrapper::SetDpiAdapter(nDpix, nDpiy);
+
+		// 根据当前DPI,自动修改当前的风格,在原有风格的后面加1x-4x分别表示正常DPI的125%,150%,175%,200%
+		int x, y;
+		CDuiWinDwmWrapper::GetDpiAdapter(x, y);
+		if(m_strCurStyle.IsEmpty())
+		{
+			m_strCurStyle = _T("default");
+		}
+		if(x >= 192)
+		{
+			m_strCurStyle = m_strCurStyle + _T("4x");
+		}else
+		if(x >= 168)
+		{
+			m_strCurStyle = m_strCurStyle + _T("3x");
+		}else
+		if(x >= 144)
+		{
+			m_strCurStyle = m_strCurStyle + _T("2x");
+		}else
+		if(x >= 120)
+		{
+			m_strCurStyle = m_strCurStyle + _T("1x");
+		}
 	}
 }
