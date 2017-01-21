@@ -13,7 +13,8 @@
 		font="default" align="left" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
 		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128"
-		down-row="0" dropfile="1" >
+		down-row="0" dropfile="1"
+		single-check = "1" >
 		<column title="列1" width="400" />
 		<column title="列2" width="120" />
 		<column title="列3" width="80" align="center" />
@@ -32,13 +33,13 @@
 			<item title="125.5M" />
 			<item link="点击下载" linkaction="link:http://www.blueantstudio.net/scriptnet/download/download.htm"/>
 		</row>
-		<row image="skins\icon\softmgr.png" check="1">
+		<row image="skins\icon\softmgr.png" check="0">
 			<item title="腾讯软件管理" content="1.新的界面，丰富的内容；2.海量软件搜索；3.功能分类清晰呈现，更易选择" font-title="1" />
 			<item title="已装：8.7.0.1" content="最新：10.0.0.1" />
 			<item title="16.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_option"/>
 		</row>
-		<row image="skins\icon\PDFViewer.png" check="1" crback="50,128,128,0" >
+		<row image="skins\icon\PDFViewer.png" check="0" crback="50,128,128,0" >
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
 			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />
@@ -46,7 +47,7 @@
 				<button name="grid_btn_delete" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="删除" tip="删除下一行" />
 			</item>
 		</row>
-		<row image="skins\icon\Movies.png" check="1">
+		<row image="skins\icon\Movies.png" check="0">
 			<item title="迅雷看看" crtext="128,128,0" content="1.修复部分Bug" font-title="1" />
 			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
@@ -54,7 +55,7 @@
 				<button name="grid_btn1" pos="0,10,70,-10" skin="IDB_BT_DEFAULT" title="一键安装" tip="普通按钮" />
 			</item>
 		</row>
-		<row image="skins\icon\iSplit.png" check="1">
+		<row image="skins\icon\iSplit.png" check="0">
 			<item title="Axialis IconWorkshop" crtext="640064" content="1.易用性改进" font-title="1" />
 			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
 			<item title="13M" />
@@ -84,19 +85,19 @@
 				tip="安装进度" />
 			</item>
 		</row>
-		<row image="skins\icon\PDFViewer.png" check="1">
+		<row image="skins\icon\PDFViewer.png" check="0">
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
 			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skins\icon\Movies.png" check="1">
+		<row image="skins\icon\Movies.png" check="0">
 			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
 			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
 			<item link="一键安装" linkaction="dlg:dlg_login"/>
 		</row>
-		<row image="skins\icon\iSplit.png" check="1">
+		<row image="skins\icon\iSplit.png" check="0">
 			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
 			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
 			<item title="13M" />

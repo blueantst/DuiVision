@@ -47,6 +47,7 @@ CDuiGridCtrl::CDuiGridCtrl(HWND hWnd, CDuiObject* pDuiObject)
 	m_bSingleLine = TRUE;
 	m_bTextWrap = FALSE;
 	m_bShowColumnSeperator = FALSE;
+	m_bSingleCheck = FALSE;
 
 	m_bHoverHeaderCheck = false;
 	m_nHeaderCheck = -1;
@@ -1705,7 +1706,22 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		{
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
-				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
+				if(m_bSingleCheck)
+				{
+					// 检查框单选模式,当前行设置为1,其他行设置为0
+					for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+					{
+						GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
+						if((i != m_nHoverRow) && (rowInfoTemp.nCheck != -1))
+						{
+							rowInfoTemp.nCheck = 0;
+						}
+					}
+					rowInfo.nCheck = 1;
+				}else
+				{
+					rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
+				}
 				SendMessage(MSG_BUTTON_CHECK, m_nHoverRow, rowInfo.nCheck);
 				UpdateControl(TRUE);
 
@@ -1721,7 +1737,22 @@ BOOL CDuiGridCtrl::OnControlLButtonUp(UINT nFlags, CPoint point)
 		{
 			if(PtInRowCheck(point, rowInfo))	// 检查框状态改变
 			{
-				rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
+				if(m_bSingleCheck)
+				{
+					// 检查框单选模式,当前行设置为1,其他行设置为0
+					for(size_t i = 0; i < m_vecRowInfo.size(); i++)
+					{
+						GridRowInfo &rowInfoTemp = m_vecRowInfo.at(i);
+						if((i != m_nDownRow) && (rowInfoTemp.nCheck != -1))
+						{
+							rowInfoTemp.nCheck = 0;
+						}
+					}
+					rowInfo.nCheck = 1;
+				}else
+				{
+					rowInfo.nCheck = ((rowInfo.nCheck == 1) ? 0 : 1);
+				}
 				SendMessage(MSG_BUTTON_CHECK, m_nDownRow, rowInfo.nCheck);
 				UpdateControl(TRUE);
 

@@ -108,6 +108,7 @@ public:
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
+	BOOL				m_bSingleCheck;		// 行检查框是否单选模式
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
@@ -139,5 +140,6 @@ public:
 		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-tip"), m_bRowTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("single-check"), m_bSingleCheck, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

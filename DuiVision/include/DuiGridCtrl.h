@@ -164,6 +164,7 @@ public:
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
 	BOOL				m_bShowColumnSeperator;	// 是否显示内容部分的列分隔线
+	BOOL				m_bSingleCheck;		// 行检查框是否单选模式
 
 	BOOL				m_bHoverHeaderCheck;	// 是否鼠标热点状态(标题行检查框)
 	int					m_nHeaderCheck;		// 标题行检查框状态(-1表示不显示)
@@ -235,5 +236,6 @@ public:
 		DUI_BOOL_ATTRIBUTE(_T("column-sep"), m_bShowColumnSeperator, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("modify-column-width"), m_bEnableModifyColumn, TRUE)
 		DUI_BOOL_ATTRIBUTE(_T("sort-click"), m_bSortOnClick, TRUE)
+		DUI_BOOL_ATTRIBUTE(_T("single-check"), m_bSingleCheck, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
