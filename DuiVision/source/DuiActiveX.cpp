@@ -4,6 +4,9 @@
 #include "exdispid.h"
 #include <comdef.h>
 #include <mshtmhst.h>	// IDocHostUIHandler使用
+#include "../activex/duicomcli.h"
+#include "../activex/flash10t.tlh"
+#include "../activex/wmp.tlh"
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2294,15 +2297,16 @@ void CDuiFlashCtrl::OnAxActivate(IUnknown *pUnknwn)
 {
 	// 保存flash控件接口
 	flash_ = pUnknwn;
+	CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash = flash_;
 	
 	if(m_bTransparent)
 	{
 		// 创建透明无窗体的Flash控件,使用DUI控件的窗口句柄画图
-		flash_->put_WMode(bstr_t(_T("transparent")));
+		flash->put_WMode(bstr_t(_T("transparent")));
 	}
 
-	flash_->DisableLocalSecurity();
-	flash_->put_AllowScriptAccess(bstr_t(_T("always"))); 
+	flash->DisableLocalSecurity();
+	flash->put_AllowScriptAccess(bstr_t(_T("always")));
 }
 
 // ActiveX控件初始化完成
@@ -2316,15 +2320,16 @@ HRESULT CDuiFlashCtrl::Navigate(CString strUrl)
 	HRESULT hr = S_OK;
 	if(flash_)
 	{
+		CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash = flash_;
 		if(!strUrl.IsEmpty())
 		{
 			m_strUrl = strUrl;
-			flash_->put_Movie(bstr_t(ParseFilePath(m_strUrl)));
+			flash->put_Movie(bstr_t(ParseFilePath(m_strUrl)));
 			if(!m_strVars.IsEmpty())
 			{
-				flash_->PutFlashVars(bstr_t(m_strVars));
+				flash->PutFlashVars(bstr_t(m_strVars));
 			}
-			flash_->Play();
+			flash->Play();
 		}
 	}
 
@@ -2339,7 +2344,8 @@ HRESULT CDuiFlashCtrl::PutFlashVars(CString strVars)
 	{
 		if(!strVars.IsEmpty())
 		{
-			flash_->PutFlashVars(bstr_t(strVars));
+			CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash = flash_;
+			flash->PutFlashVars(bstr_t(strVars));
 		}
 	}
 
@@ -2422,16 +2428,17 @@ void CDuiMediaPlayer::SetControlWndVisible(BOOL bIsVisible)
 {
 	if(( m_hwndHost != NULL ) && (wmp_ != NULL))
 	{
+		CDuiComQIPtr<WMPLib::IWMPPlayer4> wmp = wmp_;
 		//::ShowWindow(m_hwndHost, bIsVisible ? SW_SHOW : SW_HIDE);
 		//CString str = wmp_->GetuiMode();
 		//TRACE("CDuiMediaPlayer::SetControlWndVisible %s\n", str);
 		if(bIsVisible)
 		{
 			::ShowWindow(m_hwndHost, SW_SHOW);
-			wmp_->PutuiMode("full");
+			wmp->PutuiMode("full");
 		}else
 		{
-			wmp_->PutuiMode("Invisible");
+			wmp->PutuiMode("Invisible");
 		}
 	}
 }
@@ -2442,11 +2449,12 @@ HRESULT CDuiMediaPlayer::Navigate(CString strUrl)
 	HRESULT hr = S_OK;
 	if(wmp_)
 	{
-		wmp_->close();
+		CDuiComQIPtr<WMPLib::IWMPPlayer4> wmp = wmp_;
+		wmp->close();
 		if(!strUrl.IsEmpty())
 		{
 			m_strUrl = strUrl;
-			wmp_->put_URL(bstr_t(ParseFilePath(m_strUrl)));
+			wmp->put_URL(bstr_t(ParseFilePath(m_strUrl)));
 			//wmp_->openPlayer(bstr_t(ParseFilePath(m_strUrl)));	// 打开单独的播放窗口
 		}
 	}

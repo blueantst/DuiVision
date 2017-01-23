@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "WndBase.h"
-#include "../activex/duicomcli.h"
-#include "../activex/flash10t.tlh"
-#include "../activex/wmp.tlh"
 #include <exdisp.h>
 
 struct IOleObject;
@@ -160,7 +156,7 @@ public:
 	// 检测是否安装flash
 	static bool isExistFlashActiveX();
 protected:
-    CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash_;
+	IUnknown*	flash_;
 	bool		m_bTransparent;	// 是否创建背景透明的flash
 	CString		m_strVars;			// flash参数
 
@@ -189,7 +185,7 @@ public:
 	virtual HRESULT Navigate(CString strUrl);
 
 protected:
-    CDuiComQIPtr<WMPLib::IWMPPlayer4> wmp_;
+	IUnknown* wmp_;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 	DUI_DECLARE_ATTRIBUTES_END()
