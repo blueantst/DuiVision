@@ -20,9 +20,9 @@
 #define	__CRITICAL	_T("CRITICAL")
 
 // 日志转储文件
-#define	LOG_CONVEY_FILE_NAME	"logbak"
-#define	LOG_CONVEY_RULE				"logbak.*"
-#define	LOG_MAX_SAVE_NUM			5
+#define	LOG_CONVEY_FILE_NAME	_T("logbak")
+#define	LOG_CONVEY_RULE			_T("logbak.*")
+#define	LOG_MAX_SAVE_NUM		5
 
 //
 // 日志管理
