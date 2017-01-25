@@ -61,6 +61,7 @@ enum TRANSPARENT_TYPE
 
 class CControlBase : public CDuiObject
 {
+	DUIOBJ_DECLARE_CLASS_NAME(CControlBase, _T("control"))
 public:
 	CControlBase(HWND hWnd, CDuiObject* pDuiObject) ;
 	CControlBase(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE , BOOL bRresponse = TRUE) ;
@@ -76,7 +77,7 @@ public:
 
 	void TestMainThread();
 	void Draw(CDC &dc, CRect rcUpdate);
-	virtual void DrawControl(CDC &dc, CRect rcUpdate) = 0;
+	virtual void DrawControl(CDC &dc, CRect rcUpdate) {}
 	virtual BOOL DrawSubControls(CDC &dc, CRect rcUpdate);
 	virtual BOOL IsDraw(CPoint point) { return FALSE; }
 	virtual void SetUpdate(BOOL bUpdate, COLORREF clr = 0);
@@ -346,6 +347,7 @@ enum {
 // 具有文字的控件基类
 class CControlBaseFont : public CControlBase
 {
+	DUIOBJ_DECLARE_CLASS_NAME(CControlBaseFont, _T("controlfont"))
 public:
 	CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject);
 	CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE , BOOL bRresponse = TRUE,
