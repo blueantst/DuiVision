@@ -544,9 +544,9 @@ void CDlgBase::InitControlValue()
 			}else
 			if(pCtrlValue->strType == _T("check"))
 			{
-				if(pControl->IsClass(CCheckButton::GetClassName()))
+				if(pControl->IsClass(CDuiCheckButton::GetClassName()))
 				{
-					((CCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
+					((CDuiCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
 				}else
 				if(pControl->IsClass(CDuiRadioButton::GetClassName()))
 				{
