@@ -158,7 +158,7 @@ void CDuiWinDwmWrapper::SetProcessDPIAware()
 void CDuiWinDwmWrapper::SetDpiAdapter(int nDpix, int nDpiy)
 {
 	HDC hdcScreen;
-	hdcScreen = CreateDC(L"DISPLAY", NULL, NULL, NULL);
+	hdcScreen = CreateDC(_T("DISPLAY"), NULL, NULL, NULL);
 	if (NULL != hdcScreen)
 	{
 		m_nDpix = GetDeviceCaps(hdcScreen, LOGPIXELSX);
