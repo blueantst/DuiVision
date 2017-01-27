@@ -1876,8 +1876,8 @@ CDlgBase* DuiSystem::CreateDuiDialog(LPCTSTR lpszXmlTemplate, CDuiObject* pParen
 
 	if(!strName.IsEmpty())
 	{
-		// 设置name
-		pDlg->SetName(strName);
+		// 设置对话框name属性的预设置值
+		pDlg->SetControlValue(_T(""), _T("name"), strName);
 	}
 
 	if(bAdd)
@@ -1939,7 +1939,7 @@ int DuiSystem::DuiMessageBox(CDuiObject* pParent, LPCTSTR lpszText, LPCTSTR lpsz
 	{
 		CString strButtonDivName;
 		strButtonDivName.Format(_T("msgbox.type.%u"), i);
-		pDlg->SetControlValue(strButtonDivName, _T("visible"), (uButtonType == i) ? _T("1") : _T("0"));
+		pDlg->SetControlValue(strButtonDivName, _T("show"), (uButtonType == i) ? _T("1") : _T("0"));
 	}
 
 	// 图标

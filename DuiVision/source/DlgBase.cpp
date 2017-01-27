@@ -500,6 +500,9 @@ void CDlgBase::InitDialogValue()
 				// 更新窗口大小
 				SetMinSize(m_MinSize.cx, m_MinSize.cy);
 				SetRect(CRect(0, 0, m_MinSize.cx, m_MinSize.cy));
+			}else
+			{
+				SetAttribute(pCtrlValue->strType, pCtrlValue->strValue, TRUE);
 			}
 		}
 	}
@@ -526,39 +529,27 @@ void CDlgBase::InitControlValue()
 		}
 		if(pControl != NULL)
 		{
-			if(pCtrlValue->strType == _T("visible"))
+			// 需要通过控件函数刷新的一些属性值需要特殊处理,其他的直接调用控件的设置属性值函数
+			if(pCtrlValue->strType == _T("show"))
 			{
 				pControl->SetVisible(_ttoi(pCtrlValue->strValue));
-			}else
-			if(pCtrlValue->strType == _T("disable"))
-			{
-				pControl->SetDisable(_ttoi(pCtrlValue->strValue));
 			}else
 			if(pCtrlValue->strType == _T("title"))
 			{
 				((CControlBaseFont*)pControl)->SetTitle(pCtrlValue->strValue);
-			}else
-			if(pCtrlValue->strType == _T("image"))
-			{
-				((CControlBaseFont*)pControl)->OnAttributeImage(pCtrlValue->strValue, TRUE);
-			}else
-			if(pCtrlValue->strType == _T("check"))
-			{
-				if(pControl->IsClass(CDuiCheckButton::GetClassName()))
-				{
-					((CDuiCheckButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
-				}else
-				if(pControl->IsClass(CDuiRadioButton::GetClassName()))
-				{
-					((CDuiRadioButton*)pControl)->SetCheck(pCtrlValue->strValue == _T("true"));
-				}
 			}else
 			if(pCtrlValue->strType == _T("value"))
 			{
 				if(pControl->IsClass(CDuiComboBox::GetClassName()))
 				{
 					((CDuiComboBox*)pControl)->SetComboValue(pCtrlValue->strValue);
+				}else
+				{
+					pControl->SetAttribute(pCtrlValue->strType, pCtrlValue->strValue, TRUE);
 				}
+			}else
+			{
+				pControl->SetAttribute(pCtrlValue->strType, pCtrlValue->strValue, TRUE);
 			}
 		}
 	}
