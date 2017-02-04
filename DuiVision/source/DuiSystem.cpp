@@ -795,6 +795,7 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 				//delete[] pByte;
 			}else
 			{
+				pImage = NULL;
 				return FALSE;
 			}
 		}
@@ -810,6 +811,7 @@ BOOL DuiSystem::LoadImageFile(CString strFileName, BOOL useEmbeddedColorManageme
 		}else
 		{
 			// 文件不存在
+			pImage = NULL;
 			return FALSE;
 		}
 	}
@@ -893,6 +895,7 @@ BOOL DuiSystem::LoadIconFile(CString strFileName, HICON& hIcon)
 				//delete[] pByte;
 			}else
 			{
+				hIcon = NULL;
 				return FALSE;
 			}
 		}
@@ -908,6 +911,7 @@ BOOL DuiSystem::LoadIconFile(CString strFileName, HICON& hIcon)
 		}else
 		{
 			// 文件不存在
+			hIcon = NULL;
 			return FALSE;
 		}
 	}
@@ -940,6 +944,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer, DWORD& dwS
 			}
 			if(pByte == NULL)
 			{
+				pBuffer = NULL;
 				return FALSE;
 			}
 		}
@@ -955,6 +960,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer, DWORD& dwS
 		}else
 		{
 			// 文件不存在
+			pBuffer = NULL;
 			return FALSE;
 		}
 	}
@@ -966,6 +972,7 @@ BOOL DuiSystem::LoadFileToBuffer(CString strFileName, BYTE*& pBuffer, DWORD& dwS
 		// 打开文件
 		if ( !file.Open( _strFileName, CFile::modeRead ) )
 		{
+			pBuffer = NULL;
 			return FALSE;
 		}
 		dwSize = (DWORD)file.GetLength();
