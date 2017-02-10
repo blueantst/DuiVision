@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dlg name="dlg_main" title="[APP_NAME]-任务栏名字-测试" width="830" height="550" translucent="255"
 	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000" appwin="1" resize="1"
-	width-lt="3" height-lt="119" width-rb="3" height-rb="30" topmost="0"
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" topmost="0" wnd-drag="1"
 	img-shadow="skins\360\window_shadow.png" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7">
 <!--dlg name="dlg_main" title="[APP_NAME]-任务栏名字22" width="800" height="550" translucent="255"
 	frame="skins\sy-bj.png" bkimg="" crbk="0,0,0,0" crtransparent1="0,0,0" appwin="1" resize="1"

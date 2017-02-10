@@ -78,14 +78,15 @@ protected:
 
 	int				m_nOverRegioX;				// 过度的大小
 	int				m_nOverRegioY;				// 过度的大小
-	BOOL			m_bNCActive;
+	BOOL			m_bNCActive;				// 窗口当前是否处于激活状态
 
-	BOOL			m_bTracking;
-	BOOL			m_bIsLButtonDown;	
-	BOOL			m_bIsLButtonDblClk;
-	BOOL			m_bIsRButtonDown;
-	BOOL			m_bIsRButtonDblClk;
-	BOOL			m_bIsSetCapture;
+	BOOL			m_bTracking;				// 是否追踪鼠标事件
+	BOOL			m_bIsLButtonDown;			// 鼠标左键按下
+	BOOL			m_bIsLButtonDblClk;			// 鼠标左键双击
+	BOOL			m_bIsRButtonDown;			// 鼠标右键按下
+	BOOL			m_bIsRButtonDblClk;			// 鼠标右键双击
+	BOOL			m_bIsSetCapture;			// 是否设置了鼠标捕获
+	BOOL			m_bEnableWndDrag;			// 是否允许窗口拖动
 
 	BOOL			m_bAutoClose;				// 窗口自动关闭标志
 	BOOL			m_bAutoHide;				// 窗口自动隐藏标志
@@ -101,7 +102,7 @@ protected:
 
 	vector<CControlBase*>	m_vecControl;		// 用户添加的窗口控件
 	vector<CControlBase*>	m_vecArea;			// 用户添加的区域(不影响鼠标事件)
-	CControlBase*	m_pControl;				// 当前活动控件对象
+	CControlBase*	m_pControl;					// 当前活动控件对象
 	CControlBase*	m_pFocusControl;			// 当前焦点的控件对象
 
 	vector<CONTROL_VALUE>	m_vecControlValue;	// 控件预设置信息
@@ -325,6 +326,7 @@ public:
 		DUI_INT_ATTRIBUTE(_T("shadow-hrb"), m_nShadowHRB, FALSE)
 		DUI_INT_ATTRIBUTE(_T("shadow-size"), m_nShadowSize, FALSE)
 		DUI_INT_ATTRIBUTE(_T("topmost"), m_bTopMost, FALSE)
+		DUI_INT_ATTRIBUTE(_T("wnd-drag"), m_bEnableWndDrag, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

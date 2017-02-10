@@ -35,6 +35,7 @@ CDlgBase::CDlgBase(UINT nIDTemplate, CWnd* pParent /*=NULL*/)
 
 	m_bTracking = false;
 	m_bIsSetCapture = false;
+	m_bEnableWndDrag = TRUE;
 	m_clrBK = RGB(186, 226, 239);
 	m_crlBackTransParent = RGB(255, 255, 255);
 	m_bDrawImage = FALSE;
@@ -2337,7 +2338,7 @@ void CDlgBase::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 
-	if(!bHandled)
+	if(!bHandled && m_bEnableWndDrag)
 	{
 		// 窗口拖动消息
 		PostMessage(WM_NCLBUTTONDOWN,HTCAPTION,MAKELPARAM(point.x, point.y));
