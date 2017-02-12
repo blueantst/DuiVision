@@ -2,6 +2,7 @@
 
 #include "duisingleton.h"
 #include  <afxtempl.h>
+#include "DuiVisionApp.h"
 
 // 注册DUI控件宏
 #define REGISTER_DUICONTROL(classname, pfShutdown)   \
@@ -125,6 +126,10 @@ public:
 	BOOL LoadFileToBuffer(CString strFileName, BYTE*& pBuffer, DWORD& dwSize);
 	// 加载界面插件动态库
 	BOOL LoadPluginFile(CString strFileName, CString strObjType, HINSTANCE& hPluginHandle, LPVOID& pPluginObj);
+	// 获取IDuiVisionApp接口
+	IDuiVisionApp* GetIDuiVisionApp();
+	// 加载脚本解释器插件
+	BOOL LoadInterpPlugin(CString strPluginFile, CString strInstName, HINSTANCE& hInterpHandle, LPVOID& pInterpObj);
 	// 获取系统配置信息
 	CString GetConfig(CString strName);
 	// 获取XML文件
@@ -251,6 +256,8 @@ protected:
 	DWORD					m_dwLangID;								// 当前语言ID
 	CString					m_strCurStyle;							// 当前风格名
 	int						m_nDpiAwareType;						// 当前DPI虚拟化类型
+
+	CDuiVisionApp			m_DuiVisionApp;							// DuiVisionApp接口对象
 
 	DuiVision::CTaskMgr		m_TaskMsg;								// 界面消息任务队列
 

@@ -300,6 +300,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiAnimateImg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiButton.cpp"
 				>
 			</File>
@@ -364,6 +368,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\DuiVisionApp.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\DuiWkeView.cpp"
 				>
 			</File>
@@ -413,10 +421,6 @@
 			</File>
 			<File
 				RelativePath=".\source\Rectangle.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\source\DuiAnimateImg.cpp"
 				>
 			</File>
 			<File
@@ -514,6 +518,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiAnimateImg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DuiButton.h"
 				>
 			</File>
@@ -594,6 +602,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\DuiVisionApp.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\DuiWkeView.h"
 				>
 			</File>
@@ -651,10 +663,6 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\DuiAnimateImg.h"
 				>
 			</File>
 			<File

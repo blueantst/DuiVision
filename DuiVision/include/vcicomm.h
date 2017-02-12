@@ -748,7 +748,7 @@ public:
 	// 查询命令是否支持
 	virtual int __stdcall QueryCommandIsSupport(LPCSTR lpcsCmd)
 	{
-		return gQueryCommandIsSupport(lpcsCmd);
+		return 0;//gQueryCommandIsSupport(lpcsCmd);
 	}
 
 	// 安装回调函数

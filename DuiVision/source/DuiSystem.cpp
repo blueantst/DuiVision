@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "DuiSystem.h"
+#include "IInterp.h"
 #include <tchar.h>
 template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
@@ -1068,6 +1069,126 @@ BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANC
 	}
 
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Create UI plugin %s - %s object succ"), strPluginFile, strObjType);
+
+	return TRUE;
+}
+
+// 获取IDuiVisionApp接口
+IDuiVisionApp* DuiSystem::GetIDuiVisionApp()
+{
+	return (IDuiVisionApp*)(m_DuiVisionApp.ExternalQueryInterface());
+}
+
+// 加载脚本解释器插件
+// 格式1: file-resource-name		-- 根据资源名加载,先找到文件名,到exe目录加载
+// 格式2: filename.dll				-- 指定文件名,到exe目录加载
+// 格式3: c:\filename.dll			-- 指定了dll的全路径
+BOOL DuiSystem::LoadInterpPlugin(CString strPluginFile, CString strInstName, HINSTANCE& hInterpHandle, LPVOID& pInterpObj)
+{
+	hInterpHandle = NULL;
+	pInterpObj = NULL;
+	CString strInterpPluginFile;
+	if(strPluginFile.Find(_T(".dll")) == -1)	// 需要到资源定义中查找
+	{
+		if(m_mapXmlPool.Lookup(strPluginFile, strInterpPluginFile))
+		{
+		}else
+		{
+			strInterpPluginFile = strPluginFile;
+		}
+	}else
+	{
+		strInterpPluginFile = strPluginFile;
+	}
+
+	// 记录当前路径
+	TCHAR szOldPath[256];
+	memset(szOldPath, 0, 256);
+	DWORD dwPathLen = GetCurrentDirectory(255, szOldPath);
+
+	// 加载解释器插件动态库
+	if(GetFileAttributes(DuiSystem::GetExePath() + strInterpPluginFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+	{
+		// 设置当前路径
+		CString strPath = DuiSystem::GetExePath() + strInterpPluginFile;
+		strPath.Replace("/", "\\");
+		int nPos = strPath.ReverseFind('\\');
+		if(nPos >= 0)
+		{
+			strPath = strPath.Left(nPos);
+		}
+		SetCurrentDirectory(strPath);
+
+		hInterpHandle = LoadLibrary(DuiSystem::GetExePath() + strInterpPluginFile);
+	}else
+	if(GetFileAttributes(strInterpPluginFile) != 0xFFFFFFFF)	// 绝对路径查找
+	{
+		// 设置当前路径
+		CString strPath = strInterpPluginFile;
+		strPath.Replace("/", "\\");
+		int nPos = strPath.ReverseFind('\\');
+		if(nPos >= 0)
+		{
+			strPath = strPath.Left(nPos);
+		}
+		SetCurrentDirectory(strPath);
+
+		hInterpHandle = LoadLibrary(strInterpPluginFile);
+	}
+
+	// 恢复当前路径
+	SetCurrentDirectory(szOldPath);
+
+	if(hInterpHandle == NULL)
+	{
+		// 加载失败
+		DWORD dwError = ::GetLastError();
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load interp plugin %s failed, errorcode is %u"), strInterpPluginFile, dwError);
+		return FALSE;
+	}
+
+	// 加载解释器VCI组件对象
+	// 获取函数指针
+	TYPEOF_CreateObject fnCreateObject = (TYPEOF_CreateObject)GetProcAddress(hInterpHandle, "CreateObject");
+	if(fnCreateObject == NULL)
+	{
+		FreeLibrary(hInterpHandle);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load interp plugin %s failed, not found CreateObject function"), strInterpPluginFile);
+		return FALSE;
+	}
+
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Load interp plugin %s succ"), strInterpPluginFile);
+
+	LPVOID pIVciControl = NULL;
+	//pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(IID_IInterp), &pIVciControl, NULL);
+	pInterpObj = fnCreateObject(IID_IInterp, &pIVciControl, NULL);
+	if(pInterpObj == NULL)
+	{
+		FreeLibrary(hInterpHandle);
+		DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Create interp plugin %s - %s object failed"), strInterpPluginFile, IID_IInterp);
+		return FALSE;
+	}
+
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Create interp plugin %s - %s object succ"), strInterpPluginFile, IID_IInterp);
+
+	// 设置平台接口
+	if(pIVciControl)
+	{
+		((IVciControl*)pIVciControl)->setIPlatUI(NULL);
+		((IVciControl*)pIVciControl)->setPlatInterface(PLAT_INTERFACE_DUIVISIONAPP, GetIDuiVisionApp());
+	}
+	// 解释器接口设置
+	IInterp* pIInterp = (IInterp*)pInterpObj;
+	// 设置平台接口
+	pIInterp->SetIPlatUI(NULL);
+	// 设置解释器名为VCI实例名
+	pIInterp->SetInterpName(strInstName);
+
+	// 初始化
+	if(pIVciControl)
+	{
+		((IVciControl*)pIVciControl)->Init(_T(""));
+	}
 
 	return TRUE;
 }
