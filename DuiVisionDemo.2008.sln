@@ -7,7 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVision.2008", "DuiVision
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiPluginDemo.2008", "DuiPluginDemo\DuiPluginDemo.2008.vcproj", "{34ECFFC8-909B-4897-B0C5-3590CD21C0F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCDuiVisionDemo", "MFCDuiVisionDemo\MFCDuiVisionDemo.2008.vcproj", "{4972ED57-993F-487D-91C4-220218C00786}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCDuiVisionDemo.2008", "MFCDuiVisionDemo\MFCDuiVisionDemo.2008.vcproj", "{4972ED57-993F-487D-91C4-220218C00786}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionScriptDemo", "DuiVisionScriptDemo\DuiVisionScriptDemo.vcproj", "{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,14 @@ Global
 		{4972ED57-993F-487D-91C4-220218C00786}.Release|Win32.Build.0 = Release|Win32
 		{4972ED57-993F-487D-91C4-220218C00786}.ReleaseMulti|Win32.ActiveCfg = Release|Win32
 		{4972ED57-993F-487D-91C4-220218C00786}.ReleaseMulti|Win32.Build.0 = Release|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.Debug|Win32.Build.0 = Debug|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.DebugMulti|Win32.ActiveCfg = Debug_Multi|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.DebugMulti|Win32.Build.0 = Debug_Multi|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.Release|Win32.ActiveCfg = Release|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.Release|Win32.Build.0 = Release|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.ReleaseMulti|Win32.ActiveCfg = Release_Multi|Win32
+		{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}.ReleaseMulti|Win32.Build.0 = Release_Multi|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
