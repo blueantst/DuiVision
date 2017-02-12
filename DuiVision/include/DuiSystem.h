@@ -13,8 +13,12 @@
 
 
 // 多语言ID定义
+#ifndef LANGUAGE_PAGE_ENGLISH
 #define LANGUAGE_PAGE_ENGLISH		0x0409	// 英文
+#endif
+#ifndef LANGUAGE_PAGE_CHINESE
 #define LANGUAGE_PAGE_CHINESE		0x0804	// 中文简体
+#endif
 #define LANGUAGE_PAGE_CHINESE_TW	0x0404	// 台湾繁体
 #define LANGUAGE_PAGE_CHINESE_HK	0x0C04	// 香港、马来繁体
 #define LANGUAGE_PAGE_CHINESE_SGP	0x1004	// 新加坡繁体
