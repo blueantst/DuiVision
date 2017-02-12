@@ -111,12 +111,15 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]include\DuiText.h
 [duivision]include\DuiTreeCtrl.h
 [duivision]include\DuiVision.h
+[duivision]include\DuiVisionApp.h
 [duivision]include\DuiWkeView.h
 [duivision]include\DuiXml.h
 [duivision]include\GlobalFunction.h
 [duivision]include\HideButton.h
 [duivision]include\IDuiHostWnd.h
 [duivision]include\IDuiPlugin.h
+[duivision]include\IDuiVisionApp.h
+[duivision]include\IInterp.h
 [duivision]include\ImageString.h
 [duivision]include\LinkButton.h
 [duivision]include\MenuItem.h
@@ -158,6 +161,7 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]source\DuiTab.cpp
 [duivision]source\DuiText.cpp
 [duivision]source\DuiTreeCtrl.cpp
+[duivision]source\DuiVisionApp.cpp
 [duivision]source\DuiWkeView.cpp
 [duivision]source\DuiXml.cpp
 [duivision]source\GlobalFunction.cpp
