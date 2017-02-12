@@ -10,7 +10,7 @@
 <res type="cfg" name="appMutex" value="MUTEX_DUIVISION_DEMO" />
 <res type="cfg" name="enableDragFile" value="3" />
 <res type="cfg" name="trayDbClickMsg" value="0" />
-<res type="cfg" name="interpDll" value="" />
+<res type="cfg" name="interpDll" value="interp\tcl\bin\TclInterp.dll" />
 <res type="cfg" name="interpDll_d" value="interp\tcl\bin\TclInterp_d.dll" />
 <res type="cfg" name="interpInstance" value="DuiVisionTclScript" />
 <res type="cfg" name="mainScript" value="script\tcl\test_dui_gridctrl.tcl" />
