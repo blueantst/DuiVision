@@ -309,7 +309,7 @@ enum{
 //
 // 定义VCI控制接口
 //
-#define IID_IVciControl "IVciControl"
+#define IID_IVciControl _T("IVciControl")
 
 interface IVciControl : public IUnknown
 {

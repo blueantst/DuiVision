@@ -1059,7 +1059,6 @@ BOOL DuiSystem::LoadPluginFile(CString strFileName, CString strObjType, HINSTANC
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Load UI plugin %s succ"), strPluginFile);
 
 	LPVOID pIVciControl = NULL;
-	//pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(strObjType), &pIVciControl, NULL);
 	pPluginObj = fnCreateObject(strObjType, &pIVciControl, NULL);
 	if(pPluginObj == NULL)
 	{
@@ -1111,8 +1110,8 @@ BOOL DuiSystem::LoadInterpPlugin(CString strPluginFile, CString strInstName, HIN
 	{
 		// 设置当前路径
 		CString strPath = DuiSystem::GetExePath() + strInterpPluginFile;
-		strPath.Replace("/", "\\");
-		int nPos = strPath.ReverseFind('\\');
+		strPath.Replace(_T("/"), _T("\\"));
+		int nPos = strPath.ReverseFind(_T('\\'));
 		if(nPos >= 0)
 		{
 			strPath = strPath.Left(nPos);
@@ -1125,8 +1124,8 @@ BOOL DuiSystem::LoadInterpPlugin(CString strPluginFile, CString strInstName, HIN
 	{
 		// 设置当前路径
 		CString strPath = strInterpPluginFile;
-		strPath.Replace("/", "\\");
-		int nPos = strPath.ReverseFind('\\');
+		strPath.Replace(_T("/"), _T("\\"));
+		int nPos = strPath.ReverseFind(_T('\\'));
 		if(nPos >= 0)
 		{
 			strPath = strPath.Left(nPos);
@@ -1160,7 +1159,6 @@ BOOL DuiSystem::LoadInterpPlugin(CString strPluginFile, CString strInstName, HIN
 	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Load interp plugin %s succ"), strInterpPluginFile);
 
 	LPVOID pIVciControl = NULL;
-	//pPluginObj = fnCreateObject(CEncodingUtil::UnicodeToAnsi(IID_IInterp), &pIVciControl, NULL);
 	pInterpObj = fnCreateObject(IID_IInterp, &pIVciControl, NULL);
 	if(pInterpObj == NULL)
 	{
@@ -1187,7 +1185,7 @@ BOOL DuiSystem::LoadInterpPlugin(CString strPluginFile, CString strInstName, HIN
 	// 初始化
 	if(pIVciControl)
 	{
-		((IVciControl*)pIVciControl)->Init(_T(""));
+		((IVciControl*)pIVciControl)->Init(NULL);
 	}
 
 	return TRUE;

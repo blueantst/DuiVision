@@ -73,7 +73,7 @@ enum{
 	IDB_SET_VAR				= 32,	// 设置变量值
 };
 
-#define IID_IInterp "IInterp"
+#define IID_IInterp _T("IInterp")
 
 interface IInterp : public IUnknown
 {
