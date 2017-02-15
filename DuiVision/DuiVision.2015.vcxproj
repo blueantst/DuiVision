@@ -212,6 +212,7 @@
     <ClInclude Include="include\DuiText.h" />
     <ClInclude Include="include\DuiTreeCtrl.h" />
     <ClInclude Include="include\DuiVision.h" />
+	<ClInclude Include="include\DuiVisionApp.h" />
     <ClInclude Include="include\DuiWkeView.h" />
     <ClInclude Include="include\DuiXml.h" />
     <ClInclude Include="include\GlobalFunction.h" />
@@ -275,6 +276,7 @@
     <ClCompile Include="source\DuiTab.cpp" />
     <ClCompile Include="source\DuiText.cpp" />
     <ClCompile Include="source\DuiTreeCtrl.cpp" />
+	<ClCompile Include="source\DuiVisionApp.cpp" />
     <ClCompile Include="source\DuiWkeView.cpp" />
     <ClCompile Include="source\DuiXml.cpp" />
     <ClCompile Include="source\GlobalFunction.cpp" />

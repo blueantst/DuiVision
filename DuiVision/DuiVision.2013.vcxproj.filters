@@ -48,6 +48,9 @@
     <ClInclude Include="include\DuiVision.h">
       <Filter>头文件</Filter>
     </ClInclude>
+	<ClInclude Include="include\DuiVisionApp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="include\GlobalFunction.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -297,6 +300,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiTreeCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+	<ClCompile Include="source\DuiVisionApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\DuiButton.cpp">
