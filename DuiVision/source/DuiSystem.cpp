@@ -233,14 +233,19 @@ void DuiSystem::SetRootPath(CString strPath)
 	g_strRootPath = strPath;
 }
 
-// 取进程目录
-CString DuiSystem::GetExePath()
+// 获取根目录
+CString DuiSystem::GetRootPath()
 {
 	if(!g_strRootPath.IsEmpty())
 	{
 		return g_strRootPath;
 	}
+	return DuiSystem::GetExePath();
+}
 
+// 取进程目录
+CString DuiSystem::GetExePath()
+{
 	TCHAR szFullPath[MAX_PATH];
 	TCHAR szdrive[_MAX_DRIVE];
 	TCHAR szdir[_MAX_DIR];
@@ -257,13 +262,13 @@ CString DuiSystem::GetExePath()
 // 获取Skin目录
 CString DuiSystem::GetSkinPath()
 {
-	return GetExePath();
+	return GetRootPath();
 }
 
 // 获取XML目录
 CString DuiSystem::GetXmlPath()
 {
-	return GetExePath() + _T("xml\\");
+	return GetRootPath() + _T("xml\\");
 }
 
 // 路径标准化
@@ -294,7 +299,7 @@ BOOL DuiSystem::LoadResource()
 	ClearAllCachedMemFile();
 
 	// 加载zip资源文件
-	CString strResFile = GetExePath() + m_strResourceFile;
+	CString strResFile = GetRootPath() + m_strResourceFile;
 	if(strResFile.Find(_T(".ui")) != -1)	// 从文件加载zip包
 	{
 		// 如果是后缀为ui的文件,表示是ZIP文件,则加载资源ZIP文件
@@ -398,9 +403,9 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 	if(m_hResourceZip != NULL)
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
-		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		if(GetFileAttributes(GetRootPath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlResult = xmlDoc.load_file(GetExePath() + strResFile);
+			xmlResult = xmlDoc.load_file(GetRootPath() + strResFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strResFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
@@ -424,9 +429,9 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 		}		
 	}else
 	{
-		if(GetFileAttributes(GetExePath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		if(GetFileAttributes(GetRootPath() + strResFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlResult = xmlDoc.load_file(GetExePath() + strResFile);
+			xmlResult = xmlDoc.load_file(GetRootPath() + strResFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strResFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
@@ -450,7 +455,7 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 				{
 					// 加载资源文件
 					CString strFile = pResElem.attribute(_T("file")).value();
-					CString strFileU = GetExePath() + strFile;
+					CString strFileU = GetRootPath() + strFile;
 					if(m_hResourceZip != NULL)
 					{
 						strFileU = strFile;
@@ -714,9 +719,9 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 	if(m_hResourceZip != NULL)	// 存在资源zip文件
 	{
 		// 即使有zip文件的情况下,也优先使用目录中的文件
-		if(GetFileAttributes(GetExePath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		if(GetFileAttributes(GetRootPath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlResult = xmlDoc.load_file(GetExePath() + strXmlFile);
+			xmlResult = xmlDoc.load_file(GetRootPath() + strXmlFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strXmlFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
@@ -745,9 +750,9 @@ BOOL DuiSystem::LoadXmlFile(DuiXmlDocument& xmlDoc, CString strFileName)
 		}
 	}else
 	{
-		if(GetFileAttributes(GetExePath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
+		if(GetFileAttributes(GetRootPath() + strXmlFile) != 0xFFFFFFFF)	// 从exe路径开始查找
 		{
-			xmlResult = xmlDoc.load_file(GetExePath() + strXmlFile);
+			xmlResult = xmlDoc.load_file(GetRootPath() + strXmlFile);
 		}else
 		if(GetFileAttributes(GetXmlPath() + strXmlFile) != 0xFFFFFFFF)	// 从xml路径开始查找
 		{
@@ -2377,7 +2382,7 @@ public:
 						if(strProcess.Find(_T("{platpath}")) == 0)
 						{
 							strProcess.Delete(0, 10);
-							strProcess = DuiSystem::GetExePath() + strProcess;
+							strProcess = DuiSystem::GetRootPath() + strProcess;
 						}
 						CString strCmdLine = _T("");
 						int nPos = strProcess.Find(_T("|"));

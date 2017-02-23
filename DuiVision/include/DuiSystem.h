@@ -93,6 +93,8 @@ public:
 	// 设置根目录
 	static void SetRootPath(CString strPath);
 	// 获取进程路径
+	static CString GetRootPath();
+	// 获取进程路径
 	static CString GetExePath();
 	// 获取Skin路径
 	static CString GetSkinPath();
