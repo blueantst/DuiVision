@@ -1706,7 +1706,10 @@ LRESULT CDlgBase::OnUserCloseWindow(WPARAM wParam, LPARAM lParam)
 	// wParam参数表示对话框的返回值
 	if(wParam == IDOK)
 	{
-		OnOK();
+		if(m_pDuiHandler == NULL || m_pDuiHandler->OnValidate())
+		{
+			OnOK();
+		}
 	}else
 	if(wParam == IDCANCEL)
 	{
