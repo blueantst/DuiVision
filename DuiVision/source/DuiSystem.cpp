@@ -2295,7 +2295,8 @@ int DuiSystem::RunUITask(DuiVision::IBaseTask* pTask, const DuiVision::CTaskMgr*
 		return FALSE;
 	}
 
-	return pDlg->SendMessage(WM_UI_TASK, (WPARAM)pTask, (LPARAM)pTaskMgr);
+	pTask->AddRef();
+	return pDlg->PostMessage(WM_UI_TASK, (WPARAM)pTask, (LPARAM)pTaskMgr);
 }
 
 //

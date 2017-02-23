@@ -1854,6 +1854,10 @@ LRESULT CDlgBase::OnMessageUITask(WPARAM wParam, LPARAM lParam)
 			pTask->TaskNotify(pTaskMgr, DuiVision::IBaseTask::TE_Canceled);
 		}
 	}
+	if (pTask != NULL)
+	{
+		pTask->Release();
+	}
 	return bRet;
 }
 
