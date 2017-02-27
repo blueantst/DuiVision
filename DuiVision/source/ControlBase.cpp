@@ -2096,7 +2096,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 				if(strProcess.Find(_T("{platpath}")) == 0)
 				{
 					strProcess.Delete(0, 10);
-					strProcess = DuiSystem::GetExePath() + strProcess;
+					strProcess = DuiSystem::GetRootPath() + strProcess;
 				}
 				CString strCmdLine = _T("");
 				int nPos = strProcess.Find(_T("|"));

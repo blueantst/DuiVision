@@ -98,6 +98,7 @@ public:
 	CString GetTitle(CString strControlName);
 
 	virtual void OnInit();
+	virtual BOOL OnValidate();
 	virtual LRESULT OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 	virtual void OnTimer(UINT uTimerID, CString strTimerName);
 

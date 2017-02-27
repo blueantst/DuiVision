@@ -820,7 +820,7 @@ CDuiPanel::XDuiPanel::GetAppName()
 STDMETHODIMP_(CString)
 CDuiPanel::XDuiPanel::GetPlatPath()
 {
-	return DuiSystem::GetExePath();
+	return DuiSystem::GetRootPath();
 }
 
 // 获取平台版本
