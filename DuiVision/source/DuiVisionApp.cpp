@@ -56,7 +56,7 @@ CDuiVisionApp::XDuiVisionApp::GetAppName()
 STDMETHODIMP_(CString)
 CDuiVisionApp::XDuiVisionApp::GetPlatPath()
 {
-	return DuiSystem::GetExePath();
+	return DuiSystem::GetRootPath();
 }
 
 /////////////////////////////////////////////////////////////////////////////
