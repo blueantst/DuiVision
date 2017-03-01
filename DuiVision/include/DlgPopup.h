@@ -89,6 +89,8 @@ public:
 	void SetAutoClose(BOOL bAutoClose) { m_bAutoClose = bAutoClose; }
 	BOOL IsAutoClose() { return m_bAutoClose; }
 
+	CSize& GetSize() {return m_size;}
+
 	BOOL UseImageECM() { return m_bImageUseECM; }
 
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);

@@ -770,6 +770,16 @@ int CDuiTabCtrl::GetSelectItem()
 	return m_nDownItem;
 }
 
+int CDuiTabCtrl::GetCtrlHeight()
+{
+	return m_nTabCtrlHeight;
+}
+
+int CDuiTabCtrl::GetCtrlWidth()
+{
+	return m_nTabCtrlWidth;
+}
+
 // 设置Tab页签的宽度(水平模式)
 void CDuiTabCtrl::SetItemWidth(int nTabItemMaxWidth, int nTabItemMinWidth, BOOL bRefresh)
 {

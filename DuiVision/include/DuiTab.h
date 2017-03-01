@@ -53,6 +53,8 @@ public:
 	int  GetItemCount();
 	int  GetItemIndex(CString strTabName);
 	TabItemInfo* GetItemInfo(int nItem);
+	int GetCtrlHeight();
+	int GetCtrlWidth();
 	void SetItemWidth(int nTabItemMaxWidth, int nTabItemMinWidth, BOOL bRefresh = TRUE);
 	void SetItemHeight(int nTabItemMaxHeight, int nTabItemMinHeight, BOOL bRefresh = TRUE);
 	void RefreshItems();
