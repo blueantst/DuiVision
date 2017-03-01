@@ -916,6 +916,22 @@ BOOL CControlBase::OnRButtonDown(UINT nFlags, CPoint point)
 	OnMousePointChange(point);
 
 	m_bMouseDown = false;
+
+	// 查找鼠标是否在某个内部控件位置,如果是的话就更新当前子控件(按照反向顺序查找,因为定义在后面的控件是优先级更高的)
+	// 找到第一个符合条件的就结束查找
+	for (int i = m_vecControl.size()-1; i >= 0; i--)
+	{
+		CControlBase * pControlBase = m_vecControl.at(i);
+		if (pControlBase && pControlBase->PtInRect(point))
+		{
+			if(pControlBase->GetVisible() && !pControlBase->GetDisable() && pControlBase->GetRresponse())
+			{
+				m_pControl = pControlBase;
+				break;
+			}
+		}
+	}
+
 	if(m_pControl != NULL)
 	{
 		if(m_pControl->OnRButtonDown(nFlags, point))
@@ -1109,6 +1125,7 @@ BOOL CControlBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	if(m_bDuiMsgKeyDown)
 	{
 		SendMessage(MSG_KEY_DOWN, (WPARAM)nChar, (LPARAM)nFlags);
+		return true;
 	}
 
 	return false;
