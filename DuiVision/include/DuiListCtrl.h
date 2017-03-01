@@ -32,6 +32,7 @@ struct ListRowInfo
 	CString strLinkAction2;	// 链接2的动作
 	CRect	rcLink2;		// 链接2位置信息
 	int		nHoverLink;		// 当前处于热点状态的链接索引
+	DWORD   dwData;      // 关联用户数据
 	BOOL	bNeedTitleTip;	// 是否需要显示title tip(title实际宽度大于显示宽度)
 	BOOL	bNeedContentTip;// 是否需要显示content tip(content实际宽度大于显示宽度)
 };
@@ -66,6 +67,8 @@ public:
 	void SetRowBackColor(int nRow, Color clrBack);
 	void SetRowCheck(int nRow, int nCheck);
 	int  GetRowCheck(int nRow);
+	void SetRowData(int nRow, DWORD dwData);
+	DWORD GetRowData(int nRow);
 	void ClearItems();
 
 	BOOL PtInRow(CPoint point, ListRowInfo& rowInfo);

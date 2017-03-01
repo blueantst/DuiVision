@@ -415,6 +415,28 @@ int CDuiListCtrl::GetRowCheck(int nRow)
 	return rowInfo.nCheck;
 }
 
+void CDuiListCtrl::SetRowData(int nRow, DWORD dwData)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.dwData = dwData;
+}
+
+DWORD CDuiListCtrl::GetRowData(int nRow)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return NULL;
+	}
+
+	ListRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.dwData;
+}
+
 // Çå¿ÕÁÐ±í
 void CDuiListCtrl::ClearItems()
 {

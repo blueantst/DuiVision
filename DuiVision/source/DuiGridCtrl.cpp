@@ -999,6 +999,28 @@ int CDuiGridCtrl::GetRowCheck(int nRow)
 	return rowInfo.nCheck;
 }
 
+void CDuiGridCtrl::SetRowData(int nRow, DWORD dwData)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.dwData = dwData;
+}
+
+DWORD CDuiGridCtrl::GetRowData(int nRow)
+{
+	if((nRow < 0) || (nRow >= (int)m_vecRowInfo.size()))
+	{
+		return NULL;
+	}
+
+	GridRowInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.dwData;
+}
+
 // Çå¿ÕÁÐ±í
 void CDuiGridCtrl::ClearItems()
 {

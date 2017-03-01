@@ -1303,6 +1303,30 @@ int CDuiTreeCtrl::GetNodeCheck(HDUITREEITEM hNode)
 	return rowInfo.nCheck;
 }
 
+void CDuiTreeCtrl::SetNodeData(HDUITREEITEM hNode, DWORD dwData)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.dwData = dwData;
+}
+
+DWORD CDuiTreeCtrl::GetNodeData(HDUITREEITEM hNode)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return NULL;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.dwData;
+}
+
 // 清空树节点
 void CDuiTreeCtrl::ClearNodes()
 {
@@ -1914,6 +1938,54 @@ BOOL CDuiTreeCtrl::OnControlLButtonDblClk(UINT nFlags, CPoint point)
 			}
 		}
 	}
+
+	return false;
+}
+
+// 鼠标右键单击事件处理
+BOOL CDuiTreeCtrl::OnControlRButtonDown(UINT nFlags, CPoint point)
+{
+	if(m_vecRowInfo.size() == 0)
+	{
+		return false;
+	}
+
+	// 设置窗口焦点,否则可能无法进行滚动事件的处理
+	SetWindowFocus();
+
+	if((m_nHoverRow >= 0) && (m_nHoverRow < (int)m_vecRowInfo.size()))
+	{
+		TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nHoverRow);
+		if(PtInRow(point, rowInfo) && !PtInRowCheck(point, rowInfo) && !PtInRowCollapse(point, rowInfo))	// 检查框和收缩事件只在鼠标放开时候触发
+		{
+			rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
+			if(m_nDownRow != m_nHoverRow)
+			{
+				if(m_bEnableDownRow)
+				{
+					m_nDownRow = m_nHoverRow;
+					m_nHoverRow = -1;
+				}
+
+				SendMessage(MSG_MOUSE_RDOWN, rowInfo.hNode, rowInfo.nHoverItem);
+
+				UpdateControl(TRUE);
+
+				return true;
+			}
+		}	
+	}else
+		if((m_nDownRow >= 0) && (m_nDownRow < (int)m_vecRowInfo.size()))
+		{
+			// 如果点击的还是之前点击的行，也同样会发送鼠标点击事件
+			TreeNodeInfo &rowInfo = m_vecRowInfo.at(m_nDownRow);
+			if(PtInRow(point, rowInfo)&& !PtInRowCheck(point, rowInfo))	// 检查框事件只在鼠标放开时候触发
+			{
+				rowInfo.nHoverItem = PtInRowItem(point, rowInfo);
+				SendMessage(MSG_MOUSE_RDOWN, rowInfo.hNode, rowInfo.nHoverItem);
+				return true;
+			}
+		}
 
 	return false;
 }
