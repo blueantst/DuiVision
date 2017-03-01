@@ -1303,6 +1303,30 @@ int CDuiTreeCtrl::GetNodeCheck(HDUITREEITEM hNode)
 	return rowInfo.nCheck;
 }
 
+void CDuiTreeCtrl::SetNodeData(HDUITREEITEM hNode, DWORD dwData)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	rowInfo.dwData = dwData;
+}
+
+DWORD CDuiTreeCtrl::GetNodeData(HDUITREEITEM hNode)
+{
+	int nRow = GetNodeRow(hNode);
+	if(nRow == -1)
+	{
+		return NULL;
+	}
+
+	TreeNodeInfo &rowInfo = m_vecRowInfo.at(nRow);
+	return rowInfo.dwData;
+}
+
 // Çå¿ÕÊ÷½Úµã
 void CDuiTreeCtrl::ClearNodes()
 {

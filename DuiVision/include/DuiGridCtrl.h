@@ -52,6 +52,7 @@ struct GridRowInfo
 	BOOL	bRowBackColor;	// 使用行定义的背景颜色
 	Color	clrBack;		// 行背景颜色
 	int		nHoverItem;		// 当前热点列
+	DWORD   dwData;         // 关联用户数据
 	vector<GridItemInfo> vecItemInfo;
 };
 
@@ -99,6 +100,8 @@ public:
 	void SetRowBackColor(int nRow, Color clrBack);
 	void SetRowCheck(int nRow, int nCheck);
 	int  GetRowCheck(int nRow);
+	void SetRowData(int nRow, DWORD dwData);
+	DWORD GetRowData(int nRow);
 	void ClearItems();
 
 	BOOL PtInRow(CPoint point, GridRowInfo& rowInfo);

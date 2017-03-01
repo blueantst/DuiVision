@@ -58,6 +58,7 @@ struct TreeNodeInfo
 	int		nHoverItem;		// 当前热点列
 	BOOL	bCollapse;		// 是否折叠
 	BOOL	bHide;			// 是否隐藏
+	DWORD   dwData;     // 关联用户数据
 	vector<TreeItemInfo> vecItemInfo;
 };
 
@@ -113,6 +114,8 @@ public:
 	void ExpandNode(HDUITREEITEM hNode, BOOL bExpand);
 	void SetNodeCheck(HDUITREEITEM hNode, int nCheck);
 	int  GetNodeCheck(HDUITREEITEM hNode);
+	void SetNodeData(HDUITREEITEM hNode, DWORD dwData);
+	DWORD GetNodeData(HDUITREEITEM hNode);
 	void ClearNodes();
 	void HideChildNodes(HDUITREEITEM hItem);
 	void RefreshNodeRows();
