@@ -170,6 +170,42 @@ int CDuiComboBox::AddItem(CString strName, CString strDesc, CString strValue, in
 	return 0;
 }
 
+// 删除指定Combo页
+void CDuiComboBox::DeleteItem(int nItem)
+{
+	if((nItem < 0) || (nItem >= (int)m_vecItem.size()))
+	{
+		return;
+	}
+
+	CString strValue = _T("");
+	int nIndex = 0;
+	vector<ComboListItem>::iterator it;
+	for(it=m_vecItem.begin();it!=m_vecItem.end();++it)
+	{
+		if(nIndex == nItem)
+		{
+			ComboListItem &comboItem = *it;
+			strValue = comboItem.strValue;
+			m_vecItem.erase(it);
+			break;
+		}
+		nIndex++;
+	}
+
+	// 删除下拉列表中的项
+	if(m_pPopupList)
+	{
+		m_pPopupList->DeleteItem(nItem);
+	}
+
+	// 如果删除的是当前值,则更新编辑框的显示内容,更新为空
+	if(!strValue.IsEmpty() && (strValue == m_strComboValue))
+	{
+		SetTitle(_T(""));
+	}
+}
+
 // 清空Combo下拉项
 void CDuiComboBox::ClearItems()
 {
@@ -345,7 +381,7 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		// 如果设置了删除按钮图片，才可以进行删除
 		if(!m_strImageDeleteBitmap.IsEmpty() || (m_nResourceIDDeleteBitmap != 0))
 		{
-			m_pPopupList->DeleteItem(lParam);
+			DeleteItem(lParam);
 		}
 	}
 

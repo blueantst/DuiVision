@@ -27,6 +27,7 @@ public:
 	int GetItemCount();
 	int AddItem(CString strName, CString strDesc, CString strValue, int nResourceID,
 		CString strImageFile = _T(""), Color clrText = Color(255, 0, 20, 35), Color clrDesc = Color(255, 255, 255, 255));
+	void DeleteItem(int nItem);
 	void ClearItems();
 
 	HRESULT OnAttributeHeadImage(const CString& strValue, BOOL bLoading);
