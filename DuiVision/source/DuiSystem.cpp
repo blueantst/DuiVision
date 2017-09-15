@@ -636,7 +636,8 @@ BYTE* DuiSystem::LoadZipFile(CString strFile, DWORD& dwSize)
 			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, file too large"), strFile);
 			return NULL;
 		}
-		pByte = new BYTE[ dwSize ];
+		pByte = new BYTE[ dwSize+1 ];
+		memset(pByte, 0, dwSize+1);
 		int res = UnzipItem(m_hResourceZip, i, pByte, dwSize, 3);
 		if( res != 0x00000000 && res != 0x00000600)
 		{
