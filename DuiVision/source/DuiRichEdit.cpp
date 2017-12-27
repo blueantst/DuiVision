@@ -192,6 +192,7 @@ HRESULT InitDefaultCharFormat(CDuiRichEdit* re, CHARFORMAT2W* pcf, HFONT hfont)
     pcf->crTextColor = color.ToCOLORREF();
 	HDC hDCScreen = ::GetDC(NULL);
     LONG yPixPerInch = GetDeviceCaps(hDCScreen, LOGPIXELSY);
+	::ReleaseDC(NULL, hDCScreen);
     pcf->yHeight = -lf.lfHeight * LY_PER_INCH / yPixPerInch;
     pcf->yOffset = 0;
     pcf->dwEffects = 0;
@@ -419,7 +420,7 @@ HDC CTxtWinHost::TxGetDC()
 int CTxtWinHost::TxReleaseDC(HDC hdc)
 {
     //return 1;
-	return ::ReleaseDC(NULL,hdc);
+	return ::ReleaseDC(NULL, hdc);
 }
 
 BOOL CTxtWinHost::TxShowScrollBar(INT fnBar, BOOL fShow)
@@ -774,6 +775,7 @@ void CTxtWinHost::SetFont(HFONT hFont)
     ::GetObject(hFont, sizeof(LOGFONT), &lf);
 	HDC hDCScreen = ::GetDC(NULL);
     LONG yPixPerInch = ::GetDeviceCaps(hDCScreen, LOGPIXELSY);
+	::ReleaseDC(NULL, hDCScreen);
     cf.yHeight = -lf.lfHeight * LY_PER_INCH / yPixPerInch;
     if(lf.lfWeight >= FW_BOLD)
         cf.dwEffects |= CFE_BOLD;
@@ -882,6 +884,7 @@ void CTxtWinHost::SetClientRect(RECT *prc)
 	HDC hDCScreen = ::GetDC(NULL);
     LONG xPerInch = ::GetDeviceCaps(hDCScreen, LOGPIXELSX); 
     LONG yPerInch =	::GetDeviceCaps(hDCScreen, LOGPIXELSY); 
+	::ReleaseDC(NULL, hDCScreen);
     sizelExtent.cx = DXtoHimetricX(rcClient.right - rcClient.left, xPerInch);
     sizelExtent.cy = DYtoHimetricY(rcClient.bottom - rcClient.top, yPerInch);
 
@@ -935,8 +938,10 @@ BOOL CTxtWinHost::DoSetCursor(RECT *prc, POINT *pt)
     if (PtInRect(&rc, *pt))
     {
         RECT *prcClient = (!fInplaceActive || prc) ? &rc : NULL;
-		pserv->OnTxSetCursor(DVASPECT_CONTENT,	-1, NULL, NULL,  ::GetDC(m_re->GetHWND()),
+		HDC hDC = ::GetDC(m_re->GetHWND());
+		pserv->OnTxSetCursor(DVASPECT_CONTENT,	-1, NULL, NULL,  hDC,
             NULL, prcClient, pt->x, pt->y);
+		::ReleaseDC(m_re->GetHWND(), hDC);
 
         return TRUE;
     }
