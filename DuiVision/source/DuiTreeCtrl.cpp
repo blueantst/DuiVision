@@ -2082,10 +2082,14 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 	int nHeightAll = m_nVisibleRowCount*m_nRowHeight; // 总的虚拟高度 //m_rc.Height();
 	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
-	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
-	int nMaxRange = pScrollV->GetScrollMaxRange();
+	int nCurPosV = pScrollV->GetScrollCurrentPos();	// 当前top位置
+	int nMaxRangeV = pScrollV->GetScrollMaxRange();
+	if(nTotalColumnWidth > m_rc.Width())	// 如果需要显示水平滚动条,则春之滚动条的最大范围要减去滚动条宽度
+	{
+		nMaxRangeV -= m_nScrollWidth;
+	}
 
-	m_nVirtualTop = (nMaxRange > 0) ? (int)((double)nCurPos*(nHeightAll-m_rc.Height())/nMaxRange) : 0;	// 当前滚动条位置对应的虚拟的top位置
+	m_nVirtualTop = (nMaxRangeV > 0) ? (int)((double)nCurPosV*(nHeightAll-m_rc.Height())/nMaxRangeV) : 0;	// 当前滚动条位置对应的虚拟的top位置
 	if(m_nVirtualTop < 0)
 	{
 		m_nVirtualTop = 0;
