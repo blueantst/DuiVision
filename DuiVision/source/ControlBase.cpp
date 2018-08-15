@@ -618,7 +618,7 @@ int CControlBase::GetTooltipCtrlID()
 // 鼠标移动事件处理
 BOOL CControlBase::OnMouseMove(UINT nFlags, CPoint point)
 {
-	if(!m_bIsVisible || !m_bRresponse) return false;
+	if(!m_bIsVisible || !m_bRresponse || point.x<0 || point.y<0) return false;
 	
 	// 保存原始的鼠标位置,并进行位置变换
 	CPoint oldPoint = point;
@@ -1326,6 +1326,15 @@ void CControlBase::OnPositionChange()
 			pControlBase->OnPositionChange();
 		}
 	}
+	// 刷新area的位置
+	for (size_t i = 0; i < m_vecArea.size(); i++)
+	{
+		CControlBase * pControlBase = m_vecArea.at(i);
+		if (pControlBase)
+		{
+			pControlBase->OnPositionChange();
+		}
+	}
 }
 
 // 计算位置信息的具体坐标值
@@ -1866,7 +1875,12 @@ BOOL CControlBase::RemoveControl(CControlBase* pControl)
 				}
 			}
 			m_vecControl.erase(it);
+			if (pControlBase == m_pControl)
+			{
+				m_pControl = NULL;
+			}
 			delete pControlBase;
+			pControlBase = NULL;
 			return TRUE;
 		}
 	}
