@@ -253,7 +253,7 @@ LRESULT CALLBACK CWndShadow::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 			else
 			{
 				pThis->m_bUpdate = true;
-				ShowWindow(pThis->m_hWnd, SW_HIDE);
+				ShowWindow(pThis->m_hWnd, SW_SHOW);
 				LONG lParentStyle = GetWindowLong(hwnd, GWL_STYLE);
 				if (lParentStyle & 0x80000000)
 				{
@@ -261,6 +261,7 @@ LRESULT CALLBACK CWndShadow::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 					GetClientRect(hwnd,&rect);
 					PostMessage(hwnd,WM_SIZE,rect.Width(),rect.Height());
 				}
+				pThis->m_Status |= SS_VISABLE | SS_PARENTVISIBLE;
 				// pThis->m_Status |= SS_VISABLE | SS_PARENTVISIBLE;
 				// ShowWindow(pThis->m_hWnd, SW_SHOWNA);
 				// pThis->Update(hwnd);
