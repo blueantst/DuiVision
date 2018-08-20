@@ -412,6 +412,15 @@ int CDuiGridCtrl::SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn)
 	return nWidthResult;
 }
 
+int CDuiGridCtrl::GetColumnWidth(UINT nColumn)
+{
+	if (nColumn >= m_vecColumnInfo.size())
+	{
+		return -1;
+	}else
+		return m_vecColumnInfo.at(nColumn).nWidth;
+}
+
 // 移动列分隔线位置
 void CDuiGridCtrl::MoveColumnSplit(int nColumn, int nPos)
 {
@@ -1729,7 +1738,7 @@ BOOL CDuiGridCtrl::OnControlLButtonDblClk(UINT nFlags, CPoint point)
 // 垂直滚动事件处理
 BOOL CDuiGridCtrl::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 {
-	if(((int)m_vecRowInfo.size() * m_nRowHeight) <= m_rc.Height())
+	if(((int)m_vecRowInfo.size() * m_nRowHeight) <= m_rc.Height() - m_nHeaderHeight)
 	{
 		return false;
 	}
@@ -1985,6 +1994,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 		// 设置标题行文字的水平和垂直对齐方式
 		DUI_STRING_ALIGN_DEFINENAME(Header, m_uAlignmentHeader, m_uVAlignmentHeader);
+		strFormatHeader.SetTrimming(StringTrimmingEllipsisCharacter);//以字符为单位去尾，略去部分使用省略号表示
 		if(!m_bTextWrap)
 		{
 			strFormatHeader.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行
@@ -1996,12 +2006,12 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			// 画标题行背景
 			if(m_pImageHeader != NULL)
 			{
-				CRect  rcHeader(0, 0, nViewWidth, m_nHeaderHeight);
-				DrawImageFrame(graphics, m_pImageHeader, rcHeader, 0, 0, m_sizeHeader.cx, m_sizeHeader.cy, 0);
+				CRect  rcHeader(m_nVirtualLeft, 0, nViewWidth+m_nVirtualLeft, m_nHeaderHeight);
+				DrawImageFrame(graphics, m_pImageHeader, rcHeader, 0, 0, m_sizeHeader.cx, m_sizeHeader.cy);
 			}
 
 			// 画检查框
-			int nXPos = 0;
+			int nXPos = 3;
 			int nCheckImgY = 3;
 			if((m_sizeCheckBox.cy*2 > m_nHeaderHeight) || (m_uVAlignment == VAlign_Middle))
 			{
@@ -2021,6 +2031,10 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 			for(size_t j = 0; j < m_vecColumnInfo.size(); j++)
 			{
 				GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
+				if (columnInfo.nWidth == 0)
+				{
+					continue;
+				}
 				int nWidth = columnInfo.nWidth;
 				if(j == 0)
 				{
@@ -2056,6 +2070,19 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				nPosItemX += nWidth;
 			}
+			// 画分隔线(采用拉伸模式)
+			if(m_pImageSeperator != NULL)
+			{
+				// 使用拉伸模式画图
+				graphics.DrawImage(m_pImageSeperator,
+					RectF(0, (Gdiplus::REAL)(m_nHeaderHeight)-1, (Gdiplus::REAL)(nContentWidth-2), (Gdiplus::REAL)m_sizeSeperator.cy),
+					0, 0, (Gdiplus::REAL)m_sizeSeperator.cx, (Gdiplus::REAL)m_sizeSeperator.cy, UnitPixel);
+			}else
+				if(m_clrSeperator.GetValue() != Color(0, 0, 0, 0).GetValue())
+				{
+					// 未指定图片,并且分隔线显色不是全0,则画矩形
+					graphics.FillRectangle(&solidBrushS, 0, m_nHeaderHeight-1, nContentWidth-2, 1);
+				}
 		}
 		
 		if(m_vecRowInfo.size() > 0)
@@ -2065,7 +2092,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				GridRowInfo &rowInfo = m_vecRowInfo.at(i);
 				SolidBrush solidBrushRow(rowInfo.clrText);	// 行定义的颜色
 
-				int nXPos = 0;
+				int nXPos = 3;
 				int nVI = i - m_nFirstViewRow;
 
 				// 鼠标移动到行时候显示的背景颜色(如果设置为全0,则不显示行背景颜色)
@@ -2233,6 +2260,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 					// 设置单元格文字对齐方式,使用列的对齐方式
 					StringFormat strFormatColumn;
+					strFormatColumn.SetTrimming(StringTrimmingEllipsisCharacter);//以字符为单位去尾，略去部分使用省略号表示
 					UINT uAlignment = m_uAlignment;
 					if(columnInfo.uAlignment != 0xFFFFUL)
 					{
@@ -2331,38 +2359,43 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				{
 					// 使用拉伸模式画图
 					graphics.DrawImage(m_pImageSeperator,
-							RectF(0, (Gdiplus::REAL)(m_nHeaderHeight + (nVI+1)*m_nRowHeight), (Gdiplus::REAL)(nContentWidth-2), (Gdiplus::REAL)m_sizeSeperator.cy),
+							RectF(0, (Gdiplus::REAL)(m_nHeaderHeight + (nVI+1)*m_nRowHeight)-1, (Gdiplus::REAL)(nContentWidth-2), (Gdiplus::REAL)m_sizeSeperator.cy),
 							0, 0, (Gdiplus::REAL)m_sizeSeperator.cx, (Gdiplus::REAL)m_sizeSeperator.cy, UnitPixel);
 				}else
 				if(m_clrSeperator.GetValue() != Color(0, 0, 0, 0).GetValue())
 				{
 					// 未指定图片,并且分隔线显色不是全0,则画矩形
-					graphics.FillRectangle(&solidBrushS, 0, m_nHeaderHeight + (nVI+1)*m_nRowHeight, nContentWidth-2, 1);
+					graphics.FillRectangle(&solidBrushS, 0, m_nHeaderHeight + (nVI+1)*m_nRowHeight-1, nContentWidth-2, 1);
 				}
 			}
-
 			// 画内容部分的列分隔线
 			if(m_bShowColumnSeperator && (m_pImageColumnSeperator != NULL))
 			{
 				int nPosItemX = 0;
-				for(size_t j = 0; j < m_vecColumnInfo.size(); j++)
+				//先画最左侧分割线
+				RectF rectSepLeft((Gdiplus::REAL)(m_nVirtualLeft), (Gdiplus::REAL)m_nHeaderHeight,
+					(Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)(nHeightView - m_nHeaderHeight));
+				graphics.DrawImage(m_pImageColumnSeperator, rectSepLeft, 0, 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)m_sizeColumnSeperator.cy, UnitPixel);
+				// 画中间分割线
+				for(size_t j = 0; j < m_vecColumnInfo.size() -1; j++)
 				{
 					GridColumnInfo &columnInfo = m_vecColumnInfo.at(j);
 					int nWidth = columnInfo.nWidth;
 					if(nWidth== -1)
 					{
-						nWidth = m_rc.Width() - nPosItemX;
+						nWidth = m_rc.Width() - nPosItemX-m_nScrollWidth-1;
 					}
 
-					if(j < (m_vecColumnInfo.size()-1))
-					{
-						RectF rectSep((Gdiplus::REAL)(nPosItemX+nWidth), (Gdiplus::REAL)m_nHeaderHeight,
-							(Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)(nHeightView - m_nHeaderHeight));
-						graphics.DrawImage(m_pImageColumnSeperator, rectSep, 0, 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)m_sizeColumnSeperator.cy, UnitPixel);
-					}
+					RectF rectSep((Gdiplus::REAL)(nPosItemX+nWidth), (Gdiplus::REAL)m_nHeaderHeight,
+						(Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)(nHeightView - m_nHeaderHeight));
+					graphics.DrawImage(m_pImageColumnSeperator, rectSep, 0, 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)m_sizeColumnSeperator.cy, UnitPixel);
 
 					nPosItemX += nWidth;
 				}
+				//画最右侧侧分割线
+				RectF rectSepRight((Gdiplus::REAL)(m_nVirtualLeft + nViewWidth -1), (Gdiplus::REAL)m_nHeaderHeight,
+					(Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)(nHeightView - m_nHeaderHeight));
+				graphics.DrawImage(m_pImageColumnSeperator, rectSepRight, 0, 0, (Gdiplus::REAL)m_sizeColumnSeperator.cx, (Gdiplus::REAL)m_sizeColumnSeperator.cy, UnitPixel);
 			}
 
 			// 把不在显示范围内的单元格的控件都设置为不可见
