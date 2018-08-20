@@ -9,7 +9,8 @@ enum enumShowMode
 	enSMTile,				// Æ½ÆÌ
 	enSMExtrude,			// À­Éì
 	enSMFrame,				// ±ß¿ò
-	enSMMID					// ¾Å¹¬¸ñ±ß¿ò
+	enSMMID,					// ¾Å¹¬¸ñ±ß¿ò
+	enCycle
 };
 
 class CDuiPicture : public CControlBaseFont
@@ -47,6 +48,7 @@ public:
             DUI_ENUM_VALUE(_T("extrude"), enSMExtrude)
 			DUI_ENUM_VALUE(_T("frame"), enSMFrame)
 			DUI_ENUM_VALUE(_T("mid"), enSMMID)
+			DUI_ENUM_VALUE(_T("cycle"), enCycle)
         DUI_ENUM_END(m_enShowMode)
     DUI_DECLARE_ATTRIBUTES_END()
 };
