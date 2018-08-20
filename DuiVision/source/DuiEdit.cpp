@@ -905,7 +905,11 @@ LRESULT CDuiEdit::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	Graphics graphics(dc);
-
+	if (m_bIsDisable)
+	{
+		m_EditState = enBSDisable;
+		m_buttonState = enBSDisable;
+	}
 	DrawImageFrame(graphics, m_pImage, m_rc, m_EditState * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 4);
 
 	// »­±³¾°É«
