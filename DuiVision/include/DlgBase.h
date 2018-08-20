@@ -185,6 +185,8 @@ public:
 	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID, BOOL bShow=TRUE);
 	// 关闭弹出对话框
 	void CloseDlgPopup();
+	//获取弹出对话框
+	CDlgPopup * GetDlgPopUp();
 
 	// 根据控件名创建控件实例
 	CControlBase* _CreateControlByName(LPCTSTR lpszName);
@@ -244,6 +246,11 @@ public:
 	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL);
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+	// 增加注册消息的接口
+	std::map<UINT,std::wstring> m_mapMsg;
+	void RegisterMsg(UINT msg,std::wstring strMsgName){
+		m_mapMsg.insert(std::make_pair(msg,strMsgName));
+	}
 protected:
 	virtual void OnClose();
 	virtual void OnMinimize();
