@@ -1050,6 +1050,14 @@ void CDlgBase::LoadBackgroundImage(CString strFileName)
 	{
 		DrawBackground(bitBackground);
 	}
+	else
+	{
+		CString strImgFile = DuiSystem::Instance()->GetSkin(_T("SKIN_PIC_0"));
+		if (strFileName.Compare(strImgFile) != 0)
+		{
+			LoadBackgroundImage(strImgFile);
+		}
+	}
 }
 
 // 画背景图片
@@ -2524,6 +2532,11 @@ void CDlgBase::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 // 消息预处理
 BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 {
+	if (m_mapMsg.find(pMsg->message) != m_mapMsg.end())
+	{
+		//SendMessage(pMsg->message,pMsg->wParam,pMsg->lParam);
+		DuiSystem::AddDuiActionTask(1,pMsg->message,pMsg->wParam,pMsg->lParam,m_mapMsg[pMsg->message].c_str(),_T(""),NULL);
+	}
 	if (( pMsg->message == WM_KEYDOWN ) || ( pMsg->message == WM_SYSKEYDOWN ))	// 键盘按下消息
 	{
 		// 键盘事件处理
@@ -2908,7 +2921,10 @@ void CDlgBase::CloseDlgPopup()
 	}
 	m_pWndPopup = NULL;
 }
-
+CDlgPopup * CDlgBase::GetDlgPopUp()
+{
+	return m_pWndPopup;
+}
 void CDlgBase::OnDestroy()
 {
 	__super::OnDestroy();

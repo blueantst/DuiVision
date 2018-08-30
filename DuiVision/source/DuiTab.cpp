@@ -757,7 +757,7 @@ int CDuiTabCtrl::SetSelectItem(int nItem)
 				}
 			}
 		}
-
+		SetUpdate(FALSE);
 		UpdateControl();
 	}
 
@@ -1183,7 +1183,7 @@ void CDuiTabCtrl::SetControlRect(CRect rc)
 // 重载设置控件可见性的函数，需要调用子控件的函数
 void CDuiTabCtrl::SetControlVisible(BOOL bIsVisible)
 {
-	//__super::SetControlVisible(bIsVisible);
+	__super::SetControlVisible(bIsVisible);
 
 	if(bIsVisible)
 	{

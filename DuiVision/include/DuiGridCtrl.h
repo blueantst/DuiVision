@@ -73,6 +73,7 @@ public:
 		UINT uAlignment = 0xFFFFUL, UINT uVAlignment = 0xFFFFUL);
 	int GetColumnCount() { return (int)m_vecColumnInfo.size(); }
 	int SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn = -1);
+	int GetColumnWidth(UINT nColumn);
 	void MoveColumnSplit(int nColumn, int nPos);
 	int GetTotalColumnWidth();
 	int InsertRow(int nRow, CString strId,

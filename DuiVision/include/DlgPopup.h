@@ -90,6 +90,7 @@ public:
 	BOOL IsAutoClose() { return m_bAutoClose; }
 
 	CSize& GetSize() {return m_size;}
+	void SetSize(CSize&sz){ m_size = sz;}
 
 	BOOL UseImageECM() { return m_bImageUseECM; }
 

@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Picture.h"
+#include "math.h"
 
 CDuiPicture::CDuiPicture(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBaseFont(hWnd, pDuiObject)
@@ -126,7 +127,7 @@ void CDuiPicture::DrawControl(CDC &dc, CRect rcUpdate)
 				}
 			}
 		}else
-		if(m_enShowMode == enSMExtrude)	// ¿≠…Ï
+		if(m_enShowMode == enSMExtrude || m_enShowMode == enCycle)	// ¿≠…Ï
 		{
 			Rect rect(0, 0, nWidth, nHeight);
 			graphics.DrawImage(m_pImage, rect, 0, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
@@ -143,6 +144,22 @@ void CDuiPicture::DrawControl(CDC &dc, CRect rcUpdate)
 				m_nWLT, m_nHLT, m_nWRB, m_nHRB);
 		}
 	}
+	if (m_enShowMode == enCycle)
+	{
+ 		Graphics graphics(dc.m_hDC);
+		Pen pen(Color(225,225,225),1);
+		graphics.SetSmoothingMode(SmoothingModeHighQuality);
+		//…Ë÷√≤√ºÙ‘≤
+		GraphicsPath graphicspath;
+		if (graphicspath.GetLastStatus() != Ok)
+			return;
+		graphicspath.AddEllipse(m_rc.left-1, m_rc.top-1, nWidth+1, nHeight+1);
+		graphics.SetClip(&graphicspath, CombineModeReplace);
 
-	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
+		//ªÊ÷∆ÕºœÒ
+		graphics.DrawImage(m_pImage, m_rc.left,m_rc.top,nWidth,nHeight);
+
+		//graphics.DrawEllipse(&pen,m_rc.left,m_rc.top, nWidth, nHeight);
+	}else
+		dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);	
 }

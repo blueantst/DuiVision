@@ -61,6 +61,7 @@ DuiSystem::~DuiSystem(void)
 		if (pDuiHandler)
 		{
 			delete pDuiHandler;
+			pDuiHandler = NULL;
 		}		
 	}
 
@@ -71,6 +72,7 @@ DuiSystem::~DuiSystem(void)
 		if (pDlgBase)
 		{
 			delete pDlgBase;
+			pDlgBase = NULL;
 		}		
 	}
 
@@ -1923,6 +1925,7 @@ void DuiSystem::RemoveDuiDialog(CDlgBase* pDuiDialog)
 	if(pDuiDialog != NULL)
 	{
 		delete pDuiDialog;
+		pDuiDialog = NULL;
 	}
 }
 

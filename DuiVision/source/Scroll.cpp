@@ -96,6 +96,10 @@ HRESULT CDuiScroll::OnAttributeRowRange(const CString& strValue, BOOL bLoading)
 BOOL CDuiScroll::SetScrollCurrentPos(int nCurrentPos)
 {
 	m_nCurrentPos = nCurrentPos;
+	if (m_nCurrentPos >= m_nMaxRange)
+	{
+		m_nCurrentPos = m_nMaxRange;
+	}
 	SetRange();
 	return TRUE;
 }
@@ -104,6 +108,10 @@ BOOL CDuiScroll::SetScrollCurrentPos(int nCurrentPos)
 BOOL CDuiScroll::SetScrollMaxRange(int nMaxRange)
 {
 	m_nMaxRange = nMaxRange;
+	if (m_nCurrentPos >= m_nMaxRange)
+	{
+		m_nCurrentPos = m_nMaxRange;
+	}
 	if(m_bAutoCalcRange)
 	{
 		// 如果是自动计算滚动页范围,则重置页范围,好重新计算
