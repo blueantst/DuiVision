@@ -87,6 +87,11 @@ void CDuiHandler::OnInit()
 {
 }
 
+BOOL CDuiHandler::OnValidate()
+{
+	return TRUE;
+}
+
 // DUI事件处理
 LRESULT CDuiHandler::OnDuiMessage(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {

@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include "WndBase.h"
-#include "../activex/duicomcli.h"
-#include "../activex/flash10t.tlh"
-#include "../activex/wmp.tlh"
+#include <exdisp.h>
 
 struct IOleObject;
 
@@ -36,9 +33,6 @@ class CDuiActiveX : public CControlBase
 public:
     CDuiActiveX(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiActiveX();
-
-    HWND GetHostWindow() const;
-	HWND GetPaintWindow();
 
     bool IsDelayCreate() const;
     void SetDelayCreate(bool bDelayCreate = true);
@@ -79,14 +73,13 @@ protected:
     CString					m_strModuleName;
 	CString					m_strUrl;
     bool					m_bCreated;
-    bool					m_bDelayCreate;
+    bool					m_bDelayCreate;		// 是否延迟创建
 	bool					m_bShowContentMenu;	// 是否显示右键菜单
-	bool					m_bShowScroll;	// 是否显示滚动条
+	bool					m_bShowScroll;		// 是否显示滚动条
     IOleObject*				m_pUnk;
-	IConnectionPoint*		m_pCP;		// 连接点指针
+	IConnectionPoint*		m_pCP;				// 连接点指针
 	DWORD                   m_dwEventCookie;
-    CActiveXCtrl*			m_pControl;	// ActiveX控件指针
-    HWND					m_hwndHost;
+    CActiveXCtrl*			m_pControl;			// ActiveX控件指针
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("clsid"), OnAttributeCLSID)
@@ -109,14 +102,28 @@ public:
     CDuiWebBrowserCtrl(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiWebBrowserCtrl();
 
+	BOOL IsDuiMsgInvoke() {return m_bDuiMsgInvoke; }
+	virtual BOOL OnControlSetDuiMsg(LPCTSTR lpszDuiMsg);
+
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxCreateCtrl();
 	virtual void OnAxInitFinish();
+
+	IWebBrowser2* GetIWebBrowser2();
+	CString getURL();
+
 	virtual HRESULT Navigate(CString strUrl);
+	HRESULT GoBack();
+	HRESULT GoForward();
+	HRESULT Refresh();
+	HRESULT Stop();
+	HRESULT GetBusy(BOOL& bBusy);
 
 protected:
 	HRESULT InitEvents();
+
+	BOOL					m_bDuiMsgInvoke;	// 是否发送浏览器Invoke消息到DUI消息
 
 protected:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
@@ -131,20 +138,31 @@ class CDuiFlashCtrl : public CDuiActiveX
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiFlashCtrl, _T("flash"))
 
 public:
+	// 重载new操作符，判定如果flash没有安装，返回null
+	void * operator new(size_t sz);
+
     CDuiFlashCtrl(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiFlashCtrl();
 
 	virtual void OnAxInit();
 	virtual void OnAxActivate(IUnknown *pUnknwn);
 	virtual void OnAxInitFinish();
-	virtual HRESULT Navigate(CString strUrl);
 
+	virtual HRESULT Navigate(CString strUrl);
+	HRESULT PutFlashVars(CString strVars);
+
+	HRESULT OnAttributeVars(const CString& strValue, BOOL bLoading);
+
+	// 检测是否安装flash
+	static bool isExistFlashActiveX();
 protected:
-    CDuiComQIPtr<ShockwaveFlashObjects::IShockwaveFlash> flash_;
+	IUnknown*	flash_;
 	bool		m_bTransparent;	// 是否创建背景透明的flash
+	CString		m_strVars;			// flash参数
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_BOOL_ATTRIBUTE(_T("transparent"), m_bTransparent, FALSE)
+		DUI_TSTRING_ATTRIBUTE(_T("vars"), m_strVars, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -167,7 +185,7 @@ public:
 	virtual HRESULT Navigate(CString strUrl);
 
 protected:
-    CDuiComQIPtr<WMPLib::IWMPPlayer4> wmp_;
+	IUnknown* wmp_;
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 	DUI_DECLARE_ATTRIBUTES_END()

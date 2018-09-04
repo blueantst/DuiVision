@@ -5,6 +5,7 @@ CArea::CArea(HWND hWnd, CDuiObject* pDuiObject)
 			: CControlBase(hWnd, pDuiObject)
 {
 	m_clr = RGB(255, 255, 255);
+	m_nTransparentType = TRANSPARENT_VERTICAL;
 	m_nBeginTransparent = 50;
 	m_nEndTransparent = 50;
 }
@@ -14,6 +15,7 @@ CArea::CArea(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int n
 			: CControlBase(hWnd, pDuiObject, uControlID, rc, bIsVisible, FALSE, FALSE)
 {
 	m_clr = clr;
+	m_nTransparentType = TRANSPARENT_VERTICAL;
 	m_nBeginTransparent = nBeginTransparent;
 	m_nEndTransparent = nEndTransparent;
 }
@@ -43,7 +45,14 @@ void CArea::DrawControl(CDC &dc, CRect rcUpdate)
 		m_memDC.BitBlt(0, 0, nWidth, nHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
 		TempDC.FillSolidRect(&rcTemp, m_clr);		
 
-		DrawVerticalTransition(m_memDC, TempDC, rcTemp, rcTemp, m_nBeginTransparent, m_nEndTransparent);
+		if(m_nTransparentType == TRANSPARENT_VERTICAL)
+		{
+			DrawVerticalTransition(m_memDC, TempDC, rcTemp, rcTemp, m_nBeginTransparent, m_nEndTransparent);
+		}else
+		if(m_nTransparentType == TRANSPARENT_HORIZONTAL)
+		{
+			DrawHorizontalTransition(m_memDC, TempDC, rcTemp, rcTemp, m_nBeginTransparent, m_nEndTransparent);
+		}
 		
 		TempDC.SelectObject(pOldmap);
 		memBmpTemp.DeleteObject();

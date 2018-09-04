@@ -4,6 +4,9 @@
 #include "stdafx.h"
 #include "[!output PROJECT_NAME].h"
 #include "DuiHandlerMain.h"
+[!if OPTION_CHECK_USEWKE]
+#include "DuiWkeView.h"
+[!endif]
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -70,6 +73,11 @@ BOOL C[!output PROJECT_NAME]App::InitInstance()
 			return FALSE; // Here we quit this application
 		}
 	}
+
+[!if OPTION_CHECK_USEWKE]
+	// 注册WKE控件
+	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
+[!endif]
 
 	// 创建主窗口
 	CDlgBase* pMainDlg = DuiSystem::CreateDuiDialog(_T("dlg_main"), NULL, _T(""), TRUE);

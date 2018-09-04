@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugMulti|Win32">
+      <Configuration>DebugMulti</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-StaticMFC|Win32">
+      <Configuration>Release-StaticMFC</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseMulti|Win32">
+      <Configuration>ReleaseMulti</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{956C8DD0-B286-44FE-B190-7C3666CB6645}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CLRSupport>false</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMulti|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CLRSupport>false</CLRSupport>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CLRSupport>false</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMulti|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CLRSupport>false</CLRSupport>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CLRSupport>false</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugMulti|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMulti|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Lib\</OutDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMulti|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Lib\</OutDir>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Lib\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMulti|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Lib\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Lib\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMulti|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Link>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)_M$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMulti|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>include;tinyxml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="activex\duicomcli.h" />
+    <ClInclude Include="common\BaseTask.h" />
+    <ClInclude Include="common\encoding.h" />
+    <ClInclude Include="common\LogMgr.h" />
+    <ClInclude Include="common\registry.h" />
+    <ClInclude Include="common\TaskMgr.h" />
+    <ClInclude Include="common\WinDwmWrapper.h" />
+    <ClInclude Include="common\XUnZip.h" />
+    <ClInclude Include="include\Area.h" />
+    <ClInclude Include="include\CheckButton.h" />
+    <ClInclude Include="include\ControlBase.h" />
+    <ClInclude Include="include\DlgBase.h" />
+    <ClInclude Include="include\DlgPopup.h" />
+    <ClInclude Include="include\DlgSkin.h" />
+    <ClInclude Include="include\DuiActiveX.h" />
+    <ClInclude Include="include\DuiButton.h" />
+    <ClInclude Include="include\DuiComboBox.h" />
+    <ClInclude Include="include\DuiDef.h" />
+    <ClInclude Include="include\DuiEdit.h" />
+    <ClInclude Include="include\DuiGridCtrl.h" />
+    <ClInclude Include="include\DuiHandler.h" />
+    <ClInclude Include="include\duiid.h" />
+    <ClInclude Include="include\DuiLayout.h" />
+    <ClInclude Include="include\DuiListCtrl.h" />
+    <ClInclude Include="include\DuiMenu.h" />
+    <ClInclude Include="include\DuiNativeWnd.h" />
+    <ClInclude Include="include\DuiObject.h" />
+    <ClInclude Include="include\DuiRichEdit.h" />
+    <ClInclude Include="include\DuiSlider.h" />
+    <ClInclude Include="include\DuiSystem.h" />
+    <ClInclude Include="include\DuiTab.h" />
+    <ClInclude Include="include\DuiText.h" />
+    <ClInclude Include="include\DuiTreeCtrl.h" />
+    <ClInclude Include="include\DuiVision.h" />
+	<ClInclude Include="include\DuiVisionApp.h" />
+    <ClInclude Include="include\DuiWkeView.h" />
+    <ClInclude Include="include\DuiXml.h" />
+    <ClInclude Include="include\GlobalFunction.h" />
+    <ClInclude Include="include\HideButton.h" />
+    <ClInclude Include="include\IDuiPlugin.h" />
+    <ClInclude Include="include\ImageString.h" />
+    <ClInclude Include="include\LinkButton.h" />
+    <ClInclude Include="include\MenuItem.h" />
+    <ClInclude Include="include\Panel.h" />
+    <ClInclude Include="include\Picture.h" />
+    <ClInclude Include="include\PopupList.h" />
+    <ClInclude Include="include\Progress.h" />
+    <ClInclude Include="include\RadioButton.h" />
+    <ClInclude Include="include\Rectangle.h" />
+    <ClInclude Include="include\DuiAnimateImg.h" />
+    <ClInclude Include="include\Scroll.h" />
+    <ClInclude Include="include\SelectBox.h" />
+    <ClInclude Include="include\TextButton.h" />
+    <ClInclude Include="include\Timer.h" />
+    <ClInclude Include="include\WndBase.h" />
+    <ClInclude Include="include\WndShadow.h" />
+    <ClInclude Include="pugixml\foreach.hpp" />
+    <ClInclude Include="pugixml\pugiconfig.hpp" />
+    <ClInclude Include="pugixml\pugixml.hpp" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="common\LogMgr.cpp" />
+    <ClCompile Include="common\TaskMgr.cpp" />
+    <ClCompile Include="common\WinDwmWrapper.cpp" />
+    <ClCompile Include="common\XUnzip.cpp" />
+    <ClCompile Include="DuiVision.cpp" />
+    <ClCompile Include="pugixml\pugixml.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMulti|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseMulti|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="source\Area.cpp" />
+    <ClCompile Include="source\CheckButton.cpp" />
+    <ClCompile Include="source\ControlBase.cpp" />
+    <ClCompile Include="source\DlgBase.cpp" />
+    <ClCompile Include="source\DlgPopup.cpp" />
+    <ClCompile Include="source\DlgSkin.cpp" />
+    <ClCompile Include="source\DuiActiveX.cpp" />
+    <ClCompile Include="source\DuiButton.cpp" />
+    <ClCompile Include="source\DuiComboBox.cpp" />
+    <ClCompile Include="source\DuiEdit.cpp" />
+    <ClCompile Include="source\DuiGridCtrl.cpp" />
+    <ClCompile Include="source\DuiHandler.cpp" />
+    <ClCompile Include="source\DuiLayout.cpp" />
+    <ClCompile Include="source\DuiListCtrl.cpp" />
+    <ClCompile Include="source\DuiMenu.cpp" />
+    <ClCompile Include="source\DuiNativeWnd.cpp" />
+    <ClCompile Include="source\DuiObject.cpp" />
+    <ClCompile Include="source\DuiRichEdit.cpp" />
+    <ClCompile Include="source\DuiSlider.cpp" />
+    <ClCompile Include="source\DuiSystem.cpp" />
+    <ClCompile Include="source\DuiTab.cpp" />
+    <ClCompile Include="source\DuiText.cpp" />
+    <ClCompile Include="source\DuiTreeCtrl.cpp" />
+	<ClCompile Include="source\DuiVisionApp.cpp" />
+    <ClCompile Include="source\DuiWkeView.cpp" />
+    <ClCompile Include="source\DuiXml.cpp" />
+    <ClCompile Include="source\GlobalFunction.cpp" />
+    <ClCompile Include="source\HideButton.cpp" />
+    <ClCompile Include="source\ImageString.cpp" />
+    <ClCompile Include="source\LinkButton.cpp" />
+    <ClCompile Include="source\MenuItem.cpp" />
+    <ClCompile Include="source\Panel.cpp" />
+    <ClCompile Include="source\Picture.cpp" />
+    <ClCompile Include="source\PopupList.cpp" />
+    <ClCompile Include="source\Progress.cpp" />
+    <ClCompile Include="source\RadioButton.cpp" />
+    <ClCompile Include="source\Rectangle.cpp" />
+    <ClCompile Include="source\DuiAnimateImg.cpp" />
+    <ClCompile Include="source\Scroll.cpp" />
+    <ClCompile Include="source\SelectBox.cpp" />
+    <ClCompile Include="source\TextButton.cpp" />
+    <ClCompile Include="source\Timer.cpp" />
+    <ClCompile Include="source\WndBase.cpp" />
+    <ClCompile Include="source\WndShadow.cpp" />
+    <ClCompile Include="Stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMulti|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseMulti|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release-StaticMFC|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="activex\flash10t.tlh" />
+    <None Include="activex\flash10t.tli" />
+    <None Include="activex\wmp.tlh" />
+    <None Include="activex\wmp.tli" />
+    <None Include="app.ico" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

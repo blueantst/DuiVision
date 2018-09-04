@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<dlg name="dlg_chat" title="" width="620" height="520" resize="0"
+	frame="" bkimg="" crbk="000000"
+	translucent="245"
+	img-shadow="skins\default\winback_shadow.png" shadow-wlt="36" shadow-hlt="34" shadow-wrb="36" shadow-hrb="35" >
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" shortcut="ESC" />
+		<!--text name="title" crtext="FFFFFF" font="big" pos="10,5,200,25" title="聊天窗口" response="0" /-->
+	</base>
+
+	<body>
+		<area name="area-1" pos="0,0,-0,80" begin-transparent="50" end-transparent="20" />
+		<area name="area-2" pos="0,80,-0,-0" begin-transparent="20" end-transparent="20" />
+		<area name="area-3" pos="0,80,-0,81" begin-transparent="70" end-transparent="70" />
+		<!--area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" /-->
+		
+		<!-- 窗口顶部 -->
+		<!-- 图标 -->
+		<img name="image.user.frame" pos="5,4" width="50" height="50" image="skin:IDB_WINDOW_SHADOW"
+				mode="mid" width-lt="5" height-lt="3" width-rb="5" height-rb="7" response="0" />
+		<img name="image.user" pos="10,7" width="40" height="40" image="skins\im\head\181.png"
+					mode="extrude" framesize="1" tip="头像" response="0" />
+		<!-- 文字 -->
+		<text name="chat.title" crtext="000000" font="bigbig" pos="60,6,400,30" title="Script.NET & DuiVision社区" response="0" />
+		<img name="user.star" pos="61,35" width="12" height="11" image="skins\im\image\star.png" mode="normal" />
+		<img name="user.star" pos="73,35" width="12" height="11" image="skins\im\image\star.png" mode="normal" />
+		<img name="user.star" pos="85,35" width="12" height="11" image="skins\im\image\star.png" mode="normal" />
+		<text name="chat.desc" crtext="000000" font="normal" pos="100,32,400,48" title="(1000人群)行业交流-IT/互联网" response="0" />
+		
+		<tabctrl name="tabctrl.chat" img-sep="skin:IDB_TAB_SEPERATOR" img-hover="skin:IDB_TAB_BACK-"
+			img-tabbtn-="skins\default\btn_close.png" tabbtnpos="-21,3"
+			font="normal" item-width="90" tab-height="29"
+			crtext="000000" crhover="000000" crpush="000000" animate="1"
+			pos="5,50,-5,-1">
+			
+			<tab name="tab.chat.chat" image="skin:IDB_TAB_ITEM" title="聊天" active="true" pos="0,30,-0,-0">
+		
+				<layout name="split.chat" layout-type="vertical" pos="5,0,-5,-0"
+						img-split="skin:IDB_SPLIT_VERT" split-width="2" split-imm="1"
+						img-thumb="skin:IDB_SPLIT_THUMB_VERT" >
+				
+					<layout-div name="layout.chat.1" div-pos="450" min-pos="200" max-pos="500" >
+					
+						<area name="area.chat.1" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+						<area name="area.chat.2" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+					
+						<layout name="split.chat1.left" layout-type="horizontal" pos="0,0,-0,-35"
+							img-split="skin:IDB_SPLIT_HORI" split-width="1" split-imm="1"
+							img-thumb="skin:IDB_SPLIT_THUMB_HORI--" >
+							
+							<layout-div name="layout.chat1.left.1" div-pos="300" min-pos="50" max-pos="600" >
+						
+								<richedit name="richedit.history" skin="IDB_EDIT--" left-image="skin:IDB_COMPUTER--" 
+									pos="0,0,-0,-0"
+									title="test" tip="richedit"
+									multiline="1" wantreturn="1" rich="1" file="rtf\chathistory.rtf"
+									hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+									readonly="0" maxchar="128000" wordwrap="1" number="0"
+									font="default" crtext="0,0,0" crtip="128,128,128,128" />
+							
+							</layout-div>
+							
+							<layout-div name="layout.chat1.left.2" >
+							
+								<richedit name="richedit.input" skin="IDB_EDIT" 
+									pos="0,0,-0,-1"
+									title="输入内容" tip="richedit"
+									multiline="1" wantreturn="1" rich="1"
+									hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+									readonly="0" maxchar="128000" wordwrap="1" number="0"
+									font="default" crtext="0,0,0" crtip="128,128,128,128" />
+							
+							</layout-div>
+						
+						</layout>						
+						
+						<button name="btn.chat.close" pos="-170,-30,-90,-5" skin="IDB_BT_GREEN" title="关闭(C)"
+							crtext="FFFFFF" animate="1" maxindex="16" />
+						<button name="btn.chat.send" pos="-85,-30,-5,-5" skin="IDB_BT_GREEN" title="发送(S)"
+							crtext="FFFFFF" animate="1" maxindex="16" />
+					
+					</layout-div>
+					<layout-div name="layout.chat.2">
+					
+						<text crtext="202020" pos="2,2,100,18" title="群通知：" />
+					
+					</layout-div>
+					
+				</layout>
+				
+				<!--img pos="20,111,-20,112" skin="IDB_LINE" mode="extrude" framesize="0" /-->
+						
+				<!--button name="config.button.ok" skin="IDB_BT_DEFAULT" title="[OK]" pos="-100,-30,-20,-6" shortcut="RETURN" /-->
+			
+			</tab>
+			
+			<tab name="tab.chat.announce" image="skin:IDB_TAB_ITEM" title="公告" pos="0,30,-0,-0">
+			
+			</tab>
+			
+			<tab name="tab.chat.photo" image="skin:IDB_TAB_ITEM" title="相册" pos="0,30,-0,-0">
+			
+			</tab>
+			
+			<tab name="tab.chat.files" image="skin:IDB_TAB_ITEM" title="文件" pos="0,30,-0,-0">
+			
+			</tab>
+		
+		</tabctrl>
+
+	</body>
+  
+</dlg>

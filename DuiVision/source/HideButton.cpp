@@ -160,15 +160,14 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 		strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 		Size sizeTip = GetTextBounds(font, strFormat, m_strTip);
 		Size sizeText = GetTextBounds(font, strFormat, m_strTitle);
-		CPoint point = GetOriginPoint(nWidth, nHeight, sizeText.Width, sizeText.Height, m_uAlignment, m_uVAlignment);
 		
-		m_rcText.SetRect(m_rc.left + sizeTip.Width + 10, m_rc.top + point.y, m_rc.left + sizeTip.Width + 10 + sizeText.Width, m_rc.top + point.y + sizeText.Height);
+		m_rcText.SetRect(m_rc.left + sizeTip.Width + 10, m_rc.top, m_rc.left + sizeTip.Width + 10 + sizeText.Width, m_rc.top + sizeText.Height);
 		
 		SolidBrush solidBrushTip(m_clrTip);
 
 		for(int i = 0; i < 4; i++)
 		{
-			RectF rect((Gdiplus::REAL)(i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(sizeTip.Width + 10), (Gdiplus::REAL)sizeTip.Height);
+			RectF rect((Gdiplus::REAL)(i * nWidth), (Gdiplus::REAL)0, (Gdiplus::REAL)(sizeTip.Width + 10), (Gdiplus::REAL)sizeTip.Height);
 
 			BSTR bsTip = m_strTip.AllocSysString();
 			graphics.DrawString(bsTip, (INT)wcslen(bsTip), &font, rect, &strFormat, &solidBrushTip);
@@ -177,7 +176,7 @@ void CHideButton::DrawControl(CDC &dc, CRect rcUpdate)
 			if(i > 0)
 			{
 				SolidBrush solidBrush(clrText[i - 1]);	
-				RectF rect((Gdiplus::REAL)(sizeTip.Width + 10 + i * nWidth), (Gdiplus::REAL)point.y, (Gdiplus::REAL)(nWidth - (sizeTip.Width + 10)), (Gdiplus::REAL)sizeText.Height);
+				RectF rect((Gdiplus::REAL)(sizeTip.Width + 10 + i * nWidth), (Gdiplus::REAL)0, (Gdiplus::REAL)(nWidth - (sizeTip.Width + 10)), (Gdiplus::REAL)sizeText.Height);
 				BSTR bsTitle = m_strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);
 				::SysFreeString(bsTitle);

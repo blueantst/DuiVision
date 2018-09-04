@@ -8,8 +8,8 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject)
 	m_bIsFocus = FALSE;
 	m_bShowFocus = TRUE;
 	m_enButtonState = enBSNormal;
-	m_uAlignment = DT_CENTER;
-	m_uVAlignment = DT_VCENTER;
+	m_uAlignment = Align_Center;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(255, 0, 0, 0);
 	m_bTimer = FALSE;
 	m_nIndex = 0;
@@ -26,8 +26,8 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 	m_bIsFocus = FALSE;
 	m_bShowFocus = TRUE;
 	m_enButtonState = enBSNormal;
-	m_uAlignment = DT_CENTER;
-	m_uVAlignment = DT_VCENTER;
+	m_uAlignment = Align_Center;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(225, 64, 64, 64);
 	m_bTimer = FALSE;
 	m_nIndex = 0;
@@ -323,7 +323,8 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetAlignment(StringAlignmentNear);
 			strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 			Size size = GetTextBounds(font, strFormat, m_strTitle);
-			CPoint point = GetOriginPoint(nWidth, nHeight, size.Width, size.Height, m_uAlignment, m_uVAlignment);
+			CPoint point = GetOriginPoint(nWidth, nHeight, size.Width, size.Height,
+							GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 			if(m_pImageBtn != NULL)
 			{
 				// 如果有按钮图片,则文字位置向下移

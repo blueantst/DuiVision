@@ -1,9 +1,10 @@
 
 
-#ifndef __DLG_MY_BASE_X_H__
-#define __DLG_MY_BASE_X_H__
+#ifndef __DLG_BASE_H__
+#define __DLG_BASE_H__
 #include <vector>
 #include "DuiVision.h"
+#include "WndShadow.h"
 
 using namespace  std;
 
@@ -13,7 +14,7 @@ public:
 	static LPCTSTR GetClassName() { return _T("dlg");}
 	virtual BOOL IsClass(LPCTSTR lpszName)
 	{
-		if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;
+		if(_tcscmp(GetClassName(), lpszName)  == 0) return TRUE;
 		return __super::IsClass(lpszName);
 	}
 
@@ -44,7 +45,7 @@ protected:
 	BOOL			m_bChangeSize;				// 改变窗口大小
 	CSize			m_MinSize;					// 窗口限定最小大小
 	CRgn			m_Rgn;						// 不规则窗口区域
-	COLORREF		m_clrBK;					// 自定义前景颜色
+	BOOL			m_bTopMost;					// 窗口总在最前面
 
 	CString			m_strTitle;					// 窗口标题
 	CFont			m_TitleFont;				// 绘制标题栏的字体
@@ -53,10 +54,11 @@ protected:
 
 	CDlgPopup		*m_pWndPopup;				// 保存的弹出框指针
 
-	CBitmap			m_BKImage;					// 框架背景图片
-	CSize			m_sizeBKImage;
+	COLORREF		m_clrBK;					// 背景颜色,由背景图片计算出的平均色,当背景图片不够大时可以达到渐变色效果
+	CBitmap			m_BKImage;					// 框架背景图片对象
+	CSize			m_sizeBKImage;				// 背景图片大小
 	CString			m_strFramePicture;			// 背景图片
-	CDC				m_MemBKDC;					// 背景dc
+	CDC				m_MemBKDC;					// 背景dc(由背景图片或背景颜色生成)
 	CBitmap			*m_pOldMemBK;
 	CBitmap			m_MemBK;
 	BOOL			m_bDrawImage;				// 图片或纯色背景
@@ -68,23 +70,29 @@ protected:
 
 	CString			m_strBkImg;					// 背景图片
 	COLORREF		m_crlBack;					// 背景颜色
+	COLORREF		m_crlBackTransParent;		// 背景透明颜色
 	int				m_nBackTranslucent;			// 背景透明度
 
-	int				m_nFrameTopBottomSpace;
-	int				m_nFrameLeftRightSpace;
+	int				m_nFrameTopBottomSpace;		// 鼠标拖动改变窗口大小的区域宽度
+	int				m_nFrameLeftRightSpace;		// 鼠标拖动改变窗口大小的区域高度
 
-	int				m_nOverRegioX;				//过度的大小
-	int				m_nOverRegioY;				//过度的大小
-	BOOL			m_bNCActive;
+	int				m_nOverRegioX;				// 过度的大小
+	int				m_nOverRegioY;				// 过度的大小
+	BOOL			m_bNCActive;				// 窗口当前是否处于激活状态
 
-	BOOL			m_bTracking;
-	BOOL			m_bIsLButtonDown;	
-	BOOL			m_bIsLButtonDblClk;
-	BOOL			m_bIsSetCapture;
+	BOOL			m_bTracking;				// 是否追踪鼠标事件
+	BOOL			m_bIsLButtonDown;			// 鼠标左键按下
+	BOOL			m_bIsLButtonDblClk;			// 鼠标左键双击
+	BOOL			m_bIsRButtonDown;			// 鼠标右键按下
+	BOOL			m_bIsRButtonDblClk;			// 鼠标右键双击
+	BOOL			m_bIsSetCapture;			// 是否设置了鼠标捕获
+	BOOL			m_bEnableWndDrag;			// 是否允许窗口拖动
 
 	BOOL			m_bAutoClose;				// 窗口自动关闭标志
 	BOOL			m_bAutoHide;				// 窗口自动隐藏标志
 	UINT			m_uAutoCloseDelayTime;		// 窗口自动关闭的延迟时间
+
+	BOOL			m_bImageUseECM;				// 是否使用图片自身的颜色管理信息
 
 	CToolTipCtrl	m_wndToolTip;				// Tooltip
 	int				m_nTooltipCtrlID;			// 当前Tooltip显示的控件ID
@@ -92,21 +100,30 @@ protected:
 	CDuiHandler*	m_pTrayHandler;				// 托盘图标和菜单的事件处理对象
 	CString			m_strTrayMenuXml;			// 托盘菜单的XML定义文件
 
-	vector<CControlBase *>	m_vecControl;		// 用户添加的窗口控件
-	vector<CControlBase *>	m_vecArea;			// 用户添加的区域(不影响鼠标事件)
-	CControlBase	*m_pControl;				// 当前活动控件对象
-	CControlBase	*m_pFocusControl;			// 当前焦点的控件对象
+	vector<CControlBase*>	m_vecControl;		// 用户添加的窗口控件
+	vector<CControlBase*>	m_vecArea;			// 用户添加的区域(不影响鼠标事件)
+	CControlBase*	m_pControl;					// 当前活动控件对象
+	CControlBase*	m_pFocusControl;			// 当前焦点的控件对象
 
 	vector<CONTROL_VALUE>	m_vecControlValue;	// 控件预设置信息
 
+	// 窗口阴影
+	CWndShadow		m_Shadow;					// 阴影对象
+	int				m_nShadowWLT;				// 阴影图片左上角宽度(九宫格模式)
+	int				m_nShadowHLT;				// 阴影图片左上角高度(九宫格模式)
+	int				m_nShadowWRB;				// 阴影图片右下角宽度(九宫格模式)
+	int				m_nShadowHRB;				// 阴影图片右下角高度(九宫格模式)
+	int				m_nShadowSize;				// 阴影宽度(算法阴影)
+
 private:
-	vector<CControlBase *>	m_vecBaseControl;	// 窗口自身用到的一些默认控件
-	vector<CControlBase *>	m_vecBaseArea;		// 窗口默认区域
+	vector<CControlBase*>	m_vecBaseControl;	// 窗口自身用到的一些默认控件
+	vector<CControlBase*>	m_vecBaseArea;		// 窗口默认区域
 
 public:
 	CDlgBase(UINT nIDTemplate, CWnd* pParent = NULL);
 	virtual ~CDlgBase();
 
+	// 获取窗口模板ID
 	UINT GetIDTemplate() { return m_nIDTemplate; }
 
 	void SetMinSize(int iWidth, int iHeight);	// 设置最小窗口大小
@@ -117,19 +134,27 @@ public:
 
 	void TestMainThread();	// 测试是否在主线程
 
+	// 是否使用用户自定义ECM
+	BOOL UseImageECM() { return m_bImageUseECM; }
+
+	// 设置窗口的xml文件
 	void SetXmlFile(CString strXmlFile) {m_strXmlFile = strXmlFile;}
+	// 设置窗口的xml内容
 	void SetXmlContent(CString strXmlContent) {m_strXmlContent = strXmlContent;}
 
+	// 设置托盘菜单的事件处理对象
 	void SetTrayHandler(CDuiHandler* pDuiHandler) { m_pTrayHandler = pDuiHandler; }
-	void SetTratMenuXml(CString strMenuXml) { m_strTrayMenuXml = strMenuXml; }
+	// 设置托盘菜单xml定义文件
+	void SetTrayMenuXml(CString strMenuXml) { m_strTrayMenuXml = strMenuXml; }
 
-	CControlBase *GetControl(UINT uControlID);
-	CControlBase *GetControl(CString strControlName);
-	CControlBase *GetBaseControl(UINT uControlID);
-	CControlBase *GetBaseControl(CString strControlName);
-
+	// 获取控件
+	CControlBase* GetControl(UINT uControlID);
+	CControlBase* GetControl(CString strControlName);
+	CControlBase* GetBaseControl(UINT uControlID);
+	CControlBase* GetBaseControl(CString strControlName);
 	vector<CControlBase*>* GetControls() { return &m_vecControl; }
 
+	// 焦点控件相关函数
 	void SetFocusControl(CControlBase* pFocusControl);
 	void SetFocusControlPtr(CControlBase* pFocusControl) { m_pFocusControl = pFocusControl; }	// 设置焦点控件指针
 	CControlBase* GetFocusControl();
@@ -144,55 +169,55 @@ public:
 	void DoNo() { PostMessage(WM_USER_CLOSEWND, IDNO, 0); }
 
 	// 移动控件
-	virtual CControlBase * SetControlRect(UINT uControlID, CRect rc);
-	// 移动控件
-	virtual CControlBase * SetControlRect(CControlBase *pControlBase, CRect rc);
+	virtual CControlBase* SetControlRect(UINT uControlID, CRect rc);
+	virtual CControlBase* SetControlRect(CControlBase *pControlBase, CRect rc);
 	// 显示控件
-	virtual CControlBase * SetControlVisible(UINT uControlID, BOOL bVisible);
-	// 显示控件
-	virtual CControlBase * SetControlVisible(CControlBase *pControlBase, BOOL bVisible);
+	virtual CControlBase* SetControlVisible(UINT uControlID, BOOL bVisible);
+	virtual CControlBase* SetControlVisible(CControlBase *pControlBase, BOOL bVisible);
 	// 禁用控件
-	virtual CControlBase * SetControlDisable(UINT uControlID, BOOL bDisable);
-	// 禁用控件
-	virtual CControlBase * SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
+	virtual CControlBase* SetControlDisable(UINT uControlID, BOOL bDisable);
+	virtual CControlBase* SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
 
 	// 设置resize属性
 	HRESULT OnAttributeResize(const CString& strValue, BOOL bLoading);
 
 	// 打开弹出对话框
-	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID);
+	void OpenDlgPopup(CDlgPopup *pWndPopup, CRect rc, UINT uMessageID, BOOL bShow=TRUE);
 	// 关闭弹出对话框
 	void CloseDlgPopup();
+	//获取弹出对话框
+	CDlgPopup * GetDlgPopUp();
 
 	// 根据控件名创建控件实例
 	CControlBase* _CreateControlByName(LPCTSTR lpszName);
 
 	// 设置不规则窗体区域
 	void SetupRegion(int border_offset[], int nSize);
-	void DrawImageStyle(CDC &dc, const CRect &rcClient, const CRect &rcUpdate);
+	// 画窗口背景和控件
+	void DrawBackgroundAndControls(CDC &dc, const CRect &rcClient, const CRect &rcUpdate);
 	
-	// 初始化窗口背景皮肤
+	// 初始化窗口背景皮肤(加载到背景内存dc)
 	void InitWindowBkSkin();
 	// 加载窗口背景图片
 	void LoadBackgroundImage(UINT nIDResource, CString strType = TEXT("PNG"));
 	void LoadBackgroundImage(CString strFileName);
-	// 初始化窗口控件的默认值
-	void InitUIState();
+	// 设置窗口背景透明度
+	void SetupBackTranslucent();
 	// 设置不规则窗体区域
 	void SetupRegion(int nSize);
 	// 画背景图片
 	void DrawBackground(CBitmap &bitBackground);
-	// 画背景图片
+	// 画背景颜色
 	void DrawBackground(COLORREF clr);
-	// 前景图片
+	// 画控件
 	virtual void DrawControl(CDC &dc, const CRect &rcClient);	
 	// 重置控件
 	virtual void ResetControl();
-	// 更新选中
+	// 更新鼠标所在区域
 	void UpdateHover();
 
 	// 设置Tooltip
-	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth = FALSE);
+	void SetTooltip(CControlBase* pControl, CString strTooltip, CRect rect, BOOL bControlWidth = FALSE, int nTipWidth = 0);
 	// 清除Tooltip
 	void ClearTooltip();
 	// 设置当前tooltip控件ID
@@ -204,10 +229,12 @@ public:
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 	virtual void OnSize(CRect rcClient);
 
+	// 设置控件的预制值
 	void SetControlValue(CString strName, CString strType, CString strValue);
 	void InitDialogValue();
 	void InitControlValue();
 
+	// 设置窗口的自动关闭定时器
 	void SetAutoCloseTimer(UINT uDelayTime, BOOL bHideWnd = FALSE);
 
 	// 定时器消息
@@ -219,6 +246,11 @@ public:
 	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL);
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+	// 增加注册消息的接口
+	std::map<UINT,std::wstring> m_mapMsg;
+	void RegisterMsg(UINT msg,std::wstring strMsgName){
+		m_mapMsg.insert(std::make_pair(msg,strMsgName));
+	}
 protected:
 	virtual void OnClose();
 	virtual void OnMinimize();
@@ -270,9 +302,13 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnDestroy();
 
+	DUI_IMAGE_ATTRIBUTE_DEFINE(Shadow);			// 定义阴影图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("appwin"), m_bAppWin, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("title"), m_strTitle, FALSE)
@@ -287,9 +323,19 @@ public:
 		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("bkimg"), m_strBkImg, FALSE)
 		DUI_RGBCOLOR_ATTRIBUTE(_T("crbk"), m_crlBack, FALSE)
+		DUI_RGBCOLOR_ATTRIBUTE(_T("crtransparent"), m_crlBackTransParent, FALSE)
+		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE(_T("translucent"), m_nBackTranslucent, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-shadow"), OnAttributeImageShadow)
+		DUI_INT_ATTRIBUTE(_T("shadow-wlt"), m_nShadowWLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-hlt"), m_nShadowHLT, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-wrb"), m_nShadowWRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-hrb"), m_nShadowHRB, FALSE)
+		DUI_INT_ATTRIBUTE(_T("shadow-size"), m_nShadowSize, FALSE)
+		DUI_INT_ATTRIBUTE(_T("topmost"), m_bTopMost, FALSE)
+		DUI_INT_ATTRIBUTE(_T("wnd-drag"), m_bEnableWndDrag, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
-#endif __DLG_MY_BASE_X_H__
+#endif __DLG_BASE_H__
 

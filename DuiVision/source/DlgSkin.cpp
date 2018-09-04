@@ -16,6 +16,7 @@ void CDlgSkin::DrawWindowEx(CDC &dc, CRect rcClient)
 
 void CDlgSkin::InitUI(CRect rcClient)
 {
+	__super::InitUI(rcClient);
 }
 
 // œ˚œ¢œÏ”¶

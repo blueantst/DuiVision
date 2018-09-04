@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<dlg name="dlg_notifymsg" title="NotifyMsg" width="400" height="250" resize="1"	frame="" bkimg="" crbk="000000" >
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1"/>
+		<text name="notify.title" crtext="FFFFFF" crmark="800000" font="big"
+				pos="10,5,200,25" title="[APP_NAME]" mask="" response="0" show="1" />
+	</base>
+
+	<body>
+		<area name="area-1" pos="0,0,-0,40" begin-transparent="100" end-transparent="30" />
+		<area name="area-2" pos="0,40,-0,-0" begin-transparent="30" end-transparent="30" />
+		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+		
+		<img name="notify.icon" pos="25,45" width="38" height="38" skin="IDB_ICON_INFO" mode="normal" framesize="0" show="1" />
+		<text name="notify.text" crtext="000000" pos="75,45,-25,-40" title="" show="1" />
+		<chkbtn name="notify.check" skin="IDB_CHECK_BOX" pos="75,-60,-25,-40" title="" check="true" show="0" />
+		
+		<div name="notify.type.0" pos="0,-30,-0,-0" show="1" >
+			<button name="button.ok" skin="IDB_BT_DEFAULT" title="[OK]"	pos="-100,0,-20,24" show="1" />
+		</div>
+		<div name="notify.type.1" pos="0,-30,-0,-0" show="0" >
+			<button name="button.ok" skin="IDB_BT_DEFAULT" title="[OK]"	pos="-190,0,-110,24" show="1" />
+			<button name="button.cancel" skin="IDB_BT_DEFAULT" title="[CANCEL]"	pos="-100,0,-20,24" show="1" />
+		</div>
+		<div name="notify.type.2" pos="0,-30,-0,-0" show="0" >
+		</div>
+		<div name="notify.type.3" pos="0,-30,-0,-0" show="0" >
+			<button name="button.yes" skin="IDB_BT_DEFAULT" title="[YES]"	pos="-280,0,-200,24" show="1" />
+			<button name="button.no" skin="IDB_BT_DEFAULT" title="[NO]"	pos="-190,0,-110,24" show="1" />
+			<button name="button.cancel" skin="IDB_BT_DEFAULT" title="[CANCEL]"	pos="-100,0,-20,24" show="1" />
+		</div>
+		<div name="notify.type.4" pos="0,-30,-0,-0" show="0" >
+			<button name="button.yes" skin="IDB_BT_DEFAULT" title="[YES]"	pos="-190,0,-110,24" show="1" />
+			<button name="button.no" skin="IDB_BT_DEFAULT" title="[NO]"	pos="-100,0,-20,24" show="1" />
+		</div>
+		
+	</body>
+</dlg>

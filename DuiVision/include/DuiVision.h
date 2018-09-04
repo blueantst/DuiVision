@@ -19,10 +19,11 @@ using namespace Gdiplus;
 
 #include "duiid.h"
 
-#include "../common/XUnZip.h"
-
 //////////////////////////////////////////////////////////
-// Task
+//Comm
+#include "../common/XUnZip.h"
+#include "../common/WinDwmWrapper.h"
+#include "../common/LogMgr.h"
 #include "../common/BaseTask.h"
 #include "../common/TaskMgr.h"
 
@@ -33,9 +34,11 @@ using namespace Gdiplus;
 #include "GlobalFunction.h"
 #include "DuiHandler.h"
 #include "Panel.h"
+#include "DuiLayout.h"
 #include "DuiNativeWnd.h"
 #include "DuiSystem.h"
 #include "IDuiPlugin.h"
+#include "IDuiHostWnd.h"
 
 //////////////////////////////////////////////////////////
 //Timer
@@ -60,16 +63,16 @@ using namespace Gdiplus;
 //////////////////////////////////////////////////////////
 //Other
 #include "Area.h"
-#include "Frame.h"
 #include "ImageString.h"
 #include "Rectangle.h"
-#include "Runing.h"
 #include "Scroll.h"
 #include "SelectBox.h"
+#include "DuiSlider.h"
 
 //////////////////////////////////////////////////////////
 //Picture
 #include "Picture.h"
+#include "DuiAnimateImg.h"
 
 //////////////////////////////////////////////////////////
 //Progress
@@ -97,10 +100,15 @@ using namespace Gdiplus;
 //////////////////////////////////////////////////////////
 //Edit
 #include "DuiEdit.h"
+#include "DuiRichEdit.h"
 #include "DuiComboBox.h"
 
 //////////////////////////////////////////////////////////
 //ActiveX
 #include "DuiActiveX.h"
+
+//////////////////////////////////////////////////////////
+//wke
+#include "DuiWkeView.h"
 
 #endif

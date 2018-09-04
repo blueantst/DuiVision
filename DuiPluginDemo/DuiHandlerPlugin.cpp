@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "DuiHandlerPlugin.h"
 
-#define XML_ABOUT_DLG L"<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+#define XML_ABOUT_DLG _T("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
 <dlg name=\"dlg_about\" title=\"MsgBox\" width=\"450\" height=\"230\" appwin=\"0\" >\
 	<base>\
 		<imgbtn name=\"button.close\" pos=\"-45,0,-0,29\" skin=\"IDB_BT_CLOSE\" shortcut=\"ESC\"/>\
@@ -23,7 +23,7 @@
 		<text crtext=\"000080\" pos=\"170,140,-25,160\" title=\"此对话框由定义的XML内容创建\" />\
 		<button name=\"button.ok\" skin=\"IDB_BT_DEFAULT\" title=\"[OK]\" pos=\"-100,-30,-20,-6\" />\
 	</body>\
-</dlg>";
+</dlg>");
 
 //////////////////////////////////////////////////////////////
 // CDuiHandlerPlugin
@@ -42,7 +42,7 @@ CDuiHandlerPlugin::~CDuiHandlerPlugin(void)
 // 初始化
 void CDuiHandlerPlugin::OnInit()
 {
-	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"CDuiHandlerPlugin::OnInit");
+	DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("CDuiHandlerPlugin::OnInit"));
 
 	// 启动动画定时器
 	m_uTimerAni = DuiSystem::AddDuiTimer(500);
@@ -186,10 +186,10 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT M
 	}
 	// 演示如何在菜单加载时候更改菜单项的显示标题、可见性、是否禁用、是否选择等属性
 	// 必须在调用LoadXmlFile之前通过菜单项名字来设置相应菜单项的属性
-	pDuiMenu->SetItemTitle(L"item_login", L"认证--修改Title");
-	pDuiMenu->SetItemCheck(L"item_setup", 0);
-	pDuiMenu->SetItemVisible(L"item_help", FALSE);
-	pDuiMenu->SetItemDisable(L"item_about", TRUE);
+	pDuiMenu->SetItemTitle(_T("item_login"), _T("认证--修改Title"));
+	pDuiMenu->SetItemCheck(_T("item_setup"), 0);
+	pDuiMenu->SetItemVisible(_T("item_help"), FALSE);
+	pDuiMenu->SetItemDisable(_T("item_about"), TRUE);
 	if(pDuiMenu->LoadXmlFile(_T("menu_tray"), NULL, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);
@@ -211,26 +211,6 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT M
 		::ClientToScreen(m_pPanel->GetHWND(), &point);
 	}
 	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_2.xml"), NULL, point, WM_DUI_MENU))
-	{
-		pDuiMenu->ShowWindow(SW_SHOW);
-	}
-	return TRUE;
-}
-
-// 菜单3消息处理
-LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton3(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_3"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
-	pDuiMenu->SetParent(pButton);
-	CPoint point;
-	CRect rc = pButton->GetRect();
-	point.SetPoint(rc.left, rc.bottom);
-	if(m_pPanel)
-	{
-		::ClientToScreen(m_pPanel->GetHWND(), &point);
-	}
-	if(pDuiMenu->LoadXmlFile(_T("duivision\\menu_3.xml"), NULL, point, WM_DUI_MENU))
 	{
 		pDuiMenu->ShowWindow(SW_SHOW);
 	}
@@ -273,7 +253,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl1Click(UINT uID, CString strName, UIN
 // 列表控件点击消息处理
 LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	// 点击了列表控件某一行,显示此行的详细信息
+	// 点击了列表控件某一行
 	// 传入参数中wParam表示控件行号,lParam表示点击的链接的索引(链接1和2分别为0和1)
 	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));
 	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
@@ -285,30 +265,23 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2Click(UINT uID, CString strName, UIN
 			CString strMsg;
 			strMsg.Format(_T("点击了列表中的链接\n行内容：%s\n链接索引号：%d"), pRowInfo->strTitle, lParam);
 			DuiSystem::DuiMessageBox(NULL, strMsg);
-		}else
-		{
-			CDlgPopup* pDlgPopup = new CDlgPopup;
-			CRect rc = pListCtrl->GetRect();
-			rc.OffsetRect(50, 30);
-			pDlgPopup->LoadXmlFile(_T("xml:dlg_notice"));
-			CControlBaseFont* pControlTitle = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.title")));
-			if(pControlTitle)
-			{
-				pControlTitle->SetTitle(pRowInfo->strTitle);
-			}
-			CControlBaseFont* pControlTime = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.time")));
-			if(pControlTime)
-			{
-				pControlTime->SetTitle(pRowInfo->strTime);
-			}
-			CControlBaseFont* pControlContent = (CControlBaseFont*)(pDlgPopup->GetControl(_T("notice.content")));
-			if(pControlContent)
-			{
-				pControlContent->SetTitle(pRowInfo->strContent);
-			}
-			m_pPanel->OpenDlgPopup(pDlgPopup, rc, 0);
 		}
 	}
 
+	return TRUE;
+}
+
+// 列表控件双击消息处理
+LRESULT CDuiHandlerPlugin::OnDuiMsgListCtrl2DblClick(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 双击了列表控件某一行,传入参数中wParam表示控件行号
+	CDuiListCtrl* pListCtrl = (CDuiListCtrl*)GetControl(_T("listctrl_2"));
+	ListRowInfo* pRowInfo = pListCtrl->GetItemInfo(wParam);
+	if(m_pPanel && pRowInfo)
+	{
+		CString strMsg;
+		strMsg.Format(_T("鼠标双击了列表中的行\n行号：%d\n行内容：%s"), wParam, pRowInfo->strTitle);
+		DuiSystem::DuiMessageBox(NULL, strMsg);
+	}
 	return TRUE;
 }

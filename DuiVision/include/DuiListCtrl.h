@@ -1,4 +1,4 @@
-// Panel控件，此控件是一个控件容器
+// 列表控件
 #pragma once
 
 #include "Panel.h"
@@ -21,8 +21,10 @@ struct ListRowInfo
 	int		nRightImageIndex;// 右边图片索引
 	Image * pRightImage;	// 右边图片对象
 	CSize	sizeRightImage;	// 右边图片大小
-	BOOL	bRowColor;		// 使用行定义的颜色
+	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
+	BOOL	bRowBackColor;		// 使用行定义的背景颜色
+	Color	clrBack;		// 行背景颜色
 	CString strLink1;		// 链接1的文字
 	CString strLinkAction1;	// 链接1的动作
 	CRect	rcLink1;		// 链接1位置信息
@@ -30,6 +32,7 @@ struct ListRowInfo
 	CString strLinkAction2;	// 链接2的动作
 	CRect	rcLink2;		// 链接2位置信息
 	int		nHoverLink;		// 当前处于热点状态的链接索引
+	DWORD   dwData;      // 关联用户数据
 	BOOL	bNeedTitleTip;	// 是否需要显示title tip(title实际宽度大于显示宽度)
 	BOOL	bNeedContentTip;// 是否需要显示content tip(content实际宽度大于显示宽度)
 };
@@ -49,18 +52,23 @@ public:
 		int nRightImageIndex = -1, CString strRightImage = _T(""),
 		CString strLink1 = _T(""), CString strLinkAction1 = _T(""),
 		CString strLink2 = _T(""), CString strLinkAction2 = _T(""),
-		int nCheck = -1);
+		int nCheck = -1, Color clrBack = Color(0, 0, 0, 0));
 	int InsertItem(int nItem, CString strTitle, int nCheck = -1, Color clrText = Color(0, 0, 0, 0), int nImageIndex = -1,
 		CString strLink1 = _T(""), CString strLinkAction1 = _T(""),
-		CString strLink2 = _T(""), CString strLinkAction2 = _T(""));
+		CString strLink2 = _T(""), CString strLinkAction2 = _T(""), Color clrBack = Color(0, 0, 0, 0));
 	int InsertItem(int nItem, ListRowInfo &rowInfo);
 	BOOL DeleteItem(int nItem);
 	void CalcItemsPos();
+	BOOL EnsureVisible(int nRow, BOOL bPartialOK);
 	int  GetItemCount() { return m_vecRowInfo.size(); }
+	int  GetCurrentItem() { return m_nDownRow; }
 	ListRowInfo* GetItemInfo(int nRow);
 	void SetRowColor(int nRow, Color clrText);
+	void SetRowBackColor(int nRow, Color clrBack);
 	void SetRowCheck(int nRow, int nCheck);
 	int  GetRowCheck(int nRow);
+	void SetRowData(int nRow, DWORD dwData);
+	DWORD GetRowData(int nRow);
 	void ClearItems();
 
 	BOOL PtInRow(CPoint point, ListRowInfo& rowInfo);
@@ -79,7 +87,9 @@ protected:
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
+	virtual BOOL OnControlLButtonDblClk(UINT nFlags, CPoint point);
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
 
@@ -87,7 +97,6 @@ protected:
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 public:
-	CControlBase*		m_pControBkArea;	// 背景Area
 	CString				m_strFontTitle;		// 标题字体
 	int					m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle			m_fontTitleStyle;	// 标题字体Style
@@ -97,10 +106,12 @@ public:
 	Color				m_clrTitle;			// 标题颜色
 	Color				m_clrSeperator;		// 分割线颜色
 	Color				m_clrRowHover;		// 行背景颜色(鼠标移动到行)
+	Color				m_clrRowCurrent;	// 行背景颜色(当前行)
 	int					m_nRowHeight;		// 行高度
 	int					m_nBkTransparent;	// 背景透明度
 	BOOL				m_bSingleLine;		// 显示单行文字
 	BOOL				m_bTextWrap;		// 文字是否换行
+	BOOL				m_bSingleCheck;		// 行检查框是否单选模式
 
 	int					m_nHoverRow;		// 当前鼠标移动的行索引
 	int					m_nDownRow;			// 当前点击的行索引
@@ -126,10 +137,12 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crtitle"), m_clrTitle, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crsep"), m_clrSeperator, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
+		DUI_COLOR_ATTRIBUTE(_T("crrowcurrent"), m_clrRowCurrent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-height"), m_nRowHeight, FALSE)
 		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
 		DUI_INT_ATTRIBUTE(_T("row-tip"), m_bRowTooltip, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("single-check"), m_bSingleCheck, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };

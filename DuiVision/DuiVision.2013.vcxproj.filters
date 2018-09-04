@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{e51acae4-e9c3-4c5f-a131-0880af71e53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="activex">
+      <UniqueIdentifier>{f808a5ec-a856-45cd-b40a-345c98091542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pugixml">
+      <UniqueIdentifier>{e55b9a6e-8a70-4373-8f79-0132f3e94d7f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Area.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CheckButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ControlBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DlgBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DlgPopup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiVision.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+	<ClInclude Include="include\DuiVisionApp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GlobalFunction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HideButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImageString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LinkButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MenuItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Picture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Progress.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiAnimateImg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scroll.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SelectBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Timer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\duiid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\encoding.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\registry.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Panel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rectangle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DlgSkin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\BaseTask.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\TaskMgr.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PopupList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiListCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RadioButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiGridCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiTreeCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiComboBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiMenu.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiTab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiText.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiActiveX.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WndBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="activex\duicomcli.h">
+      <Filter>activex</Filter>
+    </ClInclude>
+    <ClInclude Include="common\XUnZip.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="pugixml\foreach.hpp">
+      <Filter>pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="pugixml\pugiconfig.hpp">
+      <Filter>pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="pugixml\pugixml.hpp">
+      <Filter>pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiXml.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiNativeWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IDuiPlugin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiWkeView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WndShadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiSlider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiRichEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\LogMgr.h">
+      <Filter>common</Filter>
+    </ClInclude>
+	<ClInclude Include="common\WinDwmWrapper.h">
+      <Filter>common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DuiVision.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Area.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CheckButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ControlBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DlgBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DlgPopup.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GlobalFunction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HideButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ImageString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LinkButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MenuItem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Picture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Progress.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiAnimateImg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scroll.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SelectBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TextButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Timer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Panel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Rectangle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiHandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DlgSkin.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\TaskMgr.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\PopupList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiListCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RadioButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiGridCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiTreeCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+	<ClCompile Include="source\DuiVisionApp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiComboBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiMenu.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiTab.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiText.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiActiveX.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WndBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\XUnzip.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="pugixml\pugixml.cpp">
+      <Filter>pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiXml.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiNativeWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiWkeView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WndShadow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiSlider.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiRichEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\LogMgr.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+	<ClCompile Include="common\WinDwmWrapper.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="app.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="activex\flash10t.tlh">
+      <Filter>activex</Filter>
+    </None>
+    <None Include="activex\flash10t.tli">
+      <Filter>activex</Filter>
+    </None>
+    <None Include="activex\wmp.tlh">
+      <Filter>activex</Filter>
+    </None>
+    <None Include="activex\wmp.tli">
+      <Filter>activex</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

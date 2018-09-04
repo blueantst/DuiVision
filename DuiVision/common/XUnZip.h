@@ -75,7 +75,7 @@ ZRESULT UnzipItem(HZIP hz, int index, void *dst, unsigned int len, DWORD flags);
 #else
 #define ZENTRY ZIPENTRY
 #define OpenZip OpenZipU
-#define CloseZip(hz) CloseZipA(hz)
+#define CloseZip(hz) CloseZipU(hz)
 #define GetZipItem GetZipItemA
 #define FindZipItem FindZipItemA
 #endif

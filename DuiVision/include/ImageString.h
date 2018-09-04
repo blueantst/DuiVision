@@ -1,17 +1,17 @@
 #pragma once
 #include "ControlBase.h"
 
-
-class CImageString : public CControlBaseFont
+// Í¼Æ¬×Ö·û´®¿Ø¼þ
+class CDuiImageString : public CControlBaseFont
 {
-	DUIOBJ_DECLARE_CLASS_NAME(CImageString, _T("imgstr"))
+	DUIOBJ_DECLARE_CLASS_NAME(CDuiImageString, _T("imgstr"))
 public:
-	CImageString(HWND hWnd, CDuiObject* pDuiObject);
-	CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nNumber, 
+	CDuiImageString(HWND hWnd, CDuiObject* pDuiObject);
+	CDuiImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nNumber, 
 		UINT uAlignment = DT_CENTER, UINT uVAlignment = DT_VCENTER, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE);
-	CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
+	CDuiImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
 		UINT uAlignment = DT_CENTER, UINT uVAlignment = DT_VCENTER, BOOL bIsVisible = TRUE, BOOL bIsDisable = FALSE);
-	virtual ~CImageString(void);
+	virtual ~CDuiImageString(void);
 
 	void SetTitle(int nNumber);
 

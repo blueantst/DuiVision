@@ -1,14 +1,14 @@
 #include "StdAfx.h"
 #include "ImageString.h"
 
-CImageString::CImageString(HWND hWnd, CDuiObject* pDuiObject)
+CDuiImageString::CDuiImageString(HWND hWnd, CDuiObject* pDuiObject)
 : CControlBaseFont(hWnd, pDuiObject)
 {
 	m_pImage = NULL;
 	SetTitle(0);
 }
 
-CImageString::CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nNumber, 
+CDuiImageString::CDuiImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, int nNumber, 
 						   UINT uAlignment/* = DT_CENTER*/, UINT uVAlignment/* = DT_VCENTER*/, BOOL bIsVisible/* = TRUE*/, BOOL bIsDisable/* = FALSE*/)
 : CControlBaseFont(hWnd, pDuiObject, uControlID, rc, TEXT(""), bIsVisible, bIsDisable, false)
 {
@@ -19,7 +19,7 @@ CImageString::CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	SetTitle(nNumber);
 }
 
-CImageString::CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
+CDuiImageString::CDuiImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle, 
 						   UINT uAlignment/* = DT_CENTER*/, UINT uVAlignment/* = DT_VCENTER*/, BOOL bIsVisible/* = TRUE*/, BOOL bIsDisable/* = FALSE*/)
 : CControlBaseFont(hWnd, pDuiObject, uControlID, rc, strTitle, bIsVisible, bIsDisable, false)
 {
@@ -28,13 +28,13 @@ CImageString::CImageString(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_uVAlignment = uVAlignment;
 }
 
-CImageString::~CImageString(void)
+CDuiImageString::~CDuiImageString(void)
 {
 
 }
 
 // 从XML设置图片掩码信息属性
-HRESULT CImageString::OnAttributeMask(const CString& strValue, BOOL bLoading)
+HRESULT CDuiImageString::OnAttributeMask(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -47,14 +47,14 @@ HRESULT CImageString::OnAttributeMask(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-void CImageString::SetTitle(int nNumber)
+void CDuiImageString::SetTitle(int nNumber)
 {
 	CString strTitle;
 	strTitle.Format(TEXT("%d"), nNumber);
 	__super::SetTitle(strTitle);
 }
 
-void CImageString::DrawControl(CDC &dc, CRect rcUpdate)
+void CDuiImageString::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
 	int nHeight = m_rc.Height();
@@ -70,20 +70,20 @@ void CImageString::DrawControl(CDC &dc, CRect rcUpdate)
 
 		int nXPos = 0;
 		int nYPos = 0;
-		if(m_uAlignment == DT_CENTER)
+		if(m_uAlignment == Align_Center)
 		{
 			nXPos = (nWidth - nLen * m_sizeImage.cx) / 2;
 		}
-		else if(m_uAlignment == DT_RIGHT)
+		else if(m_uAlignment == Align_Right)
 		{
 			nXPos = nWidth - nLen * m_sizeImage.cx;
 		}
 
-		if(m_uVAlignment == DT_VCENTER)
+		if(m_uVAlignment == VAlign_Middle)
 		{
 			nYPos = (nHeight - m_sizeImage.cy) / 2;
 		}
-		else if(m_uVAlignment == DT_BOTTOM)
+		else if(m_uVAlignment == VAlign_Bottom)
 		{
 			nYPos = nHeight - m_sizeImage.cy;
 		}
@@ -104,7 +104,7 @@ void CImageString::DrawControl(CDC &dc, CRect rcUpdate)
 	dc.BitBlt(m_rc.left,m_rc.top, m_rc.Width(), m_rc.Height(), &m_memDC, 0, 0, SRCCOPY);
 }
 
-int CImageString::GetImageIndex(int nIndex)
+int CDuiImageString::GetImageIndex(int nIndex)
 {
 	int nLen = m_strTitle.GetLength();
 	if(nIndex < nLen)

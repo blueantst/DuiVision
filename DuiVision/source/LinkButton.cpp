@@ -134,12 +134,12 @@ void CLinkButton::DrawControl(CDC &dc, CRect rcUpdate)
 		graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 		::SysFreeString(bsFont);
 
-		// 设置水平和垂直对齐方式
-		DUI_STRING_ALIGN_DEFINE();
-
+		StringFormat strFormat;
+		strFormat.SetAlignment(StringAlignmentNear);
 		strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 		Size sizeText = GetTextBounds(font, strFormat, m_strTitle);
-		CPoint point = GetOriginPoint(nWidth, nHeight, sizeText.Width, sizeText.Height, m_uAlignment, m_uVAlignment);
+		CPoint point = GetOriginPoint(nWidth, nHeight, sizeText.Width, sizeText.Height,
+						GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 		
 		m_rcText.SetRect(m_rc.left, m_rc.top + point.y, m_rc.left + sizeText.Width, m_rc.top + point.y + sizeText.Height);
 

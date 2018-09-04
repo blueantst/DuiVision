@@ -1,5 +1,6 @@
 #pragma once
 
+#include  <afxtempl.h>
 #include "DuiXml.h"
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -8,7 +9,7 @@
 public:                                                 \
     static CControlBase* CheckAndNew(LPCTSTR lpszName, HWND hWnd, CDuiObject* pDuiObject)       \
     {                                                   \
-        if (wcscmp(GetClassName(), lpszName)  == 0)     \
+        if (_tcscmp(GetClassName(), lpszName)  == 0)     \
 		{\
 			CControlBase* pControl = new theclass(hWnd, pDuiObject);							\
 			return pControl;                        \
@@ -29,7 +30,7 @@ public:                                                 \
                                                         \
     virtual BOOL IsClass(LPCTSTR lpszName)               \
     {                                                   \
-        if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;  \
+        if(_tcscmp(GetClassName(), lpszName)  == 0) return TRUE;  \
 		return __super::IsClass(lpszName);				\
     }                                                   \
 														\
@@ -93,7 +94,7 @@ public:                                                             \
 #define DUI_BOOL_ATTRIBUTE(attribname, varname, allredraw)         \
         if (attribname == strAttribName)                            \
         {                                                           \
-		    varname = ::StrToInt(strValue) > 0 ? true : false;     \
+		    varname = ((::StrToInt(strValue) > 0) || (strValue == _T("true"))) ? true : false;     \
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
@@ -286,7 +287,7 @@ public:                                                             \
 			}	\
 		}else	\
 		{	\
-			UINT nResourceID = _wtoi(strSkin);	\
+			UINT nResourceID = _ttoi(strSkin);	\
 			if(!Set##imgName##Bitmap(nResourceID, TEXT("PNG")))	\
 			{	\
 				if(!Set##imgName##Bitmap(nResourceID, TEXT("BMP")))	\
@@ -332,6 +333,53 @@ public:                                                             \
 	}	\
 
 
+// 对齐方式设置宏,支持设置format变量名,水平对齐方式变量名,垂直对齐方式变量名
+#define DUI_STRING_ALIGN_DEFINENAME(formatName, formatVarNameH, formatVarNameV)	\
+	StringFormat strFormat##formatName;	\
+	if(formatVarNameH == Align_Left)	\
+	{	\
+		strFormat##formatName.SetAlignment(StringAlignmentNear);	\
+	}else	\
+	if(formatVarNameH == Align_Center)	\
+	{	\
+		strFormat##formatName.SetAlignment(StringAlignmentCenter);	\
+	}else	\
+	if(formatVarNameH == Align_Right)	\
+	{	\
+		strFormat##formatName.SetAlignment(StringAlignmentFar);	\
+	}	\
+	\
+	if(formatVarNameV == VAlign_Top)	\
+	{	\
+		strFormat##formatName.SetLineAlignment(StringAlignmentNear);	\
+	}else	\
+	if(formatVarNameV == VAlign_Middle)	\
+	{	\
+		strFormat##formatName.SetLineAlignment(StringAlignmentCenter);	\
+	}else	\
+	if(formatVarNameV == VAlign_Bottom)	\
+	{	\
+		strFormat##formatName.SetLineAlignment(StringAlignmentFar);	\
+	}	\
+
+
+// 属性类型
+enum enumAttrType
+{
+	enAttrInt = 0,				// int
+	enAttrBool,				// bool
+	enAttrUInt					// uint
+};
+
+// DUI对象的属性信息结构
+struct DuiObjectAttributeInfo
+{
+	CString strName;	// 属性名
+	enumAttrType attrType;		// 属性类型
+	LPVOID	lpVar;	// 属性关联的变量
+	LPVOID	lpVarSetFunc;	// 属性关联的变量的设置函数
+	LPVOID	lpVarGetFunc;// 属性关联的变量的获取函数
+};
 
 class CControlBase;
 class CDuiHandler;
@@ -360,7 +408,9 @@ public:
 	virtual LRESULT OnControlUpdate(CRect rcUpdate, BOOL bUpdate = false, CControlBase *pControlBase = NULL) { return 0L; };
 	
 	virtual HRESULT SetAttribute(CString strAttribName, CString strValue, BOOL bLoading);
+	virtual BOOL LoadAttributesInfo();
 	virtual BOOL Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl = TRUE);
+	virtual BOOL OnInit();
 
 	virtual void SetRect(CRect rc) { m_rc = rc;};
 	virtual CRect GetRect() { return m_rc;};
@@ -368,7 +418,7 @@ public:
 	static void ParseDuiString(CString& strString);
 	static ULONG HexStringToULong(LPCTSTR lpszValue, int nSize = -1);
     static Color HexStringToColor(LPCTSTR lpszValue);
-	static Color StringToColor(LPCTSTR lpszValue, Color clrDefault = Color(0, 0, 0));
+	static Color StringToColor(LPCTSTR lpszValue, Color clrDefault = Color(0, 0, 0, 0));
 	static COLORREF HexStringToRGBColor(LPCTSTR lpszValue);
 	static void ParseKeyCode(LPCTSTR lpszValue, UINT& nChar, UINT& nFlag);
 
@@ -376,5 +426,21 @@ protected:
 	UINT	m_uID;					// DUI对象ID
 	CString	m_strName;				// DUI对象名字
 	CRect	m_rc;					// 区域
+	CMap<CString,LPCTSTR,DuiObjectAttributeInfo,DuiObjectAttributeInfo&> m_mapDuiAttrInfo;	// 属性信息列表
 	CDuiHandler* m_pDuiHandler;		// 事件处理对象
+};
+
+///////////////////////////////////////////////////////////////////////////
+// define DUI object static function
+typedef LPCTSTR (*DUIFunc_GetClassName)();
+typedef LPVOID (*DUIFunc_CheckAndNew)(LPCTSTR lpszName, HWND hWnd, CDuiObject* pDuiObject);
+typedef VOID (*DUIFunc_Shutdown)();
+
+// DUI类的信息类
+class CDuiObjectInfo
+{
+public:
+	DUIFunc_GetClassName		m_pfGetClassName;	// 获取控件名的函数指针
+	DUIFunc_CheckAndNew	m_pfCheckAndNew;	// 检查和创建控件对象的函数指针
+	DUIFunc_Shutdown			m_pfShutdown;			// 控件依赖库释放的函数指针
 };

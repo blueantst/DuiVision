@@ -16,9 +16,7 @@ public:
     CDuiNativeWnd(HWND hWnd, CDuiObject* pDuiObject);
     virtual ~CDuiNativeWnd();
 
-    HWND GetNativeHWnd() const;
 	CWnd* GetNativeWnd() const;
-	HWND GetPaintHWnd();
 	CWnd* GetPaintWnd();
 
     bool IsDelayCreate() const;
@@ -39,10 +37,10 @@ public:
 protected:
     void ReleaseControl();
 
+	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 protected:
-	HWND					m_hNativeWnd;	// 原生窗口句柄
 	CWnd*					m_pNativeWnd;	// 原生窗口对象指针,如果设置了,会自动释放
     bool					m_bCreated;		// 是否已创建
     bool					m_bDelayCreate;	// 是否延迟创建控件

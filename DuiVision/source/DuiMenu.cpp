@@ -7,8 +7,8 @@ CDuiMenu::CDuiMenu(CString strFont/* = TEXT("宋体")*/, int nFontWidth/* = 12*/, 
 	m_strFont = strFont;
 	m_nFontWidth = nFontWidth;
 	m_fontStyle = fontStyle;
-	m_uAlignment = DT_LEFT;
-	m_uVAlignment = DT_TOP;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
 
 	m_nLeft = 30;
 	m_nHeight = 30;
@@ -98,7 +98,7 @@ BOOL CDuiMenu::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nId = nIdIndex;
 		if(strId != _T(""))
 		{
-			nId = _wtoi(strId);
+			nId = _ttoi(strId);
 		}
 
 		CString strType = pItemElem.attribute(_T("type")).value();
@@ -120,7 +120,7 @@ BOOL CDuiMenu::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		}else
 		if(!strImage.IsEmpty())
 		{
-			UINT nResourceID = _wtoi(strImage);
+			UINT nResourceID = _ttoi(strImage);
 			AddMenu(strTitleU, nIdIndex, nResourceID);
 		}else
 		{
@@ -181,9 +181,9 @@ BOOL CDuiMenu::LoadXmlNode(DuiXmlNode pXmlElem, CString strXmlFile)
 				if(pControl->Load(pControlElem))
 				{
 					// 如果Load成功,则添加控件
-					if(pControl->IsClass(CArea::GetClassName()) || pControl->IsClass(CFrame::GetClassName()))
+					if(pControl->IsClass(CArea::GetClassName()))
 					{
-						// Area和Frame不能响应鼠标,必须加到Area列表中
+						// Area不能响应鼠标,必须加到Area列表中
 						m_vecArea.push_back(pControl);
 					}else
 					{
@@ -271,6 +271,8 @@ BOOL CDuiMenu::LoadXmlFile(CString strFileName, CWnd *pParent, CPoint point, UIN
 // UI初始化,此函数在窗口的OnCreate函数中调用
 void CDuiMenu::InitUI(CRect rcClient)
 {
+	__super::InitUI(rcClient);
+
 	// 如果有菜单项的预设置值,则设置相应的值到控件
 	if(m_vecMenuItemValue.size() > 0)
 	{
@@ -481,6 +483,7 @@ void CDuiMenu::SetMenuPoint()
 				// 普通菜单项
 				rc.SetRect(nXPos, nYPos, m_nWidth - 2, nYPos + m_nHeight);
 				nYPos += m_nHeight;
+				pMenuItem->m_nLeft = m_nLeft;	// 设置菜单项对象的文字左边距
 				// 设置菜单项的鼠标移动时候的背景
 				if(m_pImageRowHover != NULL)
 				{

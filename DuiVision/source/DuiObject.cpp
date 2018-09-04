@@ -10,6 +10,7 @@ CDuiObject::CDuiObject(void)
 	m_strName = _T("");
 	m_pDuiHandler = NULL;
 	SetRect(CRect(0,0,0,0));
+	LoadAttributesInfo();
 }
 
 CDuiObject::~CDuiObject(void)
@@ -65,6 +66,21 @@ HRESULT CDuiObject::SetAttribute(CString strAttribName, CString strValue, BOOL b
     return hRet;
 }
 
+// 加载属性信息的基础函数
+BOOL CDuiObject::LoadAttributesInfo()
+{
+	// 添加id属性信息
+	DuiObjectAttributeInfo attrInfoId;
+	attrInfoId.strName = _T("id");
+	m_mapDuiAttrInfo.SetAt(_T("id"), attrInfoId);
+
+	// 添加name属性信息
+	DuiObjectAttributeInfo attrInfoName;
+	m_mapDuiAttrInfo.SetAt(_T("name"), attrInfoName);
+
+	return TRUE;
+}
+
 // 加载XML节点，解析节点中的属性信息设置到当前控件的属性中
 BOOL CDuiObject::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 {
@@ -87,7 +103,16 @@ BOOL CDuiObject::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		SetAttribute(_T("pos"), strPosValue, TRUE);
 	}
 
+	// 初始化
+	OnInit();
+
     return TRUE;
+}
+
+// 初始化,由Load函数加载完属性之后调用
+BOOL CDuiObject::OnInit()
+{
+	return TRUE;
 }
 
 // 解析字符串，替换其中的替换内容
@@ -113,10 +138,12 @@ ULONG CDuiObject::HexStringToULong(LPCTSTR lpszValue, int nSize)
 	return ret;
 	*/
 
-	CStringA strValueA;
-	strValueA = lpszValue;
+	//CStringA strValueA;
+	//strValueA = lpszValue;//CEncodingUtil::AnsiToUnicode(lpszValue);
+	//这里不明白 我改为_T类型统一了
+	CString strValueA = lpszValue;
 
-    LPCSTR pchValue = strValueA.GetBuffer();;
+    LPCTSTR pchValue = strValueA.GetBuffer();;
     ULONG ulValue = 0;
 
     while (*pchValue && nSize != 0)

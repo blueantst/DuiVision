@@ -1,6 +1,87 @@
 #include "StdAfx.h"
 #include "DuiEdit.h"
 
+// 支持修改背景色和文字颜色的编辑控件
+class CColorEdit : public CEdit
+{
+private:
+	COLORREF m_clrBack;	// 背景色
+	COLORREF m_clrText;	// 文字颜色
+	CBrush	m_brBack;	// 背景色刷
+	BOOL	m_bTransparent;	// 背景是否透明
+	
+protected:
+	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
+	DECLARE_MESSAGE_MAP()
+
+public:
+	CColorEdit(COLORREF backColor = RGB(255, 255, 255), COLORREF textColor = RGB(255, 255, 255), BOOL bTransparent = FALSE);
+	virtual ~CColorEdit();
+	void SetBackColor(COLORREF color);
+	COLORREF GetBackColor();
+	void SetTransparent(BOOL bTransparent);
+	void SetTextColor(COLORREF color);
+	COLORREF GetTextColor();
+};
+
+CColorEdit::CColorEdit(COLORREF backColor, COLORREF textColor, BOOL bTransparent)
+{
+	m_clrBack = backColor;
+	m_brBack.CreateSolidBrush(m_clrBack);
+	m_clrText = textColor;
+	m_bTransparent = bTransparent;
+	EnableToolTips(TRUE);
+}
+
+CColorEdit::~CColorEdit()
+{
+}
+
+BEGIN_MESSAGE_MAP(CColorEdit, CEdit)
+	ON_WM_CTLCOLOR_REFLECT()
+END_MESSAGE_MAP()
+
+HBRUSH CColorEdit::CtlColor(CDC* pDC, UINT nCtlColor)
+{
+	if(m_bTransparent)
+	{
+		pDC-> SetBkMode(TRANSPARENT); //设置字体背景为透明
+	}else
+	{
+		pDC->SetBkColor(m_clrBack);	// 设置背景色,不支持设置透明度
+	}
+	// 设置文字颜色
+	pDC->SetTextColor(m_clrText);
+	return m_brBack;
+}
+
+void CColorEdit::SetBackColor(COLORREF color)
+{
+	m_clrBack = color;
+	m_brBack.CreateSolidBrush(color);
+}
+
+COLORREF CColorEdit::GetBackColor()
+{
+	return m_clrBack;
+}
+
+void CColorEdit::SetTransparent(BOOL bTransparent)
+{
+	m_bTransparent = bTransparent;
+}
+
+void CColorEdit::SetTextColor(COLORREF color)
+{
+	m_clrText = color;
+}
+
+COLORREF CColorEdit::GetTextColor()
+{
+	return m_clrText;
+}
+
+// CDuiEdit
 CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 		: CControlBaseFont(hWnd, pDuiObject)
 {
@@ -20,31 +101,23 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_sizeLeftImage.SetSize(0,0);
 	m_sizeSmallImage.SetSize(0,0);
 
+	m_bBack = false;
+	m_clrBack = Color(255, 255, 255);
+	m_clrText = Color(255, 0, 0, 0);
+
 	m_bPassWord = false;
 	m_bMultiLine = false;
+	m_bWantReturn = true;
 	m_bAutoHScroll = false;
 	m_bAutoVScroll = false;
+	m_bShowHScroll = false;
+	m_bShowVScroll = false;
 	m_bNumber = false;
 	m_bReadOnly = false;
 	m_nMaxChar = -1;
 
 	m_bIsSmallButton = FALSE;
-
-	VERIFY(m_fontTemp.CreateFont(
-		18,							// 字体的高度  
-		0,							// 字体的宽度  
-		0,							// 字体显示的角度
-		0,							// 字体的角度
-		FW_DONTCARE,				// 字体的磅数
-		FALSE,						// 斜体字体
-		FALSE,						// 带下划线的字体
-		0,							// 带删除线的字体
-		GB2312_CHARSET,				// 所需的字符集
-		OUT_DEFAULT_PRECIS,			// 输出的精度
-		CLIP_DEFAULT_PRECIS,		// 裁减的精度
-		DEFAULT_QUALITY,			// 逻辑字体与输出设备的实际
-		DEFAULT_PITCH | FF_SWISS,	// 字体间距和字体集
-		DuiSystem::GetDefaultFont()));					// 字体名称
+	m_bFocus = FALSE;//解决没有div容器的edit焦点问题 by lhc 20180903
 }
 
 CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/* = ""*/,
@@ -65,39 +138,30 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	m_sizeLeftImage.SetSize(0,0);
 	m_sizeSmallImage.SetSize(0,0);
 
+	m_bBack = false;
+	m_clrBack = Color(255, 255, 255);
+	m_clrText = Color(255, 0, 0, 0);
+
 	SetRect(rc);
 	SetBitmapCount(4);
 
 	m_bMultiLine = false;
 	m_bAutoHScroll = false;
 	m_bAutoVScroll = false;
+	m_bShowHScroll = false;
+	m_bShowVScroll = false;
 	m_bNumber = false;
 	m_bReadOnly = false;
 	m_nMaxChar = -1;
 
 	m_bIsSmallButton = FALSE;
-
-	VERIFY(m_fontTemp.CreateFont(
-		18,							// 字体的高度  
-		0,							// 字体的宽度  
-		0,							// 字体显示的角度
-		0,							// 字体的角度
-		FW_DONTCARE,				// 字体的磅数
-		FALSE,						// 斜体字体
-		FALSE,						// 带下划线的字体
-		0,							// 带删除线的字体
-		GB2312_CHARSET,				// 所需的字符集
-		OUT_DEFAULT_PRECIS,			// 输出的精度
-		CLIP_DEFAULT_PRECIS,		// 裁减的精度
-		DEFAULT_QUALITY,			// 逻辑字体与输出设备的实际
-		DEFAULT_PITCH | FF_SWISS,	// 字体间距和字体集
-		DuiSystem::GetDefaultFont()));					// 字体名称
+	m_bFocus = FALSE;//解决没有div容器的edit焦点问题 by lhc 20180903
 }
 
 CDuiEdit::~CDuiEdit(void)
 {
 	// 删除Windows控件
-	HideEdit();
+	DeleteEdit();
 
 	if (m_fontTemp.m_hObject)
 	{
@@ -186,7 +250,7 @@ HRESULT CDuiEdit::OnAttributeLeftImage(const CString& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!SetLeftBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetLeftBitmap(nResourceID, TEXT("BMP")))
@@ -272,7 +336,7 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!SetSmallBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!SetSmallBitmap(nResourceID, TEXT("BMP")))
@@ -285,14 +349,47 @@ HRESULT CDuiEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置背景色
+void CDuiEdit::SetBackColor(Color clrBack)
+{
+	m_clrBack = clrBack;
+	if(!m_bBack)
+	{
+		// 如果没有设置过背景色,则删除已创建的edit控件,等下一次显示时候自动刷新edit控件的颜色
+		DeleteEdit();
+	}else
+	{
+		// 如果设置过背景色,则只要调用CBkColorEdit的设置背景色的函数刷新edit控件的背景色
+		static_cast<CColorEdit*>(m_pEdit)->SetBackColor(m_clrBack.ToCOLORREF());
+	}
+	m_bBack = true;
+}
+
+// 从XML设置背景颜色属性
+HRESULT CDuiEdit::OnAttributeBackColor(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	m_clrBack = CDuiObject::StringToColor(strValue);
+	m_bBack = true;
+
+	return bLoading?S_FALSE:S_OK;
+}
+
 void  CDuiEdit::SetControlRect(CRect rc) 
 {
+	BOOL bRefresh = ((m_rc.top != rc.top) || (m_rc.left != rc.left) || (m_rc.bottom != rc.bottom) || (m_rc.right != rc.right));
 	m_rc = rc;
 	m_rcText = m_rc;
 	m_rcText.top += 4;
 	m_rcText.left += (6 + m_sizeLeftImage.cx);
 	m_rcText.bottom -= 4;
 	m_rcText.right -= (3 + m_sizeSmallImage.cx);
+	// 如果edit位置有变化,删除编辑控件,这样当编辑控件重新创建时候就可以调整大小
+	if(bRefresh)
+	{
+		DeleteEdit();
+	}
 }
 
 BOOL CDuiEdit::IsDraw(CPoint point)
@@ -326,7 +423,7 @@ void CDuiEdit::SetControlWndVisible(BOOL bIsVisible)
 {
 	if(bIsVisible)
 	{
-		//ShowEdit();
+		ShowEdit();
 	}else
 	{
 		HideEdit();
@@ -343,7 +440,7 @@ void CDuiEdit::SetControlDisable(BOOL bIsDisable)
 		{
 			m_EditState = enBSDisable;
 			m_buttonState = enBSDisable;
-			HideEdit();
+			DeleteEdit();
 		}
 		else
 		{
@@ -375,9 +472,24 @@ void CDuiEdit::SetControlTitle(CString strTitle)
 	}
 }
 
+// 设置字体
+void CDuiEdit::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
+{
+	// 删除windows控件和编辑状态使用的字体对象
+	DeleteEdit();
+	if(m_fontTemp.m_hObject)
+	{
+		m_fontTemp.DeleteObject();
+	}
+
+	// 设置新的字体
+	__super::SetFont(strFont, nFontWidth, fontStyle);
+}
+
 // 设置控件的焦点
 BOOL CDuiEdit::SetControlFocus(BOOL bFocus)
 {
+	m_bFocus = TRUE; //解决没有div容器的edit焦点问题 by lhc 20180903
 	__super::SetControlFocus(bFocus);
 
 	enumButtonState buttonState = m_buttonState;
@@ -389,12 +501,14 @@ BOOL CDuiEdit::SetControlFocus(BOOL bFocus)
 		m_buttonState = enBSNormal;
 		m_EditState = enBSNormal;
 		HideEdit();
+		m_bFocus = FALSE;//解决没有div容器的edit焦点问题 by lhc 20180903
 	}else
 	{
 		m_bDown = true;
 		m_buttonState = enBSDown;
 		m_EditState = enBSDown;
 		ShowEdit();
+		
 	}
 
 	bool bIsDraw = buttonState != m_buttonState || editState != m_EditState;
@@ -454,6 +568,13 @@ BOOL CDuiEdit::OnControlMouseMove(UINT nFlags, CPoint point)
 
 BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
+	if (!m_bFocus)//解决没有div容器的edit焦点问题 by lhc 20180903
+	{
+		SetControlFocus(m_bFocus);
+		m_bFocus = FALSE;
+	}
+
+
 	enumButtonState buttonState = m_buttonState;	
 	enumButtonState editState = m_EditState;
 	if(!m_bIsDisable)
@@ -480,7 +601,7 @@ BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 					{				
 						m_buttonState = enBSHover;
 					}				
-					SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_DOWN);
+					SendMessage(MSG_CONTROL_BUTTON, CONTROL_BUTTON, MSG_BUTTON_DOWN);
 					HideEdit();
 				}
 			}
@@ -493,7 +614,7 @@ BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 				}
 				ShowEdit();
 				
-				SendMessage(m_uID, CONTROL_EDIT, MSG_BUTTON_DOWN);
+				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_DOWN);
 			}		
 		}
 		else
@@ -539,7 +660,7 @@ BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 					{
 						m_buttonState = enBSHover;
 					}	
-					SendMessage(m_uID, CONTROL_BUTTON, MSG_BUTTON_UP);
+					SendMessage(MSG_CONTROL_BUTTON, CONTROL_BUTTON, MSG_BUTTON_UP);
 				}
 			}
 			else
@@ -552,7 +673,7 @@ BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 				{
 					m_buttonState = enBSNormal;
 				}	
-				SendMessage(m_uID, CONTROL_EDIT, MSG_BUTTON_UP);
+				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_UP);
 			}			
 		}
 		else
@@ -575,11 +696,245 @@ BOOL CDuiEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 	return buttonState != m_buttonState || editState != m_EditState;
 }
 
+// 键盘事件处理
+BOOL CDuiEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// 如果是回车键,则转换为字符事件传递给原生控件
+	if((nChar == VK_RETURN) && m_pEdit && ::IsWindow(m_pEdit->GetSafeHwnd()))
+	{
+		m_pEdit->SendMessage(WM_CHAR, VK_RETURN, nFlags);
+		// 返回值为是否允许回车换行,如果不允许,则即使焦点在此输入控件,也可以按回车键关闭窗口
+		return m_bWantReturn;
+	}
+
+	return false;
+}
+
+BOOL CDuiEdit::GetLButtonDown()
+{
+	return m_buttonState == enBSDown;
+}
+
+BOOL CDuiEdit::GetLButtonUp()
+{
+	return FALSE;
+}
+
+// 获取编辑框文字
+CString CDuiEdit::GetEditText()
+{
+	if(m_pEdit && ::IsWindow(m_pEdit->GetSafeHwnd()))
+	{
+		m_pEdit->GetWindowText(m_strTitle);
+	}
+	return m_strTitle;
+}
+
+// 创建字体对象
+void CDuiEdit::CreateEditFont()
+{
+	if (m_fontTemp.m_hObject)
+	{
+		return;
+	}
+
+	// 计算字体的高度,转换方法是设置的宽度值*18/12,如果宽度值大于12,则转换结果减2,这个转换方法可能不准确
+	int nFontHeight = m_nFontWidth * 18 / 12;
+	if(m_nFontWidth > 12)
+	{
+		nFontHeight-= 2;
+	}
+
+	VERIFY(m_fontTemp.CreateFont(
+		nFontHeight,			// 字体的高度  
+		0,							// 字体的宽度  
+		0,							// 字体显示的角度
+		0,							// 字体的角度
+		(((m_fontStyle & FontStyleBold) != 0) ? FW_BOLD : FW_NORMAL),	// 字体的磅数
+		((m_fontStyle & FontStyleItalic) != 0),	// 斜体字体
+		((m_fontStyle & FontStyleUnderline) != 0),		// 带下划线的字体
+		((m_fontStyle & FontStyleStrikeout) != 0),		// 带删除线的字体
+		GB2312_CHARSET,				// 所需的字符集
+		OUT_DEFAULT_PRECIS,			// 输出的精度
+		CLIP_DEFAULT_PRECIS,		// 裁减的精度
+		DEFAULT_QUALITY,			// 逻辑字体与输出设备的实际
+		DEFAULT_PITCH | FF_SWISS,	// 字体间距和字体集
+		m_strFont));					// 字体名称
+}
+
+// 显示编辑控件
+void CDuiEdit::ShowEdit()
+{
+	// 如果是只读属性，则不用创建edit控件
+	if(m_bReadOnly || m_bIsDisable)
+	{
+		return;
+	}
+
+ 	if(NULL == m_pEdit)
+ 	{
+		TestMainThread();	// 测试是否在主线程
+
+		CRect rc;
+		rc = m_rcText;
+		//rc.left--;
+		if(!m_bMultiLine)
+		{
+			// 仅针对单行编辑框调整位置
+			rc.top += (m_rc.Height() - 18 - 6) / 2;	// 调整windows控件激活时候的显示位置,和非激活状态下更接近一些
+			if(m_nFontWidth > 12)	// 如果修改了默认字体,则做一些微调
+			{
+				rc.top--;
+			}
+		}else
+		{
+			rc.top += 2;
+		}
+
+		if(m_bBack || (m_clrText.GetValue() != Color(255,0,0,0).GetValue()))
+		{
+			// 如果设置了背景色或文字色,则创建颜色可以更改的编辑控件
+			m_pEdit = new CColorEdit(m_clrBack.ToCOLORREF(), m_clrText.ToCOLORREF(), (m_clrBack.GetAlpha() == 0));
+		}else
+		{
+			// 否则创建普通的编辑控件
+  			m_pEdit = new CEdit;
+		}
+
+		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
+		if(m_bMultiLine)
+		{
+			dwStyle |= ES_MULTILINE;
+		}
+		if(m_bWantReturn)
+		{
+			dwStyle |= ES_WANTRETURN;
+		}
+		if(m_bAutoHScroll)
+		{
+			dwStyle |= ES_AUTOHSCROLL;
+		}
+		if(m_bAutoVScroll)
+		{
+			dwStyle |= ES_AUTOVSCROLL;
+		}
+		if(m_bNumber)
+		{
+			dwStyle |= ES_NUMBER;
+		}
+		if(m_bReadOnly)
+		{
+			dwStyle |= ES_READONLY;
+		}
+
+		// 计算父窗口的偏移量
+		CPoint pt(rc.left, rc.top);
+		if (m_pParentDuiObject)
+		{
+			CControlBase* pParentDuiObject = dynamic_cast<CControlBase*>(m_pParentDuiObject);
+			if (pParentDuiObject && pParentDuiObject->OnMousePointChange(pt))
+			{
+				int xOffset = pt.x - rc.left;
+				int yOffset = pt.y - rc.top;
+				rc.left = rc.left - xOffset;
+				rc.right = rc.right - xOffset;
+				rc.top = rc.top - yOffset;
+				rc.bottom = rc.bottom - yOffset;
+			}			
+		}	
+
+  		m_pEdit->Create(dwStyle, rc, CWnd::FromHandle(m_hWnd), GetID());
+		// 创建并设置字体对象
+		CreateEditFont();
+  		m_pEdit->SetFont(&m_fontTemp);
+		m_pEdit->SetWindowText(m_strTitle);
+		if(m_bPassWord)
+		{
+			m_pEdit->SetPasswordChar('*');
+		}
+		if(m_nMaxChar > 0)
+		{
+			m_pEdit->LimitText(m_nMaxChar);
+		}
+		m_pEdit->SetSel(m_strTitle.GetLength(), -1);
+ 	}else
+	{
+		// 如果原生控件已创建,则显示出来
+		m_pEdit->ShowWindow(SW_NORMAL);
+	}
+
+	// 设置滚动条是否显示,只读和禁用属性等
+	m_pEdit->ShowScrollBar(SB_VERT, m_bShowVScroll);
+	m_pEdit->ShowScrollBar(SB_HORZ, m_bShowHScroll);
+	m_pEdit->EnableWindow(!m_bIsDisable);
+	m_pEdit->SetReadOnly(m_bReadOnly);
+	m_pEdit->SetFocus();
+
+	::SendMessage(m_pEdit->GetSafeHwnd(), WM_SETFOCUS, 1, 1);
+	::SendMessage(::GetParent(m_pEdit->GetSafeHwnd()), WM_SETFOCUS, 1, 1);
+}
+
+// 隐藏编辑控件
+void CDuiEdit::HideEdit()
+{
+	if(m_pEdit)
+	{
+		TestMainThread();	// 测试是否在主线程
+
+		// 调用Edit的Windows控件必须先判断窗口是否有效
+		if(::IsWindow(m_pEdit->GetSafeHwnd()))
+		{
+			// 获取编辑框的内容保存在控件的变量中
+			m_pEdit->GetWindowText(m_strTitle);
+			::SendMessage(m_pEdit->GetSafeHwnd(), WM_KILLFOCUS, -1, 0);
+			::SendMessage(::GetParent(m_pEdit->GetSafeHwnd()), WM_KILLFOCUS, -1, 0);
+		}
+
+		// 隐藏输入控件
+		m_pEdit->ShowWindow(SW_HIDE);
+	}
+}
+
+// 删除编辑控件
+void CDuiEdit::DeleteEdit()
+{
+	if(m_pEdit)
+	{
+		TestMainThread();	// 测试是否在主线程
+
+		// 调用Edit的Windows控件必须先判断窗口是否有效
+		if(::IsWindow(m_pEdit->GetSafeHwnd()))
+		{
+			// 获取编辑框的内容保存在控件的变量中
+			m_pEdit->GetWindowText(m_strTitle);
+		}
+		delete m_pEdit;
+		m_pEdit = NULL;
+	}
+}
+
+// 消息处理
+LRESULT CDuiEdit::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	return __super::OnMessage(uID, uMsg, wParam, lParam);
+}
+
 void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	Graphics graphics(dc);
-
+	if (m_bIsDisable)
+	{
+		m_EditState = enBSDisable;
+		m_buttonState = enBSDisable;
+	}
 	DrawImageFrame(graphics, m_pImage, m_rc, m_EditState * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 4);
+
+	// 画背景色
+	if(m_bBack)
+	{
+		SolidBrush brush(m_clrBack);
+		graphics.FillRectangle(&brush, m_rc.left + 2, m_rc.top + 2, m_rc.Width() - 4, m_rc.Height() - 4);
+	}
 
 	if(m_pLeftImage)
 	{
@@ -665,107 +1020,4 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 		graphics.DrawString(bsTooltip, (INT)wcslen(bsTooltip), &font, rect, &strFormat, &solidBrushTip);
 		::SysFreeString(bsTooltip);
 	}
-}
-
-BOOL CDuiEdit::GetLButtonDown()
-{
-	return m_buttonState == enBSDown;
-}
-
-BOOL CDuiEdit::GetLButtonUp()
-{
-	return FALSE;
-}
-
-CString CDuiEdit::GetEditText()
-{
-	if(m_pEdit && ::IsWindow(m_pEdit->GetSafeHwnd()))
-	{
-		m_pEdit->GetWindowText(m_strTitle);
-	}
-	return m_strTitle;
-}
-
-void CDuiEdit::ShowEdit()
-{
-	// 如果是只读属性，则不用创建edit控件
-	if(m_bReadOnly || m_bIsDisable)
-	{
-		return;
-	}
-
- 	if(NULL == m_pEdit)
- 	{
-		TestMainThread();	// 测试是否在主线程
-
-		CRect rc;
-		rc = m_rcText;
-		//rc.left--;
-		if(!m_bMultiLine)
-		{
-			// 仅针对单行编辑框调整位置
-			rc.top += (m_rc.Height() - 18 - 6) / 2;	// 调整windows控件激活时候的显示位置,和非激活状态下更接近一些
-		}else
-		{
-			rc.top += 2;
-		}
-  		m_pEdit = new CEdit;
-		DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
-		if(m_bMultiLine)
-		{
-			dwStyle |= ES_MULTILINE;
-		}
-		if(m_bAutoHScroll)
-		{
-			dwStyle |= ES_AUTOHSCROLL;
-		}
-		if(m_bAutoVScroll)
-		{
-			dwStyle |= ES_AUTOVSCROLL;
-		}
-		if(m_bNumber)
-		{
-			dwStyle |= ES_NUMBER;
-		}
-		if(m_bReadOnly)
-		{
-			dwStyle |= ES_READONLY;
-		}
-  		m_pEdit->Create(dwStyle, rc, CWnd::FromHandle(m_hWnd), GetID());
-  		m_pEdit->SetFont(&m_fontTemp);
-		m_pEdit->SetWindowText(m_strTitle);	
-		if(m_bPassWord)
-		{
-			m_pEdit->SetPasswordChar('*');
-		}
-		if(m_nMaxChar > 0)
-		{
-			m_pEdit->LimitText(m_nMaxChar);
-		}
-		m_pEdit->SetSel(m_strTitle.GetLength(), -1);
-		m_pEdit->SetFocus();
- 	}
-}
-
-void CDuiEdit::HideEdit()
-{
-	if(m_pEdit)
-	{
-		TestMainThread();	// 测试是否在主线程
-
-		// 调用Edit的Windows控件必须先判断窗口是否有效
-		if(::IsWindow(m_pEdit->GetSafeHwnd()))
-		{
-			// 获取编辑框的内容保存在控件的变量中
-			m_pEdit->GetWindowText(m_strTitle);
-		}
-		delete m_pEdit;
-		m_pEdit = NULL;
-	}
-}
-
-// 消息处理
-LRESULT CDuiEdit::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	return __super::OnMessage(uID, uMsg, wParam, lParam);
 }

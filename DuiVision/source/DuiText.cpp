@@ -2,7 +2,6 @@
 #include "DuiText.h"
 
 #define	SCROLL_V	1	// 滚动条控件ID
-#define	LISTBK_AREA	2	// 背景Area控件ID
 
 CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
 		: CControlBaseFont(hWnd, pDuiObject)
@@ -14,15 +13,10 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
 	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
- 	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
+ 	pControlBase = new CDuiScrollVertical(hWnd, this, SCROLL_V, rcScroll);
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 	m_bScrollV = FALSE;
-
-	CRect rcBk = CRect(0,0,0,0);
-	pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
- 	m_vecControl.push_back(pControlBase);
-	m_pControBkArea = (CControlBase*)pControlBase;
 
 	m_nBkTransparent = 0;
 
@@ -53,15 +47,10 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	rcScroll.left = rcScroll.right - m_nScrollWidth;
 
  	CControlBase * pControlBase = NULL;
- 	pControlBase = new CScrollV(hWnd, this, SCROLL_V, rcScroll);
+ 	pControlBase = new CDuiScrollVertical(hWnd, this, SCROLL_V, rcScroll);
  	m_vecControl.push_back(pControlBase);
 	m_pControScrollV = (CControlBaseFont*)pControlBase;
 	m_bScrollV = FALSE;
-
-	CRect rcBk = CRect(0,0,0,0);
-	pControlBase = new CArea(hWnd, this, LISTBK_AREA, rcBk, 100, 100);
- 	m_vecControl.push_back(pControlBase);
-	m_pControBkArea = (CControlBase*)pControlBase;
 
 	m_nBkTransparent = 0;
 
@@ -188,7 +177,7 @@ HRESULT CDuiText::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
 		}
 	}else	// 加载图片资源
 	{
-		UINT nResourceID = _wtoi(strSkin);
+		UINT nResourceID = _ttoi(strSkin);
 		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
 		{
 			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))
@@ -218,11 +207,6 @@ void CDuiText::SetControlRect(CRect rc)
 			{
 				rcTemp = m_rc;
 				rcTemp.left = rcTemp.right - m_nScrollWidth;
-			}else
-			if(LISTBK_AREA == uControlID)
-			{
-				rcTemp = m_rc;
-				rcTemp.right -= m_nScrollWidth;
 			}else
 			{
 				continue;
@@ -310,7 +294,7 @@ BOOL CDuiText::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 	}
 
 	// 更新滚动条,并刷新界面
-	CScrollV* pScroll = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScroll = (CDuiScrollVertical*)m_pControScrollV;
 	if(pScroll->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
 	{
 		UpdateControl(true);
@@ -346,8 +330,8 @@ int CDuiText::GetVirtualHeight()
 	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
 	::SysFreeString(bsFont);
 
-	StringFormat strFormat;
-	strFormat.SetAlignment(StringAlignmentNear);
+	// 设置水平和垂直对齐方式
+	DUI_STRING_ALIGN_DEFINE();
 	strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 
 	int nWidth = m_rc.Width();
@@ -360,8 +344,12 @@ int CDuiText::GetVirtualHeight()
 
 	// 滚动条只有在需要的总高度大于文本框的高度时候才会显示
 	m_pControScrollV->SetVisible(size.Height > m_rc.Height());
-	((CScrollV*)m_pControScrollV)->SetScrollMaxRange(size.Height);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(size.Height);
 
+	if(size.Height < m_rc.Height())
+	{
+		return m_rc.Height();
+	}
 	return size.Height;
 }
 
@@ -371,7 +359,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 	int nHeight = m_rc.Height();
 	
 	// 计算显示位置
-	CScrollV* pScrollV = (CScrollV*)m_pControScrollV;
+	CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
 	int nCurPos = pScrollV->GetScrollCurrentPos();	// 当前top位置
 	int nMaxRange = pScrollV->GetScrollMaxRange();
 	int nVirtualTop = 0;	// 当前显示的是虚拟图片中什么位置开始的图片
@@ -427,13 +415,10 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			nXPos += m_sizeImage.cx + 5;
 		}
 		
-		Size size = GetTextBounds(font, strFormat, nWidth, m_strTitle);
-		CPoint point = GetOriginPoint(nWidth - nXPos, nHeight, size.Width, size.Height, m_uAlignment, m_uVAlignment);
-		
 		int nStart = m_strTitle.Find(m_strMark, m_nStart);
 		if(m_strMark.IsEmpty() || (nStart == -1))
 		{
-			int nTextWidth = nWidth - nXPos - point.x;
+			int nTextWidth = nWidth - nXPos;
 			if(m_bScrollV)
 			{
 				nTextWidth -= m_nScrollWidth;
@@ -442,7 +427,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			// 先画阴影
 			if(m_bEnableShadow)
 			{
-				RectF rectShadow((Gdiplus::REAL)(nXPos + point.x + 1), (Gdiplus::REAL)(point.y + 1), (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)max(size.Height, nHeight));
+				RectF rectShadow((Gdiplus::REAL)(nXPos  + 1), (Gdiplus::REAL)1, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)nHeight);
 				SolidBrush solidBrushS(m_clrTextShadow);
 				BSTR bsTitle = m_strTitle.AllocSysString();
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rectShadow, &strFormat, &solidBrushS);
@@ -450,7 +435,7 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			}
 
 			// 再画正常的文字
-			RectF rect((Gdiplus::REAL)(nXPos + point.x), (Gdiplus::REAL)point.y, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)(max(size.Height, nHeight)));
+			RectF rect((Gdiplus::REAL)(nXPos), (Gdiplus::REAL)0, (Gdiplus::REAL)nTextWidth, (Gdiplus::REAL)nHeight);
 			if((m_enButtonState == enBSHover) && m_bEnableHover)
 			{
 				SolidBrush solidBrushH(m_clrTextHover);
@@ -479,35 +464,35 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 			{
 				BSTR bsL = srtL.AllocSysString();
 				graphics.DrawString(bsL, (INT)wcslen(bsL), &font, 
-					PointF((Gdiplus::REAL)(nXPos + point.x + 1), (Gdiplus::REAL)(point.y + 1)), &strFormat, &solidBrushS);
+					PointF((Gdiplus::REAL)(nXPos + 1), (Gdiplus::REAL)1), &strFormat, &solidBrushS);
 				::SysFreeString(bsL);
 				BSTR bsMark = m_strMark.AllocSysString();
 				graphics.DrawString(bsMark, (INT)wcslen(bsMark), &font, 
-					PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + 2 + 1), (Gdiplus::REAL)(point.y + 1)), &strFormat, &solidBrushS);
+					PointF((Gdiplus::REAL)(nXPos + sizeL.Width + 2 + 1), (Gdiplus::REAL)1), &strFormat, &solidBrushS);
 				::SysFreeString(bsMark);
 			}
 			BSTR bsL = srtL.AllocSysString();
 			graphics.DrawString(bsL, (INT)wcslen(bsL), &font, 
-				PointF((Gdiplus::REAL)(nXPos + point.x), (Gdiplus::REAL)point.y), &strFormat, &solidBrush);
+				PointF((Gdiplus::REAL)(nXPos), (Gdiplus::REAL)0), &strFormat, &solidBrush);
 			::SysFreeString(bsL);
 			BSTR bsMark = m_strMark.AllocSysString();
 			graphics.DrawString(bsMark, (INT)wcslen(bsMark), &font, 
-				PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + 2), (Gdiplus::REAL)point.y), &strFormat, &solidBrushM);
+				PointF((Gdiplus::REAL)(nXPos + sizeL.Width + 2), (Gdiplus::REAL)0), &strFormat, &solidBrushM);
 			::SysFreeString(bsMark);
 
 			if(m_bEnableShadow)
 			{
-				RectF rect((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4 + 1), (Gdiplus::REAL)(point.y + 1), (Gdiplus::REAL)(nWidth - (nXPos + sizeL.Width + sizeM.Width + 4 + point.x)), (Gdiplus::REAL)nHeight);
+				RectF rect((Gdiplus::REAL)(nXPos + sizeL.Width + sizeM.Width + 4 + 1), (Gdiplus::REAL)(1), (Gdiplus::REAL)(nWidth - (nXPos + sizeL.Width + sizeM.Width + 4)), (Gdiplus::REAL)nHeight);
 				BSTR bsR = srtR.AllocSysString();
 				graphics.DrawString(bsR, (INT)wcslen(bsR), &font, 
-					PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)point.y), &strFormat, &solidBrushS);
+					PointF((Gdiplus::REAL)(nXPos + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)0), &strFormat, &solidBrushS);
 				::SysFreeString(bsR);
 			}
 			//RectF rect(nXPos + point.x + sizeL.Width + sizeM.Width + 4, point.y, nWidth - (nXPos + sizeL.Width + sizeM.Width + 4 + point.x), size.Height);
-			RectF rect((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)(point.y), (Gdiplus::REAL)(nWidth - (nXPos + sizeL.Width + sizeM.Width + 4 + point.x)), (Gdiplus::REAL)nHeight);
+			RectF rect((Gdiplus::REAL)(nXPos + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)0, (Gdiplus::REAL)(nWidth - (nXPos + sizeL.Width + sizeM.Width + 4)), (Gdiplus::REAL)nHeight);
 			BSTR bsR = srtR.AllocSysString();
 			graphics.DrawString(bsR, (INT)wcslen(bsR), &font, 
-				PointF((Gdiplus::REAL)(nXPos + point.x + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)point.y), &strFormat, &solidBrush);
+				PointF((Gdiplus::REAL)(nXPos + sizeL.Width + sizeM.Width + 4), (Gdiplus::REAL)0), &strFormat, &solidBrush);
 			::SysFreeString(bsR);
 		}
 	}

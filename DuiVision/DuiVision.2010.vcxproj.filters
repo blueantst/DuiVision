@@ -48,7 +48,7 @@
     <ClInclude Include="include\DuiVision.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\Frame.h">
+	<ClInclude Include="include\DuiVisionApp.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\GlobalFunction.h">
@@ -72,7 +72,7 @@
     <ClInclude Include="include\Progress.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\Runing.h">
+    <ClInclude Include="include\DuiAnimateImg.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\Scroll.h">
@@ -186,6 +186,27 @@
     <ClInclude Include="include\IDuiPlugin.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\DuiWkeView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WndShadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiSlider.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiRichEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DuiLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\LogMgr.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\WinDwmWrapper.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DuiVision.cpp">
@@ -209,9 +230,6 @@
     <ClCompile Include="source\DlgPopup.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\Frame.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="source\GlobalFunction.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -233,7 +251,7 @@
     <ClCompile Include="source\Progress.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="source\Runing.cpp">
+    <ClCompile Include="source\DuiAnimateImg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="source\Scroll.cpp">
@@ -284,6 +302,9 @@
     <ClCompile Include="source\DuiTreeCtrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+	<ClCompile Include="source\DuiVisionApp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="source\DuiButton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -319,6 +340,27 @@
     </ClCompile>
     <ClCompile Include="source\DuiNativeWnd.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiWkeView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WndShadow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiSlider.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiRichEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DuiLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\LogMgr.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\WinDwmWrapper.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

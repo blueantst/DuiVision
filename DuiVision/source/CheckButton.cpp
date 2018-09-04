@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "CheckButton.h"
 
-CCheckButton::CCheckButton(HWND hWnd, CDuiObject* pDuiObject)
+CDuiCheckButton::CDuiCheckButton(HWND hWnd, CDuiObject* pDuiObject)
 						   : CControlBaseFont(hWnd, pDuiObject)
 {
 	m_bTabStop = TRUE;	// 可以响应tab键
@@ -11,12 +11,12 @@ CCheckButton::CCheckButton(HWND hWnd, CDuiObject* pDuiObject)
 	m_pImage = NULL;
 	m_bDown = false;
 	m_bMouseDown = false;
-	m_uVAlignment = DT_VCENTER;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(254, 0, 0, 0);
 	SetBitmapCount(6);
 }
 
-CCheckButton::CCheckButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/*= TEXT("")*/, BOOL bIsVisible/* = TRUE*/, 
+CDuiCheckButton::CDuiCheckButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/*= TEXT("")*/, BOOL bIsVisible/* = TRUE*/, 
 						   BOOL bIsDisable/* = FALSE*/ ,BOOL bIsPressDown/* = FALSE*/)
 						   : CControlBaseFont(hWnd, pDuiObject, uControlID, rc, strTitle, bIsVisible, bIsDisable)
 {
@@ -27,21 +27,21 @@ CCheckButton::CCheckButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_pImage = NULL;
 	m_bDown = false;
 	m_bMouseDown = false;
-	m_uVAlignment = DT_VCENTER;
+	m_uVAlignment = VAlign_Middle;
 	m_clrText = Color(254, 0, 0, 0);
 	SetBitmapCount(6);
 }
 
-CCheckButton::~CCheckButton(void)
+CDuiCheckButton::~CDuiCheckButton(void)
 {
 }
 
-BOOL CCheckButton::GetCheck()
+BOOL CDuiCheckButton::GetCheck()
 {
 	return m_bDown;
 }
 
-BOOL CCheckButton::SetCheck(BOOL bCheck)
+BOOL CDuiCheckButton::SetCheck(BOOL bCheck)
 {
 	if (m_bIsDisable)
 	{
@@ -66,7 +66,7 @@ BOOL CCheckButton::SetCheck(BOOL bCheck)
 }
 
 // 从XML设置check属性
-HRESULT CCheckButton::OnAttributeCheck(const CString& strValue, BOOL bLoading)
+HRESULT CDuiCheckButton::OnAttributeCheck(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -77,7 +77,7 @@ HRESULT CCheckButton::OnAttributeCheck(const CString& strValue, BOOL bLoading)
 }
 
 // 设置控件的焦点
-BOOL CCheckButton::SetControlFocus(BOOL bFocus)
+BOOL CDuiCheckButton::SetControlFocus(BOOL bFocus)
 {
 	__super::SetControlFocus(bFocus);
 
@@ -92,7 +92,7 @@ BOOL CCheckButton::SetControlFocus(BOOL bFocus)
 	return TRUE;
 }
 
-BOOL CCheckButton::OnControlMouseMove(UINT nFlags, CPoint point)
+BOOL CDuiCheckButton::OnControlMouseMove(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable && !m_bMouseDown)
@@ -129,7 +129,7 @@ BOOL CCheckButton::OnControlMouseMove(UINT nFlags, CPoint point)
 	return false;
 }
 
-BOOL CCheckButton::OnControlLButtonDown(UINT nFlags, CPoint point)
+BOOL CDuiCheckButton::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable)
@@ -158,7 +158,7 @@ BOOL CCheckButton::OnControlLButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
-BOOL CCheckButton::OnControlLButtonUp(UINT nFlags, CPoint point)
+BOOL CDuiCheckButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 {
 	enumButtonState buttonState = m_enButtonState;
 	if (!m_bIsDisable)
@@ -202,19 +202,28 @@ BOOL CCheckButton::OnControlLButtonUp(UINT nFlags, CPoint point)
 }
 
 // 键盘事件处理
-BOOL CCheckButton::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+BOOL CDuiCheckButton::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+	// 处理快捷键
+	if((m_nShortcutKey != 0) && (nChar == m_nShortcutKey) && (nFlags == m_nShortcutFlag))
+	{
+		SetCheck(!GetCheck());
+		SendMessage(MSG_BUTTON_CHECK, 0, GetCheck());
+		return true;
+	}
+
 	// 如果当前处于焦点状态,用空格键可以切换check
 	if(m_bIsFocus && (nChar == VK_SPACE) && (nFlags == 0))
 	{
 		SetCheck(!GetCheck());
+		SendMessage(MSG_BUTTON_CHECK, 0, GetCheck());
 		return true;
 	}
 
 	return false;
 }
 
-void  CCheckButton::SetControlDisable(BOOL bIsDisable)
+void CDuiCheckButton::SetControlDisable(BOOL bIsDisable)
 {
 	if(m_bIsDisable != bIsDisable)
 	{
@@ -245,7 +254,7 @@ void  CCheckButton::SetControlDisable(BOOL bIsDisable)
 	}
 }
 
-void CCheckButton::DrawControl(CDC &dc, CRect rcUpdate)
+void CDuiCheckButton::DrawControl(CDC &dc, CRect rcUpdate)
 {
 	int nWidth = m_rc.Width();
 	int nHeight = m_rc.Height();
@@ -283,7 +292,8 @@ void CCheckButton::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetAlignment(StringAlignmentNear);
 			strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 			Size size = GetTextBounds(font, strFormat, m_strTitle);
-			CPoint point = GetOriginPoint(nWidth - m_sizeImage.cx - 3, nHeight, size.Width, size.Height, m_uAlignment, m_uVAlignment);
+			CPoint point = GetOriginPoint(nWidth - m_sizeImage.cx - 3, nHeight, size.Width, size.Height,
+							GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 
 			for(int i = 0; i < 6; i++)
 			{

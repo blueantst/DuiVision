@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "DuiVisionDemo.h"
 #include "DuiHandlerMain.h"
+#include "DuiWkeView.h"
+#include "DuiControlEx\MFCDateTime.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -56,11 +58,11 @@ BOOL CDuiVisionDemoApp::InitInstance()
 		if(ERROR_ALREADY_EXISTS == GetLastError() || ERROR_ACCESS_DENIED == GetLastError())
 		{
 			// 读取命令行参数,如果不需要处理命令行可以直接退出
-			CString strCmd = L"";
-			if(__argc > 0)
+			CString strCmd = _T("");
+			if(__argc > 1)
 			{
-				strCmd = __targv[0];
-				DuiSystem::LogEvent(LOG_LEVEL_DEBUG, L"Command line:%s", strCmd);
+				strCmd = __targv[1];
+				DuiSystem::LogEvent(LOG_LEVEL_DEBUG, _T("Command line:%s"), strCmd);
 			}
 
 			// 发送进程间消息(lParam为1表示不显示界面,appMutex作为应用名,信息参数传递命令行参数)
@@ -72,6 +74,11 @@ BOOL CDuiVisionDemoApp::InitInstance()
 			return FALSE; // Here we quit this application
 		}
 	}
+
+	// 注册WKE控件
+	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
+	// 注册MFCDateTime控件
+	REGISTER_DUICONTROL(CMFCDateTime, NULL);
 
 	// 创建主窗口
 	CDlgBase* pMainDlg = DuiSystem::CreateDuiDialog(_T("dlg_main"), NULL, _T(""), TRUE);

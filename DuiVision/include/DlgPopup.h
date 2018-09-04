@@ -25,7 +25,7 @@ public:
 	static LPCTSTR GetClassName() { return _T("popup");}
 	virtual BOOL IsClass(LPCTSTR lpszName)
 	{
-		if(wcscmp(GetClassName(), lpszName)  == 0) return TRUE;
+		if(_tcscmp(GetClassName(), lpszName)  == 0) return TRUE;
 		return __super::IsClass(lpszName);
 	}
 
@@ -34,6 +34,8 @@ public:
 	BOOL			m_bTracking;
 	BOOL			m_bIsLButtonDown;	
 	BOOL			m_bIsLButtonDblClk;
+	BOOL			m_bIsRButtonDown;	
+	BOOL			m_bIsRButtonDblClk;
 	BOOL			m_bIsSetCapture;
 
 protected:
@@ -55,6 +57,7 @@ protected:
 	int				m_nFrameHRB;				// 边框右下角高度(九宫格模式)
 	BOOL			m_bInitFinish;				// 是否初始化完成
 	BOOL			m_bAutoClose;				// 是否自动关闭
+	BOOL			m_bTopMost;					// 窗口总在最前面
 
 	BOOL			m_bImageUseECM;				// 是否使用图片自身的颜色管理信息
 
@@ -86,6 +89,9 @@ public:
 	void SetAutoClose(BOOL bAutoClose) { m_bAutoClose = bAutoClose; }
 	BOOL IsAutoClose() { return m_bAutoClose; }
 
+	CSize& GetSize() {return m_size;}
+	void SetSize(CSize&sz){ m_size = sz;}
+
 	BOOL UseImageECM() { return m_bImageUseECM; }
 
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
@@ -107,11 +113,16 @@ public:
 	void DrawWindow(CDC *pDC);
 	virtual void DrawWindow(CDC &dc, CRect rcClient){};
 	virtual void DrawWindowEx(CDC &dc, CRect rcClient){};
-	virtual void InitUI(CRect rcClient) {};
+	virtual void InitUI(CRect rcClient);
 	virtual BOOL OnMouseMove(CPoint point){ return false;};
 	virtual BOOL OnLButtonDown(CPoint point){ return false;};
 	virtual BOOL OnLButtonUp(CPoint point){ return false;};
+	virtual BOOL OnLButtonDblClk(CPoint point){ return false;};
+	virtual BOOL OnRButtonDown(CPoint point){ return false;};
+	virtual BOOL OnRButtonUp(CPoint point){ return false;};
+	virtual BOOL OnRButtonDblClk(CPoint point){ return false;};
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){ return false;};
+	virtual BOOL OnControlKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){ return false;};
 
 	HRESULT OnAttributeBkMode(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeBkImage(const CString& strValue, BOOL bLoading);
@@ -154,6 +165,8 @@ public:
 	virtual CControlBase * SetControlDisable(UINT uControlID, BOOL bDisable);
 	// 禁用控件
 	virtual CControlBase * SetControlDisable(CControlBase *pControlBase, BOOL bDisable);
+	// 重置控件
+	virtual void ResetControl();
 	// 更新选中
 	void UpdateHover();
 
@@ -169,10 +182,15 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	DECLARE_MESSAGE_MAP()
-	virtual void PostNcDestroy();()
+	virtual void PostNcDestroy();
 public:
 	afx_msg void OnClose();
 	afx_msg void OnPaint();
@@ -192,6 +210,7 @@ public:
 		DUI_INT_ATTRIBUTE(_T("height-rb"), m_nFrameHRB, FALSE)
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE(_T("autoclose"), m_bAutoClose, FALSE)
+		DUI_INT_ATTRIBUTE(_T("topmost"), m_bTopMost, FALSE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

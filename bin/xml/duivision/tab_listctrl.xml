@@ -19,9 +19,9 @@
 		<row image="4" crtext="80,80,0" time="星期一" title="默认浏览器加速" content="整理浏览器文件碎片，加快打开速度" />
 		<row image="5" crtext="80,0,80" time="02-01" title="整理影响开机速度的碎片" content="整理影响开机速度的碎片" />
 		<row image="6" crtext="80,0,80" time="2014-01-20" title="硬盘智能加速" content="通过优化硬盘传输效率，整理磁盘碎片等方法，让电脑快如闪电" />
-		<row image="7" crtext="80,80,80" time="2014-01-18" title="优化桌面图标缓存" content="优化后可减小开机过程中的I/O量" />
+		<row image="7" crtext="80,80,80" crback="50,128,128,0" time="2014-01-18" title="优化桌面图标缓存" content="优化后可减小开机过程中的I/O量" />
 		<row image="8" time="2014-01-15" title="固态硬盘(SSD)优化" content="优化固态硬盘相关设置" />
-		<row image="9" time="2014-01-10" title="优化Windows索引服务" content="优化后可减小开机过程的I/O量" />
+		<row image="9" crback="50,0,128,128" time="2014-01-10" title="优化Windows索引服务" content="优化后可减小开机过程的I/O量" />
 		<row image="10" time="2014-01-01" title="默认浏览器加速" content="整理浏览器文件碎片，加快打开速度" />
 		<row image="2" time="今天" title="固态硬盘(SSD)优化" content="优化固态硬盘相关设置" />
 		<row image="3" time="昨天" title="优化Windows索引服务" content="优化后可减小开机过程的I/O量" />
@@ -38,7 +38,7 @@
 	</listctrl>
 
 	<text name="text_notice" crtext="800000" crmark="800000" align="center"
-		pos="|-0,5,-0,25" title="只有标题的列表" font="big" show="1" />
+		pos="|-0,5,-0,25" title="只有标题的列表(处理双击消息)" font="big" show="1" />
 
 	<listctrl name="listctrl_2" scroll-width="10" pos="|10,30,-20,-5" show="1" row-tip="1"
 		img-scroll="skin:IDB_SCROLL_V" 
@@ -47,7 +47,7 @@
 		img-width="50" row-height="25" bk-transparent="10"
 		font-title="default" font="default" valign="middle"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="255,64,64,64"
-		crtitle="32,32,32" >
+		crsep="200,160,160,160" crtitle="32,32,32" >
 		<row right-img="2" check="1" image="1" title="启动项1" />
 		<row right-img="1" check="0" image="2" title="英特尔显卡接口辅助程序" link1="设置" linkaction1="dlg:dlg_option" link2="查看详情" />
 		<row right-img="2" check="0" image="2" title="腾讯微云" />

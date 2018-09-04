@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dlg name="dlg_main" title="[APP_NAME]-任务栏名字22" width="800" height="550" translucent="255"
+<dlg name="dlg_main" title="[APP_NAME]-任务栏名字-测试" width="830" height="550" translucent="255"
 	frame="skin:IDB_MAIN_FRAME" bkimg="" crbk="000000" appwin="1" resize="1"
-	width-lt="3" height-lt="119" width-rb="3" height-rb="30" >
+	width-lt="3" height-lt="119" width-rb="3" height-rb="30" topmost="0" wnd-drag="1"
+	img-shadow="skins\360\window_shadow.png" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7">
+<!--dlg name="dlg_main" title="[APP_NAME]-任务栏名字22" width="800" height="550" translucent="255"
+	frame="skins\sy-bj.png" bkimg="" crbk="0,0,0,0" crtransparent1="0,0,0" appwin="1" resize="1"
+	width-lt="50" height-lt="50" width-rb="20" height-rb="20"
+	img-shadow1="skins\360\window_shadow.png" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7"-->
 
   <base>
+	<div name="win.caption" pos="0,0,-0,35" response="0" />
 	<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" tip="关闭" action="hide-window" show="1"/>
 	<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
 	<imgbtn name="button.menu" pos="-110,0,-77,29" skin="IDB_BT_MENU" tip="菜单" action="menu:menu_main" menupos="-75,-0" />
@@ -20,18 +26,18 @@
 
 	<tabctrl name="tabctrl.main" image="skins\tab_image.png" img-count="3"
 			img-sep="skin:IDB_TAB_SEPERATOR--" img-hover="skin:IDB_TAB_HOVER"
-			font="bold" item-width="0" tab-height="0" animate="1"
+			font="bold" item-width="0" tab-height="0" tab-left-pading="0" animate="1"
 			pos="1,44,-1,-31">
 		<tab name="tab.home" title="首页" image="skins\icon\duivision.png" img-count="1" active="true" pos="0,75,-0,-0" show="true" >
 		
 			<!--animateimg name="animateimg_scan" skin="IDB_SCAN_STATUS_360" show="1"
 				pos="30,50" width="102" height="102" index="0" maxindex="17" timer-count="10" run="true" /-->
 			<img pos="20,50" width="128" height="128" image="skins\dui.png"
-				mode="extrude" framesize="1" tip="DuiVision LOGO" />
+				mode="extrude" framesize="1" tip="DuiVision LOGO" drag="1" />
 			<img pos="20,240" width="128" height="128" image="skins\scriptnet.jpg"
-				mode="extrude" framesize="1" tip="蓝蚂蚁工作室微信公众号二维码" />
+				mode="extrude" framesize="1" tip="蓝蚂蚁工作室微信公众号二维码" drag="1" />
 			
-			<text pos="170,50,600,80" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" />
+			<text pos="170,50,300,80" crtext="000000" crmark="904000" font="bigbig" title="DUI界面库介绍" mask="DUI" tip="文字可拖动,设置控件的drag属性=1" drag="1" />
 
 			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,-30,160" bk-transparent="5"
 				title="DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine、DuiLib等多个基于DirectUI的界面库开发的。
@@ -50,7 +56,7 @@ DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，
 			<text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,315,-30,-10" bk-transparent="5"
 				title="DuiVision开源下载地址：https://github.com/blueantst/DuiVision
 蓝蚂蚁工作室网站：http://www.blueantstudio.net
-QQ群：325880743
+QQ群：325880743 或搜索 Script.NET&DuiVision社区
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室 或扫描左侧二维码" />
 
 			<!--text crtext="808080" img-scroll="skin:IDB_SCROLL_V" pos="170,90,-30,-10" bk-transparent="5"
@@ -86,7 +92,7 @@ QQ群：325880743
 			<div name="tab_controls" pos="0,0,-0,-0" plugin-debug="DuiPluginDemo_d.dll" plugin="DuiPluginDemo.dll" />
 		</tab>
 		
-		<tab name="tab.activex" title="浏览器" image="skins\icon\ico_navigate.png" img-count="1" div="tab_activex" />
+		<tab name="tab.browser" title="浏览器" image="skins\icon\ico_navigate.png" img-count="1" div="tab_browser" />
 		
 		<tab name="tab.360" title="360演示" image="skins\icon\logo_360.png" img-count="1" outlink="true" action="dlg:dlg_360" />
 		
@@ -97,7 +103,7 @@ QQ群：325880743
 	</tabctrl>
 	
 	<div name="footer" pos="0,-26,-0,-0" >	
-		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：1.9.0.0" title="检查更新"
+		<hidebtn name="checkversion" pos="10,2,150,-0" show="1" text="版本：[APP_VER]" title="检查更新"
 				action="link:http://www.blueantstudio.net" />
 	</div>	
 	

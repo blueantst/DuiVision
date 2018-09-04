@@ -7,19 +7,25 @@
 	<!--text pos="50,20,250,40" crtext="808080" title="普通文字，左对齐1" tip="普通文字，左对齐" /-->
 	
 	<tabctrl name="tabctrl.controls" img-sep="skin:IDB_TAB_SEPERATOR" img-hover="skin:IDB_TAB_BACK-"
-		font="bold" item-width="90" tab-height="29" crtext="800000" animate="1"
-		pos="1,1,-1,-31">
+		img-tabbtn-="skins\default\btn_close.png" tabbtnpos="-21,3"
+		font="bold" item-width="90" tab-height="29"
+		crtext="800000" crhover="800000" crpush="800000" animate="1"
+		pos="1,1,-1,-1">
 		
 		<tab name="tab.control.1" image="skin:IDB_TAB_ITEM" title="文字" active="true" pos="0,30,-0,-0">
 
 			<text pos="50,20,250,40" crtext="808080" title="普通文字，左对齐" tip="普通文字，左对齐" />
 			<text pos="50,50,250,70" crtext="808080" title="普通文字，中间对齐" align="center" tip="普通文字，中间对齐" />
 			<text pos="50,80,250,100" crtext="808080" title="普通文字，右对齐" align="right" tip="普通文字，右对齐" />
-			<text pos="50,110,250,130" crtext="808080" crmark="904000" font="big"
+			<text pos="50,110,100,130" crtext="808080" font="italic" title="斜体" tip="演示斜体文字" />
+			<text pos="110,110,170,130" crtext="808080" font="underline" title="下划线" tip="演示下划线文字" />
+			<text pos="180,110,250,130" crtext="808080" font="strikeout" title="删除线" tip="演示删除线文字" />
+
+			<text pos="50,140,250,160" crtext="808080" crmark="904000" font="big"
 				title="带掩码的文字" mask="掩码" tip="文字中和掩码匹配部分可以用特殊颜色显示" />
-			<text pos="50,140,250,160" crtext="A00000" crshadow="808080" font="big"
+			<text pos="50,170,250,190" crtext="A00000" crshadow="808080" font="big"
 				title="带阴影的文字" tip="带阴影的文字" />
-			<text crtext="000080" pos="50,170,250,280" img-scroll="skin:IDB_SCROLL_V"
+			<text crtext="000080" pos="50,200,250,310" img-scroll="skin:IDB_SCROLL_V"
 				title="带滚动条的多行文字：
 					aaaaa
 					bbbbb
@@ -50,13 +56,15 @@
 
 			<button pos="50,20,150,48" skin="IDB_BT_DEFAULT" title="普通按钮" tip="普通按钮" shortcut="ALT+1" />
 			
-			<button pos="200,20,300,48" skin="IDB_BT_GREEN" title="图片按钮"
+			<button pos="170,20,270,48" skin="IDB_BT_DEFAULT" title="禁用按钮" tip="禁用状态的按钮" disable="1" />
+			
+			<button pos="290,20,390,48" skin="IDB_BT_GREEN" title="图片按钮"
 				crtext="FFFFFF" animate="1" maxindex="16" />
 			
-			<button pos="350,20,450,48" skin="IDB_BT_DEFAULT" title="动画按钮"
+			<button pos="410,20,510,48" skin="IDB_BT_DEFAULT" title="动画按钮"
 				animate="1" maxindex="16" />
 			
-			<button pos="500,20,600,48" skin="IDB_BT_DEFAULT" title="菜单按钮" tip="菜单按钮"
+			<button pos="530,20,630,48" skin="IDB_BT_DEFAULT" title="菜单按钮" tip="菜单按钮"
 				action="menu:menu_main" menupos="0,-0" />
 			
 			<hidebtn name="hidebtn" align="left"
@@ -69,41 +77,55 @@
 				pos="350,65,450,90" show="1" title="文字按钮" />
 			
 			<chkbtn name="checkbutton1" skin="IDB_CHECK_BOX"
-				pos="50,100,150,125" show="1" title="检查框1" check="true" />
+				pos="50,100,245,125" show="1" title="检查框1(快捷键：Ctrl+2)" check="true" shortcut="CTRL+2" />
 			
 			<chkbtn name="checkbutton2" skin="IDB_CHECK_BOX"
-				pos="200,100,300,125" show="1" title="检查框2" check="false" />
+				pos="250,100,450,125" show="1" title="检查框2(快捷键：Ctrl+3)" check="false" shortcut="CTRL+3" />
 			
-			<radiobtn name="radio_button_1" skin="IDB_RADIO_BUTTON" title="RadioButton演示１"
-				pos="50,140,600,165" check="true" group="radio_group_1" show="1" />
+			<radiobtn name="radio_button_1" skin="IDB_RADIO_BUTTON" title="RadioButton演示1(快捷键：ALT+2)"
+				pos="50,140,300,165" check="true" group="radio_group_1" show="1" shortcut="ALT+2" />
 			
-			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2"
-				pos="50,175,600,200" check="false" group="radio_group_1" show="1" />
+			<radiobtn name="radio_button_2" skin="IDB_RADIO_BUTTON" title="RadioButton演示2(快捷键：ALT+3)"
+				pos="50,175,300,200" check="false" group="radio_group_1" show="1" shortcut="ALT+3" />
 
-			<button pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png"
-				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4" />
+			<button name="pic_button1" pos="50,220,150,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Synchstep.png" cursor="hand"
+				title="图片按钮1" tip="图片按钮1" animate="0" maxindex="4"
+				duimsg="keydown|keyup" />
 			
-			<button pos="200,220,300,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\IM.png"
-				title="图片按钮2" tip="图片按钮2" animate="0" maxindex="4" action="dlg:dlg_login" />
+			<button pos="200,220,300,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\IM.png" cursor="wait"
+				title="图片按钮2" tip="图片按钮2(快捷键：Ctrl+5)" animate="0" maxindex="4" action="dlg:dlg_login" shortcut="CTRL+5" />
 			
-			<button pos="350,220,450,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\SMBPrefs.png"
+			<button pos="350,220,450,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\SMBPrefs.png" cursor="cross"
 				title="图片按钮3" tip="图片按钮3，不显示焦点框" animate="0" maxindex="4" showfocus="0" action="dlg:dlg_option" />
 			
-			<button pos="500,220,600,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Connect.png"
+			<button pos="500,220,600,320" skin="IDB_BT_DEFAULT" img-btn="skins\icon\Connect.png" cursor="help"
 				title="图片按钮4" tip="图片按钮4" animate="0" maxindex="4" />
-			
+	
 		</tab>
 		
 		<tab name="tab.control.3" image="skin:IDB_TAB_ITEM" title="图片" pos="0,30,-0,-0">
 
-			<img pos="50,20" width="150" height="80" image="skins\icon\Movies.png"
-				mode="tile" framesize="1" tip="平铺模式" />
+			<img name="image-tile" pos="50,20" width="150" height="80" image="skins\icon\Movies.png"
+				mode="tile" framesize="1" tip="平铺模式" duimsg="mousemove" />
 			
-			<img pos="250,20" width="100" height="80" image="skins\icon\Movies.png"
-				mode="extrude" framesize="1" tip="拉伸模式" />
+			<img name="image-extrude" pos="250,20" width="100" height="80" image="skins\icon\Movies.png"
+				mode="extrude" framesize="1" tip="拉伸模式" duimsg="mousemove" />
 			
-			<img pos="400,20" width="48" height="48" image="skins\icon\Movies.png"
-				mode="normal" framesize="1" tip="普通单张图片显示" />
+			<img name="image-normal" pos="400,20" width="48" height="48" image="skins\icon\Movies.png"
+				mode="normal" framesize="1" tip="普通单张图片显示，可以用鼠标左键拖动"
+				cursor="hand" duimsg="mousemove|mouseldown|mouselup" drag="1" />
+			
+			<img name="image-icon" pos="500,20" width="48" height="48" image="skins\dui.ico"
+				mode="normal" tip="显示图标文件" />
+			
+			<animateimg name="image-gif1" pos="570,20" width="75" height="41" img-gif="skins\gif\MovingUserData.gif"
+				run="1" tip="显示GIF动画文件" />
+			
+			<!--animateimg name="image-gif-face0" pos="570,100" width="24" height="24" img-gif="skins\gif\face\0.gif" run="1" />
+			<animateimg name="image-gif-face1" pos="600,100" width="24" height="24" img-gif="skins\gif\face\1.gif" run="1" />
+			<animateimg name="image-gif-face2" pos="630,100" width="24" height="24" img-gif="skins\gif\face\2.gif" run="1" />
+			<animateimg name="image-gif-face3" pos="660,100" width="24" height="24" img-gif="skins\gif\face\3.gif" run="1" />
+			<animateimg name="image-gif-face4" pos="690,100" width="24" height="24" img-gif="skins\gif\face\4.gif" run="1" /-->
 			
 			<img pos="50,150,500,-0" image="skins\default\msgdlg_bk.png" mode="mid"
 					width-lt="10" height-lt="60" width-rb="10" height-rb="5" />
@@ -128,86 +150,180 @@ width-lt,height-lt,width-rb,height-rb" />
 		
 		<tab name="tab.control.4" image="skin:IDB_TAB_ITEM" title="编辑框" pos="0,30,-0,-0">
 
-			<edit name="编辑框1" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
-					pos="50,20" width="200" height="26" title="test"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
-					font="default" />
-			
-			<edit name="编辑框2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
-					pos="50,60" width="200" height="50" title="test"
-					multiline="1" autohscroll="0" autovscroll="1" number="0" readonly="0" maxchar="150"
-					font="default"/>
-			
-			<edit name="编辑框3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
-					pos="50,130" width="200" height="30" title="" tip="请输入用户名"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
-					font="default" crtip="128,128,128,128" />
-			
-			<edit name="编辑框4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
-					pos="50,170" width="200" height="30" title="" tip="请输入密码"
-					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
-					font="default" crtip="128,128,128,128" />
+			<layout name="split_1" layout-type="vertical" pos="0,0,-0,-0"
+				img-split="skin:IDB_SPLIT_VERT" split-width="2" split-imm="1"
+				img-thumb="skin:IDB_SPLIT_THUMB_VERT" >
+				<layout-div name="layout-1" div-pos="300" min-pos="200" max-pos="500" >
+				
+					<edit name="edit1" img-count="2" image="skins\default\edit_border2.png" small-image="skin:IDB_KEY_BOARD"
+							pos="50,20" width="200" height="28" title="test"
+							crback="255,96,224,224"
+							multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+							font="big"
+							duimsg="focuschange" />
+					
+					<edit name="edit2" skin="IDB_EDIT" small-image="skin:IDB_KEY_BOARD"
+							pos="50,60,-20,110" title="test"
+							crtext="255,0,0,255"
+							multiline="1" autohscroll="0" autovscroll="1" vscroll="1"
+							number="0" readonly="0" maxchar="150"
+							font="default"/>
+					
+					<edit name="edit3" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+							pos="50,130,-20,160" title="" tip="请输入用户名"
+							multiline="0" wantreturn="1" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+							font="default" crtip="128,128,128,128" />
+					
+					<edit name="edit4" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
+							pos="50,170,-20,200" title="" tip="请输入密码"
+							multiline="0" autohscroll="1" autovscroll="0"
+							password="1" number="0" readonly="0" maxchar="50"
+							font="default" crtip="128,128,128,128" />
+					
+					<text pos="50,256,119,275" crtext="808080" title="时间控件：" />
+					<mfcdatetime name="mfcdatetime1" pos="120,255,230,277" small-image="skin:IDB_KEY_BOARD"
+							title="" skin="IDB_EDIT" value="now" datetime="2016-06-04 11:22:33"
+							multiline="0" wantreturn="1" autohscroll="1" autovscroll="0"
+							number="0" readonly="0" maxchar="50"/>
+							
+					<text pos="50,280,250,295" crtext="808080" title="原生控件（编辑框）："
+							tip="下面的编辑框是通过原生控件创建的" />
+					<rect pos="50,300,250,350" response="0" color="808080" />
+					<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
+						pos="51,301,249,349" tip="原生窗口控件"  />
+				
+				</layout-div>
+				<layout-div name="layout-2">
 
-			<combobox name="下拉列表框1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
-					value="local" tip="选择MAC地址" font="bold"
-					pos="300,20" width="300" height="28" title="22-33-44-55-66-77" >
-				<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
-				<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
-				<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
-			</combobox>
+					<combobox name="combobox1" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+							value="local" tip="选择MAC地址" font="bold"
+							pos="20,20,-50,48"
+							list-height="120" img-scroll="skin:IDB_SCROLL_V"
+							title="22-33-44-55-66-77" >
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+						<item name="11-22-33-44-55-66" value="1" image="skins\simage\mac.png" />
+						<item name="22-33-44-55-66-77" value="2" image="skins\simage\mac.png" />
+						<item name="33-44-55-66-77-88" value="3" crtext="800000" image="skins\simage\mac.png" />
+					</combobox>
 
-			<combobox name="下拉列表框2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
-				head-image="skin:IDB_COMBO_ITEM" del-image="skin:IDB_COMBO_ITEM_CLOSE"
-				left-image="skin:IDB_COMPUTER" tip="选择文件类型"
-				xml="xml:duivision\combo_filetype.xml--" value="pdf"
-				pos="300,60" width="300" height="28" title="test"
-				crhover="220,128,128,128" >
-				<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
-				<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
-				<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" crtext="800000" crdesc="80,0,80" />
-				<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
-			</combobox>
+					<combobox name="combobox2" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+						head-image="skin:IDB_COMBO_ITEM" del-image="skin:IDB_COMBO_ITEM_CLOSE"
+						left-image="skin:IDB_COMPUTER" tip="选择文件类型"
+						xml="xml:duivision\combo_filetype.xml--" value="pdf"
+						pos="20,60,-50,88" title="test"
+						crhover="220,128,128,128" >
+						<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
+						<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
+						<item name="邮件" desc="电子邮件" value="mail" image="skins\icon\ico_message.png" crtext="800000" crdesc="80,0,80" />
+						<item name="Excel" desc="电子表格" value="excel" image="skins\icon\ico_report.png" />
+					</combobox>
 
-			<combobox name="下拉列表框3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
-					left-image="skins\simage\search_normal.png"
-					value="local" tip="查找应用程序" font="bold" readonly="0"
-					pos="300,100" width="300" height="28" title="Script.NET" >
-				<item name="Script.NET" value="1" image="skins\simage\forum.png" />
-				<item name="Notepad++" value="2" image="skins\simage\forum.png" />
-				<item name="为知笔记" value="3" crtext="800000" image="skins\simage\forum.png" />
-			</combobox>
-			
-			<text pos="300,140,500,160" crtext="808080" title="原生控件（编辑框）：" tip="下面的编辑框是通过原生控件创建的" />
-			<rect pos="300,170,600,300" response="0" color="808080" />
-			<nativewnd name="nativewnd_1" skin="IDB_BT_DEFAULT" title="原生窗口控件"
-				pos="301,171,599,299" tip="原生窗口控件"  />
+					<combobox name="combobox3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
+							left-image="skins\simage\search_normal.png"
+							value="local" tip="查找应用程序" font="bold" readonly="0"
+							pos="20,100,-50,128" title="Script.NET" >
+						<item name="Script.NET" value="1" image="skins\simage\forum.png" />
+						<item name="Notepad++" value="2" image="skins\simage\forum.png" />
+						<item name="为知笔记" value="3" crtext="800000" image="skins\simage\forum.png" />
+					</combobox>
+					
+					<text pos="20,140,-50,160" crtext="808080" title="richedit演示：" tip="下面的编辑框内容可以从rtf文件加载" />
+					<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
+							pos="20,160,-50,-10"
+							title="测试richedit" tip="richedit"
+							multiline="1" wantreturn="1" rich="1" file="rtf\rtftest.rtf"
+							hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+							readonly="0" maxchar="128000" wordwrap="1" number="0"
+							font="default" crtext="0,0,0" crtip="128,128,128,128" />
+				</layout-div>
+			</layout>
 
 		</tab>
 		
-		<tab name="tab.control.5" image="skin:IDB_TAB_ITEM" title="动画" pos="0,30,-0,-0">
+		<tab name="tab.control.5" image="skin:IDB_TAB_ITEM" title="动画&滚动" pos="0,30,-0,-0">
 
 			<text pos="50,20,250,40" crtext="808080" title="动画图片：" />
 			
 			<animateimg name="animateimg_scan_1" skin="IDB_SCAN_STATUS_360" show="1"
-				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="5" run="true" />
+				pos="50,50" width="102" height="102" index="0" maxindex="17" timer-count="20" run="1" />
 			
 			<animateimg name="animateimg_repair_1" skin="IDB_REPAIR_STATUS_360" show="1"
-				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="5" run="true" />
+				pos="200,50" width="102" height="102" index="0" maxindex="17" timer-count="40" run="1" />
 			
 			<animateimg name="animateimg_scan_2" skin="IDB_SCAN_ANIMATE" show="1"
-				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="5" run="true" />
+				pos="350,50" width="16" height="16" index="0" maxindex="12" timer-count="30" run="1" />
 
 			<text pos="50,180,250,200" crtext="808080" title="进度条：" />
 			
 			<progress name="progress_1" skin="IDB_PROGRESS" show-text="1" crtext="808080" title="进度："
-				pos="50,210" width="330" height="15" value="40" run="true" show="1"
+				pos="50,210" width="300" height="15" value="40" timer-count="20" run="true" show="1"
 				tip="直角进度条，进度自动增加，显示进度文字" />
 			
 			<progress name="progress_2"
 				img-back="skin:IDB_PROGRESS_GREEN_BACK" img-fore="skin:IDB_PROGRESS_GREEN_FORE" head-len="5"
-				pos="50,240" width="330" height="12" value="40" run="false" show="1"
+				pos="50,240" width="300" height="12" value="40" run="false" show="1"
 				tip="圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
+			
+			<slider name="slider_1" skin="IDB_PROGRESS" show-text="0" crtext="808080" title="进度："
+				pos="50,270" width="300" height="22" value="40" show="1"
+				tip="演示滑块控件"
+				img-thumb="skins\qq\softtastmgr_btn_refresh.png"
+				slider-height="7" thumb-width="0" thumb-height="0" thumb-top="5" />
 
+			<text pos="400,20,-10,40" crtext="808080" title="通过div使子控件支持垂直滚动的演示：" />
+			<div pos="400,45,-10,200" img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" >
+				<text pos="0,0,250,20" crtext="808080" title="图片列表：" />
+				
+				<selectbox pos="0,25" width="350" height="300" image="1" col="2" row="3" tip="图片列表"
+					crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
+					<item image="bkimg\SKIN_PIC_0.png" />
+					<item image="bkimg\SKIN_PIC_1.png" />
+					<item image="bkimg\SKIN_PIC_2.png" />
+					<item image="bkimg\SKIN_PIC_3.png" />
+					<item image="bkimg\SKIN_PIC_4.png" />
+					<item image="bkimg\SKIN_PIC_5.png" />
+				</selectbox>
+			</div>
+
+			<text pos="400,210,-10,230" crtext="808080" title="通过div使子控件支持水平滚动的演示：" />
+			<div pos="400,235,-10,-10" img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" >
+				<selectbox pos="0,0" width="1000" height="85" image="1" col="6" row="1" tip="图片列表"
+					crframe="254, 255, 255, 255" crhover="128, 0, 0, 0" crselect="254, 56, 158, 221" show="1">
+					<item image="bkimg\SKIN_PIC_0.png" />
+					<item image="bkimg\SKIN_PIC_1.png" />
+					<item image="bkimg\SKIN_PIC_2.png" />
+					<item image="bkimg\SKIN_PIC_3.png" />
+					<item image="bkimg\SKIN_PIC_4.png" />
+					<item image="bkimg\SKIN_PIC_5.png" />
+				</selectbox>
+			</div>
+			
 		</tab>
 		
 		<tab name="tab.control.6" image="skin:IDB_TAB_ITEM" title="对话框" pos="0,30,-0,-0">
@@ -239,14 +355,25 @@ width-lt,height-lt,width-rb,height-rb" />
 			<button name="frame_dlg_button" skin="IDB_BT_DEFAULT" title="半透明对话框"
 				pos="350,100,450,128" show="1" tip="显示背景半透明效果对话框" action="dlg:duivision\dlg_translucent.xml" />
 
+			<button name="ie_dlg_button" skin="IDB_BT_DEFAULT" title="IE对话框"
+				pos="50,140,150,168" show="1" tip="显示IE内核的web对话框" action="dlg:dlg_ie" />
+			
+			<button name="wke_dlg_button" skin="IDB_BT_DEFAULT" title="Wke对话框"
+				pos="200,140,300,168" show="1" tip="显示webkit内核的web对话框" action="dlg:dlg_wke" />
+
+			<!--button name="wke_flash_dlg_button" skin="IDB_BT_DEFAULT" title="Wke Flash"
+				pos="200,140,300,168" show="1" tip="显示webkit内核的Flash窗口" action="dlg:duivision\dlg_wke_flash.xml" /-->
+
 		</tab>
 		
 		<tab name="tab.listctrl" image="skin:IDB_TAB_ITEM" title="列表控件" div="tab_listctrl" />
+		
+		<tab name="tab.gridctrl_header" image="skin:IDB_TAB_ITEM" title="表格控件" div="tab_gridctrl_header" />
 
 		<tab name="tab.control.7" image="skin:IDB_TAB_ITEM" title="其他" pos="0,30,-0,-0">
 
 			<button name="button_hide_tab" skin="IDB_BT_DEFAULT" title="隐藏Tab页8"
-				pos="50,20,150,48" show="1" tip="隐藏第8个Tab页"  />
+				pos="50,20,150,48" show="1" tip="隐藏第8个Tab页" />
 			
 			<button name="button_show_tab" skin="IDB_BT_DEFAULT" title="显示Tab页8"
 				pos="200,20,300,48" show="1" tip="显示第8个Tab页" />
@@ -270,8 +397,16 @@ width-lt,height-lt,width-rb,height-rb" />
 				pos="200,100,300,128" tip="普通菜单，背景1" />
 			
 			<button name="menu_3" skin="IDB_BT_DEFAULT" title="菜单3"
-				pos="350,100,450,128" tip="普通菜单，背景2" />
+				pos="350,100,450,128" tip="普通菜单，背景2，向上显示"
+				action="menu:duivision\menu_3.xml" menupos="0,0,0,-0" />
 			
+			<text pos="50,160,320,180" crtext="808080" title="带边框的矩形：" />
+			<rect pos="50,180,300,220" crframe="800000" frame-width="2" dashstyle="solid"
+				color="192,192,64" />
+			<rect pos="50,230,300,270" crframe="000000" frame-width="1" dashstyle="dash"
+				color="64,192,192" transparent-type="vertical" begin-transparent="20" end-transparent="80" />
+			<rect pos="50,280,300,320" crframe="000080" frame-width="1" dashstyle="dot"
+				color="192,64,192" transparent-type="horizontal" begin-transparent="20" end-transparent="80" />
 		</tab>
 		
 	</tabctrl>

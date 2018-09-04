@@ -6,7 +6,7 @@
 		pos="0,5,-0,25" title="树控件" font="big" show="1" />
 
 	<treectrl name="treectrl_1" pos="20,30,-20,-5" show="1"
-		img-scroll="skin:IDB_SCROLL_V" img-sep="skins\rp_line.png--"
+		img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" img-sep="skins\rp_line.png--"
 		img-check="skin:IDB_CHECK_BOX" img-colsep=""
 		img-collapse="skin:IDB_TREE_COLLAPSE"
 		img-toggle="skin:IDB_TREE_TOGGLE"
@@ -15,10 +15,10 @@
 		font-title="big" font="default"
 		valign="middle" down-row="0"
 		crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
-		crtitle="32,32,32" crsep="200,160,160,160" >
+		crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128" >
 		<column title="列1" width="400" />
 		<column title="列2" width="100" />
-		<column title="Collapse" />
+		<column title="Collapse" width="400" />
 		<node id="1">
 			<item title="应用软件1" font-title="1" />
 			<item collapse="1" />
@@ -91,7 +91,39 @@
 				<item title="迅雷看看" />
 				<item title="一键安装" />
 			</node>
-			<node id="2-7" image="skin:IDB_ICON_ERROR" check="0">
+			<node id="2-7" image="skin:IDB_ICON_ERROR" check="1" collapse="1" crback="50,128,128,0" >
+				<item title="迅雷看看2" font-title="1" image="3" />
+				<item link="一键安装" linkaction="dlg:dlg_login"/>
+				<item collapse="1" image="skin:IDB_TREE_TOGGLE" />
+				<node id="2-7-1" image="skin:IDB_ICON_ERROR" check="0">
+					<item title="迅雷看看-1,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
+					<item />
+					<item>
+						<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
+						<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+					</item>
+					<node id="2-7-1-1" image="skin:IDB_ICON_ERROR" check="1" collapse="1" >
+						<item title="迅雷看看3" font-title="1" image="3" />
+						<item link="一键安装" linkaction="dlg:dlg_login"/>
+						<item collapse="1" image="skin:IDB_TREE_TOGGLE" />
+						<node id="2-7-1-1-1" image="skin:IDB_ICON_ERROR" check="0">
+							<item title="！迅雷看看-31,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
+							<item />
+							<item>
+								<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
+								<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+							</item>
+						</node>
+						<node id="2-7-1-1-2" image="skin:IDB_ICON_ERROR" check="0">
+							<item title="！迅雷看看是中国第一高清影视视频门户,免费提供电影、电视剧、综艺、音乐MV、动漫、新片、大片的高清在线点播和下载,是中国最大最全的正版影视发行平台"/>
+						</node>
+					</node>
+				</node>
+				<node id="2-7-2" image="skin:IDB_ICON_ERROR" check="0">
+					<item title="迅雷看看是中国第一高清影视视频门户,免费提供电影、电视剧、综艺、音乐MV、动漫、新片、大片的高清在线点播和下载,是中国最大最全的正版影视发行平台"/>
+				</node>
+			</node>
+			<node id="2-8" image="skin:IDB_ICON_ERROR" check="0">
 				<item title="Testdjfsdf" />
 				<item title="安装" />
 			</node>
@@ -159,6 +191,9 @@
 				<item title="Testdjfsdf" />
 				<item title="安装" />
 			</node>
+		</node>
+		<node id="5" collapse="1" >
+			<item title="应用软件5" font-title="1" />
 		</node>
 	</treectrl>
 

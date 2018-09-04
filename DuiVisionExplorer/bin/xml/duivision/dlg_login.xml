@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<dlg name="dlg_login" title="" width="420" height="270" appwin="0" resize="0"
+	frame="" bkimg="" crbk="000000"
+	img-shadow="skin:IDB_WINDOW_SHADOW" shadow-wlt="5" shadow-hlt="3" shadow-wrb="5" shadow-hrb="7" >
+	
+	<base>
+		<imgbtn name="button.close" pos="-45,0,-0,29" skin="IDB_BT_CLOSE" show="1" shortcut="ESC" />
+		<imgbtn name="button.setup" pos="-74,0,-46,20" skin="IDB_BT_SETUP" show="1"/>
+		<text name="title" crtext="FFFFFF" crmark="800000" font="big"
+				pos="10,5,200,25" title="[APP_NAME]登录" mask="" response="0" show="1" />
+	</base>
+
+	<body>
+		<area name="area-1" pos="0,0,-0,140" begin-transparent="100" end-transparent="40" />
+		<area name="area-2" pos="0,140,-0,-0" begin-transparent="40" end-transparent="40" />
+		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
+		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
+
+		<img name="image" pos="24,109" width="80" height="80" image="skins\icon\Synchstep.png" mode="extrude" framesize="1" show="1" />
+		
+		<edit name="username" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER"
+					pos="120,110" width="220" height="32" title="" tip="请输入用户名"
+					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					font="default" crtext="0,0,0" crtip="128,128,128,128" />
+		
+		<linkbtn name="linkbtn" crtext="800000"
+				pos="350,116,-10,145" show="1" title="注册帐号" href="http://www.blueantstudio.net" />
+		
+		<edit name="pwd" skin="IDB_EDIT" left-image="skin:IDB_EDIT_PWD"
+					pos="120,149" width="220" height="32" title="" password="1" tip="请输入密码"
+					multiline="0" autohscroll="1" autovscroll="0" number="0" readonly="0" maxchar="50"
+					font="default" crtext="0,0,0" crtip="128,128,128,128" />
+		
+		<linkbtn name="linkbtn" crtext="800000"
+				pos="350,155,-10,180" show="1" title="找回密码" href="http://www.blueantstudio.net" />
+		
+		<chkbtn name="checkbutton" skin="IDB_CHECK_BOX"
+				pos="120,190" width="100" height="22" show="1" title="记住密码" check="true" />
+		
+		<chkbtn name="checkbutton" skin="IDB_CHECK_BOX"
+				pos="230,190" width="100" height="22" show="1" title="自动登录" check="false" />
+		
+		<button name="button_1" skin="IDB_BT_DEFAULT" title="设置"
+				pos="20,-30,100,-6" show="1" shortcut="" />
+		
+		<button name="button.ok" skin="IDB_BT_DEFAULT" title="[LOGIN]"
+				pos="-100,-30,-20,-6" show="1" shortcut="RETURN" />
+
+	</body>
+  
+</dlg>

@@ -20,25 +20,31 @@ DuiVision开源下载地址：https://github.com/blueantst/DuiVision
 
 作者Blog：[http://blog.csdn.net/oceanheart](http://blog.csdn.net/oceanheart)
 
-QQ群：325880743 (Script.NET&DuiVision社区)
+QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=7e3a1bd187395dbc62ae950b236386bf2de8a58fe83bd71f30de142619cb7aa9"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="Script.NET&amp;DuiVision社区" title="Script.NET&amp;DuiVision社区"></a>
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
 
-下载DuiVision Demo程序：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20141213.zip)
+下载DuiVision Demo程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20161218.zip)
 
-下载DuiVision VC向导安装包：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionWizardSetup-20141213.exe)
+下载DuiVision 浏览器演示程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVisionExplorer-20161218.zip)
 
-下载DuiVision VC向导压缩包：[20141213版本](http://www.blueantstudio.net/duivision/DuiVisionWizard-20141213.zip)
+下载DuiVision IM演示程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVisionIM-20161218.zip)
 
-推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。
+下载DuiVision 仿360演示程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVision360Demo-20161218.zip)
 
-下载DuiVision开发手册：[DuiVision开发手册.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20141213.pdf)
+下载DuiVision exe内嵌界面资源演示程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVisionZipEmbedDemo-20161218.zip)
+
+DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装包进行向导安装，目前推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。注意DuiVision的目录最好不要放在有空格或中文的路径下面，否则向导可能会出现一些异常问题。
+
+下载DuiVision开发手册：[DuiVision开发手册-20161216.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20161216.pdf)
+
+下载DuiVision控件开发指南：[DuiVision控件开发指南-20160317.pdf](http://www.blueantstudio.net/duivision/DuiVision%E6%8E%A7%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-20160317.pdf)
 
 ## License
 
 (The MIT License)
 
-Copyright (c) 2013-2014 blueant studio. and other contributors
+Copyright (c) 2013-2017 blueant studio. and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -59,18 +65,27 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-## 一些界面截图
+## 一些界面演示程序截图
 ![主界面](http://www.blueantstudio.net/duivision/suolue/duivision_home.jpg)
 ![控件演示1](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl1.jpg)
 ![控件演示2](http://www.blueantstudio.net/duivision/suolue/duivision_ctrl2.jpg)
 ![控件演示3](http://www.blueantstudio.net/duivision/suolue/duivision_gridctrl.jpg)
 ![控件演示4](http://www.blueantstudio.net/duivision/suolue/duivision_treectrl.jpg)
+![支持复杂控件的弹出窗](http://www.blueantstudio.net/duivision/suolue/duivision_popuplist.jpg)
 ![仿360界面](http://www.blueantstudio.net/duivision/suolue/duivision_360.jpg)
 ![仿QQ PC管家界面](http://www.blueantstudio.net/duivision/suolue/duivision_pcmgr.jpg)
+![仿360 10.0界面](http://www.blueantstudio.net/duivision/suolue/dui360.10.jpg)
 ![Flash对话框](http://www.blueantstudio.net/duivision/suolue/duivision_flashdlg.jpg)
 ![半透明对话框](http://www.blueantstudio.net/duivision/suolue/duivision_translucentdlg.jpg)
 ![Web控件](http://www.blueantstudio.net/duivision/suolue/duivision_webbrowser.jpg)
 ![菜单](http://www.blueantstudio.net/duivision/suolue/duivision_menu.jpg)
+
+## 浏览器演示程序截图
+![浏览器主界面](http://www.blueantstudio.net/duivision/suolue/duivisionexplorer.jpg)
+![浏览器设置窗口](http://www.blueantstudio.net/duivision/suolue/explorer_option.jpg)
+
+## IM演示程序截图
+![IM主界面](http://www.blueantstudio.net/duivision/suolue/duivision-im.jpg)
 
 ## VC工程向导截图
 ![选择工程模板](http://www.blueantstudio.net/duivision/suolue/wizard.jpg)
@@ -90,5 +105,15 @@ DuiVision的基础代码有很多是从下面几个界面库移植的：
 - blueant  : 移植代码，搭建DuiVision框架
 - 齐       : XML库移植到pugixml、XML封装库等
 - 蜡笔小新 : 完善VC向导...
+- water    : 提供阴影窗口等代码，协助解决一些bug，提出若干改进建议
+- 风儿吹吹 : 增加了多字符集的支持，支持多字符集和Unicode两种编译方式
+- 黑色泡泡糖: 增加控件的鼠标右键事件处理代码
+- LieberVogel: 修改popuplist的滚动条问题
+- wPgg1es  : edit控件增加背景色和显示滚动条显示功能
+- starrier : 优化文件拖拽等代码
+- Samuel : 修改树控件的一些问题
+- Crystal cat: 提供了自适应DPI虚拟化代码
+- 开始     : 修改gridctrl删除子控件的问题
+- 畅爽,蛋蛋爸 : 修改64位编译问题
 
 还有很多提出改进建议和改进方法的人，没有一一列出来，欢迎大家参与这个开源项目，共同完善。
