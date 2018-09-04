@@ -1226,6 +1226,70 @@ BOOL CDuiGridCtrl::SortTextItems(int nCol, BOOL bAscending)
 // 单元格文字排序的递归实现
 BOOL CDuiGridCtrl::SortTextItems(int nCol, BOOL bAscending, int low, int high)
 {
+#if __cplusplus < 201103L
+    if (nCol >= GetColumnCount())
+         return FALSE;
+
+     if (high == -1)
+         high = GetRowCount() - 1;
+
+     int lo = low;
+     int hi = high;
+
+     if (hi <= lo)
+         return FALSE;
+     
+     CString midItem = GetItemText((lo + hi)/2, nCol);
+     
+     // loop through the list until indices cross
+     while (lo <= hi)
+     {
+         // Find the first element that is greater than or equal to the partition 
+         // element starting from the left Index.
+         if (bAscending)
+             while (lo < high  && GetItemText(lo, nCol) < midItem)
+                 ++lo;
+             else
+                 while (lo < high && GetItemText(lo, nCol) > midItem)
+                     ++lo;
+                 
+                 // Find an element that is smaller than or equal to  the partition 
+                 // element starting from the right Index.
+                 if (bAscending)
+                     while (hi > low && GetItemText(hi, nCol) > midItem)
+                         --hi;
+                     else
+                         while (hi > low && GetItemText(hi, nCol) < midItem)
+                             --hi;
+                         
+                         // If the indexes have not crossed, swap if the items are not equal
+                         if (lo <= hi)
+                         {
+                             // swap only if the items are not equal
+                             if (GetItemText(lo, nCol) != GetItemText(hi, nCol))
+                             {
+ 								// 交换行
+ 								swap(m_vecRowInfo[lo], m_vecRowInfo[hi]);
+                             }
+                             
+                             ++lo;
+                             --hi;
+                         }
+     }
+     
+     // If the right index has not reached the left side of array
+     // must now sort the left partition.
+     if (low < hi)
+         SortTextItems(nCol, bAscending, low, hi);
+     
+     // If the left index has not reached the right side of array
+     // must now sort the right partition.
+     if (lo < high)
+         SortTextItems(nCol, bAscending, lo, high);
+     
+     return TRUE;
+#else
+	// 以下代码使用了C++11新的lamda特性,只在VC2012以上版本使用
 	if (nCol >= GetColumnCount())
 		return FALSE;
 	std::sort(m_vecRowInfo.begin(), m_vecRowInfo.end(), 
@@ -1244,6 +1308,7 @@ BOOL CDuiGridCtrl::SortTextItems(int nCol, BOOL bAscending, int low, int high)
 		}
 	});
 	return TRUE;
+#endif
 }
 
 // 针对指定的列按照自定义排序函数进行排序
@@ -1268,6 +1333,70 @@ BOOL CDuiGridCtrl::SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAs
 // 单元格自定义排序函数排序的递归实现
 BOOL CDuiGridCtrl::SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAscending, int low, int high)
 {
+#if __cplusplus < 201103L
+    if (nCol >= GetColumnCount())
+         return FALSE;
+
+     if (high == -1)
+         high = GetRowCount() - 1;
+
+     int lo = low;
+     int hi = high;
+
+     if (hi <= lo)
+         return FALSE;
+     
+     GridItemInfo* midItem = GetItemInfo((lo + hi)/2, nCol);
+     
+     // loop through the list until indices cross
+     while (lo <= hi)
+     {
+         // Find the first element that is greater than or equal to the partition 
+         // element starting from the left Index.
+         if (bAscending)
+             while (lo < high  && pfnCompare(GetItemInfo(lo, nCol), midItem) < 0)
+                 ++lo;
+             else
+                 while (lo < high && pfnCompare(GetItemInfo(lo, nCol), midItem) > 0)
+                     ++lo;
+                 
+                 // Find an element that is smaller than or equal to  the partition 
+                 // element starting from the right Index.
+                 if (bAscending)
+                     while (hi > low && pfnCompare(GetItemInfo(hi, nCol), midItem) > 0)
+                         --hi;
+                     else
+                         while (hi > low && pfnCompare(GetItemInfo(hi, nCol), midItem) < 0)
+                             --hi;
+                         
+                         // If the indexes have not crossed, swap if the items are not equal
+                         if (lo <= hi)
+                         {
+                             // swap only if the items are not equal
+                             if (pfnCompare(GetItemInfo(lo, nCol), GetItemInfo(hi, nCol)) != 0)
+                             {
+ 								// 交换行
+ 								swap(m_vecRowInfo[lo], m_vecRowInfo[hi]);
+                             }
+                             
+                             ++lo;
+                             --hi;
+                         }
+     }
+     
+     // If the right index has not reached the left side of array
+     // must now sort the left partition.
+     if (low < hi)
+         SortItems(pfnCompare, nCol, bAscending, low, hi);
+     
+     // If the left index has not reached the right side of array
+     // must now sort the right partition.
+     if (lo < high)
+         SortItems(pfnCompare, nCol, bAscending, lo, high);
+     
+     return TRUE;
+#else
+	// 以下代码使用了C++11新的lamda特性,只在VC2012以上版本使用
 	if (nCol >= GetColumnCount())
 		return FALSE;
 	std::sort(m_vecRowInfo.begin(), m_vecRowInfo.end(), 
@@ -1286,6 +1415,7 @@ BOOL CDuiGridCtrl::SortItems(PFN_GRIDCTRL_COMPARE pfnCompare, int nCol, BOOL bAs
 		}
 	});
 	return TRUE;
+#endif
 }
 
 // 鼠标移动事件处理
