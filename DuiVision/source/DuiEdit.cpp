@@ -117,6 +117,7 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_nMaxChar = -1;
 
 	m_bIsSmallButton = FALSE;
+	m_bIsFocus = FALSE;//解决没有div容器的edit焦点问题 by lhc 20180903
 }
 
 CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc, CString strTitle/* = ""*/,
@@ -154,6 +155,7 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	m_nMaxChar = -1;
 
 	m_bIsSmallButton = FALSE;
+	m_bIsFocus = FALSE;//解决没有div容器的edit焦点问题 by lhc 20180903
 }
 
 CDuiEdit::~CDuiEdit(void)
@@ -487,6 +489,7 @@ void CDuiEdit::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
 // 设置控件的焦点
 BOOL CDuiEdit::SetControlFocus(BOOL bFocus)
 {
+	m_bIsFocus = TRUE; //解决没有div容器的edit焦点问题 by lhc 20180903
 	__super::SetControlFocus(bFocus);
 
 	enumButtonState buttonState = m_buttonState;
@@ -498,12 +501,14 @@ BOOL CDuiEdit::SetControlFocus(BOOL bFocus)
 		m_buttonState = enBSNormal;
 		m_EditState = enBSNormal;
 		HideEdit();
+		m_bIsFocus = FALSE;//解决没有div容器的edit焦点问题 by lhc 20180903
 	}else
 	{
 		m_bDown = true;
 		m_buttonState = enBSDown;
 		m_EditState = enBSDown;
 		ShowEdit();
+		
 	}
 
 	bool bIsDraw = buttonState != m_buttonState || editState != m_EditState;
@@ -563,6 +568,13 @@ BOOL CDuiEdit::OnControlMouseMove(UINT nFlags, CPoint point)
 
 BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 {
+	if (!m_bIsFocus)//解决没有div容器的edit焦点问题 by lhc 20180903
+	{
+		SetControlFocus(m_bIsFocus);
+		m_bIsFocus = FALSE;
+	}
+
+
 	enumButtonState buttonState = m_buttonState;	
 	enumButtonState editState = m_EditState;
 	if(!m_bIsDisable)
@@ -600,6 +612,7 @@ BOOL CDuiEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 					m_bDown = false;
 					m_buttonState = enBSHover;
 				}
+				//HideEdit();
 				ShowEdit();
 				
 				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_DOWN);
@@ -857,6 +870,9 @@ void CDuiEdit::ShowEdit()
 	m_pEdit->EnableWindow(!m_bIsDisable);
 	m_pEdit->SetReadOnly(m_bReadOnly);
 	m_pEdit->SetFocus();
+
+	::SendMessage(m_pEdit->GetSafeHwnd(), WM_SETFOCUS, 1, 1);
+	::SendMessage(::GetParent(m_pEdit->GetSafeHwnd()), WM_SETFOCUS, 1, 1);
 }
 
 // 隐藏编辑控件
@@ -871,6 +887,8 @@ void CDuiEdit::HideEdit()
 		{
 			// 获取编辑框的内容保存在控件的变量中
 			m_pEdit->GetWindowText(m_strTitle);
+			::SendMessage(m_pEdit->GetSafeHwnd(), WM_KILLFOCUS, -1, 0);
+			::SendMessage(::GetParent(m_pEdit->GetSafeHwnd()), WM_KILLFOCUS, -1, 0);
 		}
 
 		// 隐藏输入控件

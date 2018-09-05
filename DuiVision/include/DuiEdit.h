@@ -88,6 +88,7 @@ public:
 	Color			m_clrTooltip;		// 提示信息颜色
 	CFont			m_fontTemp;			// 输入框的字体
 	CEdit*			m_pEdit;			// Windows原生输入控件
+	BOOL			m_bIsFocus;			// 当前是否处于焦点状态,解决没有div容器的edit焦点问题 by lhc 20180903
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_BOOL_ATTRIBUTE(_T("password"), m_bPassWord, FALSE)
