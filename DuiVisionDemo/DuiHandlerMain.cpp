@@ -182,6 +182,13 @@ void CDuiHandlerMain::OnInit()
 	}
 }
 
+// Windows关机重启消息处理
+LRESULT CDuiHandlerMain::OnDuiMsgQueryEndSession(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	// 如果返回1,则表示不允许Windows关机
+	return FALSE;
+}
+
 // 皮肤消息处理(实现皮肤的保存和获取)
 LRESULT CDuiHandlerMain::OnDuiMsgSkin(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {

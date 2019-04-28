@@ -13,6 +13,9 @@ public:
 
 	virtual void OnInit();
 
+	// Windwos关机重启消息处理
+	LRESULT OnDuiMsgQueryEndSession(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
+
 	// 皮肤选择消息处理
 	LRESULT OnDuiMsgSkin(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam);
 
@@ -70,6 +73,7 @@ public:
 	// 消息处理定义
 	DUI_DECLARE_MESSAGE_BEGIN(CDuiHandlerMain)
 		DUI_CONTROL_ID_MESSAGE(APP_IPC, OnDuiMsgInterprocess)
+		DUI_CONTROL_MSG_MESSAGE(MSG_WM_QUERYENDSESSION, OnDuiMsgQueryEndSession)
 		DUI_CONTROL_NAME_MESSAGE(NAME_SKIN_WND, OnDuiMsgSkin)
 		DUI_CONTROL_NAMEMSG_MESSAGE(NAME_TRAY_ICON, MSG_TRAY_DBCLICK, OnDuiMsgTrayIconDClick)
 		DUI_CONTROL_NAMEMSG_MESSAGE(NAME_TRAY_ICON, MSG_TRAY_LBUTTONDOWN, OnDuiMsgTrayIconLButtonDown)
