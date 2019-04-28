@@ -44,7 +44,7 @@ DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装
 
 (The MIT License)
 
-Copyright (c) 2013-2018 blueant studio. and other contributors
+Copyright (c) 2013-2019 blueant studio. and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -113,8 +113,9 @@ DuiVision的基础代码有很多是从下面几个界面库移植的：
 - starrier : 优化文件拖拽等代码
 - Samuel : 修改树控件的一些问题
 - Crystal cat: 提供了自适应DPI虚拟化代码
-- 开始(HammerCheng): 修改gridctrl删除子控件的问题，以及其他的多个优化内容
+- 开始(HammerCheng) : 修改gridctrl删除子控件问题，以及其他若干内容，增加注册Windows消息接口
 - 畅爽,蛋蛋爸 : 修改64位编译问题
 - 随缘(lhc) : 修改DuiEdit控件的焦点问题
+- 山不转水转(shelovemee) : 修改阴影窗口等问题
 
 还有很多提出改进建议和改进方法的人，没有一一列出来，欢迎大家参与这个开源项目，共同完善。
