@@ -58,6 +58,7 @@
 // 系统消息定义
 #define					MSG_TRAY_DBCLICK					1						// 托盘双击消息
 #define					MSG_TRAY_LBUTTONDOWN				2						// 托盘左键单击消息
+#define					MSG_WM_QUERYENDSESSION				3						// 系统的结束对话消息
 
 // 控件消息定义
 #define					MSG_BUTTON_DOWN						1						// 鼠标或键盘在控件按下

@@ -275,6 +275,7 @@ protected:
 	afx_msg void OnWindowPosChanged(WINDOWPOS* lpwndpos);
 
 	afx_msg LRESULT OnUserCloseWindow(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnQueryEndSession(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnMessageSkin(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnMessageUITask(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnSystemTrayIcon(WPARAM wParam, LPARAM lParam);

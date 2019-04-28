@@ -195,6 +195,7 @@ BEGIN_MESSAGE_MAP(CDlgBase, CDialog)
 	ON_WM_DROPFILES()
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_USER_CLOSEWND, OnUserCloseWindow)
+	ON_MESSAGE(WM_QUERYENDSESSION, OnQueryEndSession)
 	ON_MESSAGE(WM_SKIN, OnMessageSkin)
 	ON_MESSAGE(WM_UI_TASK, OnMessageUITask)
 	ON_MESSAGE(WM_SYSTEM_TRAYICON, OnSystemTrayIcon)
@@ -1752,6 +1753,31 @@ BOOL CDlgBase::OnMaximize()
  		ShowWindow(SW_SHOWMAXIMIZED);
 		return TRUE;
  	}
+}
+
+// 自定义的Windows系统关闭时的数据保护消息处理(WM_QUERYENDSESSION)
+LRESULT CDlgBase::OnQueryEndSession(WPARAM wParam, LPARAM lParam)
+{
+	// Windows在关机的时候会向所有顶层窗口广播一个消息WM_QUERYENDSESSION，
+	// 其lParam参数可以区分是关机还是注销用户(注销用户时lParam是ENDSESSION_LOGOFF)。
+	// 然后Windows会等到所有的应用程序都对这个消息返回TRUE才会关机，
+	// 因此，只要应用程序对这个消息的处理返回FALSE，Windows就不会关机了
+
+	// 判断是否主窗口
+	if(DuiSystem::Instance()->GetDuiDialog(0) != this)
+	{
+		return 1;
+	}
+
+	// 调用事件处理对象进行处理
+	LRESULT nRet = DuiSystem::Instance()->CallDuiHandler(0, _T(""), MSG_WM_QUERYENDSESSION, wParam, lParam);
+	if(nRet != 0)
+	{
+		// 如果DUI消息被处理过,并且没有返回0,则表示当前不能结束系统会话,需要给操作系统返回0
+		return 0;
+	}
+
+	return 1;
 }
 
 // 窗口的皮肤选择
