@@ -247,8 +247,8 @@ public:
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	// 增加注册消息的接口
-	std::map<UINT,std::wstring> m_mapMsg;
-	void RegisterMsg(UINT msg,std::wstring strMsgName){
+	std::map<UINT,CString> m_mapMsg;
+	void RegisterMsg(UINT msg,CString strMsgName){
 		m_mapMsg.insert(std::make_pair(msg,strMsgName));
 	}
 protected:

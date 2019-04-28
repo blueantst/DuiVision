@@ -2561,7 +2561,7 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 	if (m_mapMsg.find(pMsg->message) != m_mapMsg.end())
 	{
 		//SendMessage(pMsg->message,pMsg->wParam,pMsg->lParam);
-		DuiSystem::AddDuiActionTask(1,pMsg->message,pMsg->wParam,pMsg->lParam,m_mapMsg[pMsg->message].c_str(),_T(""),NULL);
+		DuiSystem::AddDuiActionTask(1,pMsg->message,pMsg->wParam,pMsg->lParam,m_mapMsg[pMsg->message],_T(""),NULL);
 	}
 	if (( pMsg->message == WM_KEYDOWN ) || ( pMsg->message == WM_SYSKEYDOWN ))	// 键盘按下消息
 	{
