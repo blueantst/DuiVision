@@ -9,7 +9,7 @@
 		<imgbtn name="button.min" pos="-76,0,-46,29" skin="IDB_BT_MIN" tip="最小化" />
 		<!--imgbtn name="button.setup" pos="-74,0,-46,20" skin="IDB_BT_SETUP" show="1"/-->
 		<text name="title" crtext="FFFFFF" crmark="800000" font="big"
-				pos="10,5,200,25" title="DuiVision脚本演示-表格控件演示" mask="" response="0" show="1" />
+				pos="10,5,300,25" title="DuiVision脚本演示-表格控件演示" mask="" response="0" show="1" />
 	</base>
 
 	<body>
@@ -26,8 +26,8 @@
 			img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H" img-sep="skin:IDB_LINE_RP"
 			img-check="skin:IDB_CHECK_BOX" img-header="skin:IDB_TOOLBAR_BG" img-colsep="skin:IDB_TAB_SEPERATOR"
 			img-count="12" image="skin:IDB_LIST_IMG"
-			left-pos="70" row-height="50" header-height="0" bk-transparent="10"
-			font="default" align="left" valign="middle"
+			left-pos="70" row-height="65" header-height="0" bk-transparent="10"
+			font="default" align="left" valign="middle" wrap="1"
 			crtext="255,64,64,64" crhover="128,0,0" crpush="0,112,235"
 			crtitle="32,32,32" crsep="200,160,160,160" crrowhover="50,128,128,128"
 			down-row="0" dropfile="1"

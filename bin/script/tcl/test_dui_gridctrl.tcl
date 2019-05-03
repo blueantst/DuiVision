@@ -95,7 +95,7 @@ body TDuiGridCtrlDialogHandler::OnInit {} {
 	
 	# 添加gridctrl行
 	set gridctrl [GetControl "gridctrl_test"]
-	set rowItems [list [list "测试" "在OnInit函数中添加的项"] \
+	set rowItems [list [list "测试" "在OnInit函数中添加的项\r\nScript.NET是蓝蚂蚁工作室开发的脚本语言集成开发环境，支持Tcl、Python、Perl、Ruby、Lua、NSIS等脚本语言开发调试"] \
 					[list "当前：1.0.0" "最新：2.0.0"] \
 					[list "10M"] \
 					[list "一键安装"]]
