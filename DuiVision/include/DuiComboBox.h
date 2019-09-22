@@ -59,7 +59,7 @@ public:
 		DUI_TSTRING_ATTRIBUTE(_T("img-scroll"), m_strImageScroll, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("value"), m_strComboValue, FALSE)
 		DUI_TSTRING_ATTRIBUTE(_T("xml"), m_strXmlFile, FALSE)
-		DUI_INT_ATTRIBUTE(_T("list-height"), m_nListHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("list-height"), m_nListHeight, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crdesc"), m_clrDesc, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrHover, FALSE)
