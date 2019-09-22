@@ -2269,6 +2269,8 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject)
 	m_strTitle = _T("");
 	m_strFont = DuiSystem::GetDefaultFont();
 	m_nFontWidth = 12;
+	// 按照当前DPI计算字体的显示大小
+	CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
 	m_fontStyle = FontStyleRegular;
 	m_uAlignment = Align_Left;
 	m_uVAlignment = VAlign_Top;
@@ -2284,6 +2286,8 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject, UINT uCont
 	m_strTitle = strTitle;
 	m_strFont = DuiSystem::GetDefaultFont(strFont);
 	m_nFontWidth = nFontWidth;
+	// 按照当前DPI计算字体的显示大小
+	CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
 	m_fontStyle = fontStyle;
 	m_uAlignment = Align_Left;
 	m_uVAlignment = VAlign_Top;
@@ -2386,6 +2390,8 @@ void CControlBaseFont::SetFont(CString strFont, int nFontWidth, FontStyle fontSt
 	{
 		m_strFont = DuiSystem::GetDefaultFont(strFont);
 		m_nFontWidth = nFontWidth;
+		// 按照当前DPI计算字体的显示大小
+		CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
 		m_fontStyle = fontStyle;
 		UpdateControl(true);
 	}
@@ -2511,7 +2517,7 @@ HRESULT CControlBaseFont::OnAttributeFont(const CString& strValue, BOOL bLoading
 	BOOL bFindFont = DuiSystem::Instance()->GetFont(strValue, fontInfo);
 	if (!bFindFont) return E_FAIL;
 	m_strFont = fontInfo.strFont;
-	m_nFontWidth = fontInfo.nFontWidth;	
+	m_nFontWidth = fontInfo.nFontWidth;
 	m_fontStyle = fontInfo.fontStyle;
 
 	return bLoading?S_FALSE:S_OK;
