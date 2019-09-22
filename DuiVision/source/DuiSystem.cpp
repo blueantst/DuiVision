@@ -2199,6 +2199,7 @@ void DuiSystem::SetNotifyMsgBoxSize(int nWidth, int nHeight)
 	CDlgBase* pNotifyMsgBox = DuiSystem::Instance()->GetNotifyMsgBox();
 	if (pNotifyMsgBox != NULL)
 	{
+		CDuiWinDwmWrapper::AdapterDpi(nWidth, nHeight);
 		pNotifyMsgBox->SetMinSize(nWidth, nHeight);
 		pNotifyMsgBox->SetRect(CRect(0, 0, nWidth, nHeight));
 		::SetWindowPos(pNotifyMsgBox->m_hWnd, NULL, 0, 0, nWidth, nHeight, SWP_SHOWWINDOW);
