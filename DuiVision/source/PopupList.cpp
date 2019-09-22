@@ -16,6 +16,8 @@ CPopupList::CPopupList(void)
 	m_nHeight = 0;
 	m_strFont = DuiSystem::GetDefaultFont();
 	m_nFontWidth = 12;
+	// 按照当前DPI计算字体的显示大小
+	CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
 	m_fontStyle = FontStyleRegular;
 	m_clrHover = Color(225, 0, 147, 209);
 	m_bSingleLine = TRUE;
