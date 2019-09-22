@@ -85,7 +85,17 @@ public:                                                             \
 #define DUI_INT_ATTRIBUTE(attribname, varname, allredraw)         \
         if (attribname == strAttribName)                            \
         {                                                           \
-			    varname = ::StrToInt(strValue);                    \
+			varname = ::StrToInt(strValue);							\
+            hRet = allredraw ? S_OK : S_FALSE;                      \
+        }                                                           \
+        else                                                        \
+
+// Int = %d StringA
+#define DUI_INT_ATTRIBUTE_DPI(attribname, varname, allredraw)         \
+        if (attribname == strAttribName)                            \
+        {                                                           \
+			varname = ::StrToInt(strValue);							\
+			CDuiWinDwmWrapper::AdapterDpi(varname);					\
             hRet = allredraw ? S_OK : S_FALSE;                      \
         }                                                           \
         else                                                        \
