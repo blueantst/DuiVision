@@ -16,7 +16,7 @@
 		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
 		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
 		
-		<img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="normal" framesize="0" response="0" show="1" />
+		<img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="extrude" framesize="0" response="0" show="1" />
 		
 		<text crtext="000000" pos="170,45,-25,65" title="[APP_NAME] [APP_VER]" />
 		<text crtext="000000" pos="170,65,-25,85" title="Copyright 2013-2019" />
