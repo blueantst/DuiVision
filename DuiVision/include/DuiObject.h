@@ -234,13 +234,25 @@ public:                                                             \
 #define DUI_IMAGE_ATTRIBUTE_DEFINE(imgName)	\
 	Image*	m_pImage##imgName;	\
 	CSize	m_size##imgName;	\
-	BOOL Set##imgName##Bitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"));	\
-	BOOL Set##imgName##Bitmap(CString strImage = TEXT(""));	\
+	CSize	m_size##imgName##Dpi;	\
+	BOOL Set##imgName##Bitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"), BOOL bAdapterDpi = FALSE);	\
+	BOOL Set##imgName##Bitmap(CString strImage = TEXT(""), BOOL bAdapterDpi = FALSE);	\
+	HRESULT OnAttributeImage##imgName(const CString& strValue, BOOL bLoading);	\
+
+//////////////////////////////////////////////////////////////////////////
+// 图片属性的定义和实现代码宏,用于简化图片属性的相似代码实现,默认进行DPI适配
+// 头文件中的定义,定义图片对象和图片大小对象,并定义设置图片和图片属性映射函数
+#define DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(imgName)	\
+	Image*	m_pImage##imgName;	\
+	CSize	m_size##imgName;	\
+	CSize	m_size##imgName##Dpi;	\
+	BOOL Set##imgName##Bitmap(UINT nResourceID = 0, CString strType= TEXT("PNG"), BOOL bAdapterDpi = TRUE);	\
+	BOOL Set##imgName##Bitmap(CString strImage = TEXT(""), BOOL bAdapterDpi = TRUE);	\
 	HRESULT OnAttributeImage##imgName(const CString& strValue, BOOL bLoading);	\
 
 // CPP代码中的设置图片和图片属性映射函数实现,图片对象和图片大小对象的初始化和析构需要自己写代码
 #define DUI_IMAGE_ATTRIBUTE_IMPLEMENT(theclass, imgName, imgCount)	\
-	BOOL theclass::Set##imgName##Bitmap(UINT nResourceID, CString strType)	\
+	BOOL theclass::Set##imgName##Bitmap(UINT nResourceID, CString strType, BOOL bAdapterDpi)	\
 	{	\
 		if(m_pImage##imgName != NULL)	\
 		{	\
@@ -251,11 +263,16 @@ public:                                                             \
 		if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, m_pImage##imgName))	\
 		{	\
 			m_size##imgName.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
+			m_size##imgName##Dpi.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
+			if(bAdapterDpi)	\
+			{	\
+				CDuiWinDwmWrapper::AdapterDpi(m_size##imgName##Dpi.cx, m_size##imgName##Dpi.cy);	\
+			}	\
 			return true;	\
 		}	\
 		return false;	\
 	}	\
-	BOOL theclass::Set##imgName##Bitmap(CString strImage)	\
+	BOOL theclass::Set##imgName##Bitmap(CString strImage, BOOL bAdapterDpi)	\
 	{	\
 		if(m_pImage##imgName != NULL)	\
 		{	\
@@ -266,6 +283,11 @@ public:                                                             \
 		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pImage##imgName))	\
 		{	\
 			m_size##imgName.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
+			m_size##imgName##Dpi.SetSize(m_pImage##imgName->GetWidth() / imgCount, m_pImage##imgName->GetHeight());	\
+			if(bAdapterDpi)	\
+			{	\
+				CDuiWinDwmWrapper::AdapterDpi(m_size##imgName##Dpi.cx, m_size##imgName##Dpi.cy);	\
+			}	\
 			return true;	\
 		}	\
 		return false;	\
