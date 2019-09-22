@@ -107,6 +107,12 @@ BOOL CDlgPopup::Create(CWnd *pParent, CRect rc, UINT uMessageID, UINT nResourceI
 	m_point.SetPoint(rc.left, rc.top);
 	m_size.SetSize(rc.Width(), rc.Height());
 
+	CDuiWinDwmWrapper::AdapterDpi(m_size.cx,m_size.cy);
+
+	// 按照m_size大小设置窗口的大小
+	rc.right = rc.left + m_size.cx;
+	rc.bottom = rc.top + m_size.cy;
+
 	m_enBackMode = enBackMode;
 	m_nFrameSize = nFrameSize;
 
@@ -132,6 +138,12 @@ BOOL CDlgPopup::Create(CWnd *pParent, CRect rc, UINT uMessageID, CString strImag
 	m_uMessageID = uMessageID;
 	m_point.SetPoint(rc.left, rc.top);
 	m_size.SetSize(rc.Width(), rc.Height());
+
+	CDuiWinDwmWrapper::AdapterDpi(m_size.cx,m_size.cy);
+
+	// 按照m_size大小设置窗口的大小
+	rc.right = rc.left + m_size.cx;
+	rc.bottom = rc.top + m_size.cy;
 
 	m_enBackMode = enBackMode;
 	m_nFrameSize = nFrameSize;
