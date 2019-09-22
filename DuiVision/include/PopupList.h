@@ -80,7 +80,7 @@ public:
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Close);			// 定义列表项删除图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("width"), m_nWidth, FALSE)
-		DUI_INT_ATTRIBUTE(_T("height"), m_nHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("height"), m_nHeight, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScrollV)
 		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
     DUI_DECLARE_ATTRIBUTES_END()
