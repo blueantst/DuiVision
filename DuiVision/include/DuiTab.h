@@ -23,6 +23,7 @@ struct TabItemInfo
 	BOOL			bVisible;	// tab页签是否可见
 	Image*			pImage;		// tab页签图片
 	CSize			sizeImage;	// tab页签图片大小
+	CSize			sizeImageDpi;// tab页签图片DPI适配后的大小
 	int				nImageCount;// tab页签图片个数(可以是1或3,如果是1,则hover图片使用tabctrl设置的)
 	int				nImageIndex;// tab页签图片索引,如果pImage为空,则使用此索引到tabctrl中查找图片
 	CRect			rc;			// tab页签部分的位置
@@ -147,8 +148,8 @@ public:
 	BOOL					m_bTabTooltip;			// 是否显示Tab页签的Tooltip
 	int						m_nTipItem;				// 当前tip页面索引
 
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);			// 定义分隔图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Hover);				// 定义热点图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Seperator);		// 定义分隔图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Hover);			// 定义热点图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(TabBtn);				// 定义tab页签按钮图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_ENUM_ATTRIBUTE(_T("tab-type"), TAB_TYPE, TRUE)
@@ -159,16 +160,16 @@ public:
 		DUI_CUSTOM_ATTRIBUTE(_T("img-hover"), OnAttributeImageHover)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-tabbtn"), OnAttributeImageTabBtn)
 		DUI_CUSTOM_ATTRIBUTE(_T("tabbtnpos"), OnAttributeTabBtnPosChange)
-		DUI_INT_ATTRIBUTE(_T("item-width"), m_nTabItemMaxWidth, FALSE)
-		DUI_INT_ATTRIBUTE(_T("item-width-min"), m_nTabItemMinWidth, FALSE)
-		DUI_INT_ATTRIBUTE(_T("item-height"), m_nTabItemMaxHeight, FALSE)
-		DUI_INT_ATTRIBUTE(_T("item-height-min"), m_nTabItemMinHeight, FALSE)
-		DUI_INT_ATTRIBUTE(_T("tab-height"), m_nTabCtrlHeight, FALSE)
-		DUI_INT_ATTRIBUTE(_T("tab-width"), m_nTabCtrlWidth, FALSE)
-		DUI_INT_ATTRIBUTE(_T("tab-left-pading"), m_nTabLeftPading, FALSE)
-		DUI_INT_ATTRIBUTE(_T("tab-right-pading"), m_nTabRightPading, FALSE)
-		DUI_INT_ATTRIBUTE(_T("tab-top-pading"), m_nTabTopPading, FALSE)
-		DUI_INT_ATTRIBUTE(_T("tab-bottom-pading"), m_nTabBottomPading, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("item-width"), m_nTabItemMaxWidth, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("item-width-min"), m_nTabItemMinWidth, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("item-height"), m_nTabItemMaxHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("item-height-min"), m_nTabItemMinHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("tab-height"), m_nTabCtrlHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("tab-width"), m_nTabCtrlWidth, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("tab-left-pading"), m_nTabLeftPading, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("tab-right-pading"), m_nTabRightPading, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("tab-top-pading"), m_nTabTopPading, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("tab-bottom-pading"), m_nTabBottomPading, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bAnimateChangeTab, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate-count"), m_nAnimateCount, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
