@@ -57,6 +57,7 @@ public:
 	static void SetDpiAdapter(int nDpix = 0, int nDpiy = 0);
 	static void GetDpiAdapter(int& nDpix, int& nDpiy);
 	static void AdapterDpi(int& x);
+	static void AdapterDpi(int& x, int& y);
 	static void AdapterDpi(LONG& x,LONG& y);
 
 private:
