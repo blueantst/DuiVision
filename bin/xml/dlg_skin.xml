@@ -2,7 +2,7 @@
 <!-- skin dailog -->
 <popup bkmode="image" framesize="4" bkimg="skin:IDB_SKIN_BKG" >
 	<imgbtn name="skin.button.customize" pos="193,10" width="24" height="24" skin="IDB_BT_SKIN_CUSTOMIZE" />
-	<img name="skin.pic.select" pos="4,8" width="40" height="30" skin="IDB_SKIN_PUSHED_BKG" />
+	<img name="skin.pic.select" pos="4,8" width="40" height="30" mode="extrude" skin="IDB_SKIN_PUSHED_BKG" />
 	<imgbtn name="skin.button.image" pos="3,7" width="40" height="30" skin="IDB_BT_SKIN_IMAGE" />
 	<imgbtn name="skin.button.color" pos="43,7" width="40" height="30" skin="IDB_BT_SKIN_COLOR" />
 	

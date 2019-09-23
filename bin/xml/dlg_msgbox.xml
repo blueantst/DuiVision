@@ -14,7 +14,7 @@
 		<area name="area-3" pos="0,-37,-0,-36" begin-transparent="70" end-transparent="70" />
 		<area name="area-4" pos="0,-36,-0,-0" begin-transparent="88" end-transparent="88" />
 		
-		<img name="msgbox.icon" pos="25,45" width="38" height="38" skin="IDB_ICON_INFO" mode="normal" framesize="0" show="1" />
+		<img name="msgbox.icon" pos="25,45" width="38" height="38" skin="IDB_ICON_INFO" mode="extrude" framesize="0" show="1" />
 		<text name="msgbox.text" crtext="000000" pos="75,45,-25,-40" title="" image="" show="1" />
 		<chkbtn name="msgbox.check" skin="IDB_CHECK_BOX" pos="75,-60,-25,-40" title="" check="true" show="0" />
 		
