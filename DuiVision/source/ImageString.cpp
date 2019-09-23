@@ -42,6 +42,9 @@ HRESULT CDuiImageString::OnAttributeMask(const CString& strValue, BOOL bLoading)
 	SetBitmapCount(m_strMask.GetLength());
 
 	m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
+	m_sizeImageDpi.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+	CDuiWinDwmWrapper::AdapterDpi(m_sizeImageDpi.cx, m_sizeImageDpi.cy);
+
 	UpdateControl(true);
 
 	return bLoading?S_FALSE:S_OK;
@@ -72,20 +75,20 @@ void CDuiImageString::DrawControl(CDC &dc, CRect rcUpdate)
 		int nYPos = 0;
 		if(m_uAlignment == Align_Center)
 		{
-			nXPos = (nWidth - nLen * m_sizeImage.cx) / 2;
+			nXPos = (nWidth - nLen * m_sizeImageDpi.cx) / 2;
 		}
 		else if(m_uAlignment == Align_Right)
 		{
-			nXPos = nWidth - nLen * m_sizeImage.cx;
+			nXPos = nWidth - nLen * m_sizeImageDpi.cx;
 		}
 
 		if(m_uVAlignment == VAlign_Middle)
 		{
-			nYPos = (nHeight - m_sizeImage.cy) / 2;
+			nYPos = (nHeight - m_sizeImageDpi.cy) / 2;
 		}
 		else if(m_uVAlignment == VAlign_Bottom)
 		{
-			nYPos = nHeight - m_sizeImage.cy;
+			nYPos = nHeight - m_sizeImageDpi.cy;
 		}
 
 		for(int i = 0; i < nLen; i++)
@@ -93,11 +96,11 @@ void CDuiImageString::DrawControl(CDC &dc, CRect rcUpdate)
 			int nImageIndex = GetImageIndex(i);
 			if(nImageIndex != -1)
 			{
-				graphics.DrawImage(m_pImage, Rect(nXPos , nYPos,  m_sizeImage.cx, m_sizeImage.cy),
+				graphics.DrawImage(m_pImage, Rect(nXPos , nYPos,  m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 					nImageIndex * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 			}
 
-			nXPos += m_sizeImage.cx;
+			nXPos += m_sizeImageDpi.cx;
 		}
 	}
 

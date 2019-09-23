@@ -410,9 +410,9 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 		int nXPos = 0;
 		if(m_pImage != NULL)
 		{
-			graphics.DrawImage(m_pImage, Rect(0, (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
+			graphics.DrawImage(m_pImage, Rect(0, (nHeight - m_sizeImageDpi.cy) / 2, m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 				0, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
-			nXPos += m_sizeImage.cx + 5;
+			nXPos += m_sizeImageDpi.cx + 5;
 		}
 		
 		int nStart = m_strTitle.Find(m_strMark, m_nStart);
