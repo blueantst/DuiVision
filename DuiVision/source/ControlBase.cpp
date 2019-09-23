@@ -2409,6 +2409,8 @@ BOOL CControlBaseFont::SetBitmap(UINT nResourceID, CString strType)
 	if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, m_pImage))
 	{
 		m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
+		m_sizeImageDpi.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+		CDuiWinDwmWrapper::AdapterDpi(m_sizeImageDpi.cx, m_sizeImageDpi.cy);
 		UpdateControl(true);
 		return true;
 	}
@@ -2427,6 +2429,8 @@ BOOL CControlBaseFont::SetBitmap(CString strImage)
 	if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pImage))
 	{
 		m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
+		m_sizeImageDpi.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+		CDuiWinDwmWrapper::AdapterDpi(m_sizeImageDpi.cx, m_sizeImageDpi.cy);
 		UpdateControl(true);
 		return true;
 	}

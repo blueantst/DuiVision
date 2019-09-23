@@ -386,6 +386,7 @@ protected:
 
 	Image*					m_pImage;			// 图片
 	CSize					m_sizeImage;		// 图片大小
+	CSize					m_sizeImageDpi;		// 图片大小(DPI适配后的大小)
 	int						m_nImagePicCount;	// Image中默认包含的图片个数
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
