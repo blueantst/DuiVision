@@ -89,6 +89,7 @@ function main()
     astrRegKeyVer[11] = "Microsoft\\VCExpress\\11.0\\Setup\\VC\\ProductDir";
     astrRegKeyVer[12] = "Microsoft\\VCExpress\\12.0\\Setup\\VC\\ProductDir";
 	astrRegKeyVer[13] = "Microsoft\\VCExpress\\14.0\\Setup\\VC\\ProductDir";
+	astrRegKeyVer[14] = "Microsoft\\VCExpress\\16.0\\Setup\\VC\\ProductDir";
 
     var astrFolder = new Array();
     astrFolder[0] = "vcprojects";
@@ -105,6 +106,7 @@ function main()
     astrFolder[11] = "vcprojects_WDExpress";
     astrFolder[12] = "vcprojects_WDExpress";
 	astrFolder[13] = "vcprojects_WDExpress";
+	astrFolder[14] = "vcprojects_WDExpress";
 
     var astrVersions = new Array();
     astrVersions[0] = "Visual Studio 2002 (7.0)";
@@ -121,6 +123,7 @@ function main()
     astrVersions[11] = "Visual Studio 2012 Express (11.0)";
     astrVersions[12] = "Visual Studio 2013 Express (12.0)";
 	astrVersions[13] = "Visual Studio 2015 Express (14.0)";
+	astrVersions[14] = "Visual Studio 2019 Express (16.0)";
 
     var abExpress = new Array();
     abExpress[0] = false;
@@ -137,6 +140,7 @@ function main()
     abExpress[11] = true;
 	abExpress[12] = true;
 	abExpress[13] = true;
+	abExpress[14] = true;
 
     var astrWizVer = new Array();
     astrWizVer[0] = "7.0";
@@ -153,6 +157,7 @@ function main()
     astrWizVer[11] = "11.0";
     astrWizVer[12] = "12.0";
 	astrWizVer[13] = "14.0";
+	astrWizVer[14] = "16.0";
 
     var nSpecial = 4;
 
