@@ -296,11 +296,11 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 		// 画按钮图片
 		if(m_pImageBtn != NULL)
 		{
-			int nX = (nWidth - m_sizeBtn.cx) / 2;
-			int nY = (nHeight - m_sizeBtn.cy - (m_strTitle.IsEmpty() ? 0 : 20)) / 2;
+			int nX = (nWidth - m_sizeBtnDpi.cx) / 2;
+			int nY = (nHeight - m_sizeBtnDpi.cy - (m_strTitle.IsEmpty() ? 0 : 20)) / 2;
 			for(int i = 0; i < 4 + m_nMaxIndex; i++)
 			{
-				graphics.DrawImage(m_pImageBtn, Rect(nX + (enBSDown == i ? 1 : 0), nY + (enBSDown == i ? 1 : 0), m_sizeBtn.cx, m_sizeBtn.cy),
+				graphics.DrawImage(m_pImageBtn, Rect(nX + (enBSDown == i ? 1 : 0), nY + (enBSDown == i ? 1 : 0), m_sizeBtnDpi.cx, m_sizeBtnDpi.cy),
 					0, 0, m_sizeBtn.cx, m_sizeBtn.cy, UnitPixel);
 				nX += nWidth;
 			}
@@ -328,7 +328,7 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 			if(m_pImageBtn != NULL)
 			{
 				// 如果有按钮图片,则文字位置向下移
-				point.y += (m_sizeBtn.cy / 2);
+				point.y += (m_sizeBtnDpi.cy / 2);
 			}
 
 			for(int i = 0; i < 4 + m_nMaxIndex; i++)

@@ -33,7 +33,7 @@ public:
 	BOOL				m_bIsFocus;			// 当前是否处于焦点状态
 	BOOL				m_bShowFocus;		// 是否显示焦点框
 
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Btn);		// 定义按钮图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Btn);		// 定义按钮图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_INT_ATTRIBUTE(_T("animate"), m_bTimer, TRUE)
