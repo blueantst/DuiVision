@@ -13,7 +13,7 @@
 		<tab name="tab1" title="IE" image1="skin:IDB_TAB_ITEM" image="skins\icon\browser_ie.png" img-count="1" active="true" pos="105,0,-0,-0">
 			<webbrowser name="ie_ctrl" show="1"
 				delaycreate="true"
-				url="http://www.blueantstudio.net"
+				url="http://www.bing.com"
 				pos="1,1,-1,-1"
 				show-contextmenu="0"
 				show-scroll="1"
