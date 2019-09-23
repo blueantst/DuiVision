@@ -23,7 +23,8 @@ public:
 struct TFrame    // structure that keeps a single frame info
 {
 	Image*	m_pPicture;  // pointer to the interface used for drawing
-	SIZE	m_frameSize;
+	SIZE	m_frameSize;	// 原始的帧图片大小
+	SIZE	m_frameSizeDpi;	// DPI适配后的帧图片大小
 	SIZE	m_frameOffset;
 	UINT	m_nDelay;     // delay (in 1/100s of a second)
 	UINT	m_nDisposal;  // disposal method

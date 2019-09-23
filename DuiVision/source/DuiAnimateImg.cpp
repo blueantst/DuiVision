@@ -166,6 +166,8 @@ HRESULT CDuiAnimateImage::OnAttributeMaxIndex(const CString& strValue, BOOL bLoa
 	if(!m_bIsGIF)
 	{
 		m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
+		m_sizeImageDpi.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+		CDuiWinDwmWrapper::AdapterDpi(m_sizeImageDpi.cx, m_sizeImageDpi.cy);
 	}
 
 	UpdateControl(true);
@@ -325,6 +327,8 @@ BOOL CDuiAnimateImage::LoadGIFFile(CString strImage)
 		// store the picture's size
 		m_sizeImage.cx = m_pGIFLSDescriptor->m_wWidth;
 		m_sizeImage.cy = m_pGIFLSDescriptor->m_wHeight;
+		m_sizeImageDpi.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+		CDuiWinDwmWrapper::AdapterDpi(m_sizeImageDpi.cx, m_sizeImageDpi.cy);
 
 		// determine frame count for this picture
 		UINT nFrameCount=0;
@@ -406,6 +410,11 @@ BOOL CDuiAnimateImage::LoadGIFFile(CString strImage)
 				{
 					nGIFFrameDelay = frame.m_nDelay;
 				}
+
+				// 计算DPI时候后的帧图片大小
+				frame.m_frameSizeDpi.cx = frame.m_frameSize.cx;
+				frame.m_frameSizeDpi.cy = frame.m_frameSize.cy;
+				CDuiWinDwmWrapper::AdapterDpi(frame.m_frameSizeDpi.cx, frame.m_frameSizeDpi.cy);
 			
 				// everything went well, add this frame
 				m_arrGIFFrames.push_back(frame);
@@ -749,7 +758,7 @@ void CDuiAnimateImage::DrawControl(CDC &dc, CRect rcUpdate)
 
 		Graphics graphics(m_memDC);
 		
-		CPoint point = GetOriginPoint(nWidth, nHeight, m_sizeImage.cx, m_sizeImage.cy,
+		CPoint point = GetOriginPoint(nWidth, nHeight, m_sizeImageDpi.cx, m_sizeImageDpi.cy,
 						GetGDIAlignment(m_uAlignment), GetGDIVAlignment(m_uVAlignment));
 
 		for(int i = 0; i < m_nMaxIndex; i++)
@@ -769,17 +778,17 @@ void CDuiAnimateImage::DrawControl(CDC &dc, CRect rcUpdate)
 						graphics.DrawImage(pGIFFrame->m_pPicture,
 							Rect(point.x + pGIFFrame->m_frameOffset.cx,
 							point.y + pGIFFrame->m_frameOffset.cy,
-							pGIFFrame->m_frameSize.cx, pGIFFrame->m_frameSize.cy),
+							pGIFFrame->m_frameSizeDpi.cx, pGIFFrame->m_frameSizeDpi.cy),
 							pGIFFrame->m_frameOffset.cx, pGIFFrame->m_frameOffset.cy,
 							pGIFFrame->m_frameSize.cx, pGIFFrame->m_frameSize.cy, UnitPixel);
-						//graphics.DrawImage(pGIFFrame->m_pPicture, Rect(point.x , point.y,  m_sizeImage.cx, m_sizeImage.cy),
+						//graphics.DrawImage(pGIFFrame->m_pPicture, Rect(point.x , point.y,  m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 						//	0, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 					}
 				}
 			}else
 			{
 				// 非GIF,按照普通图片方式画图
-				graphics.DrawImage(m_pImage, Rect(point.x , point.y,  m_sizeImage.cx, m_sizeImage.cy),
+				graphics.DrawImage(m_pImage, Rect(point.x , point.y,  m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 					i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 			}
 
