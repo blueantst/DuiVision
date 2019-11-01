@@ -99,7 +99,9 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject)
 	SetBitmapCount(4);
 
 	m_sizeLeftImage.SetSize(0,0);
+	m_sizeLeftImageDpi.SetSize(0, 0);
 	m_sizeSmallImage.SetSize(0,0);
+	m_sizeSmallImageDpi.SetSize(0, 0);
 
 	m_bBack = false;
 	m_clrBack = Color(255, 255, 255);
@@ -135,8 +137,10 @@ CDuiEdit::CDuiEdit(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	m_bPassWord = bPassWord;
 	m_strTitle = strTitle;
 
-	m_sizeLeftImage.SetSize(0,0);
-	m_sizeSmallImage.SetSize(0,0);
+	m_sizeLeftImage.SetSize(0, 0);
+	m_sizeLeftImageDpi.SetSize(0, 0);
+	m_sizeSmallImage.SetSize(0, 0);
+	m_sizeSmallImageDpi.SetSize(0, 0);
 
 	m_bBack = false;
 	m_clrBack = Color(255, 255, 255);
@@ -181,7 +185,7 @@ CDuiEdit::~CDuiEdit(void)
 	}
 }
 
-bool CDuiEdit::SetLeftBitmap(UINT nResourceID, CString strType)
+bool CDuiEdit::SetLeftBitmap(UINT nResourceID, CString strType, BOOL bAdapterDpi)
 {
 	if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, m_pLeftImage))
 	{
@@ -196,12 +200,19 @@ bool CDuiEdit::SetLeftBitmap(UINT nResourceID, CString strType)
 			m_sizeLeftImage.SetSize(m_pLeftImage->GetHeight(), m_pLeftImage->GetHeight());
 			m_nLeftImageCount = m_pLeftImage->GetWidth() / m_pLeftImage->GetHeight();
 		}
+
+		m_sizeLeftImageDpi = m_sizeLeftImage;
+		if (bAdapterDpi)
+		{
+			CDuiWinDwmWrapper::AdapterDpi(m_sizeLeftImageDpi.cx, m_sizeLeftImageDpi.cy);
+		}
+
 		return true;
 	}
 	return false;
 }
 
-bool CDuiEdit::SetLeftBitmap(CString strImage)
+bool CDuiEdit::SetLeftBitmap(CString strImage, BOOL bAdapterDpi)
 {
 	if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pLeftImage))
 	{
@@ -216,6 +227,13 @@ bool CDuiEdit::SetLeftBitmap(CString strImage)
 			m_sizeLeftImage.SetSize(m_pLeftImage->GetHeight(), m_pLeftImage->GetHeight());
 			m_nLeftImageCount = m_pLeftImage->GetWidth() / m_pLeftImage->GetHeight();
 		}
+
+		m_sizeLeftImageDpi = m_sizeLeftImage;
+		if (bAdapterDpi)
+		{
+			CDuiWinDwmWrapper::AdapterDpi(m_sizeLeftImageDpi.cx, m_sizeLeftImageDpi.cy);
+		}
+
 		return true;
 	}
 	return false;
@@ -263,7 +281,7 @@ HRESULT CDuiEdit::OnAttributeLeftImage(const CString& strValue, BOOL bLoading)
 	return bLoading?S_FALSE:S_OK;
 }
 
-bool CDuiEdit::SetSmallBitmap(UINT nResourceID, CString strType)
+bool CDuiEdit::SetSmallBitmap(UINT nResourceID, CString strType, BOOL bAdapterDpi)
 {
 	if(LoadImageFromIDResource(nResourceID, strType, m_bImageUseECM, m_pSmallImage))
 	{
@@ -280,12 +298,19 @@ bool CDuiEdit::SetSmallBitmap(UINT nResourceID, CString strType)
 			m_nSmallImageCount = m_pSmallImage->GetWidth() / m_pSmallImage->GetHeight();
 			m_bIsSmallButton = FALSE;
 		}
+
+		m_sizeSmallImageDpi = m_sizeSmallImage;
+		if (bAdapterDpi)
+		{
+			CDuiWinDwmWrapper::AdapterDpi(m_sizeSmallImageDpi.cx, m_sizeSmallImageDpi.cy);
+		}
+
 		return true;
 	}
 	return false;
 }
 
-bool CDuiEdit::SetSmallBitmap(CString strImage)
+bool CDuiEdit::SetSmallBitmap(CString strImage, BOOL bAdapterDpi)
 {
 	if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, m_pSmallImage))
 	{
@@ -302,6 +327,13 @@ bool CDuiEdit::SetSmallBitmap(CString strImage)
 			m_nSmallImageCount = m_pSmallImage->GetWidth() / m_pSmallImage->GetHeight();
 			m_bIsSmallButton = FALSE;
 		}
+
+		m_sizeSmallImageDpi = m_sizeSmallImage;
+		if (bAdapterDpi)
+		{
+			CDuiWinDwmWrapper::AdapterDpi(m_sizeSmallImageDpi.cx, m_sizeSmallImageDpi.cy);
+		}
+
 		return true;
 	}
 	return false;
@@ -382,9 +414,9 @@ void  CDuiEdit::SetControlRect(CRect rc)
 	m_rc = rc;
 	m_rcText = m_rc;
 	m_rcText.top += 4;
-	m_rcText.left += (6 + m_sizeLeftImage.cx);
+	m_rcText.left += (DUI_DPI_X(6) + m_sizeLeftImageDpi.cx);
 	m_rcText.bottom -= 4;
-	m_rcText.right -= (3 + m_sizeSmallImage.cx);
+	m_rcText.right -= (DUI_DPI_X(3) + m_sizeSmallImageDpi.cx);
 	// 如果edit位置有变化,删除编辑控件,这样当编辑控件重新创建时候就可以调整大小
 	if(bRefresh)
 	{
@@ -941,9 +973,9 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 	{
 		CRect  rc;
 		rc.left = m_rc.left + 2;
-		rc.top = m_rc.top + (m_rc.Height() - m_sizeLeftImage.cy) / 2;
-		rc.right = rc.left + m_sizeLeftImage.cx;
-		rc.bottom = rc.top + m_sizeLeftImage.cy;
+		rc.top = m_rc.top + (m_rc.Height() - m_sizeLeftImageDpi.cy) / 2;
+		rc.right = rc.left + m_sizeLeftImageDpi.cx;
+		rc.bottom = rc.top + m_sizeLeftImageDpi.cy;
 		
 		if(m_nLeftImageCount > m_buttonState)
 		{
@@ -959,10 +991,10 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 	if(m_pSmallImage)
 	{
 		CRect  rc;
-		rc.left = m_rc.right - m_sizeSmallImage.cx - 2;
-		rc.top = m_rc.top + (m_rc.Height() - m_sizeSmallImage.cy) / 2;
-		rc.right = rc.left + m_sizeSmallImage.cx;
-		rc.bottom = rc.top + m_sizeSmallImage.cy;
+		rc.left = m_rc.right - m_sizeSmallImageDpi.cx - 2;
+		rc.top = m_rc.top + (m_rc.Height() - m_sizeSmallImageDpi.cy) / 2;
+		rc.right = rc.left + m_sizeSmallImageDpi.cx;
+		rc.bottom = rc.top + m_sizeSmallImageDpi.cy;
 		
 		if(m_nSmallImageCount > m_buttonState)
 		{

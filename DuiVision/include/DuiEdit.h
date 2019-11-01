@@ -14,13 +14,13 @@ public:
 	virtual ~CDuiEdit(void);
 
 	// 设置左侧小图片
-	bool SetLeftBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
-	bool SetLeftBitmap(CString strImage);
+	bool SetLeftBitmap(UINT nResourceID, CString strType = TEXT("PNG"), BOOL bAdapterDpi = TRUE);
+	bool SetLeftBitmap(CString strImage, BOOL bAdapterDpi = TRUE);
 	HRESULT OnAttributeLeftImage(const CString& strValue, BOOL bLoading);
 
 	// 设置右侧小图片
-	bool SetSmallBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
-	bool SetSmallBitmap(CString strImage);
+	bool SetSmallBitmap(UINT nResourceID, CString strType = TEXT("PNG"), BOOL bAdapterDpi = TRUE);
+	bool SetSmallBitmap(CString strImage, BOOL bAdapterDpi = TRUE);
 	HRESULT OnAttributeSmallImage(const CString& strValue, BOOL bLoading);
 
 	void SetBackColor(Color clrBack);
@@ -58,10 +58,12 @@ protected:
 public:
 	Image*			m_pLeftImage;		// 左侧小图片
 	CSize			m_sizeLeftImage;	// 左侧小图片大小
+	CSize			m_sizeLeftImageDpi;	// 左侧小图片大小(DPI适配的)
 	int				m_nLeftImageCount;	// 左侧小图片的个数
 
 	Image*			m_pSmallImage;		// 右侧小图片
 	CSize			m_sizeSmallImage;	// 右侧小图片大小
+	CSize			m_sizeSmallImageDpi;// 右侧小图片大小(DPI适配的)
 	BOOL			m_bIsSmallButton;	// 右侧小图片是否作为按钮来处理
 	int				m_nSmallImageCount;	// 右侧小图片的个数
 

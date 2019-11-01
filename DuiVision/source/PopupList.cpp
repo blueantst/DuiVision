@@ -288,14 +288,14 @@ void CPopupList::SetItemPoint()
 		}
 	}
 
-	int nHeight = 4;
-	nHeight += 24 * nItemCount;
+	int nHeight = DUI_DPI_Y(4);
+	nHeight += DUI_DPI_Y(24) * nItemCount;
 	if(bHaveDesc)
 	{
-		if(0 == nItemCount) nHeight += 40;
-		if(nItemCount >= 1) nHeight += 20;
-		if(nItemCount >= 2) nHeight += 9;
-		if(nItemCount >= 2) nHeight += 9;
+		if(0 == nItemCount) nHeight += DUI_DPI_Y(40);
+		if(nItemCount >= 1) nHeight += DUI_DPI_Y(20);
+		if(nItemCount >= 2) nHeight += DUI_DPI_Y(9);
+		if(nItemCount >= 2) nHeight += DUI_DPI_Y(9);
 	}
 
 	int nStratTop = 2;
@@ -307,25 +307,25 @@ void CPopupList::SetItemPoint()
 		if((i - 1 == m_nHoverItem) && (m_nHoverItem != -1) || (i + 1 == m_nHoverItem))
 		{
 			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? 33 : 24);
-			nStratTop += (bHaveDesc ? 33 : 24);
+			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? DUI_DPI_Y(33) : DUI_DPI_Y(24));
+			nStratTop += (bHaveDesc ? DUI_DPI_Y(33) : DUI_DPI_Y(24));
 		}
 		else if(i == m_nHoverItem)
 		{
 			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? 44 : 24);
-			nStratTop += (bHaveDesc ? 44 : 24);
+			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? DUI_DPI_Y(44) : DUI_DPI_Y(24));
+			nStratTop += (bHaveDesc ? DUI_DPI_Y(44) : DUI_DPI_Y(24));
 
 			int nLeft = editListItem.rcItem.right - m_sizeClose.cx - 7;
-			int nTop = editListItem.rcItem.top + ((bHaveDesc ? 44 : 24) - m_sizeClose.cy) / 2 + 1;
+			int nTop = editListItem.rcItem.top + ((bHaveDesc ? DUI_DPI_Y(44) : DUI_DPI_Y(24)) - m_sizeClose.cy) / 2 + 1;
 
 			m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeClose.cx, nTop + m_sizeClose.cy);
 		}
 		else
 		{
 			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + 24;
-			nStratTop += 24;
+			editListItem.rcItem.bottom = nStratTop + DUI_DPI_Y(24);
+			nStratTop += DUI_DPI_Y(24);
 		}
 	}
 
@@ -577,14 +577,14 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
 		rcItem = editListItem.rcItem;
-		int nLeftStart = 47;
+		int nLeftStart = DUI_DPI_X(47);
 		if(editListItem.pImage == NULL)	// 没有图片,左边距
 		{
-			nLeftStart = 5;
+			nLeftStart = DUI_DPI_X(5);
 		}else
 		if(m_bSingleLine)	// 单行,左边距减少一些
 		{
-			nLeftStart = 25;
+			nLeftStart = DUI_DPI_X(25);
 		}
 
 		// 显示当前项
