@@ -7,7 +7,7 @@
 
 	<text pos="10,5,-10,25" crtext="FFFFFF" font="bold" title="DUI托盘菜单" />
 	<img pos="-60,5" width="48" height="48" image="skins\icon\Movies.png"
-		mode="normal" framesize="1" tip="图片" />
+		mode="extrude" framesize="1" tip="图片" />
 	<text pos="10,-25,-10,-5" crtext="808080" font="bold" title="蓝蚂蚁工作室" />
 	
 	<menuitem name="restore_mainwnd" skin="" image="" title="恢复窗口" font="bold" action="show-window:dlg_main" />
