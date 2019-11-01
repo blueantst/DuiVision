@@ -4,7 +4,10 @@
 #if !defined(__VCICOMM_H_)
 #define __VCICOMM_H_
 
+//#include "vcimessage.h"
+#ifndef UNICODE
 //#include "IPlatUI.h"
+#endif
 
 #define __VCI_VERSION__ 0x100
 
@@ -55,22 +58,22 @@ struct TInterfaceInfo
 	{ \
 		C##theClass *pThis = GET_INTERFACE_OBJECT(theClass); \
 		(pThis->m_ulRefCount)--; \
-		if((pThis->m_ulRefCount) == 0) { delete pThis; OutputDebugString(_T("A C\"#theClass\" object was deleted!\n")); return 0; } \
+		if((pThis->m_ulRefCount) == 0) { delete pThis; return 0; } \
 		return (pThis->m_ulRefCount); \
 	} \
 	STDMETHODIMP C##theClass::X##theClass::QueryInterface(REFIID riid, VOID** ppvObj) \
 	{ *ppvObj = this; return S_OK; }
 
 #define CONTROL_INTERFACE_DEFINE \
-	virtual int __stdcall GetVciName(CString& strVciName); \
-	virtual int __stdcall GetVciDesc(CString& strVciDesc); \
+	virtual int __stdcall GetVciName(std::string& strVciName); \
+	virtual int __stdcall GetVciDesc(std::string& strVciDesc); \
 	virtual int __stdcall GetVciVersion(int& nVersion); \
 	virtual int __stdcall GetIsDebugVersion(BOOL& bDebug); \
 	virtual int __stdcall GetVciType(UINT& nType); \
 	virtual int __stdcall SetDebugMode(BOOL bDebug); \
 	virtual int __stdcall SetLanguage(int nLanguage); \
 	virtual int __stdcall GetLanguage(); \
-	virtual CString __stdcall GetErrorInfo(int nErrorCode); \
+	virtual std::string __stdcall GetErrorInfo(int nErrorCode); \
 	virtual int __stdcall GetLastError(); \
 	virtual int __stdcall Init(LPCSTR lpcsParams); \
 	virtual int __stdcall Done(LPCSTR lpcsParams); \
@@ -95,12 +98,12 @@ struct TInterfaceInfo
 	} \
 	STDMETHODIMP C##theClass::XVciControl::QueryInterface(REFIID riid, VOID** ppvObj) \
 	{ *ppvObj = this; return S_OK; } \
-	STDMETHODIMP_(int) C##theClass::XVciControl::GetVciName(CString& strVciName) \
+	STDMETHODIMP_(int) C##theClass::XVciControl::GetVciName(std::string& strVciName) \
 	{ \
 		/*strVciName = INTERFACE_INFO_I##theClass.csName;*/ \
 		return 0; \
 	} \
-	STDMETHODIMP_(int) C##theClass::XVciControl::GetVciDesc(CString& strVciDesc) \
+	STDMETHODIMP_(int) C##theClass::XVciControl::GetVciDesc(std::string& strVciDesc) \
 	{ \
 		/*strVciDesc = INTERFACE_INFO_I##theClass.csDescription;*/ \
 		return 0; \
@@ -135,7 +138,7 @@ struct TInterfaceInfo
 		C##theClass *pThis = GET_CONTROL_INTERFACE_OBJECT(theClass); \
 		return pThis->GetLanguage(); \
 	} \
-	STDMETHODIMP_(CString) C##theClass::XVciControl::GetErrorInfo(int nErrorCode) \
+	STDMETHODIMP_(std::string) C##theClass::XVciControl::GetErrorInfo(int nErrorCode) \
 	{ \
 		C##theClass *pThis = GET_CONTROL_INTERFACE_OBJECT(theClass); \
 		return pThis->GetErrorInfo(nErrorCode); \
@@ -226,14 +229,14 @@ public:
 // 最大的调试信息块大小 (可显示的最大信息长度)
 #define MAX_DEBUG_MSG_SIZE 4000
 
-typedef int (DEBUG_OUT_FUNC)(LPCTSTR lpszComponentId, LPVOID pInstance, int nLevel, int nType, int nMode, LPCSTR lpData, int nLen);
+typedef int (DEBUG_OUT_FUNC)(LPCSTR lpszComponentId, LPVOID pInstance, int nLevel, int nType, int nMode, LPCSTR lpData, int nLen);
 
 struct TInitData_DebugOut
 {
 	DEBUG_OUT_FUNC *lpfnDebugOut;
 	int		nDeviceID;		// 组件ID(为了兼容老的结构)
 	LPVOID	lpVciInstance;	// 组件实例对象指针
-	CString	strComponentId;	// 组件ID
+	std::string	strComponentId;	// 组件ID
 };
 
 #define FORCE_ANSI      0x10000
@@ -251,15 +254,21 @@ typedef BOOL (CLOSE_VCI_FUNC)(LPVOID lpIVci);
 
 // 获取支持的命令
 typedef int (*TYPEOF_QueryCommandIsSupport)(LPCSTR lpcsCmd);
+#if defined(_WIN32)
 extern "C" __declspec(dllexport)
 int gQueryCommandIsSupport(LPCSTR lpcsCmd);
+#else
+extern "C" VCI_DECLSPEC_EXPORT
+int gQueryCommandIsSupport(LPCSTR lpcsCmd);
+#endif
 
+#if defined(_WIN32)
 // 定义属性页结构
 typedef struct
 {
-	CString strParent;		// 父节点名
-	CString strNode;		// 节点名
-	CString strDesc;		// 描述
+	std::string strParent;		// 父节点名
+	std::string strNode;		// 节点名
+	std::string strDesc;		// 描述
 	CWnd*	pPage;			// 属性页指针
 	int		nGrade;			// 权限
 } VCI_PROPERTY_PAGE;
@@ -273,9 +282,9 @@ typedef int (*TYPEOF_RegisterPropertyPage)(CVciPropertyPageArray& aPropertyPage)
 #define VCI_REGISTER_PROPERTYPAGE(szParent, szNode, szDesc, idtemplate, dialog, grade) \
 	{	\
 		get_dll_resource();	\
-		CString lpszParent = szParent;	\
-		CString lpszNode = szNode;	\
-		CString lpszDesc = szDesc;	\
+		std::string lpszParent = szParent;	\
+		std::string lpszNode = szNode;	\
+		std::string lpszDesc = szDesc;	\
 		CWnd* pOptionPage = new dialog;	\
 		if(pOptionPage->IsKindOf(RUNTIME_CLASS(CDialog)))	\
 		{	\
@@ -291,7 +300,7 @@ typedef int (*TYPEOF_RegisterPropertyPage)(CVciPropertyPageArray& aPropertyPage)
 		reset_dll_resource();	\
 	}	\
 
-
+#endif
 
 // 语言定义
 enum{
@@ -309,14 +318,14 @@ enum{
 //
 // 定义VCI控制接口
 //
-#define IID_IVciControl _T("IVciControl")
+#define IID_IVciControl "IVciControl"
 
 interface IVciControl : public IUnknown
 {
 	// 获取组件名
-	virtual int __stdcall GetVciName(CString& strVciName) = 0;
+	virtual int __stdcall GetVciName(std::string& strVciName) = 0;
 	// 获取组件描述
-	virtual int __stdcall GetVciDesc(CString& strVciDesc) = 0;
+	virtual int __stdcall GetVciDesc(std::string& strVciDesc) = 0;
 	// 获取组件版本
 	virtual int __stdcall GetVciVersion(int& nVersion) = 0;
 	// 获取调试类型
@@ -330,7 +339,7 @@ interface IVciControl : public IUnknown
 	// 获取语言类型
 	virtual int __stdcall GetLanguage() = 0;
 	// 获取错误信息
-	virtual CString __stdcall GetErrorInfo(int nErrorCode) = 0;
+	virtual std::string __stdcall GetErrorInfo(int nErrorCode) = 0;
 	// 获取最近的错误代码
 	virtual int __stdcall GetLastError() = 0;
 	// 初始化组件
@@ -359,7 +368,7 @@ class CVisualComponent : public CCommon
 public:
 	CVisualComponent()
 	{
-		m_strComponentId = _T("");
+		m_strComponentId = "";
 		m_nDeviceID = 0;
 		m_lpfnDebugOut = NULL;
 		m_lpfnOpenVci = NULL;
@@ -377,7 +386,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 public:
 	// 调试手段的有关定义
-	CString m_strComponentId;
+	std::string m_strComponentId;
 	int m_nDeviceID;
 	DEBUG_OUT_FUNC *m_lpfnDebugOut;
 
@@ -388,9 +397,10 @@ public:
 		{
 			nLen = strlen(lpData);
 		}
-		if(m_lpfnDebugOut) m_lpfnDebugOut(m_strComponentId, NULL, nLevel, nType, nMode, lpData, nLen);
+		if(m_lpfnDebugOut) m_lpfnDebugOut(m_strComponentId.c_str(), NULL, nLevel, nType, nMode, lpData, nLen);
 	}
 
+#if defined(_WIN32)
 	// 输出调试信息(带格式化参数)
 	void DEBUG_OUTF(int nLevel, LPCTSTR lpszFormat, ...)
 	{
@@ -629,13 +639,14 @@ public:
 		p_ssData = new char[nMaxLen+1];
 		//VERIFY(_vstprintf(p_ssData, lpszFormat, argListSave) <= nMaxLen+1);
 
-		if(m_lpfnDebugOut) m_lpfnDebugOut(m_strComponentId, NULL, nLevel, TEXT_DEBUG, MODE_ASCII, p_ssData, nMaxLen+1);
+		if(m_lpfnDebugOut) m_lpfnDebugOut(m_strComponentId.c_str(), NULL, nLevel, TEXT_DEBUG, MODE_ASCII, p_ssData, nMaxLen+1);
 
 		delete[] p_ssData;
 
 		va_end(argListSave);
 		va_end(argList);
 	}
+#endif
 
 	// 组件操作定义
 	OPEN_VCI_FUNC *m_lpfnOpenVci;
@@ -707,9 +718,9 @@ public:
 	{
 		return m_nLastError;
 	}
-	virtual CString __stdcall GetErrorInfo(int nErrorCode)
+	virtual std::string __stdcall GetErrorInfo(int nErrorCode)
 	{
-		return _T("");
+		return "";
 	}
 
 //////////////////////////////////////////////////////////////////////////
@@ -730,12 +741,14 @@ public:
 	// 发送消息
 	virtual int __stdcall SendMessage(CVciMessage* pIn, CVciMessage* ppOut)
 	{
+#ifndef UNICODE
 		// 调用IPlatUI的SendMessage
 		/*IPlatUI* pIPlatUI = (IPlatUI*)(getIPlatUI());
 		if(pIPlatUI)
 		{
 			return pIPlatUI->SendMessage(pIn, ppOut);
 		}*/
+#endif
 		return 0;
 	}
 
@@ -770,8 +783,10 @@ public:
 				m_strComponentId = pInitData->strComponentId;
 				m_nDeviceID = pInitData->nDeviceID;
 			}
+#if !defined(UNICODE) && defined(_WIN32)
 			TRACE("InstallHandler: Event=DEBUG_OUT_EVENT, FunctionEntry=0x%08X, ComponentId=%s, Instance=0x%08X, DeviceID=0x%04X\n",
 				lpHandler, m_strComponentId, NULL, m_nDeviceID);
+#endif
 		}else
 		if(nEventID == OPEN_VCI_EVENT)
 		{
@@ -782,7 +797,9 @@ public:
 
 			// 安装打开组件回调函数
 			m_lpfnOpenVci = (OPEN_VCI_FUNC*)lpHandler;
+#if !defined(UNICODE) && defined(_WIN32)
 			TRACE("InstallHandler: Event=OPEN_VCI_EVENT, FunctionEntry=0x%08X\n", lpHandler);
+#endif
 		}else
 		if(nEventID == CLOSE_VCI_EVENT)
 		{
@@ -793,7 +810,9 @@ public:
 
 			// 安装关闭组件回调函数
 			m_lpfnCloseVci = (CLOSE_VCI_FUNC*)lpHandler;
+#if !defined(UNICODE) && defined(_WIN32)
 			TRACE("InstallHandler: Event=CLOSE_VCI_EVENT, FunctionEntry=0x%08X\n", lpHandler);
+#endif
 		}
 
 		return 0;
