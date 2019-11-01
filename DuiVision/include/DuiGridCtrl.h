@@ -25,6 +25,7 @@ struct GridItemInfo
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
+	CSize	sizeImageDpi;	// 图片大小(DPI适配的)
 	Color	clrText;		// 文字颜色
 	CString strLink;		// 链接的文字
 	CString strLinkAction;	// 链接的动作

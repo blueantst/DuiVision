@@ -23,6 +23,7 @@ struct TreeItemInfo
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
+	CSize	sizeImageDpi;	// 图片大小(DPI适配的)
 	int		nImageCount;	// 图片个数
 	Color	clrText;		// 文字颜色
 	CString strLink;		// 链接的文字
@@ -186,8 +187,8 @@ public:
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(CheckBox);	// 定义检查框图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Collapse);	// 定义行缩放图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Toggle);		// 定义树节点收缩图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Collapse);	// 定义行缩放图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Toggle);		// 定义树节点收缩图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)

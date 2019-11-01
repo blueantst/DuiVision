@@ -654,6 +654,8 @@ BOOL CDuiTreeCtrl::SetSubItem(HDUITREEITEM hNode, int nItem, CString strTitle, C
 		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
+			itemInfo.sizeImageDpi = itemInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy);
 		}
 	}else
 	{
@@ -662,6 +664,8 @@ BOOL CDuiTreeCtrl::SetSubItem(HDUITREEITEM hNode, int nItem, CString strTitle, C
 		if((itemInfo.nImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
 		{
 			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			itemInfo.sizeImageDpi = itemInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy);
 		}
 	}
 
@@ -722,6 +726,8 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HDUITREEITEM hNode, int nItem, CString strLink
 		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, itemInfo.pImage))
 		{
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / 1, itemInfo.pImage->GetHeight());
+			itemInfo.sizeImageDpi = itemInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy);
 		}
 	}else
 	{
@@ -730,6 +736,8 @@ BOOL CDuiTreeCtrl::SetSubItemLink(HDUITREEITEM hNode, int nItem, CString strLink
 		if((itemInfo.nImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
 		{
 			itemInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			itemInfo.sizeImageDpi = itemInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy);
 		}
 	}
 
@@ -791,6 +799,8 @@ BOOL CDuiTreeCtrl::SetSubItemCollapse(HDUITREEITEM hNode, int nItem, CString str
 				itemInfo.nImageCount = 6;
 			}
 			itemInfo.sizeImage.SetSize(itemInfo.pImage->GetWidth() / itemInfo.nImageCount, itemInfo.pImage->GetHeight());
+			itemInfo.sizeImageDpi = itemInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy);
 		}
 	}
 
@@ -2196,11 +2206,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 节点存在子节点，或者是顶层节点的情况下，画缩放图片
 					if(HaveChildNode(rowInfo.hNode) || (GetParentNode(rowInfo.hNode) == NULL))
 					{
-						int nToggleImgY = (m_nRowHeight - m_sizeToggle.cy) / 2;
+						int nToggleImgY = (m_nRowHeight - m_sizeToggleDpi.cy) / 2;
 						int nToggleIndex = (m_nHoverRow == i) ? 1 : 0;
-						graphics.DrawImage(m_pImageToggle, Rect(nXPos, nVI*m_nRowHeight + nToggleImgY, m_sizeToggle.cx, m_sizeToggle.cy),
+						graphics.DrawImage(m_pImageToggle, Rect(nXPos, nVI*m_nRowHeight + nToggleImgY, m_sizeToggleDpi.cx, m_sizeToggleDpi.cy),
 							rowInfo.bCollapse ? nToggleIndex*m_sizeToggle.cx : (3+nToggleIndex)*m_sizeToggle.cx, 0, m_sizeToggle.cx, m_sizeToggle.cy, UnitPixel);
-						nXPos += m_sizeToggle.cx;
+						nXPos += m_sizeToggleDpi.cx;
 					}
 				}
 
@@ -2307,25 +2317,25 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					int nImgY = 3;
 					if((itemInfo.pImage != NULL) && (itemInfo.nImageCount <= 1))
 					{
-						if((itemInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+						if((itemInfo.sizeImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 						{
-							nImgY = (m_nRowHeight - itemInfo.sizeImage.cy) / 2 + 1;
+							nImgY = (m_nRowHeight - itemInfo.sizeImageDpi.cy) / 2 + 1;
 						}
 						// 使用单元格指定的图片
-						graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+						graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy),
 							0, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
-						nItemImageX += (itemInfo.sizeImage.cx + 3);
+						nItemImageX += (itemInfo.sizeImageDpi.cx + DUI_DPI_X(3));
 					}else
 					if((itemInfo.nImageIndex != -1) && (m_pImage != NULL))
 					{
-						if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+						if((itemInfo.sizeImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 						{
-							nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+							nImgY = (m_nRowHeight - itemInfo.sizeImageDpi.cy) / 2 + 1;
 						}
 						// 使用索引图片
-						graphics.DrawImage(m_pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+						graphics.DrawImage(m_pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + nImgY, itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy),
 							itemInfo.nImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
-						nItemImageX += (m_sizeImage.cx + 3);
+						nItemImageX += (itemInfo.sizeImageDpi.cx + DUI_DPI_X(3));
 					}
 					rect.Offset((Gdiplus::REAL)nItemImageX, 0);
 					rect.Width -= (Gdiplus::REAL)nItemImageX;
@@ -2336,12 +2346,12 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 						int nCollapseIndex = (m_nHoverRow == i) ? 1 : 0;
 						if(itemInfo.pImage != NULL)
 						{
-							graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-itemInfo.sizeImage.cy)/2, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy),
+							graphics.DrawImage(itemInfo.pImage, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-itemInfo.sizeImage.cy)/2, itemInfo.sizeImageDpi.cx, itemInfo.sizeImageDpi.cy),
 								rowInfo.bCollapse ? nCollapseIndex*itemInfo.sizeImage.cx : ((itemInfo.nImageCount / 2)+nCollapseIndex)*itemInfo.sizeImage.cx, 0, itemInfo.sizeImage.cx, itemInfo.sizeImage.cy, UnitPixel);
 						}else
 						if(m_pImageCollapse != NULL)
 						{
-							graphics.DrawImage(m_pImageCollapse, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-m_sizeCollapse.cy)/2, m_sizeCollapse.cx, m_sizeCollapse.cy),
+							graphics.DrawImage(m_pImageCollapse, Rect(nPosItemX+nItemImageX, nVI*m_nRowHeight + (m_nRowHeight-m_sizeCollapse.cy)/2, m_sizeCollapseDpi.cx, m_sizeCollapseDpi.cy),
 								rowInfo.bCollapse ? nCollapseIndex*m_sizeCollapse.cx : (4+nCollapseIndex)*m_sizeCollapse.cx, 0, m_sizeCollapse.cx, m_sizeCollapse.cy, UnitPixel);
 						}
 					}
