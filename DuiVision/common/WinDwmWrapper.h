@@ -56,6 +56,8 @@ public:
 	void SetProcessDPIAware();
 	static void SetDpiAdapter(int nDpix = 0, int nDpiy = 0);
 	static void GetDpiAdapter(int& nDpix, int& nDpiy);
+	static int DPI_X(int x);
+	static int DPI_Y(int y);
 	static void AdapterDpi(int& x);
 	static void AdapterDpi(int& x, int& y);
 	static void AdapterDpi(LONG& x,LONG& y);
@@ -65,5 +67,13 @@ private:
 	static int m_nDpix;
 	static int m_nDpiy;
 };
+
+// ¼ò»¯µÄDPIºê
+#define DUI_DPI_X(x)	\
+	CDuiWinDwmWrapper::DPI_X(x)
+
+#define DUI_DPI_Y(y)	\
+	CDuiWinDwmWrapper::DPI_Y(y)
+
 
 #endif // __DUIWINDWMWRAPPER_H__

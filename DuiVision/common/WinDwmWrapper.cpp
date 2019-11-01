@@ -185,6 +185,18 @@ void CDuiWinDwmWrapper::GetDpiAdapter(int& nDpix, int& nDpiy)
 }
 
 // 根据当前DPI计算x值
+int CDuiWinDwmWrapper::DPI_X(int x)
+{
+	return MulDiv(x, m_nDpix, 96);
+}
+
+// 根据当前DPI计算y值
+int CDuiWinDwmWrapper::DPI_Y(int y)
+{
+	return MulDiv(y, m_nDpix, 96);
+}
+
+// 根据当前DPI计算x值
 void CDuiWinDwmWrapper::AdapterDpi(int& x)
 {
 	// x*m_nDpix/96
