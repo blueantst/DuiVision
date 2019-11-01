@@ -112,7 +112,7 @@ BOOL CDuiTreeCtrl::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		int nWidth = -1;
 		if(!strWidth.IsEmpty())
 		{
-			nWidth = _ttoi(strWidth);
+			nWidth = DUI_DPI_X(_ttoi(strWidth));
 		}
 		InsertColumn(-1, strTitle, nWidth, clrText);
 	}
@@ -383,7 +383,7 @@ int CDuiTreeCtrl::SetColumnWidth(int nColumn, int nWidth, int nWidthNextColumn)
 			_nWidth = m_rc.Width() - nXPos;
 			if(_nWidth < 0)
 			{
-				_nWidth = 100;	// 如果宽度不够,设置一个最小值
+				_nWidth = DUI_DPI_X(100);	// 如果宽度不够,设置一个最小值
 			}
 		}
 		if(i == nColumn)
@@ -518,6 +518,8 @@ HDUITREEITEM CDuiTreeCtrl::InsertNode(HDUITREEITEM hParentNode, CString strId, C
 		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, nodeInfo.pImage))
 		{
 			nodeInfo.sizeImage.SetSize(nodeInfo.pImage->GetWidth() / 1, nodeInfo.pImage->GetHeight());
+			nodeInfo.sizeImageDpi = nodeInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(nodeInfo.sizeImageDpi.cx, nodeInfo.sizeImageDpi.cy);
 		}
 	}else
 	{
@@ -526,6 +528,8 @@ HDUITREEITEM CDuiTreeCtrl::InsertNode(HDUITREEITEM hParentNode, CString strId, C
 		if((nodeInfo.nImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
 		{
 			nodeInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			nodeInfo.sizeImageDpi = nodeInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(nodeInfo.sizeImageDpi.cx, nodeInfo.sizeImageDpi.cy);
 		}
 	}
 
@@ -536,6 +540,8 @@ HDUITREEITEM CDuiTreeCtrl::InsertNode(HDUITREEITEM hParentNode, CString strId, C
 		if(DuiSystem::Instance()->LoadImageFile(strRightImage, m_bImageUseECM, nodeInfo.pRightImage))
 		{
 			nodeInfo.sizeRightImage.SetSize(nodeInfo.pRightImage->GetWidth() / 1, nodeInfo.pRightImage->GetHeight());
+			nodeInfo.sizeRightImageDpi = nodeInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(nodeInfo.sizeRightImageDpi.cx, nodeInfo.sizeRightImageDpi.cy);
 		}
 	}else
 	{
@@ -544,6 +550,8 @@ HDUITREEITEM CDuiTreeCtrl::InsertNode(HDUITREEITEM hParentNode, CString strId, C
 		if((nodeInfo.nRightImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
 		{
 			nodeInfo.sizeRightImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			nodeInfo.sizeRightImageDpi = nodeInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(nodeInfo.sizeRightImageDpi.cx, nodeInfo.sizeRightImageDpi.cy);
 		}
 	}
 
@@ -1427,14 +1435,14 @@ void CDuiTreeCtrl::RefreshNodeRows()
 		if((rowInfoTemp.nCheck != -1) && (m_pImageCheckBox != NULL))
 		{
 			int nCheckImgY = 3;
-			if((m_sizeCheckBox.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+			if((m_sizeCheckBoxDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 			{
-				nCheckImgY = (m_nRowHeight - m_sizeCheckBox.cy) / 2 + 1;
+				nCheckImgY = (m_nRowHeight - m_sizeCheckBoxDpi.cy) / 2 + 1;
 			}
 			rowInfoTemp.rcCheck.left = nXPos;
-			rowInfoTemp.rcCheck.right = rowInfoTemp.rcCheck.left + m_sizeCheckBox.cx;
+			rowInfoTemp.rcCheck.right = rowInfoTemp.rcCheck.left + m_sizeCheckBoxDpi.cx;
 			rowInfoTemp.rcCheck.top = rowInfoTemp.rcRow.top + nCheckImgY;
-			rowInfoTemp.rcCheck.bottom = rowInfoTemp.rcCheck.top + m_sizeCheckBox.cy;
+			rowInfoTemp.rcCheck.bottom = rowInfoTemp.rcCheck.top + m_sizeCheckBoxDpi.cy;
 		}
 
 		// 计算每个单元格位置
@@ -2215,41 +2223,41 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				// 画检查框
 				int nCheckImgY = 3;
-				if((m_sizeCheckBox.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+				if((m_sizeCheckBoxDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 				{
-					nCheckImgY = (m_nRowHeight - m_sizeCheckBox.cy) / 2 + 1;
+					nCheckImgY = (m_nRowHeight - m_sizeCheckBoxDpi.cy) / 2 + 1;
 				}
 				if((rowInfo.nCheck != -1) && (m_pImageCheckBox != NULL))
 				{
 					int nCheckImageIndex = ((m_nHoverRow == i) ? ((rowInfo.nCheck==1) ? 4 : 1) : ((rowInfo.nCheck==1) ? 2 : 0));
-					graphics.DrawImage(m_pImageCheckBox, Rect(nXPos, nVI*m_nRowHeight + nCheckImgY, m_sizeCheckBox.cx, m_sizeCheckBox.cy),
+					graphics.DrawImage(m_pImageCheckBox, Rect(nXPos, nVI*m_nRowHeight + nCheckImgY, m_sizeCheckBoxDpi.cx, m_sizeCheckBoxDpi.cy),
 						nCheckImageIndex * m_sizeCheckBox.cx, 0, m_sizeCheckBox.cx, m_sizeCheckBox.cy, UnitPixel);
-					nXPos += (m_sizeCheckBox.cx + 3);
+					nXPos += (m_sizeCheckBoxDpi.cx + DUI_DPI_X(3));
 				}
 
 				// 画行左边图片
 				int nImgY = 3;
 				if(rowInfo.pImage != NULL)
 				{
-					if((rowInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - rowInfo.sizeImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeImageDpi.cy) / 2 + 1;
 					}
 					// 使用行数据指定的图片
-					graphics.DrawImage(rowInfo.pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy),
+					graphics.DrawImage(rowInfo.pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImageDpi.cx, rowInfo.sizeImageDpi.cy),
 						0, 0, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy, UnitPixel);
-					nXPos += (rowInfo.sizeImage.cx + 3);
+					nXPos += (rowInfo.sizeImageDpi.cx + DUI_DPI_X(3));
 				}else
 				if((rowInfo.nImageIndex != -1) && (m_pImage != NULL))
 				{
-					if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeImageDpi.cy) / 2 + 1;
 					}
 					// 使用索引图片
-					graphics.DrawImage(m_pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImageDpi.cx, rowInfo.sizeImageDpi.cy),
 						rowInfo.nImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
-					nXPos += (m_sizeImage.cx + 3);
+					nXPos += (rowInfo.sizeImageDpi.cx + DUI_DPI_X(3));
 				}
 
 				// 画行右边图片
@@ -2257,25 +2265,25 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				nImgY = 3;
 				if(rowInfo.pRightImage != NULL)
 				{
-					if((rowInfo.sizeRightImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeRightImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - rowInfo.sizeRightImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeRightImageDpi.cy) / 2 + 1;
 					}
 					// 使用行数据指定的图片
-					graphics.DrawImage(rowInfo.pRightImage, Rect(nContentWidth-rowInfo.sizeRightImage.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy),
+					graphics.DrawImage(rowInfo.pRightImage, Rect(nContentWidth-rowInfo.sizeRightImageDpi.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImageDpi.cx, rowInfo.sizeRightImageDpi.cy),
 						0, 0, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy, UnitPixel);
-					nRightImageWidth = rowInfo.sizeRightImage.cx + 1;
+					nRightImageWidth = rowInfo.sizeRightImageDpi.cx + 1;
 				}else
 				if((rowInfo.nRightImageIndex != -1) && (m_pImage != NULL))
 				{
-					if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeRightImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeRightImageDpi.cy) / 2 + 1;
 					}
 					// 使用索引图片
-					graphics.DrawImage(m_pImage, Rect(nContentWidth-m_sizeImage.cx-1, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(nContentWidth- rowInfo.sizeRightImageDpi.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImageDpi.cx, rowInfo.sizeRightImageDpi.cy),
 						rowInfo.nRightImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
-					nRightImageWidth = m_sizeImage.cx + 1;
+					nRightImageWidth = rowInfo.sizeRightImageDpi.cx + 1;
 				}
 
 				// 画单元格内容

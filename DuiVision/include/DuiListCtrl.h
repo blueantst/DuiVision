@@ -18,9 +18,11 @@ struct ListRowInfo
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
+	CSize	sizeImageDpi;	// 图片大小(DPI适配的)
 	int		nRightImageIndex;// 右边图片索引
 	Image * pRightImage;	// 右边图片对象
 	CSize	sizeRightImage;	// 右边图片大小
+	CSize	sizeRightImageDpi;	// 右边图片大小(DPI适配的)
 	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
 	BOOL	bRowBackColor;		// 使用行定义的背景颜色
@@ -126,7 +128,7 @@ public:
 	int					m_nTipVirtualTop;	// 当前tip行的虚拟Top
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(CheckBox);	// 定义检查框图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("img-sep"), OnAttributeImageSeperator)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-check"), OnAttributeImageCheckBox)

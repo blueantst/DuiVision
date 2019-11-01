@@ -212,6 +212,8 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 		if(DuiSystem::Instance()->LoadImageFile(strImage, m_bImageUseECM, rowInfo.pImage))
 		{
 			rowInfo.sizeImage.SetSize(rowInfo.pImage->GetWidth() / 1, rowInfo.pImage->GetHeight());
+			rowInfo.sizeImageDpi = rowInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(rowInfo.sizeImageDpi.cx, rowInfo.sizeImageDpi.cy);
 		}
 	}else
 	{
@@ -220,6 +222,8 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 		if((rowInfo.nImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
 		{
 			rowInfo.sizeImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			rowInfo.sizeImageDpi = rowInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(rowInfo.sizeImageDpi.cx, rowInfo.sizeImageDpi.cy);
 		}
 	}
 
@@ -230,6 +234,8 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 		if(DuiSystem::Instance()->LoadImageFile(strRightImage, m_bImageUseECM, rowInfo.pRightImage))
 		{
 			rowInfo.sizeRightImage.SetSize(rowInfo.pRightImage->GetWidth() / 1, rowInfo.pRightImage->GetHeight());
+			rowInfo.sizeRightImageDpi = rowInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(rowInfo.sizeRightImageDpi.cx, rowInfo.sizeRightImageDpi.cy);
 		}
 	}else
 	{
@@ -238,6 +244,8 @@ int CDuiListCtrl::InsertItem(int nItem, CString strId, CString strTitle, CString
 		if((rowInfo.nRightImageIndex != -1) && (m_pImage != NULL) && (m_pImage->GetLastStatus() == Ok))
 		{
 			rowInfo.sizeRightImage.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			rowInfo.sizeRightImageDpi = rowInfo.sizeImage;
+			CDuiWinDwmWrapper::AdapterDpi(rowInfo.sizeRightImageDpi.cx, rowInfo.sizeRightImageDpi.cy);
 		}
 	}
 
@@ -1047,42 +1055,42 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 
 				// 画检查框
 				int nCheckImgY = 3;
-				if((m_sizeCheckBox.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+				if((m_sizeCheckBoxDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 				{
-					nCheckImgY = (m_nRowHeight - m_sizeCheckBox.cy) / 2 + 1;
+					nCheckImgY = (m_nRowHeight - m_sizeCheckBoxDpi.cy) / 2 + 1;
 				}
 				if((rowInfo.nCheck != -1) && (m_pImageCheckBox != NULL))
 				{
 					int nCheckImageIndex = ((m_nHoverRow == i) ? ((rowInfo.nCheck==1) ? 4 : 1) : ((rowInfo.nCheck==1) ? 2 : 0));
-					graphics.DrawImage(m_pImageCheckBox, Rect(nXPos, nVI*m_nRowHeight + nCheckImgY, m_sizeCheckBox.cx, m_sizeCheckBox.cy),
+					graphics.DrawImage(m_pImageCheckBox, Rect(nXPos, nVI*m_nRowHeight + nCheckImgY, m_sizeCheckBoxDpi.cx, m_sizeCheckBoxDpi.cy),
 						nCheckImageIndex * m_sizeCheckBox.cx, 0, m_sizeCheckBox.cx, m_sizeCheckBox.cy, UnitPixel);
-					rowInfo.rcCheck.SetRect(nXPos, i*m_nRowHeight + nCheckImgY, nXPos + m_sizeCheckBox.cx, i*m_nRowHeight + nCheckImgY + m_sizeCheckBox.cy);
-					nXPos += (m_sizeCheckBox.cx + 3);
+					rowInfo.rcCheck.SetRect(nXPos, i*m_nRowHeight + nCheckImgY, nXPos + m_sizeCheckBoxDpi.cx, i*m_nRowHeight + nCheckImgY + m_sizeCheckBoxDpi.cy);
+					nXPos += (m_sizeCheckBoxDpi.cx + DUI_DPI_X(3));
 				}
 
 				// 画行左边图片
 				int nImgY = 3;
 				if(rowInfo.pImage != NULL)
 				{
-					if((rowInfo.sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - rowInfo.sizeImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeImageDpi.cy) / 2 + 1;
 					}
 					// 使用行数据指定的图片
-					graphics.DrawImage(rowInfo.pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy),
+					graphics.DrawImage(rowInfo.pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImageDpi.cx, rowInfo.sizeImageDpi.cy),
 						0, 0, rowInfo.sizeImage.cx, rowInfo.sizeImage.cy, UnitPixel);
-					nXPos += (rowInfo.sizeImage.cx + 3);
+					nXPos += (rowInfo.sizeImageDpi.cx + DUI_DPI_X(3));
 				}else
 				if((rowInfo.nImageIndex != -1) && (m_pImage != NULL))
 				{
-					if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeImageDpi.cy) / 2 + 1;
 					}
 					// 使用索引图片
-					graphics.DrawImage(m_pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(nXPos, nVI*m_nRowHeight + nImgY, rowInfo.sizeImageDpi.cx, rowInfo.sizeImageDpi.cy),
 						rowInfo.nImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
-					nXPos += (m_sizeImage.cx + 3);
+					nXPos += (rowInfo.sizeImageDpi.cx + DUI_DPI_X(3));
 				}
 
 				// 画行右边图片
@@ -1090,25 +1098,25 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				nImgY = 3;
 				if(rowInfo.pRightImage != NULL)
 				{
-					if((rowInfo.sizeRightImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeRightImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - rowInfo.sizeRightImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeRightImageDpi.cy) / 2 + 1;
 					}
 					// 使用行数据指定的图片
-					graphics.DrawImage(rowInfo.pRightImage, Rect(nWidth-rowInfo.sizeRightImage.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy),
+					graphics.DrawImage(rowInfo.pRightImage, Rect(nWidth-rowInfo.sizeRightImageDpi.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImageDpi.cx, rowInfo.sizeRightImageDpi.cy),
 						0, 0, rowInfo.sizeRightImage.cx, rowInfo.sizeRightImage.cy, UnitPixel);
-					nRightImageWidth = rowInfo.sizeRightImage.cx + 1;
+					nRightImageWidth = rowInfo.sizeRightImageDpi.cx + 1;
 				}else
 				if((rowInfo.nRightImageIndex != -1) && (m_pImage != NULL))
 				{
-					if((m_sizeImage.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
+					if((rowInfo.sizeRightImageDpi.cy*2 > m_nRowHeight) || (m_uVAlignment == VAlign_Middle))
 					{
-						nImgY = (m_nRowHeight - m_sizeImage.cy) / 2 + 1;
+						nImgY = (m_nRowHeight - rowInfo.sizeRightImageDpi.cy) / 2 + 1;
 					}
 					// 使用索引图片
-					graphics.DrawImage(m_pImage, Rect(nWidth-m_sizeImage.cx-1, nVI*m_nRowHeight + nImgY, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(nWidth- rowInfo.sizeRightImageDpi.cx-1, nVI*m_nRowHeight + nImgY, rowInfo.sizeRightImageDpi.cx, rowInfo.sizeRightImageDpi.cy),
 						rowInfo.nRightImageIndex*m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
-					nRightImageWidth = m_sizeImage.cx + 1;
+					nRightImageWidth = rowInfo.sizeRightImageDpi.cx + 1;
 				}
 
 				// 画内容
@@ -1124,8 +1132,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if(!rowInfo.strLink2.IsEmpty())
 				{
 					Size sizeLink = GetTextBounds(font, strFormatRight, rowInfo.strLink2);
-					nLinkWidth += (sizeLink.Width + 10);
-					RectF rectLink((Gdiplus::REAL)(nWidth-nLinkWidth-nRightImageWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2), (Gdiplus::REAL)(sizeLink.Width+8), (Gdiplus::REAL)sizeLink.Height);
+					nLinkWidth += (sizeLink.Width + DUI_DPI_X(10));
+					RectF rectLink((Gdiplus::REAL)(nWidth-nLinkWidth-nRightImageWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2), (Gdiplus::REAL)(sizeLink.Width+ DUI_DPI_X(8)), (Gdiplus::REAL)sizeLink.Height);
 					rowInfo.rcLink2.SetRect((int)rectLink.X,(int)rectLink.Y,(int)(rectLink.X+sizeLink.Width),(int)(rectLink.Y+rectLink.Height));
 					rowInfo.rcLink2.OffsetRect(0, m_nFirstViewRow*m_nRowHeight);
 					if(((m_nHoverRow == i) || (m_nDownRow == i)) && (rowInfo.nHoverLink == 1))
@@ -1143,8 +1151,8 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if(!rowInfo.strLink1.IsEmpty())
 				{
 					Size sizeLink = GetTextBounds(font, strFormatRight, rowInfo.strLink1);
-					nLinkWidth += (sizeLink.Width + 10);
-					RectF rectLink((Gdiplus::REAL)(nWidth-nLinkWidth-nRightImageWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2), (Gdiplus::REAL)(sizeLink.Width+8), (Gdiplus::REAL)sizeLink.Height);
+					nLinkWidth += (sizeLink.Width + DUI_DPI_X(10));
+					RectF rectLink((Gdiplus::REAL)(nWidth-nLinkWidth-nRightImageWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + (m_nRowHeight - sizeLink.Height)/2), (Gdiplus::REAL)(sizeLink.Width+ DUI_DPI_X(8)), (Gdiplus::REAL)sizeLink.Height);
 					rowInfo.rcLink1.SetRect((int)rectLink.X,(int)rectLink.Y,(int)(rectLink.X+sizeLink.Width),(int)(rectLink.Y+rectLink.Height));
 					rowInfo.rcLink1.OffsetRect(0, m_nFirstViewRow*m_nRowHeight);
 					if(((m_nHoverRow == i) || (m_nDownRow == i)) && (rowInfo.nHoverLink == 0))

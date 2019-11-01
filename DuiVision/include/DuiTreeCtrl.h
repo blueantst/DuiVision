@@ -48,9 +48,11 @@ struct TreeNodeInfo
 	int		nImageIndex;	// 图片索引
 	Image * pImage;			// 图片对象
 	CSize	sizeImage;		// 图片大小
+	CSize	sizeImageDpi;	// 图片大小(DPI适配的)
 	int		nRightImageIndex;// 右边图片索引
 	Image * pRightImage;	// 右边图片对象
 	CSize	sizeRightImage;	// 右边图片大小
+	CSize	sizeRightImageDpi;	// 右边图片大小(DPI适配的)
 	BOOL	bRowColor;		// 使用行定义的文字颜色
 	Color	clrText;		// 行文字颜色
 	BOOL	bRowBackColor;		// 使用行定义的背景颜色
@@ -183,7 +185,7 @@ public:
 	HDUITREEITEM			m_nNodeIndex;		// 句柄递增变量
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Seperator);	// 定义行分隔线图片
-	DUI_IMAGE_ATTRIBUTE_DEFINE(CheckBox);	// 定义检查框图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(CheckBox);	// 定义检查框图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Collapse);	// 定义行缩放图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Toggle);		// 定义树节点收缩图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
@@ -200,7 +202,7 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crrowhover"), m_clrRowHover, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crrowcurrent"), m_clrRowCurrent, FALSE)
 		DUI_INT_ATTRIBUTE_DPI(_T("row-height"), m_nRowHeight, FALSE)
-		DUI_INT_ATTRIBUTE(_T("left-pos"), m_nLeftPos, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("left-pos"), m_nLeftPos, FALSE)
 		DUI_INT_ATTRIBUTE(_T("wrap"), m_bTextWrap, FALSE)
 		DUI_INT_ATTRIBUTE(_T("down-row"), m_bEnableDownRow, FALSE)
 		DUI_INT_ATTRIBUTE(_T("bk-transparent"), m_nBkTransparent, FALSE)
