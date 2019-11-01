@@ -47,8 +47,8 @@ int DrawHorizontalTransition(CDC &dcDes, CDC &dcSrc, const CRect &rcDes, const C
 void DrawRightBottomTransition(CDC &dc, CDC &dcTemp, CRect rc, const int nOverRegio, const COLORREF clrBackground);
 // 画图片边框
 void DrawImageFrame(Graphics &graphics, Image *pImage, const CRect &rcControl, int nX, int nY, int nW, int nH, int nFrameSide = 4);
-// 画图片边框(可指定九宫格的位置,nX/nY是原图的左上角,nWH/nHL是左上角点坐标,nWR/nHR是右下角点坐标)
-void DrawImageFrameMID(Graphics &graphics, Image *pImage, const CRect &rcControl, int nX, int nY, int nW, int nH, int nWL, int nHL, int nWR, int nHR);
+// 画图片边框(可指定九宫格的位置,nX/nY是原图的左上角,nWH/nHL是左上角点坐标,nWR/nHR是右下角点坐标),bAdapterDpi表示是否进行DPI适配
+void DrawImageFrameMID(Graphics &graphics, Image *pImage, const CRect &rcControl, int nX, int nY, int nW, int nH, int nWL, int nHL, int nWR, int nHR, BOOL bAdapterDpi = TRUE);
 // 画过渡圆角矩形
 void DrawRectangle(CDC &dcDes, const CRect &rcDes, BOOL bUp = TRUE, int nBeginTransparent = 60, int nEndTransparent = 90);
 

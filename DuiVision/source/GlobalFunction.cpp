@@ -734,42 +734,47 @@ void DrawImageFrame(Graphics &graphics, Image *pImage, const CRect &rcControl, i
 }
 
 // 画图片边框(可指定九宫格的位置,nX/nY是原图的左上角,nWH/nHL是左上角点坐标,nWR/nHR是右下角点坐标)
-void DrawImageFrameMID(Graphics &graphics, Image *pImage, const CRect &rcControl, int nX, int nY, int nW, int nH, int nWL, int nHL, int nWR, int nHR)
+void DrawImageFrameMID(Graphics &graphics, Image *pImage, const CRect &rcControl, int nX, int nY, int nW, int nH, int nWL, int nHL, int nWR, int nHR, BOOL bAdapterDpi)
 {
+	int nDpiWL = bAdapterDpi ? DUI_DPI_X(nWL) : nWL;
+	int nDpiHL = bAdapterDpi ? DUI_DPI_Y(nHL) : nHL;
+	int nDpiWR = bAdapterDpi ? DUI_DPI_X(nWR) : nWR;
+	int nDpiHR = bAdapterDpi ? DUI_DPI_X(nHR) : nHR;
+
 	// 左上角
-	graphics.DrawImage(pImage, Rect(rcControl.left ,rcControl.top, nWL, nHL),
+	graphics.DrawImage(pImage, Rect(rcControl.left ,rcControl.top, nDpiWL, nDpiHL),
 		nX, nY, nWL, nHL, UnitPixel);
 
 	// 左中边框
-	graphics.DrawImage(pImage, Rect(rcControl.left ,rcControl.top + nHL, nWL, rcControl.Height() - nHL - nHR),
+	graphics.DrawImage(pImage, Rect(rcControl.left ,rcControl.top + nDpiHL, nDpiWL, rcControl.Height() - nDpiHL - nDpiHR),
 		nX, nY + nHL, nWL, nH - nHL - nHR, UnitPixel);
 
 	// 左下角
-	graphics.DrawImage(pImage, Rect(rcControl.left ,rcControl.bottom - nHR, nWL, nHR), 
+	graphics.DrawImage(pImage, Rect(rcControl.left ,rcControl.bottom - nDpiHR, nDpiWL, nDpiHR),
 		nX, nY + nH - nHR, nWL, nHR, UnitPixel);
 
 	// 上中边框
-	graphics.DrawImage(pImage, Rect(rcControl.left + nWL ,rcControl.top, rcControl.Width() - nWL - nWR, nHL),
+	graphics.DrawImage(pImage, Rect(rcControl.left + nDpiWL ,rcControl.top, rcControl.Width() - nDpiWL - nDpiWR, nDpiHL),
 		nX + nWL, nY, nW - nWL - nWR, nHL, UnitPixel);
 
 	// 右上角
-	graphics.DrawImage(pImage, Rect(rcControl.right - nWR ,rcControl.top, nWR, nHL), 
+	graphics.DrawImage(pImage, Rect(rcControl.right - nDpiWR ,rcControl.top, nDpiWR, nDpiHL),
 		nX + nW - nWR, nY, nWR, nHL, UnitPixel);
 
 	// 右中边框
-	graphics.DrawImage(pImage, Rect(rcControl.right - nWR ,rcControl.top + nHL, nWR, rcControl.Height() - nHL - nHR), 
+	graphics.DrawImage(pImage, Rect(rcControl.right - nDpiWR ,rcControl.top + nDpiHL, nDpiWR, rcControl.Height() - nDpiHL - nDpiHR),
 		nX + nW - nWR, nY + nHL, nWR, nH - nHL - nHR, UnitPixel);
 
 	// 右下角
-	graphics.DrawImage(pImage, Rect(rcControl.right - nWR ,rcControl.bottom - nHR, nWR, nHR), 
+	graphics.DrawImage(pImage, Rect(rcControl.right - nDpiWR ,rcControl.bottom - nDpiHR, nDpiWR, nDpiHR),
 		nX + nW - nWR, nY + nH - nHR, nWR, nHR, UnitPixel);	
 
 	 // 下中边框
-	graphics.DrawImage(pImage, Rect(rcControl.left + nWL ,rcControl.bottom - nHR, rcControl.Width() - nWL - nWR, nHR), 
+	graphics.DrawImage(pImage, Rect(rcControl.left + nDpiWL ,rcControl.bottom - nDpiHR, rcControl.Width() - nDpiWL - nDpiWR, nDpiHR),
 		nX + nWL, nY + nH - nHR, nW - nWL - nWR, nHR, UnitPixel);
 
 	// 中间
-	graphics.DrawImage(pImage, Rect(rcControl.left + nWL ,rcControl.top + nHL, rcControl.Width() - nWL - nWR, rcControl.Height() - nHL - nHR), 
+	graphics.DrawImage(pImage, Rect(rcControl.left + nDpiWL ,rcControl.top + nDpiHL, rcControl.Width() - nDpiWL - nDpiWR, rcControl.Height() - nDpiHL - nDpiHR),
 		nX + nWL, nY + nHL, nW - nWL - nWR, nH - nHL - nHR, UnitPixel);
 }
 

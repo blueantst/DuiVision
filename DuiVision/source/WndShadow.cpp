@@ -329,12 +329,12 @@ void CWndShadow::Update(HWND hParent)
 
 	if(m_pShadowImage != NULL)
 	{
-		// 九宫格方式画阴影图片
+		// 九宫格方式画阴影图片(阴影的九宫格图片暂不进行DPI适配)
 		Graphics graphics(hMemDC);
 		CRect rcTemp(0, 0, nShadWndWid, nShadWndHei);
 		DrawImageFrameMID(graphics, m_pShadowImage, rcTemp,
 			0, 0, m_pShadowImage->GetWidth(), m_pShadowImage->GetHeight(),
-			m_nShadowWLT, m_nShadowHLT, m_nShadowWRB+1, m_nShadowHRB+1);
+			m_nShadowWLT, m_nShadowHLT, m_nShadowWRB+1, m_nShadowHRB+1, FALSE);
 	}else
 	{
 		// 画算法阴影
