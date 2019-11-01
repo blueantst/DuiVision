@@ -40,5 +40,5 @@ using namespace Gdiplus;
 //#include "common/registry.h"
 #include "common/LogMgr.h"
 
-// 跨进称通知消息定义
+// 跨进程通知消息定义
 static const UINT WM_CHECK_ITS_ME = RegisterWindowMessage(_T("##DUIVISION_APPLICATION##"));
