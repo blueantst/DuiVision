@@ -14,7 +14,7 @@
 <res type="cfg" name="interpDll_d" value="interp\tcl\bin\TclInterp_d.dll" />
 <res type="cfg" name="interpInstance" value="DuiVisionTclScript" />
 <res type="cfg" name="mainScript" value="script\tcl\test_dui_gridctrl.tcl" />
-<res type="cfg" name="dpiAware" value="0" dpix="" dpiy="" />
+<res type="cfg" name="dpiAware" value="2" dpix="" dpiy="" />
 
 <!--风格设置-->
 <!--每种风格可以定义名字后面增加1x-4x的四种风格,分别表示DPI为原始的125%,150%,175%,200%四种分辨率下的风格,dpiAware设置为3才生效-->
