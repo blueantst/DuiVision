@@ -75,8 +75,10 @@ BOOL CDuiVisionDemoApp::InitInstance()
 		}
 	}
 
+	#ifdef SUPPORT_WKE
 	// ×¢²áWKE¿Ø¼þ
 	REGISTER_DUICONTROL(CDuiWkeView, CDuiWkeView::WkeShutdown);
+	#endif
 	// ×¢²áMFCDateTime¿Ø¼þ
 	REGISTER_DUICONTROL(CMFCDateTime, NULL);
 
