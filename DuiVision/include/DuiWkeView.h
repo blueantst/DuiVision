@@ -3,6 +3,8 @@
 
 #pragma once
 
+#ifdef SUPPORT_WKE
+
 #include "../third-part/wke/wke.h"
 
 // GDI方式的渲染类
@@ -184,5 +186,7 @@ protected:
 		DUI_BOOL_ATTRIBUTE(_T("transparent"), m_bTransparent, TRUE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
+
+#endif
 
 #endif // __DUIWKEVIEW_H__

@@ -19,6 +19,11 @@ using namespace Gdiplus;
 
 #include "duiid.h"
 
+#define SUPPORT_WKE
+#ifdef _WIN64
+#undef SUPPORT_WKE
+#endif
+
 //////////////////////////////////////////////////////////
 //Comm
 #include "../common/XUnZip.h"
@@ -109,6 +114,8 @@ using namespace Gdiplus;
 
 //////////////////////////////////////////////////////////
 //wke
+#ifdef SUPPORT_WKE
 #include "DuiWkeView.h"
+#endif
 
 #endif
