@@ -162,6 +162,9 @@
     <OutDir>$(SolutionDir)bin\</OutDir>
     <TargetName>$(ProjectName).$(Platform)</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\DuiVision\include;..\DuiVision\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -189,8 +192,8 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>DuiVision.2010d.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)DuiPluginDemo_d.dll</OutputFile>
+      <AdditionalDependencies>DuiVision.2010d.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)DuiPluginDemo_d.x64.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../Lib;../DuiVision/third-part/wke;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -224,7 +227,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>DuiVision.2010d_M.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)DuiPluginDemo_d.dll</OutputFile>
+      <OutputFile>$(OutDir)DuiPluginDemo_d.x64.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../Lib;../DuiVision/third-part/wke;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -292,7 +295,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>DuiVision.2010.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)DuiPluginDemo.dll</OutputFile>
+      <OutputFile>$(OutDir)DuiPluginDemo.x64.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../Lib;../DuiVision/third-part/wke;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
