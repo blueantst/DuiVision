@@ -87,7 +87,7 @@ int CTimer::SetTimer(UINT nTimerResolution, CString strTimerName, BOOL bAppTimer
 		} 
 	}
 
-	UINT uTimerID = timeSetEvent(nTimerResolution, m_uAccuracy,(LPTIMECALLBACK) TimerCallProc, (DWORD)this, TIME_PERIODIC);
+	UINT uTimerID = timeSetEvent(nTimerResolution, m_uAccuracy,(LPTIMECALLBACK) TimerCallProc, (DWORD_PTR)this, TIME_PERIODIC);
 	#endif
 
 	#ifdef USE_WND_TIMER
