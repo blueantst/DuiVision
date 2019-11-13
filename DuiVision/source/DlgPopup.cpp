@@ -404,8 +404,8 @@ void CDlgPopup::SetBackMode(enumBackMode enBackMode)
 	if(m_enBackMode == enBMImage && m_pImage != NULL)
 	{
 		m_enBackMode = enBackMode;
-		SetWindowPos(NULL, m_point.x, m_point.y, m_sizeBKImage.cx, m_sizeBKImage.cy, SWP_SHOWWINDOW);
-		m_size = m_sizeBKImage;
+		SetWindowPos(NULL, m_point.x, m_point.y, m_sizeBKImageDpi.cx, m_sizeBKImageDpi.cy, SWP_SHOWWINDOW);
+		m_size = m_sizeBKImageDpi;
 	}
 	else
 	{
@@ -426,6 +426,8 @@ void CDlgPopup::SetBackBitmap(UINT nResourceID)
 	if(LoadImageFromIDResource(nResourceID, TEXT("PNG"), m_bImageUseECM, m_pImage))
 	{
 		m_sizeBKImage.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
+		m_sizeBKImageDpi.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
+		CDuiWinDwmWrapper::AdapterDpi(m_sizeBKImageDpi.cx, m_sizeBKImageDpi.cy);
 		//DrawWindow();
 		if(m_bInitFinish)
 		{
@@ -439,6 +441,8 @@ void CDlgPopup::SetBackBitmap(CString strImage)
 	if(DuiSystem::Instance()->LoadImageFile(strImage, FALSE, m_pImage))
 	{
 		m_sizeBKImage.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
+		m_sizeBKImageDpi.SetSize(m_pImage->GetWidth(), m_pImage->GetHeight());
+		CDuiWinDwmWrapper::AdapterDpi(m_sizeBKImageDpi.cx, m_sizeBKImageDpi.cy);
 		//DrawWindow();
 		if(m_bInitFinish)
 		{
@@ -557,7 +561,8 @@ void CDlgPopup::DrawWindow(CDC *pDC)
 				m_nFrameWLT, m_nFrameHLT, m_nFrameWRB, m_nFrameHRB);
 		}else	// ͼƬģʽ
 		{
-			graphics.DrawImage(m_pImage, Rect(0, 0, m_sizeBKImage.cx, m_sizeBKImage.cy), 0, 0, m_sizeBKImage.cx, m_sizeBKImage.cy, UnitPixel);
+			graphics.DrawImage(m_pImage, Rect(0, 0, m_sizeBKImageDpi.cx, m_sizeBKImageDpi.cy),
+								0, 0, m_sizeBKImage.cx, m_sizeBKImage.cy, UnitPixel);
 		}
 	}
 	else

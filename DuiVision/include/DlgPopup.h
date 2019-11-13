@@ -43,6 +43,7 @@ protected:
 
 	Image*			m_pImage;
 	CSize			m_sizeBKImage;
+	CSize			m_sizeBKImageDpi;
 	CPoint			m_point;
 	CSize			m_size;
 	UINT			m_uMessageID;
