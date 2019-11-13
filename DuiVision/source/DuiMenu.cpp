@@ -10,9 +10,9 @@ CDuiMenu::CDuiMenu(CString strFont/* = TEXT("ËÎÌו")*/, int nFontWidth/* = 12*/, 
 	m_uAlignment = Align_Left;
 	m_uVAlignment = VAlign_Top;
 
-	m_nLeft = 30;
-	m_nHeight = 30;
-	m_nWidth = 113;
+	m_nLeft = DUI_DPI_X(30);
+	m_nHeight = DUI_DPI_Y(30);
+	m_nWidth = DUI_DPI_X(113);
 	m_nFrameWidth = 0;
 	m_nTopHeight = 0;
 	m_nBottomHeight = 0;
