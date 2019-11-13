@@ -59,6 +59,7 @@ public:
 	static int DPI_X(int x);
 	static int DPI_Y(int y);
 	static void AdapterDpi(int& x);
+	static void AdapterDpi(LONG& x);
 	static void AdapterDpi(int& x, int& y);
 	static void AdapterDpi(LONG& x,LONG& y);
 
