@@ -37,7 +37,7 @@ CTimer::~CTimer(void)
 }
 
 #ifdef USE_WMM_TIMER
-void CALLBACK CTimer::TimerCallProc(UINT uTimerID, UINT msg, DWORD dwData, DWORD dwa, DWORD dwb)
+void CALLBACK CTimer::TimerCallProc(UINT uTimerID, UINT msg, LONG_PTR dwData, DWORD dwa, DWORD dwb)
 {
 	CTimer *pTimer = (CTimer *)dwData;
 	if (pTimer)

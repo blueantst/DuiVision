@@ -1979,7 +1979,7 @@ void CDuiRichEdit::DoInit()
         m_pTxtWinHost->SetTransparent(TRUE);
         LRESULT lResult;
 		m_pTxtWinHost->GetTextServices()->TxSendMessage(EM_GETLANGOPTIONS, 0, 0, &lResult);
-		DWORD dw = lResult;
+		LONG_PTR dw = lResult;
 		dw |= IMF_AUTOKEYBOARD | IMF_DUALFONT;
 		dw &= ~IMF_AUTOFONT;
         m_pTxtWinHost->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, dw, &lResult);

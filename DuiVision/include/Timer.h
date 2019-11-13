@@ -34,7 +34,7 @@ public:
 	int KillTimer(CString strTimerName);
 	void KillTimer();
 	#ifdef USE_WMM_TIMER
-	static void CALLBACK TimerCallProc(UINT uTimerID, UINT msg, DWORD dwData, DWORD dwa, DWORD dwb);
+	static void CALLBACK TimerCallProc(UINT uTimerID, UINT msg, LONG_PTR dwData, DWORD dwa, DWORD dwb);
 	#endif
 	#ifdef USE_WND_TIMER
 	static void CALLBACK TimerCallProc(HWND hwnd, UINT message, UINT uTimerID, DWORD dwTime);
