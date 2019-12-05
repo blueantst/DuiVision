@@ -2274,6 +2274,7 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject)
 	m_fontStyle = FontStyleRegular;
 	m_uAlignment = Align_Left;
 	m_uVAlignment = VAlign_Top;
+	m_bEllipsisCharacter = FALSE;
 
 	m_pImage = NULL;
 	m_nImagePicCount = 4;
@@ -2291,6 +2292,7 @@ CControlBaseFont::CControlBaseFont(HWND hWnd, CDuiObject* pDuiObject, UINT uCont
 	m_fontStyle = fontStyle;
 	m_uAlignment = Align_Left;
 	m_uVAlignment = VAlign_Top;
+	m_bEllipsisCharacter = FALSE;
 
 	m_pImage = NULL;
 	m_nImagePicCount = 4;

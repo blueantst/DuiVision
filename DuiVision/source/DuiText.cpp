@@ -405,7 +405,10 @@ void CDuiText::DrawControl(CDC &dc, CRect rcUpdate)
 
 		//strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
 		strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
-		//strFormat.SetTrimming(StringTrimmingEllipsisWord);	// 以单词为单位去尾,略去部分使用省略号
+		if (m_bEllipsisCharacter)
+		{
+			strFormat.SetTrimming(StringTrimmingEllipsisWord);	// 以单词为单位去尾,略去部分使用省略号
+		}
 
 		int nXPos = 0;
 		if(m_pImage != NULL)

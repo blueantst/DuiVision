@@ -383,6 +383,7 @@ protected:
 	FontStyle				m_fontStyle;		// 字体Style
 	UINT					m_uAlignment;		// 水平对齐方式
 	UINT					m_uVAlignment;		// 垂直对齐方式
+	BOOL					m_bEllipsisCharacter;// 字符串结尾超出范围是否显示省略号
 
 	Image*					m_pImage;			// 图片
 	CSize					m_sizeImage;		// 图片大小
@@ -407,5 +408,6 @@ protected:
 		DUI_CUSTOM_ATTRIBUTE(_T("image"), OnAttributeImage)
 		DUI_CUSTOM_ATTRIBUTE(_T("skin"), OnAttributeSkin)
 		DUI_INT_ATTRIBUTE(_T("img-count"), m_nImagePicCount, FALSE)
+		DUI_BOOL_ATTRIBUTE(_T("ellipsis"), m_bEllipsisCharacter, TRUE)
     DUI_DECLARE_ATTRIBUTES_END()
 };
