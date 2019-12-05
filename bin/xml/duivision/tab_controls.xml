@@ -39,6 +39,8 @@
 					kkkkk
 					lllll
 					" />
+			<text pos="50,320,250,337" crtext="808080" ellipsis="1"
+				title="超出显示范围去尾，并显示省略号的文字" tip="超出显示范围去尾，并显示省略号的文字" />
 			
 			<text pos="300,20,500,40" crtext="808080" title="图片文字：" tip="使用图片拼接的文字" />
 			<imgstr skin="IDB_NUMBER_SAFE" mask="0123456789"
