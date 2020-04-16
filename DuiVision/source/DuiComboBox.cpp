@@ -113,6 +113,11 @@ void CDuiComboBox::SetComboValue(CString strComboValue)
 // 获取Combo选择项的值
 CString CDuiComboBox::GetComboValue()
 {
+	if (m_strComboValue.IsEmpty() && !IsReadOnly())
+	{
+		return GetTitle();
+	}
+
 	return m_strComboValue;
 }
 
