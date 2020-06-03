@@ -70,8 +70,8 @@
 			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
 			<item title="29.5M" crtext="0,0,128" />
 			<item>
-				<button name="grid_btn_resume" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
-				<button name="grid_btn_cancel" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+				<button name="grid_btn_resume" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showmode="extrude" showfocus="0" tip="图片按钮1" />
+				<button name="grid_btn_cancel" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showmode="extrude" showfocus="0" tip="图片按钮2" />
 			</item>
 		</row>
 		<row image="skins\icon\ico_business.png" check="0">
@@ -119,8 +119,8 @@
 			<item title="4.9.14.2版本" image="1" />
 			<item title="43.5M" />
 			<item>
-				<button name="grid_btn_resume2" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
-				<button name="grid_btn_cancel2" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+				<button name="grid_btn_resume2" pos="10,20,27,37" image="skins\qq\softtastmgr_btn_resume.png" showmode="extrude" showfocus="0" tip="图片按钮1" />
+				<button name="grid_btn_cancel2" pos="30,20,47,37" image="skins\qq\softtastmgr_btn_cancel.png" showmode="extrude" showfocus="0" tip="图片按钮2" />
 			</item>
 		</row>
 		<row image="skin:IDB_ICON_CHECK" check="0">

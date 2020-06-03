@@ -47,9 +47,9 @@
 					<item title="迅雷看看-1,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
 					<item />
 					<item>
-						<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
-						<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
-					</item>
+						<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showmode="extrude" showfocus="0" tip="图片按钮1" />
+						<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showmode="extrude" showfocus="0" tip="图片按钮2" />
+					</item> 
 				</node>
 				<node id="1-3-2" image="skin:IDB_ICON_ERROR" check="0">
 					<item title="迅雷看看是中国第一高清影视视频门户,免费提供电影、电视剧、综艺、音乐MV、动漫、新片、大片的高清在线点播和下载,是中国最大最全的正版影视发行平台"/>
@@ -99,8 +99,8 @@
 					<item title="迅雷看看-1,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
 					<item />
 					<item>
-						<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
-						<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+						<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showmode="extrude" showfocus="0" tip="图片按钮1" />
+						<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showmode="extrude" showfocus="0" tip="图片按钮2" />
 					</item>
 					<node id="2-7-1-1" image="skin:IDB_ICON_ERROR" check="1" collapse="1" >
 						<item title="迅雷看看3" font-title="1" image="3" />
@@ -110,8 +110,8 @@
 							<item title="！迅雷看看-31,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop,Axialis IconWorkshop"/>
 							<item />
 							<item>
-								<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showfocus="0" tip="图片按钮1" />
-								<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showfocus="0" tip="图片按钮2" />
+								<button name="tree_btn_resume" pos="10,5,27,22" image="skins\qq\softtastmgr_btn_resume.png" showmode="extrude" showfocus="0" tip="图片按钮1" />
+								<button name="tree_btn_cancel" pos="30,5,47,22" image="skins\qq\softtastmgr_btn_cancel.png" showmode="extrude" showfocus="0" tip="图片按钮2" />
 							</item>
 						</node>
 						<node id="2-7-1-1-2" image="skin:IDB_ICON_ERROR" check="0">
