@@ -1,6 +1,13 @@
 #pragma once
 #include "ControlBase.h"
 
+// 按钮显示模式
+enum enumButtonShowMode
+{
+	enBSMFrame = 0,			// 边框
+	enBSMExtrude			// 拉伸
+};
+
 class CDuiButton : public CControlBaseFont
 {
 	DUIOBJ_DECLARE_CLASS_NAME(CDuiButton, _T("button"))
@@ -25,6 +32,7 @@ protected:
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
 
 public:
+	enumButtonShowMode	m_enButtonShowMode;	// 按钮的背景图片显示模式
 	enumButtonState		m_enButtonState;	// 按钮状态
 	Color				m_clrText;			// 文字颜色
 	int					m_nIndex;			// 渐变效果的过程索引
@@ -40,6 +48,10 @@ public:
 		DUI_INT_ATTRIBUTE(_T("maxindex"), m_nMaxIndex, TRUE)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-btn"), OnAttributeImageBtn)
 		DUI_BOOL_ATTRIBUTE(_T("showfocus"), m_bShowFocus, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("showmode"), enumButtonShowMode, TRUE)
+			DUI_ENUM_VALUE(_T("extrude"), enBSMExtrude)
+			DUI_ENUM_VALUE(_T("frame"), enBSMFrame)
+		DUI_ENUM_END(m_enButtonShowMode)
     DUI_DECLARE_ATTRIBUTES_END()
 };
 

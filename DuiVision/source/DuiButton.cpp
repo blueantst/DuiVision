@@ -7,6 +7,7 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject)
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bIsFocus = FALSE;
 	m_bShowFocus = TRUE;
+	m_enButtonShowMode = enBSMFrame;
 	m_enButtonState = enBSNormal;
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
@@ -25,6 +26,7 @@ CDuiButton::CDuiButton(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 	m_bTabStop = TRUE;	// 可以响应tab键
 	m_bIsFocus = FALSE;
 	m_bShowFocus = TRUE;
+	m_enButtonShowMode = enBSMFrame;
 	m_enButtonState = enBSNormal;
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
@@ -256,12 +258,20 @@ void CDuiButton::DrawControl(CDC &dc, CRect rcUpdate)
 		
 		m_memDC.SetBkMode(TRANSPARENT);
 
-		// 画基础状态
+		// 画基础背景状态
 		for(int i = 0; i < 4; i++)
 		{
 			m_memDC.BitBlt(i * nWidth, 0, nWidth, nHeight, &dc, m_rc.left ,m_rc.top, SRCCOPY);
 			
-			DrawImageFrame(graphics, m_pImage, rcTemp, i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 4);
+			if (m_enButtonShowMode == enBSMFrame)	// 边框
+			{
+				DrawImageFrame(graphics, m_pImage, rcTemp, i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 4);
+			}else
+			if (m_enButtonShowMode == enBSMExtrude)	// 拉伸
+			{
+				Rect rect(i * nWidth, 0, nWidth, nHeight);
+				graphics.DrawImage(m_pImage, rect, i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
+			}
 
 			// 画焦点框(虚线框)
 			if(m_bIsFocus && m_bShowFocus)
