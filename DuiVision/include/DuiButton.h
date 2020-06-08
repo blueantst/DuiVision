@@ -17,6 +17,7 @@ public:
 	virtual ~CDuiButton(void);
 
 	void SetMaxIndex(int nMaxIndex) { m_nMaxIndex = nMaxIndex; }
+	void SetShowMode(enumButtonShowMode enButtonShowMode);
 
 	virtual BOOL SetControlFocus(BOOL bFocus);
 

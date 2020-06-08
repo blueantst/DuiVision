@@ -50,6 +50,16 @@ CDuiButton::~CDuiButton(void)
 // 图片属性的实现
 DUI_IMAGE_ATTRIBUTE_IMPLEMENT(CDuiButton, Btn, 1)
 
+// 设置按钮的背景图片显示模式
+void CDuiButton::SetShowMode(enumButtonShowMode enButtonShowMode)
+{
+	if (enButtonShowMode != m_enButtonShowMode)
+	{
+		m_enButtonShowMode = enButtonShowMode;
+		UpdateControl(true);
+	}
+}
+
 // 设置控件的焦点
 BOOL CDuiButton::SetControlFocus(BOOL bFocus)
 {
