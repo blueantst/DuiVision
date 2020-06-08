@@ -60,6 +60,16 @@ void CDuiButton::SetShowMode(enumButtonShowMode enButtonShowMode)
 	}
 }
 
+// 设置是否显示焦点框
+void CDuiButton::SetShowFocus(BOOL bShowFocus)
+{
+	if (bShowFocus != m_bShowFocus)
+	{
+		m_bShowFocus = bShowFocus;
+		UpdateControl(true);
+	}
+}
+
 // 设置控件的焦点
 BOOL CDuiButton::SetControlFocus(BOOL bFocus)
 {

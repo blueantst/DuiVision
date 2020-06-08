@@ -76,6 +76,16 @@ HRESULT CDuiCheckButton::OnAttributeCheck(const CString& strValue, BOOL bLoading
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置是否显示焦点框
+void CDuiCheckButton::SetShowFocus(BOOL bShowFocus)
+{
+	if (bShowFocus != m_bShowFocus)
+	{
+		m_bShowFocus = bShowFocus;
+		UpdateControl(true);
+	}
+}
+
 // 设置控件的焦点
 BOOL CDuiCheckButton::SetControlFocus(BOOL bFocus)
 {

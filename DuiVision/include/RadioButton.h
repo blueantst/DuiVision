@@ -22,6 +22,7 @@ public:
 	HRESULT OnAttributeCheck(const CString& strValue, BOOL bLoading);
 
 	void SetTextColor(Color clrText) { m_clrText = clrText; };
+	void SetShowFocus(BOOL bShowFocus);
 
 	virtual BOOL SetControlFocus(BOOL bFocus);
 

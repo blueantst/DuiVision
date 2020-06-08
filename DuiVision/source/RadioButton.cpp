@@ -185,6 +185,16 @@ HRESULT CDuiRadioButton::OnAttributeCheck(const CString& strValue, BOOL bLoading
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 设置是否显示焦点框
+void CDuiRadioButton::SetShowFocus(BOOL bShowFocus)
+{
+	if (bShowFocus != m_bShowFocus)
+	{
+		m_bShowFocus = bShowFocus;
+		UpdateControl(true);
+	}
+}
+
 // 设置控件的焦点
 BOOL CDuiRadioButton::SetControlFocus(BOOL bFocus)
 {

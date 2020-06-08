@@ -18,6 +18,7 @@ public:
 
 	void SetMaxIndex(int nMaxIndex) { m_nMaxIndex = nMaxIndex; }
 	void SetShowMode(enumButtonShowMode enButtonShowMode);
+	void SetShowFocus(BOOL bShowFocus);
 
 	virtual BOOL SetControlFocus(BOOL bFocus);
 
