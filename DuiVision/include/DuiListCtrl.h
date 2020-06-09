@@ -64,6 +64,7 @@ public:
 	BOOL EnsureVisible(int nRow, BOOL bPartialOK);
 	int  GetItemCount() { return m_vecRowInfo.size(); }
 	int  GetCurrentItem() { return m_nDownRow; }
+	int  GetItemById(CString strItemId);
 	ListRowInfo* GetItemInfo(int nRow);
 	void SetRowColor(int nRow, Color clrText);
 	void SetRowBackColor(int nRow, Color clrBack);

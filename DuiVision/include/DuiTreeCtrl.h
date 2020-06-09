@@ -98,6 +98,7 @@ public:
 	BOOL DeleteNode(HDUITREEITEM hNode);
 	int  GetNodeCount() { return m_vecRowInfo.size(); }
 	int  GetNodeRow(HDUITREEITEM hNode);
+	int  GetNodeRowById(CString strNodeId);
 	int	 GetNodeLastChildRow(HDUITREEITEM hNode);
 	HDUITREEITEM  GetCurrentNode();
 	BOOL HaveChildNode(HDUITREEITEM hNode);

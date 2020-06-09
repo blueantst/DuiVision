@@ -959,6 +959,21 @@ int CDuiTreeCtrl::GetNodeRow(HDUITREEITEM hNode)
 	return -1;
 }
 
+// 根据节点ID获取节点行号
+int CDuiTreeCtrl::GetNodeRowById(CString strNodeId)
+{
+	for (size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		TreeNodeInfo& rowInfoTemp = m_vecRowInfo.at(i);
+		if (rowInfoTemp.strId == strNodeId)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 // 获取节点的最后一个子节点行号(遍历到最底层的子节点)
 int CDuiTreeCtrl::GetNodeLastChildRow(HDUITREEITEM hNode)
 {

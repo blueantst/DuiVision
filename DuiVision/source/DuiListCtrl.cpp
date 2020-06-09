@@ -363,6 +363,21 @@ BOOL CDuiListCtrl::EnsureVisible(int nRow, BOOL bPartialOK)
 	return TRUE;
 }
 
+// 根据行ID获取行索引
+int CDuiListCtrl::GetItemById(CString strItemId)
+{
+	for (size_t i = 0; i < m_vecRowInfo.size(); i++)
+	{
+		ListRowInfo& rowInfo = m_vecRowInfo.at(i);
+		if (rowInfo.strId == strItemId)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 // 获取某一个列表项
 ListRowInfo* CDuiListCtrl::GetItemInfo(int nRow)
 {
