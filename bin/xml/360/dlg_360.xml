@@ -26,7 +26,7 @@
 		<tab name="tab1" title="电脑体检" image="skins\icon\ico_Examine.png" img-count="1" active="true" pos="0,75,-0,-0">
 		
 			<animateimg name="animateimg_scan_360" skin="IDB_SCAN_STATUS_360"
-				pos="30,50" width="102" height="102" show="1" index="0" maxindex="17" timer-count="10" run="true" />
+				pos="30,50" width="102" height="102" show="1" index="0" maxindex="17" timer-count="10" run="1" />
 			
 			<text name="text" crtext="404040" crmark="A04000" font="big"
 				pos="170,50,450,80" title="您的电脑已经 5 天没有体检，建议立即体检" mask="5" show="1" />
