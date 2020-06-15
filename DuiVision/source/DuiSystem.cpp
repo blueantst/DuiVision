@@ -2,14 +2,21 @@
 #include "DuiSystem.h"
 #include "IInterp.h"
 #include <tchar.h>
-template<> DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
-static DuiSystem* g_pIns = NULL;
-static UINT g_nIDTemplate = 0;
-static CString g_strRootPath = _T("");
+template<>	DuiSystem* Singleton<DuiSystem>::ms_Singleton = 0;
 
-static ULONG_PTR gdiplusToken;
-static GdiplusStartupInput gdiplusStartupInput;
+static		DuiSystem*	g_pIns = NULL;					// 实例指针
+static		UINT		g_nIDTemplate = 0;				// Windows对话框资源ID
+static		CString		g_strRootPath = _T("");			// 资源的根路径
+
+static		ULONG_PTR	gdiplusToken;
+static		GdiplusStartupInput gdiplusStartupInput;
+
+static		CString		g_strLogFile = _T("");			// 默认日志文件名
+static		int			g_nLogLevel = LOG_LEVEL_INFO;	// 默认日志级别
+static		int			g_nLogFileSize = 1024;			// 默认日志文件大小
+static		int			g_nLogFileNumber = 5;			// 默认日志文件个数
+
 
 DuiSystem::DuiSystem(HINSTANCE hInst, DWORD dwLangID, CString strResourceFile, UINT uAppID, UINT nIDTemplate, CString strStyle)
     :m_hInst(hInst), m_uAppID(uAppID)
@@ -1272,7 +1279,7 @@ void DuiSystem::ParseDuiString(CString& strString)
 	strString = strTmp;
 }
 
-// 获取操作系统名字
+// 获取操作系统名字(此方法无法获取到正确的Win10的版本号,因为兼容模式下获取到的Win10版本号和Win8相同)
 CString DuiSystem::GetOSName()
 {
 	int nOSType       =  OS_UNKNOWN;
@@ -2870,19 +2877,44 @@ BOOL DuiSystem::SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	return TRUE;
 }
 
+// 设置日志参数(如果不设置,默认会使用resource.xml中定义的日志配置)
+void DuiSystem::SetLogParam(CString strLogFile, int nLogLevel, int nLogFileSize, int nLogFileNumber)
+{
+	g_strLogFile = strLogFile;
+	g_nLogLevel = nLogLevel;
+	g_nLogFileSize = nLogFileSize;
+	g_nLogFileNumber = nLogFileNumber;
+}
+
 // 日志初始化
 void DuiSystem::InitLog()
 {
 	// 初始化日志文件路径和锁
-	CString strLogFile = GetConfig(_T("logfile"));
+	CString strLogFile = _T("");
+	int nLogLevel = LOG_LEVEL_INFO;
+	int nLogFileSize = 1024;
+	int nLogFileNumber = 5;
+
+	// 如果设置了日志的全局参数,则优先使用全局参数定义的内容,否则才使用resource.xml中定义的参数
+	if (!g_strLogFile.IsEmpty())
+	{
+		strLogFile = g_strLogFile;
+		nLogLevel = g_nLogLevel;
+		nLogFileSize = g_nLogFileSize * 1024;	// 单位是K
+		nLogFileNumber = g_nLogFileNumber;
+	}else
+	{
+		strLogFile = GetConfig(_T("logfile"));
+		nLogLevel = _ttoi(GetConfig(_T("loglevel")));
+		nLogFileSize = _ttoi(GetConfig(_T("logFileSize"))) * 1024;	// 单位是K
+		nLogFileNumber = _ttoi(GetConfig(_T("logFileNumber")));
+	}
+	
 	if(strLogFile.IsEmpty())
 	{
 		return;
 	}
 	strLogFile = GetExePath() + strLogFile;
-	int nLogLevel = _ttoi(GetConfig(_T("loglevel")));
-	int nLogFileSize = _ttoi(GetConfig(_T("logFileSize"))) * 1024;	// 单位是K
-	int nLogFileNumber = _ttoi(GetConfig(_T("logFileNumber")));
 
 	CLogMgr::Instance()->SetLogFile(strLogFile);
 	CLogMgr::Instance()->SetLogLevel(nLogLevel);

@@ -2,22 +2,22 @@
 #define __LOG_MGR_H_
 
 // 日志相关定义
-#define MAXLOGFILESIZE			(1024 << 10)		// 日志文件最大长度
-#define _LOG_DATABUFF			1024	// 日志数据缓冲区大小
-#define _MAX_FILE_PATH			1024	// 支持的最大文件路径名
-#define MAX_MAINTENANCE_LOG_NUM	1024	// 可维护最大文件数1024
+#define MAXLOGFILESIZE			(1024 << 10)// 日志文件最大长度
+#define _LOG_DATABUFF			1024		// 日志数据缓冲区大小
+#define _MAX_FILE_PATH			1024		// 支持的最大文件路径名
+#define MAX_MAINTENANCE_LOG_NUM	1024		// 可维护最大文件数1024
 
 //日志级别定义
-#define LOG_LEVEL_DEBUG 0x0001      // 调试信息
-#define LOG_LEVEL_INFO	0x0002      // 一般信息
-#define LOG_LEVEL_ERROR 0x0004      // 错误信息
-#define LOG_LEVEL_CRITICAL 0x0008	// 致命信息
+#define LOG_LEVEL_DEBUG			0x0001      // 调试信息
+#define LOG_LEVEL_INFO			0x0002      // 一般信息
+#define LOG_LEVEL_ERROR			0x0004      // 错误信息
+#define LOG_LEVEL_CRITICAL		0x0008		// 致命信息
 
 // 日志级别字符串
-#define	__DEBUG		_T("DEBUG")
-#define	__INFO		_T("INFO")
-#define	__ERROR		_T("ERROR")
-#define	__CRITICAL	_T("CRITICAL")
+#define	__DEBUG					_T("DEBUG")
+#define	__INFO					_T("INFO")
+#define	__ERROR					_T("ERROR")
+#define	__CRITICAL				_T("CRITICAL")
 
 // 日志转储文件
 #define	LOG_CONVEY_FILE_NAME	_T("logbak")

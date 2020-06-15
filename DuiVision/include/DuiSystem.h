@@ -39,7 +39,8 @@ enum OSType
     WINDOWS_VISTA,
 	WINDOWS_7,
 	WINDOWS_8,
-    WINDOWS_HIGH
+	WINDOWS_10,
+	WINDOWS_HIGH
 };
 
 // 操作系统补丁类型定义
@@ -231,6 +232,7 @@ public:
 	BOOL SendInterprocessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, CString strAppName, CString strInfo);
 
 	// 日志函数
+	static void SetLogParam(CString strLogFile, int nLogLevel, int nLogFileSize = 1024, int nLogFileNumber = 5);
 	void InitLog();
 	void DoneLog();
 	static void	LogEvent(int nLevel, LPCTSTR lpFormat, ...);
