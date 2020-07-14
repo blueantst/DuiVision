@@ -17,7 +17,9 @@ DirectUI技术需要解决的主要问题如下：
 
 通常DirectUI的界面库都采用XML配置文件+图片+控制脚本（Lua、Javascript等）的开发方式，非常类似于Web程序的开发方式，当然这里面控制脚本也可以直接使用C++代码来实现。这种开发方式可以大大提高开发效率，将程序员从繁琐的界面工作中解脱出来，并且通过美工的设计，可以使界面更美观。
 
-DuiVision开源下载地址：https://github.com/blueantst/DuiVision
+DuiVision开源下载地址(github)：https://github.com/blueantst/DuiVision
+
+DuiVision开源下载地址(gitee)：https://gitee.com/blueantst/DuiVision
 
 蓝蚂蚁工作室主页：[http://www.blueantstudio.net](http://www.blueantstudio.net)
 
