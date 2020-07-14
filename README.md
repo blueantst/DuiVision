@@ -2,7 +2,7 @@ DuiVision
 =========
 
 ![License](https://img.shields.io/badge/license-MIT-green)
-[![](https://img.shields.io/badge/Author-蓝蚂蚁工作室-orange.svg)](http://www.blueantstudio.net)
+[![](https://img.shields.io/badge/Author-蓝蚂蚁工作室-blue.svg)](http://www.blueantstudio.net)
 ![QQ群325880743](https://img.shields.io/badge/QQ群-325880743-brightgreen)
 [![GitHub stars](https://img.shields.io/github/stars/blueantst/DuiVision.svg?style=social&label=Stars)](https://github.com/blueantst/DuiVision)
 [![GitHub forks](https://img.shields.io/github/forks/blueantst/DuiVision.svg?style=social&label=Fork)](https://github.com/blueantst/DuiVision)
