@@ -1,6 +1,9 @@
 DuiVision
 =========
 
+![License](https://img.shields.io/badge/license-MIT-green)
+![QQ群325880743](https://img.shields.io/badge/QQ群-325880743-brightgreen)
+
 DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine、DuiLib等多个基于DirectUI的界面库开发的。
 
 DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用Windows控件，所以这些控件都是无句柄的。
@@ -44,7 +47,7 @@ DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装
 
 (The MIT License)
 
-Copyright (c) 2013-2019 blueant studio. and other contributors
+Copyright (c) 2013-2020 blueant studio. and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
