@@ -32,7 +32,7 @@ QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://sh
 
 微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室
 
-下载DuiVision Demo程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20161218.zip)
+下载DuiVision Demo程序：[20200603版本](http://www.blueantstudio.net/duivision/DuiVisionDemo-20200603.zip)
 
 下载DuiVision 浏览器演示程序：[20161218版本](http://www.blueantstudio.net/duivision/DuiVisionExplorer-20161218.zip)
 
@@ -44,9 +44,11 @@ QQ群：325880743 (Script.NET&DuiVision社区)<a target="_blank" href="http://sh
 
 DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装包进行向导安装，目前推荐的向导安装方法是使用网友蜡笔小辛提供的js安装向导，首先下载github代码库到本地，然后直接点击执行DuiVision\DuiWizard\SetupWizard.js文件，会提示安装哪些VC版本的向导。这种方法安装的向导优点是每次界面库有更新不需要安装新版本的向导，只要更新了github库就可以自动使用最新的向导。注意DuiVision的目录最好不要放在有空格或中文的路径下面，否则向导可能会出现一些异常问题。
 
-下载DuiVision开发手册：[DuiVision开发手册-20161216.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20161216.pdf)
+下载DuiVision开发手册：[DuiVision开发手册-20200603.pdf](http://www.blueantstudio.net/duivision/DuiVision%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20200603.pdf)
 
-下载DuiVision控件开发指南：[DuiVision控件开发指南-20160317.pdf](http://www.blueantstudio.net/duivision/DuiVision%E6%8E%A7%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-20160317.pdf)
+下载DuiVision控件开发指南：[DuiVision控件开发指南-20190923.pdf](http://www.blueantstudio.net/duivision/DuiVision%E6%8E%A7%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-20190923.pdf)
+
+下载DuiVision Tcl脚本开发手册：[DuiVision Tcl脚本开发手册-20170212.pdf](http://www.blueantstudio.net/duivision/DuiVision%20Tcl%E8%84%9A%E6%9C%AC%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C-20170212.pdf)
 
 ## License
 
@@ -127,3 +129,9 @@ DuiVision的基础代码有很多是从下面几个界面库移植的：
 - 山不转水转(shelovemee) : 修改阴影窗口等问题
 
 还有很多提出改进建议和改进方法的人，没有一一列出来，欢迎大家参与这个开源项目，共同完善。
+
+## 捐赠
+支付宝账号：
+
+![支付宝账号](http://www.blueantstudio.net/duivision/alipay_scriptnet.jpg)
+
