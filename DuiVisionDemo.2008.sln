@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiPluginDemo.2008", "DuiPl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCDuiVisionDemo.2008", "MFCDuiVisionDemo\MFCDuiVisionDemo.2008.vcproj", "{4972ED57-993F-487D-91C4-220218C00786}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionScriptDemo", "DuiVisionScriptDemo\DuiVisionScriptDemo.vcproj", "{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionScriptDemo", "DuiVisionScriptDemo\DuiVisionScriptDemo.2008.vcproj", "{46C7AE9C-8E39-48F8-BD16-9B2FAE9FA9A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
