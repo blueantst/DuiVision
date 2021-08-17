@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29503.13
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVision.2010", "DuiVision\DuiVision.2010.vcxproj", "{956C8DD0-B286-44FE-B190-7C3666CB6645}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiVisionDemo.2010", "DuiVisionDemo\DuiVisionDemo.2010.vcxproj", "{FC22C86E-283A-4CA4-BBCE-883E5D02058F}"
