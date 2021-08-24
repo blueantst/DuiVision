@@ -8,6 +8,7 @@
 <res type="cfg" name="appMutex" value="MUTEX_DUIVISION_IM" />
 <res type="cfg" name="enableDragFile" value="1" />
 <res type="cfg" name="trayDbClickMsg" value="0" />
+<res type="cfg" name="dpiAware" value="2" dpix="" dpiy="" />
 
 <!--风格设置-->
 <res type="style" name="default" value="" />
