@@ -609,6 +609,8 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 				// 按照设置的小图片个数计算
 				m_sizeImage.SetSize(m_pImage->GetWidth() / m_nImagePicCount, m_pImage->GetHeight());
 			}
+			m_sizeImageDpi.SetSize(m_sizeImage.cx, m_sizeImage.cy);
+			CDuiWinDwmWrapper::AdapterDpi(m_sizeImageDpi.cx, m_sizeImageDpi.cy);
 		}
 
 		Graphics graphics(m_memDC);
@@ -646,18 +648,18 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 				if(m_bIsPopup && (m_pImagePopupArrow == NULL))
 				{
 					// 如果是弹出菜单,并且没有设置菜单的箭头图片,则用菜单图片作为右侧的箭头图片
-					graphics.DrawImage(m_pImage, Rect(rcTemp.right - m_sizeImage.cx - 6, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(rcTemp.right - m_sizeImageDpi.cx - 6, rcTemp.top + (nHeight - m_sizeImageDpi.cy) / 2, m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 						(i % 2) * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}else
 				if(m_bSelect)
 				{
 					// checkbox或radiobutton
-					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImage.cx) / 2, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImageDpi.cx) / 2, rcTemp.top + (nHeight - m_sizeImageDpi.cy) / 2, m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 						i * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}else
 				{
 					// 普通菜单项的图片,如果小图片个数不足,则使用第一个小图片
-					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImage.cx) / 2, rcTemp.top + (nHeight - m_sizeImage.cy) / 2, m_sizeImage.cx, m_sizeImage.cy),
+					graphics.DrawImage(m_pImage, Rect(rcTemp.left + (m_nLeft - m_sizeImageDpi.cx) / 2, rcTemp.top + (nHeight - m_sizeImageDpi.cy) / 2, m_sizeImageDpi.cx, m_sizeImageDpi.cy),
 						((m_nImagePicCount-1 < i) ? 0 : i) * m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, UnitPixel);
 				}
 			}
@@ -665,7 +667,9 @@ void CMenuItem::DrawControl(CDC &dc, CRect rcUpdate)
 			// 如果是弹出菜单,并且设置了菜单的箭头图片,则画右侧的箭头图片
 			if(m_bIsPopup && (m_pImagePopupArrow != NULL))
 			{
-				graphics.DrawImage(m_pImagePopupArrow, Rect(rcTemp.right - m_sizePopupArrow.cx - 6, rcTemp.top + (nHeight - m_sizePopupArrow.cy) / 2, m_sizePopupArrow.cx, m_sizePopupArrow.cy),
+				m_sizePopupArrowDpi.SetSize(m_sizePopupArrow.cx, m_sizePopupArrow.cy);
+				CDuiWinDwmWrapper::AdapterDpi(m_sizePopupArrowDpi.cx, m_sizePopupArrowDpi.cy);
+				graphics.DrawImage(m_pImagePopupArrow, Rect(rcTemp.right - m_sizePopupArrowDpi.cx - 6, rcTemp.top + (nHeight - m_sizePopupArrowDpi.cy) / 2, m_sizePopupArrowDpi.cx, m_sizePopupArrowDpi.cy),
 					(i % 2) * m_sizePopupArrow.cx, 0, m_sizePopupArrow.cx, m_sizePopupArrow.cy, UnitPixel);
 			}
 

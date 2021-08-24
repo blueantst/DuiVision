@@ -76,6 +76,7 @@ public:
 	CSize				m_sizeHover;		// 背景图片大小
 	Image*				m_pImagePopupArrow;	// 弹出菜单箭头图片
 	CSize				m_sizePopupArrow;	// 弹出菜单箭头图片大小
+	CSize				m_sizePopupArrowDpi;// 弹出菜单箭头图片大小(DPI适配后的大小)
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("select"), m_bSelect, FALSE)
