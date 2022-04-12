@@ -167,10 +167,10 @@ LRESULT CDuiHandlerMain::OnDuiMsgInterprocess(UINT uID, CString strName, UINT Ms
 	CString strCmd = pInterMsg->wInfo;
 	if(!strCmd.IsEmpty())
 	{
-		DuiSystem::DuiMessageBox(NULL, L"执行了命令行参数:" + strCmd);
+		DuiSystem::DuiMessageBox(NULL, _T("执行了命令行参数:") + strCmd);
 	}else
 	{
-		CDlgBase* pDlg = DuiSystem::Instance()->GetDuiDialog(L"dlg_main");
+		CDlgBase* pDlg = DuiSystem::Instance()->GetDuiDialog(_T("dlg_main"));
 		if(pDlg)
 		{
 			pDlg->SetForegroundWindow();
