@@ -1503,7 +1503,16 @@ void CDuiRichEdit::SetText(LPCTSTR pstrText)
     m_strTitle = pstrText;
     if( !m_pTxtWinHost ) return;
     SetSel(0, -1);
+#ifndef _UNICODE
+    int nUnicodeLen = MultiByteToWideChar(CP_ACP, 0, pstrText, -1, NULL, 0);
+    wchar_t* pcUnicode = new wchar_t[nUnicodeLen + 1];
+    memset(pcUnicode, 0, nUnicodeLen * 2 + 2);
+    MultiByteToWideChar(CP_ACP, 0, pstrText, -1, pcUnicode, nUnicodeLen);
+    ReplaceSelW(pcUnicode, bCanUndo);
+    delete[] pcUnicode;
+#else
     ReplaceSel(pstrText, FALSE);
+#endif
 }
 
 // 从文件中读取rtf内容
@@ -1694,15 +1703,35 @@ void CDuiRichEdit::ScrollCaret()
 int CDuiRichEdit::InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCanUndo)
 {
     int nRet = SetSel(nInsertAfterChar, nInsertAfterChar);
+#ifndef _UNICODE
+    int nUnicodeLen = MultiByteToWideChar(CP_ACP, 0, lpstrText, -1, NULL, 0);
+    wchar_t* pcUnicode = new wchar_t[nUnicodeLen + 1];
+    memset(pcUnicode, 0, nUnicodeLen * 2 + 2);
+    MultiByteToWideChar(CP_ACP, 0, lpstrText, -1, pcUnicode, nUnicodeLen);
+    ReplaceSelW(pcUnicode, bCanUndo);
+    delete[] pcUnicode;
+#else
     ReplaceSel(lpstrText, bCanUndo);
+#endif
     return nRet;
 }
 
 int CDuiRichEdit::AppendText(LPCTSTR lpstrText, bool bCanUndo)
 {
     int nRet = SetSel(-1, -1);
+    
+#ifndef _UNICODE
+    int nUnicodeLen = MultiByteToWideChar(CP_ACP, 0, lpstrText, -1, NULL, 0);
+    wchar_t* pcUnicode = new wchar_t[nUnicodeLen + 1];
+    memset(pcUnicode, 0, nUnicodeLen * 2 + 2);
+    MultiByteToWideChar(CP_ACP, 0, lpstrText, -1, pcUnicode, nUnicodeLen);
+    ReplaceSelW(pcUnicode, bCanUndo);
+    delete[] pcUnicode;
+#else
     ReplaceSel(lpstrText, bCanUndo);
-    return nRet;
+#endif
+
+     return nRet;
 }
 
 DWORD CDuiRichEdit::GetDefaultCharFormat(CHARFORMAT2 &cf) const
