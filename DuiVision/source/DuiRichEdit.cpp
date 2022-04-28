@@ -1508,7 +1508,7 @@ void CDuiRichEdit::SetText(LPCTSTR pstrText)
     wchar_t* pcUnicode = new wchar_t[nUnicodeLen + 1];
     memset(pcUnicode, 0, nUnicodeLen * 2 + 2);
     MultiByteToWideChar(CP_ACP, 0, pstrText, -1, pcUnicode, nUnicodeLen);
-    ReplaceSelW(pcUnicode, bCanUndo);
+    ReplaceSelW(pcUnicode);
     delete[] pcUnicode;
 #else
     ReplaceSel(pstrText, FALSE);
