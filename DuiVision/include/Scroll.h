@@ -21,6 +21,10 @@ public:
 	int GetScrollCurrentPos() { return m_nCurrentPos; }
 	BOOL SetScrollMaxRange(int nMaxRange);
 	int GetScrollMaxRange() { return m_nMaxRange; }
+	BOOL SetScrollRowRange(int nRowRange);
+	int GetScrollRowRange() { return m_nRowRange; }
+	BOOL SetScrollPageRange(int nPageRange);
+	int GetScrollPageRange() { return m_nPageRange; }
 	BOOL SetScrollSize(int nPageRange, int nRowRange = 0);
 	BOOL SetScrollInfo(int nMaxRange, int nCurrentPos, int nPageRange = 0, int nRowRange = 0);
 	BOOL ScrollRow(int nRow);

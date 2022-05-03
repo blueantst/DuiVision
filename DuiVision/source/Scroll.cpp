@@ -121,6 +121,29 @@ BOOL CDuiScroll::SetScrollMaxRange(int nMaxRange)
 	return TRUE;
 }
 
+// 设置滚动条行像素数
+BOOL CDuiScroll::SetScrollRowRange(int nRowRange)
+{
+	if (nRowRange != 0)
+	{
+		m_nRowRange = nRowRange;
+	}
+	SetRange();
+	return TRUE;
+}
+
+// 设置滚动条页像素数
+BOOL CDuiScroll::SetScrollPageRange(int nPageRange)
+{
+	m_nPageRange = nPageRange;
+	if (m_nPageRange != 0)
+	{
+		m_bAutoCalcRange = FALSE;
+	}
+	SetRange();
+	return TRUE;
+}
+
 // 设置滚动条行和页的像素数
 BOOL CDuiScroll::SetScrollSize(int nPageRange, int nRowRange)
 {
