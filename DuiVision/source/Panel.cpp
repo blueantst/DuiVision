@@ -11,6 +11,8 @@ CDuiPanel::CDuiPanel(HWND hWnd, CDuiObject* pDuiObject)
 	m_ulRefCount = 0;
 	m_bEnableScroll = TRUE;
 	m_nScrollWidth = 8;
+	// 按照当前DPI计算滚动条的宽度
+	CDuiWinDwmWrapper::AdapterDpi(m_nScrollWidth);
 
 	// 垂直滚动条
 	CRect rcScroll = CRect(0,0,0,0);

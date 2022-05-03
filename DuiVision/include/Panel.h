@@ -124,7 +124,7 @@ public:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScrollV)
 		DUI_CUSTOM_ATTRIBUTE("img-scrollh", OnAttributeImageScrollH)
-		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
+		DUI_INT_ATTRIBUTE_DPI("scroll-width", m_nScrollWidth, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("xml", OnAttributeXml)
 #ifdef _DEBUG
 		DUI_CUSTOM_ATTRIBUTE("plugin-debug", OnAttributePlugin)
