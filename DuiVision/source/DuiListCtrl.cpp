@@ -334,6 +334,7 @@ void CDuiListCtrl::CalcItemsPos()
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollRowRange(m_nRowHeight);
 }
 
 // 将指定的行滚动到可见范围
@@ -523,6 +524,7 @@ void CDuiListCtrl::SetControlRect(CRect rc)
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible(((int)m_vecRowInfo.size() * m_nRowHeight) > m_rc.Height());
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange((int)m_vecRowInfo.size() * m_nRowHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollRowRange(m_nRowHeight);
 }
 
 // 判断指定的坐标位置是否在某一行中

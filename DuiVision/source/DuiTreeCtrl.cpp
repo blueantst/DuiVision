@@ -1492,6 +1492,7 @@ void CDuiTreeCtrl::RefreshNodeRows()
 	// 需要的总高度大于显示区高度才会显示滚动条
 	m_pControScrollV->SetVisible((nVisibleRows * m_nRowHeight) > m_rc.Height());
 	((CDuiScrollVertical*)m_pControScrollV)->SetScrollMaxRange(nVisibleRows * m_nRowHeight);
+	((CDuiScrollVertical*)m_pControScrollV)->SetScrollRowRange(m_nRowHeight);
 
 	UpdateControl(true);
 }
