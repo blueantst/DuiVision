@@ -2486,11 +2486,11 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					nFirstRowCount++;
 				}else
 				{
-					nRowIndex++;
 					if(nRowIndex < nViewRowCount)
 					{
 						bHideControl = FALSE;
 					}
+					nRowIndex++;
 				}
 
 				// 显示区域之外的行的控件都隐藏
