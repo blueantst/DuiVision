@@ -1324,6 +1324,26 @@ HRESULT CDuiRichEdit::OnAttributeSmallImage(const CString& strValue, BOOL bLoadi
 	return bLoading?S_FALSE:S_OK;
 }
 
+BOOL CDuiRichEdit::IsPassWord()
+{
+    return m_bPassWord;
+}
+
+void CDuiRichEdit::SetPassWord(BOOL bPassWord)
+{
+    m_bPassWord = bPassWord;
+}
+
+BOOL CDuiRichEdit::IsMultiLine()
+{
+    return m_bMultiLine;
+}
+
+void CDuiRichEdit::SetMultiLine(BOOL bMultiLine)
+{
+    m_bMultiLine = bMultiLine;
+}
+
 BOOL CDuiRichEdit::IsWantReturn()
 {
     return m_bWantReturn;
@@ -1364,6 +1384,16 @@ void CDuiRichEdit::SetReadOnly(BOOL bReadOnly)
 {
     m_bReadOnly = bReadOnly;
     if( m_pTxtWinHost ) m_pTxtWinHost->SetReadOnly(bReadOnly);
+}
+
+BOOL CDuiRichEdit::IsNumber()
+{
+    return m_bNumber;
+}
+
+void CDuiRichEdit::SetNumber(BOOL bNumber)
+{
+    m_bNumber = bNumber;
 }
 
 BOOL CDuiRichEdit::GetWordWrap()

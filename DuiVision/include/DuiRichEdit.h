@@ -23,6 +23,10 @@ public:
 	bool SetSmallBitmap(CString strImage);
 	HRESULT OnAttributeSmallImage(const CString& strValue, BOOL bLoading);
 
+    BOOL IsPassWord();
+    void SetPassWord(BOOL bPassWord = true);
+    BOOL IsMultiLine();
+    void SetMultiLine(BOOL bMultiLine = true);
     BOOL IsWantReturn();
     void SetWantReturn(BOOL bWantReturn = true);
     BOOL IsWantCtrlReturn();
@@ -31,6 +35,8 @@ public:
     void SetRich(BOOL bRich = true);
     BOOL IsReadOnly();
     void SetReadOnly(BOOL bReadOnly = true);
+    BOOL IsNumber();
+    void SetNumber(BOOL bNumber = true);
     BOOL GetWordWrap();
     void SetWordWrap(BOOL bWordWrap = true);
 	HFONT GetDefaultFont();
