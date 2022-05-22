@@ -1364,6 +1364,46 @@ void CDuiRichEdit::SetWantCtrlReturn(BOOL bWantCtrlReturn)
     m_bWantCtrlReturn = bWantCtrlReturn;
 }
 
+BOOL CDuiRichEdit::IsHScrollBar()
+{
+    return m_bHScrollBar;
+}
+
+void CDuiRichEdit::SetHScrollBar(BOOL bHScrollBar)
+{
+    m_bHScrollBar = bHScrollBar;
+}
+
+BOOL CDuiRichEdit::IsAutoHScroll()
+{
+    return m_bAutoHScroll;
+}
+
+void CDuiRichEdit::SetAutoHScroll(BOOL bAutoHScroll)
+{
+    m_bAutoHScroll = bAutoHScroll;
+}
+
+BOOL CDuiRichEdit::IsVScrollBar()
+{
+    return m_bVScrollBar;
+}
+
+void CDuiRichEdit::SetVScrollBar(BOOL bVScrollBar)
+{
+    m_bVScrollBar = bVScrollBar;
+}
+
+BOOL CDuiRichEdit::IsAutoVScroll()
+{
+    return m_bAutoVScroll;
+}
+
+void CDuiRichEdit::SetAutoVScroll(BOOL bAutoVScroll)
+{
+    m_bAutoVScroll = bAutoVScroll;
+}
+
 BOOL CDuiRichEdit::IsRich()
 {
     return m_bRich;
