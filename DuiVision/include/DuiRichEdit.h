@@ -31,6 +31,14 @@ public:
     void SetWantReturn(BOOL bWantReturn = true);
     BOOL IsWantCtrlReturn();
     void SetWantCtrlReturn(BOOL bWantCtrlReturn = true);
+    BOOL IsHScrollBar();
+    void SetHScrollBar(BOOL bHScrollBar = true);
+    BOOL IsAutoHScroll();
+    void SetAutoHScroll(BOOL bAutoHScroll = true);
+    BOOL IsVScrollBar();
+    void SetVScrollBar(BOOL bVScrollBar = true);
+    BOOL IsAutoVScroll();
+    void SetAutoVScroll(BOOL bAutoVScroll = true);
     BOOL IsRich();
     void SetRich(BOOL bRich = true);
     BOOL IsReadOnly();
@@ -143,9 +151,13 @@ protected:
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonUp(UINT nFlags, CPoint point);
+    virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual	void SetControlDisable(BOOL bIsDisable);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
+
+    // 消息响应
+    virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 protected:
 	Image*			m_pLeftImage;		// 左侧小图片

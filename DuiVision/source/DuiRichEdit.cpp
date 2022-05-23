@@ -6,6 +6,9 @@
 #pragma comment(lib, "imm32.lib")		// 自动链接imm库
 #pragma message("Automatically linking with imm32.lib")
 
+#define	SCROLL_V	1	// 垂直滚动条控件ID
+#define	SCROLL_H	2	// 水平滚动条控件ID
+
 // These constants are for backward compatibility. They are the 
 // sizes used for initialization and reset in RichEdit 1.0
 
@@ -437,6 +440,18 @@ BOOL CTxtWinHost::TxShowScrollBar(INT fnBar, BOOL fShow)
         if( pVerticalScrollBar ) pVerticalScrollBar->SetVisible(fShow == TRUE);
         if( pHorizontalScrollBar ) pHorizontalScrollBar->SetVisible(fShow == TRUE);
     }*/
+    CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_re->m_pControScrollV;
+    CDuiScrollHorizontal* pScrollH = (CDuiScrollHorizontal*)m_re->m_pControScrollH;
+    if (fnBar == SB_VERT && pScrollV) {
+        pScrollV->SetVisible(fShow == TRUE);
+    }
+    else if (fnBar == SB_HORZ && pScrollH) {
+        pScrollH->SetVisible(fShow == TRUE);
+    }
+    else if (fnBar == SB_BOTH) {
+        if (pScrollV) pScrollV->SetVisible(fShow == TRUE);
+        if (pScrollH) pScrollH->SetVisible(fShow == TRUE);
+    }
     return TRUE;
 }
 
@@ -455,6 +470,18 @@ BOOL CTxtWinHost::TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags)
         m_re->GetVerticalScrollBar()->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
         m_re->GetHorizontalScrollBar()->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
     }*/
+    CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_re->m_pControScrollV;
+    CDuiScrollHorizontal* pScrollH = (CDuiScrollHorizontal*)m_re->m_pControScrollH;
+    if (fuSBFlags == SB_VERT) {
+        pScrollV->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
+    }
+    else if (fuSBFlags == SB_HORZ) {
+        pScrollH->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
+    }
+    else if (fuSBFlags == SB_BOTH) {
+        pScrollV->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
+        pScrollH->SetVisible(fuArrowflags != ESB_DISABLE_BOTH);
+    }
     return TRUE;
 }
 
@@ -480,6 +507,26 @@ BOOL CTxtWinHost::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fR
             pHorizontalScrollBar->SetScrollRange(nMaxPos - nMinPos - rcClient.right + rcClient.left);
         }   
     }*/
+    CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_re->m_pControScrollV;
+    CDuiScrollHorizontal* pScrollH = (CDuiScrollHorizontal*)m_re->m_pControScrollH;
+    if (fnBar == SB_VERT && pScrollV) {
+        if (nMaxPos - nMinPos - rcClient.bottom + rcClient.top <= 0) {
+            pScrollV->SetVisible(false);
+        }
+        else {
+            pScrollV->SetVisible(true);
+            pScrollV->SetScrollMaxRange(nMaxPos - nMinPos - rcClient.bottom + rcClient.top);
+        }
+    }
+    else if (fnBar == SB_HORZ && pScrollH) {
+        if (nMaxPos - nMinPos - rcClient.right + rcClient.left <= 0) {
+            pScrollH->SetVisible(false);
+        }
+        else {
+            pScrollH->SetVisible(true);
+            pScrollH->SetScrollMaxRange(nMaxPos - nMinPos - rcClient.right + rcClient.left);
+        }
+    }
     return TRUE;
 }
 
@@ -493,6 +540,14 @@ BOOL CTxtWinHost::TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw)
     else if( fnBar == SB_HORZ && pHorizontalScrollBar ) {
         pHorizontalScrollBar->SetScrollPos(nPos);
     }*/
+    CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_re->m_pControScrollV;
+    CDuiScrollHorizontal* pScrollH = (CDuiScrollHorizontal*)m_re->m_pControScrollH;
+    if (fnBar == SB_VERT && pScrollV) {
+        pScrollV->SetScrollCurrentPos(nPos);
+    }
+    else if (fnBar == SB_HORZ && pScrollH) {
+        pScrollH->SetScrollCurrentPos(nPos);
+    }
     return TRUE;
 }
 
@@ -2181,6 +2236,15 @@ void CDuiRichEdit::OnTxNotify(DWORD iNotify, void *pv)
 	}
 }
 
+void CDuiRichEdit::SetScrollPos(SIZE szPos)
+{
+    if (m_pTxtWinHost)
+    {
+        // 注：使用TxSetCaretPos修改位置有问题，需要换别的方法
+        m_pTxtWinHost->TxSetCaretPos(szPos.cx, szPos.cy);
+    }
+}
+
 void CDuiRichEdit::LineUp()
 {
     TxSendMessage(WM_VSCROLL, SB_LINEUP, 0L, 0);
@@ -2273,6 +2337,19 @@ void CDuiRichEdit::SetControlRect(CRect rc)
 	m_rcText.right -= (3 + m_sizeSmallImage.cx);
 
 	//if( !m_bInited ) DoInit();
+
+    CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+    if (pScrollV->GetVisible() || m_bVScrollBar)
+    {
+        pScrollV->SetScrollPageRange(m_rcText.bottom - m_rcText.top);
+        // 文字区域留出垂直滚动条的位置
+        m_rcText.right -= m_nScrollWidth;
+        // 设置垂直滚动条的位置
+        CRect rcScroll(m_rcText);
+        rcScroll.left = m_rcText.right;
+        rcScroll.right = m_rc.right;
+        pScrollV->SetRect(rcScroll);
+    }
 
 	if( m_pTxtWinHost )
 	{
@@ -2582,6 +2659,19 @@ BOOL CDuiRichEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 	return buttonState != m_buttonState || editState != m_EditState;
 }
 
+// 垂直滚动事件处理
+BOOL CDuiRichEdit::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
+{
+    // 更新滚动条,并刷新界面
+    CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+    if (pScrollV->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
+    {
+        UpdateControl(true);
+    }
+
+    return true;
+}
+
 // 键盘事件处理
 BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
@@ -2746,6 +2836,23 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	handled = true;
 
 	return handled;
+}
+
+// 消息响应
+LRESULT CDuiRichEdit::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	if((uID == SCROLL_V) && (Msg == MSG_SCROLL_CHANGE))
+	{
+		// 如果是垂直滚动条的位置变更事件,则更新位置
+        CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
+        SIZE sz;
+        sz.cx = 0;
+        sz.cy = pScrollV->GetScrollCurrentPos();
+        SetScrollPos(sz);
+		//UpdateControl(true);
+	}
+
+	return __super::OnMessage(uID, Msg, wParam, lParam); 
 }
 
 void CDuiRichEdit::DrawControl(CDC &dc, CRect rcUpdate)
