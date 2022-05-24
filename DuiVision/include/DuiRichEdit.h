@@ -83,7 +83,7 @@ public:
     void HideSelection(bool bHide = true, bool bChangeStyle = false);
     void ScrollCaret();
     int InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCanUndo = false);
-    int AppendText(LPCTSTR lpstrText, bool bCanUndo = false);
+    int AppendText(LPCTSTR lpstrText, bool bCanUndo = false, bool bAutoScroll = true);
     DWORD GetDefaultCharFormat(CHARFORMAT2 &cf) const;
     bool SetDefaultCharFormat(CHARFORMAT2 &cf);
     DWORD GetSelectionCharFormat(CHARFORMAT2 &cf) const;

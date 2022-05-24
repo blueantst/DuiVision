@@ -1841,8 +1841,13 @@ int CDuiRichEdit::InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCan
     return nRet;
 }
 
-int CDuiRichEdit::AppendText(LPCTSTR lpstrText, bool bCanUndo)
+int CDuiRichEdit::AppendText(LPCTSTR lpstrText, bool bCanUndo, bool bAutoScroll)
 {
+    long nStartChar, nEndChar;
+    GetSel(nStartChar, nEndChar);   // 获取当前光标位置
+    long nViewStartChar = CharFromPos(CPoint(0, 0)); // 获取当前显示区域的第一行第一个位置的字符索引
+    long nCurLine = LineFromChar(nViewStartChar);    // 获取当前行
+
     int nRet = SetSel(-1, -1);
     
 #ifndef _UNICODE
@@ -1856,7 +1861,16 @@ int CDuiRichEdit::AppendText(LPCTSTR lpstrText, bool bCanUndo)
     ReplaceSel(lpstrText, bCanUndo);
 #endif
 
-     return nRet;
+    // 如果不自动滚动,则将当前光标位置和显示位置恢复到原来的位置
+    if (!bAutoScroll)
+    {
+        SetSel(nStartChar, nEndChar);   // 光标位置恢复
+        long nNewViewStartChar = CharFromPos(CPoint(0, 0)); // 获取当前显示区域的第一行第一个位置的字符索引
+        long nNewCurLine = LineFromChar(nNewViewStartChar);    // 获取当前行
+        LineScroll(nCurLine - nNewCurLine, 0);  // 当前显示位置通过滚动的方式恢复
+    }
+
+    return nRet;
 }
 
 DWORD CDuiRichEdit::GetDefaultCharFormat(CHARFORMAT2 &cf) const
@@ -2238,11 +2252,6 @@ void CDuiRichEdit::OnTxNotify(DWORD iNotify, void *pv)
 
 void CDuiRichEdit::SetScrollPos(SIZE szPos)
 {
-    if (m_pTxtWinHost)
-    {
-        // 注：使用TxSetCaretPos修改位置有问题，需要换别的方法
-        m_pTxtWinHost->TxSetCaretPos(szPos.cx, szPos.cy);
-    }
 }
 
 void CDuiRichEdit::LineUp()
@@ -2666,6 +2675,7 @@ BOOL CDuiRichEdit::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
     CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
     if (pScrollV->ScrollRow((nFlags == SB_LINEDOWN) ? 1 : -1))
     {
+        LineScroll((nFlags == SB_LINEDOWN) ? 1 : -1, 0);
         UpdateControl(true);
     }
 
@@ -2844,12 +2854,27 @@ LRESULT CDuiRichEdit::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam
 	if((uID == SCROLL_V) && (Msg == MSG_SCROLL_CHANGE))
 	{
 		// 如果是垂直滚动条的位置变更事件,则更新位置
+        // 1.计算滚动条当前位置和最大位置的占比
+        // 2.根据当前显示区域第一行第一个字符的行号和总行数,计算滚动的行数
         CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
-        SIZE sz;
-        sz.cx = 0;
-        sz.cy = pScrollV->GetScrollCurrentPos();
-        SetScrollPos(sz);
-		//UpdateControl(true);
+        //long nScrollCurPos = pScrollV->GetScrollCurrentPos();
+        long nScrollCurPos = wParam;    // 滚动条当前位置
+        long nScrollMaxRange = pScrollV->GetScrollMaxRange();   // 滚动条最大值
+        //long nStartChar, nEndChar;
+        //GetSel(nStartChar, nEndChar);   // 获取当前光标位置
+        long nViewStartChar = CharFromPos(CPoint(0,0)); // 获取当前显示区域的第一行第一个位置的字符索引
+        long nCurLine = LineFromChar(nViewStartChar);    // 获取当前行
+        long nTotalLine = GetLineCount();    // 获取总行数
+        long nTargetLine = nScrollCurPos * nTotalLine / nScrollMaxRange; // 计算滚动条位置的行号
+        long nScroll = nTargetLine - nCurLine;   // 计算需要滚动的行数
+        LineScroll(nScroll, 0);
+        //CString str;
+        //str.Format("nScrollCurPos=%d,nScrollMaxRange=%d,nViewStartChar=%d,nCurLine=%d,nTotalLine=%d,nTargetLine=%d,nScroll=%d",
+        //    nScrollCurPos, nScrollMaxRange, nViewStartChar, nCurLine, nTotalLine, nTargetLine, nScroll);
+        //DuiSystem::LogEvent(LOG_LEVEL_DEBUG, str);
+        //LRESULT lResult = true;
+        //TxSendMessage(WM_VSCROLL, wParam, 0, &lResult);
+		UpdateControl(true);
 	}
 
 	return __super::OnMessage(uID, Msg, wParam, lParam); 
