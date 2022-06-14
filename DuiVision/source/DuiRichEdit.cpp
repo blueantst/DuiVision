@@ -2685,10 +2685,16 @@ BOOL CDuiRichEdit::OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point)
 // 键盘事件处理
 BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-/*	// 如果是回车键,则转换为字符事件传递给原生控件
+    if (!IsFocusControl())
+    {
+        return false;
+    }
+
+/*
+	// 如果是回车键,则转换为字符事件传递给原生控件
 	if((nChar == VK_RETURN) && m_pTxtWinHost)
 	{
-		m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_CHAR, VK_RETURN, nFlags, NULL);
+		TxSendMessage(WM_CHAR, VK_RETURN, nFlags, NULL);
 		return true;
 	}
 
@@ -2717,22 +2723,18 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
         }else
         {
             nChar=MAKEWORD(nChar,m_byDbcsLeadByte);
-            m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_IME_CHAR,nChar,0,NULL);
+            TxSendMessage(WM_IME_CHAR,nChar,0,NULL);
             m_byDbcsLeadByte=0;
             return true;
         }
 #endif//_UNICODE
         break;
     }
-    m_pTxtWinHost->GetTextServices()->TxSendMessage(WM_CHAR, nChar, nFlags, NULL);
+    TxSendMessage(WM_CHAR, nChar, nFlags, NULL);
 
 	return true;
 */
-	if(!IsFocusControl())
-	{
-		return false;
-	}
-
+	
 	bool handled = true;
 	unsigned int virtualKeyCode = nChar;
     unsigned int flags = nFlags;
@@ -2755,12 +2757,12 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}	
 		}
 	}	
-	if(nChar >= 0x70  && nChar <= 0x7F  )
+	if(nChar >= 0x70 && nChar <= 0x7F)
 	{
 		LRESULT lResult = true;
 		TxSendMessage(WM_KEYDOWN, virtualKeyCode, flags, &lResult);
 		handled = true;
-		if( nChar == 0x74 )
+		if(nChar == 0x74)
 		{
 			MSG msg;
 			msg.hwnd = m_hWnd;
@@ -2780,18 +2782,47 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
 	if(!bShiftState)
 	{
-		if( !GetKeyState(VK_CAPITAL)  )
+		if(!GetKeyState(VK_CAPITAL))
 		{
 			if((nChar >= 'A') && (nChar <= 'Z'))
 				virtualKeyCode = tolower(nChar);
 		}
 		if(nChar != VK_SHIFT)
 		{
-			if( nChar > 0x80 )
-				return 0;
+            if (nChar > 0x80)
+            {
+                // 大写未打开状态的特殊键盘字符处理(参见WinUser.h中的定义)
+                if (nChar == VK_OEM_NEC_EQUAL)
+                    virtualKeyCode = '=';
+                else if (nChar == VK_OEM_1)
+                    virtualKeyCode = ';';
+                else if (nChar == VK_OEM_PLUS)
+                    virtualKeyCode = '=';
+                else if (nChar == VK_OEM_COMMA)
+                    virtualKeyCode = ',';
+                else if (nChar == VK_OEM_MINUS)
+                    virtualKeyCode = '-';
+                else if (nChar == VK_OEM_PERIOD)
+                    virtualKeyCode = '.';
+                else if (nChar == VK_OEM_2)
+                    virtualKeyCode = '/';
+                else if (nChar == VK_OEM_3)
+                    virtualKeyCode = '`';
+                else if (nChar == VK_OEM_4)
+                    virtualKeyCode = '[';
+                else if (nChar == VK_OEM_5)
+                    virtualKeyCode = '\\';
+                else if (nChar == VK_OEM_6)
+                    virtualKeyCode = ']';
+                else if (nChar == VK_OEM_7)
+                    virtualKeyCode = '\'';
+                else
+                    return false;
+            }
 		}
 	}else
-	{	
+	{
+        // shift状态的字符转换
 		if(nChar != VK_SHIFT)
 		{
 			//wParam = wParam & 0x7F;//`~
@@ -2832,11 +2863,54 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				virtualKeyCode = '?';
 			else if(nChar == '`')
 				virtualKeyCode = '~';
-			else if(nChar > 0x80)
-				return 0;
+            else if (nChar > 0x80)
+            {
+                // 大写打开状态的特殊键盘字符处理(参见WinUser.h中的定义)
+                if (nChar == VK_OEM_NEC_EQUAL)
+                    virtualKeyCode = '=';
+                else if (nChar == VK_OEM_1)
+                    virtualKeyCode = ':';
+                else if (nChar == VK_OEM_PLUS)
+                    virtualKeyCode = '+';
+                else if (nChar == VK_OEM_COMMA)
+                    virtualKeyCode = '<';
+                else if (nChar == VK_OEM_MINUS)
+                    virtualKeyCode = '_';
+                else if (nChar == VK_OEM_PERIOD)
+                    virtualKeyCode = '>';
+                else if (nChar == VK_OEM_2)
+                    virtualKeyCode = '?';
+                else if (nChar == VK_OEM_3)
+                    virtualKeyCode = '~';
+                else if (nChar == VK_OEM_4)
+                    virtualKeyCode = '{';
+                else if (nChar == VK_OEM_5)
+                    virtualKeyCode = '|';
+                else if (nChar == VK_OEM_6)
+                    virtualKeyCode = '}';
+                else if (nChar == VK_OEM_7)
+                    virtualKeyCode = '"';
+                else
+                    return false;
+            }
 		}
 	}
 
+    if (nChar == VK_RETURN)
+    {
+        // 判断回车键
+        if (m_bWantReturn || (m_bWantCtrlReturn && GetKeyState(VK_CONTROL)))
+        {
+            // 回车键转换为换行符
+            //virtualKeyCode = '\n';
+            // TextService没有响应回车,原因不明,暂时在最后添加一个换行符模拟回车换行
+            SetSel(-1,-1);
+            ReplaceSel(_T("\n"), FALSE);
+        }else
+        {
+            return handled;
+        }
+    }else
 	if((nChar < '0') && (nChar != ' '))
 	{
 		return handled;
