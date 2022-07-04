@@ -1449,10 +1449,10 @@ void CDuiTreeCtrl::RefreshNodeRows()
 		if(m_pImageToggle != NULL)
 		{
 			int nNodeLevel = GetNodeLevel(rowInfoTemp.hNode);
-			nXPos += (nNodeLevel * m_sizeToggle.cx);
+			nXPos += (nNodeLevel * m_sizeToggleDpi.cx);
 			if(HaveChildNode(rowInfoTemp.hNode))
 			{
-				nXPos += m_sizeToggle.cx;
+				nXPos += m_sizeToggleDpi.cx;
 			}
 		}
 
@@ -1480,7 +1480,7 @@ void CDuiTreeCtrl::RefreshNodeRows()
 			if((j == 0) && (m_pImageToggle != NULL) && HaveChildNode(rowInfoTemp.hNode))
 			{
 				int nNodeLevel = GetNodeLevel(rowInfoTemp.hNode);
-				itemInfo.rcItem.left = (nNodeLevel+1) * m_sizeToggle.cx + rowInfoTemp.rcRow.left;
+				itemInfo.rcItem.left = (nNodeLevel+1) * m_sizeToggleDpi.cx + rowInfoTemp.rcRow.left;
 			}
 		}
 
@@ -1630,8 +1630,8 @@ BOOL CDuiTreeCtrl::PtInRowCollapse(CPoint point, TreeNodeInfo& rowInfo)
 	{
 		int nNodeLevel = GetNodeLevel(rowInfo.hNode);
 		CRect rc = rowInfo.rcRow;
-		rc.left = nNodeLevel * m_sizeToggle.cx;
-		rc.right = rc.left + m_sizeToggle.cx;
+		rc.left = nNodeLevel * m_sizeToggleDpi.cx;
+		rc.right = rc.left + m_sizeToggleDpi.cx;
 		rc.OffsetRect(m_rc.left - m_nVirtualLeft, m_rc.top-m_nVirtualTop);
 		if(rc.PtInRect(point))
 		{
@@ -2218,7 +2218,7 @@ void CDuiTreeCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				if(m_pImageToggle != NULL)
 				{
 					int nNodeLevel = GetNodeLevel(rowInfo.hNode);
-					nXPos += (nNodeLevel * m_sizeToggle.cx);
+					nXPos += (nNodeLevel * m_sizeToggleDpi.cx);
 					// 节点存在子节点，或者是顶层节点的情况下，画缩放图片
 					if(HaveChildNode(rowInfo.hNode) || (GetParentNode(rowInfo.hNode) == NULL))
 					{
