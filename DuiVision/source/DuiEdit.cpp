@@ -413,9 +413,9 @@ void  CDuiEdit::SetControlRect(CRect rc)
 	BOOL bRefresh = ((m_rc.top != rc.top) || (m_rc.left != rc.left) || (m_rc.bottom != rc.bottom) || (m_rc.right != rc.right));
 	m_rc = rc;
 	m_rcText = m_rc;
-	m_rcText.top += 4;
+	m_rcText.top += DUI_DPI_Y(2);
 	m_rcText.left += (DUI_DPI_X(6) + m_sizeLeftImageDpi.cx);
-	m_rcText.bottom -= 4;
+	m_rcText.bottom -= DUI_DPI_Y(2);
 	m_rcText.right -= (DUI_DPI_X(3) + m_sizeSmallImageDpi.cx);
 	// 如果edit位置有变化,删除编辑控件,这样当编辑控件重新创建时候就可以调整大小
 	if(bRefresh)
@@ -814,14 +814,14 @@ void CDuiEdit::ShowEdit()
 		if(!m_bMultiLine)
 		{
 			// 仅针对单行编辑框调整位置
-			rc.top += (m_rc.Height() - 18 - 6) / 2;	// 调整windows控件激活时候的显示位置,和非激活状态下更接近一些
+			rc.top += (m_rc.Height() - DUI_DPI_Y(12)) / 2;	// 调整windows控件激活时候的显示位置,和非激活状态下更接近一些
 			if(m_nFontWidth > 12)	// 如果修改了默认字体,则做一些微调
 			{
-				rc.top--;
+				rc.top -= DUI_DPI_Y(1);
 			}
 		}else
 		{
-			rc.top += 2;
+			rc.top += DUI_DPI_Y(2);
 		}
 
 		if(m_bBack || (m_clrText.GetValue() != Color(255,0,0,0).GetValue()))
@@ -1026,7 +1026,7 @@ void CDuiEdit::DrawControl(CDC &dc, CRect rcUpdate)
 		strFormat.SetLineAlignment(StringAlignmentNear);	// 垂直方向上对齐
 	}
 
-	RectF rect((Gdiplus::REAL)m_rcText.left, (Gdiplus::REAL)(m_rcText.top+2), (Gdiplus::REAL)m_rcText.Width(), (Gdiplus::REAL)(m_rcText.Height()-2));
+	RectF rect((Gdiplus::REAL)m_rcText.left, (Gdiplus::REAL)(m_rcText.top+DUI_DPI_Y(2)), (Gdiplus::REAL)m_rcText.Width(), (Gdiplus::REAL)(m_rcText.Height()-DUI_DPI_Y(2)));
 
 	if(!m_strTitle.IsEmpty())
 	{
