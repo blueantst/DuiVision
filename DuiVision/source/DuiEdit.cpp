@@ -814,7 +814,7 @@ void CDuiEdit::ShowEdit()
 		if(!m_bMultiLine)
 		{
 			// 仅针对单行编辑框调整位置
-			rc.top += (m_rc.Height() - DUI_DPI_Y(12)) / 2;	// 调整windows控件激活时候的显示位置,和非激活状态下更接近一些
+			rc.top += (m_rc.Height() - DUI_DPI_Y(16)) / 2;	// 调整windows控件激活时候的显示位置,和非激活状态下更接近一些
 			if(m_nFontWidth > 12)	// 如果修改了默认字体,则做一些微调
 			{
 				rc.top -= DUI_DPI_Y(1);
