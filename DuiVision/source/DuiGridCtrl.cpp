@@ -2389,6 +2389,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					rect.Width -= (Gdiplus::REAL)nItemImageX;
 
 					// 画单元格标题或链接内容
+					BOOL bUseItemBrush = FALSE;	// 是否使用单元格或行的颜色(即使设置了使用标题字体,颜色也会使用单元格或行设置的)
 					SolidBrush solidBrushItem(m_clrText);
 					if((m_nHoverRow == i) && (m_clrTextHover.GetValue() != Color(0, 0, 0, 0).GetValue()))	// 设置了鼠标移动颜色,则使用
 					{
@@ -2401,10 +2402,12 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					if(itemInfo.clrText.GetValue() != Color(0, 0, 0, 0).GetValue())	// 设置了单元格颜色,则使用
 					{
 						solidBrushItem.SetColor(itemInfo.clrText);
+						bUseItemBrush = TRUE;
 					}else
 					if(rowInfo.bRowColor)	// 设置了行颜色,则使用
 					{
 						solidBrushItem.SetColor(rowInfo.clrText);
+						bUseItemBrush = TRUE;
 					}
 					CString strItemTitle = itemInfo.strTitle;
 					// 计算是否需要显示tip
@@ -2467,7 +2470,7 @@ void CDuiGridCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 					// 根据bUseTitleFont决定用标题字体还是普通字体
 					BSTR bsItemTitle = strItemTitle.AllocSysString();
 					graphics.DrawString(bsItemTitle, (INT)wcslen(bsItemTitle),
-						itemInfo.bUseTitleFont ? &fontTitle : &font, rect, &strFormatColumn, itemInfo.bUseTitleFont ? &solidBrushT : &solidBrushItem);
+						itemInfo.bUseTitleFont ? &fontTitle : &font, rect, &strFormatColumn, (itemInfo.bUseTitleFont && !bUseItemBrush) ? &solidBrushT : &solidBrushItem);
 					::SysFreeString(bsItemTitle);
 
 					// 画单元格内容
