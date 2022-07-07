@@ -277,10 +277,27 @@ DuiXmlNode DuiXmlDocument::child(const LPCTSTR name) const
 
 DuiXmlParseResult DuiXmlDocument::load(const LPCTSTR contents, unsigned int options)
 {
+#ifdef _UNICODE
 	//DuiXmlParseResult result;
 	//const char_t* contents = pcontents;
 	return m_document.load(contents, options & ~parse_wconv_attribute);
 	//return result;
+#else
+	DuiXmlParseResult result;
+
+	//////////////////////////////////////////////////////////////////////////
+	std::string strSource = std::string(contents);
+
+	std::wstring unicodeText;
+	utf8ToUnicode(strSource, unicodeText);
+
+	std::string strResult;
+	unicodeToMulti(unicodeText, strResult);
+
+	result = m_document.load(strResult.c_str(), options & ~parse_wconv_attribute);
+
+	return result;
+#endif
 }
 
 DuiXmlParseResult DuiXmlDocument::load_file(const LPCTSTR path, unsigned int options, xml_encoding encoding)
@@ -328,7 +345,7 @@ DuiXmlParseResult DuiXmlDocument::load_file(const LPCTSTR path, unsigned int opt
 	fclose(file);
 
 	//////////////////////////////////////////////////////////////////////////
-	std::string strSource=contents;
+	std::string strSource = std::string(contents);
 	delete[] contents;
 
 	std::wstring unicodeText;
