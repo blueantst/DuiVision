@@ -486,6 +486,7 @@ int CDuiScrollVertical::MoveRange(int nMove)
 
 			UpdateControl(true);
 
+			// 发送滚动条变更事件(lParam为0表示鼠标未放开)
 			SendMessage(MSG_SCROLL_CHANGE, m_nCurrentPos, 0);
 		}
 
@@ -643,6 +644,10 @@ BOOL  CDuiScrollVertical::OnControlLButtonUp(UINT nFlags, CPoint point)
 	if(buttonState != m_enButtonState)
 	{
 		UpdateControl();
+
+		// 发送滚动条变更事件(lParam为1表示鼠标已放开)
+		SendMessage(MSG_SCROLL_CHANGE, m_nCurrentPos, 1);
+
 		return true;
 	}
 	return false;
@@ -920,6 +925,7 @@ int CDuiScrollHorizontal::MoveRange(int nMove)
 
 			UpdateControl(true);
 
+			// 发送滚动条变更事件(lParam为0表示鼠标未放开)
 			SendMessage(MSG_SCROLL_CHANGE, m_nCurrentPos, 0);
 		}
 
@@ -1077,6 +1083,10 @@ BOOL  CDuiScrollHorizontal::OnControlLButtonUp(UINT nFlags, CPoint point)
 	if(buttonState != m_enButtonState)
 	{
 		UpdateControl();
+
+		// 发送滚动条变更事件(lParam为1表示鼠标已放开)
+		SendMessage(MSG_SCROLL_CHANGE, m_nCurrentPos, 1);
+
 		return true;
 	}
 	return false;
