@@ -2955,7 +2955,8 @@ LRESULT CDuiRichEdit::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam
         long nCurLine = LineFromChar(nViewStartChar);    // 获取当前行
         long nTotalLine = GetLineCount();    // 获取总行数
 
-        long nTargetLine = nScrollCurPos * nTotalLine / (nScrollMaxRange + nViewHeight); // 计算滚动条位置的行号
+        // 计算滚动条位置的行号(运算过程中必须用long long类型,long类型超过10位之后会越界导致运算结果不准)
+        long nTargetLine = (long long)nScrollCurPos * (long long)nTotalLine / (long long)(nScrollMaxRange + nViewHeight);
         long nScroll = nTargetLine - nCurLine;   // 计算需要滚动的行数
         if (nTargetLine == 0)
         {
