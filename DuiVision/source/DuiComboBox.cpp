@@ -300,7 +300,8 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CString& strValue, BOOL bLoad
 // 消息处理
 LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if((MSG_CONTROL_BUTTON == uMsg) && (CONTROL_BUTTON == wParam) && (MSG_BUTTON_DOWN == lParam) && (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮
+	if((MSG_CONTROL_BUTTON == uMsg) && ((CONTROL_BUTTON == wParam) || (CONTROL_EDIT == wParam)) && (MSG_BUTTON_DOWN == lParam)
+		&& (m_pPopupList == NULL))	// 鼠标点击了编辑框的下拉按钮或者点击了编辑框
 	{
 		CRect rcClient = GetRect();
 		rcClient.top = rcClient.bottom;
