@@ -54,7 +54,7 @@ DuiVision提供了VC向导用于创建应用工程，以前使用向导的安装
 
 (The MIT License)
 
-Copyright (c) 2013-2022 blueant studio. and other contributors
+Copyright (c) 2013-2023 blueant studio. and other contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -127,6 +127,7 @@ DuiVision的基础代码有很多是从下面几个界面库移植的：
 - 畅爽,蛋蛋爸 : 修改64位编译问题
 - 随缘(lhc) : 修改DuiEdit控件的焦点问题
 - 山不转水转(shelovemee) : 修改阴影窗口等问题
+- 推推 : ComboBox下拉框优化
 
 还有很多提出改进建议和改进方法的人，没有一一列出来，欢迎大家参与这个开源项目，共同完善。
 
