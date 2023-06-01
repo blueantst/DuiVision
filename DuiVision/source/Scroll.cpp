@@ -482,7 +482,7 @@ int CDuiScrollVertical::MoveRange(int nMove)
 				// 如果计算出的滚动快太小,则设置一个滚动块长度的下限值
 				nBlockHeight = (int)__min(100, nRangeHeight-50);
 			}
-			m_nCurrentPos = (m_rcBlock.top - m_rc.top - m_nArrowLen)  * m_nMaxRange / (nRangeHeight - nBlockHeight);
+			m_nCurrentPos = (long long)(m_rcBlock.top - m_rc.top - m_nArrowLen)  * (long long)m_nMaxRange / (long long)(nRangeHeight - nBlockHeight);
 
 			UpdateControl(true);
 
@@ -605,7 +605,7 @@ BOOL CDuiScrollVertical::OnControlLButtonDown(UINT nFlags, CPoint point)
 		{
 			// 不在滚动块内,则移动滚动块
 			int nRangeHeight = m_rc.Height() - m_nArrowLen*2;
-			int nMove = m_nPageRange * nRangeHeight / m_nMaxRange;
+			int nMove = (long long)m_nPageRange * (long long)nRangeHeight / (long long)m_nMaxRange;
 
 			return MoveRange(point.y < m_rcBlock.top ? -nMove : nMove);
 		}
@@ -921,7 +921,7 @@ int CDuiScrollHorizontal::MoveRange(int nMove)
 				// 如果计算出的滚动快太小,则设置一个滚动块长度的下限值
 				nBlockWidth = (int)__min(100, nRangeWidth-50);
 			}
-			m_nCurrentPos = (m_rcBlock.left - m_rc.left - m_nArrowLen)  * m_nMaxRange / (nRangeWidth - nBlockWidth);
+			m_nCurrentPos = (long long)(m_rcBlock.left - m_rc.left - m_nArrowLen)  * (long long)m_nMaxRange / (long long)(nRangeWidth - nBlockWidth);
 
 			UpdateControl(true);
 
@@ -1044,7 +1044,7 @@ BOOL CDuiScrollHorizontal::OnControlLButtonDown(UINT nFlags, CPoint point)
 		{
 			// 不在滚动块内,则移动滚动块
 			int nRangeWidth = m_rc.Width() - m_nArrowLen*2;
-			int nMove = m_nPageRange * nRangeWidth / m_nMaxRange;
+			int nMove = (long long)m_nPageRange * (long long)nRangeWidth / (long long)m_nMaxRange;
 
 			return MoveRange(point.x < m_rcBlock.left ? -nMove : nMove);
 		}
