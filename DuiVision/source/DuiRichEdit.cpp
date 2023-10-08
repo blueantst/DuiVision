@@ -2363,7 +2363,7 @@ void CDuiRichEdit::SetControlRect(CRect rc)
         //long nEndLine = LineFromChar(nViewEndChar);    // 获取当前行
         //pScrollV->SetScrollPageRange(nEndLine- nStartLine);
         CString str;
-        str.Format("SetControlRect:ScrollPageRange=%d", m_rcText.bottom - m_rcText.top);
+        str.Format(_T("SetControlRect:ScrollPageRange=%d"), m_rcText.bottom - m_rcText.top);
         DuiSystem::LogEvent(LOG_LEVEL_DEBUG, str);
         // 文字区域留出垂直滚动条的位置
         m_rcText.right -= m_nScrollWidth;
