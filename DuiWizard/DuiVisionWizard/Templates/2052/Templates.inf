@@ -78,7 +78,6 @@ DuiPlugin\DuiHandlerPlugin.cpp
 [duivision]common\XUnzip.cpp
 [duivision]common\XUnZip.h
 
-[duivision]pugixml\foreach.hpp
 [duivision]pugixml\pugiconfig.hpp
 [duivision]pugixml\pugixml.cpp
 [duivision]pugixml\pugixml.hpp
