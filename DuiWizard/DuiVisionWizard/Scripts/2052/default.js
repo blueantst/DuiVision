@@ -177,6 +177,7 @@ function AddConfig(proj, strProjectName)
 		
 		var WizardVersion = wizard.FindSymbol('WIZARD_VERSION');
 		
+		//-----------------------------------------------------------------------------------------------
         // Debug设置
 	    var config = proj.Object.Configurations('Debug');
 		if(strProjPlugin)
@@ -197,6 +198,7 @@ function AddConfig(proj, strProjectName)
 	    config.OutputDirectory = '$(SolutionDir)bin';
 		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
 		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
+		config.CharacterSet = 1;	// 0-未设置,1-Unicode,2-多字节字符集
 
 		var CLTool = config.Tools('VCCLCompilerTool');
 		// TODO: 添加编译器设置
@@ -216,6 +218,7 @@ function AddConfig(proj, strProjectName)
 		LinkTool.SuppressStartupBanner = true;  // nologo
 		LinkTool.OutputFile = "$(outdir)/" + strProjectName + "d" + strProjExeExt;	// 输出文件
 		LinkTool.AdditionalLibraryDirectories = "../Lib;../DuiVision/third-part/wke;";	// 附加库目录
+		LinkTool.SubSystem = 2;	// 系统子系统定义, 1-控制台,2-Windows,3-本机
 		// 附加依赖项
 		if(dte.Version == '9.0')
 		{
@@ -240,6 +243,76 @@ function AddConfig(proj, strProjectName)
 			LinkTool.AdditionalDependencies += " wke.lib";
 		}
 
+		
+		//-----------------------------------------------------------------------------------------------
+        // DebugMulti设置
+		proj.Object.AddConfiguration('DebugMulti');	// 首先需要添加配置
+	    var config = proj.Object.Configurations('DebugMulti');
+		if(strProjPlugin)
+		{
+			config.ConfigurationType = 2; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}else
+		{
+			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}
+	    config.CharacterSet = charSetUNICODE;
+		if(WizardVersion >= 10.0)
+		{
+			config.IntermediateDirectory = '$(Configuration)\\';
+		}else
+		{
+			config.IntermediateDirectory = '$(ConfigurationName)\\';
+		}
+	    config.OutputDirectory = '$(SolutionDir)bin';
+		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
+		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
+		config.CharacterSet = 2;	// 0-未设置,1-Unicode,2-多字节字符集
+
+		var CLTool = config.Tools('VCCLCompilerTool');
+		// TODO: 添加编译器设置
+		CLTool.UsePrecompiledHeader = 2;    // 2-使用预编译头,1-创建,0-不使用
+		CLTool.SuppressStartupBanner = true;
+		CLTool.WarningLevel = warningLevelOption.warningLevel_3;
+		CLTool.AdditionalIncludeDirectories = '..\\DuiVision\\include;..\\DuiVision\\common;';//%(AdditionalIncludeDirectories)';
+		CLTool.DebugInformationFormat = 3;	// 调试信息格式:0=none, 1=Z7, 2=Zi, 3=ZI
+		CLTool.PreprocessorDefinitions = 'WIN32;_WINDOWS;STRICT;_DEBUG;_CRT_SECURE_NO_WARNINGS;'; //%(PreprocessorDefinitions)';
+		CLTool.RuntimeLibrary = 3; // 运行时库:0=MT, 1=MTd, 2=MTD (DLL), 3=MTDd
+		CLTool.Optimization = 0; // 优化:0=disabled, 1=minspace, 2=maxspe
+
+		var LinkTool = config.Tools('VCLinkerTool');
+		// TODO: 添加链接器设置
+		LinkTool.GenerateDebugInformation = true;
+		LinkTool.LinkIncremental = linkIncrementalYes;
+		LinkTool.SuppressStartupBanner = true;  // nologo
+		LinkTool.OutputFile = "$(outdir)/" + strProjectName + "d" + strProjExeExt;	// 输出文件
+		LinkTool.AdditionalLibraryDirectories = "../Lib;../DuiVision/third-part/wke;";	// 附加库目录
+		LinkTool.SubSystem = 2;	// 系统子系统定义, 1-控制台,2-Windows,3-本机
+		// 附加依赖项
+		if(dte.Version == '9.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2008d.lib";	// VC2008库
+		}else
+		if(dte.Version == '10.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2010d_M.lib";	// VC2010库
+		}else
+		if(dte.Version == '12.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2013d_M.lib";	// VC2013库
+		}else
+		if(dte.Version == '14.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2015d_M.lib";	// VC2015库
+		}
+		
+		// 如果工程选项选择了支持WKE控件,则增加相应的配置
+		if(wizard.FindSymbol('OPTION_CHECK_USEWKE'))
+		{
+			LinkTool.AdditionalDependencies += " wke.lib";
+		}
+		
+		
+		//-----------------------------------------------------------------------------------------------
 		// Release设置
 		var config = proj.Object.Configurations('Release');
 		if(strProjPlugin)
@@ -260,6 +333,7 @@ function AddConfig(proj, strProjectName)
 		config.OutputDirectory = '$(SolutionDir)bin';
 		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
 		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
+		config.CharacterSet = 1;	// 0-未设置,1-Unicode,2-多字节字符集
 
 		var CLTool = config.Tools('VCCLCompilerTool');
 		// TODO: 添加编译器设置
@@ -277,6 +351,73 @@ function AddConfig(proj, strProjectName)
 		LinkTool.SuppressStartupBanner = true;  // nologo
 		LinkTool.OutputFile = "$(outdir)/" + strProjectName + strProjExeExt;	// 输出文件
 		LinkTool.AdditionalLibraryDirectories = "../Lib;../DuiVision/third-part/wke;";	// 附加库目录
+		LinkTool.SubSystem = 2;	// 系统子系统定义, 1-控制台,2-Windows,3-本机
+		// 附加依赖项
+		if(dte.Version == '9.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2008.lib";	// VC2008库
+		}else
+		if(dte.Version == '10.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2010.lib";	// VC2010库
+		}else
+		if(dte.Version == '12.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2013.lib";	// VC2013库
+		}else
+		if(dte.Version == '14.0')
+		{
+			LinkTool.AdditionalDependencies = "DuiVision.2015.lib";	// VC2015库
+		}
+		
+		// 如果工程选项选择了支持WKE控件,则增加相应的配置
+		if(wizard.FindSymbol('OPTION_CHECK_USEWKE'))
+		{
+			LinkTool.AdditionalDependencies += " wke.lib";
+		}
+		
+		
+		//-----------------------------------------------------------------------------------------------
+		// ReleaseMulti设置
+		proj.Object.AddConfiguration('ReleaseMulti');	// 首先需要添加配置
+		var config = proj.Object.Configurations('ReleaseMulti');
+		if(strProjPlugin)
+		{
+			config.ConfigurationType = 2; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}else
+		{
+			config.ConfigurationType = 1; // 0=unk, 1=exe, 2=dll, 4=lib, 10=generic
+		}
+		config.CharacterSet = charSetUNICODE;
+		if(WizardVersion >= 10.0)
+		{
+			config.IntermediateDirectory = '$(Configuration)\\';
+		}else
+		{
+			config.IntermediateDirectory = '$(ConfigurationName)\\';
+		}
+		config.OutputDirectory = '$(SolutionDir)bin';
+		config.useOfMfc = 2; // 0=win32, 1=static, 2=dynamic
+		config.useOfAtl = 0; // 0=not set, 1=static, 2=dynamic
+		config.CharacterSet = 2;	// 0-未设置,1-Unicode,2-多字节字符集
+
+		var CLTool = config.Tools('VCCLCompilerTool');
+		// TODO: 添加编译器设置
+		CLTool.UsePrecompiledHeader = 2;    // 2-使用预编译头,1-创建,0-不使用
+		CLTool.SuppressStartupBanner = true;
+		CLTool.WarningLevel = warningLevelOption.warningLevel_3;
+		CLTool.AdditionalIncludeDirectories = '..\\DuiVision\\include;..\\DuiVision\\common;';//%(AdditionalIncludeDirectories)';
+		CLTool.PreprocessorDefinitions = 'WIN32;_WINDOWS;STRICT;NDEBUG;_CRT_SECURE_NO_WARNINGS;'; //%(PreprocessorDefinitions)';
+		CLTool.RuntimeLibrary = 2; // 0=MT, 1=MTd, 2=MTD (DLL), 3=MTDd
+
+		var LinkTool = config.Tools('VCLinkerTool');
+		// TODO: 添加链接器设置
+		LinkTool.GenerateDebugInformation = true;
+		LinkTool.LinkIncremental = linkIncrementalYes;
+		LinkTool.SuppressStartupBanner = true;  // nologo
+		LinkTool.OutputFile = "$(outdir)/" + strProjectName + strProjExeExt;	// 输出文件
+		LinkTool.AdditionalLibraryDirectories = "../Lib;../DuiVision/third-part/wke;";	// 附加库目录
+		LinkTool.SubSystem = 2;	// 系统子系统定义, 1-控制台,2-Windows,3-本机
 		// 附加依赖项
 		if(dte.Version == '9.0')
 		{
@@ -624,7 +765,11 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 		var file = files.Item('stdafx.cpp');	// 必须将stdafx.cpp设置为创建预编译头
 		var fileConfig = file.FileConfigurations('Debug');
 		fileConfig.Tool.UsePrecompiledHeader = 1;
+		fileConfig = file.FileConfigurations('DebugMulti');
+		fileConfig.Tool.UsePrecompiledHeader = 1;
 		fileConfig = file.FileConfigurations('Release');
+		fileConfig.Tool.UsePrecompiledHeader = 1;
+		fileConfig = file.FileConfigurations('ReleaseMulti');
 		fileConfig.Tool.UsePrecompiledHeader = 1;
 	}
 	catch(e)
