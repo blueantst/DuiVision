@@ -23,4 +23,6 @@ Crystal cat: 提供了自适应DPI虚拟化代码
 畅爽,蛋蛋爸 : 修改64位编译问题
 随缘(lhc) : 修改DuiEdit控件的焦点问题
 山不转水转(shelovemee) : 修改阴影窗口等问题
+推推 : ComboBox下拉框优化
+xfirefly : 升级pugixml版本到1.13
 还有很多提出改进建议和改进方法的人，没有一一列出来

@@ -256,11 +256,12 @@ width-lt,height-lt,width-rb,height-rb" />
 					</combobox>
 					
 					<text pos="20,140,-50,160" crtext="808080" title="richedit演示：" tip="下面的编辑框内容可以从rtf文件加载" />
-					<richedit name="richedit1" skin="IDB_EDIT" left-image="skin:IDB_COMPUTER" 
+					<richedit name="richedit1" skin="IDB_EDIT" left-image="-skin:IDB_COMPUTER" 
+							img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H"
 							pos="20,160,-50,-10"
 							title="测试richedit" tip="richedit"
 							multiline="1" wantreturn="1" rich="1" file="rtf\rtftest.rtf"
-							hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+							hscrollbar="0" autohscroll="1" vscrollbar="1" autovscroll="1"
 							readonly="0" maxchar="128000" wordwrap="1" number="0"
 							font="default" crtext="0,0,0" crtip="128,128,128,128" />
 				</layout-div>

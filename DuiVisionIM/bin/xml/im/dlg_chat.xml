@@ -54,10 +54,11 @@
 							<layout-div name="layout.chat1.left.1" div-pos="300" min-pos="50" max-pos="600" >
 						
 								<richedit name="richedit.history" skin="IDB_EDIT--" left-image="skin:IDB_COMPUTER--" 
+									img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H"
 									pos="0,0,-0,-0"
 									title="test" tip="richedit"
 									multiline="1" wantreturn="1" rich="1" file="rtf\chathistory.rtf"
-									hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+									hscrollbar="0" autohscroll="1" vscrollbar="1" autovscroll="1"
 									readonly="0" maxchar="128000" wordwrap="1" number="0"
 									font="default" crtext="0,0,0" crtip="128,128,128,128" />
 							
@@ -66,10 +67,11 @@
 							<layout-div name="layout.chat1.left.2" >
 							
 								<richedit name="richedit.input" skin="IDB_EDIT" 
+									img-scroll="skin:IDB_SCROLL_V" img-scrollh="skin:IDB_SCROLL_H"
 									pos="0,0,-0,-1"
 									title="输入内容" tip="richedit"
 									multiline="1" wantreturn="1" rich="1"
-									hscrollbar="0" autohscroll="1" vscrollbar="0" autovscroll="1"
+									hscrollbar="0" autohscroll="1" vscrollbar="1" autovscroll="1"
 									readonly="0" maxchar="128000" wordwrap="1" number="0"
 									font="default" crtext="0,0,0" crtip="128,128,128,128" />
 							
