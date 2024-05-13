@@ -43,17 +43,17 @@ public:
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(BackGround);	// ∂®“Â±≥æ∞Õº∆¨
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ForeGround);	// ∂®“Â«∞æ∞Õº∆¨
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Thumb);	// ∂®“Âª¨øÈÕº∆¨
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Thumb);	// ∂®“Âª¨øÈÕº∆¨
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_INT_ATTRIBUTE(_T("value"), m_nProgress, FALSE)
 		DUI_INT_ATTRIBUTE(_T("max-value"), m_nMaxProgress, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-back"), OnAttributeImageBackGround)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-fore"), OnAttributeImageForeGround)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-thumb"), OnAttributeImageThumb)
-		DUI_INT_ATTRIBUTE(_T("slider-height"), m_nSliderHeight, FALSE)
-		DUI_INT_ATTRIBUTE(_T("thumb-width"), m_nThumbWidth, FALSE)
-		DUI_INT_ATTRIBUTE(_T("thumb-height"), m_nThumbHeight, FALSE)
-		DUI_INT_ATTRIBUTE(_T("thumb-top"), m_nThumbTop, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("slider-height"), m_nSliderHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("thumb-width"), m_nThumbWidth, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("thumb-height"), m_nThumbHeight, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("thumb-top"), m_nThumbTop, FALSE)
 		DUI_INT_ATTRIBUTE(_T("head-len"), m_nHeadLength, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("show-text"), m_bShowText, TRUE)

@@ -312,9 +312,9 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 			if(m_pImageThumb != NULL)
 			{
 				// ¼ÆËã»¬¿éµÄÎ»ÖÃ
-				int nPos = (int)__max(m_rc.Width() * m_nProgress / m_nMaxProgress - m_nThumbWidth / 2, 0);
-				nPos = (int)__min(nPos, m_rc.Width() - m_nThumbWidth);
-				Rect rect(nPos, nPosY, m_nThumbWidth, m_nThumbHeight);
+				int nPos = (int)__max(m_rc.Width() * m_nProgress / m_nMaxProgress - m_sizeThumbDpi.cx / 2, 0);
+				nPos = (int)__min(nPos, m_rc.Width() - m_sizeThumbDpi.cx);
+				Rect rect(nPos, nPosY, m_sizeThumbDpi.cx, m_sizeThumbDpi.cy);
 				graphics.DrawImage(m_pImageThumb, rect, i * m_sizeThumb.cx, 0, m_sizeThumb.cx, m_sizeThumb.cy, UnitPixel);
 			}
 
