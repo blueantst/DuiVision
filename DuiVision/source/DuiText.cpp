@@ -7,6 +7,8 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject)
 		: CControlBaseFont(hWnd, pDuiObject)
 {
 	m_nScrollWidth = 8;
+	// 按照当前DPI计算滚动条的宽度
+	CDuiWinDwmWrapper::AdapterDpi(m_nScrollWidth);
 
 	CRect rcScroll = CRect(0,0,0,0);
 	rcScroll.top;
@@ -41,6 +43,8 @@ CDuiText::CDuiText(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect rc,
 	: CControlBaseFont(hWnd, pDuiObject, uControlID, rc, m_strTitle, bIsVisible, FALSE, FALSE, strFont, nFontWidth, fontStyle)
 {
 	m_nScrollWidth = 8;
+	// 按照当前DPI计算滚动条的宽度
+	CDuiWinDwmWrapper::AdapterDpi(m_nScrollWidth);
 
 	CRect rcScroll = CRect(0,0,0,0);
 	rcScroll.top;
