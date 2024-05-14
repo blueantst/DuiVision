@@ -6,7 +6,8 @@
 		pos="0,5,|-0,25" title="带内容的列表" font="big" show="1" />
 	
 	<listctrl name="listctrl_1" pos="20,30,|-10,-5" show="1" row-tip="1"
-		img-scroll="skin:IDB_SCROLL_V" img-sep="skin:IDB_MENU_SEP"
+		img-scroll="skin:IDB_SCROLL_V" img-scroll-up="skin:IDB_BT_SCROLL_UP" img-scroll-down="skin:IDB_BT_SCROLL_DOWN"
+		img-sep="skin:IDB_MENU_SEP"
 		img-count="12" image="skin:IDB_LIST_IMG" down-row="0"
 		img-width="50" row-height="50" bk-transparent="10"
 		font-title="big" font="default"
