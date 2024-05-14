@@ -46,6 +46,10 @@ public:
 
 	HRESULT OnAttributeImageScrollV(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageScrollH(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollUp(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollDown(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollLeft(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollRight(const CString& strValue, BOOL bLoading);
 
 	virtual void SetControlRect(CRect rc);
 	virtual void DrawControl(CDC &dc, CRect rcUpdate);
@@ -124,6 +128,10 @@ public:
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScrollV)
 		DUI_CUSTOM_ATTRIBUTE("img-scrollh", OnAttributeImageScrollH)
+		DUI_CUSTOM_ATTRIBUTE("img-scroll-up", OnAttributeImageScrollUp)
+		DUI_CUSTOM_ATTRIBUTE("img-scroll-down", OnAttributeImageScrollDown)
+		DUI_CUSTOM_ATTRIBUTE("img-scroll-left", OnAttributeImageScrollLeft)
+		DUI_CUSTOM_ATTRIBUTE("img-scroll-right", OnAttributeImageScrollRight)
 		DUI_INT_ATTRIBUTE_DPI("scroll-width", m_nScrollWidth, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("xml", OnAttributeXml)
 #ifdef _DEBUG

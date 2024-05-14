@@ -23,6 +23,8 @@ public:
 	HRESULT OnAttributeTextHoverColor(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeTextShadowColor(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeImageScroll(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollUp(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollDown(const CString& strValue, BOOL bLoading);
 
 	// œ˚œ¢œÏ”¶
 	virtual LRESULT OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -57,6 +59,8 @@ public:
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("img-scroll"), OnAttributeImageScroll)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-scroll-up"), OnAttributeImageScrollUp)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-scroll-down"), OnAttributeImageScrollDown)
 		DUI_INT_ATTRIBUTE(_T("scroll-width"), m_nScrollWidth, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_CUSTOM_ATTRIBUTE(_T("crhover"), OnAttributeTextHoverColor)

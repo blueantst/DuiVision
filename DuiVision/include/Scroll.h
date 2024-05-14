@@ -43,6 +43,7 @@ protected:
 	virtual int  SetRange();
 
 	// 消息响应
+	virtual LRESULT OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnMessage(UINT	uID, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 public:
@@ -51,9 +52,6 @@ public:
 	enumButtonState m_enButtonState;		// 鼠标状态
 	BOOL			m_bHover;				// 是否鼠标热点状态
 	BOOL			m_bShowScroll;			// 是否显示滚动条
-
-	CControlBase*	m_pControlUpImage;		// 上箭头控件
-	CControlBase*	m_pControlDownImage;	// 下箭头控件
 
 	int				m_nArrowLen;			// 箭头的长度
 
@@ -84,8 +82,9 @@ public:
 	virtual BOOL SetBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	virtual BOOL SetBitmap(CString strImage);
 
-	HRESULT OnAttributeUpImage(const CString& strValue, BOOL bLoading);
-	HRESULT OnAttributeDownImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScroll(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollUp(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollDown(const CString& strValue, BOOL bLoading);
 
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
@@ -104,8 +103,9 @@ public:
 	int				m_nDownTop;				// 鼠标点击时候的纵向坐标位置
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE(_T("upimg"), OnAttributeUpImage)
-		DUI_CUSTOM_ATTRIBUTE(_T("downimg"), OnAttributeDownImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-scroll"), OnAttributeImageScroll)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-up"), OnAttributeImageScrollUp)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-down"), OnAttributeImageScrollDown)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 
@@ -121,8 +121,9 @@ public:
 	virtual BOOL SetBitmap(UINT nResourceID, CString strType = TEXT("PNG"));
 	virtual BOOL SetBitmap(CString strImage);
 
-	HRESULT OnAttributeLeftImage(const CString& strValue, BOOL bLoading);
-	HRESULT OnAttributeRightImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScroll(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollLeft(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeImageScrollRight(const CString& strValue, BOOL bLoading);
 
 	virtual BOOL OnControlMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL OnControlLButtonDown(UINT nFlags, CPoint point);
@@ -141,7 +142,8 @@ public:
 	int				m_nDownLeft;			// 鼠标点击时候的横向坐标位置
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
-		DUI_CUSTOM_ATTRIBUTE(_T("leftimg"), OnAttributeLeftImage)
-		DUI_CUSTOM_ATTRIBUTE(_T("rightimg"), OnAttributeRightImage)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-scroll"), OnAttributeImageScroll)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-left"), OnAttributeImageScrollLeft)
+		DUI_CUSTOM_ATTRIBUTE(_T("img-right"), OnAttributeImageScrollRight)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

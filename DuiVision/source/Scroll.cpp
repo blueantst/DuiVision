@@ -237,25 +237,31 @@ void CDuiScroll::SetControlRect(CRect rc)
 }
 
 // 消息响应
+LRESULT CDuiScroll::OnBaseMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	return OnMessage(uID, uMsg, wParam, lParam);
+}
+
+// 消息响应
 LRESULT CDuiScroll::OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if((uID == BT_UP) && (MSG_BUTTON_UP == lParam))
+	if((uID == BT_UP) && (MSG_BUTTON_UP == Msg))
 	{
 		MoveRange(-m_nRowRange);
 	}else
-	if((uID == BT_DOWN) && (MSG_BUTTON_UP == lParam))
+	if((uID == BT_DOWN) && (MSG_BUTTON_UP == Msg))
 	{
 		MoveRange(m_nRowRange);
 	}else
-	if((uID == BT_LEFT) && (MSG_BUTTON_UP == lParam))
+	if((uID == BT_LEFT) && (MSG_BUTTON_UP == Msg))
 	{
 		MoveRange(-m_nRowRange);
 	}else
-	if((uID == BT_RIGHT) && (MSG_BUTTON_UP == lParam))
+	if((uID == BT_RIGHT) && (MSG_BUTTON_UP == Msg))
 	{
 		MoveRange(m_nRowRange);
 	}
-	return 0L; 
+	return 0L;
 }
 
 void CDuiScroll::DrawControl(CDC &dc, CRect rcUpdate)
@@ -311,12 +317,14 @@ CDuiScrollVertical::CDuiScrollVertical(HWND hWnd, CDuiObject* pDuiObject, UINT u
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CImageButton(hWnd, this, BT_UP, rcButton);
 	pControlBase->SetTabStop(FALSE);
+	m_pControlUpImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
  
  	rcButton = rc;
  	rcButton.top = rc.bottom - m_nArrowLen;
  	pControlBase = new CImageButton(hWnd, this, BT_DOWN, rcButton);
 	pControlBase->SetTabStop(FALSE);
+	m_pControlDownImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
 
 	m_nDownTop = -1;
@@ -360,8 +368,50 @@ BOOL CDuiScrollVertical::SetBitmap(CString strImage)
 	return false;
 }
 
+// 从XML设置滚动条图片信息属性
+HRESULT CDuiScrollVertical::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	// 通过Skin读取
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
+	{
+		strSkin = DuiSystem::Instance()->GetSkin(strValue);
+		if (strSkin.IsEmpty()) return E_FAIL;
+	}else
+	{
+		strSkin = strValue;
+	}
+
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
+	{
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
+		{
+			strImgFile = strSkin;
+		}
+		if(!SetBitmap(strImgFile))
+		{
+			return E_FAIL;
+		}
+	}else	// 加载图片资源
+	{
+		UINT nResourceID = _ttoi(strSkin);
+		if(!SetBitmap(nResourceID, TEXT("PNG")))
+		{
+			if(!SetBitmap(nResourceID, TEXT("BMP")))
+			{
+				return E_FAIL;
+			}
+		}
+	}
+
+	return bLoading?S_FALSE:S_OK;
+}
+
 // 从XML设置上箭头图片信息属性
-HRESULT CDuiScrollVertical::OnAttributeUpImage(const CString& strValue, BOOL bLoading)
+HRESULT CDuiScrollVertical::OnAttributeImageScrollUp(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -405,7 +455,7 @@ HRESULT CDuiScrollVertical::OnAttributeUpImage(const CString& strValue, BOOL bLo
 }
 
 // 从XML设置下箭头图片信息属性
-HRESULT CDuiScrollVertical::OnAttributeDownImage(const CString& strValue, BOOL bLoading)
+HRESULT CDuiScrollVertical::OnAttributeImageScrollDown(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -724,14 +774,14 @@ CDuiScrollHorizontal::CDuiScrollHorizontal(HWND hWnd, CDuiObject* pDuiObject)
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CImageButton(hWnd, this, BT_UP, rcButton);
 	pControlBase->SetTabStop(FALSE);
-	m_pControlUpImage = pControlBase;
+	m_pControlLeftImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
  
  	rcButton = CRect(0,0,0,0);
  	rcButton.left = rcButton.right - m_nArrowLen;
  	pControlBase = new CImageButton(hWnd, this, BT_DOWN, rcButton);
 	pControlBase->SetTabStop(FALSE);
-	m_pControlDownImage = pControlBase;
+	m_pControlRightImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
 
 	m_nDownLeft = -1;
@@ -750,12 +800,14 @@ CDuiScrollHorizontal::CDuiScrollHorizontal(HWND hWnd, CDuiObject* pDuiObject, UI
  	CControlBase * pControlBase = NULL;
  	pControlBase = new CImageButton(hWnd, this, BT_UP, rcButton);
 	pControlBase->SetTabStop(FALSE);
+	m_pControlLeftImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
  
  	rcButton = rc;
  	rcButton.left = rcButton.right - m_nArrowLen;
  	pControlBase = new CImageButton(hWnd, this, BT_DOWN, rcButton);
 	pControlBase->SetTabStop(FALSE);
+	m_pControlRightImage = pControlBase;
  	m_vecControl.push_back(pControlBase);
 
 	m_nDownLeft = -1;
@@ -799,8 +851,50 @@ BOOL CDuiScrollHorizontal::SetBitmap(CString strImage)
 	return false;
 }
 
+// 从XML设置滚动条图片信息属性
+HRESULT CDuiScrollHorizontal::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	// 通过Skin读取
+	CString strSkin = _T("");
+	if(strValue.Find(_T("skin:")) == 0)
+	{
+		strSkin = DuiSystem::Instance()->GetSkin(strValue);
+		if (strSkin.IsEmpty()) return E_FAIL;
+	}else
+	{
+		strSkin = strValue;
+	}
+
+	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
+	{
+		CString strImgFile = strSkin;
+		if(strSkin.Find(_T(":")) != -1)
+		{
+			strImgFile = strSkin;
+		}
+		if(!SetBitmap(strImgFile))
+		{
+			return E_FAIL;
+		}
+	}else	// 加载图片资源
+	{
+		UINT nResourceID = _ttoi(strSkin);
+		if(!SetBitmap(nResourceID, TEXT("PNG")))
+		{
+			if(!SetBitmap(nResourceID, TEXT("BMP")))
+			{
+				return E_FAIL;
+			}
+		}
+	}
+
+	return bLoading?S_FALSE:S_OK;
+}
+
 // 从XML设置左箭头图片信息属性
-HRESULT CDuiScrollHorizontal::OnAttributeLeftImage(const CString& strValue, BOOL bLoading)
+HRESULT CDuiScrollHorizontal::OnAttributeImageScrollLeft(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 
@@ -844,7 +938,7 @@ HRESULT CDuiScrollHorizontal::OnAttributeLeftImage(const CString& strValue, BOOL
 }
 
 // 从XML设置右箭头图片信息属性
-HRESULT CDuiScrollHorizontal::OnAttributeRightImage(const CString& strValue, BOOL bLoading)
+HRESULT CDuiScrollHorizontal::OnAttributeImageScrollRight(const CString& strValue, BOOL bLoading)
 {
 	if (strValue.IsEmpty()) return E_FAIL;
 

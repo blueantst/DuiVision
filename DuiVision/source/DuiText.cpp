@@ -155,45 +155,27 @@ HRESULT CDuiText::OnAttributeTextShadowColor(const CString& strValue, BOOL bLoad
 // 从XML设置图片信息属性
 HRESULT CDuiText::OnAttributeImageScroll(const CString& strValue, BOOL bLoading)
 {
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CString strSkin = _T("");
-	if(strValue.Find(_T("skin:")) == 0)
+	HRESULT hRes = ((CDuiScrollVertical*)m_pControScrollV)->OnAttributeImageScroll(strValue, bLoading);
+	if (hRes == E_FAIL)
 	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
-	{
-		CString strImgFile = strSkin;
-		if(strSkin.Find(_T(":")) != -1)
-		{
-			strImgFile = strSkin;
-		}
-		if(!m_pControScrollV->SetBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = _ttoi(strSkin);
-		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
+		return hRes;
 	}
 
 	m_bScrollV = TRUE;
 
 	return bLoading?S_FALSE:S_OK;
+}
+
+// 从XML设置垂直滚动条上箭头图片信息属性
+HRESULT CDuiText::OnAttributeImageScrollUp(const CString& strValue, BOOL bLoading)
+{
+	return ((CDuiScrollVertical*)m_pControScrollV)->OnAttributeImageScrollUp(strValue, bLoading);
+}
+
+// 从XML设置垂直滚动条下箭头图片信息属性
+HRESULT CDuiText::OnAttributeImageScrollDown(const CString& strValue, BOOL bLoading)
+{
+	return ((CDuiScrollVertical*)m_pControScrollV)->OnAttributeImageScrollDown(strValue, bLoading);
 }
 
 void CDuiText::SetControlRect(CRect rc)

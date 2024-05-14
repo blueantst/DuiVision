@@ -139,85 +139,37 @@ BOOL CDuiPanel::LoadXmlFile(CString strFileName)
 // 从XML设置垂直滚动条图片信息属性
 HRESULT CDuiPanel::OnAttributeImageScrollV(const CString& strValue, BOOL bLoading)
 {
-	if (strValue.IsEmpty()) return E_FAIL;
-
-	// 通过Skin读取
-	CString strSkin = _T("");
-	if(strValue.Find(_T("skin:")) == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
-
-	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
-	{
-		CString strImgFile = strSkin;
-		if(strSkin.Find(_T(":")) != -1)
-		{
-			strImgFile = strSkin;
-		}
-		if(!m_pControScrollV->SetBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = _ttoi(strSkin);
-		if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!m_pControScrollV->SetBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
-
-	return bLoading?S_FALSE:S_OK;
+	return ((CDuiScrollVertical*)m_pControScrollV)->OnAttributeImageScroll(strValue, bLoading);
 }
 
 // 从XML设置水平滚动条图片信息属性
 HRESULT CDuiPanel::OnAttributeImageScrollH(const CString& strValue, BOOL bLoading)
 {
-	if (strValue.IsEmpty()) return E_FAIL;
+	return ((CDuiScrollHorizontal*)m_pControScrollH)->OnAttributeImageScroll(strValue, bLoading);
+}
 
-	// 通过Skin读取
-	CString strSkin = _T("");
-	if(strValue.Find(_T("skin:")) == 0)
-	{
-		strSkin = DuiSystem::Instance()->GetSkin(strValue);
-		if (strSkin.IsEmpty()) return E_FAIL;
-	}else
-	{
-		strSkin = strValue;
-	}
+// 从XML设置垂直滚动条上箭头图片信息属性
+HRESULT CDuiPanel::OnAttributeImageScrollUp(const CString& strValue, BOOL bLoading)
+{
+	return ((CDuiScrollVertical*)m_pControScrollV)->OnAttributeImageScrollUp(strValue, bLoading);
+}
 
-	if(strSkin.Find(_T(".")) != -1)	// 加载图片文件
-	{
-		CString strImgFile = strSkin;
-		if(strSkin.Find(_T(":")) != -1)
-		{
-			strImgFile = strSkin;
-		}
-		if(!m_pControScrollH->SetBitmap(strImgFile))
-		{
-			return E_FAIL;
-		}
-	}else	// 加载图片资源
-	{
-		UINT nResourceID = _ttoi(strSkin);
-		if(!m_pControScrollH->SetBitmap(nResourceID, TEXT("PNG")))
-		{
-			if(!m_pControScrollH->SetBitmap(nResourceID, TEXT("BMP")))
-			{
-				return E_FAIL;
-			}
-		}
-	}
+// 从XML设置垂直滚动条下箭头图片信息属性
+HRESULT CDuiPanel::OnAttributeImageScrollDown(const CString& strValue, BOOL bLoading)
+{
+	return ((CDuiScrollVertical*)m_pControScrollV)->OnAttributeImageScrollDown(strValue, bLoading);
+}
 
-	return bLoading?S_FALSE:S_OK;
+// 从XML设置垂直滚动条左箭头图片信息属性
+HRESULT CDuiPanel::OnAttributeImageScrollLeft(const CString& strValue, BOOL bLoading)
+{
+	return ((CDuiScrollHorizontal*)m_pControScrollH)->OnAttributeImageScrollLeft(strValue, bLoading);
+}
+
+// 从XML设置垂直滚动条右箭头图片信息属性
+HRESULT CDuiPanel::OnAttributeImageScrollRight(const CString& strValue, BOOL bLoading)
+{
+	return ((CDuiScrollHorizontal*)m_pControScrollH)->OnAttributeImageScrollRight(strValue, bLoading);
 }
 
 // 从XML设置XML属性,加载XML文件的内容作为div容器内的内容
