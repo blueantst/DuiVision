@@ -290,11 +290,29 @@ width-lt,height-lt,width-rb,height-rb" />
 			<progress name="progress_2"
 				img-back="skin:IDB_PROGRESS_GREEN_BACK" img-fore="skin:IDB_PROGRESS_GREEN_FORE" head-len="5"
 				pos="100,210" width="250" height="12" value="40" run="false" show="1"
-				tip="圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
+				tip="绿色圆角进度条，需要前景和背景两张图片，进度通过程序控制" />
+
+			<progress name="progress_3"
+				img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_RED" head-len="2"
+				show-text="1" crtext="A0A020" title="进度："
+				pos="100,240" width="250" height="15" value="40" timer-count="20" run="true" show="1"
+				tip="红色进度条，需要前景和背景两张图片" />
+
+			<progress name="progress_4"
+				img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_GRADIENT_GREEN" head-len="2"
+				show-text="1" crtext="A0A020" title="进度："
+				pos="100,270" width="250" height="15" value="40" timer-count="20" run="true" show="1"
+				tip="绿色渐变进度条，需要前景和背景两张图片" />
+
+			<progress name="progress_5"
+				img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_RAY_GREEN" head-len="2"
+				show-text="1" crtext="A0A020" title="进度："
+				pos="100,300" width="250" height="15" value="40" timer-count="20" run="true" show="1"
+				tip="绿色条纹进度条，需要前景和背景两张图片" />
 			
-			<text pos="50,240,110,260" crtext="808080" title="滑动条：" />
+			<text pos="50,340,110,360" crtext="808080" title="滑动条：" />
 			<slider name="slider_1" skin="IDB_PROGRESS" show-text="0" crtext="808080" title="进度："
-				pos="100,240" width="250" height="22" value="40" show="1"
+				pos="100,340" width="250" height="22" value="40" show="1"
 				tip="演示滑块控件"
 				img-thumb="skins\qq\softtastmgr_btn_refresh.png"
 				slider-height="7" thumb-width="0" thumb-height="0" thumb-top="5" />
