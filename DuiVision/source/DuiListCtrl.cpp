@@ -1190,7 +1190,7 @@ void CDuiListCtrl::DrawControl(CDC &dc, CRect rcUpdate)
 				rowInfo.bNeedTitleTip = rect.Width < GetTextBounds(font, rowInfo.strTitle).Width;
 				rowInfo.bNeedContentTip = rect.Width < GetTextBounds(font, rowInfo.strContent).Width;
 				Size sizeTime = GetTextBounds(font, strFormatRight, rowInfo.strTime);
-				int nTimeWidth = sizeTime.Width + 10;
+				int nTimeWidth = sizeTime.Width + DUI_DPI_X(10);
 				RectF rectTime((Gdiplus::REAL)(nWidth-nRightImageWidth-2-nTimeWidth-nLinkWidth), (Gdiplus::REAL)(nVI*m_nRowHeight + 1), (Gdiplus::REAL)nTimeWidth, (Gdiplus::REAL)(m_bSingleLine ? m_nRowHeight : (m_nRowHeight / 2)) );
 				if(m_nHoverRow == i)
 				{
