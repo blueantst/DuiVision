@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+
+<TITLE>DuiVision界面库</TITLE>
+
+<meta name="Security" content="public" />
+<meta name="Robots" content="index,follow" />
+<meta name="DC.Language" scheme="rfc1766" content="zh-CN" />
+<meta name="Description" content="蓝蚂蚁工作室致力于平台软件、脚本语言、开发环境等方面的研究，目前已经发布了Script.NET系列脚本语言开发环境、FVision GUI类库、DuiVision界面库等软件版本，蓝蚂蚁工作室所有软件均为免费开源软件，希望能给程序员们带来帮助。" />
+<meta name="Keywords"   content="蓝蚂蚁工作室,DuiVision,FVision,Script.NET,脚本,IDE,开发环境,RCP,Tcl,Python,Perl,Ruby,Lua,NSIS,XMPP,Pascal,Eclipse,金山界面库向导,开发平台,VCI,OWM,组件,界面,c/c++" />
+
+<LINK href="css/blueui.css" type=text/css rel=stylesheet>
+<LINK href="css/ssdn.css" type=text/css rel=stylesheet>
+<SCRIPT src="js/blueui.js" type=text/javascript>
+</SCRIPT>
+
+</HEAD>
+<BODY bottomMargin=0 bgColor=#ffffff leftMargin=0 topMargin=0 rightMargin=0>
+<TABLE id=table1 cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD align="center">
+      <TABLE id=table2 cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD>
+            <TABLE id=table10 cellSpacing=0 cellPadding=0 width="100%" border=0><TBODY>
+              <TR>
+                <TD align=middle bgColor=#2e52af colSpan=3>
+				  <IMG height=1 src="image/spacer.gif" width=1 border=0></TD>
+			  </TR>
+              <TR>
+                <TD width="50%" background="image/dark_blue_back.gif" bgColor=#000080>
+                  <TABLE id=table51 cellSpacing=0 cellPadding=0 border=0>
+                    <TBODY>
+                    <TR>
+                      <TD style="PADDING-LEFT: 10px">
+                        <TABLE cellSpacing=0 cellPadding=0 border=0>
+                          <TBODY>
+                          <TR class=white 
+                          onmousedown="javascript:mDown('')" 
+                          onmouseover="this.className='orange';" 
+                          onmouseout="this.className='white';">
+                            <TD width=28><IMG height=24 src="image/icon_24x24_home.gif" width=24 border=0></TD>
+                            <TD class=white><a href="http://www.blueantstudio.net">主页</a>&nbsp;</TD></TR></TBODY></TABLE></TD>
+                      <TD align=middle width=10>
+					    <IMG height=24 src="image/top_blue_separator.gif" width=2 border=0>
+					  </TD>
+                      <TD align=middle>
+                        <TABLE cellSpacing=0 cellPadding=0 border=0>
+                          <TBODY>
+                          <TR class=white 
+                          onmousedown="javascript:mDown('')" 
+                          onmouseover="this.className='orange';" 
+                          onmouseout="this.className='white';">
+                            <TD width=28><IMG height=24 src="image/icon_24x24_download.jpg" width=24 border=0></TD>
+                            <TD class=white>源代码下载&nbsp;</TD></TR></TBODY></TABLE></TD>
+                      <TD align=middle width=10>
+					    <IMG height=24 src="image/top_blue_separator.gif" width=2 border=0>
+					  </TD>
+
+					  </TR></TBODY></TABLE>
+				</TD>
+          
+				</TR></TBODY>
+			</TABLE>
+            <TABLE id=table49 cellSpacing=0 cellPadding=0 width="100%" border=0>
+			  <TBODY>
+              <TR>
+                <TD class=ltblue width=3 background="image/light_blue_back.gif">
+				  <IMG height=30 src="image/spacer.gif" width=3 border=0></TD>
+                <TD class=ltblueborder align=middle width=172 background="image/light_blue_back.gif">
+                  <TABLE id=table50 cellSpacing=0 cellPadding=2 width=150 border=0>
+                    <TBODY>
+                    <TR>
+                      <FORM name=frmSiteSearch 
+                      onsubmit="return CheckSearchForm(this);" 
+                      action="http://www.baidu.com"
+                      method=get><INPUT type=hidden value=allwords name=mode> 
+                      <TD align=middle><B style="COLOR: #000000">Search:</B></TD>
+                      <TD align=middle width="100%"><INPUT class=searchbox 
+                        onfocus=this.select() size=15 name=search></TD>
+                      <TD align=middle><INPUT id=image1 type=image height=16 
+                        width=16 src="image/icon_16x16_search.gif" name=image1></TD>
+					  </FORM></TR></TBODY></TABLE></TD>
+                <TD class=ltblueborder background="image/light_blue_back.gif">&nbsp;</TD>
+			  </TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD>
+            <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+              <TBODY>
+              <TR>
+			  
+			  <TD class=splitleft width=3><IMG height=1 src="image/spacer.gif" width=3 border=0></TD>
+
+                <TD style="BACKGROUND-COLOR: #fff;PADDING-LEFT: 5px" vAlign=top width="100%">
+				  <!-- begin:page content -->
+
+					<BR>DuiVision界面库是参考了仿PC管家程序、金山界面库、DuiEngine、DuiLib等多个基于DirectUI的界面库开发的。
+					<BR>DirectUI技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用Windows控件，所以这些控件都是无句柄的。
+					<BR>DirectUI技术需要解决的主要问题如下：
+					<BR>1、窗口的子类化，截获窗口的消息；
+					<BR>2、封装自己的控件，并将自己的控件绘制到该窗口上；
+					<BR>3、封装窗口的消息，并分发到自己的控件上，让自己的控件根据消息进行相应和绘制；
+					<BR>4、根据不同的行为发送自定义消息给窗口，以便程序进行调用；
+					<BR>5、一般窗口上控件的组织使用XML来描述。
+					<BR>通常DirectUI的界面库都采用XML配置文件+图片+控制脚本（Lua、Javascript等）的开发方式，非常类似于Web程序的开发方式，当然这里面控制脚本也可以直接使用C++代码来实现。这种开发方式可以大大提高开发效率，将程序员从繁琐的界面工作中解脱出来，并且通过美工的设计，可以使界面更美观。
+
+					<BR>DuiVision开源下载地址：<a href="https://github.com/blueantst/DuiVision">https://github.com/blueantst/DuiVision</a>
+					<BR>QQ群：325880743 (Script.NET社区)
+					<BR>微信公众号：blueantstudio 或搜索 蓝蚂蚁工作室 或扫描首页二维码
+					
+					<p><b>演示程序界面截图：</b></p>
+					<img src="image/openrtu_config.jpg" border=0><br>
+					<img src="image/openrtu_terminal.jpg" border=0><br>
+					<br>
+
+                  <DIV style="PADDING-BOTTOM: 25px"></DIV>
+				  <!-- end:page content --></TD>
+				  
+				  <TD class=splitleft width=1><IMG height=1 src="image/spacer.gif" width=1 border=0></TD>
+				  <TD class=ltblue width=3>
+					<IMG height=30 src="image/spacer.gif" width=3 border=0></TD>
+					
+				  </TR>
+              <TR>
+                <TD colSpan=4>
+                  <TABLE cellSpacing=0 cellPadding=0 width="100%" 
+                  bgColor=#a4c2f5 border=0>
+                    <TBODY>
+                    <TR>
+                      <TD width=3><IMG height=4 
+                        src="image/spacer.gif" width=3 
+                        border=0></TD>
+                      <TD class=splitbottom width=172><IMG height=4 
+                        src="image/spacer.gif" width=172 
+                        border=0></TD>
+                      <!--TD width=3><IMG height=4 
+                        src="../image/spacer.gif" width=3 
+                        border=0></TD-->
+                      <TD class=splitbottom><IMG height=4 
+                        src="image/spacer.gif" width=3 
+                        border=0></TD>
+					</TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
+ <TR>
+    <TD align="center">
+		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD class=footer align=middle width="100%">
+			  <BR>&copy;蓝蚂蚁工作室版权所有2000-2024，保留所有权利。
+			  [ email：script.net@gmail.com ]
+			  <BR>  <?
+					require("counter.php");
+					?>
+			  <BR><span>最近更新日期：2024-11-16</span>
+			  <BR><BR>
+		  </TD>
+		</TR>
+		</TBODY></TABLE>
+	</TD>
+</TR></TBODY></TABLE></BODY>
+</HTML>
