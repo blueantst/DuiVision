@@ -79,34 +79,98 @@
 			<item title="已装：1.8.3.0" content="最新：1.8.9.0" />
 			<item title="7.5M" />
 			<item>
-				<progress name="grid_progress_install" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
+				<progress name="grid_progress_blue" skin="IDB_PROGRESS" show-text="1" crtext="808080" title=""
 				pos="0,17" width="110" height="15" value="20" run="true" show="1"
 				tip="安装进度" />
 			</item>
 		</row>
-		<row image="skins\icon\PDFViewer.png" check="1">
+		<row image="skins\icon\PDFViewer.png" check="0">
 			<item title="Notepad++"  content="1.修复功能列表崩溃问题;2.增强分隔符选择" font-title="1" />
 			<item title="已装：6.5.0.0" content="最新：6.6.0.0" />
 			<item title="7.5M" />
-			<item link="一键安装" linkaction="dlg:dlg_login"/>
+			<item>
+				<progress name="grid_progress_red" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_RED" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
 		</row>
-		<row image="skins\icon\Movies.png" check="1">
+		<row image="skins\icon\Movies.png" check="0">
 			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
 			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
 			<item title="43.5M" />
-			<item link="一键安装" linkaction="dlg:dlg_login"/>
+			<item>
+				<progress name="grid_progress_green" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_GREEN" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
 		</row>
-		<row image="skins\icon\iSplit.png" check="1">
+		<row image="skins\icon\iSplit.png" check="0">
 			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
 			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
 			<item title="13M" />
-			<item link="一键安装" linkaction="dlg:dlg_login"/>
+			<item>
+				<progress name="grid_progress_orange" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_ORANGE" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
 		</row>
-		<row image="skins\icon\adrule_rename.png" check="-1">
+		<row image="skins\icon\adrule_rename.png" check="0">
 			<item title="为知笔记" content="1.改进了博客发布功能;2.改进了编写日记功能" font-title="1" />
 			<item title="已装：22.9.0.0" content="最新：24.0.1.1" />
 			<item title="29.5M" crtext="0,0,128" />
-			<item link="一键安装" />
+			<item>
+				<progress name="grid_progress_gradient_green" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_GRADIENT_GREEN" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
+		</row>
+		<row image="skins\icon\Movies.png" check="0">
+			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
+			<item title="43.5M" />
+			<item>
+				<progress name="grid_progress_gradient_green2" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_GRADIENT_GREEN2" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
+		</row>
+		<row image="skins\icon\iSplit.png" check="0">
+			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item>
+				<progress name="grid_progress_gradient_red" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_GRADIENT_RED" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
+		</row>
+		<row image="skins\icon\Movies.png" check="0">
+			<item title="迅雷看看" content="1.修复部分Bug" font-title="1" />
+			<item title="已装：4.8.0.0" content="最新：4.9.14.2" />
+			<item title="43.5M" />
+			<item>
+				<progress name="grid_progress_ray_green" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_RAY_GREEN" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
+		</row>
+		<row image="skins\icon\iSplit.png" check="0">
+			<item title="Axialis IconWorkshop" content="1.易用性改进" font-title="1" />
+			<item title="已装：4.9.0.0" content="最新：6.8.1.2" />
+			<item title="13M" />
+			<item>
+				<progress name="grid_progress_ray_red" img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_RAY_RED" head-len="2"
+				show-text="1" crtext="808080" title=""
+				pos="0,17" width="110" height="15" value="20" run="true" show="1"
+				tip="安装进度" />
+			</item>
 		</row>
 		<row image="skins\icon\ico_business.png" check="0">
 			<item title="TortoiseGit 64位" content="暂无版本更新说明" font-title="1" />
