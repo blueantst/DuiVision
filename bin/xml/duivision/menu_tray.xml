@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu title="TrayMenu" width="250" item-height="25" left="30"
+<menu title="TrayMenu" width="250" item-height="25" left="50"
 	frame-width="0" top-height="72" bottom-height="30"
 	bkmode="mid" width-lt="5" height-lt="70" width-rb="5" height-rb="30"
 	img-popuparrow="skin:IDB_MENU_ARROW"

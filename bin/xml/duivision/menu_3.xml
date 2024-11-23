@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu title="Menu_3" width="150" item-height="25" framesize="30" left="30" frame-width="0"
+<menu title="Menu_3" width="150" item-height="25" framesize="30" left="40" frame-width="0"
 	crrowhover="255,196,196,196"
 	bkimg="skins\menu\menu_back.png" >
 

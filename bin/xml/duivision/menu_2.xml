@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu title="TrayMenu" width="150" item-height="25" framesize="30" left="30" frame-width="3"
+<menu title="TrayMenu" width="150" item-height="25" left="50" frame-width="3"
 	img-rowhover="skins\menu\bg_safe.png"
-	bkimg="skin:IDB_MENU_BACK" >
+	bkmode="frame" bkimg="skin:IDB_MENU_BACK" >
 
 	<menuitem name="restore_mainwnd" skin="" image="" title="恢复窗口" font="bold" action="show-window:dlg_main" />
 	<menuitem separator="1" skin="IDB_MENU_SEP" />
