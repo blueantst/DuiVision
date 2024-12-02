@@ -16,6 +16,7 @@ public:
 	void SetMarkText(CString strTitle, CString strMark, Color clrMark = Color(237, 128, 27), int nStart = 0);
 
 	void SetTextColor(Color clrText) { m_clrText = clrText; };
+	void SetMarkColor(Color clrMark) { m_clrMark = clrMark; };
 
 	int GetVirtualHeight();
 

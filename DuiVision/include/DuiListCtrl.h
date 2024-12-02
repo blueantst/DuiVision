@@ -94,10 +94,11 @@ protected:
 	virtual BOOL OnControlScroll(BOOL bVertical, UINT nFlags, CPoint point);
 	virtual BOOL OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
-	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
-
 	// 消息响应
 	virtual LRESULT OnMessage(UINT uID, UINT Msg, WPARAM wParam, LPARAM lParam);
+
+public:
+	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
 
 public:
 	CString				m_strFontTitle;		// 标题字体
