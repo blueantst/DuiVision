@@ -153,6 +153,7 @@ public:
 	CControlBase* GetFocusControl();
 	CControlBase* GetPrevFocusableControl();
 	CControlBase* GetNextFocusableControl();
+	BOOL SwitchFocusControl(int nTab);
 
 	// ÒÆ¶¯¿Ø¼þ
 	virtual CControlBase * SetControlRect(UINT uControlID, CRect rc);

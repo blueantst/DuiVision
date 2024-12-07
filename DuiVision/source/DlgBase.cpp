@@ -892,6 +892,38 @@ CControlBase* CDlgBase::GetNextFocusableControl()
 	return NULL;
 }
 
+// 切换焦点控件,nTab为1表示往后切换1个控件,nTab为-1表示往前切换1个控件
+BOOL CDlgBase::SwitchFocusControl(int nTab)
+{
+	if (nTab == 0)
+	{
+		return FALSE;
+	}
+
+	CControlBase* pFocusControl = GetFocusControl();
+
+	if (nTab == 1)
+	{
+		CControlBase* pNextControl = GetNextFocusableControl();
+		if (pNextControl != pFocusControl)
+		{
+			SetFocusControl(pNextControl);
+			return TRUE;
+		}
+	}else
+	if (nTab == -1)
+	{
+		CControlBase* pPrevControl = GetPrevFocusableControl();
+		if (pPrevControl != pFocusControl)
+		{
+			SetFocusControl(pPrevControl);
+			return TRUE;
+		}
+	}
+	
+	return FALSE;
+}
+
 int CDlgBase::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	// 设置窗口风格
@@ -2586,21 +2618,15 @@ BOOL CDlgBase::PreTranslateMessage(MSG* pMsg)
 		// 处理tab键和shift+tab键,切换焦点
 		if((pMsg->wParam == VK_TAB) && (nFlags == 0))
 		{
-			CControlBase* pFocusControl = GetFocusControl();
-			CControlBase* pNextControl = GetNextFocusableControl();
-			if(pNextControl != pFocusControl)
+			if (SwitchFocusControl(1))	// 焦点往后切换一个控件
 			{
-				SetFocusControl(pNextControl);
 				return TRUE;
 			}
 		}else
 		if((pMsg->wParam == VK_TAB) && (nFlags == VK_SHIFT))
 		{
-			CControlBase* pFocusControl = GetFocusControl();
-			CControlBase* pPrevControl = GetPrevFocusableControl();
-			if(pPrevControl != pFocusControl)
+			if (SwitchFocusControl(-1))	// 焦点往前切换一个控件
 			{
-				SetFocusControl(pPrevControl);
 				return TRUE;
 			}
 		}

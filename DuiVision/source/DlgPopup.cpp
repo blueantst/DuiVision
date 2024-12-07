@@ -1491,6 +1491,38 @@ CControlBase* CDlgPopup::GetNextFocusableControl()
 	return NULL;
 }
 
+// 切换焦点控件,nTab为1表示往后切换1个控件,nTab为-1表示往前切换1个控件
+BOOL CDlgPopup::SwitchFocusControl(int nTab)
+{
+	if (nTab == 0)
+	{
+		return FALSE;
+	}
+
+	CControlBase* pFocusControl = GetFocusControl();
+
+	if (nTab == 1)
+	{
+		CControlBase* pNextControl = GetNextFocusableControl();
+		if (pNextControl != pFocusControl)
+		{
+			SetFocusControl(pNextControl);
+			return TRUE;
+		}
+	}else
+	if (nTab == -1)
+	{
+		CControlBase* pPrevControl = GetPrevFocusableControl();
+		if (pPrevControl != pFocusControl)
+		{
+			SetFocusControl(pPrevControl);
+			return TRUE;
+		}
+	}
+	
+	return FALSE;
+}
+
 // 移动控件
 CControlBase * CDlgPopup::SetControlRect(UINT uControlID, CRect rc)
 {

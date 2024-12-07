@@ -160,6 +160,7 @@ public:
 	CControlBase* GetFocusControl();
 	CControlBase* GetPrevFocusableControl();
 	CControlBase* GetNextFocusableControl();
+	BOOL SwitchFocusControl(int nTab);
 
 	// 确认和放弃
 	void DoOK() { PostMessage(WM_USER_CLOSEWND, IDOK, 0); }
