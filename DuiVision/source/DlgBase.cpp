@@ -520,6 +520,15 @@ void CDlgBase::InitControlValue()
 		// 对话框自身属性更改
 		if(pCtrlValue->strName.IsEmpty())
 		{
+			if (pCtrlValue->strType == _T("focus-control"))
+			{
+				// 设置当前焦点控件
+				CControlBase* pControl = GetControl(pCtrlValue->strValue);
+				if (pControl)
+				{
+					SetFocusControl(pControl);
+				}
+			}
 			continue;
 		}
 
