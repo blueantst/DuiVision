@@ -24,6 +24,10 @@
 #define LANGUAGE_PAGE_CHINESE_HK	0x0C04	// 香港、马来繁体
 #define LANGUAGE_PAGE_CHINESE_SGP	0x1004	// 新加坡繁体
 
+// 默认语言的获取方式
+#define DEFAULT_LANGUAGE_SYSTEM		0		// 获取系统默认语言
+#define DEFAULT_LANGUAGE_USER		1		// 获取登录用户的默认语言
+
 // 操作系统类型定义
 enum OSType
 {
@@ -103,6 +107,8 @@ public:
 	static CString GetXmlPath();
 	// 路径标准化
 	static BOOL PathCanonicalize(CString& strPath);
+	// 加载基础配置
+	BOOL LoadBaseConfig();
 	// 加载资源
 	BOOL LoadResource();
 	// 加载XML资源文件(可以指定加载的风格)
@@ -257,6 +263,7 @@ protected:
 	HINSTANCE				m_hInst;
 	UINT					m_uAppID;								// 应用ID
 
+	int						m_nDefaultLanguageType;					// 系统默认语言的获取方式(系统还是当前登录用户)
 	DWORD					m_dwLangID;								// 当前语言ID
 	CString					m_strCurStyle;							// 当前风格名
 	int						m_nDpiAwareType;						// 当前DPI虚拟化类型
