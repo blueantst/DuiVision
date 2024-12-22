@@ -300,14 +300,16 @@ width-lt,height-lt,width-rb,height-rb" />
 
 			<progress name="progress_4"
 				img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_GRADIENT_GREEN" head-len="2"
-				show-text="1" crtext="A0A020" title="进度："
-				pos="100,270" width="250" height="15" value="40" timer-count="20" run="true" show="1"
+				show-text="1" text-mode="number-all" crtext="A0A020" title="进度："
+				pos="100,270" width="250" height="15"
+				value="40" max-value="120" timer-count="20" run="true" show="1"
 				tip="绿色渐变进度条，需要前景和背景两张图片" />
 
 			<progress name="progress_5"
 				img-back="skin:IDB_PROGRESS_BACK" img-fore="skin:IDB_PROGRESS_RAY_GREEN" head-len="2"
-				show-text="1" crtext="A0A020" title="进度："
-				pos="100,300" width="250" height="15" value="40" timer-count="20" run="true" show="1"
+				show-text="1" text-mode="number-use" crtext="A0A020" title="进度："
+				pos="100,300" width="250" height="15"
+				value="40" max-value="120" timer-count="20" run="true" show="1"
 				tip="绿色条纹进度条，需要前景和背景两张图片" />
 			
 			<text pos="50,340,110,360" crtext="808080" title="滑动条：" />
