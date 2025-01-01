@@ -79,13 +79,7 @@ int CDuiProgress::SetProgress(int nProgress)
 		return m_nProgress;
 	}
 
-	if(nProgress > m_nMaxProgress)
-	{
-		// 设置值超过最大值,自动更改为最大值
-		nProgress = m_nMaxProgress;
-	}
-
-	if(nProgress >= 0 && nProgress <= m_nMaxProgress && m_nProgress != nProgress)
+	if((nProgress >= 0) && (m_nProgress != nProgress))
 	{
 		m_nProgress = nProgress;
 		if(GetVisible())
@@ -170,6 +164,12 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 
 		Graphics graphics(m_memDC);
 
+		int nProgressWidth = (long long)nWidth * (long long)m_nProgress / (long long)m_nMaxProgress;
+		if (nProgressWidth > nWidth)
+		{
+			nProgressWidth = nWidth;
+		}
+
 		if(m_pImageForeGround != NULL)	// 使用背景和前景图片画进度条
 		{
 			if(m_pImageBackGround != NULL)	// 画背景
@@ -181,7 +181,7 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 
 			if(m_nProgress != 0)	// 画前景
 			{
-				DrawImageFrameMID(graphics, m_pImageForeGround, CRect(0, 0, nWidth * m_nProgress / m_nMaxProgress, nHeight),
+				DrawImageFrameMID(graphics, m_pImageForeGround, CRect(0, 0, nProgressWidth, nHeight),
 					0, 0, m_sizeForeGround.cx, m_sizeForeGround.cy,
 					m_nHeadLength, 0, m_nHeadLength, 0);
 			}
@@ -193,7 +193,7 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 
 			if(m_nProgress != 0)
 			{
-				DrawImageFrame(graphics, m_pImage, CRect(0, 0, nWidth * m_nProgress / m_nMaxProgress, nHeight), 
+				DrawImageFrame(graphics, m_pImage, CRect(0, 0, nProgressWidth, nHeight),
 					m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 2);
 			}
 		}
