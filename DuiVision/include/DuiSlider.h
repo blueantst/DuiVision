@@ -1,6 +1,15 @@
 #pragma once
 #include "ControlBase.h"
 
+// 进度文字显示模式
+enum enumSlidTextMode
+{
+	enSlidTitleAuto = 0,			// 显示标题,并自动判断是否百分比显示
+	enSlidTitlePercent,				// 显示标题,并转换为百分比显示数值
+	enSlidTitleNumberUse,			// 显示标题,并显示进度数值
+	enSlidTitleNumberAll,			// 显示标题,并显示进度数值和总数
+	enSlidTitleOnly					// 只显示标题
+};
 
 class CDuiSlider : public CControlBaseFont
 {
@@ -40,6 +49,7 @@ public:
 
 	Color			m_clrText;			// 进度文字颜色
 	BOOL			m_bShowText;		// 是否显示进度文字
+	enumSlidTextMode m_enTextMode;		// 文字显示模式
 
 	DUI_IMAGE_ATTRIBUTE_DEFINE(BackGround);	// 定义背景图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(ForeGround);	// 定义前景图片
@@ -57,5 +67,12 @@ public:
 		DUI_INT_ATTRIBUTE(_T("head-len"), m_nHeadLength, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("show-text"), m_bShowText, TRUE)
+		DUI_ENUM_ATTRIBUTE(_T("text-mode"), enumSlidTextMode, TRUE)
+			DUI_ENUM_VALUE(_T("auto"), enSlidTitleAuto)
+			DUI_ENUM_VALUE(_T("percent"), enSlidTitlePercent)
+			DUI_ENUM_VALUE(_T("number-use"), enSlidTitleNumberUse)
+			DUI_ENUM_VALUE(_T("number-all"), enSlidTitleNumberAll)
+			DUI_ENUM_VALUE(_T("title-only"), enSlidTitleOnly)
+		DUI_ENUM_END(m_enTextMode)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

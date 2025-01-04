@@ -29,6 +29,7 @@ CDuiSlider::CDuiSlider(HWND hWnd, CDuiObject* pDuiObject)
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
 	m_bShowText = FALSE;
+	m_enTextMode = enSlidTitleAuto;
 
 	m_nProgress = 0;
 	SetProgress(0);
@@ -63,6 +64,7 @@ CDuiSlider::CDuiSlider(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, CRect
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
 	m_bShowText = FALSE;
+	m_enTextMode = enSlidTitleAuto;
 
 	m_nProgress = 0;
 	SetProgress(nProgress);
@@ -99,13 +101,7 @@ int CDuiSlider::SetProgress(int nProgress)
 		return m_nProgress;
 	}
 
-	if(nProgress > m_nMaxProgress)
-	{
-		// 设置值超过最大值,自动更改为最大值
-		nProgress = m_nMaxProgress;
-	}
-
-	if(nProgress >= 0 && nProgress <= m_nMaxProgress && m_nProgress != nProgress)
+	if ((nProgress >= 0) && (m_nProgress != nProgress))
 	{
 		m_nProgress = nProgress;
 		if(GetVisible())
@@ -132,8 +128,14 @@ void CDuiSlider::SetControlRect(CRect rc)
 		m_nThumbHeight = m_sizeThumb.cy;
 	}
 
+	int nProgressWidth = (long long)m_rc.Width() * (long long)m_nProgress / (long long)m_nMaxProgress;
+	if (nProgressWidth > m_rc.Width())
+	{
+		nProgressWidth = m_rc.Width();
+	}
+
 	// 计算滑块的位置
-	int nPos = (int)__max(m_rc.Width() * m_nProgress / m_nMaxProgress - m_nThumbWidth / 2, 0);
+	int nPos = (int)__max(nProgressWidth - m_nThumbWidth / 2, 0);
 	nPos = (int)__min(nPos, m_rc.Width() - m_nThumbWidth);
 	m_rcThumb = CRect(nPos, 0, nPos + m_nThumbWidth, m_nThumbHeight);
 	m_rcThumb.OffsetRect(m_rc.left, m_rc.top);
@@ -142,14 +144,14 @@ void CDuiSlider::SetControlRect(CRect rc)
 // 移动滑块位置
 int CDuiSlider::MoveThumbPos(CPoint point)
 {
-	int nProgress = m_nMaxProgress * (point.x - m_rc.left) / m_rc.Width();
+	int nProgress = (long long)m_nMaxProgress * (long long)(point.x - m_rc.left) / (long long)m_rc.Width();
 	nProgress = __max(0, nProgress);
 	nProgress = __min(m_nMaxProgress, nProgress);
 	if(nProgress != m_nProgress)
 	{
 		m_nProgress = nProgress;
 		// 计算滑块的位置
-		int nPos = (int)__max(m_rc.Width() * m_nProgress / m_nMaxProgress - m_nThumbWidth / 2, 0);
+		int nPos = (int)__max((long long)m_rc.Width() * (long long)m_nProgress / (long long)m_nMaxProgress - m_nThumbWidth / 2, 0);
 		nPos = (int)__min(nPos, m_rc.Width() - m_nThumbWidth);
 		m_rcThumb = CRect(nPos, 0, nPos + m_nThumbWidth, m_nThumbHeight);
 		m_rcThumb.OffsetRect(m_rc.left, m_rc.top);
@@ -272,6 +274,12 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 
 		Graphics graphics(m_memDC);
 
+		int nProgressWidth = (long long)nWidth * (long long)m_nProgress / (long long)m_nMaxProgress;
+		if (nProgressWidth > nWidth)
+		{
+			nProgressWidth = nWidth;
+		}
+
 		// 画4个状态的内存图片
 		for(int i = 0; i < 4; i++)
 		{
@@ -291,7 +299,7 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 
 				if(m_nProgress != 0)	// 画前景
 				{
-					DrawImageFrameMID(graphics, m_pImageForeGround, CRect(0, nPosY + m_nThumbTop, nWidth * m_nProgress / m_nMaxProgress, nPosY + m_nThumbTop + m_nSliderHeight),
+					DrawImageFrameMID(graphics, m_pImageForeGround, CRect(0, nPosY + m_nThumbTop, nProgressWidth, nPosY + m_nThumbTop + m_nSliderHeight),
 						0, 0, m_sizeForeGround.cx, m_sizeForeGround.cy,
 						m_nHeadLength, 0, m_nHeadLength, 0);
 				}
@@ -303,7 +311,7 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 
 				if(m_nProgress != 0)
 				{
-					DrawImageFrame(graphics, m_pImage, CRect(0, nPosY + m_nThumbTop, nWidth * m_nProgress / m_nMaxProgress, nPosY + m_nThumbTop + m_nSliderHeight), 
+					DrawImageFrame(graphics, m_pImage, CRect(0, nPosY + m_nThumbTop, nProgressWidth, nPosY + m_nThumbTop + m_nSliderHeight),
 						m_sizeImage.cx, 0, m_sizeImage.cx, m_sizeImage.cy, 2);
 				}
 			}
@@ -312,7 +320,7 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 			if(m_pImageThumb != NULL)
 			{
 				// 计算滑块的位置
-				int nPos = (int)__max(m_rc.Width() * m_nProgress / m_nMaxProgress - m_sizeThumbDpi.cx / 2, 0);
+				int nPos = (int)__max(nProgressWidth - m_sizeThumbDpi.cx / 2, 0);
 				nPos = (int)__min(nPos, m_rc.Width() - m_sizeThumbDpi.cx);
 				Rect rect(nPos, nPosY, m_sizeThumbDpi.cx, m_sizeThumbDpi.cy);
 				graphics.DrawImage(m_pImageThumb, rect, i * m_sizeThumb.cx, 0, m_sizeThumb.cx, m_sizeThumb.cy, UnitPixel);
@@ -333,8 +341,31 @@ void CDuiSlider::DrawControl(CDC &dc, CRect rcUpdate)
 				strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 
 				CString strText;
-				// 只有最大值设置为100情况下才会显示百分号
-				strText.Format(_T("%s%d%s"), m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? _T("%") : _T(""));
+				if (m_enTextMode == enSlidTitleAuto)	// 显示标题,并自动判断是否百分比显示
+				{
+					// 只有最大值设置为100情况下才会显示百分号
+					strText.Format(_T("%s%d%s"), m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? _T("%") : _T(""));
+				}else
+				if (m_enTextMode == enSlidTitlePercent)	// 显示标题,并转换为百分比显示数值
+				{
+					// 转换为百分比显示
+					strText.Format(_T("%s%d%%"), m_strTitle, (long long)m_nProgress*100 / (long long)m_nMaxProgress);
+				}else
+				if (m_enTextMode == enSlidTitleNumberUse)	// 显示标题,并显示进度数值
+				{
+					// 显示进度数值
+					strText.Format(_T("%s%d"), m_strTitle, m_nProgress);
+				}else
+				if (m_enTextMode == enSlidTitleNumberAll)	// 显示标题,并显示进度数值和总数
+				{
+					// 显示进度数值
+					strText.Format(_T("%s%d/%d"), m_strTitle, m_nProgress, m_nMaxProgress);
+				}else
+				{
+					// 只显示标题
+					strText = m_strTitle;
+				}
+
 				BSTR bsTitle = strText.AllocSysString();
 				RectF rect((Gdiplus::REAL)(0), (Gdiplus::REAL)nPosY, (Gdiplus::REAL)nWidth, (Gdiplus::REAL)nHeight);
 				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrush);

@@ -21,7 +21,7 @@ CDuiProgress::CDuiProgress(HWND hWnd, CDuiObject* pDuiObject)
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
 	m_bShowText = FALSE;
-	m_enTextMode = enTitleAuto;
+	m_enTextMode = enProgTitleAuto;
 
 	m_nProgress = 0;
 	SetProgress(0);
@@ -48,7 +48,7 @@ CDuiProgress::CDuiProgress(HWND hWnd, CDuiObject* pDuiObject, UINT uControlID, C
 	m_uAlignment = Align_Center;
 	m_uVAlignment = VAlign_Middle;
 	m_bShowText = FALSE;
-	m_enTextMode = enTitleAuto;
+	m_enTextMode = enProgTitleAuto;
 
 	m_nProgress = 0;
 	SetProgress(nProgress);
@@ -213,22 +213,22 @@ void CDuiProgress::DrawControl(CDC &dc, CRect rcUpdate)
 			strFormat.SetFormatFlags( StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 
 			CString strText;
-			if (m_enTextMode == enTitleAuto)	// 显示标题,并自动判断是否百分比显示
+			if (m_enTextMode == enProgTitleAuto)	// 显示标题,并自动判断是否百分比显示
 			{
 				// 只有最大值设置为100情况下才会显示百分号
 				strText.Format(_T("%s%d%s"), m_strTitle, m_nProgress, (m_nMaxProgress == 100) ? _T("%") : _T(""));
 			}else
-			if (m_enTextMode == enTitlePercent)	// 显示标题,并转换为百分比显示数值
+			if (m_enTextMode == enProgTitlePercent)	// 显示标题,并转换为百分比显示数值
 			{
 				// 转换为百分比显示
 				strText.Format(_T("%s%d%%"), m_strTitle, (long long)m_nProgress*100 / (long long)m_nMaxProgress);
 			}else
-			if (m_enTextMode == enTitleNumberUse)	// 显示标题,并显示进度数值
+			if (m_enTextMode == enProgTitleNumberUse)	// 显示标题,并显示进度数值
 			{
 				// 显示进度数值
 				strText.Format(_T("%s%d"), m_strTitle, m_nProgress);
 			}else
-			if (m_enTextMode == enTitleNumberAll)	// 显示标题,并显示进度数值和总数
+			if (m_enTextMode == enProgTitleNumberAll)	// 显示标题,并显示进度数值和总数
 			{
 				// 显示进度数值
 				strText.Format(_T("%s%d/%d"), m_strTitle, m_nProgress, m_nMaxProgress);

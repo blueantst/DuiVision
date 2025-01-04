@@ -4,11 +4,11 @@
 // 进度文字显示模式
 enum enumProgTextMode
 {
-	enTitleAuto = 0,			// 显示标题,并自动判断是否百分比显示
-	enTitlePercent,				// 显示标题,并转换为百分比显示数值
-	enTitleNumberUse,			// 显示标题,并显示进度数值
-	enTitleNumberAll,			// 显示标题,并显示进度数值和总数
-	enTitleOnly					// 只显示标题
+	enProgTitleAuto = 0,			// 显示标题,并自动判断是否百分比显示
+	enProgTitlePercent,				// 显示标题,并转换为百分比显示数值
+	enProgTitleNumberUse,			// 显示标题,并显示进度数值
+	enProgTitleNumberAll,			// 显示标题,并显示进度数值和总数
+	enProgTitleOnly					// 只显示标题
 };
 
 class CDuiProgress : public CControlBaseFont
@@ -58,11 +58,11 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("show-text"), m_bShowText, TRUE)
 		DUI_ENUM_ATTRIBUTE(_T("text-mode"), enumProgTextMode, TRUE)
-			DUI_ENUM_VALUE(_T("auto"), enTitleAuto)
-			DUI_ENUM_VALUE(_T("percent"), enTitlePercent)
-			DUI_ENUM_VALUE(_T("number-use"), enTitleNumberUse)
-			DUI_ENUM_VALUE(_T("number-all"), enTitleNumberAll)
-			DUI_ENUM_VALUE(_T("title-only"), enTitleOnly)
+			DUI_ENUM_VALUE(_T("auto"), enProgTitleAuto)
+			DUI_ENUM_VALUE(_T("percent"), enProgTitlePercent)
+			DUI_ENUM_VALUE(_T("number-use"), enProgTitleNumberUse)
+			DUI_ENUM_VALUE(_T("number-all"), enProgTitleNumberAll)
+			DUI_ENUM_VALUE(_T("title-only"), enProgTitleOnly)
 		DUI_ENUM_END(m_enTextMode)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
