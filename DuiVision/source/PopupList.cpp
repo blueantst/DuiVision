@@ -21,7 +21,8 @@ CPopupList::CPopupList(void)
 	m_fontStyle = FontStyleRegular;
 	m_clrHover = Color(225, 0, 147, 209);
 	m_bSingleLine = TRUE;
-	m_nScrollWidth = 8;
+	m_nScrollWidth = DUI_DPI_X(8);
+	m_nRowHeight = DUI_DPI_Y(24);
 
 	// 垂直滚动条
 	CRect rcScroll = CRect(0,0,0,0);
@@ -288,6 +289,9 @@ void CPopupList::SetItemPoint()
 		}
 	}
 
+	int nRowHeightBig = bHaveDesc ? (m_nRowHeight + DUI_DPI_Y(9)) : m_nRowHeight;
+	int nRowHeightHover = bHaveDesc ? (m_nRowHeight + DUI_DPI_Y(20)) : m_nRowHeight;
+
 	int nHeight = DUI_DPI_Y(4);
 	nHeight += DUI_DPI_Y(24) * nItemCount;
 	if(bHaveDesc)
@@ -304,28 +308,29 @@ void CPopupList::SetItemPoint()
 		EditListItem &editListItem = m_vecItem.at(i);
 		editListItem.rcItem.left = 2;
 		editListItem.rcItem.right = m_nWidth - 2;
-		if((i - 1 == m_nHoverItem) && (m_nHoverItem != -1) || (i + 1 == m_nHoverItem))
+		if( ((i - 1 == m_nHoverItem) && (m_nHoverItem != -1)) || (i + 1 == m_nHoverItem) )
 		{
+			// 当前选择行的前一行或后一行(有描述信息则行距大一些)
 			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? DUI_DPI_Y(33) : DUI_DPI_Y(24));
-			nStratTop += (bHaveDesc ? DUI_DPI_Y(33) : DUI_DPI_Y(24));
-		}
-		else if(i == m_nHoverItem)
+			editListItem.rcItem.bottom = nStratTop + nRowHeightBig;
+			nStratTop += nRowHeightBig;
+		}else if(i == m_nHoverItem)
 		{
+			// 当前选择行(有描述信息则行距最大)
 			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + (bHaveDesc ? DUI_DPI_Y(44) : DUI_DPI_Y(24));
-			nStratTop += (bHaveDesc ? DUI_DPI_Y(44) : DUI_DPI_Y(24));
+			editListItem.rcItem.bottom = nStratTop + nRowHeightHover;
+			nStratTop += nRowHeightHover;
 
-			int nLeft = editListItem.rcItem.right - m_sizeClose.cx - 7;
-			int nTop = editListItem.rcItem.top + ((bHaveDesc ? DUI_DPI_Y(44) : DUI_DPI_Y(24)) - m_sizeClose.cy) / 2 + 1;
+			int nLeft = editListItem.rcItem.right - m_sizeCloseDpi.cx - DUI_DPI_X(7);
+			int nTop = editListItem.rcItem.top + (nRowHeightHover - m_sizeCloseDpi.cy) / 2 + 1;
 
-			m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeClose.cx, nTop + m_sizeClose.cy);
-		}
-		else
+			m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeCloseDpi.cx, nTop + m_sizeCloseDpi.cy);
+		}else
 		{
+			// 其他行的行距固定
 			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + DUI_DPI_Y(24);
-			nStratTop += DUI_DPI_Y(24);
+			editListItem.rcItem.bottom = nStratTop + m_nRowHeight;
+			nStratTop += m_nRowHeight;
 		}
 	}
 
