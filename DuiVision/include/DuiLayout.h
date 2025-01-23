@@ -59,7 +59,7 @@ public:
 	int						m_nSplitWidth;	// 分隔线宽度
 	BOOL					m_bSplitImm;	// 鼠标移动分割线是否立即生效
 
-	DUI_IMAGE_ATTRIBUTE_DEFINE(Split);	// 定义Split图片
+	DUI_IMAGE_ATTRIBUTE_DEFINE_DPI(Split);	// 定义Split图片
 	DUI_IMAGE_ATTRIBUTE_DEFINE(Thumb);	// 定义前景图片
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_ENUM_ATTRIBUTE(_T("layout-type"), LAYOUT_TYPE, TRUE)
@@ -68,7 +68,7 @@ public:
         DUI_ENUM_END(m_nLayoutType)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-split"), OnAttributeImageSplit)
 		DUI_CUSTOM_ATTRIBUTE(_T("img-thumb"), OnAttributeImageThumb)
-		DUI_INT_ATTRIBUTE(_T("split-width"), m_nSplitWidth, FALSE)
+		DUI_INT_ATTRIBUTE_DPI(_T("split-width"), m_nSplitWidth, FALSE)
 		DUI_BOOL_ATTRIBUTE(_T("split-imm"), m_bSplitImm, TRUE)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

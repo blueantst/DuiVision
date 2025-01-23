@@ -91,6 +91,8 @@ BOOL CDuiLayout::Load(DuiXmlNode pXmlElem, BOOL bLoadSubControl)
 		ParsePosition(strDivPos, itemInfo.pos);	// 解析pos信息
 		itemInfo.nMinPos = nMinPos;
 		itemInfo.nMaxPos = nMaxPos;
+		CDuiWinDwmWrapper::AdapterDpi(itemInfo.nMinPos);
+		CDuiWinDwmWrapper::AdapterDpi(itemInfo.nMaxPos);
 		itemInfo.nPos = -1;	// 初始化实际的位置值
 		itemInfo.rcSplit = CRect(0, 0, 0, 0);	// 初始化分割线区域
 		itemInfo.rcThumb = CRect(0, 0, 0, 0);	// 初始化滑块区域
@@ -205,7 +207,7 @@ void CDuiLayout::SetControlRect(CRect rc)
 	m_rc = rc;
 	if(m_nSplitWidth == 0)
 	{
-		m_nSplitWidth = (m_nLayoutType == LAYOUT_TYPE_HORIZONTAL) ? m_sizeSplit.cy : m_sizeSplit.cx;
+		m_nSplitWidth = (m_nLayoutType == LAYOUT_TYPE_HORIZONTAL) ? m_sizeSplitDpi.cy : m_sizeSplitDpi.cx;
 	}
 
 	// 计算panel、分割线、滑块的位置
