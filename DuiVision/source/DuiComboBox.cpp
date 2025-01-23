@@ -17,6 +17,16 @@ CDuiComboBox::CDuiComboBox(HWND hWnd, CDuiObject* pDuiObject)
 	m_clrText = Color(255, 0, 20, 35);
 	m_clrDesc = Color(255, 255, 255, 255);
 	m_clrHover = Color(225, 0, 147, 209);
+
+	// 标题字体(name部分字体)
+	m_strFontTitle = DuiSystem::GetDefaultFont();
+	m_nFontTitleWidth = 12;
+	// 按照当前DPI计算字体的显示大小
+	CDuiWinDwmWrapper::AdapterDpi(m_nFontTitleWidth);
+	m_fontTitleStyle = FontStyleRegular;
+
+	m_enTextMode = enPopupTextAuto;
+	m_nRowHeight = DUI_DPI_Y(24);
 }
 
 CDuiComboBox::~CDuiComboBox(void)
@@ -297,6 +307,22 @@ HRESULT CDuiComboBox::OnAttributeDeleteImage(const CString& strValue, BOOL bLoad
 	return bLoading?S_FALSE:S_OK;
 }
 
+// 从XML设置Font-title属性
+HRESULT CDuiComboBox::OnAttributeFontTitle(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	DuiFontInfo fontInfo;
+	BOOL bFindFont = DuiSystem::Instance()->GetFont(strValue, fontInfo);
+	if (!bFindFont) return E_FAIL;
+
+	m_strFontTitle = fontInfo.strFont;
+	m_nFontTitleWidth = fontInfo.nFontWidth;
+	m_fontTitleStyle = fontInfo.fontStyle;
+
+	return bLoading ? S_FALSE : S_OK;
+}
+
 // 消息处理
 LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -342,7 +368,11 @@ LRESULT CDuiComboBox::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 
 		pPopupList->SetFont(m_strFont, m_nFontWidth, m_fontStyle);
+		pPopupList->SetTitleFont(m_strFontTitle, m_nFontTitleWidth, m_fontTitleStyle);
 		pPopupList->SetHoverColor(m_clrHover);
+
+		pPopupList->SetRowHeight(m_nRowHeight);
+		pPopupList->SetTextMode(m_enTextMode);
 
 		// 必须窗口创建之后才能加载内容
 		for (size_t i = 0; i < m_vecItem.size(); i++)

@@ -32,6 +32,7 @@ public:
 
 	HRESULT OnAttributeHeadImage(const CString& strValue, BOOL bLoading);
 	HRESULT OnAttributeDeleteImage(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
 
 	virtual LRESULT OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -43,15 +44,20 @@ public:
 	UINT					m_nResourceIDDeleteBitmap;
 	CString					m_strImageHeadBitmap;
 	CString					m_strImageDeleteBitmap;
-	int						m_nListHeight;	// 列表高度
+	int						m_nListHeight;		// 列表高度
 	CString					m_strImageScroll;	// 定义下拉列表的滚动条图片文件
-	CString					m_strXmlFile;	// 定义下拉列表项的XML文件(可以不需要)
-	CPopupList*				m_pPopupList;	// 保存下拉列表框对象指针
-	vector<ComboListItem>	m_vecItem;		// 下拉列表项列表
-	CString					m_strComboValue;// 下拉列表选择的项目的值
-	Color					m_clrText;		// 文字颜色
-	Color					m_clrDesc;		// 描述部分文字颜色
-	Color					m_clrHover;		// 选择的列表项背景颜色(鼠标移动到行)
+	CString					m_strXmlFile;		// 定义下拉列表项的XML文件(可以不需要)
+	CPopupList*				m_pPopupList;		// 保存下拉列表框对象指针
+	vector<ComboListItem>	m_vecItem;			// 下拉列表项列表
+	CString					m_strComboValue;	// 下拉列表选择的项目的值
+	Color					m_clrText;			// 文字颜色
+	Color					m_clrDesc;			// 描述部分文字颜色
+	Color					m_clrHover;			// 选择的列表项背景颜色(鼠标移动到行)
+	CString					m_strFontTitle;		// 列表项标题字体
+	int						m_nFontTitleWidth;	// 列表项标题字体宽度
+	FontStyle				m_fontTitleStyle;	// 列表项标题字体Style
+	enumPopupTextMode		m_enTextMode;		// 列表项文字显示模式
+	int						m_nRowHeight;		// 列表项行高度
 
 	DUI_DECLARE_ATTRIBUTES_BEGIN()
 		DUI_CUSTOM_ATTRIBUTE(_T("head-image"), OnAttributeHeadImage)
@@ -63,5 +69,13 @@ public:
 		DUI_COLOR_ATTRIBUTE(_T("crtext"), m_clrText, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crdesc"), m_clrDesc, FALSE)
 		DUI_COLOR_ATTRIBUTE(_T("crhover"), m_clrHover, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("font-title"), OnAttributeFontTitle)
+		DUI_INT_ATTRIBUTE_DPI(_T("row-height"), m_nRowHeight, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("text-mode"), enumPopupTextMode, TRUE)
+			DUI_ENUM_VALUE(_T("auto"), enPopupTextAuto)
+			DUI_ENUM_VALUE(_T("hover-enlarge"), enPopupTextHoverEnlarge)
+			DUI_ENUM_VALUE(_T("fixed-height"), enPopupTextFixedHeight)
+			DUI_ENUM_VALUE(_T("left-right"), enPopupTextLeftRight)
+		DUI_ENUM_END(m_enTextMode)
 	DUI_DECLARE_ATTRIBUTES_END()
 };

@@ -14,13 +14,24 @@ CPopupList::CPopupList(void)
 	m_buttonState = enBSNormal;
 	m_nWidth = 191;
 	m_nHeight = 0;
+
+	// 默认字体
 	m_strFont = DuiSystem::GetDefaultFont();
 	m_nFontWidth = 12;
 	// 按照当前DPI计算字体的显示大小
 	CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
 	m_fontStyle = FontStyleRegular;
+
+	// 标题字体(name部分字体)
+	m_strFontTitle = DuiSystem::GetDefaultFont();
+	m_nFontTitleWidth = 12;
+	// 按照当前DPI计算字体的显示大小
+	CDuiWinDwmWrapper::AdapterDpi(m_nFontTitleWidth);
+	m_fontTitleStyle = FontStyleRegular;
+
 	m_clrHover = Color(225, 0, 147, 209);
 	m_bSingleLine = TRUE;
+	m_enTextMode = enPopupTextAuto;
 	m_nScrollWidth = DUI_DPI_X(8);
 	m_nRowHeight = DUI_DPI_Y(24);
 
@@ -129,6 +140,14 @@ void CPopupList::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
 	m_strFont = strFont;
 	m_nFontWidth = nFontWidth;
 	m_fontStyle = fontStyle;
+}
+
+// 设置列表项标题字体
+void CPopupList::SetTitleFont(CString strFont, int nFontWidth, FontStyle fontStyle)
+{
+	m_strFontTitle = strFont;
+	m_nFontTitleWidth = nFontWidth;
+	m_fontTitleStyle = fontStyle;
 }
 
 // 设置选择的列表项背景颜色
@@ -275,26 +294,41 @@ void CPopupList::SetItemPoint()
 {
 	int nItemCount =  m_vecItem.size();
 
+	m_bSingleLine = TRUE;
+
 	// 判断是否有Desc字段,如果都没有的话,则显示的列表一律用相同高度的
 	BOOL bHaveDesc = FALSE;
-	m_bSingleLine = TRUE;
 	for (int i = 0; i < nItemCount; i++)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
 		if(!editListItem.strDesc.IsEmpty())
 		{
 			bHaveDesc = TRUE;
-			m_bSingleLine = FALSE;
 			break;
 		}
 	}
 
-	int nRowHeightBig = bHaveDesc ? (m_nRowHeight + DUI_DPI_Y(9)) : m_nRowHeight;
-	int nRowHeightHover = bHaveDesc ? (m_nRowHeight + DUI_DPI_Y(20)) : m_nRowHeight;
+	if (m_enTextMode == enPopupTextAuto)
+	{
+		// 自动模式，并且没有设置列表高度，则非单行显示
+		if (bHaveDesc && (m_nHeight == 0))
+		{
+			m_bSingleLine = FALSE;
+		}
+	}else
+	if (m_enTextMode == enPopupTextHoverEnlarge)
+	{
+		m_bSingleLine = FALSE;
+	}
 
+	// 鼠标热点行自动放大的情况下，需要计算放大行的高度
+	int nRowHeightBig = (!m_bSingleLine) ? (m_nRowHeight + DUI_DPI_Y(9)) : m_nRowHeight;
+	int nRowHeightHover = (!m_bSingleLine) ? (m_nRowHeight + DUI_DPI_Y(20)) : m_nRowHeight;
+
+	// 计算总高度
 	int nHeight = DUI_DPI_Y(4);
 	nHeight += DUI_DPI_Y(24) * nItemCount;
-	if(bHaveDesc)
+	if(!m_bSingleLine)
 	{
 		if(0 == nItemCount) nHeight += DUI_DPI_Y(40);
 		if(nItemCount >= 1) nHeight += DUI_DPI_Y(20);
@@ -302,35 +336,47 @@ void CPopupList::SetItemPoint()
 		if(nItemCount >= 2) nHeight += DUI_DPI_Y(9);
 	}
 
+	// 计算每一行的位置
 	int nStratTop = 2;
 	for (int i = 0; i < nItemCount; i++)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
 		editListItem.rcItem.left = 2;
 		editListItem.rcItem.right = m_nWidth - 2;
-		if( ((i - 1 == m_nHoverItem) && (m_nHoverItem != -1)) || (i + 1 == m_nHoverItem) )
+		if (m_bSingleLine)
 		{
-			// 当前选择行的前一行或后一行(有描述信息则行距大一些)
-			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + nRowHeightBig;
-			nStratTop += nRowHeightBig;
-		}else if(i == m_nHoverItem)
-		{
-			// 当前选择行(有描述信息则行距最大)
-			editListItem.rcItem.top = nStratTop;
-			editListItem.rcItem.bottom = nStratTop + nRowHeightHover;
-			nStratTop += nRowHeightHover;
-
-			int nLeft = editListItem.rcItem.right - m_sizeCloseDpi.cx - DUI_DPI_X(7);
-			int nTop = editListItem.rcItem.top + (nRowHeightHover - m_sizeCloseDpi.cy) / 2 + 1;
-
-			m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeCloseDpi.cx, nTop + m_sizeCloseDpi.cy);
-		}else
-		{
-			// 其他行的行距固定
+			// 单行模式下，每一行的高度固定
 			editListItem.rcItem.top = nStratTop;
 			editListItem.rcItem.bottom = nStratTop + m_nRowHeight;
 			nStratTop += m_nRowHeight;
+		}else
+		{
+			// 非单行模式下，计算每一行的位置
+			if (((i - 1 == m_nHoverItem) && (m_nHoverItem != -1)) || (i + 1 == m_nHoverItem))
+			{
+				// 当前选择行的前一行或后一行(行距大一些)
+				editListItem.rcItem.top = nStratTop;
+				editListItem.rcItem.bottom = nStratTop + nRowHeightBig;
+				nStratTop += nRowHeightBig;
+			}else
+			if (i == m_nHoverItem)
+			{
+				// 当前选择行(行距最大)
+				editListItem.rcItem.top = nStratTop;
+				editListItem.rcItem.bottom = nStratTop + nRowHeightHover;
+				nStratTop += nRowHeightHover;
+
+				int nLeft = editListItem.rcItem.right - m_sizeCloseDpi.cx - DUI_DPI_X(7);
+				int nTop = editListItem.rcItem.top + (nRowHeightHover - m_sizeCloseDpi.cy) / 2 + 1;
+
+				m_rcClose.SetRect(nLeft, nTop, nLeft + m_sizeCloseDpi.cx, nTop + m_sizeCloseDpi.cy);
+			}else
+			{
+				// 其他行的行距固定
+				editListItem.rcItem.top = nStratTop;
+				editListItem.rcItem.bottom = nStratTop + m_nRowHeight;
+				nStratTop += m_nRowHeight;
+			}
 		}
 	}
 
@@ -402,6 +448,22 @@ HRESULT CPopupList::OnAttributeImageScrollV(const CString& strValue, BOOL bLoadi
 	}
 
 	return bLoading?S_FALSE:S_OK;
+}
+
+// 从XML设置Font-title属性
+HRESULT CPopupList::OnAttributeFontTitle(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	DuiFontInfo fontInfo;
+	BOOL bFindFont = DuiSystem::Instance()->GetFont(strValue, fontInfo);
+	if (!bFindFont) return E_FAIL;
+
+	m_strFontTitle = fontInfo.strFont;
+	m_nFontTitleWidth = fontInfo.nFontWidth;
+	m_fontTitleStyle = fontInfo.fontStyle;
+
+	return bLoading ? S_FALSE : S_OK;
 }
 
 BOOL CPopupList::OnMouseMove(CPoint point)
@@ -559,11 +621,19 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 	CRect rcItem, rcText;
 
 	Graphics graphics(dc);
+
+	BSTR bsFontTitle = m_strFontTitle.AllocSysString();
+	FontFamily fontFamilyTitle(bsFontTitle);
+	Font fontTitle(&fontFamilyTitle, (REAL)m_nFontTitleWidth, m_fontTitleStyle, UnitPixel);
+	::SysFreeString(bsFontTitle);
+
 	BSTR bsFont = m_strFont.AllocSysString();
 	FontFamily fontFamily(bsFont);
 	Font font(&fontFamily, (REAL)m_nFontWidth, m_fontStyle, UnitPixel);
-	graphics.SetTextRenderingHint( TextRenderingHintClearTypeGridFit );
 	::SysFreeString(bsFont);
+
+	graphics.SetTextRenderingHint(TextRenderingHintClearTypeGridFit);
+
 	StringFormat strFormat;
 	strFormat.SetAlignment(StringAlignmentNear);	// 左对齐
 	strFormat.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
@@ -592,41 +662,68 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 			nLeftStart = DUI_DPI_X(25);
 		}
 
-		// 显示当前项
- 		if((i == m_nHoverItem) && !editListItem.strDesc.IsEmpty())
- 		{
-			SolidBrush brushHover(m_clrHover);
-			graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top, rcItem.Width(), rcItem.Height());
- 
-			// 显示name和desc
-			SolidBrush solidBrushTitle(editListItem.clrText);
-			SolidBrush solidBrushDesc(editListItem.clrDesc);
-			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)(rcItem.top + 1), (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)(rcItem.Height()/2));
-			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
-			BSTR bsTitle = editListItem.strName.AllocSysString();
-			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
-			::SysFreeString(bsTitle);
-
-			rect.Offset(0, (Gdiplus::REAL)(rcItem.Height() / 2));
-			BSTR bsDesc = editListItem.strDesc.AllocSysString();
-			graphics.DrawString(bsDesc, (INT)wcslen(bsDesc), &font, rect, &strFormat, &solidBrushDesc);
-			::SysFreeString(bsTitle);
- 		}
- 		else
+		if (i == m_nHoverItem)
 		{
-			if(i == m_nHoverItem)
-			{
-				SolidBrush brushHover(m_clrHover);
-				graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top - nVirtualTop, rcItem.Width(), rcItem.Height());
-			}
+			SolidBrush brushHover(m_clrHover);
+			graphics.FillRectangle(&brushHover, rcItem.left, rcItem.top - nVirtualTop, rcItem.Width(), rcItem.Height());
+		}
 
-			// 只显示name
-			SolidBrush solidBrushTitle(editListItem.clrText);
-			RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)rcItem.top, (Gdiplus::REAL)(rcItem.Width() - nLeftStart -2), (Gdiplus::REAL)rcItem.Height());
-			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
-			BSTR bsTitle = editListItem.strName.AllocSysString();
-			graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
-			::SysFreeString(bsTitle);
+		if (m_bSingleLine)
+		{
+			// 单行模式
+			if (m_enTextMode == enPopupTextLeftRight)
+			{
+				// 左侧显示名字(使用标题颜色、字体)，右侧显示描述(使用文字颜色、字体)
+				SolidBrush solidBrushTitle(editListItem.clrText);
+				SolidBrush solidBrushDesc(editListItem.clrDesc);
+				RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)(rcItem.top + 1), (Gdiplus::REAL)((rcItem.Width() - nLeftStart) / 2), (Gdiplus::REAL)(rcItem.Height() - 2));
+				rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
+				BSTR bsTitle = editListItem.strName.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormat, &solidBrushTitle);
+				::SysFreeString(bsTitle);
+
+				rect.Offset((Gdiplus::REAL)((rcItem.Width() - nLeftStart) / 2), 0);
+				BSTR bsDesc = editListItem.strDesc.AllocSysString();
+				graphics.DrawString(bsDesc, (INT)wcslen(bsDesc), &font, rect, &strFormat, &solidBrushDesc);
+				::SysFreeString(bsTitle);
+			}else
+			{
+				// 只显示名字(使用文字颜色、字体)
+				SolidBrush solidBrushTitle(editListItem.clrText);
+				RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)rcItem.top, (Gdiplus::REAL)(rcItem.Width() - nLeftStart - 2), (Gdiplus::REAL)rcItem.Height());
+				rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
+				BSTR bsTitle = editListItem.strName.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
+				::SysFreeString(bsTitle);
+			}
+		}else
+		{
+			// 非单行模式
+			if (!editListItem.strDesc.IsEmpty())
+			{
+				// 上面显示名字(使用标题颜色、字体)，下面显示描述(使用文字颜色、字体)
+				SolidBrush solidBrushTitle(editListItem.clrText);
+				SolidBrush solidBrushDesc(editListItem.clrDesc);
+				RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)(rcItem.top + 1), (Gdiplus::REAL)(rcItem.Width() - nLeftStart - 2), (Gdiplus::REAL)(rcItem.Height() / 2));
+				rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
+				BSTR bsTitle = editListItem.strName.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &fontTitle, rect, &strFormat, &solidBrushTitle);
+				::SysFreeString(bsTitle);
+
+				rect.Offset(0, (Gdiplus::REAL)(rcItem.Height() / 2));
+				BSTR bsDesc = editListItem.strDesc.AllocSysString();
+				graphics.DrawString(bsDesc, (INT)wcslen(bsDesc), &font, rect, &strFormat, &solidBrushDesc);
+				::SysFreeString(bsTitle);
+			}else
+			{
+				// 只显示名字(使用文字颜色、字体)
+				SolidBrush solidBrushTitle(editListItem.clrText);
+				RectF rect((Gdiplus::REAL)(rcItem.left + nLeftStart), (Gdiplus::REAL)rcItem.top, (Gdiplus::REAL)(rcItem.Width() - nLeftStart - 2), (Gdiplus::REAL)rcItem.Height());
+				rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);
+				BSTR bsTitle = editListItem.strName.AllocSysString();
+				graphics.DrawString(bsTitle, (INT)wcslen(bsTitle), &font, rect, &strFormat, &solidBrushTitle);
+				::SysFreeString(bsTitle);
+			}
 		}
 	}
 }

@@ -4,6 +4,15 @@
 #include <vector>
 using namespace std;
 
+// 文字显示模式
+enum enumPopupTextMode
+{
+	enPopupTextAuto = 0,			// 自动显示
+	enPopupTextHoverEnlarge,		// 鼠标热点行的高度放大
+	enPopupTextFixedHeight,			// 每一行的高度固定，只显示名字
+	enPopupTextLeftRight			// 每一行的高度固定，左侧显示名字，右侧显示描述
+};
+
 // 列表项定义
 struct EditListItem
 {
@@ -32,7 +41,10 @@ public:
 	void SetWidth(int nWidth) { m_nWidth = nWidth; }
 	void SetHeight(int nHeight) { m_nHeight = nHeight; }
 	void SetFont(CString strFont, int nFontWidth, FontStyle fontStyle);
+	void SetTitleFont(CString strFont, int nFontWidth, FontStyle fontStyle);
 	void SetHoverColor(Color clrHover);
+	void SetRowHeight(int nRowHeight) { m_nRowHeight = nRowHeight; }
+	void SetTextMode(enumPopupTextMode enTextMode) { m_enTextMode = enTextMode; }
 
 	bool GetItemDesc(UINT nItem, CString &strDesc);
 	bool GetItemName(UINT nItem, CString &strName);
@@ -50,6 +62,7 @@ public:
 	void SetItemPoint();
 
 	HRESULT OnAttributeImageScrollV(const CString& strValue, BOOL bLoading);
+	HRESULT OnAttributeFontTitle(const CString& strValue, BOOL bLoading);
 
 	virtual BOOL OnMouseMove(CPoint point);
 	virtual BOOL OnLButtonDown(CPoint point);
@@ -66,11 +79,17 @@ public:
 	int						m_nHoverItem;		// 当前选择的列表项索引
 	int						m_nWidth;			// 列表宽度
 	int						m_nHeight;			// 列表高度
-	CString					m_strFont;			// 字体
-	int						m_nFontWidth;		// 字体宽度
-	FontStyle				m_fontStyle;		// 字体Style
+
+	CString					m_strFont;			// 文字字体
+	int						m_nFontWidth;		// 文字字体宽度
+	FontStyle				m_fontStyle;		// 文字字体Style
+	CString					m_strFontTitle;		// 标题字体
+	int						m_nFontTitleWidth;	// 标题字体宽度
+	FontStyle				m_fontTitleStyle;	// 标题字体Style
+
 	Color					m_clrHover;			// 选择的列表项背景颜色(鼠标移动到行)
 	BOOL					m_bSingleLine;		// 是否单行的列表
+	enumPopupTextMode		m_enTextMode;		// 文字显示模式
 	int						m_nVirtualHeight;	// 整体的高度
 	CControlBaseFont*		m_pControScrollV;	// 垂直滚动条
 	int						m_nScrollWidth;		// 滚动条宽度
@@ -84,7 +103,14 @@ public:
 		DUI_INT_ATTRIBUTE_DPI(_T("height"), m_nHeight, FALSE)
 		DUI_CUSTOM_ATTRIBUTE("img-scroll", OnAttributeImageScrollV)
 		DUI_INT_ATTRIBUTE("scroll-width", m_nScrollWidth, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("font-title"), OnAttributeFontTitle)
 		DUI_INT_ATTRIBUTE_DPI(_T("row-height"), m_nRowHeight, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("text-mode"), enumPopupTextMode, TRUE)
+			DUI_ENUM_VALUE(_T("auto"), enPopupTextAuto)
+			DUI_ENUM_VALUE(_T("hover-enlarge"), enPopupTextHoverEnlarge)
+			DUI_ENUM_VALUE(_T("fixed-height"), enPopupTextFixedHeight)
+			DUI_ENUM_VALUE(_T("left-right"), enPopupTextLeftRight)
+		DUI_ENUM_END(m_enTextMode)
     DUI_DECLARE_ATTRIBUTES_END()
 	
 protected:
