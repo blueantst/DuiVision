@@ -19,7 +19,7 @@
 		<img name="icon" pos="25,45" width="128" height="128" image="skins\scriptnet.jpg" mode="extrude" framesize="0" response="0" show="1" />
 		
 		<text crtext="000000" pos="170,45,-25,65" title="[APP_NAME] [APP_VER]" />
-		<text crtext="000000" pos="170,65,-25,85" title="Copyright 2013-2024" />
+		<text crtext="000000" pos="170,65,-25,85" title="Copyright 2013-2025" />
 		
 		<linkbtn name="linkbtn1" crtext="800000"
 			pos="170,100,-25,120" show="1" title="http://www.blueantstudio.net" href="http://www.blueantstudio.net" />

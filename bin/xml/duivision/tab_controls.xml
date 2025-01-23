@@ -239,6 +239,8 @@ width-lt,height-lt,width-rb,height-rb" />
 						left-image="skin:IDB_COMPUTER" tip="选择文件类型"
 						xml="xml:duivision\combo_filetype.xml--" value="pdf"
 						pos="20,60,-50,88" title="test"
+						list-height="0"
+						font-title="bold" text-mode="auto"
 						crhover="220,128,128,128" >
 						<item name="多媒体文件" desc="多媒体类型的文件" value="media" image="skins\icon\Movies.png" />
 						<item name="PDF文件" desc="PDF类型文件" value="pdf" image="skins\icon\PDFViewer.png" />
@@ -248,11 +250,13 @@ width-lt,height-lt,width-rb,height-rb" />
 
 					<combobox name="combobox3" skin="IDB_EDIT" small-image="skin:IDB_DROP_DOWN"
 							left-image="skins\simage\search_normal.png"
-							value="local" tip="查找应用程序" font="bold" readonly="0"
+							value="local" tip="查找应用程序" readonly="0"
+							font="default" font-title="bold" text-mode="left-right"
+							row-height="24"
 							pos="20,100,-50,128" title="Script.NET" >
-						<item name="Script.NET" value="1" image="skins\simage\forum.png" />
-						<item name="Notepad++" value="2" image="skins\simage\forum.png" />
-						<item name="为知笔记" value="3" crtext="800000" image="skins\simage\forum.png" />
+						<item name="Script.NET" desc="Script.NET IDE" value="1" crdesc="000080" image="skins\simage\forum.png" />
+						<item name="Notepad++" desc="增强型记事本" value="2" crdesc="000080" image="skins\simage\forum.png" />
+						<item name="为知笔记" value="3" crtext="800000" crdesc="000080" image="skins\simage\forum.png" />
 					</combobox>
 					
 					<text pos="20,140,-50,160" crtext="808080" title="richedit演示：" tip="下面的编辑框内容可以从rtf文件加载" />
