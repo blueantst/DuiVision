@@ -685,7 +685,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 				rect.Offset((Gdiplus::REAL)((rcItem.Width() - nLeftStart) / 2), 0);
 				BSTR bsDesc = editListItem.strDesc.AllocSysString();
 				graphics.DrawString(bsDesc, (INT)wcslen(bsDesc), &font, rect, &strFormat, &solidBrushDesc);
-				::SysFreeString(bsTitle);
+				::SysFreeString(bsDesc);
 			}else
 			{
 				// 只显示名字(使用文字颜色、字体)
@@ -713,7 +713,7 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 				rect.Offset(0, (Gdiplus::REAL)(rcItem.Height() / 2));
 				BSTR bsDesc = editListItem.strDesc.AllocSysString();
 				graphics.DrawString(bsDesc, (INT)wcslen(bsDesc), &font, rect, &strFormat, &solidBrushDesc);
-				::SysFreeString(bsTitle);
+				::SysFreeString(bsDesc);
 			}else
 			{
 				// 只显示名字(使用文字颜色、字体)
