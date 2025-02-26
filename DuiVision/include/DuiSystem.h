@@ -61,6 +61,8 @@ enum OSPack
     SP8
 };
 
+#define MAX_MEMFILE_SIZE 10*1024*1024	// 每个内存文件的最大限制10M
+
 // 内存文件信息定义
 struct MemFileInfo
 {

@@ -732,7 +732,7 @@ BYTE* DuiSystem::LoadZipFile(CString strFile, DWORD& dwSize)
 			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, file is empty"), strFile);
 			return NULL;
 		}
-		if ( dwSize > 4096*1024 )
+		if ( dwSize > MAX_MEMFILE_SIZE)
 		{
 			DuiSystem::LogEvent(LOG_LEVEL_ERROR, _T("Load zip file %s failed, file too large"), strFile);
 			return NULL;
