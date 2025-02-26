@@ -739,7 +739,7 @@ BYTE* DuiSystem::LoadZipFile(CString strFile, DWORD& dwSize)
 		}
 		pByte = new BYTE[ dwSize+1 ];
 		memset(pByte, 0, dwSize+1);
-		int res = UnzipItem(m_hResourceZip, i, pByte, dwSize, 3);
+		int res = UnzipItem(m_hResourceZip, i, pByte, dwSize, ZIP_MEMORY);
 		if( res != 0x00000000 && res != 0x00000600)
 		{
 			delete[] pByte;
