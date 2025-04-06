@@ -575,6 +575,22 @@ BOOL DuiSystem::LoadResourceXml(CString strResFile, CString strStyle)
 						m_nDefaultLanguageType = DEFAULT_LANGUAGE_SYSTEM;
 					}
 				}
+				// 获取当前语言设置
+				if (strName == _T("currentLanguage"))
+				{
+					if ((strValue == _T("zh-cn")))
+					{
+						m_dwLangID = LANGUAGE_PAGE_CHINESE;
+					}else
+					if ((strValue == _T("zh-tw")))
+					{
+						m_dwLangID = LANGUAGE_PAGE_CHINESE_TW;
+					}else
+					if ((strValue == _T("en-us")))
+					{
+						m_dwLangID = LANGUAGE_PAGE_ENGLISH;
+					}
+				}
 			}else
 			if(strType == _T("style"))	// 风格定义
 			{
