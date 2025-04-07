@@ -128,7 +128,7 @@ void CLogMgr::LogEvent(int nLevel, LPCTSTR lpFormat, ...)
 // ¼ÇÂ¼ÈÕÖ¾
 int CLogMgr::LogEventArgs(int nLevel, LPCTSTR lpFormat, va_list argp)
 {
-	const int nBufLen = MAX_PATH * 2;
+	const int nBufLen = _LOG_DATABUFF;
 	TCHAR szBuf[nBufLen];
 
 	int nStrLen=_vsntprintf_s(szBuf, nBufLen-1, lpFormat, argp);
