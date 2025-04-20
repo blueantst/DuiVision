@@ -2012,7 +2012,12 @@ LRESULT DuiSystem::CallDuiHandler(UINT uID, CString strName, UINT uMsg, WPARAM w
 		CDuiHandler* pDuiHandler = m_vecDuiHandler.at(i);
 		if (pDuiHandler)
 		{
-			pDuiHandler->OnDuiMessage(uID, strName, uMsg, wParam, lParam);
+			LRESULT nRet = pDuiHandler->OnDuiMessage(uID, strName, uMsg, wParam, lParam);
+			// 对于系统关闭时的数据保护消息(WM_QUERYENDSESSION),只要有返回非0,则返回这个值,表示当前不能结束系统会话
+			if ((uID == 0) && (uMsg == MSG_WM_QUERYENDSESSION) && (nRet != 0))
+			{
+				return nRet;
+			}
 		}		
 	}
 
