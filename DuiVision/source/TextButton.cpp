@@ -125,7 +125,8 @@ void CTextButton::DrawControl(CDC &dc, CRect rcUpdate)
 		// 设置水平和垂直对齐方式
 		DUI_STRING_ALIGN_DEFINE();
 
-		strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
+		//strFormat.SetFormatFlags( StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);
+		strFormat.SetFormatFlags(StringFormatFlagsNoClip | StringFormatFlagsMeasureTrailingSpaces);
 
 		for(int i = 0; i < 4; i++)
 		{
