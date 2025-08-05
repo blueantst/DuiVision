@@ -3,7 +3,7 @@
 
 // 日志相关定义
 #define MAXLOGFILESIZE			(1024 << 10)// 日志文件最大长度
-#define _LOG_DATABUFF			1024		// 日志数据缓冲区大小
+#define _LOG_DATABUFF			4096		// 日志数据缓冲区大小
 #define _MAX_FILE_PATH			1024		// 支持的最大文件路径名
 #define MAX_MAINTENANCE_LOG_NUM	1024		// 可维护最大文件数1024
 
