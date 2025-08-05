@@ -93,6 +93,8 @@ public:
 	virtual void OnPositionChange();	// Î»ÖÃË¢ÐÂ
 	virtual void InvalidateRect(LPCRECT lpRect, BOOL bErase = TRUE);
 
+	int GetWidth() { return m_rc.Width(); }
+	int GetHeight() { return m_rc.Height(); }
 	void SetPosStr(CString strPos) { m_strPos = strPos; };
 	CString GetPosStr() { return m_strPos;};
 	int PositionItem2Value( const DUI_POSITION_ITEM &pos ,int nMin, int nMax);

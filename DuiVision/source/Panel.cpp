@@ -291,6 +291,8 @@ void CDuiPanel::SetControlRect(CRect rc)
 	}
 
 	CRect rcTemp;
+	m_nVirtualHeight = 0;
+	m_nVirtualWidth = 0;
 	for (size_t i = 0; i < m_vecControl.size(); i++)
 	{
 		CControlBase * pControlBase = m_vecControl.at(i);
@@ -308,16 +310,40 @@ void CDuiPanel::SetControlRect(CRect rc)
 				rcTemp.top = rcTemp.bottom - m_nScrollWidth;
 			}else
 			{
-				rcTemp = pControlBase->GetRect();
-				if(rcTemp.bottom > m_nVirtualHeight)
+				CString strPos = pControlBase->GetPosStr();
+				DUI_POSITION pos;
+
+				pos.nCount = 0;
+				LPCTSTR pszValue = strPos;
+				while(pos.nCount < 4 && pszValue)
 				{
-					// 刷新Panel的虚拟高度
-					m_nVirtualHeight = rcTemp.bottom - m_rc.top;
+					pszValue=ParsePosition(pszValue, pos.Item[pos.nCount++]);
 				}
-				if(rcTemp.right > m_nVirtualWidth)
+
+				if (2 == pos.nCount || 4 == pos.nCount)
 				{
-					// 刷新Panel的虚拟宽度
-					m_nVirtualWidth = rcTemp.right - m_rc.left;
+					int nWidth = 0;
+					int nHeight = 0;
+					if(4 == pos.nCount)
+					{
+						nWidth = PositionItem2Value(pos.Right, 0, m_rc.Width());
+						nHeight = PositionItem2Value(pos.Bottom, 0, m_rc.Height());
+					}else
+					if(2 == pos.nCount)
+					{
+						nWidth = pControlBase->GetWidth();
+						nHeight = pControlBase->GetHeight();
+					}
+					if (nHeight > m_nVirtualHeight)
+					{
+						// 刷新Panel的虚拟高度
+						m_nVirtualHeight = nHeight;
+					}
+					if (nWidth > m_nVirtualWidth)
+					{
+						// 刷新Panel的虚拟宽度
+						m_nVirtualWidth = nWidth;
+					}
 				}
 				continue;
 			}
