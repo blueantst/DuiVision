@@ -193,6 +193,7 @@ protected:
 	Color			m_clrText;			// 文字颜色
 	HFONT			m_hFont;			// 字体句柄
     int				m_iLimitText;		// 最大字符数
+    bool            m_bMouseLButtonDown;// 是否处于鼠标左键按下状态
 	int				m_nStartChar;		// 选择块的开始位置
 	int				m_nEndChar;			// 选择块的结束位置
     LONG			m_lTwhStyle;		// richedit控件的窗口风格

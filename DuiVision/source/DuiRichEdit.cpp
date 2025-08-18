@@ -1138,6 +1138,7 @@ CDuiRichEdit::CDuiRichEdit(HWND hWnd, CDuiObject* pDuiObject)
 	m_bWordWrap = false;
 	m_strFile = _T("");
     m_iLimitText = cInitTextMax;
+    m_bMouseLButtonDown = false;
 	m_nStartChar = -1;
 	m_nEndChar = -1;
 	m_lTwhStyle = ES_MULTILINE;
@@ -2541,7 +2542,15 @@ BOOL CDuiRichEdit::OnControlMouseMove(UINT nFlags, CPoint point)
 				{
 					m_buttonState = enBSNormal;
 				}
-			}
+            }
+
+            if (m_bMouseLButtonDown)
+            {
+                // 鼠标左键处于按下状态,则刷新选择区域到当前为止
+                //TxSendMessage(WM_MOUSEMOVE, (WPARAM)nFlags, (LPARAM)(&point), 0);
+                m_nEndChar = CharFromPos(point); // 获取当前鼠标位置的字符索引
+                SetSel(m_nStartChar, m_nEndChar);   // 设置选择区域
+            }
 		}
 		else
 		{
@@ -2601,6 +2610,13 @@ BOOL CDuiRichEdit::OnControlLButtonDown(UINT nFlags, CPoint point)
 				}
 				
 				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_DOWN);
+
+                // 如果鼠标左键按下,则选择区域更新到此为止
+                //TxSendMessage(WM_LBUTTONDOWN, (WPARAM)nFlags, (LPARAM)(&point), 0);
+                m_nStartChar = CharFromPos(point); // 获取当前鼠标位置的字符索引
+                m_nEndChar = m_nStartChar;
+                SetSel(m_nStartChar, m_nEndChar);   // 设置选择区域
+                m_bMouseLButtonDown = true;
 			}		
 		}
 		else
@@ -2660,7 +2676,12 @@ BOOL CDuiRichEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 					m_buttonState = enBSNormal;
 				}	
 				SendMessage(MSG_CONTROL_BUTTON, CONTROL_EDIT, MSG_BUTTON_UP);
-			}			
+
+                // 鼠标左键放开,刷新选择区域
+                //TxSendMessage(WM_LBUTTONUP, (WPARAM)nFlags, (LPARAM)(&point), 0);
+                m_nEndChar = CharFromPos(point); // 获取当前鼠标位置的字符索引
+                SetSel(m_nStartChar, m_nEndChar);   // 设置选择区域
+			}		
 		}
 		else
 		{
@@ -2673,6 +2694,7 @@ BOOL CDuiRichEdit::OnControlLButtonUp(UINT nFlags, CPoint point)
 	}
 	
 	m_bDownTemp = false;
+    m_bMouseLButtonDown = false;
 
 	if(buttonState != m_buttonState || editState != m_EditState)
 	{
@@ -2752,19 +2774,24 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	bool handled = true;
 	unsigned int virtualKeyCode = nChar;
     unsigned int flags = nFlags;
+    bool bControlState = false;
+    if ((GetKeyState(VK_CONTROL) & 0x8000) || (VK_CONTROL == nChar))
+        bControlState = true;
 	bool bShiftState = false;
 	if((GetKeyState(VK_SHIFT) & 0x8000) || (VK_SHIFT == nChar))
 		bShiftState = true;
+    // 获取当前键盘布局标识符
 	HKL hKL = GetKeyboardLayout(0);
 	int i = LOWORD(hKL);
 	TCHAR buffer[255];   
 	memset(buffer,0,255 * sizeof(TCHAR));  
 	if( (i == 0x0804) && (ImmIsIME(hKL)) )
 	{
+        // 获取输入法名称
 		ImmGetDescription(hKL,buffer,255);
 		if(buffer[0] != NULL)
 		{
-			if(( nChar & 0x80 )  |  (nChar >= 0x70  && nChar <= 0x7F  ))
+			if((nChar & 0x80) | (nChar >= 0x70 && nChar <= 0x7F))
 			{
 				//if( !IsFocusControl() ) return 0;
 				return false;
@@ -2930,7 +2957,12 @@ BOOL CDuiRichEdit::OnControlKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		return handled;
 	}
 
-	TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
+    // Control键没有按下的情况下才发送字符消息，避免多输出字符
+    if (!bControlState)
+    {
+        TxSendMessage(WM_CHAR, virtualKeyCode, flags, &lResult);
+    }
+	
 	handled = true;
 
 	return handled;
