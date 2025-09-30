@@ -41,6 +41,14 @@ CDlgPopup::CDlgPopup() : CDuiObject()
 	m_uTimerAnimation = 0;
 	m_size = CSize(0,0);
 
+	m_strFont = DuiSystem::GetDefaultFont();
+	m_nFontWidth = 12;
+	// 按照当前DPI计算字体的显示大小
+	CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
+	m_fontStyle = FontStyleRegular;
+	m_uAlignment = Align_Left;
+	m_uVAlignment = VAlign_Top;
+
 	m_strXmlFile = _T("");
 	m_strXmlContent = _T("");
 }
@@ -506,6 +514,103 @@ HRESULT CDlgPopup::OnAttributeBkImage(const CString& strValue, BOOL bLoading)
 	}
 
 	return bLoading?S_FALSE:S_OK;
+}
+
+// 设置水平对齐方式
+void CDlgPopup::SetAlignment(UINT uAlignment)
+{
+	if(uAlignment != m_uAlignment)
+	{
+		m_uAlignment = uAlignment;
+		InvalidateRect(NULL);
+	}
+}
+
+// 设置垂直对齐方式
+void CDlgPopup::SetVAlignment(UINT uVAlignment)
+{
+	if(uVAlignment != m_uVAlignment)
+	{
+		m_uVAlignment = uVAlignment;
+		InvalidateRect(NULL);
+	}
+}
+
+// 设置对齐方式
+void CDlgPopup::SetAlignment(UINT uAlignment, UINT uVAlignment)
+{
+	if(uAlignment != m_uAlignment || uVAlignment != m_uVAlignment)
+	{
+		m_uAlignment = uAlignment;
+		m_uVAlignment = uVAlignment;
+
+		InvalidateRect(NULL);
+	}
+}
+
+// 转换水平对齐方式为GDI定义方式
+UINT CDlgPopup::GetGDIAlignment(UINT uAlignment)
+{
+	if(uAlignment == Align_Left)
+	{
+		return DT_LEFT;
+	}else
+	if(uAlignment == Align_Center)
+	{
+		return DT_CENTER;
+	}else
+	if(uAlignment == Align_Right)
+	{
+		return DT_RIGHT;
+	}
+	return DT_LEFT;
+}
+
+// 转换垂直对齐方式为GDI定义方式
+UINT CDlgPopup::GetGDIVAlignment(UINT uVAlignment)
+{
+	if(uVAlignment == VAlign_Top)
+	{
+		return DT_TOP;
+	}else
+	if(uVAlignment == VAlign_Middle)
+	{
+		return DT_VCENTER;
+	}else
+	if(uVAlignment == VAlign_Bottom)
+	{
+		return DT_BOTTOM;
+	}
+	return DT_TOP;
+}
+
+// 设置字体
+void CDlgPopup::SetFont(CString strFont, int nFontWidth, FontStyle fontStyle)
+{
+	if(m_strFont != strFont || m_nFontWidth != nFontWidth || m_fontStyle != fontStyle)
+	{
+		m_strFont = DuiSystem::GetDefaultFont(strFont);
+		m_nFontWidth = nFontWidth;
+		// 按照当前DPI计算字体的显示大小
+		CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
+		m_fontStyle = fontStyle;
+		InvalidateRect(NULL);
+	}
+}
+
+// 从XML设置Font属性
+HRESULT CDlgPopup::OnAttributeFont(const CString& strValue, BOOL bLoading)
+{
+	if (strValue.IsEmpty()) return E_FAIL;
+
+	DuiFontInfo fontInfo;
+	BOOL bFindFont = DuiSystem::Instance()->GetFont(strValue, fontInfo);
+	if (!bFindFont) return E_FAIL;
+	m_strFont = fontInfo.strFont;
+	m_nFontWidth = fontInfo.nFontWidth;
+	m_fontStyle = fontInfo.fontStyle;
+
+	return bLoading ? S_FALSE : S_OK;
 }
 
 void CDlgPopup::CloseWindow()

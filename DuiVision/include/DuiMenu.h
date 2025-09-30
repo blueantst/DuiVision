@@ -28,7 +28,7 @@ public:
 	}
 
 public:
-	CDuiMenu(CString strFont = DuiSystem::GetDefaultFont(), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
+	CDuiMenu();
 	virtual ~CDuiMenu(void);
 
 	// 创建菜单窗口
@@ -74,11 +74,6 @@ public:
 
 public:
 	CString		m_strTitle;				// 标题
-	CString		m_strFont;				// 菜单字体
-	int			m_nFontWidth;			// 字体宽度
-	FontStyle	m_fontStyle;			// 字体风格
-	UINT		m_uAlignment;			// 水平对齐方式
-	UINT		m_uVAlignment;			// 垂直对齐方式
 
 	int			m_nLeft;				// 左边间隔
 	int			m_nHeight;				// 菜单项默认高度

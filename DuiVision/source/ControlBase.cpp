@@ -2038,7 +2038,7 @@ LRESULT CControlBase::OnMessage(UINT uID, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}else
 	if(m_strAction.Find(_T("menu:")) == 0)	// 动作:打开一个菜单
 	{
-		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);	// 可以考虑改为通过DuiSystem创建和管理
+		CDuiMenu *pDuiMenu = new CDuiMenu();	// 可以考虑改为通过DuiSystem创建和管理
 		pDuiMenu->SetAutoClose(FALSE);
 		pDuiMenu->SetParent(this);
 		CPoint point;

@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "DlgSkin.h"
 
-CDlgSkin::CDlgSkin(void)
+CDlgSkin::CDlgSkin(void) : CDlgPopup()
 {
 	m_bImage = true;
 }

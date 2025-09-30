@@ -70,6 +70,12 @@ protected:
 
 	UINT			m_uTimerAnimation;			// 动画定时器
 
+	CString			m_strFont;					// 字体
+	int				m_nFontWidth;				// 字体宽度
+	FontStyle		m_fontStyle;				// 字体风格
+	UINT			m_uAlignment;				// 水平对齐方式
+	UINT			m_uVAlignment;				// 垂直对齐方式
+
 	CString			m_strXmlFile;				// XML文件名
 	CString			m_strXmlContent;			// XML内容
 
@@ -94,6 +100,18 @@ public:
 	void SetSize(CSize&sz){ m_size = sz;}
 
 	BOOL UseImageECM() { return m_bImageUseECM; }
+
+	// 对齐方式
+	virtual void SetAlignment(UINT uAlignment);
+	virtual void SetVAlignment(UINT uVAlignment);
+	virtual void SetAlignment(UINT uAlignment, UINT uVAlignment);
+
+	UINT GetGDIAlignment(UINT uAlignment);
+	UINT GetGDIVAlignment(UINT uVAlignment);
+
+	// 字体和图片属性
+	virtual void SetFont(CString strFont = _T(""), int nFontWidth = 12, FontStyle fontStyle = FontStyleRegular);
+	HRESULT OnAttributeFont(const CString& strValue, BOOL bLoading);
 
 	virtual void InitUI(CRect rcClient, DuiXmlNode pNode);
 
@@ -213,6 +231,19 @@ public:
 		DUI_INT_ATTRIBUTE(_T("img-ecm"), m_bImageUseECM, TRUE)
 		DUI_INT_ATTRIBUTE(_T("autoclose"), m_bAutoClose, FALSE)
 		DUI_INT_ATTRIBUTE(_T("topmost"), m_bTopMost, FALSE)
+		DUI_CUSTOM_ATTRIBUTE(_T("font"), OnAttributeFont)
+		DUI_TSTRING_ATTRIBUTE(_T("fontname"), m_strFont, FALSE)
+		DUI_INT_ATTRIBUTE(_T("fontwidth"), m_nFontWidth, FALSE)
+		DUI_ENUM_ATTRIBUTE(_T("valign"), UINT, TRUE)
+			DUI_ENUM_VALUE(_T("top"), VAlign_Top)
+			DUI_ENUM_VALUE(_T("middle"), VAlign_Middle)
+			DUI_ENUM_VALUE(_T("bottom"), VAlign_Bottom)
+		DUI_ENUM_END(m_uVAlignment)
+		DUI_ENUM_ATTRIBUTE(_T("align"), UINT, TRUE)
+			DUI_ENUM_VALUE(_T("left"), Align_Left)
+			DUI_ENUM_VALUE(_T("center"), Align_Center)
+			DUI_ENUM_VALUE(_T("right"), Align_Right)
+		DUI_ENUM_END(m_uAlignment)
 	DUI_DECLARE_ATTRIBUTES_END()
 };
 

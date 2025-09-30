@@ -80,9 +80,6 @@ public:
 	int						m_nWidth;			// 列表宽度
 	int						m_nHeight;			// 列表高度
 
-	CString					m_strFont;			// 文字字体
-	int						m_nFontWidth;		// 文字字体宽度
-	FontStyle				m_fontStyle;		// 文字字体Style
 	CString					m_strFontTitle;		// 标题字体
 	int						m_nFontTitleWidth;	// 标题字体宽度
 	FontStyle				m_fontTitleStyle;	// 标题字体Style

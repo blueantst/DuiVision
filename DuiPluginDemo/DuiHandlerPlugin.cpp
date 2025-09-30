@@ -175,7 +175,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgXmlDlgButton(UINT uID, CString strName, UINT 
 LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_1"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+	CDuiMenu *pDuiMenu = new CDuiMenu();
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();
@@ -201,7 +201,7 @@ LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT M
 LRESULT CDuiHandlerPlugin::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_2"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+	CDuiMenu *pDuiMenu = new CDuiMenu();
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();

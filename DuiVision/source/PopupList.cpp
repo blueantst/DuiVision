@@ -5,7 +5,7 @@
 #define	SCROLL_H	2	// 水平滚动条控件ID
 
 
-CPopupList::CPopupList(void)
+CPopupList::CPopupList(void) : CDlgPopup()
 {
 	m_nHoverItem = -1;
 	m_pImageHead = NULL;
@@ -15,12 +15,8 @@ CPopupList::CPopupList(void)
 	m_nWidth = 191;
 	m_nHeight = 0;
 
-	// 默认字体
-	m_strFont = DuiSystem::GetDefaultFont();
-	m_nFontWidth = 12;
-	// 按照当前DPI计算字体的显示大小
-	CDuiWinDwmWrapper::AdapterDpi(m_nFontWidth);
-	m_fontStyle = FontStyleRegular;
+	// 垂直对齐方式默认改为中间对齐
+	m_uVAlignment = VAlign_Middle;
 
 	// 标题字体(name部分字体)
 	m_strFontTitle = DuiSystem::GetDefaultFont();
@@ -327,7 +323,7 @@ void CPopupList::SetItemPoint()
 
 	// 计算总高度
 	int nHeight = DUI_DPI_Y(4);
-	nHeight += DUI_DPI_Y(24) * nItemCount;
+	nHeight += m_nRowHeight * nItemCount;
 	if(!m_bSingleLine)
 	{
 		if(0 == nItemCount) nHeight += DUI_DPI_Y(40);
@@ -634,9 +630,11 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 
 	graphics.SetTextRenderingHint(TextRenderingHintClearTypeGridFit);
 
-	StringFormat strFormat;
-	strFormat.SetAlignment(StringAlignmentNear);	// 左对齐
-	strFormat.SetLineAlignment(StringAlignmentCenter);	// 中间对齐
+	// 设置普通文字的水平和垂直对齐方式
+	DUI_STRING_ALIGN_DEFINE();
+
+	strFormat.SetTrimming(StringTrimmingEllipsisCharacter);	// 以字符为单位去尾,略去部分使用省略号
+	strFormat.SetFormatFlags(StringFormatFlagsNoWrap | StringFormatFlagsMeasureTrailingSpaces);	// 不换行
 
 	//// 计算显示位置
 	//CDuiScrollVertical* pScrollV = (CDuiScrollVertical*)m_pControScrollV;
@@ -652,14 +650,14 @@ void CPopupList::DrawWindow(CDC &dc, CRect rcClient)
 	{
 		EditListItem &editListItem = m_vecItem.at(i);
 		rcItem = editListItem.rcItem;
-		int nLeftStart = DUI_DPI_X(47);
+		int nLeftStart = m_nRowHeight + DUI_DPI_Y(20);
 		if(editListItem.pImage == NULL)	// 没有图片,左边距
 		{
 			nLeftStart = DUI_DPI_X(5);
 		}else
 		if(m_bSingleLine)	// 单行,左边距减少一些
 		{
-			nLeftStart = DUI_DPI_X(25);
+			nLeftStart = m_nRowHeight + DUI_DPI_Y(3);
 		}
 
 		if (i == m_nHoverItem)
@@ -762,7 +760,8 @@ void CPopupList::DrawWindowEx(CDC &dc, CRect rcClient)
 
 		// 列表图片
 		if(editListItem.pImage)
-		{	
+		{
+			// 图片的宽度和高度都按照行的高度
 			CRect rcHead(rcItem.left + 1, rcItem.top + 2, rcItem.left + 1 + rcItem.Height() - 4, rcItem.top + 2 + rcItem.Height() - 4);
 			RectF rect((Gdiplus::REAL)rcHead.left, (Gdiplus::REAL)rcHead.top, (Gdiplus::REAL)rcHead.Width(), (Gdiplus::REAL)rcHead.Height());
 			rect.Offset(0, -(Gdiplus::REAL)nVirtualTop);

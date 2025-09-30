@@ -118,7 +118,7 @@ void CMenuItem::ShowPopupMenu()
 
 	if(m_bIsPopup)
 	{
-		m_pPopupMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		m_pPopupMenu = new CDuiMenu();
 		m_pPopupMenu->SetAutoClose(FALSE);
 		m_pPopupMenu->SetParent(this);
 		m_pPopupMenu->m_clrRowHover = m_clrHover;	// 设置菜单菜单的背景色

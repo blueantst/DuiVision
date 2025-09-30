@@ -397,7 +397,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuButton1(UINT uID, CString strName, UINT Msg
 {
 	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_1"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+	CDuiMenu *pDuiMenu = new CDuiMenu();
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();
@@ -424,7 +424,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgMenuButton2(UINT uID, CString strName, UINT Msg
 {
 	CDlgBase* pDlg = GetControlDialog(uID);
 	CDuiButton* pButton = (CDuiButton*)GetControl(_T("menu_2"));
-	CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+	CDuiMenu *pDuiMenu = new CDuiMenu();
 	pDuiMenu->SetParent(pButton);
 	CPoint point;
 	CRect rc = pButton->GetRect();
@@ -807,7 +807,7 @@ LRESULT CDuiHandlerMain::OnDuiMsgGridCtrlHeaderRButtonUp(UINT uID, CString strNa
 	if(pItemInfo)
 	{
 		// ÏÔÊ¾ÓÒ¼ü²Ëµ¥
-		CDuiMenu *pDuiMenu = new CDuiMenu(DuiSystem::GetDefaultFont(), 12);
+		CDuiMenu *pDuiMenu = new CDuiMenu();
 		pDuiMenu->SetAutoClose(FALSE);
 		pDuiMenu->SetParent(pGridCtrl);
 		CPoint point;

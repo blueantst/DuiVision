@@ -1,15 +1,8 @@
 #include "StdAfx.h"
 #include "DuiMenu.h"
 
-CDuiMenu::CDuiMenu(CString strFont/* = TEXT("ËÎÌו")*/, int nFontWidth/* = 12*/, FontStyle fontStyle/* = FontStyleRegular*/)
-	: CDlgPopup()
+CDuiMenu::CDuiMenu() : CDlgPopup()
 {
-	m_strFont = strFont;
-	m_nFontWidth = nFontWidth;
-	m_fontStyle = fontStyle;
-	m_uAlignment = Align_Left;
-	m_uVAlignment = VAlign_Top;
-
 	m_nLeft = DUI_DPI_X(30);
 	m_nHeight = DUI_DPI_Y(30);
 	m_nWidth = DUI_DPI_X(113);
