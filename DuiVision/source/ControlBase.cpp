@@ -1278,6 +1278,22 @@ BOOL CControlBase::OnControlDropFile(CPoint point, CString strFileName)
 		return true;
 	}
 
+	// 如果当前活动子控件不能处理,则遍历符合条件的子控件看是否能处理拖拽消息
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			if (pControlBase->PtInRect(point) && pControlBase->GetRresponse())
+			{
+				if (pControlBase->OnControlDropFile(point, strFileName))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
 	return false;
 }
 

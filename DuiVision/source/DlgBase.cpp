@@ -1034,7 +1034,22 @@ void CDlgBase::InitWindowBkSkin()
 void CDlgBase::OnDropFiles(HDROP hDropInfo)
 {
 	CPoint ptDrop;
-	BOOL bQueryPoint = (DragQueryPoint(hDropInfo, &ptDrop) && m_pControl);
+	BOOL bQueryPoint = DragQueryPoint(hDropInfo, &ptDrop);
+
+	// 获取当前拖拽坐标所属控件用户控件
+	CControlBase* pDropControl = NULL;
+	for (size_t i = 0; i < m_vecControl.size(); i++)
+	{
+		CControlBase* pControlBase = m_vecControl.at(i);
+		if (pControlBase)
+		{
+			if (pControlBase->PtInRect(ptDrop) && pControlBase->GetRresponse())
+			{
+				pDropControl = pControlBase;
+			}
+		}
+	}
+	bQueryPoint = bQueryPoint && (pDropControl != NULL);
 
 	TCHAR szFileName[MAX_PATH + 1] = {0};
 	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, NULL, 0);
@@ -1051,8 +1066,8 @@ void CDlgBase::OnDropFiles(HDROP hDropInfo)
 		//strEnableDragFile不可能=0
 		if(strEnableDragFile != _T("2"))	//只允许背景
 		{
-			// 如果当前控件可以处理拖拽文件的事件,则不需要其他的处理
-			if(bQueryPoint && m_pControl->OnControlDropFile(ptDrop, strFileName))
+			// 如果鼠标位置所属控件或子控件可以处理拖拽文件的事件,则不需要其他的处理
+			if (bQueryPoint && pDropControl->OnControlDropFile(ptDrop, strFileName))
 			{
 				continue;
 			}
